@@ -1,0 +1,76 @@
+Type: Level
+
+Zone ID:    0
+Act ID:     0
+
+Object Def: objdef\s3obj
+Object Palette: objdef\s3obj1.pcx
+
+8x8 Compression:       5
+Num 8x8 Pages:         1
+8x8 Tiles Page 0:      ..\Levels\DEZ\Tiles\Primary.bin
+
+16x16 Compression:     0
+Num 16x16 Pages:       1
+Page0 8x8 Page:        0
+16x16 Tiles Page 0:    ..\Levels\DEZ\Blocks\Primary.bin
+
+Metatile Size:         128
+Metatile Compression:  1
+Num Metatile Pages:    1
+Page0 16x16 Page:      0
+Metatile Tiles Page 0: ..\Levels\DEZ\Chunks\Primary.bin
+
+Layout Format:         2
+Layout Compression:    0
+BG 128x128 Page:      0
+Level Layout:       ..\Levels\DEZ\Layout\1.bin
+
+Objects Format:        4
+Objects:               ..\Levels\DEZ\Object Pos\1.bin
+Rings Format:          2
+Objects:              ..\Levels\DEZ\Ring Pos\1.bin
+Misc Format:           0
+Num Start Positions:   1
+Start Position 0:      ..\Levels\DEZ\Start Location\1.bin
+
+Palettes-
+
+ Number of files: 4
+
+  Palette 0-
+
+   Start index:        0
+   Number of entries: 16
+   File:              ..\Objects\Sonic\Palettes\Sonic.bin
+
+  Palette 1-
+
+   Start index:       16
+   Number of entries: 48
+   File:              ..\Levels\DEZ\Palettes\Death Egg Zone.bin
+
+  Palette 2-
+
+   Start index:        64
+   Number of entries: 16
+   File:              ..\Objects\Sonic\Palettes\Water Sonic.bin
+
+  Palette 3-
+
+   Start index:       80
+   Number of entries: 48
+   File:              ..\Levels\DEZ\Palettes\Water Death Egg Zone.bin
+
+Collision Map Format:    0
+Collision Array:         ..\Misc Data\Height Maps.bin
+Rotated Collision Array: ..\Misc Data\Height Maps Rotated.bin
+Angle Array:             ..\Misc Data\Angle Map.bin
+
+Collision Index Format:      3
+Collision Index Compression: 0
+Collision Index:             ..\Levels\DEZ\Collision\1.bin
+
+Game Name: Sonic 3
+
+-EOF-

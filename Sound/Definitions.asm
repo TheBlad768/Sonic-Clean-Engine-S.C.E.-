@@ -1,0 +1,6 @@
+	include "Sound/engine/Macros.asm"
+	include "Sound/Sound IDs.asm"
+	include "Sound/Settings.asm"
+	include "Sound/engine/RAM.asm"
+	include "Sound/engine/Constants.asm"
+	include "Sound/engine/_smps2asm_inc.asm"

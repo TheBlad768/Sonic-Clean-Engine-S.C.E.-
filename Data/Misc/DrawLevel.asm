@@ -1,0 +1,777 @@
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_DrawLevel:
+		lea	(VDP_data_port).l,a6
+		lea	(Plane_buffer).w,a0
+		bsr.s	VInt_DrawLevel_2
+		move.l	(Plane_buffer_2_addr).w,d0
+		beq.s	VInt_DrawLevel_Return
+		movea.l	d0,a0
+
+VInt_DrawLevel_2:
+		move.w	(a0),d0
+		beq.s	VInt_DrawLevel_Done
+		clr.w	(a0)+
+		move.w	(a0)+,d1
+		bmi.s	VInt_DrawLevel_Col
+		move.w	#$8F02,d2		; VRAM increment at 2 bytes (horizontal level write)
+		move.w	#$80,d3
+		bra.s	VInt_DrawLevel_Draw
+; ---------------------------------------------------------------------------
+
+VInt_DrawLevel_Col:
+		move.w	#$8F80,d2		; VRAM increment at $80 bytes (vertical level write)
+		moveq	#2,d3
+		andi.w	#$7FFF,d1
+
+VInt_DrawLevel_Draw:
+		move.w	d2,VDP_control_port-VDP_data_port(a6)
+		move.w	d0,d2
+		move.w	d1,d4
+		bsr.s	VInt_VRAMWrite
+		move.w	d2,d0
+		add.w	d3,d0
+		move.w	d4,d1
+		bsr.s	VInt_VRAMWrite
+		bra.s	VInt_DrawLevel_2
+; ---------------------------------------------------------------------------
+
+VInt_DrawLevel_Done:
+		move.w	#$8F02,VDP_control_port-VDP_data_port(a6)
+
+VInt_DrawLevel_Return:
+		rts
+; End of function VInt_DrawLevel
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_VRAMWrite:
+		bsr.w	CalcVRAM
+		move.l	d0,VDP_control_port-VDP_data_port(a6)
+
+-		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
+		dbf	d1,-
+
+VInt_VRAMWrite_Return:
+		rts
+; End of function VInt_VRAMWrite
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_TileColumn:
+		move.w	(a6),d0
+		andi.w	#-$10,d0
+		move.w	(a5),d2
+		move.w	d0,(a5)
+		move.w	d2,d3
+		sub.w	d0,d2
+		beq.s	VInt_VRAMWrite_Return
+		tst.b	d2
+		bpl.s	+
+		neg.w	d2
+		move.w	d3,d0
+		addi.w	#$150,d0
++		andi.w	#$30,d2
+		cmpi.w	#$10,d2
+		sne	(Plane_double_update_flag).w
+		movem.w	d1/d6,-(sp)
+		bsr.s	Setup_TileColumnDraw
+		movem.w	(sp)+,d1/d6
+		tst.b	(Plane_double_update_flag).w
+		beq.s	VInt_VRAMWrite_Return
+		addi.w	#$10,d0
+		bra.s	Setup_TileColumnDraw
+; End of function Draw_TileColumn
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_TileColumn2:
+		move.w	(a6),d0
+		andi.w	#-$10,d0
+		move.w	(a5),d2
+		move.w	d0,(a5)
+		move.w	d2,d3
+		sub.w	d0,d2
+		beq.s	VInt_VRAMWrite_Return
+		tst.b	d2
+		bpl.s	+
+		neg.w	d2
+		move.w	d3,d0
+		addi.w	#$150,d0
+		swap	d1
++		andi.w	#$30,d2
+		cmpi.w	#$10,d2
+		sne	(Plane_double_update_flag).w
+		movem.w	d1/d6,-(sp)
+		bsr.s	Setup_TileColumnDraw
+		movem.w	(sp)+,d1/d6
+		tst.b	(Plane_double_update_flag).w
+		beq.s	VInt_VRAMWrite_Return
+		addi.w	#$10,d0
+
+Setup_TileColumnDraw:
+		move.w	d1,d2
+		andi.w	#$70,d2
+		move.w	d1,d3
+		lsl.w	#4,d3
+		andi.w	#$F00,d3
+		asr.w	#4,d1
+		move.w	d1,d4
+		asr.w	#1,d1
+		and.w	(Layout_row_index_mask).w,d1
+		andi.w	#$F,d4
+		moveq	#$10,d5
+		sub.w	d4,d5
+		move.w	d5,d4
+		sub.w	d6,d5
+		bmi.s	+
+		move.w	d0,d5
+		asr.w	#2,d5
+		andi.w	#$7C,d5
+		add.w	d7,d5
+		add.w	d3,d5
+		move.w	d5,(a0)+
+		move.w	d6,d5
+		subq.w	#1,d6
+		move.w	d6,(a0)+
+		bset	#7,-2(a0)
+		lea	(a0),a1
+		add.w	d5,d5
+		add.w	d5,d5
+		adda.w	d5,a0
+		jsr	Get_LevelChunkColumn(pc)
+		bra.s	++
++		neg.w	d5
+		move.w	d5,-(sp)
+		move.w	d0,d5
+		asr.w	#2,d5
+		andi.w	#$7C,d5
+		add.w	d7,d5
+		add.w	d3,d5
+		move.w	d5,(a0)+
+		move.w	d4,d6
+		subq.w	#1,d6
+		move.w	d6,(a0)+
+		bset	#7,-2(a0)
+		lea	(a0),a1
+		add.w	d4,d4
+		add.w	d4,d4
+		adda.w	d4,a0
+		jsr	Get_LevelChunkColumn(pc)
+		bsr.s	+
+		move.w	(sp)+,d6
+		move.w	d0,d5
+		asr.w	#2,d5
+		andi.w	#$7C,d5
+		add.w	d7,d5
+		move.w	d5,(a0)+
+		move.w	d6,d5
+		subq.w	#1,d6
+		move.w	d6,(a0)+
+		bset	#7,-2(a0)
+		lea	(a0),a1
+		add.w	d5,d5
+		add.w	d5,d5
+		adda.w	d5,a0
++		swap	d7
+
+-		move.w	(a5,d2.w),d3
+		move.w	d3,d4
+		andi.w	#$3FF,d3
+		lsl.w	#3,d3
+		move.w	(a2,d3.w),d5
+		swap	d5
+		move.w	4(a2,d3.w),d5
+		move.w	6(a2,d3.w),d7
+		move.w	2(a2,d3.w),d3
+		swap	d3
+		move.w	d7,d3
+		btst	#$B,d4
+		beq.s	+
+		eori.l	#$10001000,d5
+		eori.l	#$10001000,d3
+		swap	d5
+		swap	d3
++		btst	#$A,d4
+		beq.s	+
+		eori.l	#$8000800,d5
+		eori.l	#$8000800,d3
+		exg	d3,d5
++		move.l	d5,(a1)+
+		move.l	d3,(a0)+
+		addi.w	#$10,d2
+		andi.w	#$70,d2
+		bne.s	+
+		addq.w	#4,d1
+		and.w	(Layout_row_index_mask).w,d1
+		bsr.s	Get_LevelChunkColumn
++		dbf	d6,-
+		swap	d7
+		clr.w	(a0)
+		rts
+; End of function Setup_TileColumnDraw
+
+; =============== S U B R O U T I N E =======================================
+
+Get_LevelChunkColumn:
+		movea.l	(Level_layout_addr_ROM).w,a4
+		move.w	(a3,d1.w),d3
+		andi.l	#$7FFF,d3
+		adda.l	d3,a4
+		move.w	d0,d3
+		asr.w	#7,d3
+		adda.w	d3,a4
+		moveq	#-1,d3
+		clr.w	d3
+		move.b	(a4),d3
+		lsl.w	#7,d3
+		move.w	d0,d4
+		asr.w	#3,d4
+		andi.w	#$E,d4
+		add.w	d4,d3
+		movea.l	d3,a5
+
+Get_LevelChunkColumn_Return:
+		rts
+; End of function Get_LevelChunkColumn
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_TileRow:
+		move.w	(a6),d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	(a5),d2
+		move.w	d0,(a5)
+		move.w	d2,d3
+		sub.w	d0,d2
+		beq.s	Get_LevelChunkColumn_Return
+		tst.b	d2
+		bpl.s	+
+		neg.w	d2
+		move.w	d3,d0
+		addi.w	#$F0,d0
+		and.w	(Camera_Y_pos_mask).w,d0
++		andi.w	#$30,d2
+		cmpi.w	#$10,d2
+		sne	(Plane_double_update_flag).w
+		movem.w	d1/d6,-(sp)
+		bsr.s	Setup_TileRowDraw
+		movem.w	(sp)+,d1/d6
+		tst.b	(Plane_double_update_flag).w
+		beq.s	Get_LevelChunkColumn_Return
+		addi.w	#$10,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		bra.s	Setup_TileRowDraw
+; End of function Draw_TileRow
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_TileRow2:
+		move.w	(a6),d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	(a5),d2
+		move.w	d0,(a5)
+		move.w	d2,d3
+		sub.w	d0,d2
+		beq.s	Get_LevelChunkColumn_Return
+		tst.b	d2
+		bpl.s	+
+		neg.w	d2
+		move.w	d3,d0
+		addi.w	#$F0,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		swap	d1
++		andi.w	#$30,d2
+		cmpi.w	#$10,d2
+		sne	(Plane_double_update_flag).w
+		movem.w	d1/d6,-(sp)
+		bsr.s	Setup_TileRowDraw
+		movem.w	(sp)+,d1/d6
+		tst.b	(Plane_double_update_flag).w
+		beq.w	Get_LevelChunkColumn_Return
+		addi.w	#$10,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+
+Setup_TileRowDraw:
+		asr.w	#4,d1
+		move.w	d1,d2
+		move.w	d1,d4
+		asr.w	#3,d1
+		add.w	d2,d2
+		move.w	d2,d3
+		andi.w	#$E,d2
+		add.w	d3,d3
+		andi.w	#$7C,d3
+		andi.w	#$1F,d4
+		moveq	#$20,d5
+		sub.w	d4,d5
+		move.w	d5,d4
+		sub.w	d6,d5
+		bmi.s	+
+		move.w	d0,d5
+		andi.w	#$F0,d5		; If the length of the write can fit without wrapping the nametable
+		lsl.w	#4,d5
+		add.w	d7,d5
+		add.w	d3,d5
+		move.w	d5,(a0)+
+		move.w	d6,d5
+		subq.w	#1,d6
+		move.w	d6,(a0)+
+		lea	(a0),a1
+		add.w	d5,d5
+		add.w	d5,d5
+		adda.w	d5,a0
+		jsr	Get_LevelAddrChunkRow(pc)
+		bra.s	++
++		neg.w	d5			; If the length of the write wraps over the length of the nametable
+		move.w	d5,-(sp)
+		move.w	d0,d5
+		andi.w	#$F0,d5
+		lsl.w	#4,d5
+		add.w	d7,d5
+		add.w	d3,d5
+		move.w	d5,(a0)+
+		move.w	d4,d6
+		subq.w	#1,d6
+		move.w	d6,(a0)+
+		lea	(a0),a1
+		add.w	d4,d4
+		add.w	d4,d4
+		adda.w	d4,a0
+		bsr.s	Get_LevelAddrChunkRow
+		bsr.s	+
+		move.w	(sp)+,d6		; Must place one more write command to account for rollover
+		move.w	d0,d5
+		andi.w	#$F0,d5
+		lsl.w	#4,d5
+		add.w	d7,d5
+		move.w	d5,(a0)+
+		move.w	d6,d5
+		subq.w	#1,d6
+		move.w	d6,(a0)+
+		lea	(a0),a1
+		add.w	d5,d5
+		add.w	d5,d5
+		adda.w	d5,a0
++
+-		move.w	(a5,d2.w),d3
+		move.w	d3,d4
+		andi.w	#$3FF,d3
+		lsl.w	#3,d3
+		move.l	(a2,d3.w),d5
+		move.l	4(a2,d3.w),d3
+		btst	#$B,d4
+		beq.s	+
+		eori.l	#$10001000,d5
+		eori.l	#$10001000,d3
+		exg	d3,d5
++		btst	#$A,d4
+		beq.s	+
+		eori.l	#$8000800,d5
+		eori.l	#$8000800,d3
+		swap	d5
+		swap	d3
++		move.l	d5,(a1)+
+		move.l	d3,(a0)+
+		addq.w	#2,d2
+		andi.w	#$E,d2
+		bne.s	+
+		addq.w	#1,d1
+		bsr.s	Get_ChunkRow
++		dbf	d6,-
+		clr.w	(a0)
+		rts
+; End of function Setup_TileRowDraw
+
+; =============== S U B R O U T I N E =======================================
+
+Get_LevelAddrChunkRow:
+		movea.l	(Level_layout_addr_ROM).w,a4
+		move.w	d0,d3
+		asr.w	#5,d3
+		and.w	(Layout_row_index_mask).w,d3
+		move.w	(a3,d3.w),d3
+		andi.l	#$7FFF,d3
+		adda.l	d3,a4
+
+Get_ChunkRow:
+		moveq	#-1,d3
+		clr.w	d3
+		move.b	(a4,d1.w),d3
+		lsl.w	#7,d3
+		move.w	d0,d4
+		andi.w	#$70,d4
+		add.w	d4,d3
+		movea.l	d3,a5
+		rts
+; End of function Get_LevelAddrChunkRow
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_PlaneFull:
+		moveq	#$F,d2
+
+-		movem.l	d0-d2/a0,-(sp)
+		moveq	#$20,d6
+		jsr	Setup_TileRowDraw(pc)
+		jsr	VInt_DrawLevel(pc)
+		movem.l	(sp)+,d0-d2/a0
+		addi.w	#$10,d0
+		dbf	d2,-
+		rts
+; End of function Refresh_PlaneFull
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_PlaneTileDeform:
+		move.w	(a4)+,d2
+		moveq	#$F,d3
+
+-		cmp.w	d2,d0
+		bmi.s	+
+		add.w	(a4)+,d2
+		addq.w	#4,a5
+		bra.s	-
++		move.w	(a5),d1
+		moveq	#$20,d6
+		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
+		jsr	Setup_TileRowDraw(pc)
+		jsr	VInt_DrawLevel(pc)
+		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
+		addi.w	#$10,d0
+		dbf	d3,-
+		rts
+; End of function Refresh_PlaneTileDeform
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_PlaneFullDirect:
+		moveq	#$20,d6
+		bra.s	Refresh_PlaneDirect2
+; ---------------------------------------------------------------------------
+
+Refresh_PlaneScreenDirect:
+		moveq	#$15,d6
+
+Refresh_PlaneDirect2:
+		move.w	(Camera_Y_pos_copy).w,d0
+		move.w	(Camera_X_pos_copy).w,d1
+
+Refresh_PlaneDirect:
+		disableInts
+		moveq	#$E,d2
+
+-		movem.l	d0-d2/d6/a0,-(sp)		; Redraws the entire plane in one go during 68k execution
+		jsr	Setup_TileRowDraw(pc)
+		jsr	VInt_DrawLevel(pc)
+		movem.l	(sp)+,d0-d2/d6/a0
+		addi.w	#$10,d0
+		dbf	d2,-
+		enableInts
+		rts
+; End of function Refresh_PlaneDirect
+
+; =============== S U B R O U T I N E =======================================
+
+DrawTilesAsYouMove:
+		lea	(Camera_X_pos_copy).w,a6
+		lea	(Camera_X_pos_rounded).w,a5
+		move.w	(Camera_Y_pos_copy).w,d1
+		moveq	#$F,d6
+		jsr	Draw_TileColumn(pc)
+		lea	(Camera_Y_pos_copy).w,a6
+		lea	(Camera_Y_pos_rounded).w,a5
+		move.w	(Camera_X_pos_copy).w,d1
+		moveq	#$15,d6
+		jmp	Draw_TileRow(pc)
+; End of function DrawTilesAsYouMove
+
+; =============== S U B R O U T I N E =======================================
+
+DrawBGAsYouMove:
+		lea	(Camera_X_pos_BG_copy).w,a6
+		lea	(Camera_X_pos_BG_rounded).w,a5
+		move.w	(Camera_Y_pos_BG_copy).w,d1
+		moveq	#$F,d6
+		jsr	Draw_TileColumn(pc)
+		lea	(Camera_Y_pos_BG_copy).w,a6
+		lea	(Camera_Y_pos_BG_rounded).w,a5
+		move.w	(Camera_X_pos_BG_copy).w,d1
+		moveq	#$15,d6
+		jmp	Draw_TileRow(pc)
+; End of function DrawBGAsYouMove
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_BG:
+		movem.l	d5/a4-a5,-(sp)
+		lea	(Camera_Y_pos_BG_copy).w,a6
+		jsr	Get_DeformDrawPosVert(pc)
+		lea	(Camera_Y_pos_BG_rounded).w,a5
+		jsr	Draw_TileRow2(pc)
+		movem.l	(sp)+,d5/a4/a6
+		move.w	(Camera_Y_pos_BG_rounded).w,d6
+		tst.w	(Camera_Y_pos_BG_copy).w
+		bpl.s	Draw_BGNoVert
+		move.w	(Camera_Y_pos_BG_copy).w,d6
+		andi.w	#-$10,d6
+
+Draw_BGNoVert:
+		move.w	d6,d1
+
+-		sub.w	(a4)+,d6
+		bmi.s	+
+		move.w	(a6)+,d0
+		andi.w	#-$10,d0
+		move.w	d0,(a6)+
+		subq.w	#1,d5
+		bra.s	-
+; ---------------------------------------------------------------------------
++		neg.w	d6
+		lsr.w	#4,d6
+		moveq	#$F,d4
+		sub.w	d6,d4
+		bcc.s	+
+		moveq	#0,d4
+		moveq	#$F,d6
++
+-		movem.w	d1/d4-d6,-(sp)
+		movem.l	a4/a6,-(sp)
+		lea	2(a6),a5
+		jsr	Draw_TileColumn(pc)
+		movem.l	(sp)+,a4/a6
+		movem.w	(sp)+,d1/d4-d6
+		addq.w	#4,a6
+		tst.w	d4
+		beq.s	+
+		lsl.w	#4,d6
+		add.w	d6,d1
+		subq.w	#1,d5
+		move.w	(a4)+,d6
+		lsr.w	#4,d6
+		move.w	d4,d0
+		sub.w	d6,d4
+		bpl.s	-
+		move.w	d0,d6
+		moveq	#0,d4
+		bra.s	-
+; ---------------------------------------------------------------------------
++
+-		subq.w	#1,d5
+		beq.s	Get_DeformDrawPosVert_Return
+		move.w	(a6)+,d0
+		andi.w	#-$10,d0
+		move.w	d0,(a6)+
+		bra.s	-
+; End of function Draw_BG
+
+; =============== S U B R O U T I N E =======================================
+
+Get_DeformDrawPosVert:
+		move.w	(a4)+,d2
+		move.w	(a6),d0
+		bsr.s	+
+		addi.w	#$E0,d0
++
+-		cmp.w	d2,d0
+		bmi.s	+
+		add.w	(a4)+,d2
+		addq.w	#4,a5
+		bra.s	-
+; ---------------------------------------------------------------------------
++		move.w	(a5),d1
+		swap	d1
+
+Get_DeformDrawPosVert_Return:
+		rts
+; End of function Get_DeformDrawPosVert
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_TileOffsetPositionActual:
+		move.w	(Camera_X_pos_copy).w,d0
+		move.w	d0,d1
+		andi.w	#-$10,d0
+		move.w	d0,(Camera_X_pos_rounded).w
+		move.w	(Camera_Y_pos_copy).w,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	d0,(Camera_Y_pos_rounded).w
+		rts
+; End of function Reset_TileOffsetPositionActual
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_TileOffsetPositionEff:
+		move.w	(Camera_X_pos_BG_copy).w,d0
+		move.w	d0,d1
+		andi.w	#-$10,d0
+		move.w	d0,d2
+		move.w	d0,(Camera_X_pos_BG_rounded).w
+		move.w	(Camera_Y_pos_BG_copy).w,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	d0,(Camera_Y_pos_BG_rounded).w
+		rts
+; End of function Reset_TileOffsetPositionEff
+
+; =============== S U B R O U T I N E =======================================
+
+Clear_Switches:
+		clearRAM Level_trigger_array, Level_trigger_array_End
+		rts
+; End of function Clear_Switches
+
+; =============== S U B R O U T I N E =======================================
+
+Restart_LevelData:
+		clr.b	(Dynamic_resize_routine).w
+		clr.b	(Object_load_routine).w
+		clr.b	(Rings_manager_routine).w
+		clr.b	(Boss_flag).w
+		bsr.s	Clear_Switches
+		bsr.w	Load_Level
+		bsr.w	Load_Solids
+		bra.w	CheckLevelForWater
+; End of function Restart_LevelData
+
+; =============== S U B R O U T I N E =======================================
+
+Offset_ObjectsDuringTransition:
+		lea	(Dynamic_object_RAM+next_object).w,a1
+		moveq	#((Dynamic_object_RAM_End-Dynamic_object_RAM)/object_size)-1,d2
+
+-		tst.l	address(a1)
+		beq.s	+
+		btst	#2,render_flags(a1)
+		beq.s	+
+		sub.w	d0,x_pos(a1)
+		sub.w	d1,y_pos(a1)
++		lea	next_object(a1),a1
+		dbf	d2,-
+		rts
+; End of function Offset_ObjectsDuringTransition
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_ObjectsPosition:
+		sub.w	d1,(Player_1+y_pos).w
+		move.w	(Camera_X_pos).w,d0
+		sub.w	d0,(Player_1+x_pos).w
+		bsr.s	Offset_ObjectsDuringTransition
+		sub.w	d0,(Camera_X_pos).w
+		sub.w	d1,(Camera_Y_pos).w
+		sub.w	d0,(Camera_X_pos_copy).w
+		sub.w	d1,(Camera_Y_pos_copy).w
+		sub.w	d0,(Camera_min_X_pos).w
+		sub.w	d0,(Camera_max_X_pos).w
+		sub.w	d1,(Camera_min_Y_pos).w
+		sub.w	d1,(Camera_max_Y_pos).w
+		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
+		rts
+; End of function Reset_ObjectsPosition
+
+; =============== S U B R O U T I N E =======================================
+
+Change_ActSizes:
+		move.w	(Current_zone_and_act).w,d0
+		lsl.b	#6,d0
+		lsr.w	#3,d0
+		lea	LevelSizes(pc),a1
+		lea	(a1,d0.w),a1
+		move.l	(a1)+,d0
+		move.l	d0,(Camera_min_X_pos).w
+		move.l	d0,(Camera_target_min_X_pos).w
+		move.l	(a1)+,d0
+		move.l	d0,(Camera_min_Y_pos).w
+		move.l	d0,(Camera_target_min_Y_pos).w
+		rts
+; End of function Change_ActSizes
+
+; =============== S U B R O U T I N E =======================================
+
+LoadLevelLoadBlock:
+		move.w	(Current_zone_and_act).w,d0
+		lsl.b	#6,d0
+		lsr.w	#4,d0
+		move.w	d0,d1
+		add.w	d0,d0
+		add.w	d1,d0
+		lea	(LevelLoadBlock).l,a2
+		lea	(a2,d0.w),a2
+		move.l	(a2)+,d0
+		andi.l	#$FFFFFF,d0
+		movea.l	d0,a1
+		move.w	#0,d2
+		bsr.w	Queue_Kos_Module
+
+-		move.b	#VintID_TitleCard,(V_int_routine).w
+		bsr.w	Process_Kos_Queue
+		bsr.w	Wait_VSync
+		bsr.w	Process_Nem_Queue_Init
+		bsr.w	Process_Kos_Module_Queue
+		tst.b	(Kos_modules_left).w
+		bne.s	-
+		rts
+; End of function LoadLevelLoadBlock
+
+; =============== S U B R O U T I N E =======================================
+
+LoadLevelLoadBlock2:
+		move.w	(Current_zone_and_act).w,d0
+		lsl.b	#6,d0
+		lsr.w	#4,d0
+		move.w	d0,d1
+		add.w	d0,d0
+		add.w	d1,d0
+		lea	(LevelLoadBlock).l,a2
+		lea	(a2,d0.w),a2
+		move.l	a2,-(sp)
+		addq.w	#4,a2
+		move.l	(a2)+,(Block_table_addr_ROM).w
+		movea.l	(a2)+,a0
+		lea	(RAM_start).l,a1
+		bsr.w	Kos_Decomp
+		bsr.s	Load_Level
+		bsr.w	LoadPLC_Nem
+		movea.l	(sp)+,a2
+		moveq	#0,d0
+		move.b	(a2),d0
+		bra.w	LoadPalette
+; End of function LoadLevelLoadBlock2
+
+; =============== S U B R O U T I N E =======================================
+
+Load_Level:
+		move.w	(Current_zone_and_act).w,d0
+		lsl.b	#6,d0
+		lsr.w	#4,d0
+		lea	(LevelPtrs).l,a0
+		movea.l	(a0,d0.w),a0
+
+Load_Level2:
+		move.l	a0,(Level_layout_addr_ROM).w
+		addq.l	#8,a0
+		move.l	a0,(Level_layout2_addr_ROM).w
+		rts
+; End of function Load_Level
+; ---------------------------------------------------------------------------
+; Collision index pointer loading subroutine
+; Uses Sonic & Knuckles format mapping
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Load_Solids:
+		move.w	(Current_zone_and_act).w,d0
+		lsl.b	#6,d0
+		lsr.w	#4,d0
+		lea	(SolidIndexes).l,a0
+		movea.l	(a0,d0.w),a0
+
+Load_Solids2:
+		move.l	a0,(Primary_collision_addr).w
+		move.l	a0,(Collision_addr).w
+		addq.l	#1,a0
+		move.l	a0,(Secondary_collision_addr).w
+		rts
+; End of function Load_Solids
