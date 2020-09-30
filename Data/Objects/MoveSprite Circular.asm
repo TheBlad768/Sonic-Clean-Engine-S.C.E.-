@@ -112,7 +112,7 @@ MoveSprite_AtAngleLookup:
 		lsr.w	#5,d1
 		andi.w	#6,d1
 		movea.w	parent3(a0),a1
-		lea	objoff_40(a2),a3
+		lea	$40(a2),a3
 		move.w	x_pos(a1),d2
 		move.w	y_pos(a1),d3
 		move.w	d0,d4
@@ -179,7 +179,7 @@ MoveSprite_CircularLookup:
 		lsr.w	#5,d1
 		andi.w	#6,d1
 		movea.w	parent3(a0),a1
-		lea	objoff_40(a2),a3
+		lea	$40(a2),a3
 		move.w	x_pos(a1),d2
 		move.w	y_pos(a1),d3
 		move.b	child_dx(a0),d4
@@ -216,7 +216,7 @@ MoveSprite_AngleYLookup:
 		lsr.w	#5,d1
 		andi.w	#6,d1
 		movea.w	parent3(a0),a1
-		lea	objoff_40(a2),a3
+		lea	$40(a2),a3
 		move.w	y_pos(a1),d3
 		move.w	d0,d4
 		not.w	d4

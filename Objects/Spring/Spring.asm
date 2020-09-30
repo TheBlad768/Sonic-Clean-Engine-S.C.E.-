@@ -31,7 +31,7 @@ loc_22DB0:
 		move.b	#3,mapping_frame(a0)
 		move.w	#$4A0,art_tile(a0)	; set yellow
 		move.b	#8,width_pixels(a0)
-		move.l	#loc_23050,(a0)
+		move.l	#loc_23050,address(a0)
 		bra.s	loc_22EC4
 ; ---------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ loc_22DEE:
 
 loc_22DFC:
 		move.b	#6,mapping_frame(a0)
-		move.l	#loc_23326,(a0)
+		move.l	#loc_23326,address(a0)
 		bra.s	loc_22EC4
 ; ---------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ loc_22E28:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
 		move.w	#$468,art_tile(a0)	; set diagonal
-		move.l	#loc_23490,(a0)
+		move.l	#loc_23490,address(a0)
 		bra.s	loc_22EC4
 ; ---------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ loc_22E58:
 		move.b	#$A,mapping_frame(a0)
 		move.w	#$468,art_tile(a0)	; set diagonal
 		bset	#1,status(a0)
-		move.l	#loc_235D2,(a0)
+		move.l	#loc_235D2,address(a0)
 		bra.s	loc_22EC4
 ; ---------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ loc_22E8E:
 		bne.s	loc_22DFC
 
 loc_22E96:
-		move.l	#loc_22EF4,(a0)
+		move.l	#loc_22EF4,address(a0)
 
 loc_22EC4:
 		move.b	subtype(a0),d0
@@ -103,8 +103,8 @@ loc_22EF4:
 loc_22F1C:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		jsr	(Animate_Sprite).l
-		jmp	(Sprite_OnScreen_Test).l
+		bsr.w	Animate_Sprite
+		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -157,8 +157,7 @@ loc_23036:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_23048:
-		moveq	#sfx_Spring,d0
-		jmp	(Play_Sound_2).l
+		sfx	sfx_Spring,1,0,0
 ; End of function sub_22F98
 ; ---------------------------------------------------------------------------
 
@@ -189,9 +188,9 @@ loc_23092:
 		movem.l	(sp)+,d1-d4
 		bsr.w	sub_2326C
 		lea	Ani_Spring(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		move.w	$32(a0),d0
-		jmp	(Sprite_OnScreen_Test2).l
+		bra.w	Sprite_OnScreen_Test2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -252,10 +251,9 @@ loc_2323A:
 loc_2324C:
 		bclr	#5,status(a0)
 		bclr	#6,status(a0)
-		bclr	#5,status(a1)
-		move.b	#0,$2F(a1)
-		moveq	#sfx_Spring,d0
-		jmp	(Play_Sound_2).l
+		bclr	#Status_Push,status(a1)
+		move.b	#0,double_jump_flag(a1)
+		sfx	sfx_Spring,1,0,0
 ; End of function sub_23190
 
 ; =============== S U B R O U T I N E =======================================
@@ -322,8 +320,8 @@ loc_23326:
 loc_2334C:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		jsr	(Animate_Sprite).l
-		jmp	(Sprite_OnScreen_Test).l
+		bsr.w	Animate_Sprite
+		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -381,8 +379,7 @@ loc_2346C:
 		clr.b	jumping(a1)
 		move.b	#2,routine(a1)
 		move.b	#0,double_jump_flag(a1)
-		moveq	#sfx_Spring,d0
-		jmp	(Play_Sound_2).l
+		sfx	sfx_Spring,1,0,0
 ; End of function sub_233CA
 ; ---------------------------------------------------------------------------
 
@@ -402,9 +399,9 @@ loc_23490:
 loc_234B8:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		move.w	$32(a0),d0
-		jmp	(Sprite_OnScreen_Test2).l
+		bra.w	Sprite_OnScreen_Test2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -414,7 +411,7 @@ sub_234E6:
 		move.w	x_pos(a0),d0
 		subq.w	#4,d0
 		cmp.w	x_pos(a1),d0
-		blo.s	loc_2350A
+		blo.s		loc_2350A
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -477,8 +474,7 @@ loc_235B8:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_235CA:
-		moveq	#sfx_Spring,d0
-		jmp	(Play_Sound_2).l
+		sfx	sfx_Spring,1,0,0
 ; End of function sub_234E6
 ; ---------------------------------------------------------------------------
 
@@ -498,9 +494,9 @@ loc_235D2:
 loc_235F8:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		move.w	$32(a0),d0
-		jmp	(Sprite_OnScreen_Test2).l
+		bra.w	Sprite_OnScreen_Test2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -555,8 +551,7 @@ loc_236D0:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_236E2:
-		moveq	#sfx_Spring,d0
-		jmp	(Play_Sound_2).l
+		sfx	sfx_Spring,1,0,0
 ; End of function sub_23624
 ; ---------------------------------------------------------------------------
 

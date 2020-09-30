@@ -3,10 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 ; RAM
-Music_test_count:			= Object_RAM+0		; word
-Sound_test_count:			= Object_RAM+2		; word
-v_LeveSelect_VCount:			= Object_RAM+4		; word
-v_LeveSelect_HCount:			= Object_RAM+6		; word($10 bytes)
+Music_test_count:			= Camera_RAM		; word
+Sound_test_count:			= Camera_RAM+2	; word
+v_LeveSelect_VCount:			= Camera_RAM+4	; word
+v_LeveSelect_HCount:			= Camera_RAM+6	; word($10 bytes)
 
 ; VRAM
 LSText_VRAM:				= $7B8
@@ -57,7 +57,7 @@ LevelSelect_Screen:
 		move.b	d0,(Level_started_flag).w
 		ResetDMAQueue
 		locVRAM	$F800
-		lea	(ArtText_LevelSelect).l,a0
+		lea	(ArtNem_LevelSelectText).l,a0
 		bsr.w	Nem_Decomp
 		lea	(Pal_LevelSelect).l,a1
 		lea	(Target_palette).w,a2

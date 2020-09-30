@@ -40,7 +40,7 @@ ArtNem_Rabbit:				binclude "Objects/Animals/Nemesis Art/Rabbit.bin"
 	even
 ArtNem_SignpostStub:		binclude "Objects/Signpost/Nemesis Art/Stub.bin"
 	even
-ArtText_LevelSelect:			binclude "Data/Screens/Level Select/Nemesis Art/Art - Text.bin"
+ArtNem_LevelSelectText:		binclude "Data/Screens/Level Select/Nemesis Art/Text.bin"
 	even
 
 ; ===========================================================================

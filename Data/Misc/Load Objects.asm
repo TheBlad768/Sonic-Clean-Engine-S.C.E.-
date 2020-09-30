@@ -373,7 +373,7 @@ Create_New_Sprite4:
 		bmi.s	+
 
 -		lea	next_object(a1),a1
-		tst.l	(a1)
+		tst.l	address(a1)
 		dbeq	d0,-
 +		rts
 ; End of function Load_Sprites

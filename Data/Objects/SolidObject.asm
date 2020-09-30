@@ -1,6 +1,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
+SolidObject:
 SolidObjectFull:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6

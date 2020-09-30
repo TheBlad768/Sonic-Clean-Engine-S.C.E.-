@@ -197,9 +197,9 @@ locret_EAE4:
 
 Test_Ring_Collisions_AttractRing:
 		movea.l	a1,a3
-		jsr	(Create_New_Sprite).l
+		jsr	Create_New_Sprite(pc)
 		bne.s	loc_EB16
-		move.l	#Obj_Attracted_Ring,(a1)
+		move.l	#Obj_Attracted_Ring,address(a1)
 		move.w	(a3),x_pos(a1)
 		move.w	2(a3),y_pos(a1)
 		move.w	a4,$30(a1)
@@ -336,7 +336,7 @@ Clear_SpriteRingMem:
 		moveq	#((Dynamic_object_RAM_End-Dynamic_object_RAM)/object_size)-1,d1
 
 -		lea	next_object(a1),a1
-		tst.l	(a1)
+		tst.l	address(a1)
 		beq.s	+
 		move.w	respawn_addr(a1),d0
 		beq.s	+

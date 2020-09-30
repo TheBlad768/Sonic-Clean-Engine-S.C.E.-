@@ -403,9 +403,9 @@ loc_11056:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_Move:
-		move.w	(a4),d6						; set Sonic_Knux_top_speed
-		move.w	2(a4),d5						; set Sonic_Knux_acceleration
-		move.w	4(a4),d4						; set Sonic_Knux_deceleration
+		move.w	Sonic_Knux_top_speed-Sonic_Knux_top_speed(a4),d6		; set Sonic_Knux_top_speed
+		move.w	Sonic_Knux_acceleration-Sonic_Knux_top_speed(a4),d5	; set Sonic_Knux_acceleration
+		move.w	Sonic_Knux_deceleration-Sonic_Knux_top_speed(a4),d4	; set Sonic_Knux_deceleration
 		tst.b	status_secondary(a0)				; is bit 7 set? (Infinite inertia)
 		bmi.w	loc_11332					; if so, branch
 		tst.w	move_lock(a0)
@@ -420,12 +420,20 @@ Sonic_NotLeft:
 		bsr.w	sub_11482
 
 Sonic_NotRight:
-		move.b	angle(a0),d0
+		move.w	(HScroll_Shift).w,d1
+		beq.s	+
+		bclr	#0,status(a0)
+		tst.w	d1
+		bpl.s	+
+		bset	#0,status(a0)
++		move.b	angle(a0),d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0						; is Sonic on a slope?
 		bne.w	loc_112EA					; if yes, branch
 		tst.w	ground_vel(a0)				; is Sonic moving?
 		bne.w	loc_112EA					; if yes, branch
+		tst.w	d1
+		bne.w	loc_112EA
 		bclr	#Status_Push,status(a0)
 		move.b	#id_Wait,anim(a0)			; use standing animation
 		btst	#Status_OnObj,status(a0)
@@ -553,6 +561,8 @@ loc_11228:
 ; ---------------------------------------------------------------------------
 
 loc_11276:
+		tst.w	(HScroll_Shift).w
+		bne.s	loc_112B0
 		btst	#1,(Ctrl_1_logical).w
 		beq.s	loc_112B0
 		move.b	#id_Duck,anim(a0)
@@ -716,6 +726,8 @@ sub_113F6:
 		bpl.s	loc_11430
 
 loc_113FE:
+		tst.w	(HScroll_Shift).w
+		bne.s	loc_11412
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_11412
 		bclr	#Status_Push,status(a0)
@@ -1096,6 +1108,8 @@ loc_11732:
 SonicKnux_Roll:
 		tst.b	status_secondary(a0)
 		bmi.s	locret_1177E
+		tst.w	(HScroll_Shift).w
+		bne.s	locret_1177E
 		move.b	(Ctrl_1_logical).w,d0
 		andi.b	#$C,d0
 		bne.s	locret_1177E
@@ -1358,8 +1372,8 @@ loc_11C5E:
 		subi.w	#$A,$14(a0)
 
 loc_11C8C:
-		move.b	#0,$3D(a0)
 		moveq	#0,d0
+		move.b	d0,$3D(a0)
 		move.b	$3E(a0),d0
 		add.w	d0,d0
 		move.w	word_11CF2(pc,d0.w),ground_vel(a0)
@@ -1425,6 +1439,16 @@ loc_11D2E:
 		move.w	#$800,$3E(a0)
 
 loc_11D5E:
+	if	ExtendedCamera
+		moveq	#0,d0
+		move.b	$3E(a0),d0
+		add.w	d0,d0
+		move.w	word_11CF2(pc,d0.w),ground_vel(a0)
+		btst	#0,status(a0)
+		beq.s	+
+		neg.w	ground_vel(a0)
++
+	endif
 		addq.l	#4,sp
 		cmpi.w	#$60,(a5)
 		beq.s	loc_11D6C
@@ -2268,6 +2292,7 @@ loc_126DC:
 		lsr.b	#4,d0
 		andi.b	#6,d0
 		move.w	ground_vel(a0),d2
+		add.w	(HScroll_Shift).w,d2
 		bpl.s	loc_12700
 		neg.w	d2
 
@@ -2524,6 +2549,7 @@ loc_12A2A:
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.w	SAnim_Delay
 		move.w	ground_vel(a0),d2
+		add.w	(HScroll_Shift).w,d2
 		bpl.s	loc_12A4C
 		neg.w	d2
 

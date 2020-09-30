@@ -17,11 +17,11 @@ off_1E5EE: offsetTable
 
 loc_1E5F6:
 		addq.b	#2,routine(a0)
-		jsr	(Create_New_Sprite).l
+		bsr.w	Create_New_Sprite
 		bne.s	loc_1E61A
-		move.l	#Obj_Animal,(a1)
-		move.w	$10(a0),$10(a1)
-		move.w	$14(a0),$14(a1)
+		move.l	#Obj_Animal,address(a1)
+		move.w	x_pos(a0),x_pos(a1)
+		move.w	y_pos(a0),y_pos(a1)
 		move.w	$3E(a0),$3E(a1)
 
 loc_1E61A:
@@ -29,7 +29,7 @@ loc_1E61A:
 		addq.b	#2,routine(a0)
 
 loc_1E626:
-		move.l	#Map_Explosion,$C(a0)
+		move.l	#Map_Explosion,mappings(a0)
 		move.w	art_tile(a0),d0
 		andi.w	#$8000,d0
 		ori.w	#$5A0,d0
@@ -50,7 +50,7 @@ loc_1E66E:
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
 		beq.w	loc_1E758
-+		jmp	(Draw_Sprite).l
++		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -64,14 +64,14 @@ Obj_FireShield_Dissipate:
 		move.b	#3,anim_frame_timer(a0)
 		move.b	#1,mapping_frame(a0)
 		move.l	#+,address(a0)
-+		jsr	(MoveSprite2).l
++		bsr.w	MoveSprite2
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	+
 		move.b	#3,anim_frame_timer(a0)
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
 		beq.s	loc_1E758
-+		jmp	(Draw_Sprite).l
++		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -90,18 +90,18 @@ sub_1E6EC:
 ; ---------------------------------------------------------------------------
 +		move.b	#3,anim_frame_timer(a0)
 		move.l	#+,address(a0)
-+		jsr	(MoveSprite2).l
++		bsr.w	MoveSprite2
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	+
 		move.b	#7,anim_frame_timer(a0)
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
 		beq.s	loc_1E758
-+		jmp	(Draw_Sprite).l
++		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_1E758:
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -115,9 +115,9 @@ Obj_EnemyScore:
 		move.l	#+,address(a0)
 +		tst.w	y_vel(a0)
 		bpl.s	loc_1E758
-		jsr	(MoveSprite2).l
+		bsr.w	MoveSprite2
 		addi.w	#$18,y_vel(a0)
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Explosion/Object Data/Map - Explosion.asm"

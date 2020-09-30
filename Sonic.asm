@@ -5,6 +5,7 @@
 ; Assembly options
 ZoneCount:				= 1	; discrete zones are: DEZ
 GameDebug:				= 1	; if 1, enable debug mode for Sonic
+ExtendedCamera			= 0	; if 1, enable extended camera
 OptimiseSound:	  		= 1	; change to 1 to optimise sound queuing
 ZeroOffsetOptimization:	= 1	; if 1, makes a handful of zero-offset instructions smaller
 AllOptimizations:			= 1	; if 1, enables all optimizations
@@ -397,6 +398,8 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 ; Clone sound driver subroutines
 ; ---------------------------------------------------------------------------
+
+		align $1000
 
 		include "Sound/Engine/Sonic 2 Clone Driver v2.asm"
 

@@ -19,21 +19,21 @@ Obj_InvisibleHurtBlockHorizontal:
 		move.b	d1,height_pixels(a0)
 		btst	#0,status(a0)
 		beq.s	loc_1F448
-		move.l	#loc_1F4C4,(a0)
+		move.l	#loc_1F4C4,address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F448:
 		btst	#1,status(a0)
 		beq.s	loc_1F458
-		move.l	#loc_1F528,(a0)
+		move.l	#loc_1F528,address(a0)
 
 locret_1F456:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F458:
-		move.l	#loc_1F45E,(a0)
+		move.l	#loc_1F45E,address(a0)
 
 loc_1F45E:
 		moveq	#0,d1
@@ -62,7 +62,7 @@ loc_1F4A2:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F456
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_1F4C4:
@@ -92,7 +92,7 @@ loc_1F506:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F59E
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_1F528:
@@ -122,7 +122,7 @@ loc_1F56A:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F59E
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 

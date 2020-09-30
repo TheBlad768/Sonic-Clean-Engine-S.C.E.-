@@ -17,7 +17,7 @@ Obj_28_Invisible_Barrier:
 		addq.w	#1,d1
 		lsl.w	#3,d1
 		move.b	d1,height_pixels(a0)
-		move.l	#loc_1EC6C,(a0)
+		move.l	#loc_1EC6C,address(a0)
 
 loc_1EC6C:
 		moveq	#0,d1
@@ -36,7 +36,7 @@ loc_1EC6C:
 		bhi.s	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1ECA8
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 locret_1ECA8:
@@ -50,7 +50,7 @@ loc_1EBAA:
 		bclr	#7,(a2)
 
 loc_1EBB6:
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Invisible Barrier/Object Data/Map - Invisible Block.asm"

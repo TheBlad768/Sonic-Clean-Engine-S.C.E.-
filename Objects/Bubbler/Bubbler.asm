@@ -22,7 +22,7 @@ loc_2F952:
 		move.l	#Map_Bubbler,mappings(a0)
 		move.w	#$570,art_tile(a0)
 		move.b	#$84,render_flags(a0)
-		move.b	#$10,width_pixels(a0)
+		move.b	#32/2,width_pixels(a0)
 		move.w	#$80,priority(a0)
 		move.b	subtype(a0),d0
 		bpl.s	loc_2F996
@@ -73,7 +73,7 @@ loc_2F9E2:
 		beq.s	loc_2FA2C
 
 loc_2FA14:
-		jsr	(MoveSprite2).l
+		bsr.w	MoveSprite2
 		tst.b	render_flags(a0)
 		bpl.w	loc_2FB8A
 		bra.w	loc_2FB90
@@ -127,9 +127,9 @@ loc_2FABA:
 		jsr	(Random_Number).l
 		andi.w	#$1F,d0
 		move.w	d0,$38(a0)
-		jsr	(Create_New_Sprite).l
+		bsr.w	Create_New_Sprite
 		bne.s	loc_2FB34
-		move.l	(a0),(a1)
+		move.l	address(a0),address(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		jsr	(Random_Number).l
 		andi.w	#$F,d0
@@ -190,11 +190,11 @@ loc_2FB7E:
 		bclr	#7,(a2)
 
 loc_2FB8A:
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_2FB90:
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 byte_2FB96:

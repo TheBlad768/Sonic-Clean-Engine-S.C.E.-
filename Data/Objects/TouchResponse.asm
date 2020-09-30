@@ -502,6 +502,7 @@ loc_1036E:
 		move.w	#-$700,y_vel(a0)
 		move.w	#0,x_vel(a0)
 		move.w	#0,ground_vel(a0)
+		move.w	#0,(HScroll_Shift).w
 		move.b	#id_Death,anim(a0)
 		move.w	art_tile(a0),(Saved_art_tile).w
 		bset	#7,art_tile(a0)

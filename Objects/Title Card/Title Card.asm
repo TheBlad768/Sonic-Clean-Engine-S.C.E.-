@@ -117,7 +117,7 @@ Obj_TitleCardWait2:
 		jsr	(PLCLoad_Animals).l
 		move.l	#Obj_HUD,(v_HUD).w
 		move.b	#0,(Ctrl_1_locked).w
-+		jmp	(Delete_Current_Sprite).l
++		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardRedBanner:
@@ -127,7 +127,7 @@ Obj_TitleCardRedBanner:
 		tst.b	render_flags(a0)
 		bmi.s	+
 		subq.w	#1,$30(a1)
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 +		cmp.b	$28(a0),d0
 		blo.s		++
@@ -141,13 +141,13 @@ Obj_TitleCardRedBanner:
 		move.w	d0,y_pos(a0)
 		st	$34(a1)
 +		move.b	#$70,6(a0)
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardName:
 		move.b	(Current_zone).w,d0
 		add.b	d0,mapping_frame(a0)
-		move.l	#Obj_TitleCardElement,(a0)
+		move.l	#Obj_TitleCardElement,address(a0)
 
 Obj_TitleCardElement:
 		movea.w	parent2(a0),a1
@@ -156,7 +156,7 @@ Obj_TitleCardElement:
 		tst.b	render_flags(a0)
 		bmi.s	+
 		subq.w	#1,$30(a1)
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 +		cmp.b	$28(a0),d0
 		blo.s		++
@@ -169,17 +169,17 @@ Obj_TitleCardElement:
 		subi.w	#$10,d0
 		move.w	d0,x_pos(a0)
 		st	$34(a1)
-+		jmp	(Draw_Sprite).l
++		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardAct:
-		move.l	#Obj_TitleCardElement,(a0)
+		move.l	#Obj_TitleCardElement,address(a0)
 		rts
 
 ; Remove a number of the act, if not needed
 ;		movea.w	parent2(a0),a1
 ;		subq.w	#1,$30(a1)
-;		jmp	(Delete_Current_Sprite).l
+;		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardElement2:
@@ -190,7 +190,7 @@ Obj_TitleCardElement2:
 		cmpi.w	#$20C,x_pos(a0)
 		blo.s		+
 		subq.w	#1,$30(a1)
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 +		cmp.b	$28(a0),d0
 		blo.s		++
@@ -203,7 +203,7 @@ Obj_TitleCardElement2:
 		subi.w	#$10,d0
 		move.w	d0,x_pos(a0)
 		st	$34(a1)
-+		jmp	(Draw_Sprite).l
++		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 ObjArray_TtlCard:

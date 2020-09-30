@@ -40,6 +40,7 @@ Kos_decomp_buffer:					ds.b $1000				; Each module in a KosM archive is decompre
 Nem_code_table:						ds.b $200				; Code table is built up here and then used during decompression
 
 H_scroll_buffer:						ds.l 224					; Horizontal scroll table is built up here and then DMAed to VRAM
+v_deformtablebuffer:					ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
 H_scroll_buffer_End
 Collision_response_list:				ds.b 128					; Collision response list
 Pos_table:							ds.l 64					; Recorded player XY position buffer
@@ -97,6 +98,12 @@ Camera_Y_pos_coarse:				ds.w 1					; Rounded down to the nearest chunk boundary 
 Camera_X_pos_coarse_back:			ds.w 1					; Camera_X_pos_coarse - $80
 Camera_Y_pos_coarse_back:			ds.w 1					; Camera_Y_pos_coarse - $80
 Plane_double_update_flag:				ds.w 1					; Set when two block are to be updated instead of one (i.e. the camera's scrolled by more than $10 pixels)
+HScroll_Shift:
+Camera_Hscroll_shift:					ds.w 3
+	if	ExtendedCamera
+Camera_X_Extend:					ds.l 1					; Camera X extension against P1 speed
+Camera_Y_Extend:					ds.l 1					; Camera Y extension against P1 speed
+	endif
 Screen_X_wrap_value:				ds.w 1					; Set to $FFFF
 Screen_Y_wrap_value:					ds.w 1					; Either $7FF or $FFF
 Camera_Y_pos_mask:					ds.w 1					; Either $7F0 or $FF0
@@ -206,6 +213,8 @@ Object_load_routine:					ds.b 1					; Routine counter for the object loading man
 Deform_Lock:						ds.b 1
 Boss_flag:							ds.b 1					; Set if a boss fight is going on
 TitleCard_end_flag:					ds.b 1
+LevResults_end_flag:					ds.b 1
+NoBackgroundEvent_flag:				ds.b 1
 ScreenEvent_routine:					ds.b 1
 ScreenEvent_flag:						ds.b 1
 BackgroundEvent_routine:				ds.b 1
@@ -219,7 +228,7 @@ Debug_object:						ds.b 1					; The current position in the debug mode object li
 Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
 Debug_mode_flag:					ds.b 1
-DPLC_SlottedRAM:					ds.w 2
+DPLC_SlottedRAM:					ds.w 2					; 2 slots
 PalCycle_Frame:						ds.w 1
 PalCycle_Timer:						ds.w 1
 PalCycle_Frame2:						ds.w 1

@@ -33,3 +33,6 @@ ArtKosM_DEZTitleCard:		binclude "Objects/Title Card/KosinskiM Art/Levels/DEZ - T
 ; ===========================================================================
 ; Kosinski Module compressed levels graphics
 ; ===========================================================================
+
+ArtKosM_RobotnikShip:		binclude "Objects/Robotnik/KosinskiM Art/Robotnik Ship.bin"
+	even

@@ -24,15 +24,15 @@ Obj_MonitorInit:
 		move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$180,priority(a0)
-		move.b	#$E,width_pixels(a0)
-		move.b	#$10,height_pixels(a0)
+		move.b	#28/2,width_pixels(a0)
+		move.b	#32/2,height_pixels(a0)
 		move.w	respawn_addr(a0),d0				; Get address in respawn table
 		beq.s	.notbroken						; If it's zero, it isn't remembered
 		movea.w	d0,a2							; Load address into a2
 		btst	#0,(a2)								; Is this monitor broken?
 		beq.s	.notbroken						; If not, branch
 		move.b	#$B,mapping_frame(a0)			; Use 'broken monitor' frame
-		move.l	#Sprite_OnScreen_Test,(a0)
+		move.l	#Sprite_OnScreen_Test,address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ loc_1D61A:
 Obj_MonitorAnimate:
 		cmpi.b	#$B,mapping_frame(a0)			; Is monitor broken?
 		bne.s	.notbroken						; If not, branch
-		move.l	#loc_1D61A,(a0)
+		move.l	#loc_1D61A,address(a0)
 
 .notbroken:
 		lea	Ani_Monitor(pc),a1
@@ -173,7 +173,7 @@ Obj_MonitorSpawnIcon:
 		move.b	#0,collision_flags(a0)
 		bsr.w	Create_New_Sprite3
 		bne.s	.skipiconcreation
-		move.l	#Obj_MonitorContents,(a1)
+		move.l	#Obj_MonitorContents,address(a1)
 		move.w	x_pos(a0),x_pos(a1)				; Set icon's position
 		move.w	y_pos(a0),y_pos(a1)
 		move.b	anim(a0),anim(a1)
@@ -184,7 +184,7 @@ Obj_MonitorSpawnIcon:
 .skipiconcreation:
 		bsr.w	Create_New_Sprite3
 		bne.s	.skipexplosioncreation
-		move.l	#Obj_Explosion,(a1)
+		move.l	#Obj_Explosion,address(a1)
 		addq.b	#2,routine(a1)					; => loc_1E61A
 		move.w	x_pos(a0),x_pos(a1)				; Set explosion's position
 		move.w	y_pos(a0),y_pos(a1)
@@ -197,7 +197,7 @@ Obj_MonitorSpawnIcon:
 
 .notremembered:
 		move.b	#$A,anim(a0)					; Display 'broken' animation
-		move.l	#Obj_MonitorAnimate,(a0)
+		move.l	#Obj_MonitorAnimate,address(a0)
 		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -311,8 +311,7 @@ Monitor_Give_Fire_Shield:
 		bset	#Status_FireShield,status_secondary(a1)
 		move.l	#Obj_Fire_Shield,(v_Shield).w
 		move.w	a1,(v_Shield+parent).w
-		moveq	#sfx_FireShield,d0
-		jmp	(Play_Sound).l
+		music	sfx_FireShield,1,0,0
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Lightning_Shield:
@@ -321,8 +320,7 @@ Monitor_Give_Lightning_Shield:
 		bset	#Status_LtngShield,status_secondary(a1)
 		move.l	#Obj_Lightning_Shield,(v_Shield).w
 		move.w	a1,(v_Shield+parent).w
-		moveq	#sfx_LightShield,d0
-		jmp	(Play_Sound).l
+		music	sfx_LightShield,1,0,0
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Bubble_Shield:
@@ -331,19 +329,17 @@ Monitor_Give_Bubble_Shield:
 		bset	#Status_BublShield,status_secondary(a1)
 		move.l	#Obj_Bubble_Shield,(v_Shield).w
 		move.w	a1,(v_Shield+parent).w
-		moveq	#sfx_BubleShield,d0
-		jmp	(Play_Sound).l
+		music	sfx_BubleShield,1,0,0
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
-		bset	#1,status_secondary(a1)
+		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#150,invincibility_timer(a1)
 		tst.b	(Boss_flag).w
 		bne.s	loc_1DA3E
 		cmpi.b	#12,air_left(a1)
 		bls.s		loc_1DA3E
-		moveq	#bgm_Invincible,d0	; If invincible, play invincibility music
-		jsr	(Play_Sound).l
+		music	bgm_Invincible,0,0,0	; If invincible, play invincibility music
 
 loc_1DA3E:
 		move.l	#Obj_Invincibility,(v_Invincibility_stars).w

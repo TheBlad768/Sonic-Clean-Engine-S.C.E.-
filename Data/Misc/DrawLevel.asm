@@ -474,6 +474,34 @@ Refresh_PlaneDirect:
 
 ; =============== S U B R O U T I N E =======================================
 
+Refresh_PlaneFullDirect_BG:
+		moveq	#$20,d6
+		bra.s	Refresh_PlaneDirect2_BG
+; ---------------------------------------------------------------------------
+
+Refresh_PlaneScreenDirect_BG:
+		moveq	#$15,d6
+
+Refresh_PlaneDirect2_BG:
+		move.w	(Camera_Y_pos_BG_copy).w,d0
+		move.w	(Camera_X_pos_BG_copy).w,d1
+
+Refresh_PlaneDirect_BG:
+		disableInts
+		moveq	#$F,d2
+
+-		movem.l	d0-d2/d6/a0,-(sp)		; Redraws the entire plane in one go during 68k execution
+		jsr	Setup_TileRowDraw(pc)
+		jsr	VInt_DrawLevel(pc)
+		movem.l	(sp)+,d0-d2/d6/a0
+		addi.w	#$10,d0
+		dbf	d2,-
+		enableInts
+		rts
+; End of function Refresh_PlaneDirect_BG
+
+; =============== S U B R O U T I N E =======================================
+
 DrawTilesAsYouMove:
 		lea	(Camera_X_pos_copy).w,a6
 		lea	(Camera_X_pos_rounded).w,a5
@@ -568,6 +596,15 @@ Draw_BGNoVert:
 
 ; =============== S U B R O U T I N E =======================================
 
+Draw_BG2:
+		lea	(Camera_Y_pos_BG_copy).w,a6
+		lea	(Camera_Y_pos_BG_rounded).w,a5
+		moveq	#0,d1
+		moveq	#$20,d6
+		jmp	Draw_TileRow(pc)
+
+; =============== S U B R O U T I N E =======================================
+
 Get_DeformDrawPosVert:
 		move.w	(a4)+,d2
 		move.w	(a6),d0
@@ -624,6 +661,7 @@ Clear_Switches:
 ; =============== S U B R O U T I N E =======================================
 
 Restart_LevelData:
+		clr.b	(BackgroundEvent_routine).w
 		clr.b	(Dynamic_resize_routine).w
 		clr.b	(Object_load_routine).w
 		clr.b	(Rings_manager_routine).w
@@ -633,6 +671,43 @@ Restart_LevelData:
 		bsr.w	Load_Solids
 		bra.w	CheckLevelForWater
 ; End of function Restart_LevelData
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_ObjectsPosition3:
+		bsr.s	Reset_ObjectsPosition2
+		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
+		move.w	(Camera_X_pos).w,(Camera_max_X_pos).w
+		move.w	(Camera_Y_pos).w,(Camera_min_Y_pos).w
+		move.w	(Camera_Y_pos).w,(Camera_max_Y_pos).w
+		rts
+; ---------------------------------------------------------------------------
+
+Reset_ObjectsPosition2:
+		sub.w	d1,(Player_1+y_pos).w
+		sub.w	d0,(Player_1+x_pos).w
+		sub.w	d0,(Camera_X_pos).w
+		sub.w	d1,(Camera_Y_pos).w
+		sub.w	d0,(Camera_X_pos_copy).w
+		sub.w	d1,(Camera_Y_pos_copy).w
+		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
+		bra.s	Offset_ObjectsDuringTransition
+; ---------------------------------------------------------------------------
+
+Reset_ObjectsPosition:
+		sub.w	d1,(Player_1+y_pos).w
+		move.w	(Camera_X_pos).w,d0
+		sub.w	d0,(Player_1+x_pos).w
+		sub.w	d0,(Camera_X_pos).w
+		sub.w	d1,(Camera_Y_pos).w
+		sub.w	d0,(Camera_X_pos_copy).w
+		sub.w	d1,(Camera_Y_pos_copy).w
+		sub.w	d0,(Camera_min_X_pos).w
+		sub.w	d0,(Camera_max_X_pos).w
+		sub.w	d1,(Camera_min_Y_pos).w
+		sub.w	d1,(Camera_max_Y_pos).w
+		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
+; End of function Reset_ObjectsPosition
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -653,26 +728,8 @@ Offset_ObjectsDuringTransition:
 
 ; =============== S U B R O U T I N E =======================================
 
-Reset_ObjectsPosition:
-		sub.w	d1,(Player_1+y_pos).w
-		move.w	(Camera_X_pos).w,d0
-		sub.w	d0,(Player_1+x_pos).w
-		bsr.s	Offset_ObjectsDuringTransition
-		sub.w	d0,(Camera_X_pos).w
-		sub.w	d1,(Camera_Y_pos).w
-		sub.w	d0,(Camera_X_pos_copy).w
-		sub.w	d1,(Camera_Y_pos_copy).w
-		sub.w	d0,(Camera_min_X_pos).w
-		sub.w	d0,(Camera_max_X_pos).w
-		sub.w	d1,(Camera_min_Y_pos).w
-		sub.w	d1,(Camera_max_Y_pos).w
-		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
-		rts
-; End of function Reset_ObjectsPosition
-
-; =============== S U B R O U T I N E =======================================
-
 Change_ActSizes:
+		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		lsl.b	#6,d0
 		lsr.w	#3,d0
@@ -690,6 +747,7 @@ Change_ActSizes:
 ; =============== S U B R O U T I N E =======================================
 
 LoadLevelLoadBlock:
+		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
@@ -717,6 +775,7 @@ LoadLevelLoadBlock:
 ; =============== S U B R O U T I N E =======================================
 
 LoadLevelLoadBlock2:
+		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
@@ -742,6 +801,7 @@ LoadLevelLoadBlock2:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Level:
+		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
@@ -762,6 +822,7 @@ Load_Level2:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Solids:
+		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0

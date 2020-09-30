@@ -11,7 +11,7 @@ Clear_DisplayData:
 		clr.l	(H_scroll_value).w
 		clearRAM Sprite_table_buffer, Sprite_table_buffer_End
 		clearRAM H_scroll_buffer, H_scroll_buffer_End
-		rts
+		bra.w	Init_SpriteTable
 ; End of function Clear_DisplayData
 ; ---------------------------------------------------------------------------
 ; Copies a plane map to a plane PNT
@@ -31,12 +31,54 @@ Plane_Map_To_VRAM:
 		lea	(VDP_data_port).l,a6
 		move.l	#vdpCommDelta(planeLocH40(0,1)),d4	; row increment value
 
--		move.w	d1,d3
+.loop	move.w	d1,d3
 		bsr.s	RAM_Map_Data_Copy
 		add.l	d4,d0			; move onto next row
-		dbf	d2,-					; and copy it
+		dbf	d2,.loop				; and copy it
 		rts
 ; End of function Plane_Map_To_VRAM
+; ---------------------------------------------------------------------------
+; Copies a plane map to a plane PNT, used for a 128-cell wide plane
+; Inputs:
+; a1 = map address
+; d0 = VDP command to write to the PNT
+; d1 = number of cells in a row - 1
+; d2 = number of cell rows - 1
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Plane_Map_To_VRAM_2:
+		lea	(VDP_data_port).l,a6
+		move.l	#vdpCommDelta(planeLocH80(0,1)),d4	; row increment value
+		bra.s	Plane_Map_To_VRAM.loop
+; ---------------------------------------------------------------------------
+; Copies a plane map to a plane PNT
+; Inputs:
+; a1 = map address
+; d0 = VDP command to write to the PNT
+; d1 = number of cells in a row - 1
+; d2 = number of cell rows - 1
+; d3 = VRAM shift
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Plane_Map_To_VRAM_3:
+		lea	(VDP_data_port).l,a6
+		move.l	#vdpCommDelta(planeLocH40(0,1)),d4
+
+-		move.l	d0,VDP_control_port-VDP_data_port(a6)
+		move.w	d1,d5
+
+-		move.w	(a1)+,d6
+		add.w	d3,d6	; add VRAM shift
+		move.w	d6,VDP_data_port-VDP_data_port(a6)
+		dbf	d5,-			; copy one row
+		add.l	d4,d0	; move onto next row
+		dbf	d2,--		; and copy it
+		rts
+; End of function Plane_Map_To_VRAM_3
 
 ; =============== S U B R O U T I N E =======================================
 

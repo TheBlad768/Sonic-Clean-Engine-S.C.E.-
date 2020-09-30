@@ -22,7 +22,7 @@ Obj_Fire_Shield:
 loc_195F0:	; +
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
 		move.b	#-1,LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#Obj_Fire_Shield_Main,(a0)
+		move.l	#Obj_Fire_Shield_Main,address(a0)
 ; loc_19602:
 Obj_Fire_Shield_Main:
 		movea.w	parent(a0),a2
@@ -68,13 +68,13 @@ Obj_Fire_Shield_DestroyUnderwater:
 		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		jsr	(Create_New_Sprite).l		; Set up for a new object
 		bne.w	Obj_Fire_Shield_Destroy		; If that can't happen, branch
-		move.l	#Obj_FireShield_Dissipate,(a1)	; Create dissipate object
+		move.l	#Obj_FireShield_Dissipate,address(a1)	; Create dissipate object
 		move.w	x_pos(a0),x_pos(a1)		; Put it at shields' x_pos
 		move.w	y_pos(a0),y_pos(a1)		; Put it at shields' y_pos
 
 Obj_Fire_Shield_Destroy:
 		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		move.l	#Obj_Insta_Shield,(a0)		; Replace the Fire Shield with the Insta-Shield
+		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Fire Shield with the Insta-Shield
 
 locret_19690:
 		rts
@@ -104,7 +104,7 @@ Obj_Lightning_Shield:
 .nothighpriority:
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
 		move.b	#-1,LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#Obj_Lightning_Shield_Main,(a0)
+		move.l	#Obj_Lightning_Shield_Main,address(a0)
 
 Obj_Lightning_Shield_Main:
 		movea.w	parent(a0),a2
@@ -155,14 +155,14 @@ Obj_Lightning_Shield_DestroyUnderwater:
 
 Obj_Lightning_Shield_Destroy:
 		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		move.l	#Obj_Insta_Shield,(a0)		; Replace the Lightning Shield with the Insta-Shield
+		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Lightning Shield with the Insta-Shield
 
 locret_197C4:
 		rts
 ; ---------------------------------------------------------------------------
 ; LightningShield_FlashWater:
 Obj_Lightning_Shield_FlashWater:
-		move.l	#Obj_Lightning_Shield_DestroyUnderwater2,(a0)
+		move.l	#Obj_Lightning_Shield_DestroyUnderwater2,address(a0)
 		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 
 		; Flashes the underwater palette white
@@ -190,7 +190,7 @@ Obj_Lightning_Shield_Create_Spark_Part2:
 
 -		bsr.w	Create_New_Sprite		; Find free object slot
 		bne.s	locret_19862			; If one can't be found, return
-		move.l	#Obj_Lightning_Shield_Spark,(a1)	; Make new object a Spark
+		move.l	#Obj_Lightning_Shield_Spark,address(a1)	; Make new object a Spark
 		move.w	x_pos(a0),x_pos(a1)		; (Spark) Inherit x_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	y_pos(a0),y_pos(a1)		; (Spark) Inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.l	mappings(a0),mappings(a1)	; (Spark) Inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
@@ -232,7 +232,7 @@ Obj_Lightning_Shield_Spark_Delete:
 Obj_Lightning_Shield_DestroyUnderwater2:
 		subq.b	#1,anim_frame_timer(a0)		; Is it time to end the white flash?
 		bpl.s	locret_198BC			; If not, return
-		move.l	#Obj_Insta_Shield,(a0)		; Replace Lightning Shield with Insta-Shield
+		move.l	#Obj_Insta_Shield,address(a0)		; Replace Lightning Shield with Insta-Shield
 		lea	(Target_water_palette).w,a1
 		lea	(Water_palette).w,a2
 		move.w	#($80/4)-1,d0			; Size of Water_palette/4-1
@@ -264,7 +264,7 @@ Obj_Bubble_Shield:
 		move.b	#-1,LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
 		movea.w	parent(a0),a1
 		bsr.w	Player_ResetAirTimer
-		move.l	#Obj_Bubble_Shield_Main,(a0)
+		move.l	#Obj_Bubble_Shield_Main,address(a0)
 
 Obj_Bubble_Shield_Main:
 		movea.w	parent(a0),a2
@@ -298,7 +298,7 @@ Obj_Bubble_Shield_Main:
 
 Obj_Bubble_Shield_Destroy:
 		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		move.l	#Obj_Insta_Shield,(a0)		; Replace the Bubble Shield with the Insta-Shield
+		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Bubble Shield with the Insta-Shield
 
 locret_1998A:
 		rts
@@ -323,7 +323,7 @@ Obj_Insta_Shield:
 .nothighpriority:
 		move.w	#1,anim(a0)			; Clear anim and set prev_anim to 1
 		move.b	#-1,LastLoadedDPLC(a0)		; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#Obj_Insta_Shield_Main,(a0)
+		move.l	#Obj_Insta_Shield_Main,address(a0)
 
 Obj_Insta_Shield_Main:
 		movea.w	parent(a0),a2
@@ -422,11 +422,11 @@ Obj_Invincibility:
 		jsr	(Add_To_DMA_Queue).l
 		moveq	#0,d2
 		lea	off_187DE-6(pc),a2
-		lea	(a0),a1
+		lea	address(a0),a1
 		moveq	#4-1,d1
 
 loc_1880E:
-		move.l	#Obj_188E8,(a1)
+		move.l	#Obj_188E8,address(a1)
 		move.l	#Map_Invincibility,$C(a1)
 		move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a1)
 		move.w	#$80,8(a1)
@@ -441,7 +441,7 @@ loc_1880E:
 		move.w	(a2)+,$34(a1)
 		lea	next_object(a1),a1
 		dbf	d1,loc_1880E
-		move.l	#loc_18868,(a0)
+		move.l	#loc_18868,address(a0)
 		move.b	#4,$34(a0)
 
 loc_18868:

@@ -363,6 +363,24 @@ p2_pushing					= 1<<p2_pushing_bit
 standing_mask				= p1_standing|p2_standing
 pushing_mask				= p1_pushing|p2_pushing
 ; ---------------------------------------------------------------------------
+; The high word of d6 after a SolidObject call is a bitfield
+; with the following meaning:
+p1_touch_side_bit		= 0
+p2_touch_side_bit		= p1_touch_side_bit + 1
+p1_touch_side			= 1<<p1_touch_side_bit
+p2_touch_side			= 1<<p2_touch_side_bit
+touch_side_mask			= p1_touch_side|p2_touch_side
+p1_touch_bottom_bit		= p1_touch_side_bit + pushing_bit_delta
+p2_touch_bottom_bit		= p1_touch_bottom_bit + 1
+p1_touch_bottom			= 1<<p1_touch_bottom_bit
+p2_touch_bottom			= 1<<p2_touch_bottom_bit
+touch_bottom_mask		= p1_touch_bottom|p2_touch_bottom
+p1_touch_top_bit			= p1_touch_bottom_bit + pushing_bit_delta
+p2_touch_top_bit			= p1_touch_top_bit + 1
+p1_touch_top				= 1<<p1_touch_top_bit
+p2_touch_top			= 1<<p2_touch_top_bit
+touch_top_mask			= p1_touch_top|p2_touch_top
+; ---------------------------------------------------------------------------
 ; Player Status Variables
 Status_Facing				= 0
 Status_InAir					= 1

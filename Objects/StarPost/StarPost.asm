@@ -3,40 +3,40 @@
 
 Obj_StarPost:
 		moveq	#0,d0
-		move.b	5(a0),d0
+		move.b	routine(a0),d0
 		move.w	off_2CFB6(pc,d0.w),d1
 		jmp	off_2CFB6(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
 off_2CFB6: offsetTable
-		offsetTableEntry.w loc_2CFC0		; 0
-		offsetTableEntry.w loc_2D012		; 2
-		offsetTableEntry.w loc_2D0F8		; 4
-		offsetTableEntry.w loc_2D10A		; 6
-		offsetTableEntry.w loc_2D47E		; 8
+		offsetTableEntry.w loc_2CFC0	; 0
+		offsetTableEntry.w loc_2D012	; 2
+		offsetTableEntry.w loc_2D0F8	; 4
+		offsetTableEntry.w loc_2D10A	; 6
+		offsetTableEntry.w loc_2D47E	; 8
 ; ---------------------------------------------------------------------------
 
 loc_2CFC0:
-		addq.b	#2,5(a0)
-		move.l	#Map_StarPost,$C(a0)
-		move.w	#$5EC,$A(a0)
-		move.b	#4,4(a0)
-		move.b	#8,7(a0)
-		move.b	#$28,6(a0)
-		move.w	#$280,8(a0)
+		addq.b	#2,routine(a0)
+		move.l	#Map_StarPost,mappings(a0)
+		move.w	#$5EC,art_tile(a0)
+		move.b	#4,render_flags(a0)
+		move.b	#16/2,width_pixels(a0)
+		move.b	#80/2,height_pixels(a0)
+		move.w	#$280,priority(a0)
 		movea.w	respawn_addr(a0),a2
 		btst	#0,(a2)
 		bne.s	loc_2D008
 		move.b	(Last_star_post_hit).w,d1
 		andi.b	#$7F,d1
-		move.b	$2C(a0),d2
+		move.b	subtype(a0),d2
 		andi.b	#$7F,d2
 		cmp.b	d2,d1
 		blo.s		loc_2D012
 
 loc_2D008:
 		bset	#0,(a2)
-		move.b	#2,$20(a0)
+		move.b	#2,anim(a0)
 
 loc_2D012:
 		tst.w	(Debug_placement_mode).w
@@ -50,35 +50,35 @@ loc_2D012:
 
 sub_2D028:
 		andi.b	#$7F,d1
-		move.b	$2C(a0),d2
+		move.b	subtype(a0),d2
 		andi.b	#$7F,d2
 		cmp.b	d2,d1
 		bhs.w	loc_2D0EA
-		move.w	$10(a3),d0
-		sub.w	$10(a0),d0
+		move.w	x_pos(a3),d0
+		sub.w	x_pos(a0),d0
 		addi.w	#8,d0
 		cmpi.w	#$10,d0
 		bhs.w	locret_2D0E8
-		move.w	$14(a3),d0
-		sub.w	$14(a0),d0
+		move.w	y_pos(a3),d0
+		sub.w	y_pos(a0),d0
 		addi.w	#$40,d0
 		cmpi.w	#$68,d0
 		bhs.w	locret_2D0E8
 		sfx	sfx_Lamppost,0,0,0
 		jsr	(Create_New_Sprite).l
 		bne.s	loc_2D0D0
-		move.l	#Obj_StarPost,(a1)
-		move.b	#6,5(a1)
-		move.w	$10(a0),$30(a1)
-		move.w	$14(a0),$32(a1)
+		move.l	#Obj_StarPost,address(a1)
+		move.b	#6,routine(a1)
+		move.w	x_pos(a0),$30(a1)
+		move.w	y_pos(a0),$32(a1)
 		subi.w	#$14,$32(a1)
-		move.l	$C(a0),$C(a1)
-		move.w	$A(a0),$A(a1)
-		move.b	#4,4(a1)
-		move.b	#8,7(a1)
-		move.b	#8,6(a1)
-		move.w	#$200,8(a1)
-		move.b	#2,$22(a1)
+		move.l	mappings(a0),mappings(a1)
+		move.w	art_tile(a0),art_tile(a1)
+		move.b	#4,render_flags(a1)
+		move.b	#16/2,width_pixels(a1)
+		move.b	#16/2,height_pixels(a1)
+		move.w	#$200,priority(a1)
+		move.b	#2,mapping_frame(a1)
 		move.w	#$20,$36(a1)
 		move.w	a0,$3E(a1)
 		cmpi.w	#20,(Ring_count).w
@@ -86,9 +86,9 @@ sub_2D028:
 		bsr.w	sub_2D3C8
 
 loc_2D0D0:
-		move.b	#1,$20(a0)
+		move.b	#1,anim(a0)
 		bsr.w	Lamp_StoreInfo
-		move.b	#4,5(a0)
+		move.b	#4,routine(a0)
 		movea.w	respawn_addr(a0),a2
 		bset	#0,(a2)
 
@@ -97,9 +97,9 @@ locret_2D0E8:
 ; ---------------------------------------------------------------------------
 
 loc_2D0EA:
-		tst.b	$20(a0)
+		tst.b	anim(a0)
 		bne.s	locret_2D0F6
-		move.b	#2,$20(a0)
+		move.b	#2,anim(a0)
 
 locret_2D0F6:
 		rts
@@ -107,45 +107,45 @@ locret_2D0F6:
 ; ---------------------------------------------------------------------------
 
 loc_2D0F8:
-		lea	(Ani_Starpost).l,a1
+		lea	Ani_Starpost(pc),a1
 		jsr	(Animate_Sprite).l
-		jmp	(Sprite_OnScreen_Test).l
+		bra.w	Sprite_OnScreen_Test
 ; ---------------------------------------------------------------------------
 
 loc_2D10A:
 		subq.w	#1,$36(a0)
 		bpl.s	loc_2D12E
 		movea.w	$3E(a0),a1
-		cmpi.l	#Obj_StarPost,(a1)
+		cmpi.l	#Obj_StarPost,address(a1)
 		bne.s	loc_2D128
-		move.b	#2,$20(a1)
-		move.b	#0,$22(a1)
+		move.b	#2,anim(a1)
+		move.b	#0,mapping_frame(a1)
 
 loc_2D128:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
 loc_2D12E:
-		move.b	$26(a0),d0
-		subi.b	#$10,$26(a0)
+		move.b	angle(a0),d0
+		subi.b	#$10,angle(a0)
 		subi.b	#$40,d0
 		jsr	(GetSineCosine).l
 		muls.w	#$C00,d1
 		swap	d1
 		add.w	$30(a0),d1
-		move.w	d1,$10(a0)
+		move.w	d1,x_pos(a0)
 		muls.w	#$C00,d0
 		swap	d0
 		add.w	$32(a0),d0
-		move.w	d0,$14(a0)
-		jmp	(Sprite_OnScreen_Test).l
+		move.w	d0,y_pos(a0)
+		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 
 Lamp_StoreInfo:
-		move.b	$2C(a0),(Last_star_post_hit).w
-		move.w	$10(a0),(Saved_X_pos).w
-		move.w	$14(a0),(Saved_Y_pos).w
+		move.b	subtype(a0),(Last_star_post_hit).w
+		move.w	x_pos(a0),(Saved_X_pos).w
+		move.w	y_pos(a0),(Saved_Y_pos).w
 
 Save_Level_Data:
 		move.b	(Last_star_post_hit).w,(Saved_last_star_post_hit).w
@@ -198,23 +198,23 @@ sub_2D3C8:
 
 -		jsr	(Create_New_Sprite).l
 		bne.s	+
-		move.l	(a0),(a1)
-		move.l	#Map_StarpostStars,$C(a1)
-		move.w	#$5EC,$A(a1)
-		move.b	#4,4(a1)
-		move.b	#8,5(a1)
-		move.w	$10(a0),d0
-		move.w	d0,$10(a1)
+		move.l	address(a0),address(a1)
+		move.l	#Map_StarpostStars,mappings(a1)
+		move.w	#$5EC,art_tile(a1)
+		move.b	#4,render_flags(a1)
+		move.b	#8,routine(a1)
+		move.w	x_pos(a0),d0
+		move.w	d0,x_pos(a1)
 		move.w	d0,$30(a1)
-		move.w	$14(a0),d0
+		move.w	y_pos(a0),d0
 		subi.w	#$30,d0
-		move.w	d0,$14(a1)
+		move.w	d0,y_pos(a1)
 		move.w	d0,$32(a1)
-		move.w	8(a0),8(a1)
-		move.b	#8,7(a1)
-		move.b	#1,$22(a1)
-		move.w	#-$400,$18(a1)
-		move.w	#0,$1A(a1)
+		move.w	priority(a0),priority(a1)
+		move.b	#16/2,width_pixels(a1)
+		move.b	#1,mapping_frame(a1)
+		move.w	#-$400,x_vel(a1)
+		move.w	#0,y_vel(a1)
 		move.w	d2,$34(a1)
 		addi.w	#$40,d2
 		dbf	d1,-
@@ -238,10 +238,12 @@ sub_2D3C8:
 ; ---------------------------------------------------------------------------
 
 loc_2D47E:	; 8
-		move.b	$29(a0),d0
-		beq.w	loc_2D50A
+		move.b	collision_property(a0),d0
+		beq.s	loc_2D50A
 		andi.b	#1,d0
 		beq.s	loc_2D506
+
+; Load bonus stage
 		move.w	#$100,(Current_zone_and_act).w
 		move.w	(Ring_count).w,(Saved_ring_count).w
 		clr.b	(Last_star_post_hit).w
@@ -252,7 +254,7 @@ loc_2D47E:	; 8
 		jsr	(Clear_SpriteRingMem).l
 
 loc_2D506:
-		clr.b	$29(a0)
+		clr.b	collision_property(a0)
 
 loc_2D50A:
 		addi.w	#$A,$34(a0)
@@ -303,24 +305,24 @@ loc_2D56A:
 ; ---------------------------------------------------------------------------
 
 loc_2D574:
-		move.b	#-$28,$28(a0)
+		move.b	#$18|$C0,collision_flags(a0)
 
 loc_2D57A:
 		cmpi.w	#$180,d1
 		ble.s		loc_2D58C
 		neg.w	d1
 		addi.w	#$200,d1
-		bmi.w	loc_2D5C0
+		bmi.s	loc_2D5C0
 		bra.s	loc_2D56A
 ; ---------------------------------------------------------------------------
 
 loc_2D58C:
 		move.w	$30(a0),d2
 		add.w	d3,d2
-		move.w	d2,$10(a0)
+		move.w	d2,x_pos(a0)
 		move.w	$32(a0),d2
 		add.w	d0,d2
-		move.w	d2,$14(a0)
+		move.w	d2,y_pos(a0)
 		addq.b	#1,$23(a0)
 		move.b	$23(a0),d0
 		andi.w	#6,d0
@@ -330,8 +332,8 @@ loc_2D58C:
 		moveq	#1,d0
 
 loc_2D5B6:
-		move.b	d0,$22(a0)
-		jmp	(RememberState_Collision).l
+		move.b	d0,mapping_frame(a0)
+		bra.w	RememberState_Collision
 ; ---------------------------------------------------------------------------
 
 loc_2D5C0:

@@ -22,7 +22,7 @@ DeformBgLayer:
 		lea	(Camera_min_X_pos).w,a2
 		lea	(V_scroll_amount).w,a4
 		move.w	(Distance_from_screen_top).w,d3
-		bsr.s	MoveCameraY
+		bsr.w	MoveCameraY
 +		bra.w	Do_ResizeEvents
 ; ---------------------------------------------------------------------------
 ; Subroutine to scroll the level horizontally as Sonic moves
@@ -31,6 +31,9 @@ DeformBgLayer:
 ; =============== S U B R O U T I N E =======================================
 
 MoveCameraX:
+	if	ExtendedCamera
+		bsr.s	Camera_Extended
+	endif
 		move.w	(a1),d4
 		move.w	(a5),d1
 		beq.s	loc_1C0D2
@@ -52,6 +55,9 @@ loc_1C0D2:
 
 loc_1C0D6:
 		sub.w	(a1),d0
+	if	ExtendedCamera
+		add.w	(Camera_X_Extend).w,d0
+	endif
 		subi.w	#$90,d0
 		blt.s		loc_1C0E8
 		subi.w	#$10,d0
@@ -90,6 +96,32 @@ loc_1C112:
 		move.w	d1,(a4)
 		rts
 ; End of function MoveCameraX
+
+	if	ExtendedCamera
+
+; ---------------------------------------------------------------------------
+; Subroutine of the Extended camera
+; By Firerat
+; ---------------------------------------------------------------------------
+
+Camera_Extended:
+		moveq	#0,d1						; clear register
+		move.l	(Camera_X_Extend).w,d0		; Source pos
+		move.w	(Player_1+x_vel).w,d1			; use x speed as target
+		btst	#Status_InAir,(Player_1+status).w
+		bne.s	.calcdist
+		move.w	(Player_1+ground_vel).w,d1		; use inertia if player is on the ground
+
+.calcdist:
+		asr.w	#6,d1						; divide by 64
+		swap	d1							; swap 16 bits
+		sub.l	d1,d0						; subscract result to current amount of camera extension
+		asr.l	#4,d0							; divide difference by 16
+		sub.l	d0,(Camera_X_Extend).w		; otherwise, substract difference to current amount of camera extension
+		rts
+
+	endif
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to scroll the level vertically as Sonic moves
 ; ---------------------------------------------------------------------------

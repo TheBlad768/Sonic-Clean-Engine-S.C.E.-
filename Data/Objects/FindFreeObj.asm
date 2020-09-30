@@ -20,8 +20,8 @@ Create_New_Sprite3:
 		movea.l	a0,a1
 		move.w	#Dynamic_object_RAM_End,d0
 		sub.w	a0,d0
-		lsr.w	#6,d0
-		move.b	Find_First_Sprite_Table(pc,d0.w),d0
+		lsr.w	#6,d0								; Divide by $40... even though SSTs are $4A bytes long in this game
+		move.b	Find_First_Sprite_Table(pc,d0.w),d0	; Use a look-up table to get the right loop counter
 		bmi.s	NFree_Found
 
 NFree_Loop:

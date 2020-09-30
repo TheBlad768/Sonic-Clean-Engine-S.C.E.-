@@ -5,8 +5,8 @@ Obj_Button:
 		move.l	#Map_Button,mappings(a0)
 		move.w	#$47E,art_tile(a0)
 		move.b	#4,render_flags(a0)
-		move.b	#$10,width_pixels(a0)
-		move.b	#8,height_pixels(a0)
+		move.b	#32/2,width_pixels(a0)
+		move.b	#16/2,height_pixels(a0)
 		move.w	#$200,priority(a0)
 		addq.w	#4,y_pos(a0)
 		btst	#5,subtype(a0)
@@ -52,7 +52,7 @@ loc_2C612:
 		move.b	#1,mapping_frame(a0)
 
 loc_2C626:
-		jmp	(Sprite_OnScreen_Test).l
+		bra.w	Sprite_OnScreen_Test
 ; ---------------------------------------------------------------------------
 
 loc_2C62C:
@@ -88,7 +88,7 @@ loc_2C67C:
 		move.b	#1,mapping_frame(a0)
 
 loc_2C690:
-		jmp	(Sprite_OnScreen_Test).l
+		bra.w	Sprite_OnScreen_Test
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Button/Object Data/Map - Button.asm"

@@ -19,21 +19,21 @@ Obj_InvisibleHurtBlockVertical:
 		move.b	d1,height_pixels(a0)
 		btst	#0,status(a0)
 		beq.s	loc_1F5F0
-		move.l	#loc_1F66C,(a0)
+		move.l	#loc_1F66C,address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F5F0:
 		btst	#1,status(a0)
 		beq.s	loc_1F600
-		move.l	#loc_1F6D0,(a0)
+		move.l	#loc_1F6D0,address(a0)
 
 locret_1F5FE:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F600:
-		move.l	#loc_1F606,(a0)
+		move.l	#loc_1F606,address(a0)
 
 loc_1F606:
 		moveq	#0,d1
@@ -62,7 +62,7 @@ loc_1F64A:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F5FE
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_1F66C:
@@ -92,7 +92,7 @@ loc_1F6AE:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F742
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_1F6D0:
@@ -122,7 +122,7 @@ loc_1F712:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F742
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -130,7 +130,7 @@ sub_1F734:
 		move.w	d6,-(sp)
 		move.l	a0,-(sp)
 		movea.l	a1,a0
-		jsr	(Kill_Character).l
+		bsr.w	Kill_Character
 		movea.l	(sp)+,a0
 		move.w	(sp)+,d6
 

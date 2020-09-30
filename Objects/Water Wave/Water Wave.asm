@@ -5,15 +5,15 @@ Obj_WaterWave:
 		move.l	#Map_WaterWave,mappings(a0)
 		move.w	#$87C0,art_tile(a0)
 		move.b	#4,render_flags(a0)
-		move.b	#$80,width_pixels(a0)
-		move.b	#8,height_pixels(a0)
+		move.b	#256/2,width_pixels(a0)
+		move.b	#16/2,height_pixels(a0)
 		bset	#6,render_flags(a0)		; set multi-draw flag
 		move.w	#1,mainspr_childsprites(a0)
 		lea	sub2_x_pos(a0),a2
 		move.w	x_pos(a0),(a2)
 		addi.w	#$C0,(a2)+
 		move.w	y_pos(a0),(a2)+
-		move.l	#+,(a0)
+		move.l	#+,address(a0)
 +		move.w	(Camera_X_pos).w,d1
 		andi.w	#-$20,d1
 		addi.w	#$60,d1

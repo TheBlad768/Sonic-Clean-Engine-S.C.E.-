@@ -10,7 +10,7 @@ DisplaySprite:
 		adda.w	priority(a0),a1
 
 loc_1ABCE:
-		cmpi.w	#$7E,(a1)
+		cmpi.w	#$80-2,(a1)
 		bhs.s	loc_1ABDC
 		addq.w	#2,(a1)
 		adda.w	(a1),a1
@@ -75,6 +75,33 @@ loc_84984:
 		bra.w	Go_Delete_Sprite
 ; ---------------------------------------------------------------------------
 
+Child_Draw_Sprite2:
+		movea.w	$46(a0),a1
+		btst	#4,$38(a1)
+		bne.s	loc_8499E
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+loc_8499E:
+		bra.w	Go_Delete_Sprite_2
+; ---------------------------------------------------------------------------
+
+Child_DrawTouch_Sprite2:
+		movea.w	$46(a0),a1
+		btst	#4,$38(a1)
+		bne.s	loc_849C2
+		btst	#7,$2A(a1)
+		bne.s	loc_849BC
+		jsr	(Add_SpriteToCollisionResponseList).l
+
+loc_849BC:
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+loc_849C2:
+		bra.w	Go_Delete_Sprite_2
+; ---------------------------------------------------------------------------
+
 Child_Draw_Sprite_FlickerMove:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
@@ -103,3 +130,18 @@ Child_DrawTouch_Sprite_FlickerMove:
 		bne.s	loc_849D8
 		bsr.w	Add_SpriteToCollisionResponseList
 		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+Child_DrawTouch_Sprite2_FlickerMove:
+		movea.w	parent3(a0),a1
+		btst	#4,$38(a1)
+		bne.s	loc_849D8
+		btst	#7,status(a1)
+		beq.s	loc_84A3C
+		bset	#7,status(a0)
+		jmp	(Draw_Sprite).l
+; ---------------------------------------------------------------------------
+
+loc_84A3C:
+		jsr	(Add_SpriteToCollisionResponseList).l
+		jmp	(Draw_Sprite).l

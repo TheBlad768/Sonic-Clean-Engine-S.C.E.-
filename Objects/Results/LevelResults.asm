@@ -69,12 +69,12 @@ loc_2DBA8:
 Obj_LevelResultsCreate:
 		tst.b	(Kos_modules_left).w
 		bne.s	locret_2DC34							; Don't load the objects until the art has been loaded
-		jsr	(Create_New_Sprite3).l
+		bsr.w	Create_New_Sprite3
 		bne.s	locret_2DC34
 		lea	ObjArray_LevResults(pc),a2
 		moveq	#12-1,d1								; Make 12 objects
 
--		move.l	(a2)+,(a1)
+-		move.l	(a2)+,address(a1)
 		move.w	(a2)+,$46(a1)
 		move.w	(a2)+,$10(a1)
 		spl	5(a1)
@@ -91,6 +91,8 @@ Obj_LevelResultsCreate:
 		addq.b	#2,routine(a0)
 		tst.b	(LastAct_end_flag).w
 		bne.s	locret_2DC34							; If this is the last act, branch
+		tst.b	(NoBackgroundEvent_flag).w
+		bne.s	locret_2DC34
 		st	(BackgroundEvent_flag).w					; Set the background event flag for the given level (presumably for transitions)
 
 locret_2DC34:
@@ -104,8 +106,7 @@ Obj_LevelResultsWait:
 		cmpi.w	#$121,$2E(a0)
 		bne.s	locret_2DC9E						; Play after eh, a second or so
 		move.b	#30,(Player_1+air_left).w				; Reset air
-		moveq	#bgm_GotThrough,d0
-		jmp	(Play_Sound).l							; Play level complete theme
+		music	bgm_GotThrough,1,0,0				; Play level complete theme
 ; ---------------------------------------------------------------------------
 
 loc_2DC5C:
@@ -129,8 +130,7 @@ loc_2DC7E:
 		move.w	(Level_frame_counter).w,d0
 		andi.w	#3,d0
 		bne.s	locret_2DC9E
-		moveq	#sfx_Switch,d0						; Every four frames play the score countdown sound
-		jmp	(Play_Sound_2).l
+		sfx	sfx_Switch,1,0,0							; Every four frames play the score countdown sound
 ; ---------------------------------------------------------------------------
 
 loc_2DCA0:
@@ -148,7 +148,7 @@ locret_2DC9E:
 ; ---------------------------------------------------------------------------
 
 loc_2DCD6:
-		tst.w	$30(a0)							; Wait for title screen objects to disappear
+		tst.w	$30(a0)						; Wait for title screen objects to disappear
 		beq.s	loc_2DCE2
 		addq.w	#1,$32(a0)
 		rts
@@ -159,21 +159,22 @@ loc_2DCE2:
 		tst.b	(LastAct_end_flag).w
 		bne.s	+
 		clr.b	(Last_star_post_hit).w
-		move.l	#Obj_TitleCard,(a0)	; Change current object to title card
+		move.l	#Obj_TitleCard,address(a0)	; Change current object to title card
 		clr.b	routine(a0)
 		st	$3E(a0)
 		rts
 ; ---------------------------------------------------------------------------
-+		clr.b	(TitleCard_end_flag).w			; Stop level results flag and set title card finished flag
-		jmp	(Delete_Current_Sprite).l
++		clr.b	(TitleCard_end_flag).w				; Stop level results flag and set title card finished flag
+		st	(LevResults_end_flag).w
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_LevResultsCharName:
-		move.l	#Obj_LevResultsGeneral,(a0)
+		move.l	#Obj_LevResultsGeneral,address(a0)
 
 Obj_LevResultsGeneral:
 		jsr	LevelResults_MoveElement(pc)
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsTimeBonus:
@@ -194,7 +195,7 @@ Obj_LevelResultsTotal:
 
 loc_2DDBE:
 		bsr.s	LevResults_DisplayScore
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -234,7 +235,7 @@ LevelResults_MoveElement:
 		bmi.s	loc_2DE20
 		subq.w	#1,$30(a1)		; If offscreen, subtract from number of elements and delete
 		addq.w	#4,sp
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 loc_2DE20:

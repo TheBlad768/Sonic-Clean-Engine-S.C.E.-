@@ -5,8 +5,8 @@ Obj_PathSwap:
 		move.l	#Map_PathSwap,mappings(a0)
 		move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
-		move.b	#$40,width_pixels(a0)
-		move.b	#$40,height_pixels(a0)
+		move.b	#128/2,width_pixels(a0)
+		move.b	#128/2,height_pixels(a0)
 		move.w	#$280,priority(a0)
 		move.b	subtype(a0),d0
 		btst	#2,d0
@@ -21,7 +21,7 @@ Obj_PathSwap:
 		cmp.w	y_pos(a1),d1
 		bcc.s	+
 		move.b	#1,$34(a0)
-+		move.l	#loc_1CEF2,(a0)
++		move.l	#loc_1CEF2,address(a0)
 		bra.w	loc_1CEF2
 ; ---------------------------------------------------------------------------
 
@@ -42,16 +42,16 @@ loc_1CD3C:
 		cmp.w	x_pos(a1),d1
 		bcc.s	+
 		move.b	#1,$34(a0)
-+		move.l	#+,(a0)
++		move.l	#+,address(a0)
 +		tst.w	(Debug_placement_mode).w
 		bne.s	+
 		move.w	x_pos(a0),d1
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1CDDA
-		jmp	(Delete_Sprite_If_Not_In_Range).l
+		bra.w	Delete_Sprite_If_Not_In_Range
 ; ---------------------------------------------------------------------------
-+		jmp	(Sprite_OnScreen_Test).l
++		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -157,9 +157,9 @@ loc_1CEF2:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1CF42
-		jmp	(Delete_Sprite_If_Not_In_Range).l
+		bra.w	Delete_Sprite_If_Not_In_Range
 ; ---------------------------------------------------------------------------
-+		jmp	(Sprite_OnScreen_Test).l
++		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 

@@ -21,7 +21,7 @@ Obj_SpinForcer:
 		cmp.w	y_pos(a1),d1
 		bcc.s	+
 		move.b	#1,$34(a0)
-+		move.l	#loc_1E9E6,(a0)
++		move.l	#loc_1E9E6,address(a0)
 		bra.w	loc_1E9E6
 ; ---------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ loc_1E85C:
 		move.b	#1,$34(a0)
 
 loc_1E890:
-		move.l	#loc_1E896,(a0)
+		move.l	#loc_1E896,address(a0)
 
 loc_1E896:
 		tst.w	(Debug_placement_mode).w
@@ -53,11 +53,11 @@ loc_1E896:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1E8C6
-		jmp	(Delete_Sprite_If_Not_In_Range).l
+		bra.w	Delete_Sprite_If_Not_In_Range
 ; ---------------------------------------------------------------------------
 
 loc_1E8C0:
-		jmp	(Sprite_OnScreen_Test).l
+		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -159,8 +159,7 @@ loc_1E9C0:
 		move.b	#7,$1F(a1)
 		move.b	#2,$20(a1)
 		addq.w	#5,y_pos(a1)
-		moveq	#sfx_Roll,d0
-		jmp	(Play_Sound_2).l
+		sfx	sfx_Roll,1,0,0
 ; End of function sub_1E8C6
 ; ---------------------------------------------------------------------------
 
@@ -171,11 +170,11 @@ loc_1E9E6:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1EA14
-		jmp	(Delete_Sprite_If_Not_In_Range).l
+		bra.w	Delete_Sprite_If_Not_In_Range
 ; ---------------------------------------------------------------------------
 
 loc_1EA0E:
-		jmp	(Sprite_OnScreen_Test).l
+		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
 

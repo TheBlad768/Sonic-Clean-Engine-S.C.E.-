@@ -92,33 +92,47 @@ DEZ1_ScreenEvent:
 ; ---------------------------------------------------------------------------
 
 DEZ1_ScreenEvent_RefreshPlane:
+		sf	(ScreenEvent_flag).w
 		jmp	Refresh_PlaneScreenDirect(pc)
 
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_BackgroundInit:
+		bsr.s	DEZ1_Deform
 		jsr	Reset_TileOffsetPositionEff(pc)
+		moveq	#0,d1	; Set XCam BG pos
 		jsr	Refresh_PlaneFull(pc)
-		lea	DEZ_ParallaxScript(pc),a1
-		jsr	ExecuteParallaxScript(pc)
-		jmp	ShakeScreen_Setup(pc)
+		bra.s	DEZ1_BackgroundEvent.deform
 
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_BackgroundEvent:
 		tst.b (BackgroundEvent_flag).w
 		bne.s	DEZ1_Transition
-		lea	DEZ_ParallaxScript(pc),a1
-		jsr	ExecuteParallaxScript(pc)
+		bsr.s	DEZ1_Deform
+
+.deform:
+		lea	DEZ1_BGDrawArray(pc),a4
+		lea	(v_deformtablebuffer).w,a5
+		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
+; ---------------------------------------------------------------------------
+
+DEZ1_BGDrawArray:	dc.w $7FFF
+; ---------------------------------------------------------------------------
+
+DEZ1_Deform:
+		lea	DEZ1_ParallaxScript(pc),a1
+		jmp	ExecuteParallaxScript(pc)
+; ---------------------------------------------------------------------------
+
+DEZ1_ParallaxScript:
+			; Mode	Speed coef.	Number of lines(Linear only)
+		dc.w	_normal,	 $0050		; BG
+		dc.w	-1
 ; ---------------------------------------------------------------------------
 
 DEZ1_Transition:
 		sf	(BackgroundEvent_flag).w
 		rts
-; ---------------------------------------------------------------------------
 
-DEZ_ParallaxScript:
-			; Mode			Speed coef.	Number of lines
-		dc.w	_normal,			$0050,		224		; BG
-		dc.w	-1

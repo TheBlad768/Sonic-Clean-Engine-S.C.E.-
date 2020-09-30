@@ -409,7 +409,7 @@ sub_868F8:
 		jsr	(Set_PlayerEndingPose).l
 		jsr	(Create_New_Sprite).l
 		bne.s	locret_86930
-		move.l	#Obj_LevelResults,(a1)
+		move.l	#Obj_LevelResults,address(a1)
 
 locret_86930:
 		rts
@@ -429,7 +429,7 @@ sub_86984:
 		move.b	d0,routine(a0)
 		jsr	(Create_New_Sprite).l
 		bne.s	loc_869C2
-		move.l	#Obj_LevelResults,(a1)
+		move.l	#Obj_LevelResults,address(a1)
 
 loc_869C2:
 		moveq	#1,d0

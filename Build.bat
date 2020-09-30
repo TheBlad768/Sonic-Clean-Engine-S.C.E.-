@@ -29,7 +29,7 @@ IF EXIST Sonic.gen "Win32/convsym" Sonic.lst Sonic.gen -a -input as_lst
 
 REM // "Win32/rompad" Sonic.gen 255 0
 
-REM REM // fix the rom header (checksum)
+REM // fix the rom header (checksum)
 IF EXIST Sonic.gen "Win32/fixheadr" Sonic.gen
 
 REM // done -- pause if we seem to have failed, then exit

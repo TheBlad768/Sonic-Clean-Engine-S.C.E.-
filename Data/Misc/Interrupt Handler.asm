@@ -181,15 +181,10 @@ VInt_Level:
 		lea	(VDP_data_port).l,a6
 		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_data_port(a6)
 		move.w	#cWhite,d0
-		move.w	#32-1,d1
+		move.w	#64-1,d1
 
 -		move.w	d0,VDP_data_port-VDP_data_port(a6)
-		dbf	d1,-	; fill entire first and second palette lines with white
-		move.w	#0,VDP_data_port-VDP_data_port(a6)	; keep backdrop black
-		move.w	#$1E,d1
-
--		move.w	d0,VDP_data_port-VDP_data_port(a6)
-		dbf	d1,-	; fill remaining colours with white
+		dbf	d1,-	; fill entire palette with white
 		bra.s	VInt_Level_Cont
 ; ---------------------------------------------------------------------------
 

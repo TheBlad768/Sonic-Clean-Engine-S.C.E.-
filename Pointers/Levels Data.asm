@@ -99,13 +99,16 @@ DEZ1_Layout:		binclude	"Levels/DEZ/Layout/1.bin"
 ; Level sprite data
 ; ===========================================================================
 
-		dc.w -1, 0, 0	; Start end
+		dc.w -1, 0, 0
 DEZ1_Sprites:		binclude	"Levels/DEZ/Object Pos/1.bin"
+		dc.w -1, 0, 0
 	even
 
 ; ===========================================================================
 ; Level ring data
 ; ===========================================================================
 
+		dc.w -1, 0, 0
 DEZ1_Rings:			binclude	"Levels/DEZ/Ring Pos/1.bin"
+		dc.w -1, 0, 0
 	even

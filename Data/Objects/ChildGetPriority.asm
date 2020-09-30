@@ -21,3 +21,20 @@ Child_GetPriorityOnce:
 		move.l	(sp),address(a0)
 +		rts
 ; End of function Child_GetPriorityOnce
+
+; =============== S U B R O U T I N E =======================================
+
+Child_SyncDraw:
+		movea.w	parent3(a0),a1
+		btst	#6,$38(a1)
+		bne.s	++
+		bclr	#6,$38(a0)
+		bset	#7,art_tile(a0)
+		btst	#7,art_tile(a1)
+		bne.s	+
+		bclr	#7,art_tile(a0)
++		rts
+; ---------------------------------------------------------------------------
++		bset	#6,$38(a0)
+		rts
+; End of function Child_SyncDraw

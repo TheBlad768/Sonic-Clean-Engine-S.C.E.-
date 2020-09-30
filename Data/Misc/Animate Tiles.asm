@@ -104,7 +104,7 @@ AnimateTiles_DoAniPLC_Part2:
 ; decompressed that the VBLANK window would close before all the animating was done.
 
 ;    zoneanimdecl -1, ArtUnc_Flowers1, ArtTile_ArtUnc_Flowers1, 6, 2
-;	-1			Global frame duration. If -1, then each frame will use its own duration, instead
+;	-1						Global frame duration. If -1, then each frame will use its own duration, instead
 
 ;	ArtUnc_Flowers1			Source address
 ;	ArtTile_ArtUnc_Flowers1	Destination VRAM address

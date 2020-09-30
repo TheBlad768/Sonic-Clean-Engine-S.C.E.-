@@ -41,7 +41,7 @@ SetUp_ObjAttributesSlotted:
 		add.w	d4,d3					; Add VRAM offset
 		dbf	d1,-							; Repeat max times
 		moveq	#0,d0
-		move.l	d0,(a0)
+		move.l	d0,address(a0)
 		move.l	d0,x_pos(a0)
 		move.l	d0,y_pos(a0)
 		move.b	d0,subtype(a0)
@@ -61,7 +61,7 @@ SetUp_ObjAttributesSlotted:
 		move.b	(a1)+,mapping_frame(a0)	; Frame number
 		move.b	(a1)+,collision_flags(a0)	; Collision number
 		bset	#2,status(a0)					; Turn object slotting on
-		move.b	#-1,objoff_3A(a0)			; CHECKLATER
+		st	objoff_3A(a0)				; CHECKLATER
 		bset	#2,render_flags(a0)			; Use screen coordinates
 		addq.b	#2,routine(a0)			; Next routine
 		rts
@@ -177,6 +177,18 @@ Displace_PlayerOffObject_Return:
 
 ; =============== S U B R O U T I N E =======================================
 
+Go_CheckPlayerRelease:
+		movem.l	d7-a0/a2-a3,-(sp)
+		lea	(Player_1).w,a1
+		btst	#3,status(a1)
+		beq.s	+
+		movea.w	interact(a1),a0
+		bsr.w	CheckPlayerReleaseFromObj
++		movem.l	(sp)+,d7-a0/a2-a3
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 Obj_Song_Fade_Transition:
 		move.w	#$5A,$2E(a0)
 		sfx	bgm_Fade,0,1,1			; fade out music
@@ -239,7 +251,7 @@ Init_BossArena3:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjectsExtraRoutine:
+ObjectsRoutine:
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		adda.w	(a1,d0.w),a1
@@ -482,11 +494,28 @@ Wait_NewDelay:
 
 ; =============== S U B R O U T I N E =======================================
 
+Wait_FadeToLevelMusic:
+		subq.w	#1,$2E(a0)
+		bmi.s	+
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
++		bclr	#7,render_flags(a0)
+		move.w	#$77,$2E(a0)
+		jsr	(Create_New_Sprite).l
+		bne.s	+
+		move.l	#Obj_Song_Fade_ToLevelMusic,(a1)
++		movea.l	$34(a0),a1
+		jmp	(a1)
+
+; =============== S U B R O U T I N E =======================================
+
 BossDefeated_StopTimer:
 		clr.b	(Update_HUD_timer).w
 
 BossDefeated:
 		move.w	#$3F,$2E(a0)
+
+BossDefeated_NoTime:
 		bclr	#7,render_flags(a0)
 		moveq	#100,d0
 		bra.w	HUD_AddToScore
@@ -501,7 +530,7 @@ BossFlash:
 ; ---------------------------------------------------------------------------
 
 word_7A622:
-		dc.w Normal_palette+$E
+		dc.w Normal_palette+$C
 		dc.w Normal_palette+$1C
 		dc.w Normal_palette+$1E
 word_7A628:

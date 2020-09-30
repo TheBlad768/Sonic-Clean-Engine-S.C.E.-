@@ -21,7 +21,6 @@ GM_Level:
 		clearRAM Lag_frame_count, Lag_frame_count_End
 		clearRAM Camera_RAM, Camera_RAM_End
 		clearRAM Oscillating_variables, Oscillating_variables_End
-		bsr.w	Init_SpriteTable
 		lea	(VDP_control_port).l,a6
 		move.w	#$8004,(a6)								; 8-colour mode
 		move.w	#$8200+(vram_fg>>10),(a6)				; set foreground nametable address
@@ -100,11 +99,12 @@ GM_Level:
 		move.b	d0,(Saved_status_secondary).w
 +		move.b	d0,(Time_over_flag).w
 		bsr.w	OscillateNumInit
-		move.b	#1,(Ctrl_1_locked).w
-		move.b	#1,(Update_HUD_score).w					; update score counter
-		move.b	#1,(Update_HUD_ring_count).w			; update rings counter
-		move.b	#1,(Update_HUD_timer).w					; update time counter
-		move.b	#1,(Level_started_flag).w
+		moveq	#1,d0
+		move.b	d0,(Ctrl_1_locked).w
+		move.b	d0,(Update_HUD_score).w					; update score counter
+		move.b	d0,(Update_HUD_ring_count).w			; update rings counter
+		move.b	d0,(Update_HUD_timer).w					; update time counter
+		move.b	d0,(Level_started_flag).w
 		tst.b	(Water_flag).w
 		beq.s	+
 		move.l	#Obj_WaterWave,(v_WaterWave).w
