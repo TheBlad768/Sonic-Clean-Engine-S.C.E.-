@@ -12,14 +12,14 @@ Check_CameraInRange:
 		bcs.s	Check_CameraInRange_Fail
 		cmp.w	(a1)+,d1
 		bhi.s	Check_CameraInRange_Fail
-		bclr	#7,$27(a0)
+		bclr	#7,objoff_27(a0)
 		cmp.w	(a1),d0
 		bls.s		+
-		bset	#7,$27(a0)
-+		bclr	#6,$27(a0)
+		bset	#7,objoff_27(a0)
++		bclr	#6,objoff_27(a0)
 		cmp.w	4(a1),d1
 		bls.s		+
-		bset	#6,$27(a0)
+		bset	#6,objoff_27(a0)
 +		move.l	(sp),address(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -29,6 +29,94 @@ Check_CameraInRange_Fail:
 		addq.w	#4,sp
 		rts
 ; End of function Check_CameraInRange
+
+; =============== S U B R O U T I N E =======================================
+
+sub_85C7E:
+		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
+		move.w	(Camera_target_max_Y_pos).w,d0
+		cmp.w	(Camera_max_Y_pos).w,d0
+		blo.s		locret_85CA2
+		move.w	d0,(Camera_min_Y_pos).w
+		move.w	$3A(a0),d0
+		cmp.w	(Camera_X_pos).w,d0
+		bhi.s	locret_85CA2
+		movea.l	$34(a0),a1
+		jsr	(a1)
+
+locret_85CA2:
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_85CA4:
+		btst	#0,objoff_27(a0)
+		bne.s	loc_85CC6
+		subq.w	#1,$2E(a0)
+		bpl.s	loc_85CC6
+		move.b	objoff_26(a0),d0
+		move.b	d0,(Level_music+1).w
+		bsr.w	Play_Sound
+		bset	#0,objoff_27(a0)
+
+loc_85CC6:
+		btst	#1,objoff_27(a0)
+		bne.s	loc_85D06
+		move.w	(Camera_Y_pos).w,d0
+		tst.b	objoff_27(a0)
+		bmi.s	loc_85CE6
+		cmp.w	(Camera_min_Y_pos_Saved).w,d0
+		bhs.s	loc_85CF2
+		move.w	d0,(Camera_min_Y_pos).w
+		bra.w	loc_85D06
+; ---------------------------------------------------------------------------
+
+loc_85CE6:
+		move.w	(Camera_max_Y_pos_Saved).w,d1
+		addi.w	#$60,d1
+		cmp.w	d1,d0
+		bhi.s	loc_85D06
+
+loc_85CF2:
+		bset	#1,objoff_27(a0)
+		move.w	(Camera_min_Y_pos_Saved).w,(Camera_min_Y_pos).w
+		move.w	(Camera_max_Y_pos_Saved).w,d0
+		move.w	d0,(Camera_target_max_Y_pos).w
+
+loc_85D06:
+		btst	#2,objoff_27(a0)
+		bne.s	loc_85D48
+		move.w	(Camera_X_pos).w,d0
+		btst	#6,objoff_27(a0)
+		bne.s	loc_85D28
+		cmp.w	(Camera_min_X_pos_Saved).w,d0
+		bhs.s	loc_85D36
+		move.w	d0,(Camera_min_X_pos).w
+		bra.w	loc_85D48
+; ---------------------------------------------------------------------------
+
+loc_85D28:
+		cmp.w	(Camera_max_X_pos_Saved).w,d0
+		bls.s		loc_85D36
+		move.w	d0,(Camera_max_X_pos).w
+		bra.w	loc_85D48
+; ---------------------------------------------------------------------------
+
+loc_85D36:
+		bset	#2,objoff_27(a0)
+		move.w	(Camera_min_X_pos_Saved).w,(Camera_min_X_pos).w
+		move.w	(Camera_max_X_pos_Saved).w,(Camera_max_X_pos).w
+
+loc_85D48:
+		move.b	objoff_27(a0),d0
+		andi.b	#7,d0
+		cmpi.b	#7,d0
+		bne.w	locret_85CA2
+		clr.b	objoff_27(a0)
+		clr.w	objoff_1C(a0)
+		clr.b	objoff_26(a0)
+		movea.l	$34(a0),a1
+		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 

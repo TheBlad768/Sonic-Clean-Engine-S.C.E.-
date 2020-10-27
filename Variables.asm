@@ -73,6 +73,10 @@ Saved_Camera_max_X_pos:			ds.w 1
 Saved_Camera_min_X_pos:			ds.w 1
 Saved_Camera_min_Y_pos:			ds.w 1
 Saved_Camera_target_max_Y_pos:		ds.w 1
+Camera_min_X_pos_Saved:			ds.w 1
+Camera_max_X_pos_Saved:			ds.w 1
+Camera_min_Y_pos_Saved:			ds.w 1
+Camera_max_Y_pos_Saved:			ds.w 1
 H_scroll_frame_offset:					ds.w 1					; If this is non-zero with value x, horizontal scrolling will be based on the player's position x / $100 + 1 frames ago
 Pos_table_index:						ds.b 1
 Pos_table_byte:						ds.b 1

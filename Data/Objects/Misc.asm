@@ -242,10 +242,10 @@ Init_BossArena3:
 		move.w	(Camera_target_max_Y_pos).w,(Saved_Camera_target_max_Y_pos).w
 		move.w	(Camera_min_X_pos).w,(Saved_Camera_min_X_pos).w
 		move.w	(Camera_max_X_pos).w,(Saved_Camera_max_X_pos).w
-		move.w	(a1)+,(Camera_min_Y_pos).w
-		move.w	(a1)+,(Camera_max_Y_pos).w
-		move.w	(a1)+,(Camera_min_X_pos).w
-		move.w	(a1)+,(Camera_max_X_pos).w
+		move.w	(a1)+,(Camera_min_Y_pos_Saved).w
+		move.w	(a1)+,(Camera_max_Y_pos_Saved).w
+		move.w	(a1)+,(Camera_min_X_pos_Saved).w
+		move.w	(a1)+,(Camera_max_X_pos_Saved).w
 		rts
 ; End of function Init_BossArena
 

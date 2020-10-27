@@ -188,123 +188,125 @@ bitUp:		equ 0
 object_size =				$4A	; the size of an object's status table entry
 next_object =				object_size
 ; ---------------------------------------------------------------------------
-; Object struct
+; Object Status Table offsets
 ; ---------------------------------------------------------------------------
-	phase 0 ; pretend we're at address 0
-id:								; long ; object ID
-obId:							; long ; object ID
-address:					ds.l 1	; long ; object ID
-obRender:						; byte(bitfield) ; refer to SCHG for details
-render_flags:				ds.b 1	; byte(bitfield) ; refer to SCHG for details
-routine:							; byte
-obRoutine:				ds.b 1	; byte
-obHeight:						; byte
-height_pixels:			ds.b 1	; byte
-obWidth:						; byte
-width_pixels:				ds.b 1	; byte
-priority:							; word ; in units of $80
-obPriority:				ds.w 1	; word ; in units of $80
-obGfx:							; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
-art_tile:					ds.w 1	; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
-obMap:							; long
-mappings:				ds.l 1	; long
-
-obX:							; word, or long when extra precision is required
-x_pos:							; word, or long when extra precision is required
-x_pixel:					ds.w 1	; word ; x-coordinate for objects using screen positioning
-x_sub:					ds.w 1	; word
-obY:								; word, or long when extra precision is required
-y_pos:							; word, or long when extra precision is required
-y_pixel:					ds.w 1	; word ; y-coordinate for objects using screen positioning
-y_sub:					ds.w 1	; word
-x_vel:							; word ; horizontal velocity
-obVelX:					ds.w 1	; word ; horizontal velocity
-y_vel:							; word ; vertical velocity
-obVelY:					ds.w 1	; word ; vertical velocity
-
-obInertia:						; word ; used by sonic
-ground_vel:						; word ; used by sonic
-boss_invulnerable_time:	ds.w 1	; byte
-
-y_radius:				ds.b 1	; byte ; collision height / 2
-x_radius:				ds.b 1	; byte ; collision width / 2
-
-anim:							; byte
-obAnim:					ds.b 1	; byte
-obNextAni:						; byte ; when this isn't equal to anim the animation restarts
-next_anim:						; byte ; when this isn't equal to anim the animation restarts
-prev_anim:				ds.b 1	; byte ; when this isn't equal to anim the animation restarts
-obFrame:						; byte
-mapping_frame:			ds.b 1	; byte
-anim_frame:				ds.b 1	; byte
-anim_frame_timer:		ds.b 1	; byte
-
-collision_restore_flags:				; byte ; restore collision after hit (maybe it's used only bosses)
-double_jump_property:	ds.b 1	; byte ; used by sonic ; remaining frames of flight / 2 for Tails, gliding-related for Knuckles
-
-angle:							; byte, or word ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
-obAngle:					ds.b 1	; byte, or word ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
-flip_angle:				ds.b 1	; byte ; used by sonic
-obColType:						; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
-collision_flags:			ds.b 1	; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
-obColProp:						; byte ; usage varies, bosses use it as a hit counter
-boss_hitcount2:					; byte ; usage varies, bosses use it as a hit counter
-collision_property:		ds.b 1	; byte ; usage varies, bosses use it as a hit counter
-status:							; byte(bitfield) ; refer to SCHG for details
-obStatus:				ds.b 1	; byte(bitfield) ; refer to SCHG for details
-shield_reaction:					; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
-status_secondary:			ds.b 1	; byte ; used by sonic
-subtype:							; byte, or word
-obSubtype:						; byte, or word
-air_left:					ds.b 1	; byte ; used by sonic
-flip_type:				ds.b 1	; byte ; used by sonic
-obTimer:							; word
-object_control:			ds.b 1	; byte ; used by sonic
-double_jump_flag:		ds.b 1	; byte ; used by sonic
-flips_remaining:			ds.b 1	; byte ; used by sonic
-flip_speed:				ds.b 1	; byte ; used by sonic
-move_lock:				ds.w 1	; word ; used by sonic
-invulnerability_timer:		ds.b 1	; byte ; used by sonic
-invincibility_timer:		ds.b 1	; byte ; used by sonic
-speed_shoes_timer:		ds.b 1	; byte ; used by sonic
-status_tertiary:			ds.b 1	; byte ; used by sonic
-character_id:				ds.b 1	; byte ; used by sonic
-scroll_delay_counter:		ds.b 1	; byte ; used by sonic
-next_tilt:				ds.b 1	; byte ; used by sonic
-tilt:								; byte ; used by sonic
-ros_bit:					ds.b 1	; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
-ros_addr:						; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
-stick_to_convex:					; byte ; used by sonic
-routine_secondary:		ds.b 1	; byte ; used by monitors for this purpose at least
-spin_dash_flag:			ds.b 1	; byte ; used by sonic
-spin_dash_counter:		ds.w 1	; word ; used by sonic
-jumping:							; byte ; used by sonic
-vram_art:				ds.w 1	; word ; address of art in VRAM (same as art_tile * $20)
-interact:							; word ; used by sonic
-parent:							; word
-obParent:						; word
-child_dx:				ds.b 1	; byte
-child_dy:				ds.b 1	; byte
-default_y_radius:			ds.b 1	; byte ; used by sonic
-default_x_radius:			ds.b 1	; byte ; used by sonic
-parent3:							; word ; parent of child objects
-obParent3:						; word ; parent of child objects
-top_solid_bit:			ds.b 1	; byte ; used by sonic
-lrb_solid_bit:				ds.b 1	; byte ; used by sonic
-parent2:							; several objects use this instead
-obParent2:						; word ; several objects use this instead
-respawn_addr:			ds.w 1	; word ; the address of this object's entry in the respawn table
-	if * > object_size
-		fatal "The size should be $\{object_size} bytes, but it has size $\{*} bytes."
-	endif
-    if MOMPASS=1
-	message "The objects RAM size is $\{*-1} bytes."
-    endif
-
-	dephase		; Stop pretending
-	!org	0		; Reset the program counter
+; Universally followed object conventions:
 ; ---------------------------------------------------------------------------
-; when childsprites are activated (i.e. bit #6 of render_flags set)
+id =						  0 ; long
+address =				  id ; long
+render_flags =		 	  4 ; bitfield ; refer to SCHG for details
+height_pixels =			  6 ; byte
+width_pixels =		 	  7 ; byte
+priority =		 	 	  8 ; word ; in units of $80
+art_tile =		 		$A ; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
+mappings =				$C ; long
+x_pos =					$10 ; word, or long when extra precision is required
+x_sub =					x_pos+2
+y_pos =					$14 ; word, or long when extra precision is required
+y_sub =					y_pos+2
+mapping_frame =			$22 ; byte
+; ---------------------------------------------------------------------------
+; Conventions followed by most objects:
+; ---------------------------------------------------------------------------
+routine =		 	 	    	    5 ; byte
+x_vel =					$18 ; word
+y_vel =					$1A ; word
+y_radius =				$1E ; byte ; collision height / 2
+x_radius =				$1F ; byte ; collision width / 2
+anim =					$20 ; byte
+next_anim =				$21 ; byte ; when this isn't equal to anim the animation restarts
+prev_anim =				$21 ; byte ; when this isn't equal to anim the animation restarts
+anim_frame =			$23 ; byte
+anim_frame_timer =		$24 ; byte
+angle =					$26 ; byte ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
+status =					$2A ; bitfield ; refer to SCHG for details
+; ---------------------------------------------------------------------------
+; Conventions followed by many objects but not Sonic/Tails/Knuckles:
+; ---------------------------------------------------------------------------
+x_pixel =				x_pos ; word ; x-coordinate for objects using screen positioning
+y_pixel =					y_pos ; word ; y-coordinate for objects using screen positioning
+collision_flags =			$28 ; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
+collision_property =		$29 ; byte ; usage varies, bosses use it as a hit counter
+shield_reaction =			$2B ; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
+subtype =				$2C ; byte
+ros_bit =					$3B ; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
+ros_addr =				$3C ; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
+routine_secondary =		$3C ; byte ; used by monitors for this purpose at least
+vram_art =   				$40 ; word ; address of art in VRAM (same as art_tile * $20)
+parent =					$42 ; word ; address of the object that owns or spawned this one, if applicable
+child_dx = 				$42 ; byte ; X offset of child relative to parent
+child_dy = 				$43 ; byte ; Y offset of child relative to parent
+parent3 = 				$46 ; word ; parent of child objects
+parent2 =				$48 ; word ; several objects use this instead
+respawn_addr =			$48 ; word ; the address of this object's entry in the respawn table
+; ---------------------------------------------------------------------------
+; Conventions specific to Sonic/Tails/Knuckles:
+; ---------------------------------------------------------------------------
+ground_vel =				$1C ; word ; overall velocity along ground, not updated when in the air
+double_jump_property =	$25 ; byte ; remaining frames of flight / 2 for Tails, gliding-related for Knuckles
+flip_angle =				$27 ; byte ; angle about horizontal axis (360 degrees = 256)
+status_secondary =		$2B ; byte ; see SCHG for details
+air_left =				$2C ; byte
+flip_type =				$2D ; byte ; bit 7 set means flipping is inverted, lower bits control flipping type
+object_control =			$2E ; byte ; bit 0 set means character can jump out, bit 7 set means he can't
+double_jump_flag =		$2F ; byte ; meaning depends on current character, see SCHG for details
+flips_remaining =			$30 ; byte
+flip_speed =				$31 ; byte
+move_lock =				$32 ; word ; horizontal control lock, counts down to 0
+invulnerability_timer =	$34 ; byte ; decremented every frame
+invincibility_timer =		$35 ; byte ; decremented every 8 frames
+speed_shoes_timer =		$36 ; byte ; decremented every 8 frames
+status_tertiary =			$37 ; byte ; see SCHG for details
+character_id =			$38 ; byte ; 0 for Sonic, 1 for Tails, 2 for Knuckles
+scroll_delay_counter =		$39 ; byte ; incremented each frame the character is looking up/down, camera starts scrolling when this reaches 120
+next_tilt =				$3A ; byte ; angle on ground in front of character
+tilt =					$3B ; byte ; angle on ground
+stick_to_convex =			$3C ; byte ; used to make character stick to convex surfaces such as the rotating discs in CNZ
+spin_dash_flag =			$3D ; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
+spin_dash_counter =		$3E ; word
+jumping =				$40 ; byte
+interact =				$42 ; word ; RAM address of the last object the character stood on
+default_y_radius =		$44 ; byte ; default value of y_radius
+default_x_radius =		$45 ; byte ; default value of x_radius
+top_solid_bit =			$46 ; byte ; the bit to check for top solidity (either $C or $E)
+lrb_solid_bit =			$47 ; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
+; ---------------------------------------------------------------------------
+; Conventions followed by some/most bosses:
+; ---------------------------------------------------------------------------
+boss_invulnerable_time =	$1C ; byte ; flash time
+collision_restore_flags =	$25 ; byte ; restore collision after hit
+boss_hitcount2 =			$29 ; byte ; usage varies, bosses use it as a hit counter
+ ; ---------------------------------------------------------------------------
+; Object variables
+; ---------------------------------------------------------------------------
+obId =					0
+obRender =				4	; bitfield for x/y flip, display mode
+obRoutine =				5	; routine number
+obHeight	 =				6	; height/2
+obWidth =				7	; width/2
+obPriority =				8	; word ; sprite stack priority -- 0 is front
+obGfx =					$A	; palette line & VRAM setting (2 bytes)
+obMap =					$C	; mappings address (4 bytes)
+obX =					$10	; x-axis position (2-4 bytes)
+obY =					$14	; y-axis position (2-4 bytes)
+obVelX =					$18	; x-axis velocity (2 bytes)
+obVelY =					$1A	; y-axis velocity (2 bytes)
+obInertia	 =				$1C	; potential speed (2 bytes)
+obAnim =				$20	; current animation
+obNextAni =				$21	; next animation
+obFrame =				$22	; current frame displayed
+obAngle =				$26	; angle
+obColType =				$28	; collision response type
+obColProp =				$29	; collision extra property
+obStatus =				$2A	; orientation or mode
+obSubtype =				$2C	; object subtype
+obTimer =				$2E	; object timer
+obParent =				$42 	; word ; parent of child objects
+obParent2 =				$48 	; word ; parent of child objects
+obParent3 =				$46 	; word ; parent of child objects
+; ---------------------------------------------------------------------------
+; When childsprites are activated (i.e. bit #6 of render_flags set)
+; ---------------------------------------------------------------------------
 mainspr_childsprites 		= $16	; amount of child sprites
 sub2_x_pos				= $18	; x_vel
 sub2_y_pos				= $1A	; y_vel
@@ -332,11 +334,13 @@ sub9_y_pos				= $44
 sub9_mapframe			= $47
 next_subspr				= $6
 ; ---------------------------------------------------------------------------
-; unknown or inconsistently used offsets that are not applicable to sonic/tails:
+; Unknown or inconsistently used offsets that are not applicable to sonic/tails:
+; ---------------------------------------------------------------------------
 objoff_12 =				2+x_pos
 objoff_16 =				2+y_pos
 objoff_1C =				$1C
 objoff_1D =				$1D
+objoff_26 =				$26
 objoff_27 =				$27
 objoff_2B =				$2B
 objoff_2C =				$2C
@@ -351,6 +355,7 @@ objoff_30 =				$30
 ; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
 ; bitfield with the following meaning:
+; ---------------------------------------------------------------------------
 p1_standing_bit				= 3
 p2_standing_bit				= p1_standing_bit + 1
 p1_standing					= 1<<p1_standing_bit
@@ -365,6 +370,7 @@ pushing_mask				= p1_pushing|p2_pushing
 ; ---------------------------------------------------------------------------
 ; The high word of d6 after a SolidObject call is a bitfield
 ; with the following meaning:
+; ---------------------------------------------------------------------------
 p1_touch_side_bit		= 0
 p2_touch_side_bit		= p1_touch_side_bit + 1
 p1_touch_side			= 1<<p1_touch_side_bit
@@ -382,6 +388,7 @@ p2_touch_top			= 1<<p2_touch_top_bit
 touch_top_mask			= p1_touch_top|p2_touch_top
 ; ---------------------------------------------------------------------------
 ; Player Status Variables
+; ---------------------------------------------------------------------------
 Status_Facing				= 0
 Status_InAir					= 1
 Status_Roll					= 2
@@ -391,6 +398,7 @@ Status_Push					= 5
 Status_Underwater			= 6
 ; ---------------------------------------------------------------------------
 ; Player status_secondary variables
+; ---------------------------------------------------------------------------
 Status_Shield					= 0
 Status_Invincible				= 1
 Status_SpeedShoes			= 2
@@ -400,12 +408,14 @@ Status_LtngShield				= 5
 Status_BublShield				= 6
 ; ---------------------------------------------------------------------------
 ; Object Status Variables
+; ---------------------------------------------------------------------------
 Status_ObjOrienX				= 0
 Status_ObjOrienY				= 1
 Status_ObjHurt				= 6
 Status_ObjDefeated			= 7
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels).
+; ---------------------------------------------------------------------------
 ArtTile_ArtUnc_Sonic			= $680
 ArtTile_ArtNem_Ring			= $6B4
 ArtTile_ArtNem_Powerups		= $4AC
@@ -413,6 +423,7 @@ ArtTile_ArtUnc_Shield			= $79C
 ArtTile_ArtUnc_Shield_Sparks	= $7BB
 ; ---------------------------------------------------------------------------
 ; VRAM data
+; ---------------------------------------------------------------------------
 vram_fg:				= $C000 ; foreground namespace
 vram_window:		= $C000 ; window namespace
 vram_bg:			= $E000 ; background namespace
@@ -420,6 +431,7 @@ vram_sprites:			= $D400 ; sprite table
 vram_hscroll:			= $F000 ; horizontal scroll table
 ; ---------------------------------------------------------------------------
 ; Colours
+; ---------------------------------------------------------------------------
 cBlack:				equ $000			; colour black
 cWhite:				equ $EEE			; colour white
 cBlue:				equ $E00			; colour blue
@@ -430,6 +442,7 @@ cAqua:				equ cGreen+cBlue		; colour aqua
 cMagenta:			equ cBlue+cRed		; colour magenta
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
+; ---------------------------------------------------------------------------
 palette_line0			= (0<<13)
 palette_line_0		= (0<<13)
 palette_line1			= (1<<13)
@@ -444,10 +457,12 @@ drawing_mask		= $7FFF
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses.
 ; VRAM Reserved regions.
+; ---------------------------------------------------------------------------
 VRAM_Plane_A_Name_Table	= $C000	; Extends until $CFFF
 VRAM_Plane_B_Name_Table	= $E000	; Extends until $EFFF
 ; ---------------------------------------------------------------------------
 ; Animation flags
+; ---------------------------------------------------------------------------
 afEnd:						= $FF	; return to beginning of animation
 afBack:						= $FE	; go back (specified number) bytes
 afChange:					= $FD	; run specified animation
