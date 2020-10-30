@@ -457,9 +457,9 @@ HurtCharacter:
 		neg.w	x_vel(a0)							; if Sonic is right of the object, reverse
 
 .isleft:
-		move.w	#0,ground_vel(a0)
+		clr.w	ground_vel(a0)
 		move.b	#id_Hurt,anim(a0)
-		move.w	#120,invulnerability_timer(a0)			; set temp invincible time to 2 seconds
+		move.b	#2*60,invulnerability_timer(a0)			; set temp invincible time to 2 seconds
 		moveq	#sfx_Death,d0						; load normal damage sound
 		cmpi.l	#Obj_Spikes,address(a2)				; was damage caused by spikes?
 		blo.s		.sound								; if not, branch
