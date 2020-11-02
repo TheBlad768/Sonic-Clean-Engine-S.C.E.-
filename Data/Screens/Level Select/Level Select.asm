@@ -159,13 +159,13 @@ LevelSelect_FindUpDownControls:
 		beq.s	+
 		subq.w	#1,d0
 		bpl.s	+
-		moveq	#0,d0
+		move.w	d2,d0
 +		btst	#button_down,d1
 		beq.s	+
 		addq.w	#1,d0
 		cmp.w	d2,d0
 		ble.s		+
-		move.w	d2,d0
+		moveq	#0,d0
 +		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -176,13 +176,13 @@ LevelSelect_FindLeftRightControls:
 		beq.s	+
 		subq.w	#1,d0
 		bpl.s	+
-		moveq	#0,d0
+		move.w	d2,d0
 +		btst	#button_right,d1
 		beq.s	+
 		addq.w	#1,d0
 		cmp.w	d2,d0
 		ble.s		+
-		move.w	d2,d0
+		moveq	#0,d0
 +		rts
 
 ; =============== S U B R O U T I N E =======================================
