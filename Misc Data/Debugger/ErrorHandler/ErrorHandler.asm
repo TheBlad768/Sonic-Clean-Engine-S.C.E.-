@@ -7,10 +7,6 @@
 ; Error handler functions and calls
 ; ---------------------------------------------------------------
 
-ErrorTrap:
-		nop
-		nop
-		bra.s	ErrorTrap
 ; ---------------------------------------------------------------
 ; Error handler control flags
 ; ---------------------------------------------------------------
@@ -67,7 +63,8 @@ Line1111Emu:
 ErrorExcept:
 	__ErrorMessage "ERROR EXCEPTION", _eh_default
 
-
+ErrorTrap:
+	__ErrorMessage "ERROR TRAP", _eh_default
 
 
 
@@ -105,7 +102,6 @@ ErrorHandler___extern__vsync:
 ; ---------------------------------------------------------------
 
 ErrorHandler:
-	stopZ80
 	binclude "Misc Data/Debugger/ErrorHandler/ErrorHandler.bin"
 
 ; ---------------------------------------------------------------

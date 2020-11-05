@@ -5,7 +5,6 @@
 ; =============== S U B R O U T I N E =======================================
 
 EntryPoint:
-		lea	(System_stack).w,sp
 		tst.l	(HW_Port_1_Control-1).l
 		bne.s	+
 		tst.w	(HW_Expansion_Control-1).l

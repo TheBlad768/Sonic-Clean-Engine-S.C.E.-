@@ -29,6 +29,7 @@ VInt_Music:
 		SMPS_UpdateSoundDriver						; Update SMPS
 
 VInt_Done:
+		bsr.w	Random_Number
 		addq.l	#1,(V_int_run_count).w
 		movem.l	(sp)+,d0-a6							; return saved registers from the stack
 		rte
@@ -181,14 +182,34 @@ VInt_Level:
 		lea	(VDP_data_port).l,a6
 		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_data_port(a6)
 		move.w	#cWhite,d0
-		move.w	#64-1,d1
+		moveq	#64-1,d1
 
 -		move.w	d0,VDP_data_port-VDP_data_port(a6)
 		dbf	d1,-	; fill entire palette with white
-		bra.s	VInt_Level_Cont
+		bra.w	VInt_Level_Cont
 ; ---------------------------------------------------------------------------
 
 VInt_Level_NoFlash:
+		tst.b	(Negative_flash_timer).w
+		beq.s	VInt_Level_NoNegativeFlash
+		subq.b	#1,(Negative_flash_timer).w
+		btst	#2,(Negative_flash_timer).w
+		beq.s	VInt_Level_NoNegativeFlash
+		lea	(VDP_data_port).l,a6
+		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_data_port(a6)
+		moveq	#(64/2)-1,d1
+		move.l	#$0EEE0EEE,d2
+		lea	(Normal_palette).w,a1
+
+-		move.l	(a1)+,d0
+		not.l	d0
+		and.l	d2,d0
+		move.l	d0,VDP_data_port-VDP_data_port(a6)
+		dbf	d1,-
+		bra.s	VInt_Level_Cont
+; ---------------------------------------------------------------------------
+
+VInt_Level_NoNegativeFlash:
 		tst.b	(Water_full_screen_flag).w
 		bne.s	+
 		dma68kToVDP Normal_palette,$0000,$80,CRAM

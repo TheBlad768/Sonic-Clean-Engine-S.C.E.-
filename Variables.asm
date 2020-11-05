@@ -240,6 +240,8 @@ PalCycle_Timer2:						ds.w 1
 PalCycle_Frame3:						ds.w 1
 PalCycle_Timer3:						ds.w 1
 Hyper_Sonic_flash_timer:				ds.b 1
+Negative_flash_timer:					ds.b 1
+									ds.b 1					; Unused
 PalRotation_flag:						ds.b 1
 PalRotation_pointer:					ds.l 1
 PalRotation_buffer:					ds.b $22
