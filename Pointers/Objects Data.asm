@@ -14,7 +14,6 @@
 		include "Objects/Title Card/Title Card.asm"
 		include "Objects/Signpost/Signpost.asm"
 		include "Objects/Results/LevelResults.asm"
-		include "Objects/HUD/HUD.asm"
 		include "Objects/Explosion/Boss Explosion.asm"
 		include "Objects/Explosion/Explosion.asm"
 		include "Objects/Bubbler/Bubbler.asm"

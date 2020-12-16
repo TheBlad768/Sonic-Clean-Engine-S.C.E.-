@@ -38,7 +38,7 @@ locret_1AC36:
 loc_1AC38:
 		addq.b	#1,d0			; Code FF - Repeat animation from beginning
 		bne.s	loc_1AC48
-		move.b	#0,anim_frame(a0)
+		clr.b	anim_frame(a0)
 		move.b	1(a1),d0
 		bra.s	loc_1AC1C
 ; ---------------------------------------------------------------------------
@@ -194,7 +194,7 @@ Anim_Wait:
 Anim_End_FF:
 		addq.b	#1,d0			; Code FF - Repeat animation from beginning
 		bne.s	Anim_End_FE
-		move.b	#0,anim_frame(a0)
+		clr.b	anim_frame(a0)
 		move.b	1(a1),d0
 		bra.s	Anim_Next
 ; ---------------------------------------------------------------------------

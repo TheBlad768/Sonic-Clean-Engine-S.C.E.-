@@ -162,6 +162,6 @@ SpawnLevelMainSprites:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Collision_Response_List:
-		move.w	#0,(Collision_response_list).w
+		clr.w	(Collision_response_list).w
 		rts
 ; End of function Obj_Collision_Response_List

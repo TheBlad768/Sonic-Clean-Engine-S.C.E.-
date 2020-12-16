@@ -26,7 +26,7 @@
 ; 	Use128kbSafeDMA (default 0)
 ; 	UseVIntSafeDMA (default 0)
 ; Input:
-; 	d1	Source address (in bytes, or in words if AssumeSourceAddressIsRAMSafe is
+; 	d1	Source address (in bytes, or in words if AssumeSourceAddressInBytes is
 ; 		set to 0)
 ; 	d2	Destination address
 ; 	d3	Transfer length (in words)
@@ -102,7 +102,7 @@ UseRAMSourceSafeDMA = 1&(AssumeSourceAddressIsRAMSafe==0)
 ; disabled by default because you can simply align the art in ROM and avoid the
 ; issue altogether. It is here so that you have a high-performance routine to do
 ; the job in situations where you can't align it in ROM.
-Use128kbSafeDMA = 1
+Use128kbSafeDMA = 0
 ; ===========================================================================
 ; option UseVIntSafeDMA
 ;
@@ -353,7 +353,7 @@ c := c + 1
 InitDMAQueue:
 Init_DMA_Queue:
 	lea	(VDP_Command_Buffer).w,a0
-	move.b	#$94,d0
+	moveq	#-$6C,d0				; fast-store $94 (sign-extended) in d0
 	move.l	#$93979695,d1
 c := 0
 	rept QueueSlotCount

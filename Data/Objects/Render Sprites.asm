@@ -29,6 +29,7 @@ Render_Sprites:
 		lea	(Sprite_table_buffer).w,a6
 		tst.b	(Level_started_flag).w
 		beq.s	Render_Sprites_LevelLoop
+		bsr.w	Render_HUD
 		bsr.w	Render_Rings
 
 Render_Sprites_LevelLoop:

@@ -238,7 +238,7 @@ VInt_Level_Cont:
 
 Do_Updates:
 		bsr.w	UpdateHUD
-		move.w	#0,(Lag_frame_count).w
+		clr.w	(Lag_frame_count).w
 		bsr.w	Process_Nem_Queue_2
 		tst.w	(Demo_timer).w ; is there time left on the demo?
 		beq.s	+

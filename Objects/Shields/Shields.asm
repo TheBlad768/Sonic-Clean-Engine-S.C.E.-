@@ -85,7 +85,7 @@ Obj_Lightning_Shield:
 		; Load Spark art
 		move.l	#ArtUnc_Obj_Lightning_Shield_Sparks,d1			; Load art source
 		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield_Sparks),d2	; Load art destination
-		move.w	#(ArtUnc_Obj_Lightning_Shield_Sparks_end-ArtUnc_Obj_Lightning_Shield_Sparks)/2,d3	; Size of art (in words)
+		move.w	#(ArtUnc_Obj_Lightning_Shield_Sparks_End-ArtUnc_Obj_Lightning_Shield_Sparks)/2,d3	; Size of art (in words)
 		jsr	(Add_To_DMA_Queue).l
 
 		move.l	#Map_LightningShield,mappings(a0)

@@ -19,7 +19,7 @@ Object_RAM:							ds.b object_size
 Reserved_object_3:					ds.b object_size			; During a level, an object whose sole purpose is to clear the collision response list is stored here
 Dynamic_object_RAM:				ds.b object_size*90		; 90 objects
 Dynamic_object_RAM_End
-v_HUD:								ds.b object_size
+									ds.b object_size
 v_Dust:								ds.b object_size
 v_Shield:							ds.b object_size
 									ds.b object_size
@@ -363,6 +363,12 @@ Timer_frame:
 Timer_centisecond:					ds.b 1					; The second gets incremented when this reaches 60
 v_score:
 Score:								ds.l 1
+
+HUD_RAM:
+.Xpos:								ds.w 1
+.Ypos:								ds.w 1
+.status:								ds.b 1
+									ds.b 1					; Unused
 
 DecimalScoreRAM:					ds.l 1
 DecimalScoreRAM2:					ds.l 1

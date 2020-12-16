@@ -44,7 +44,7 @@ LevelSelect_Screen:
 		lea	(RAM_start).l,a3
 		move.w	#bytesToWcnt(2240),d1
 
--		move.w	#0,(a3)+
+-		clr.w	(a3)+
 		dbf	d1,-
 		clearRAM Sprite_table_input, Sprite_table_input_End
 		clearRAM Object_RAM, Object_RAM_End

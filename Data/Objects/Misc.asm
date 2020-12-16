@@ -255,7 +255,7 @@ ObjectsRoutine:
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		adda.w	(a1,d0.w),a1
-		jmp	(a1,d0.w)
+		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 

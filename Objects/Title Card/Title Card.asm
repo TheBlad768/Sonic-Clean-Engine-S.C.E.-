@@ -114,9 +114,9 @@ Obj_TitleCardWait2:
 +		lea	PLC_Main2(pc),a1
 		jsr	(LoadPLC_Raw_Nem).l
 		jsr	(LoadPLC_KosM).l
-		jsr	(PLCLoad_Animals).l
-		move.l	#Obj_HUD,(v_HUD).w
-		move.b	#0,(Ctrl_1_locked).w
+		bsr.w	PLCLoad_Animals
+		move.b	#1,(HUD_RAM.status).w
+		clr.b	(Ctrl_1_locked).w
 +		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
