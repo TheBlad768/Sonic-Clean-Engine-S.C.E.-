@@ -38,7 +38,7 @@ Render_HUD_Process:
 		btst	#3,(Level_frame_counter+1).w
 		bne.s	Render_HUD_Process_Draw
 		tst.w	(Ring_count).w				; Do you have any rings?
-		bne.s	Render_HUD_Process_Time	; If not, branch
+		bne.s	Render_HUD_Process_Time	; If yes, branch
 		addq.w	#1*2,d4						; Hide ring counter
 
 Render_HUD_Process_Time:
