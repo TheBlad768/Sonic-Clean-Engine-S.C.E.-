@@ -92,6 +92,7 @@ GM_Level:
 		moveq	#0,d0
 		move.w	d0,(Ctrl_1_logical).w
 		move.w	d0,(Ctrl_1).w
+		move.b	d0,(HUD_RAM.status).w
 		tst.b	(Last_star_post_hit).w							; are you starting from a lamppost?
 		bne.s	+										; if yes, branch
 		move.w	d0,(Ring_count).w						; set rings

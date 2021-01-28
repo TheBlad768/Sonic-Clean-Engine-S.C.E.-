@@ -20,10 +20,11 @@ Offs_PLC: offsetTable
 ; ===========================================================================
 
 PLC_Main: plrlistheader
-		plreq $5E4, ArtNem_Lamp							; Lamppost
-		plreq ArtTile_ArtNem_Ring, ArtNem_Ring			; Rings
-		plreq $6C2, ArtNem_Hud							; HUD
+		plreq $5E4, ArtNem_Lamp								; Lamppost
+		plreq ArtTile_ArtNem_Ring_Sparks, ArtNem_Ring_Sparks	; Rings
+		plreq $6C2, ArtNem_Hud								; HUD
 PLC_Main_End
+
 ; ===========================================================================
 ; Pattern load cues - Main 2
 ; ===========================================================================
@@ -34,12 +35,14 @@ PLC_Main2: plrlistheader
 		plreq ArtTile_ArtNem_Powerups, ArtNem_Monitors	; Monitors
 		plreq $5A0, ArtNem_Explosion						; Explosion
 PLC_Main2_End
+
 ; ===========================================================================
 ; Pattern load cues - Death Egg (Misc)
 ; ===========================================================================
 
 PLC1_DEZ1_Misc: plrlistheader
 PLC1_DEZ1_Misc_End
+
 ; ===========================================================================
 ; Pattern load cues - Death Egg (Enemy)
 ; ===========================================================================

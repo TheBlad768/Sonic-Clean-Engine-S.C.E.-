@@ -460,6 +460,11 @@ DoPauseMusic:
 	cmpi.b	#2,SMPS_RAM.f_stopmusic(a6)
 	beq.s	.locret
 	move.b	#2,SMPS_RAM.f_stopmusic(a6)
+	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
+	beq.s	.skip
+	MCDSend	#_MCD_PauseTrack, #20	; flag, timer
+
+.skip:
 	bsr.w	FMSilenceAll
 	bsr.w	PSGSilenceAll
     if SMPS_EnablePWM
@@ -478,6 +483,13 @@ DoPauseMusic:
 ; loc_71E94: .unpausemusic: UnpauseMusic:
 DoUnpauseMusic:
 	clr.b	SMPS_RAM.f_stopmusic(a6)
+
+	; Resume CDA
+	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
+	beq.s	.skip
+	MCDSend	#_MCD_UnPauseTrack
+
+.skip:
 
 	; Resume music FM channels
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
@@ -547,9 +559,9 @@ CycleSoundQueue:
 	cmpi.b	#MusID__First,d0	; Make it into 0-based index
 	blo.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
 	cmpi.b	#SndID__End,d0		; Is it a special command?
-	bhs.s	PlaySoundID		; If so, branch
+	bhs.w	PlaySoundID		; If so, branch
 	subi.b	#SndID__First,d0	; Subtract first SFX index
-	blo.s	PlaySoundID		; If it was music, branch
+	blo.w	PlaySoundID		; If it was music, branch
 	add.w	d0,d0
 	add.w	d0,d0
 	move.b	(a0,d0.w),d2		; Get sound type
@@ -557,7 +569,7 @@ CycleSoundQueue:
 	blo.s	.lowerpriority		; Branch if yes
 	move.b	d2,d3			; Store new priority
 	movem.l	d0-a6,-(sp)
-	bsr.s	PlaySoundID
+	bsr.w	PlaySoundID
 	movem.l	(sp)+,d0-a6
 
 .lowerpriority:
@@ -573,6 +585,75 @@ CycleSoundQueue:
 	rts
 ; End of function CycleSoundQueue
 
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+Sound_PlayCDA:
+	tst.b	(SegaCD_Mode).w
+	beq.w	Sound_PlayBGM
+
+	bsr.w	StopSFX
+    if SMPS_EnableSpecSFX
+	bsr.w	StopSpecSFX
+    endif
+
+	; Clownacy | We're backing-up the variables and tracks separately, to put the backed-up variables after the backed-up tracks
+	; this is so the backed-up tracks and SFX tracks start at the same place: at the end of the music tracks
+;	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority (S2 removes this one)
+	lea	SMPS_RAM.v_music_track_ram(a6),a0
+	lea	SMPS_RAM.v_1up_ram_copy(a6),a1
+	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; Backup music track data
+; loc_72012:
+.backuptrackramloop:
+	move.l	(a0)+,(a1)+
+	dbf	d0,.backuptrackramloop
+
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&2
+	move.w	(a0)+,(a1)+
+    endif
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&1
+	move.b	(a0)+,(a1)+
+    endif
+
+	lea	SMPS_RAM.variables(a6),a0
+	lea	SMPS_RAM.variables_backup(a6),a1
+	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
+
+.backupvariablesloop:
+	move.l	(a0)+,(a1)+
+	dbf	d0,.backupvariablesloop
+
+    if SMPS_RAM_Variables.len&2
+	move.w	(a0)+,(a1)+
+    endif
+    if SMPS_RAM_Variables.len&1
+	move.b	(a0)+,(a1)+
+    endif
+
+	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority twice?
+
+	bsr.w	InitMusicPlayback						; reset SMPS memory
+	st	SMPS_RAM.variables.v_cda_playing(a6)		; set CDA playing flag
+
+;	subi.w	#MusID__First,d7					; subtract $E5 to get track number
+
+	moveq	#0,d0
+	move.b	PlayCD_Index-1(pc,d7.w),d0			; play track repeatedly
+	MCDSend	d0, d7							; request MCD a track
+	addq.w	#4,sp								; Tamper return value so we don't return to caller
+
+.ret
+	rts
+; ===========================================================================
+
+PlayCD_Index:
+	dc.b _MCD_PlayTrack			; $01 (DEZ)
+	dc.b _MCD_PlayTrack			; $02 (Mid Boss)
+	dc.b _MCD_PlayTrack			; $03 (Boss)
+	dc.b _MCD_PlayTrack			; $04 (Invincible)
+	dc.b _MCD_PlayTrack_Once	; $05 (Act Clear)
+	dc.b _MCD_PlayTrack_Once	; $06 (Countdown)
+	dc.b _MCD_PlayTrack			; $07 (Speedup)
+	even
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -580,29 +661,29 @@ CycleSoundQueue:
 PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it has to be 'music --> SFX --> flags'
 	; Music
 	cmpi.b	#MusID__First,d7	; Is this before music?
-	blo.s	CycleSoundQueue.locret	; Return if yes
+	blo.w	CycleSoundQueue.locret	; Return if yes
 	cmpi.b	#MusID__End,d7		; Is this music ($01-$1F)?
-	blo.w	Sound_PlayBGM		; Branch if yes
+	blo.w	Sound_PlayCDA		; Branch if yes
 
 	; SFX
 	cmpi.b	#SndID__First,d7	; Is this after music but before sfx?
-	blo.s	CycleSoundQueue.locret	; Return if yes
+	blo.w	CycleSoundQueue.locret	; Return if yes
 	cmpi.b	#SndID__End,d7		; Is this sfx ($80-$D0)?
 	blo.w	Sound_PlaySFX		; Branch if yes
 
     if SMPS_EnableSpecSFX
 	; Special SFX
 	cmpi.b	#SpecID__First,d7	; Is this after sfx but before spec sfx?
-	blo.s	CycleSoundQueue.locret	; Return if yes
+	blo.w	CycleSoundQueue.locret	; Return if yes
 	cmpi.b	#SpecID__End,d7		; Is this spec sfx
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
 
 	; Commands
 	subi.b	#FlgID__First,d7		; Is this after sfx (spec if above code is assembled) but before commands?
-	bcs.s	CycleSoundQueue.locret		; Return if yes
+	bcs.w	CycleSoundQueue.locret		; Return if yes
 	cmpi.b	#FlgID__End-FlgID__First,d7	; Is this after commands?
-	bhs.s	CycleSoundQueue.locret		; Return if yes
+	bhs.w	CycleSoundQueue.locret		; Return if yes
 	add.w	d7,d7
 	move.w	Sound_ExIndex(pc,d7.w),d7
 	jmp	Sound_ExIndex(pc,d7.w)
@@ -730,6 +811,14 @@ Sound_PlayBGM:
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 ; loc_7202C:
 .bgm_loadMusic:
+
+	; If CDA is playing, stop it
+	tst.b SMPS_RAM.variables.v_cda_playing(a6)
+	beq.s	.NoCD
+	MCDSend	#_MCD_PauseTrack, #0		; Stop
+	sf	SMPS_RAM.variables.v_cda_playing(a6)
+
+.NoCD:
 	bsr.w	InitMusicPlayback
 	subi.b	#MusID__First,d7
 	add.w	d7,d7
@@ -1432,6 +1521,13 @@ FadeOutMusic:
 ;    endif
 	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)	; Set fadeout delay to 3
 	move.b	#$28,SMPS_RAM.variables.v_fadeout_counter(a6)	; Set fadeout counter
+
+	; Fade out CD track
+	tst.b	(SegaCD_Mode).w
+	beq.s	.skip
+	MCDSend	#_MCD_PauseTrack, #$28		; flag, timer
+
+.skip:
 	bclr	#f_speedup,SMPS_RAM.variables.bitfield2(a6)	; Disable speed shoes tempo
 	rts
 
@@ -1575,6 +1671,14 @@ FMSilenceAll:
 ; ---------------------------------------------------------------------------
 ; Sound_E4: StopSoundAndMusic:
 StopAllSound:
+
+	; If CDA is playing, stop it
+	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
+	beq.s	.NoCD
+	MCDSend	#_MCD_PauseTrack, #0		; Stop
+	sf	SMPS_RAM.variables.v_cda_playing(a6)
+
+.NoCD:
 	moveq	#$27,d0		; Timers, FM3/FM6 mode
 	moveq	#0,d1		; FM3/FM6 normal mode, disable timers
 	bsr.w	WriteFMI

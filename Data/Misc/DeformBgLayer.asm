@@ -56,12 +56,17 @@ loc_1C0D2:
 loc_1C0D6:
 		sub.w	(a1),d0
 	if	ExtendedCamera
-		add.w	(Camera_X_Extend).w,d0
-	endif
+		add.w	Camera_X_Extend-Camera_X_pos(a1),d0
+		bmi.s	loc_1C0EE
+		subi.w	#320/2,d0
+		blt.s		loc_1C0E8
+		bge.s	loc_1C0FC
+	elseif
 		subi.w	#$90,d0
 		blt.s		loc_1C0E8
 		subi.w	#$10,d0
 		bge.s	loc_1C0FC
+	endif
 		clr.w	(a4)
 
 locret_1C0E6:
@@ -71,6 +76,8 @@ locret_1C0E6:
 loc_1C0E8:
 		cmpi.w	#-24,d0
 		bgt.s	+
+
+loc_1C0EE:
 		move.w	#-24,d0
 +		add.w	(a1),d0
 		cmp.w	(a2),d0
@@ -101,23 +108,20 @@ loc_1C112:
 
 ; ---------------------------------------------------------------------------
 ; Subroutine of the Extended camera
-; By Firerat
 ; ---------------------------------------------------------------------------
 
 Camera_Extended:
-		moveq	#0,d1						; clear register
-		move.l	(Camera_X_Extend).w,d0		; Source pos
-		move.w	(Player_1+x_vel).w,d1			; use x speed as target
-		btst	#Status_InAir,(Player_1+status).w
-		bne.s	.calcdist
-		move.w	(Player_1+ground_vel).w,d1		; use inertia if player is on the ground
-
-.calcdist:
-		asr.w	#6,d1						; divide by 64
-		swap	d1							; swap 16 bits
-		sub.l	d1,d0						; subscract result to current amount of camera extension
-		asr.l	#4,d0							; divide difference by 16
-		sub.l	d0,(Camera_X_Extend).w		; otherwise, substract difference to current amount of camera extension
+		moveq	#0,d1
+		move.l	Camera_X_Extend-Camera_X_pos(a1),d0
+		move.w	x_vel(a0),d1
+		btst	#Status_InAir,status(a0)
+		bne.s	+
+		move.w	ground_vel(a0),d1
++		asr.w	#6,d1
+		swap	d1
+		sub.l	d1,d0
+		asr.l	#4,d0
+		sub.l	d0,Camera_X_Extend-Camera_X_pos(a1)
 		rts
 
 	endif

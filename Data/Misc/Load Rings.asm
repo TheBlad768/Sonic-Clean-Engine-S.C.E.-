@@ -88,13 +88,18 @@ sub_E994:
 -		move.w	(a2)+,d0
 		beq.s	-
 		movea.w	d0,a1
+
+; Wait
 		subq.b	#1,(a1)
 		bne.s	+
 		move.b	#6,(a1)
+
+; Frame
 		addq.b	#1,1(a1)
-		cmpi.b	#(CMap_Ring_End-CMap_Ring)/8,1(a1)	; 8 frames
+		cmpi.b	#(CMap_Ring_End-CMap_Ring)/8,1(a1)	; 5 frames
 		bne.s	+
 		move.w	#-1,(a1)
+
 		clr.w	-2(a2)
 		subq.w	#1,(Ring_consumption_table).w
 +		dbf	d1,-
@@ -174,7 +179,7 @@ loc_EABE:
 		bne.s	Test_Ring_Collisions_AttractRing
 
 loc_EAC6:
-		move.w	#$0604,(a4)
+		move.w	#(6<<8)|((CMap_Ring_Spark-CMap_Ring)/8),(a4)
 		jsr	(GiveRing).l
 		lea	(Ring_consumption_list).w,a3
 
@@ -239,7 +244,7 @@ loc_EBA6:
 		addi.w	#$80,d0
 		move.b	-1(a4),d6
 		bne.s	loc_EBCE
-		move.b	(Rings_frame).w,d6
+		moveq	#0,d6
 
 loc_EBCE:
 		lsl.w	#3,d6
@@ -279,45 +284,28 @@ CMap_Ring:
 	dc.w	$FFF8
 
 ;frame2:
+CMap_Ring_Spark:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$0004+make_art_tile(ArtTile_ArtNem_Ring,1,0)
+	dc.w	$0000+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
 	dc.w	$FFF8
 
 ;frame3:
 	dc.w	$FFF8
-	dc.w	$0001
-	dc.w	$0008+make_art_tile(ArtTile_ArtNem_Ring,1,0)
-	dc.w	$FFFC
+	dc.w	$0005
+	dc.w	$1800+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
+	dc.w	$FFF8
 
 ;frame4:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$0804+make_art_tile(ArtTile_ArtNem_Ring,1,0)
+	dc.w	$0800+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
 	dc.w	$FFF8
 
 ;frame5:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$000A+make_art_tile(ArtTile_ArtNem_Ring,1,0)
-	dc.w	$FFF8
-
-;frame6:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$180A+make_art_tile(ArtTile_ArtNem_Ring,1,0)
-	dc.w	$FFF8
-
-;frame7:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$080A+make_art_tile(ArtTile_ArtNem_Ring,1,0)
-	dc.w	$FFF8
-
-;frame8:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$100A+make_art_tile(ArtTile_ArtNem_Ring,1,0)
+	dc.w	$1000+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
 	dc.w	$FFF8
 CMap_Ring_End
 

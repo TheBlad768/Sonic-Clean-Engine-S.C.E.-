@@ -26,13 +26,12 @@ Obj_RingInit:
 		move.b	#16/2,width_pixels(a0)
 
 Obj_RingAnimate:
-		move.b	(Rings_frame).w,mapping_frame(a0)
 		bra.w	RememberState_Collision
 ; ---------------------------------------------------------------------------
 
 Obj_RingCollect:
 		addq.b	#2,routine(a0)
-		move.b	#0,collision_flags(a0)
+		clr.b	collision_flags(a0)
 		move.w	#$80,priority(a0)
 		bsr.s	GiveRing
 
@@ -152,7 +151,6 @@ loc_1A738:
 		bne.w	loc_1A7E8
 
 loc_1A75C:
-		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)
 		bsr.w	MoveSprite2
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A7B0
@@ -186,7 +184,7 @@ loc_1A7B0:
 
 loc_1A7C2:
 		addq.b	#2,routine(a0)
-		move.b	#0,collision_flags(a0)
+		clr.b	collision_flags(a0)
 		move.w	#$80,priority(a0)
 		bsr.w	GiveRing
 
@@ -201,7 +199,6 @@ loc_1A7E4:
 ; ---------------------------------------------------------------------------
 
 loc_1A7E8:
-		move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)
 		bsr.w	MoveSprite_TestGravity2
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A83C
@@ -251,17 +248,10 @@ loc_1A88C:
 		bne.s	AttractedRing_GiveRing
 		bsr.w	AttractedRing_Move
 		btst	#Status_LtngShield,(Player_1+status_secondary).w	; Does player still have a lightning shield?
-		bne.s	Obj_Attracted_RingAnimate
+		bne.s	loc_1A8C6
 		move.l	#Obj_Bouncing_Ring,address(a0)				; If not, change object
 		move.b	#2,routine(a0)
 		move.b	#-1,(Ring_spill_anim_counter).w
-
-Obj_Attracted_RingAnimate:
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	loc_1A8C6
-		move.b	#3,anim_frame_timer(a0)
-		addq.b	#1,mapping_frame(a0)
-		andi.b	#3,mapping_frame(a0)
 
 loc_1A8C6:
 		move.w	x_pos(a0),d0
@@ -290,11 +280,11 @@ loc_1A8FC:
 ; ---------------------------------------------------------------------------
 
 AttractedRing_GiveRing:
-		move.b	#0,collision_flags(a0)
+		clr.b	collision_flags(a0)
 		move.w	#$80,priority(a0)
 		bsr.w	GiveRing
 		move.l	#loc_1A920,address(a0)
-		move.b	#0,routine(a0)
+		clr.b	routine(a0)
 
 loc_1A920:
 		tst.b	routine(a0)

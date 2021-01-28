@@ -324,7 +324,7 @@ EnemyDefeat_Score:
 		movea.w	a1,a3
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,address(a0)
-		move.b	#0,routine(a0)
+		clr.b	routine(a0)
 		rts
 ; End of function EnemyDefeat_Score
 

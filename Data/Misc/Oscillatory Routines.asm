@@ -10,7 +10,20 @@ SynchroAnimate:
 		bpl.s	.Sync2
 		move.b	#7,(Rings_frame_timer).w
 		addq.b	#1,(Rings_frame).w
-		andi.b	#3,(Rings_frame).w
+		cmpi.b	#(ArtUnc_Ring_End-ArtUnc_Ring)>>7,(Rings_frame).w
+		bne.s	.Sync
+		clr.b	(Rings_frame).w
+
+; Dynamic graphics
+.Sync:
+		moveq	#0,d0
+		move.l	#ArtUnc_Ring,d1							; Load art source
+		move.b	(Rings_frame).w,d0
+		lsl.w	#7,d0
+		add.l	d0,d1									; Get next frame
+		move.w	#tiles_to_bytes(ArtTile_ArtNem_Ring),d2	; Load art destination
+		move.w	#$80/2,d3								; Size of art (in words)	; We only need one frame
+		jsr	(Add_To_DMA_Queue).l
 
 ; Used for bouncing rings
 .Sync2:

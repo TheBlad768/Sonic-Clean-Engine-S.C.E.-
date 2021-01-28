@@ -23,7 +23,7 @@ Obj_Sonic:
 +		addq.b	#1,mapping_frame(a0)		; Next frame
 		cmpi.b	#((Map_Sonic_End-Map_Sonic)/2)-1,mapping_frame(a0)	; Have we reached the end of Sonic's frames?
 		blo.s		+
-		move.b	#0,mapping_frame(a0)	; If so, reset to Sonic's first frame
+		clr.b	mapping_frame(a0)	; If so, reset to Sonic's first frame
 +		bsr.w	Sonic_Load_PLC
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -188,6 +188,8 @@ Sonic_ChkInvin:										; Checks if invincibility has expired and disables it i
 		bne.s	Sonic_ChkShoes
 		subq.b	#1,invincibility_timer(a0)				; reduce invincibility_timer only on every 8th frame
 		bne.s	Sonic_ChkShoes						; if time is still left, branch
+		tst.b	(Level_end_flag).w						; Don't change music if level is end
+		bne.s	Sonic_RmvInvin
 		tst.b	(Boss_flag).w								; Don't change music if in a boss fight
 		bne.s	Sonic_RmvInvin
 		cmpi.b	#$C,air_left(a0)						; Don't change music if drowning
@@ -2292,11 +2294,11 @@ loc_126DC:
 		lsr.b	#4,d0
 		andi.b	#6,d0
 		move.w	ground_vel(a0),d2
-		add.w	(HScroll_Shift).w,d2
 		bpl.s	loc_12700
 		neg.w	d2
 
 loc_12700:
+		add.w	(HScroll_Shift).w,d2
 		tst.b	status_secondary(a0)
 		bpl.w	loc_1270A
 		add.w	d2,d2
@@ -2549,11 +2551,11 @@ loc_12A2A:
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.w	SAnim_Delay
 		move.w	ground_vel(a0),d2
-		add.w	(HScroll_Shift).w,d2
 		bpl.s	loc_12A4C
 		neg.w	d2
 
 loc_12A4C:
+		add.w	(HScroll_Shift).w,d2
 		lea	SonAni_Roll2(pc),a1
 		cmpi.w	#$600,d2
 		bcc.s	loc_12A5E

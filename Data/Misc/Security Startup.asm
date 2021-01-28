@@ -190,6 +190,8 @@ Game_Program:
 		move.l	#'INIT',(Checksum_string).w		; set flag so checksum won't run again
 
 GameInit:
+		bsr.w	Init_MSU_Driver
+		seq	(SegaCD_Mode).w
 		bsr.w	Init_DMA_Queue
 		bsr.s	Init_VDP
 		bsr.w	SoundDriverLoad

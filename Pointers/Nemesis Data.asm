@@ -2,7 +2,7 @@
 ; Nemesis compressed main graphics
 ; ===========================================================================
 
-ArtNem_Ring:				binclude	"Objects/Rings/Nemesis Art/Rings.bin"
+ArtNem_Ring_Sparks:			binclude	"Objects/Rings/Nemesis Art/Sparks.bin"
 	even
 ArtNem_Hud:				binclude	"Objects/HUD/Nemesis Art/HUD.bin"
 	even

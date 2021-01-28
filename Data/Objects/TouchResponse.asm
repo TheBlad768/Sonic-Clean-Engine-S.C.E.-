@@ -294,7 +294,7 @@ Touch_Enemy:
 		move.b	collision_flags(a1),collision_restore_flags(a1)	; Save collision_flags
 		move.w	a0,d0								; Save value of RAM address of which player hit the boss:
 		move.b	d0,ground_vel(a1)
-		move.b	#0,collision_flags(a1)
+		clr.b	collision_flags(a1)
 		subq.b	#1,boss_hitcount2(a1)
 		bne.s	.bossnotedefeated
 		bset	#7,status(a1)
@@ -331,7 +331,7 @@ Touch_EnemyNormal:
 		movea.w	a0,a3
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,address(a1)			; change object to explosion
-		move.b	#0,routine(a1)
+		clr.b	routine(a1)
 		tst.w	y_vel(a0)
 		bmi.s	.bouncedown
 		move.w	y_pos(a0),d0

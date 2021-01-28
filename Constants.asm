@@ -418,6 +418,7 @@ Status_ObjDefeated			= 7
 ; ---------------------------------------------------------------------------
 ArtTile_ArtUnc_Sonic			= $680
 ArtTile_ArtNem_Ring			= $6B4
+ArtTile_ArtNem_Ring_Sparks	= $6B8
 ArtTile_ArtNem_Powerups		= $4AC
 ArtTile_ArtUnc_Shield			= $79C
 ArtTile_ArtUnc_Shield_Sparks	= $7BB

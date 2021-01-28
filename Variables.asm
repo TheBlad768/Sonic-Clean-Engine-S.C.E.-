@@ -126,7 +126,7 @@ Ring_consumption_table_End
 
 Plane_Buffer:							ds.b $480				; Used by level drawing routines
 
-v_snddriver_ram:						ds.b $394				; Start of RAM for the sound driver data
+v_snddriver_ram:						ds.b $396				; Start of RAM for the sound driver data
 
 v_gamemode:
 Game_mode:							ds.b 1
@@ -232,13 +232,15 @@ Debug_object:						ds.b 1					; The current position in the debug mode object li
 Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
 Debug_mode_flag:					ds.b 1
-DPLC_SlottedRAM:					ds.w 2					; 2 slots
+DPLC_SlottedRAM:					ds.w 1
 PalCycle_Frame:						ds.w 1
 PalCycle_Timer:						ds.w 1
 PalCycle_Frame2:						ds.w 1
 PalCycle_Timer2:						ds.w 1
 PalCycle_Frame3:						ds.w 1
 PalCycle_Timer3:						ds.w 1
+Pal_fade_delay:						ds.w 1
+Pal_fade_delay2:						ds.w 1
 Hyper_Sonic_flash_timer:				ds.b 1
 Negative_flash_timer:					ds.b 1
 									ds.b 1					; Unused
@@ -270,6 +272,8 @@ Last_star_post_hit:
 Last_star_pole_hit:					ds.b 1
 Level_music:							ds.w 1
 Palette_fade_timer:					ds.w 1					; The palette gets faded in until this timer expires
+SegaCD_Mode:						ds.b 1
+									ds.b 1					; Unused
 
 Block_table_addr_ROM:				ds.l 1					; Block table pointer(Block (16x16) definitions, 8 bytes per definition)
 Level_layout_addr_ROM:				ds.l 1					; Level layout pointer

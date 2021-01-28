@@ -49,7 +49,7 @@ Debug_Zone:
 		move.w	(a2)+,d6
 		cmp.b	(Debug_object).w,d6 ; have you gone past the last item?
 		bhi.s	.noreset	; if not, branch
-		move.b	#0,(Debug_object).w ; back to start of list
+		clr.b	(Debug_object).w ; back to start of list
 
 .noreset:
 		bsr.w	Debug_ShowItem
@@ -157,7 +157,7 @@ Debug_ChgItem:
 		addq.b	#1,(Debug_object).w	; go forwards 1 item
 		cmp.b	(Debug_object).w,d6
 		bhi.s	.display
-		move.b	#0,(Debug_object).w	; loop back to first item
+		clr.b	(Debug_object).w	; loop back to first item
 
 .display:
 		bra.w	Debug_ShowItem
@@ -181,7 +181,7 @@ Debug_ChgItem:
 		add.w	d1,d0
 		move.b	4(a2,d0.w),subtype(a1)
 		move.l	(a2,d0.w),(a1)
-		move.b	#0,(a1)
+		clr.b	(a1)
 		rts
 ; ---------------------------------------------------------------------------
 

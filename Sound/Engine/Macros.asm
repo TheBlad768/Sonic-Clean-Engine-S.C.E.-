@@ -125,3 +125,24 @@ SMPS_RAM_even macro
 ; helper for sound IDs
 ; ---------------------------------------------------------------------------
 SMPS_id function ptr,((ptr-offset)/ptrsize+idstart)
+
+; ---------------------------------------------------------------------------
+; Macro to communicate with Sega CD
+; Arguments:	1 - command id
+;		2 - command arg
+;		2 - command arg2
+; -------------------------------------------------------------
+
+MCDSend macro	id, arg, arg2
+.wait
+	tst.b	(MCD_Status).l
+	bne.s	.wait
+	move.b	id,(MCD_Command).l
+	if ("arg"<>"")
+		move.b arg,(MCD_Argument).l
+	endif
+	if ("arg2"<>"")
+		move.l arg,(MCD_Argument2).l
+	endif
+	addq.b  #1,(MCD_Command_Clock).l
+	endm
