@@ -4,6 +4,7 @@
 ; Thanks to Vladikcomper for the integration examples
 ; https://github.com/krikzz/msu-md
 ; https://github.com/ekeeke/msu-md
+; Doesn't work on Kega Fusion(DMA bug). Use RetroArch or real hardware
 ; ---------------------------------------------------------------------------
 
 MCD_Command			= $A12010		; Command sent to Mega CD	; .b
