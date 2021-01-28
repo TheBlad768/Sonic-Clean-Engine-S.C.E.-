@@ -23,7 +23,7 @@ SynchroAnimate:
 		add.l	d0,d1									; Get next frame
 		move.w	#tiles_to_bytes(ArtTile_ArtNem_Ring),d2	; Load art destination
 		move.w	#$80/2,d3								; Size of art (in words)	; We only need one frame
-		jsr	(Add_To_DMA_Queue).l
+		bsr.w	Add_To_DMA_Queue
 
 ; Used for bouncing rings
 .Sync2:
