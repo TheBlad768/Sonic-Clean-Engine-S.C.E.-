@@ -288,12 +288,12 @@ Touch_Enemy:
 		; Boss related? Could be special enemies in general
 		tst.b	boss_hitcount2(a1)
 		beq.s	Touch_EnemyNormal
-		neg.w	x_vel(a0)							; Bounce player directly off boss
+		neg.w	x_vel(a0)								; Bounce player directly off boss
 		neg.w	y_vel(a0)
 		neg.w	ground_vel(a0)
 		move.b	collision_flags(a1),collision_restore_flags(a1)	; Save collision_flags
-		move.w	a0,d0								; Save value of RAM address of which player hit the boss:
-		move.b	d0,ground_vel(a1)
+		move.w	a0,d0									; Save value of RAM address of which player hit the boss:
+		move.b	d0,$1C(a1)
 		clr.b	collision_flags(a1)
 		subq.b	#1,boss_hitcount2(a1)
 		bne.s	.bossnotedefeated

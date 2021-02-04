@@ -309,9 +309,9 @@ AniRaw_EndSigns2:
 		dc.b	4,   5
 		dc.b	6, $FC
 AniRaw_SignpostSparkle:
-		dc.b	1,   4
-		dc.b	5,   6
-		dc.b	7, $FC
+		dc.b	1,   1
+		dc.b	2,   3
+		dc.b	4, $FC
 Child6_EndSign:
 		dc.w 0
 		dc.l Obj_EndSign
