@@ -105,8 +105,7 @@ Plane_double_update_flag:				ds.w 1					; Set when two block are to be updated i
 HScroll_Shift:
 Camera_Hscroll_shift:					ds.w 3
 	if	ExtendedCamera
-Camera_X_Extend:					ds.l 1					; Camera X extension against P1 speed
-Camera_Y_Extend:					ds.l 1					; Camera Y extension against P1 speed
+Camera_X_Center:					ds.w 1
 	endif
 Screen_X_wrap_value:				ds.w 1					; Set to $FFFF
 Screen_Y_wrap_value:					ds.w 1					; Either $7FF or $FFF

@@ -9,6 +9,9 @@ Get_LevelSizeStart:
 		move.b	d0,(Fast_V_scroll_flag).w
 		bsr.w	Change_ActSizes
 		move.w	#$60,(Distance_from_screen_top).w
+	if	ExtendedCamera
+		move.w	#320/2,(Camera_X_Center).w
+	endif
 		move.w	#-1,(Screen_X_wrap_value).w
 		move.w	#-1,(Screen_Y_wrap_value).w
 		tst.b	(Last_star_post_hit).w				; have any lampposts been hit?

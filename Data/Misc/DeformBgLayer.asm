@@ -56,9 +56,7 @@ loc_1C0D2:
 loc_1C0D6:
 		sub.w	(a1),d0
 	if	ExtendedCamera
-		add.w	Camera_X_Extend-Camera_X_pos(a1),d0
-		bmi.s	loc_1C0EE
-		subi.w	#320/2,d0
+		sub.w	(Camera_X_Center).w,d0
 		blt.s		loc_1C0E8
 		bge.s	loc_1C0FC
 	elseif
@@ -108,20 +106,49 @@ loc_1C112:
 
 ; ---------------------------------------------------------------------------
 ; Subroutine of the Extended camera
+; From Sonic CD R11A Disassembly
+; Check out the github:
+; https://github.com/Ralakimus/sonic-cd-r11a-disassembly
 ; ---------------------------------------------------------------------------
 
 Camera_Extended:
-		moveq	#0,d1
-		move.l	Camera_X_Extend-Camera_X_pos(a1),d0
-		move.w	x_vel(a0),d1
-		btst	#Status_InAir,status(a0)
-		bne.s	+
-		move.w	ground_vel(a0),d1
-+		asr.w	#6,d1
-		swap	d1
-		sub.l	d1,d0
-		asr.l	#4,d0
-		sub.l	d0,Camera_X_Extend-Camera_X_pos(a1)
+		move.w	Camera_X_Center-Camera_X_pos(a1),d1		; Get camera X center position
+		move.w	ground_vel(a0),d0						; Get how fast we are moving
+		bpl.s	.PosInertia
+		neg.w	d0
+
+.PosInertia:
+		cmpi.w	#$600,d0								; Are we going at max regular speed?
+		bcs.s	.ResetPan								; If not, branch
+		tst.w	ground_vel(a0)							; Are we moving right?
+		bpl.s	.MovingRight								; If so, branch
+
+.MovingLeft:
+		addq.w	#2,d1									; Pan the camera to the right
+		cmpi.w	#(320/2)+64,d1							; Has it panned far enough?
+		bcs.s	.SetPanVal								; If not, branch
+		move.w	#(320/2)+64,d1							; Cap the camera's position
+		bra.s	.SetPanVal
+
+.MovingRight:
+		subq.w	#2,d1									; Pan the camera to the left
+		cmpi.w	#(320/2)-64,d1							; Has it panned far enough
+		bcc.s	.SetPanVal								; If not, branch
+		move.w	#(320/2)-64,d1							; Cap the camera's position
+		bra.s	.SetPanVal
+
+.ResetPan:
+		cmpi.w	#320/2,d1								; Has the camera panned back to the middle?
+		beq.s	.SetPanVal								; If so, branch
+		bcc.s	.ResetLeft								; If it's panning back left
+		addq.w	#2,d1									; Pan back to the right
+		bra.s	.SetPanVal
+
+.ResetLeft:
+		subq.w	#2,d1									; Pan back to the left
+
+.SetPanVal:
+		move.w	d1,Camera_X_Center-Camera_X_pos(a1)		; Update camera X center position
 		rts
 
 	endif
