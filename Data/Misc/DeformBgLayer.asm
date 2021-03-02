@@ -7,14 +7,14 @@
 DeformBgLayer:
 		tst.b	(Deform_lock).w
 		bne.s	locret_1C0E6
-		clr.w	(Camera_RAM).w
+		clr.w	(H_scroll_amount).w
 		clr.w	(V_scroll_amount).w
 		tst.b	(Scroll_lock).w
 		bne.s	+
 		lea	(Player_1).w,a0
 		lea	(Camera_X_pos).w,a1
 		lea	(Camera_min_X_pos).w,a2
-		lea	(Camera_RAM).w,a4
+		lea	(H_scroll_amount).w,a4
 		lea	(H_scroll_frame_offset).w,a5
 		lea	(Pos_table).w,a6
 		bsr.s	MoveCameraX
@@ -59,7 +59,7 @@ loc_1C0D6:
 		sub.w	(Camera_X_Center).w,d0
 		blt.s		loc_1C0E8
 		bge.s	loc_1C0FC
-	elseif
+	else
 		subi.w	#$90,d0
 		blt.s		loc_1C0E8
 		subi.w	#$10,d0

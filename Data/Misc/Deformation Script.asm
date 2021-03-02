@@ -201,7 +201,7 @@ _linear		= $0400
 ; =============== S U B R O U T I N E =======================================
 
 ExecuteParallaxScript:
-		lea	(v_deformtablebuffer).w,a5
+		lea	(H_scroll_table).w,a5
 		move.w	(Camera_X_pos_copy).w,d0	; d0 = BG Position
 		swap	d0
 		clr.w	d0

@@ -142,7 +142,7 @@ MCDSend macro	id, arg, arg2
 		move.b arg,(MCD_Argument).l
 	endif
 	if ("arg2"<>"")
-		move.l arg,(MCD_Argument2).l
+		move.l arg2,(MCD_Argument2).l
 	endif
 	addq.b  #1,(MCD_Command_Clock).l
 	endm

@@ -40,7 +40,7 @@ Kos_decomp_buffer:					ds.b $1000				; Each module in a KosM archive is decompre
 Nem_code_table:						ds.b $200				; Code table is built up here and then used during decompression
 
 H_scroll_buffer:						ds.l 224					; Horizontal scroll table is built up here and then DMAed to VRAM
-v_deformtablebuffer:					ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
+H_scroll_table:						ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
 H_scroll_buffer_End
 Collision_response_list:				ds.b 128					; Collision response list
 Pos_table:							ds.l 64					; Recorded player XY position buffer

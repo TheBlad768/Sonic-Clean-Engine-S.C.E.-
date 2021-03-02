@@ -32,7 +32,7 @@ UpdateHUD:
 		beq.s	.chkrings							; if not, branch
 		clr.b	(Update_HUD_score).w
 		locVRAM	tiles_to_bytes($6DC),d0		; set VRAM address
-		move.l	(v_score).w,d1					; load score
+		move.l	(Score).w,d1						; load score
 		bsr.w	DrawSixDigitNumber
 
 .chkrings:

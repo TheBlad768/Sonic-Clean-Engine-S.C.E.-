@@ -2156,7 +2156,7 @@ locret_1258E:
 ; ---------------------------------------------------------------------------
 
 loc_12590:
-		tst.w	(Camera_RAM).w
+		tst.w	(H_scroll_amount).w
 		bne.s	+
 		tst.w	(V_scroll_amount).w
 		bne.s	+

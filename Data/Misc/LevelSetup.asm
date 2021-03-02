@@ -113,7 +113,7 @@ DEZ1_BackgroundEvent:
 
 .deform:
 		lea	DEZ1_BGDrawArray(pc),a4
-		lea	(v_deformtablebuffer).w,a5
+		lea	(H_scroll_table).w,a5
 		jsr	ApplyDeformation(pc)
 		jmp	ShakeScreen_Setup(pc)
 ; ---------------------------------------------------------------------------
