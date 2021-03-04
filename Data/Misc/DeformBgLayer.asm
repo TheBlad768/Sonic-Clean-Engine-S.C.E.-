@@ -74,8 +74,6 @@ locret_1C0E6:
 loc_1C0E8:
 		cmpi.w	#-24,d0
 		bgt.s	+
-
-loc_1C0EE:
 		move.w	#-24,d0
 +		add.w	(a1),d0
 		cmp.w	(a2),d0
