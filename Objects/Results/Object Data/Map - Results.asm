@@ -59,14 +59,14 @@ word_2F332:
 word_2F346:		; Bonus
 		dc.w 3
 		dc.b	0,  $D,	$A4, $9A,   0,	 0
-		dc.b	0,   1,	$A6, $C2,   0, $20
+		dc.b	0,   1,	$A6, $BC,   0, $20
 		dc.b  $F6,   6,	$84, $94,   0, $24
 word_2F35A:
 		dc.w 1	; Ring
-		dc.b	0,  $D,	$A6, $CA,   0,	 0
+		dc.b	0,  $D,	$A6, $C4,   0,	 0
 word_2F362:
 		dc.w 1	; Time
-		dc.b	0,  $D,	$A6, $D2,   0,	 0
+		dc.b	0,  $D,	$A6, $CC,   0,	 0
 word_2F36A:
 		dc.w 2
 		dc.b  $10,   9,	$84, $AA,   0,	 0

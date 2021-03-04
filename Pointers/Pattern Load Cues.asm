@@ -22,7 +22,7 @@ Offs_PLC: offsetTable
 PLC_Main: plrlistheader
 		plreq $5E4, ArtNem_Lamp								; Lamppost
 		plreq ArtTile_ArtNem_Ring_Sparks, ArtNem_Ring_Sparks	; Rings
-		plreq $6C2, ArtNem_Hud								; HUD
+		plreq ArtTile_ArtNem_HUD, ArtNem_Hud				; HUD
 PLC_Main_End
 
 ; ===========================================================================
