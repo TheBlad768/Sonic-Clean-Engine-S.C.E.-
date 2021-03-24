@@ -119,7 +119,7 @@ loc_2D10A:
 		cmpi.l	#Obj_StarPost,address(a1)
 		bne.s	loc_2D128
 		move.b	#2,anim(a1)
-		move.b	#0,mapping_frame(a1)
+		clr.b	mapping_frame(a1)
 
 loc_2D128:
 		jmp	(Delete_Current_Sprite).l
@@ -130,11 +130,12 @@ loc_2D12E:
 		subi.b	#$10,angle(a0)
 		subi.b	#$40,d0
 		jsr	(GetSineCosine).l
-		muls.w	#$C00,d1
+		move.w	#$C00,d2
+		muls.w	d2,d1
 		swap	d1
 		add.w	$30(a0),d1
 		move.w	d1,x_pos(a0)
-		muls.w	#$C00,d0
+		muls.w	d2,d0
 		swap	d0
 		add.w	$32(a0),d0
 		move.w	d0,y_pos(a0)
@@ -214,7 +215,7 @@ sub_2D3C8:
 		move.b	#16/2,width_pixels(a1)
 		move.b	#1,mapping_frame(a1)
 		move.w	#-$400,x_vel(a1)
-		move.w	#0,y_vel(a1)
+		clr.w	y_vel(a1)
 		move.w	d2,$34(a1)
 		addi.w	#$40,d2
 		dbf	d1,-

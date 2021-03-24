@@ -14,18 +14,18 @@ Obj_Fire_Shield:
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
-		move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	loc_195F0
 		bset	#7,art_tile(a0)
 loc_195F0:	; +
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
-		move.b	#-1,LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
+		st	LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
 		move.l	#Obj_Fire_Shield_Main,address(a0)
 ; loc_19602:
 Obj_Fire_Shield_Main:
-		movea.w	parent(a0),a2
+		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2) ; Is player invincible?
 		bne.w	locret_19690				; If so, do not display and do not update variables
 		cmpi.b	#$1C,anim(a2)				; Is player in their 'blank' animation?
@@ -84,7 +84,7 @@ Obj_Lightning_Shield:
 		; init
 		; Load Spark art
 		move.l	#ArtUnc_Obj_Lightning_Shield_Sparks,d1			; Load art source
-		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield_Sparks),d2	; Load art destination
+		move.w	#tiles_to_bytes(ArtTile_Shield_Sparks),d2	; Load art destination
 		move.w	#(ArtUnc_Obj_Lightning_Shield_Sparks_End-ArtUnc_Obj_Lightning_Shield_Sparks)/2,d3	; Size of art (in words)
 		jsr	(Add_To_DMA_Queue).l
 
@@ -95,19 +95,19 @@ Obj_Lightning_Shield:
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
-		move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#7,art_tile(a0)
 
 .nothighpriority:
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
-		move.b	#-1,LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
+		st	LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
 		move.l	#Obj_Lightning_Shield_Main,address(a0)
 
 Obj_Lightning_Shield_Main:
-		movea.w	parent(a0),a2
+		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)	; Is player invincible?
 		bne.s	locret_19690				; If so, do not display and do not update variables
 		cmpi.b	#$1C,anim(a2)				; Is player in their 'blank' animation?
@@ -170,11 +170,10 @@ Obj_Lightning_Shield_FlashWater:
 		lea	(Target_water_palette).w,a2
 		move.w	#($80/4)-1,d0			; Size of Water_palette/4-1
 
--		move.l	(a1),(a2)+			; Backup palette entries
+-		move.l	(a1),(a2)+				; Backup palette entries
 		move.l	#$0EEE0EEE,(a1)+		; Overwrite palette entries with white
-		dbf	d0,-				; Loop until entire thing is overwritten
+		dbf	d0,-							; Loop until entire thing is overwritten
 
-		move.w	#0,-$40(a1)			; Set the first colour in the third palette line to black
 		move.b	#3,anim_frame_timer(a0)
 		rts
 
@@ -253,21 +252,21 @@ Obj_Bubble_Shield:
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
-		move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#7,art_tile(a0)
 
 .nothighpriority:
 		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
-		move.b	#-1,LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		movea.w	parent(a0),a1
+		st	LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
+		lea	(Player_1).w,a1
 		bsr.w	Player_ResetAirTimer
 		move.l	#Obj_Bubble_Shield_Main,address(a0)
 
 Obj_Bubble_Shield_Main:
-		movea.w	parent(a0),a2
+		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)	; Is player invincible?
 		bne.s	locret_1998A				; If so, do not display and do not update variables
 		cmpi.b	#$1C,anim(a2)				; Is player in their 'blank' animation?
@@ -297,7 +296,7 @@ Obj_Bubble_Shield_Main:
 ; ---------------------------------------------------------------------------
 
 Obj_Bubble_Shield_Destroy:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#$8E,status_secondary(a2)			; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Bubble Shield with the Insta-Shield
 
 locret_1998A:
@@ -314,28 +313,28 @@ Obj_Insta_Shield:
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
 		move.b	#$18,height_pixels(a0)
-		move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#7,art_tile(a0)
 
 .nothighpriority:
-		move.w	#1,anim(a0)			; Clear anim and set prev_anim to 1
-		move.b	#-1,LastLoadedDPLC(a0)		; Reset LastLoadedDPLC (used by PLCLoad_Shields)
+		move.w	#1,anim(a0)					; Clear anim and set prev_anim to 1
+		st	LastLoadedDPLC(a0)				; Reset LastLoadedDPLC (used by PLCLoad_Shields)
 		move.l	#Obj_Insta_Shield_Main,address(a0)
 
 Obj_Insta_Shield_Main:
-		movea.w	parent(a0),a2
+		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2) ; Is the player invincible?
-		bne.s	locret_195A4			; If so, return
-		move.w	x_pos(a2),x_pos(a0)		; Inherit player's x_pos
-		move.w	y_pos(a2),y_pos(a0)		; Inherit player's y_pos
-		move.b	status(a2),status(a0)		; Inherit status
-		andi.b	#1,status(a0)			; Limit inheritance to 'orientation' bit
+		bne.s	locret_1998A					; If so, return
+		move.w	x_pos(a2),x_pos(a0)			; Inherit player's x_pos
+		move.w	y_pos(a2),y_pos(a0)			; Inherit player's y_pos
+		move.b	status(a2),status(a0)			; Inherit status
+		andi.b	#1,status(a0)					; Limit inheritance to 'orientation' bit
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.normalgravity
-		ori.b	#2,status(a0)			; Reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
+		ori.b	#2,status(a0)					; Reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
 .normalgravity:
 		andi.w	#drawing_mask,art_tile(a0)
@@ -348,26 +347,22 @@ Obj_Insta_Shield_Main:
 		lea	Ani_InstaShield(pc),a1
 		jsr	(Animate_Sprite).l
 		cmpi.b	#7,mapping_frame(a0)		; Has it reached then end of its animation?
-		bne.s	.notover			; If not, branch
-		tst.b	double_jump_flag(a2)		; Is it in its attacking state?
-		beq.s	.notover			; If not, branch
+		bne.s	.notover						; If not, branch
+		tst.b	double_jump_flag(a2)				; Is it in its attacking state?
+		beq.s	.notover						; If not, branch
 		move.b	#2,double_jump_flag(a2)		; Mark attack as over
 
 .notover:
-		tst.b	mapping_frame(a0)		; Is this the first frame?
-		beq.s	.loadnewDPLC			; If so, branch and load the DPLC for this and the next few frames
+		tst.b	mapping_frame(a0)				; Is this the first frame?
+		beq.s	.loadnewDPLC				; If so, branch and load the DPLC for this and the next few frames
 		cmpi.b	#3,mapping_frame(a0)		; Is this the third frame?
-		bne.s	.skipDPLC			; If not, branch as we don't need to load another DPLC yet
+		bne.s	.skipDPLC					; If not, branch as we don't need to load another DPLC yet
 
 .loadnewDPLC:
 		bsr.w	PLCLoad_Shields
 
 .skipDPLC:
 		jmp	(Draw_Sprite).l
-; ---------------------------------------------------------------------------
-
-locret_195A4:
-		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -375,14 +370,14 @@ PLCLoad_Shields:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
 		cmp.b	LastLoadedDPLC(a0),d0
-		beq.s	locret_199E8
+		beq.s	PLCLoad_Shields_Return
 		move.b	d0,LastLoadedDPLC(a0)
 		movea.l	DPLC_Address(a0),a2
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d5
 		subq.w	#1,d5
-		bmi.s	locret_199E8
+		bmi.s	PLCLoad_Shields_Return
 		move.w	vram_art(a0),d4
 
 PLCLoad_Shields_ReadEntry:
@@ -401,24 +396,15 @@ PLCLoad_Shields_ReadEntry:
 		jsr	(Add_To_DMA_Queue).l
 		dbf	d5,PLCLoad_Shields_ReadEntry
 
-locret_199E8:
+PLCLoad_Shields_Return:
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
-off_187DE:
-		dc.l byte_189ED
-		dc.w $B
-		dc.l byte_18A02
-		dc.w $160D
-		dc.l byte_18A1B
-		dc.w $2C0D
-; ---------------------------------------------------------------------------
-
 Obj_Invincibility:
 		move.l	#ArtUnc_Invincibility,d1
-		move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield),d2	; VRAM
-		move.w	#$400/2,d3								; Size/2
+		move.w	#tiles_to_bytes(ArtTile_Shield),d2	; VRAM
+		move.w	#$400/2,d3						; Size/2
 		jsr	(Add_To_DMA_Queue).l
 		moveq	#0,d2
 		lea	off_187DE-6(pc),a2
@@ -427,14 +413,13 @@ Obj_Invincibility:
 
 loc_1880E:
 		move.l	#Obj_188E8,address(a1)
-		move.l	#Map_Invincibility,$C(a1)
-		move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a1)
-		move.w	#$80,8(a1)
-		move.b	#4,4(a1)
-		bset	#6,4(a1)
-		move.b	#$10,7(a1)
-		move.w	#2,$16(a1)
-		move.w	$42(a0),$42(a1)
+		move.l	#Map_Invincibility,mappings(a1)
+		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a1)
+		move.w	#$80,priority(a1)
+		move.b	#4,render_flags(a1)
+		bset	#6,render_flags(a1)
+		move.b	#32/2,width_pixels(a1)
+		move.w	#2,mainspr_childsprites(a1)
 		move.b	d2,$36(a1)
 		addq.w	#1,d2
 		move.l	(a2)+,$30(a1)
@@ -445,14 +430,14 @@ loc_1880E:
 		move.b	#4,$34(a0)
 
 loc_18868:
-		movea.w	$42(a0),a1
-		btst	#1,$2B(a1)
+		lea	(Player_1).w,a1
+		btst	#1,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
-		move.w	$10(a1),d0
-		move.w	d0,$10(a0)
-		move.w	$14(a1),d1
-		move.w	d1,$14(a0)
-		lea	$18(a0),a2
+		move.w	x_pos(a1),d0
+		move.w	d0,x_pos(a0)
+		move.w	y_pos(a1),d1
+		move.w	d1,y_pos(a0)
+		lea	sub2_x_pos(a0),a2
 		lea	byte_189E0(pc),a3
 		moveq	#0,d5
 
@@ -478,18 +463,19 @@ loc_188B0:
 		move.w	d3,(a2)+
 		move.w	d5,(a2)+
 		moveq	#$12,d0
-		btst	#0,$2A(a1)
+		btst	#0,status(a1)
 		beq.s	loc_188E0
 		neg.w	d0
 
 loc_188E0:
 		add.b	d0,$34(a0)
 		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_188E8:
-		movea.w	$42(a0),a1
-		btst	#1,$2B(a1)
+		lea	(Player_1).w,a1
+		btst	#1,status_secondary(a1)
 		beq.w	Delete_Current_Sprite
 		lea	(Pos_table_index).w,a5
 		lea	(Pos_table).w,a6
@@ -503,9 +489,9 @@ Obj_188E8:
 		lea	(a6,d0.w),a2
 		move.w	(a2)+,d0
 		move.w	(a2)+,d1
-		move.w	d0,$10(a0)
-		move.w	d1,$14(a0)
-		lea	$18(a0),a2
+		move.w	d0,x_pos(a0)
+		move.w	d1,y_pos(a0)
+		lea	sub2_x_pos(a0),a2
 		movea.l	$30(a0),a3
 
 loc_18936:
@@ -534,7 +520,7 @@ loc_18946:
 		move.w	d3,(a2)+
 		move.w	d5,(a2)+
 		moveq	#2,d0
-		btst	#0,$2A(a1)
+		btst	#0,status(a1)
 		beq.s	loc_18982
 		neg.w	d0
 
@@ -556,6 +542,13 @@ sub_1898A:
 ; End of function sub_1898A
 ; ---------------------------------------------------------------------------
 
+off_187DE:
+		dc.l byte_189ED
+		dc.w $B
+		dc.l byte_18A02
+		dc.w $160D
+		dc.l byte_18A1B
+		dc.w $2C0D
 word_189A0:
 		dc.w   $F00,  $F03,  $E06,  $D08,  $B0B,  $80D,	 $60E,	$30F,	$10, $FC0F, $F90E, $F70D, $F40B, $F208,	$F106, $F003
 		dc.w  $F000, $F0FC, $F1F9, $F2F7, $F4F4, $F7F2,	$F9F1, $FCF0, $FFF0,  $3F0,  $6F1,  $8F2,  $BF4,  $DF7,	 $EF9,	$FFC

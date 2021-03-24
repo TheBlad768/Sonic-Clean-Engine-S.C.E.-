@@ -6,8 +6,8 @@
 
 Process_Sprites:
 		lea	(Object_RAM).w,a0
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w
-		bhs.s	Process_Sprites_FreezeObject
+		cmpi.b	#id_SonicDeath,routine(a0)		; has Sonic just died?
+		bhs.s	Process_Sprites_FreezeObject		; if yes, branch
 		moveq	#((Object_RAM_End-Object_RAM)/object_size)-1,d7
 
 Process_Sprites_Loop:

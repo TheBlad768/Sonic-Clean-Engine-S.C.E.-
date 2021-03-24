@@ -318,8 +318,8 @@ loc_1E050:
 		bpl.s	loc_1E06E
 
 loc_1E056:
-		move.w	#0,ground_vel(a1)
-		move.w	#0,x_vel(a1)
+		clr.w	ground_vel(a1)
+		clr.w	x_vel(a1)
 		tst.b	$37(a1)
 		bpl.s	loc_1E06E
 		bset	#6,$37(a1)
@@ -391,14 +391,14 @@ loc_1E0E0:
 ; ---------------------------------------------------------------------------
 
 loc_1E0F6:
-		move.w	#0,ground_vel(a1)
+		clr.w	ground_vel(a1)
 
 loc_1E0FC:
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	+
 		neg.w	d3
 +		sub.w	d3,y_pos(a1)
-		move.w	#0,y_vel(a1)
+		clr.w	y_vel(a1)
 
 loc_1E10E:
 		tst.b	$37(a1)
@@ -757,13 +757,13 @@ loc_1E45A:
 RideObject_SetRide:
 		btst	#Status_OnObj,status(a1)
 		beq.s	loc_1E4A0
-		movea.w	$42(a1),a3
+		movea.w	interact(a1),a3
 		bclr	d6,status(a3)
 
 loc_1E4A0:
-		move.w	a0,$42(a1)
-		move.b	#0,$26(a1)
-		move.w	#0,y_vel(a1)
+		move.w	a0,interact(a1)
+		clr.b	angle(a1)
+		clr.w	y_vel(a1)
 		move.w	x_vel(a1),ground_vel(a1)
 		bset	#Status_OnObj,status(a1)
 		bset	d6,status(a0)

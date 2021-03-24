@@ -731,7 +731,7 @@ Offset_ObjectsDuringTransition:
 Change_ActSizes:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#3,d0
 		lea	LevelSizes(pc),a1
 		lea	(a1,d0.w),a1
@@ -749,7 +749,7 @@ Change_ActSizes:
 LoadLevelLoadBlock:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		move.w	d0,d1
 		add.w	d0,d0
@@ -759,7 +759,7 @@ LoadLevelLoadBlock:
 		move.l	(a2)+,d0
 		andi.l	#$FFFFFF,d0
 		movea.l	d0,a1
-		move.w	#0,d2
+		moveq	#0,d2
 		bsr.w	Queue_Kos_Module
 
 -		move.b	#VintID_TitleCard,(V_int_routine).w
@@ -777,7 +777,7 @@ LoadLevelLoadBlock:
 LoadLevelLoadBlock2:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		move.w	d0,d1
 		add.w	d0,d0
@@ -803,7 +803,7 @@ LoadLevelLoadBlock2:
 Load_Level:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		lea	(LevelPtrs).l,a0
 		movea.l	(a0,d0.w),a0
@@ -824,7 +824,7 @@ Load_Level2:
 Load_Solids:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		lea	(SolidIndexes).l,a0
 		movea.l	(a0,d0.w),a0

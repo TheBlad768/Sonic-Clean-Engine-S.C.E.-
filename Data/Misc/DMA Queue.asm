@@ -111,7 +111,7 @@ Use128kbSafeDMA = 0
 ; handle these race conditions would be to make unsafe callers (such as S3&K's
 ; KosM decoder) prevent these by masking off interrupts before calling and then
 ; restore interrupts after.
-UseVIntSafeDMA = 1
+UseVIntSafeDMA = 0
 ; ===========================================================================
 ; Convenience macros, for increased maintainability of the code.
 	ifndef DMA

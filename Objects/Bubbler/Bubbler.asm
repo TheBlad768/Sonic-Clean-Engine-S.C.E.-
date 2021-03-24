@@ -61,7 +61,7 @@ loc_2F9E2:
 		move.b	$26(a0),d0
 		addq.b	#1,$26(a0)
 		andi.w	#$7F,d0
-		lea	byte_1831E(pc),a1
+		lea	AirCountdown_WobbleData(pc),a1
 		move.b	(a1,d0.w),d0
 		ext.w	d0
 		add.w	$30(a0),d0
@@ -246,7 +246,7 @@ sub_2FBA8:
 		clr.w	ground_vel(a1)
 		move.b	#$15,anim(a1)
 		move.w	#$23,$32(a1)
-		move.b	#0,jumping(a1)
+		clr.b	jumping(a1)
 		bclr	#5,status(a1)
 		bclr	#4,status(a1)
 		btst	#2,status(a1)

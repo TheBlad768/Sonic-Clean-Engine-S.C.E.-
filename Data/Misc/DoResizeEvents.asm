@@ -7,7 +7,7 @@
 Do_ResizeEvents:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#5,d0
 		move.w	LevelResizeArray(pc,d0.w),d0
 		jsr	LevelResizeArray(pc,d0.w)

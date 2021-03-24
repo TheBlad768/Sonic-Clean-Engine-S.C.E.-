@@ -335,7 +335,7 @@ loc_868B6:
 		move.w	#$300,d0
 		move.w	#$100,d1
 		moveq	#$10,d2
-		move.w	#0,d3
+		moveq	#0,d3
 		move.w	#-$30,d4
 		sub.b	$2C(a0),d4
 		bsr.w	sub_869F6

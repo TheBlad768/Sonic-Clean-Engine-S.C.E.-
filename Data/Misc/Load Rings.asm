@@ -18,7 +18,7 @@ Load_Rings_Init:
 		clearRAM Ring_status_table, Ring_status_table_End
 		clearRAM Ring_consumption_table, Ring_consumption_table_End
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		lea	(RingLocPtrs).l,a1
 		movea.l	(a1,d0.w),a1
@@ -280,32 +280,32 @@ CMap_Ring:
 ;frame1:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$0000+make_art_tile(ArtTile_ArtNem_Ring,1,0)
+	dc.w	$0000+make_art_tile(ArtTile_Ring,1,0)
 	dc.w	$FFF8
 
 ;frame2:
 CMap_Ring_Spark:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$0000+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
+	dc.w	$0000+make_art_tile(ArtTile_Ring_Sparks,1,0)
 	dc.w	$FFF8
 
 ;frame3:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$1800+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
+	dc.w	$1800+make_art_tile(ArtTile_Ring_Sparks,1,0)
 	dc.w	$FFF8
 
 ;frame4:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$0800+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
+	dc.w	$0800+make_art_tile(ArtTile_Ring_Sparks,1,0)
 	dc.w	$FFF8
 
 ;frame5:
 	dc.w	$FFF8
 	dc.w	$0005
-	dc.w	$1000+make_art_tile(ArtTile_ArtNem_Ring_Sparks,1,0)
+	dc.w	$1000+make_art_tile(ArtTile_Ring_Sparks,1,0)
 	dc.w	$FFF8
 CMap_Ring_End
 

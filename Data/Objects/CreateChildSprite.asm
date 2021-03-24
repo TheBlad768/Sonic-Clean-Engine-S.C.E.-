@@ -5,7 +5,7 @@ CreateChild1_Normal:
 		moveq	#0,d2						; Includes positional offset data
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a0,parent3(a1)				; Parent RAM address into $46
 		move.l	mappings(a0),mappings(a1)
@@ -36,7 +36,7 @@ CreateChild2_Complex:
 		moveq	#0,d2						; Includes positional offset data and velocity and CHECKLATER
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a0,parent3(a1)				; Parent RAM address into $46
 		move.l	mappings(a0),mappings(a1)
@@ -73,7 +73,7 @@ CreateChild3_NormalRepeated:
 		move.w	(a2)+,d6
 
 -		movea.l	a2,a3
-		jsr	(Create_New_Sprite3).l
+		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -105,7 +105,7 @@ CreateChild4_LinkListRepeated:
 		moveq	#0,d2
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a3,parent3(a1)
 		move.w	a1,$44(a3)
@@ -128,7 +128,7 @@ CreateChild5_ComplexAdjusted:
 		moveq	#0,d2						; Same as child routine 2, but adjusts both X position and X velocity based on parent object's orientation
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+++
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -171,7 +171,7 @@ CreateChild6_Simple:
 		moveq	#0,d2						; Simple child creation routine, merely creates x number of the same object at the parent's position
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -192,7 +192,7 @@ CreateChild7_Normal2:
 		moveq	#0,d2						; Same as child routine 1, but does not limit children to object slots after the parent
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite).l
+-		bsr.w	Create_New_Sprite
 		bne.s	+
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -224,7 +224,7 @@ CreateChild8_TreeListRepeated:
 		moveq	#0,d2
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a3,parent3(a1)
 		move.w	a0,$44(a1)
@@ -248,7 +248,7 @@ CreateChild9_TreeList:
 		moveq	#0,d2
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a3,parent3(a1)
 		move.w	a0,$44(a1)
@@ -271,7 +271,7 @@ CreateChild10_NormalAdjusted:
 		moveq	#0,d2						; Same as child routine 1, but adjusts X position based on parent object's orientation
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	++
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -306,7 +306,7 @@ CreateChild11_NormalVelocity:
 		moveq	#0,d2						; Simple child creation routine, merely creates x number of the same object at the parent's position
 		move.w	(a2)+,d6
 
--		jsr	(Create_New_Sprite3).l
+-		bsr.w	Create_New_Sprite3
 		bne.s	+
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)

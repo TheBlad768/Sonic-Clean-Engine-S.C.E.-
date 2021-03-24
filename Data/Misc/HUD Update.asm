@@ -66,11 +66,11 @@ loc_DD64:
 		addq.b	#1,-(a1)							; increment 1/60s counter
 		cmpi.b	#60,(a1)							; check if passed 60
 		blo.s		loc_DD9E
-		move.b	#0,(a1)
+		clr.b	(a1)
 		addq.b	#1,-(a1)							; increment second counter
 		cmpi.b	#60,(a1)							; check if passed 60
 		blo.s		loc_DD9E
-		move.b	#0,(a1)
+		clr.b	(a1)
 		addq.b	#1,-(a1)							; increment minute counter
 		cmpi.b	#9,(a1)							; check if passed 9
 		blo.s		loc_DD9E
@@ -87,7 +87,7 @@ loc_DD9E:
 		bsr.w	DrawTwoDigitNumber
 		locVRAM	tiles_to_bytes($6EE),d0
 		moveq	#0,d1
-		move.b	(Timer_centisecond).w,d1 			; load centisecond
+		move.b	(Timer_frame).w,d1 				; load centisecond
 		mulu.w	#100,d1
 		divu.w	#60,d1
 		swap	d1
@@ -108,7 +108,7 @@ UpdateHUD_TimeOver:
 		bsr.w	Kill_Character
 
 .finish:
-		move.b	#1,(Time_over_flag).w
+		st	(Time_over_flag).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -145,11 +145,11 @@ HudDebug:
 		addq.b	#1,-(a1)							; increment 1/60s counter
 		cmpi.b	#60,(a1)							; check if passed 60
 		blo.s		locret_DE7C
-		move.b	#0,(a1)
+		clr.b	(a1)
 		addq.b	#1,-(a1)							; increment second counter
 		cmpi.b	#60,(a1)							; check if passed 60
 		blo.s		locret_DE7C
-		move.b	#0,(a1)
+		clr.b	(a1)
 		addq.b	#1,-(a1)							; increment minute counter
 		cmpi.b	#9,(a1)							; check if passed 9
 		blo.s		locret_DE7C

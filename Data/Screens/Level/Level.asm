@@ -32,7 +32,7 @@ GM_Level:
 		move.w	#$9001,(a6)								; 64-cell hscroll size
 		move.w	#$9200,(a6)								; set window V position at default
 	if GameDebug=1
-		btst	#bitA,(Ctrl_1).w								; is A button held?
+		btst	#bitA,(Ctrl_1_held).w							; is A button held?
 		beq.s	+										; if not, branch
 		move.b	#1,(Debug_mode_flag).w 					; enable debug mode
 +
@@ -58,7 +58,7 @@ GM_Level:
 		move.w	d1,d0
 		bsr.w	LoadPalette2_Immediate
 +		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#6,d0
 		lea	LevelMusic_Playlist(pc),a1						; load music playlist
 		move.b	(a1,d0.w),d0
@@ -156,7 +156,6 @@ SpawnLevelMainSprites:
 		move.l	#Obj_Sonic,(Player_1).w
 		move.l	#Obj_DashDust,(v_Dust).w
 		move.l	#Obj_Insta_Shield,(v_Shield).w
-		move.w	#Player_1,(v_Shield+parent).w
 		rts
 ; End of function SpawnLevelMainSprites
 

@@ -248,7 +248,6 @@ Touch_Monitor:
 		bne.s	.locret
 		neg.w	y_vel(a0)
 		move.b	#4,routine(a1)
-		move.w	a0,parent(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -396,10 +395,11 @@ Touch_ChkHurt_Bounce_Projectile:
 		sub.w	y_pos(a1),d2
 		bsr.w	GetArcTan
 		bsr.w	GetSineCosine
-		muls.w	#-$800,d1
+		move.w	#-$800,d2
+		muls.w	d2,d1
 		asr.l	#8,d1
 		move.w	d1,x_vel(a1)
-		muls.w	#-$800,d0
+		muls.w	d2,d0
 		asr.l	#8,d0
 		move.w	d0,y_vel(a1)
 		clr.b	collision_flags(a1)
@@ -440,7 +440,7 @@ HurtCharacter:
 		andi.b	#-$72,status_secondary(a0)
 
 .bounce:
-		move.b	#4,routine(a0)
+		move.b	#id_SonicHurt,routine(a0)
 		bsr.w	Sonic_ResetOnFloor
 		bset	#Status_InAir,status(a0)
 		move.w	#-$400,y_vel(a0)						; make Sonic bounce away from the object
@@ -500,9 +500,9 @@ loc_1036E:
 		move.w	(sp)+,d0
 		bset	#Status_InAir,status(a0)
 		move.w	#-$700,y_vel(a0)
-		move.w	#0,x_vel(a0)
-		move.w	#0,ground_vel(a0)
-		move.w	#0,(HScroll_Shift).w
+		clr.w	x_vel(a0)
+		clr.w	ground_vel(a0)
+		clr.w	(HScroll_Shift).w
 		move.b	#id_Death,anim(a0)
 		move.w	art_tile(a0),(Saved_art_tile).w
 		bset	#7,art_tile(a0)
@@ -637,10 +637,11 @@ ShieldTouch_Height:
 		sub.w	y_pos(a1),d2
 		bsr.w	GetArcTan
 		bsr.w	GetSineCosine
-		muls.w	#-$800,d1
+		move.w	#-$800,d2
+		muls.w	d2,d1
 		asr.l	#8,d1
 		move.w	d1,x_vel(a1)
-		muls.w	#-$800,d0
+		muls.w	d2,d0
 		asr.l	#8,d0
 		move.w	d0,y_vel(a1)
 		clr.b	collision_flags(a1)

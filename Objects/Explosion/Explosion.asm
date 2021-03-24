@@ -36,11 +36,11 @@ loc_1E626:
 		move.w	d0,art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#0,collision_flags(a0)
-		move.b	#$C,width_pixels(a0)
-		move.b	#$C,height_pixels(a0)
+		clr.b	collision_flags(a0)
+		move.b	#24/2,width_pixels(a0)
+		move.b	#24/2,height_pixels(a0)
 		move.b	#3,anim_frame_timer(a0)
-		move.b	#0,mapping_frame(a0)
+		clr.b	mapping_frame(a0)
 		move.l	#loc_1E66E,address(a0)
 
 loc_1E66E:
@@ -80,9 +80,9 @@ sub_1E6EC:
 		move.w	#$85A0,art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
-		move.b	#$C,width_pixels(a0)
-		move.b	#$C,height_pixels(a0)
-		move.b	#0,mapping_frame(a0)
+		move.b	#24/2,width_pixels(a0)
+		move.b	#24/2,height_pixels(a0)
+		clr.b	mapping_frame(a0)
 		move.l	#+,address(a0)
 +		subq.b	#1,anim_frame_timer(a0)
 		bmi.s	+

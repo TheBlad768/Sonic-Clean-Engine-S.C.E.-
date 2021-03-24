@@ -5,12 +5,10 @@
 ; =============== S U B R O U T I N E =======================================
 
 Pause_Game:
-		nop
 		tst.b	(Game_paused).w
 		bne.s	+
-		move.b	(Ctrl_1_pressed).w,d0
-		andi.b	#button_start_mask,d0			; is Start pressed?
-		beq.s	Pause_NoPause					; if not, branch
+		tst.b	(Ctrl_1_pressed).w					; is Start pressed?
+		bpl.s	Pause_NoPause					; if not, branch
 +		st	(Game_paused).w
 		SMPS_PauseMusic
 
@@ -25,15 +23,14 @@ Pause_Loop:
 ; ---------------------------------------------------------------------------
 
 Pause_ChkFrameAdvance:
-		btst	#bitB,(Ctrl_1).w						; is button B pressed?
+		btst	#bitB,(Ctrl_1_held).w					; is button B held?
 		bne.s	Pause_FrameAdvance				; if yes, branch
 		btst	#bitC,(Ctrl_1_pressed).w				; is button C pressed?
 		bne.s	Pause_FrameAdvance				; if yes, branch
 Pause_ChkStart:
 	endif
-		move.b	(Ctrl_1_pressed).w,d0
-		andi.b	#button_start_mask,d0
-		beq.s	Pause_Loop
+		tst.b	(Ctrl_1_pressed).w					; is Start pressed?
+		bpl.s	Pause_Loop						; if not, branch
 
 Pause_ResumeMusic:
 		SMPS_UnpauseMusic

@@ -312,8 +312,7 @@ loc_2DE70:
 		dc.b 0, 0, 4
 		dc.b 0, 0, 2
 		dc.b 0, 0, 1
-TimeBonus:
-		dc.w 5000, 5000, 1000, 500, 400, 300, 100, 10
+TimeBonus:	dc.w 5000, 5000, 1000, 500, 400, 300, 100, 10
 ObjArray_LevResults:
 ; 1
 		dc.l Obj_LevResultsCharName		; Object address

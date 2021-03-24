@@ -217,7 +217,7 @@ Obj_Song_Fade_ToLevelMusic:
 
 Obj_PlayLevelMusic:
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#6,d0
 		lea	LevelMusic_Playlist(pc),a2
 		move.b	(a2,d0.w),d0
@@ -338,7 +338,7 @@ HurtCharacter_WithoutDamage:
 		bset	#Status_InAir,status(a1)
 		move.w	#-$200,x_vel(a1)			; Set speed of player
 		move.w	#-$300,y_vel(a1)
-		move.w	#0,ground_vel(a1)			; Zero out inertia
+		clr.w	ground_vel(a1)			; Zero out inertia
 		move.b	#id_Hurt,anim(a1)		; Set falling animation
 		sfx	sfx_Death,1,0,0
 ; End of function HurtCharacter_WithoutDamage

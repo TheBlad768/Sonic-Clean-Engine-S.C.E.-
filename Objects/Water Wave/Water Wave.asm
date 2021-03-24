@@ -37,7 +37,7 @@ Obj_WaterWave:
 ; ---------------------------------------------------------------------------
 +		tst.b	(Game_paused).w
 		bne.s	++
-		move.b	#0,$32(a0)
+		clr.b	$32(a0)
 		subq.b	#3,mapping_frame(a0)
 +		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	+

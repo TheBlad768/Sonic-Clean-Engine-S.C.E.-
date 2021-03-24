@@ -9,11 +9,11 @@ Obj_Monitor:
 ; ---------------------------------------------------------------------------
 
 Monitor_Index: offsetTable
-		offsetTableEntry.w Obj_MonitorInit
-		offsetTableEntry.w Obj_MonitorMain
-		offsetTableEntry.w Obj_MonitorBreak
-		offsetTableEntry.w Obj_MonitorAnimate
-		offsetTableEntry.w loc_1D61A
+		offsetTableEntry.w Obj_MonitorInit			; 0
+		offsetTableEntry.w Obj_MonitorMain		; 2
+		offsetTableEntry.w Obj_MonitorBreak		; 4
+		offsetTableEntry.w Obj_MonitorAnimate		; 6
+		offsetTableEntry.w loc_1D61A				; 8
 ; ---------------------------------------------------------------------------
 
 Obj_MonitorInit:
@@ -21,7 +21,7 @@ Obj_MonitorInit:
 		move.b	#$F,y_radius(a0)
 		move.b	#$F,x_radius(a0)
 		move.l	#Map_Monitor,mappings(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Powerups,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$180,priority(a0)
 		move.b	#28/2,width_pixels(a0)
@@ -54,9 +54,9 @@ Obj_MonitorMain:
 		movem.l	d1-d4,-(sp)
 		bsr.w	SolidObject_Monitor_SonicKnux
 		movem.l	(sp)+,d1-d4
-		jsr	(Add_SpriteToCollisionResponseList).l
+		bsr.w	Add_SpriteToCollisionResponseList
 		lea	Ani_Monitor(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 
 loc_1D61A:
 		bra.w	Sprite_OnScreen_Test
@@ -69,7 +69,7 @@ Obj_MonitorAnimate:
 
 .notbroken:
 		lea	Ani_Monitor(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
@@ -84,7 +84,7 @@ Obj_MonitorFallUpsideUp:
 		bsr.w	MoveSprite
 		tst.w	y_vel(a0)						; Is monitor moving up?
 		bmi.s	locret_1D694						; If so, return
-		jsr	(ObjCheckFloorDist).l
+		bsr.w	ObjCheckFloorDist
 		tst.w	d1								; Is monitor in the ground?
 		beq.s	.inground						; If so, branch
 		bpl.s	locret_1D694						; if not, return
@@ -101,7 +101,7 @@ Obj_MonitorFallUpsideDown:
 		subi.w	#$38,y_vel(a0)
 		tst.w	y_vel(a0)						; Is monitor moving down?
 		bpl.s	locret_1D694						; If so, return
-		jsr	(ObjCheckCeilingDist).l
+		bsr.w	ObjCheckCeilingDist
 		tst.w	d1								; Is monitor in the ground (ceiling)?
 		beq.s	.inground						; If so, branch
 		bpl.s	locret_1D694						; if not, return
@@ -132,7 +132,7 @@ Monitor_ChkOverEdge:
 		add.w	d2,d2
 		btst	#1,status(a1)							; Is the character in the air?
 		bne.s	.notonmonitor					; If so, branch
-		; Check if character is standing on 
+		; Check if character is standing on
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -170,7 +170,7 @@ Obj_MonitorBreak:
 
 Obj_MonitorSpawnIcon:
 		andi.b	#3,status(a0)
-		move.b	#0,collision_flags(a0)
+		clr.b	collision_flags(a0)
 		bsr.w	Create_New_Sprite3
 		bne.s	.skipiconcreation
 		move.l	#Obj_MonitorContents,address(a1)
@@ -179,7 +179,6 @@ Obj_MonitorSpawnIcon:
 		move.b	anim(a0),anim(a1)
 		move.b	render_flags(a0),render_flags(a1)
 		move.b	status(a0),status(a1)
-		move.w	parent(a0),parent(a1)
 
 .skipiconcreation:
 		bsr.w	Create_New_Sprite3
@@ -209,33 +208,33 @@ Obj_MonitorContents:
 		jmp	off_1D7C8(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_1D7C8:
-		dc.w loc_1D7CE-off_1D7C8
-		dc.w loc_1D81A-off_1D7C8
-		dc.w loc_1DB2E-off_1D7C8
+off_1D7C8: offsetTable
+		offsetTableEntry.w loc_1D7CE
+		offsetTableEntry.w loc_1D81A
+		offsetTableEntry.w loc_1DB2E
 ; ---------------------------------------------------------------------------
 
 loc_1D7CE:
 		addq.b	#2,routine(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Powerups,0,0),art_tile(a0)
 		ori.b	#$24,render_flags(a0)
-		move.w	#$180,8(a0)
-		move.b	#8,7(a0)
-		move.w	#-$300,$1A(a0)
+		move.w	#$180,priority(a0)
+		move.b	#8,width_pixels(a0)
+		move.w	#-$300,y_vel(a0)
 		btst	#1,render_flags(a0)
 		beq.s	loc_1D7FC
-		neg.w	$1A(a0)
+		neg.w	y_vel(a0)
 
 loc_1D7FC:
 		moveq	#0,d0
-		move.b	$20(a0),d0
+		move.b	anim(a0),d0
 		addq.b	#1,d0
-		move.b	d0,$22(a0)
+		move.b	d0,mapping_frame(a0)
 		movea.l	#Map_Monitor,a1
 		add.b	d0,d0
 		adda.w	(a1,d0.w),a1
 		addq.w	#2,a1
-		move.l	a1,$C(a0)
+		move.l	a1,mappings(a0)
 
 loc_1D81A:
 		bsr.s	sub_1D820
@@ -246,27 +245,27 @@ loc_1D81A:
 sub_1D820:
 		btst	#1,render_flags(a0)
 		bne.s	loc_1D83C
-		tst.w	$1A(a0)
+		tst.w	y_vel(a0)
 		bpl.w	loc_1D850
 		bsr.w	MoveSprite2
-		addi.w	#$18,$1A(a0)
+		addi.w	#$18,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1D83C:
-		tst.w	$1A(a0)
+		tst.w	y_vel(a0)
 		bmi.w	loc_1D850
 		bsr.w	MoveSprite2
-		subi.w	#$18,$1A(a0)
+		subi.w	#$18,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1D850:
 		addq.b	#2,routine(a0)
-		move.w	#$1D,$24(a0)
-		movea.w	$42(a0),a1
+		move.w	#$1D,anim_frame_timer(a0)
+		lea	(Player_1).w,a1
 		moveq	#0,d0
-		move.b	$20(a0),d0
+		move.b	anim(a0),d0
 		add.w	d0,d0
 		move.w	off_1D87C(pc,d0.w),d0
 		jmp	off_1D87C(pc,d0.w)
@@ -310,7 +309,6 @@ Monitor_Give_Fire_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_FireShield,status_secondary(a1)
 		move.l	#Obj_Fire_Shield,(v_Shield).w
-		move.w	a1,(v_Shield+parent).w
 		music	sfx_FireShield,1,0,0
 ; ---------------------------------------------------------------------------
 
@@ -319,7 +317,6 @@ Monitor_Give_Lightning_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
 		move.l	#Obj_Lightning_Shield,(v_Shield).w
-		move.w	a1,(v_Shield+parent).w
 		music	sfx_LightShield,1,0,0
 ; ---------------------------------------------------------------------------
 
@@ -328,13 +325,14 @@ Monitor_Give_Bubble_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_BublShield,status_secondary(a1)
 		move.l	#Obj_Bubble_Shield,(v_Shield).w
-		move.w	a1,(v_Shield+parent).w
 		music	sfx_BubleShield,1,0,0
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
 		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#150,invincibility_timer(a1)
+		tst.b	(Level_end_flag).w
+		bne.s	loc_1DA3E
 		tst.b	(Boss_flag).w
 		bne.s	loc_1DA3E
 		cmpi.b	#12,air_left(a1)
@@ -343,12 +341,11 @@ Monitor_Give_Invincibility:
 
 loc_1DA3E:
 		move.l	#Obj_Invincibility,(v_Invincibility_stars).w
-		move.w	a1,(v_Invincibility_stars+parent).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1DB2E:
-		subq.w	#1,$24(a0)
+		subq.w	#1,anim_frame_timer(a0)
 		bmi.w	Delete_Current_Sprite
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------

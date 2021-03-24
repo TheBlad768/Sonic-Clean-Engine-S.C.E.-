@@ -19,7 +19,7 @@ Ring_Index: offsetTable
 Obj_RingInit:
 		addq.b	#2,routine(a0)
 		move.l	#Map_Ring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#$47,collision_flags(a0)
@@ -114,12 +114,12 @@ loc_1A6B6:
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		move.l	#Map_Ring,mappings(a1)
-		move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,1),art_tile(a1)
+		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
 		move.b	#$84,render_flags(a1)
 		move.w	#$180,priority(a1)
 		move.b	#$47,collision_flags(a1)
 		move.b	#8,width_pixels(a1)
-		move.b	#-1,(Ring_spill_anim_counter).w
+		st	(Ring_spill_anim_counter).w
 		tst.w	d4
 		bmi.s	loc_1A728
 		move.w	d4,d0
@@ -233,7 +233,7 @@ loc_1A83C:
 Obj_Attracted_Ring:
 		; init
 		move.l	#Map_Ring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#$47,collision_flags(a0)
@@ -251,7 +251,7 @@ loc_1A88C:
 		bne.s	loc_1A8C6
 		move.l	#Obj_Bouncing_Ring,address(a0)				; If not, change object
 		move.b	#2,routine(a0)
-		move.b	#-1,(Ring_spill_anim_counter).w
+		st	(Ring_spill_anim_counter).w
 
 loc_1A8C6:
 		move.w	x_pos(a0),d0
@@ -273,7 +273,7 @@ loc_1A8F0:
 		move.w	$30(a0),d0
 		beq.s	loc_1A8FC
 		movea.w	d0,a2
-		move.w	#0,(a2)
+		clr.w	(a2)
 
 loc_1A8FC:
 		bra.w	Delete_Current_Sprite

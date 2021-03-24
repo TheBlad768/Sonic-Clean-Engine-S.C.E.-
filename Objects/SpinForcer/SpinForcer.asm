@@ -3,7 +3,7 @@
 
 Obj_SpinForcer:
 		move.l	#Map_PathSwap,mappings(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Ring,0,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Ring,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.b	#$80,width_pixels(a0)
 		move.b	#$80,height_pixels(a0)
@@ -100,14 +100,14 @@ loc_1E930:
 loc_1E934:
 		btst	#4,subtype(a0)
 		bne.s	locret_1E9B4
-		move.b	#0,$3D(a1)
+		clr.b	$3D(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1E944:
 		cmp.w	x_pos(a1),d1
 		bls.s		locret_1E9B4
-		move.b	#0,-1(a2)
+		clr.b	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
 		move.w	$32(a0),d4
@@ -141,7 +141,7 @@ loc_1E9A4:
 loc_1E9A6:
 		btst	#4,subtype(a0)
 		bne.s	locret_1E9B4
-		move.b	#0,$3D(a1)
+		clr.b	$3D(a1)
 
 locret_1E9B4:
 		rts
@@ -215,7 +215,7 @@ loc_1EA7A:
 		bclr	#1,status(a1)
 		move.b	#$40,$26(a1)
 		move.w	y_vel(a1),ground_vel(a1)
-		move.w	#0,x_vel(a1)
+		clr.w	x_vel(a1)
 
 loc_1EA9A:
 		bra.w	loc_1E9B6
@@ -224,14 +224,14 @@ loc_1EA9A:
 loc_1EA9E:
 		btst	#4,subtype(a0)
 		bne.w	locret_1EB30
-		move.b	#0,$3D(a1)
+		clr.b	$3D(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1EAB0:
 		cmp.w	y_pos(a1),d1
 		bls.s		locret_1EB30
-		move.b	#0,-1(a2)
+		clr.b	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
 		move.w	$32(a0),d4
@@ -270,7 +270,7 @@ loc_1EB1E:
 loc_1EB22:
 		btst	#4,subtype(a0)
 		bne.s	locret_1EB30
-		move.b	#0,$3D(a1)
+		clr.b	$3D(a1)
 
 locret_1EB30:
 		rts

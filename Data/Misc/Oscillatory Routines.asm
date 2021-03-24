@@ -5,6 +5,9 @@
 ; =============== S U B R O U T I N E =======================================
 
 SynchroAnimate:
+		cmpi.b	#id_SonicDeath,(Player_1+routine).w		; has Sonic just died?
+		bhs.s	.SyncEnd									; if yes, branch
+
 ; Used for rings and giant rings
 		subq.b	#1,(Rings_frame_timer).w
 		bpl.s	.Sync2
@@ -21,7 +24,7 @@ SynchroAnimate:
 		move.b	(Rings_frame).w,d0
 		lsl.w	#7,d0
 		add.l	d0,d1									; Get next frame
-		move.w	#tiles_to_bytes(ArtTile_ArtNem_Ring),d2	; Load art destination
+		move.w	#tiles_to_bytes(ArtTile_Ring),d2			; Load art destination
 		move.w	#$80/2,d3								; Size of art (in words)	; We only need one frame
 		bsr.w	Add_To_DMA_Queue
 

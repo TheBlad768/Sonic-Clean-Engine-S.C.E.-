@@ -20,9 +20,9 @@ Offs_PLC: offsetTable
 ; ===========================================================================
 
 PLC_Main: plrlistheader
-		plreq $5E4, ArtNem_Lamp								; Lamppost
-		plreq ArtTile_ArtNem_Ring_Sparks, ArtNem_Ring_Sparks	; Rings
-		plreq ArtTile_ArtNem_HUD, ArtNem_Hud				; HUD
+		plreq $5E4, ArtNem_Lamp						; Lamppost
+		plreq ArtTile_Ring_Sparks, ArtNem_Ring_Sparks	; Rings
+		plreq ArtTile_HUD, ArtNem_Hud				; HUD
 PLC_Main_End
 
 ; ===========================================================================
@@ -30,10 +30,10 @@ PLC_Main_End
 ; ===========================================================================
 
 PLC_Main2: plrlistheader
-		plreq $47E, ArtNem_GrayButton					; Button
-		plreq $484, ArtNem_SpikesSprings					; Spikes and normal spring
-		plreq ArtTile_ArtNem_Powerups, ArtNem_Monitors	; Monitors
-		plreq $5A0, ArtNem_Explosion						; Explosion
+		plreq $47E, ArtNem_GrayButton				; Button
+		plreq $484, ArtNem_SpikesSprings				; Spikes and normal spring
+		plreq ArtTile_Powerups, ArtNem_Monitors		; Monitors
+		plreq $5A0, ArtNem_Explosion					; Explosion
 PLC_Main2_End
 
 ; ===========================================================================

@@ -57,7 +57,7 @@ word_2FD60:
 		dc.b	0,   5,	$18, $28,   0,	 0
 word_2FD7A:
 		dc.w 1
-		dc.b  $F4,   6,	  2, $70, $FF, $F8		; Air Countdown
+		dc.b  $F4,   6,	  2, $80, $FF, $F8		; Air Countdown
 word_2FD82:
 		dc.w 1
 		dc.b  $F8,   5,	  0, $2C, $FF, $F8

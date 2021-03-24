@@ -221,7 +221,7 @@ loc_2CA3C:
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	+
-		move.b	#0,mapping_frame(a0)
+		clr.b	mapping_frame(a0)
 		jsr	(ObjCheckFloorDist).l
 		tst.w	d1
 		bpl.s	+
@@ -323,7 +323,7 @@ loc_2CB9C:
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	loc_2CBD8
-		move.b	#0,mapping_frame(a0)
+		clr.b	mapping_frame(a0)
 		jsr	(ObjCheckFloorDist).l
 		tst.w	d1
 		bpl.s	loc_2CBD8
@@ -356,7 +356,7 @@ loc_2CBFC:
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	+
-		move.b	#0,mapping_frame(a0)
+		clr.b	mapping_frame(a0)
 		jsr	(ObjCheckFloorDist).l
 		tst.w	d1
 		bpl.s	+
@@ -396,7 +396,7 @@ sub_2CC92:
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	+
-		move.b	#0,mapping_frame(a0)
+		clr.b	mapping_frame(a0)
 		jsr	(ObjCheckFloorDist).l
 		tst.w	d1
 		bpl.s	+

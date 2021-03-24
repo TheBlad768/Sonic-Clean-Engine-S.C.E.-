@@ -108,7 +108,7 @@ Obj_EndSignLanded:
 ; ---------------------------------------------------------------------------
 +		move.b	#6,routine(a0)
 		clr.l	x_vel(a0)						; Null velocity
-		move.b	#0,mapping_frame(a0)
+		clr.b	mapping_frame(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ locret_83B02:
 EndSign_Range:	dc.w -$20, $40, -$18, $30
 ObjSlot_EndSigns:		subObjSlotData 0,$5CA,$C,0,Map_EndSigns,$300,$18,$10,0,0
 ObjDat_SignpostStub:		subObjData Map_SignpostStub,$5E2,$300,4,8,0,0
-ObjDat_SignpostSparkle:	subObjData Map_Ring,make_art_tile(ArtTile_ArtNem_Ring,1,0),$280,8,8,4,0
+ObjDat_SignpostSparkle:	subObjData Map_Ring,make_art_tile(ArtTile_Ring,1,0),$280,8,8,4,0
 Child1_EndSignStub:
 		dc.w 0
 		dc.l Obj_SignpostStub

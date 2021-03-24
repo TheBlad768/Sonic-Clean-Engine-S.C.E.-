@@ -123,15 +123,15 @@ sub_22F98:
 		move.b	#2,routine(a1)
 		move.b	subtype(a0),d0
 		bpl.s	loc_22FE0
-		move.w	#0,x_vel(a1)
+		clr.w	x_vel(a1)
 
 loc_22FE0:
 		btst	#0,d0
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
 		move.b	#1,$27(a1)
-		move.b	#0,anim(a1)
-		move.b	#0,$30(a1)
+		clr.b	anim(a1)
+		clr.b	$30(a1)
 		move.b	#4,$31(a1)
 		btst	#1,d0
 		bne.s	loc_23010
@@ -210,19 +210,19 @@ loc_231BE:
 		move.w	x_vel(a1),ground_vel(a1)
 		btst	#2,status(a1)
 		bne.s	loc_231D8
-		move.b	#0,anim(a1)
+		clr.b	anim(a1)
 
 loc_231D8:
 		move.b	subtype(a0),d0
 		bpl.s	loc_231E4
-		move.w	#0,y_vel(a1)
+		clr.w	y_vel(a1)
 
 loc_231E4:
 		btst	#0,d0
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
 		move.b	#1,$27(a1)
-		move.b	#0,anim(a1)
+		clr.b	anim(a1)
 		move.b	#1,$30(a1)
 		move.b	#8,$31(a1)
 		btst	#1,d0
@@ -252,7 +252,7 @@ loc_2324C:
 		bclr	#5,status(a0)
 		bclr	#6,status(a0)
 		bclr	#Status_Push,status(a1)
-		move.b	#0,double_jump_flag(a1)
+		clr.b	double_jump_flag(a1)
 		sfx	sfx_Spring,1,0,0
 ; End of function sub_23190
 
@@ -340,15 +340,15 @@ sub_233CA:
 loc_233F8:
 		move.b	subtype(a0),d0
 		bpl.s	loc_23404
-		move.w	#0,x_vel(a1)
+		clr.w	x_vel(a1)
 
 loc_23404:
 		btst	#0,d0
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
 		move.b	#1,$27(a1)
-		move.b	#0,anim(a1)
-		move.b	#0,$30(a1)
+		clr.b	anim(a1)
+		clr.b	$30(a1)
 		move.b	#4,$31(a1)
 		btst	#1,d0
 		bne.s	loc_23434
@@ -378,7 +378,7 @@ loc_2346C:
 		bclr	#3,status(a1)
 		clr.b	jumping(a1)
 		move.b	#2,routine(a1)
-		move.b	#0,double_jump_flag(a1)
+		clr.b	double_jump_flag(a1)
 		sfx	sfx_Spring,1,0,0
 ; End of function sub_233CA
 ; ---------------------------------------------------------------------------
@@ -447,7 +447,7 @@ loc_23542:
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
 		move.b	#1,$27(a1)
-		move.b	#0,anim(a1)
+		clr.b	anim(a1)
 		move.b	#1,$30(a1)
 		move.b	#8,$31(a1)
 		btst	#1,d0
@@ -524,7 +524,7 @@ loc_23660:
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)
 		move.b	#1,$27(a1)
-		move.b	#0,anim(a1)
+		clr.b	anim(a1)
 		move.b	#1,$30(a1)
 		move.b	#8,$31(a1)
 		btst	#1,d0

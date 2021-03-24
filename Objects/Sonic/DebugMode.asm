@@ -42,24 +42,24 @@ Debug_Zone:
 		move.b	d0,mapping_frame(a0)
 		move.b	d0,anim(a0)
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#5,d0
 		lea	DebugList(pc),a2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
-		cmp.b	(Debug_object).w,d6 ; have you gone past the last item?
-		bhi.s	.noreset	; if not, branch
-		clr.b	(Debug_object).w ; back to start of list
+		cmp.b	(Debug_object).w,d6	; have you gone past the last item?
+		bhi.s	.noreset				; if not, branch
+		clr.b	(Debug_object).w			; back to start of list
 
 .noreset:
 		bsr.w	Debug_ShowItem
-		move.b	#12,(v_debugxspeed).w
-		move.b	#1,(v_debugyspeed).w
+		move.b	#12,(Debug_camera_delay).w
+		move.b	#1,(Debug_camera_speed).w
 
 Debug_Action:	; Routine 2
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#5,d0
 		lea	DebugList(pc),a2
 		adda.w	(a2,d0.w),a2
@@ -73,37 +73,37 @@ Debug_Control:
 		moveq	#0,d4
 		move.w	#1,d1
 		move.b	(Ctrl_1_pressed).w,d4
-		andi.w	#btnDir,d4	; is up/down/left/right	pressed?
-		bne.s	.dirpressed	; if yes, branch
-		move.b	(Ctrl_1).w,d0
-		andi.w	#btnDir,d0	; is up/down/left/right	held?
-		bne.s	.dirheld	; if yes, branch
-		move.b	#12,(v_debugxspeed).w
-		move.b	#15,(v_debugyspeed).w
+		andi.w	#btnDir,d4			; is up/down/left/right	pressed?
+		bne.s	.dirpressed			; if yes, branch
+		move.b	(Ctrl_1_held).w,d0
+		andi.w	#btnDir,d0			; is up/down/left/right	held?
+		bne.s	.dirheld				; if yes, branch
+		move.b	#12,(Debug_camera_delay).w
+		move.b	#15,(Debug_camera_speed).w
 		bra.w	Debug_ChgItem
 ; ---------------------------------------------------------------------------
 
 .dirheld:
-		subq.b	#1,(v_debugxspeed).w
+		subq.b	#1,(Debug_camera_delay).w
 		bne.s	loc_1D01C
-		move.b	#1,(v_debugxspeed).w
-		addq.b	#1,(v_debugyspeed).w
+		move.b	#1,(Debug_camera_delay).w
+		addq.b	#1,(Debug_camera_speed).w
 		bne.s	.dirpressed
-		move.b	#-1,(v_debugyspeed).w
+		st	(Debug_camera_speed).w
 
 .dirpressed:
-		move.b	(Ctrl_1).w,d4
+		move.b	(Ctrl_1_held).w,d4
 
 loc_1D01C:
 		moveq	#0,d1
-		move.b	(v_debugyspeed).w,d1
+		move.b	(Debug_camera_speed).w,d1
 		addq.w	#1,d1
 		swap	d1
 		asr.l	#4,d1
 		move.l	y_pos(a0),d2
 		move.l	x_pos(a0),d3
-		btst	#bitUp,d4	; is up	being pressed?
-		beq.s	loc_1D03C	; if not, branch
+		btst	#bitUp,d4				; is up being held?
+		beq.s	loc_1D03C			; if not, branch
 		sub.l	d1,d2
 		moveq	#0,d0
 		move.w	(Camera_min_Y_pos).w,d0
@@ -113,8 +113,8 @@ loc_1D01C:
 		move.l	d0,d2
 
 loc_1D03C:
-		btst	#bitDn,d4	; is down being	pressed?
-		beq.s	loc_1D052	; if not, branch
+		btst	#bitDn,d4				; is down being held?
+		beq.s	loc_1D052			; if not, branch
 		add.l	d1,d2
 		moveq	#0,d0
 		move.w	(Camera_target_max_Y_pos).w,d0
@@ -125,15 +125,15 @@ loc_1D03C:
 		move.l	d0,d2
 
 loc_1D052:
-		btst	#bitL,d4
-		beq.s	loc_1D05E
+		btst	#bitL,d4					; is left being held?
+		beq.s	loc_1D05E			; if not, branch
 		sub.l	d1,d3
 		bcc.s	loc_1D05E
 		moveq	#0,d3
 
 loc_1D05E:
-		btst	#bitR,d4
-		beq.s	loc_1D066
+		btst	#bitR,d4					; is right being held?
+		beq.s	loc_1D066			; if not, branch
 		add.l	d1,d3
 
 loc_1D066:
@@ -141,7 +141,7 @@ loc_1D066:
 		move.l	d3,x_pos(a0)
 
 Debug_ChgItem:
-		btst	#bitA,(Ctrl_1).w 			; is button A pressed?
+		btst	#bitA,(Ctrl_1_held).w 		; is button A held?
 		beq.s	.createitem			; if not, branch
 		btst	#bitC,(Ctrl_1_pressed).w	; is button C pressed?
 		beq.s	.nextitem			; if not, branch
@@ -157,15 +157,15 @@ Debug_ChgItem:
 		addq.b	#1,(Debug_object).w	; go forwards 1 item
 		cmp.b	(Debug_object).w,d6
 		bhi.s	.display
-		clr.b	(Debug_object).w	; loop back to first item
+		clr.b	(Debug_object).w			; loop back to first item
 
 .display:
 		bra.w	Debug_ShowItem
 ; ---------------------------------------------------------------------------
 
 .createitem:
-		btst	#bitC,(Ctrl_1_pressed).w ; is button C pressed?
-		beq.s	.backtonormal	; if not, branch
+		btst	#bitC,(Ctrl_1_pressed).w	; is button C pressed?
+		beq.s	.backtonormal		; if not, branch
 		jsr	(Create_New_Sprite).l
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
@@ -188,8 +188,7 @@ Debug_ChgItem:
 .backtonormal:
 		btst	#bitB,(Ctrl_1_pressed).w				; is button B pressed?
 		beq.s	.stayindebug						; if not, branch
-		moveq	#0,d0
-		move.w	d0,(Debug_placement_mode).w		; deactivate debug mode
+		clr.w	(Debug_placement_mode).w		; deactivate debug mode
 		disableInts
 		jsr	(HUD_DrawInitial).l
 		move.b	#1,(Update_HUD_score).w
@@ -209,6 +208,7 @@ Debug_ChgItem:
 ; =============== S U B R O U T I N E =======================================
 
 sub_92C54:
+		moveq	#0,d0
 		move.b	d0,anim(a1)
 		move.w	d0,x_pos+2(a1)
 		move.w	d0,y_pos+2(a1)

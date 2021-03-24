@@ -24,7 +24,7 @@ Get_LevelSizeStart:
 
 LevSz_StartLoc:
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		lea	StartLocArray(pc,d0.w),a1			; load Sonic's start location
 		moveq	#0,d1

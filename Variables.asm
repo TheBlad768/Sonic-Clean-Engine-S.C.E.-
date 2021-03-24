@@ -225,8 +225,8 @@ BackgroundEvent_flag:					ds.b 1
 Debug_placement_mode:										; Both routine and type
 Debug_placement_routine:				ds.b 1
 Debug_placement_type:				ds.b 1					; 0 = normal gameplay, 1 = normal object placement, 2 = frame cycling
-v_debugxspeed:						ds.b 1
-v_debugyspeed:						ds.b 1
+Debug_camera_delay:					ds.b 1
+Debug_camera_speed:					ds.b 1
 Debug_object:						ds.b 1					; The current position in the debug mode object list
 Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
@@ -408,7 +408,7 @@ Ring_spill_anim_accum:				ds.b 1
 									ds.b 1					; Unused
 Oscillating_variables_End
 
-Current_RAM_start					!align $FEF0				; Unused data
+Current_RAM_start					!org $FEF0				; Unused data
 Current_RAM_end
 
 System_stack_size					ds.b $100				; ~$100 bytes ; this is the top of the stack, it grows downwards($FEF0-$FFF0)

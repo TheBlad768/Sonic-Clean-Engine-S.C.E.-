@@ -19,10 +19,10 @@ loc_EC5A:
 		moveq	#3,d0
 		move.b	d0,(Primary_Angle).w
 		move.b	d0,(Secondary_Angle).w
-		move.b	$26(a0),d0
+		move.b	angle(a0),d0
 		addi.b	#$20,d0
 		bpl.s	loc_EC7C
-		move.b	$26(a0),d0
+		move.b	angle(a0),d0
 		bpl.s	loc_EC76
 		subq.b	#1,d0
 
@@ -32,7 +32,7 @@ loc_EC76:
 ; ---------------------------------------------------------------------------
 
 loc_EC7C:
-		move.b	$26(a0),d0
+		move.b	angle(a0),d0
 		bpl.s	loc_EC84
 		addq.b	#1,d0
 
@@ -132,22 +132,22 @@ loc_ED5E:
 		btst	#0,d2
 		bne.s	loc_ED7A
 		move.b	d2,d0
-		sub.b	$26(a0),d0
+		sub.b	angle(a0),d0
 		bpl.s	loc_ED6E
 		neg.b	d0
 
 loc_ED6E:
 		cmpi.b	#$20,d0
 		bhs.s	loc_ED7A
-		move.b	d2,$26(a0)
+		move.b	d2,angle(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_ED7A:
-		move.b	$26(a0),d2
+		move.b	angle(a0),d2
 		addi.b	#$20,d2
 		andi.b	#$C0,d2
-		move.b	d2,$26(a0)
+		move.b	d2,angle(a0)
 		rts
 ; End of function Player_Angle
 ; ---------------------------------------------------------------------------
@@ -198,7 +198,7 @@ locret_EE00:
 
 loc_EE02:
 		subq.b	#1,$41(a0)
-		move.b	#$C0,$26(a0)
+		move.b	#$C0,angle(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

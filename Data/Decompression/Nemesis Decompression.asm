@@ -7,7 +7,7 @@
 
 LoadPLC_Nem:
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#4,d0
 		lea	(Offs_PLC).l,a1
 		adda.w	(a1,d0.w),a1
@@ -94,12 +94,12 @@ Process_Nem_Queue_Init:
 		tst.w	(Nem_patterns_left).w
 		bne.s	Process_Nem_Queue_Return	; return if processing of a previous piece is still going on
 		movea.l	(Nem_decomp_queue).w,a0
-		lea	(Nem_PCD_WriteRowToVDP).l,a3
+		lea	Nem_PCD_WriteRowToVDP(pc),a3
 		nop
-		lea	(Nem_code_table).w,a1
-		move.w	(a0)+,d2
-		bpl.s	+
-		adda.w	#Nem_PCD_WriteRowToVDP_XOR-Nem_PCD_WriteRowToVDP,a3
+		lea	(Nem_code_table).w,a1		; load Nemesis decompression buffer
+		move.w	(a0)+,d2					; get number of patterns
+		bpl.s	+						; are we in Mode 0?
+		lea	Nem_PCD_WriteRowToVDP_XOR-Nem_PCD_WriteRowToVDP(a3),a3	; if not, use Mode 1
 +		andi.w	#$7FFF,d2
 		bsr.w	Nem_Build_Code_Table
 		move.b	(a0)+,d5
@@ -213,6 +213,7 @@ Process_Nem_Queue_ShiftUp:
 ; before calling this routine
 ; See http://www.segaretro.org/Nemesis_compression for format description
 ; Optimized by Vladikcomper
+; See https://github.com/flamewing/mdcomp
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================

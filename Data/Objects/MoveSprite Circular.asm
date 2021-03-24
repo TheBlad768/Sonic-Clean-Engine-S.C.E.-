@@ -104,6 +104,42 @@ MoveSprite_CircularSimpleOffset:
 
 ; =============== S U B R O U T I N E =======================================
 
+MoveSprite_CircularLookup:
+		moveq	#0,d0
+		move.b	objoff_3C(a0),d0
+		move.w	d0,d1
+		andi.w	#$3F,d0
+		lsr.w	#5,d1
+		andi.w	#6,d1
+		movea.w	parent3(a0),a1
+		lea	$40(a2),a3
+		move.w	x_pos(a1),d2
+		move.w	y_pos(a1),d3
+		move.b	child_dx(a0),d4
+		ext.w	d4
+		btst	#0,render_flags(a0)
+		beq.s	+
+		neg.w	d4
++		add.w	d4,d2
+		move.b	child_dy(a0),d4
+		ext.w	d4
+		add.w	d4,d3
+		move.w	d0,d4
+		not.w	d4
+		move.w	AtAngle_LookupIndex(pc,d1.w),d1
+		jsr	AtAngle_LookupIndex(pc,d1.w)
+		btst	#0,render_flags(a0)
+		beq.s	+
+		neg.w	d5
++		add.w	d5,d2
+		add.w	d6,d3
+		move.w	d2,x_pos(a0)
+		move.w	d3,y_pos(a0)
+		rts
+; End of function MoveSprite_CircularLookup
+
+; =============== S U B R O U T I N E =======================================
+
 MoveSprite_AtAngleLookup:
 		moveq	#0,d0
 		move.b	objoff_3C(a0),d0
@@ -168,43 +204,6 @@ AtAngle_C0_FF:
 		moveq	#0,d6
 		move.b	(a2,d0.w),d6
 		rts
-
-; =============== S U B R O U T I N E =======================================
-
-MoveSprite_CircularLookup:
-		moveq	#0,d0
-		move.b	objoff_3C(a0),d0
-		move.w	d0,d1
-		andi.w	#$3F,d0
-		lsr.w	#5,d1
-		andi.w	#6,d1
-		movea.w	parent3(a0),a1
-		lea	$40(a2),a3
-		move.w	x_pos(a1),d2
-		move.w	y_pos(a1),d3
-		move.b	child_dx(a0),d4
-		ext.w	d4
-		btst	#0,render_flags(a0)
-		beq.s	+
-		neg.w	d4
-+		add.w	d4,d2
-		move.b	child_dy(a0),d4
-		ext.w	d4
-		add.w	d4,d3
-		move.w	d0,d4
-		not.w	d4
-		lea	AtAngle_LookupIndex(pc),a4
-		move.w	(a4,d1.w),d1
-		jsr	(a4,d1.w)
-		btst	#0,render_flags(a0)
-		beq.s	+
-		neg.w	d5
-+		add.w	d5,d2
-		add.w	d6,d3
-		move.w	d2,x_pos(a0)
-		move.w	d3,y_pos(a0)
-		rts
-; End of function MoveSprite_CircularLookup
 
 ; =============== S U B R O U T I N E =======================================
 

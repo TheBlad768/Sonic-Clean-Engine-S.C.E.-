@@ -99,10 +99,8 @@ Swing_LeftAndRight:
 ; =============== S U B R O U T I N E =======================================
 
 Swing_UpAndDown_Slow:
-		moveq	#0,d0
 		move.b	angle(a0),d0
-		addq.b	#2,d0
-		move.b	d0,angle(a0)
+		addq.b	#2,angle(a0)
 		bsr.w	GetSineCosine
 		asr.w	#2,d0
 		move.w	d0,y_vel(a0)

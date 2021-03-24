@@ -3,7 +3,7 @@
 
 Obj_PathSwap:
 		move.l	#Map_PathSwap,mappings(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Ring,1,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.b	#128/2,width_pixels(a0)
 		move.b	#128/2,height_pixels(a0)
@@ -105,7 +105,7 @@ loc_1CE54:
 loc_1CE6C:
 		cmp.w	x_pos(a1),d1
 		bls.w	locret_1CEF0
-		move.b	#0,-1(a2)
+		clr.b	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
 		move.w	$32(a0),d4
@@ -213,7 +213,7 @@ loc_1CFBC:
 loc_1CFD4:
 		cmp.w	y_pos(a1),d1
 		bls.w	locret_1D058
-		move.b	#0,-1(a2)
+		clr.b	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
 		move.w	$32(a0),d4

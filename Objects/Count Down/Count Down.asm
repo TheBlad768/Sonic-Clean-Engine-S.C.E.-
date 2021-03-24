@@ -1,26 +1,29 @@
+; ----------------------------------------------------------------------------
+; Small bubbles from Sonic's face while underwater
+; ----------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Air_CountDown:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	off_18172(pc,d0.w),d1
-		jmp	off_18172(pc,d1.w)
+		move.w	AirCountdown_Index(pc,d0.w),d1
+		jmp	AirCountdown_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_18172: offsetTable
-		offsetTableEntry.w loc_18184
-		offsetTableEntry.w loc_181DC
-		offsetTableEntry.w loc_181E8
-		offsetTableEntry.w loc_18254
-		offsetTableEntry.w loc_1826C
-		offsetTableEntry.w Player_TestAirTimer
-		offsetTableEntry.w loc_18272
-		offsetTableEntry.w loc_182B2
-		offsetTableEntry.w loc_1826C
+AirCountdown_Index: offsetTable
+		offsetTableEntry.w AirCountdown_Init
+		offsetTableEntry.w AirCountdown_Animate
+		offsetTableEntry.w AirCountdown_ChkWater
+		offsetTableEntry.w AirCountdown_Display
+		offsetTableEntry.w AirCountdown_Delete
+		offsetTableEntry.w AirCountdown_Countdown
+		offsetTableEntry.w AirCountdown_AirLeft
+		offsetTableEntry.w AirCountdown_DisplayNumber
+		offsetTableEntry.w AirCountdown_Delete
 ; ---------------------------------------------------------------------------
 
-loc_18184:
+AirCountdown_Init:
 		addq.b	#2,routine(a0)
 		move.l	#Map_Bubbler,mappings(a0)
 		move.w	#$570,art_tile(a0)
@@ -32,29 +35,29 @@ loc_18184:
 		addq.b	#8,routine(a0)
 		andi.w	#$7F,d0
 		move.b	d0,$37(a0)
-		bra.w	Player_TestAirTimer
+		bra.w	AirCountdown_Countdown
 ; ---------------------------------------------------------------------------
 
 loc_181CC:
-		move.b	d0,$20(a0)
+		move.b	d0,anim(a0)
 		move.w	x_pos(a0),$34(a0)
 		move.w	#-$100,y_vel(a0)
 
-loc_181DC:
+AirCountdown_Animate:
 		lea	Ani_Shields(pc),a1
 		jsr	(Animate_Sprite).l
 
-loc_181E8:
+AirCountdown_ChkWater:
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0
 		blo.s		loc_1820E
 		move.b	#6,routine(a0)
-		addq.b	#7,$20(a0)
-		cmpi.b	#$D,$20(a0)
-		beq.s	loc_18254
-		bcs.s	loc_18254
-		move.b	#$D,$20(a0)
-		bra.s	loc_18254
+		addq.b	#7,anim(a0)
+		cmpi.b	#$D,anim(a0)
+		beq.s	AirCountdown_Display
+		bcs.s	AirCountdown_Display
+		move.b	#$D,anim(a0)
+		bra.s	AirCountdown_Display
 ; ---------------------------------------------------------------------------
 
 loc_1820E:
@@ -63,15 +66,15 @@ loc_1820E:
 		addq.w	#4,$34(a0)
 
 loc_18218:
-		move.b	$26(a0),d0
-		addq.b	#1,$26(a0)
+		move.b	angle(a0),d0
+		addq.b	#1,angle(a0)
 		andi.w	#$7F,d0
-		lea	byte_1831E(pc),a1
+		lea	AirCountdown_WobbleData(pc),a1
 		move.b	(a1,d0.w),d0
 		ext.w	d0
 		add.w	$34(a0),d0
 		move.w	d0,x_pos(a0)
-		bsr.w	sub_182D2
+		bsr.w	AirCountdown_ShowNumber
 		bsr.w	MoveSprite2
 		tst.b	render_flags(a0)
 		bpl.s	loc_1824E
@@ -81,28 +84,32 @@ loc_18218:
 loc_1824E:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
+; AirCountdown_Display and AirCountdown_DisplayNumber were split in this
+; game, unlike Sonic 2, to fix a bug where the countdown numbers corrupted
+; if they reached the surface of the water.
+; (The start of ARZ Act 1 is a good place to see this).
 
-loc_18254:
-		bsr.s	sub_182D2
+AirCountdown_Display:
+		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_Shields(pc),a1
 		jsr	(Animate_Sprite).l
 		bsr.w	AirCountdown_Load_Art
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_1826C:
+AirCountdown_Delete:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_18272:
-		movea.l	$40(a0),a2
+AirCountdown_AirLeft:
+		lea	(Player_1).w,a2
 		cmpi.b	#12,air_left(a2)
 		bhi.s	loc_182AC
 		subq.w	#1,$3C(a0)
 		bne.s	loc_18290
 		move.b	#$E,routine(a0)
-		addq.b	#7,$20(a0)
-		bra.s	loc_18254
+		addq.b	#7,anim(a0)
+		bra.s	AirCountdown_Display
 ; ---------------------------------------------------------------------------
 
 loc_18290:
@@ -118,26 +125,26 @@ loc_182AC:
 		jmp	(Delete_Current_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_182B2:
-		movea.l	$40(a0),a2
+AirCountdown_DisplayNumber:
+		lea	(Player_1).w,a2
 		cmpi.b	#12,air_left(a2)
-		bhi.s	loc_1826C
-		bsr.s	sub_182D2
+		bhi.s	AirCountdown_Delete
+		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_Shields(pc),a1
 		jsr	(Animate_Sprite).l
 		jmp	(Draw_Sprite).l
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_182D2:
+AirCountdown_ShowNumber:
 		tst.w	$3C(a0)
 		beq.s	locret_1831C
 		subq.w	#1,$3C(a0)
 		bne.s	locret_1831C
-		cmpi.b	#7,$20(a0)
+		cmpi.b	#7,anim(a0)
 		bhs.s	locret_1831C
 		move.w	#$F,$3C(a0)
-		clr.w	$1A(a0)
+		clr.w	y_vel(a0)
 		move.b	#$80,render_flags(a0)
 		move.w	x_pos(a0),d0
 		sub.w	(Camera_X_pos).w,d0
@@ -151,32 +158,24 @@ sub_182D2:
 
 locret_1831C:
 		rts
-; End of function sub_182D2
+; End of function AirCountdown_ShowNumber
 ; ---------------------------------------------------------------------------
 
-byte_1831E:
-		dc.b	0,   0,	  0,   0,   0,	 0,   1,   1,	1,   1,	  1,   2,   2,	 2,   2,   2
-		dc.b	2,   2,	  3,   3,   3,	 3,   3,   3,	3,   3,	  3,   3,   3,	 3,   3,   3
-		dc.b	3,   3,	  3,   3,   3,	 3,   3,   3,	3,   3,	  3,   3,   3,	 3,   3,   2
-		dc.b	2,   2,	  2,   2,   2,	 2,   1,   1,	1,   1,	  1,   0,   0,	 0,   0,   0
-		dc.b	0, $FF,	$FF, $FF, $FF, $FF, $FE, $FE, $FE, $FE,	$FE, $FD, $FD, $FD, $FD, $FD
-		dc.b  $FD, $FD,	$FC, $FC, $FC, $FC, $FC, $FC, $FC, $FC,	$FC, $FC, $FC, $FC, $FC, $FC
-		dc.b  $FC, $FC,	$FC, $FC, $FC, $FC, $FC, $FC, $FC, $FC,	$FC, $FC, $FC, $FC, $FC, $FD
-		dc.b  $FD, $FD,	$FD, $FD, $FD, $FD, $FE, $FE, $FE, $FE,	$FE, $FF, $FF, $FF, $FF, $FF
-		dc.b	0,   0,	  0,   0,   0,	 0,   1,   1,	1,   1,	  1,   2,   2,	 2,   2,   2
-		dc.b	2,   2,	  3,   3,   3,	 3,   3,   3,	3,   3,	  3,   3,   3,	 3,   3,   3
-		dc.b	3,   3,	  3,   3,   3,	 3,   3,   3,	3,   3,	  3,   3,   3,	 3,   3,   2
-		dc.b	2,   2,	  2,   2,   2,	 2,   1,   1,	1,   1,	  1,   0,   0,	 0,   0,   0
-		dc.b	0, $FF,	$FF, $FF, $FF, $FF, $FE, $FE, $FE, $FE,	$FE, $FD, $FD, $FD, $FD, $FD
-		dc.b  $FD, $FD,	$FC, $FC, $FC, $FC, $FC, $FC, $FC, $FC,	$FC, $FC, $FC, $FC, $FC, $FC
-		dc.b  $FC, $FC,	$FC, $FC, $FC, $FC, $FC, $FC, $FC, $FC,	$FC, $FC, $FC, $FC, $FC, $FD
-		dc.b  $FD, $FD,	$FD, $FD, $FD, $FD, $FE, $FE, $FE, $FE,	$FE, $FF, $FF, $FF, $FF, $FF
+AirCountdown_WobbleData:
+		dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
+		dc.b  2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+		dc.b  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+		dc.b  2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
+		dc.b  0,-1,-1,-1,-1,-1,-2,-2,-2,-2,-2,-3,-3,-3,-3,-3
+		dc.b -3,-3,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4
+		dc.b -4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-3
+		dc.b -3,-3,-3,-3,-3,-3,-2,-2,-2,-2,-2,-1,-1,-1,-1,-1
 
 ; =============== S U B R O U T I N E =======================================
 
 AirCountdown_Load_Art:
 		moveq	#0,d1
-		move.b	$22(a0),d1
+		move.b	mapping_frame(a0),d1
 		cmpi.b	#9,d1
 		blo.s		locret_18464
 		cmpi.b	#$13,d1
@@ -190,8 +189,8 @@ AirCountdown_Load_Art:
 		add.w	d0,d1
 		lsl.w	#6,d1
 		addi.l	#ArtUnc_AirCountDown,d1
-		move.w	#$FC00,d2
-		move.w	#$60,d3
+		move.w	#tiles_to_bytes(ArtTile_DashDust),d2
+		move.w	#$C0/2,d3
 		jsr	(Add_To_DMA_Queue).l
 
 locret_18464:
@@ -199,8 +198,8 @@ locret_18464:
 ; End of function AirCountdown_Load_Art
 ; ---------------------------------------------------------------------------
 
-Player_TestAirTimer:
-		movea.l	$40(a0),a2
+AirCountdown_Countdown:
+		lea	(Player_1).w,a2
 		tst.w	$30(a0)
 		bne.w	loc_1857C
 		cmpi.b	#id_SonicDeath,routine(a2)
@@ -243,7 +242,7 @@ loc_184FC:
 loc_1850A:
 		subq.b	#1,air_left(a2)
 		bcc.w	loc_18592
-		move.b	#-$7F,$2E(a2)
+		move.b	#-$7F,object_control(a2)
 		sfx	sfx_Drown,0,0,0
 		move.b	#$A,$38(a0)
 		move.w	#1,$3A(a0)
@@ -253,19 +252,19 @@ loc_1850A:
 		move.l	a0,-(sp)
 		movea.l	a2,a0
 		bsr.w	Sonic_ResetOnFloor
-		move.b	#$17,anim(a0)
+		move.b	#id_Drown,anim(a0)
 		bset	#Status_InAir,status(a0)
 		bset	#7,art_tile(a0)
 		clr.l	x_vel(a0)
 		clr.w	ground_vel(a0)
-		move.b	#$C,routine(a0)
+		move.b	#id_SonicDrown,routine(a0)
 		movea.l	(sp)+,a0
 		st	(Deform_lock).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1857C:
-		move.b	#$17,$20(a2)
+		move.b	#id_Drown,anim(a2)
 		subq.w	#1,$30(a0)
 		bne.s	loc_18590
 		move.b	#6,routine(a2)
@@ -298,13 +297,12 @@ loc_185A4:
 		move.l	address(a0),address(a1)
 		move.w	x_pos(a2),x_pos(a1)
 		moveq	#6,d0
-		btst	#0,status(a2)
+		btst	#Status_Facing,status(a2)
 		beq.s	+
 		neg.w	d0
 		move.b	#$40,$26(a1)
 +		add.w	d0,x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
-		move.l	$40(a0),$40(a1)
 		move.b	#6,$2C(a1)
 		tst.w	$30(a0)
 		beq.s	loc_1862A
@@ -326,7 +324,7 @@ loc_1862A:
 		beq.s	loc_18676
 		moveq	#0,d2
 		move.b	air_left(a2),d2
-		cmpi.b	#$C,d2
+		cmpi.b	#12,d2
 		bhs.s	loc_18676
 		lsr.w	#1,d2
 		jsr	(Random_Number).l
@@ -342,7 +340,7 @@ loc_1865E:
 		bne.s	loc_18676
 		bset	#6,$3A(a0)
 		bne.s	loc_18676
-		move.b	d2,$2C(a1)
+		move.b	d2,subtype(a1)
 		move.w	#$1C,$3C(a1)
 
 loc_18676:

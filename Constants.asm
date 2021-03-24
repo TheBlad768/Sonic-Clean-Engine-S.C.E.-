@@ -113,6 +113,8 @@ id_SonicHurt =					id(ptr_Sonic_Hurt)		; 4
 id_SonicDeath =					id(ptr_Sonic_Death)		; 6
 id_SonicRestart =					id(ptr_Sonic_Restart)		; 8
 
+id_SonicDrown =					id(ptr_Sonic_Drown)		; C
+
 ; ---------------------------------------------------------------------------
 ; Levels
 ; ---------------------------------------------------------------------------
@@ -308,17 +310,17 @@ obParent3 =				$46 	; word ; parent of child objects
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
 ; ---------------------------------------------------------------------------
 mainspr_childsprites 		= $16	; amount of child sprites
-sub2_x_pos				= $18	; x_vel
-sub2_y_pos				= $1A	; y_vel
+sub2_x_pos				= $18
+sub2_y_pos				= $1A
 sub2_mapframe			= $1D
-sub3_x_pos				= $1E	; y_radius
-sub3_y_pos				= $20	; anim
-sub3_mapframe			= $23	; anim_frame
-sub4_x_pos				= $24	; anim_frame_timer
-sub4_y_pos				= $26	; angle
-sub4_mapframe			= $29	; collision_property
-sub5_x_pos				= $2A	; status
-sub5_y_pos				= $2C	; subtype
+sub3_x_pos				= $1E
+sub3_y_pos				= $20
+sub3_mapframe			= $23
+sub4_x_pos				= $24
+sub4_y_pos				= $26
+sub4_mapframe			= $29
+sub5_x_pos				= $2A
+sub5_y_pos				= $2C
 sub5_mapframe			= $2F
 sub6_x_pos				= $30
 sub6_y_pos				= $32
@@ -332,7 +334,7 @@ sub8_mapframe			= $41
 sub9_x_pos				= $42
 sub9_y_pos				= $44
 sub9_mapframe			= $47
-next_subspr				= $6
+next_subspr				= 6		; size
 ; ---------------------------------------------------------------------------
 ; Unknown or inconsistently used offsets that are not applicable to sonic/tails:
 ; ---------------------------------------------------------------------------
@@ -411,18 +413,19 @@ Status_BublShield				= 6
 ; ---------------------------------------------------------------------------
 Status_ObjOrienX				= 0
 Status_ObjOrienY				= 1
-Status_ObjHurt				= 6
+Status_ObjTouch				= 6
 Status_ObjDefeated			= 7
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels).
 ; ---------------------------------------------------------------------------
-ArtTile_ArtUnc_Sonic			= $680
-ArtTile_ArtNem_Ring			= $6B4
-ArtTile_ArtNem_Ring_Sparks	= $6B8
-ArtTile_ArtNem_HUD			= $6BC
-ArtTile_ArtNem_Powerups		= $4AC
-ArtTile_ArtUnc_Shield			= $79C
-ArtTile_ArtUnc_Shield_Sparks	= $7BB
+ArtTile_Sonic				= $680
+ArtTile_Ring				= $6B4
+ArtTile_Ring_Sparks		= $6B8
+ArtTile_HUD				= $6BC
+ArtTile_Powerups			= $4AC
+ArtTile_Shield			= $79C
+ArtTile_Shield_Sparks		= $7BB
+ArtTile_DashDust			= $7F0
 ; ---------------------------------------------------------------------------
 ; VRAM data
 ; ---------------------------------------------------------------------------

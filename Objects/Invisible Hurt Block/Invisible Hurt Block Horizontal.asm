@@ -3,7 +3,7 @@
 
 Obj_InvisibleHurtBlockHorizontal:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_ArtNem_Ring,0,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)

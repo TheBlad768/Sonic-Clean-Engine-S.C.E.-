@@ -12,14 +12,14 @@ LevelSetup:
 		movea.l	(Level_layout2_addr_ROM).w,a3
 		move.w	#vram_fg,d7
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#2,d0
 		movea.l	Offs_ScreenInit(pc,d0.w),a1
 		jsr	(a1)
 		addq.w	#2,a3
 		move.w	#vram_bg,d7
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#2,d0
 		movea.l	Offs_BackgroundInit(pc,d0.w),a1
 		jsr	(a1)
@@ -36,14 +36,14 @@ ScreenEvents:
 		movea.l	(Level_layout2_addr_ROM).w,a3
 		move.w	#vram_fg,d7
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#2,d0
 		movea.l	Offs_ScreenEvent(pc,d0.w),a1
 		jsr	(a1)
 		addq.w	#2,a3
 		move.w	#vram_bg,d7
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#2,d0
 		movea.l	Offs_BackgroundEvent(pc,d0.w),a1
 		jsr	(a1)

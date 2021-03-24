@@ -17,20 +17,19 @@ off_18B4C: offsetTable
 
 loc_18B54:
 		addq.b	#2,routine(a0)
-		move.l	#Map_DashDust,$C(a0)
+		move.l	#Map_DashDust,mappings(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#$10,width_pixels(a0)
-		move.w	#$7F0,art_tile(a0)
+		move.b	#32/2,width_pixels(a0)
+		move.w	#ArtTile_DashDust,art_tile(a0)
+		move.w	#tiles_to_bytes(ArtTile_DashDust),vram_art(a0)
 		lea	(Player_1).w,a1
-		move.w	a1,parent(a0)
-		move.w	#$FE00,vram_art(a0)
 		cmpi.b	#1,character_id(a1)
 		bne.s	loc_18BAA
-		move.b	#1,$38(a0)
+		move.b	#1,character_id(a0)
 
 loc_18BAA:
-		movea.w	parent(a0),a2
+		lea	(Player_1).w,a2
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		add.w	d0,d0
@@ -51,7 +50,7 @@ loc_18BC8:
 		tst.b	$21(a0)
 		bne.w	loc_18C94
 		move.w	x_pos(a2),x_pos(a0)
-		move.b	#0,status(a0)
+		clr.b	status(a0)
 		andi.w	#$7FFF,art_tile(a0)
 		bra.w	loc_18C94
 ; ---------------------------------------------------------------------------
@@ -60,7 +59,7 @@ loc_18BEC:
 		tst.b	$21(a0)
 		bne.s	+
 		move.w	x_pos(a2),x_pos(a0)
-		move.b	#0,status(a0)
+		clr.b	status(a0)
 		andi.w	#$7FFF,art_tile(a0)
 +		lea	Ani_DashSplashDrown(pc),a1
 		jsr	(Animate_Sprite).l
@@ -113,7 +112,7 @@ loc_18C94:
 ; ---------------------------------------------------------------------------
 
 loc_18CAA:
-		move.b	#0,anim(a0)
+		clr.b	anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -122,7 +121,7 @@ loc_18CB2:
 ; ---------------------------------------------------------------------------
 
 loc_18CB6:
-		movea.w	parent(a0),a2
+		lea	(Player_1).w,a2
 		moveq	#$10,d1
 		cmpi.b	#id_Stop,anim(a2)
 		beq.s	loc_18CE4
@@ -134,7 +133,7 @@ loc_18CB6:
 
 loc_18CD6:
 		move.b	#2,routine(a0)
-		move.b	#0,$36(a0)
+		clr.b	$36(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -156,7 +155,7 @@ loc_18CE4:
 		beq.s	+
 		neg.w	d1
 +		add.w	d1,y_pos(a1)
-		move.b	#0,status(a1)
+		clr.b	status(a1)
 		move.b	#id_Roll2,anim(a1)
 		addq.b	#2,routine(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -164,7 +163,6 @@ loc_18CE4:
 		move.w	#$80,priority(a1)
 		move.b	#4,width_pixels(a1)
 		move.w	art_tile(a0),art_tile(a1)
-		move.w	parent(a0),parent(a1)
 		andi.w	#$7FFF,art_tile(a1)
 		tst.w	art_tile(a2)
 		bpl.s	DashDust_Load_DPLC

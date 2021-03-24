@@ -39,7 +39,7 @@ Handle_Onscreen_Water_Height_Return:
 DynamicWaterHeight:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#5,d0
 		move.w	DynamicWaterResize(pc,d0.w),d0
 		jsr	DynamicWaterResize(pc,d0.w)
@@ -84,7 +84,7 @@ StartLevelWater:
 		beq.s	LoadWaterPalette
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#5,d0
 		move.w	StartingWaterHeights(pc,d0.w),d0
 		move.w	d0,(Water_level).w
@@ -99,7 +99,7 @@ LoadWaterPalette:
 		beq.s	CheckLevelForWater_Return
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
-		lsl.b	#6,d0
+		ror.b	#2,d0
 		lsr.w	#6,d0
 		move.b	WaterPalette_Index(pc,d0.w),d0	; Water palette
 		move.w	d0,d1

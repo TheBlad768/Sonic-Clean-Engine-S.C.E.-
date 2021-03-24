@@ -49,7 +49,7 @@ Render_HUD_Process_Time:
 Render_HUD_Process_Draw:
 		move.w	HUD_RAM.Xpos-HUD_RAM(a1),d0		; Xpos
 		move.w	HUD_RAM.Ypos-HUD_RAM(a1),d1		; Ypos
-		move.w	#make_art_tile(ArtTile_ArtNem_HUD,0,1),d5	; VRAM
+		move.w	#make_art_tile(ArtTile_HUD,0,1),d5		; VRAM
 		lea	Map_HUD(pc),a1
 		adda.w	(a1,d4.w),a1
 		move.w	(a1)+,d4
