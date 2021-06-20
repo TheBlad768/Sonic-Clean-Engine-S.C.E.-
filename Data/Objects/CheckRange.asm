@@ -56,7 +56,7 @@ sub_85CA4:
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
 		move.b	d0,(Level_music+1).w
-		bsr.w	Play_Sound
+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 		bset	#0,objoff_27(a0)
 
 loc_85CC6:
@@ -68,7 +68,7 @@ loc_85CC6:
 		cmp.w	(Camera_min_Y_pos_Saved).w,d0
 		bhs.s	loc_85CF2
 		move.w	d0,(Camera_min_Y_pos).w
-		bra.w	loc_85D06
+		bra.s	loc_85D06
 ; ---------------------------------------------------------------------------
 
 loc_85CE6:
@@ -92,14 +92,14 @@ loc_85D06:
 		cmp.w	(Camera_min_X_pos_Saved).w,d0
 		bhs.s	loc_85D36
 		move.w	d0,(Camera_min_X_pos).w
-		bra.w	loc_85D48
+		bra.s	loc_85D48
 ; ---------------------------------------------------------------------------
 
 loc_85D28:
 		cmp.w	(Camera_max_X_pos_Saved).w,d0
 		bls.s		loc_85D36
 		move.w	d0,(Camera_max_X_pos).w
-		bra.w	loc_85D48
+		bra.s	loc_85D48
 ; ---------------------------------------------------------------------------
 
 loc_85D36:
@@ -111,7 +111,7 @@ loc_85D48:
 		move.b	objoff_27(a0),d0
 		andi.b	#7,d0
 		cmpi.b	#7,d0
-		bne.w	locret_85CA2
+		bne.s	Check_InTheirRange_Return
 		clr.b	objoff_27(a0)
 		clr.w	objoff_1C(a0)
 		clr.b	objoff_26(a0)
@@ -138,6 +138,8 @@ Check_InTheirRange:
 		cmp.w	d1,d0
 		bge.s	Check_InTheirRange_Fail
 		moveq	#1,d0
+
+Check_InTheirRange_Return:
 		rts
 ; ---------------------------------------------------------------------------
 

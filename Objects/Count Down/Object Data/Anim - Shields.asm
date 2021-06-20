@@ -29,3 +29,4 @@ byte_1873D:	dc.b	7, $16,	 $F, $16,  $F, $16,  $F, $FC
 byte_18745:	dc.b	7, $16,	 $E, $16,  $E, $16,  $E, $FC
 byte_1874D:	dc.b   $E, $FC
 byte_1874F:	dc.b   $E,   1,	  2,   3,   4, $FC,   0
+	even

@@ -23,7 +23,7 @@ locret_1ABDA:
 loc_1ABDC:
 		cmpa.w	#(Sprite_table_input_End-$80),a1
 		beq.s	locret_1ABDA
-		adda.w	#$80,a1
+		lea	$80(a1),a1
 		bra.s	loc_1ABCE
 ; End of function DisplaySprite
 

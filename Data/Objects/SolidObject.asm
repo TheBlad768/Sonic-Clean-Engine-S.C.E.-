@@ -5,12 +5,7 @@ SolidObject:
 SolidObjectFull:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
-		movem.l	d1-d4,-(sp)
-		bsr.s	+
-		movem.l	(sp)+,d1-d4
-		rts
-; ---------------------------------------------------------------------------
-+		btst	d6,status(a0)
+		btst	d6,status(a0)
 		beq.w	loc_1DF88
 		move.w	d1,d2
 		add.w	d2,d2
@@ -590,13 +585,6 @@ loc_1E2A0:
 SolidObjectTop:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
-		movem.l	d1-d4,-(sp)
-		bsr.s	sub_1E2BC
-		movem.l	(sp)+,d1-d4
-		rts
-; ---------------------------------------------------------------------------
-
-sub_1E2BC:
 		btst	d6,status(a0)
 		beq.w	loc_1E42E
 		move.w	d1,d2

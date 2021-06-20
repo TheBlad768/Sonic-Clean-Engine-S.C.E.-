@@ -37,12 +37,12 @@ v_Invincibility_stars:					ds.b object_size*4			; 4 objects
 Object_RAM_End
 
 Kos_decomp_buffer:					ds.b $1000				; Each module in a KosM archive is decompressed here and then DMAed to VRAM
-Nem_code_table:						ds.b $200				; Code table is built up here and then used during decompression
 
 H_scroll_buffer:						ds.l 224					; Horizontal scroll table is built up here and then DMAed to VRAM
 H_scroll_table:						ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
 H_scroll_buffer_End
-Collision_response_list:				ds.b 128					; Collision response list
+
+Collision_response_list:				ds.b 128					; Only objects in this list are processed by the collision response routines
 Pos_table:							ds.l 64					; Recorded player XY position buffer
 Ring_status_table:					ds.w RingTable_Count		; Ring status table(1 word)
 Ring_status_table_End
@@ -125,7 +125,7 @@ Ring_consumption_table_End
 
 Plane_Buffer:							ds.b $480				; Used by level drawing routines
 
-v_snddriver_ram:						ds.b $396				; Start of RAM for the sound driver data
+v_snddriver_ram:						ds.b $400				; Start of RAM for the sound driver data
 
 v_gamemode:
 Game_mode:							ds.b 1
@@ -208,7 +208,7 @@ Object_respawn_index_back:			ds.w 1					; The object respawn table index for the
 Collision_addr:						ds.l 1					; Points to the primary or secondary collision data as appropriate
 Primary_collision_addr:				ds.l 1
 Secondary_collision_addr:				ds.l 1
-v_SonFrameNum:						ds.b 1
+Player_prev_frame:					ds.b 1
 Reverse_gravity_flag:					ds.b 1
 Primary_Angle:						ds.b 1
 Secondary_Angle:						ds.b 1
@@ -217,11 +217,11 @@ Deform_Lock:						ds.b 1
 Boss_flag:							ds.b 1					; Set if a boss fight is going on
 TitleCard_end_flag:					ds.b 1
 LevResults_end_flag:					ds.b 1
-NoBackgroundEvent_flag:				ds.b 1
-ScreenEvent_routine:					ds.b 1
-ScreenEvent_flag:						ds.b 1
-BackgroundEvent_routine:				ds.b 1
-BackgroundEvent_flag:					ds.b 1
+NoBackground_event_flag:				ds.b 1
+Screen_event_routine:					ds.b 1
+Screen_event_flag:					ds.b 1
+Background_event_routine:				ds.b 1
+Background_event_flag:				ds.b 1
 Debug_placement_mode:										; Both routine and type
 Debug_placement_routine:				ds.b 1
 Debug_placement_type:				ds.b 1					; 0 = normal gameplay, 1 = normal object placement, 2 = frame cycling
@@ -231,13 +231,7 @@ Debug_object:						ds.b 1					; The current position in the debug mode object li
 Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
 Debug_mode_flag:					ds.b 1
-DPLC_SlottedRAM:					ds.w 1
-PalCycle_Frame:						ds.w 1
-PalCycle_Timer:						ds.w 1
-PalCycle_Frame2:						ds.w 1
-PalCycle_Timer2:						ds.w 1
-PalCycle_Frame3:						ds.w 1
-PalCycle_Timer3:						ds.w 1
+Palette_cycle_counters:				ds.b $10
 Pal_fade_delay:						ds.w 1
 Pal_fade_delay2:						ds.w 1
 Hyper_Sonic_flash_timer:				ds.b 1
@@ -246,6 +240,7 @@ Negative_flash_timer:					ds.b 1
 PalRotation_flag:						ds.b 1
 PalRotation_pointer:					ds.l 1
 PalRotation_buffer:					ds.b $22
+Boss_Events:							ds.b $10
 Chain_bonus_counter:					ds.w 1
 Time_bonus_countdown:				ds.w 1					; Used on the results screen
 Ring_bonus_countdown:				ds.w 1					; Used on the results screen
@@ -278,20 +273,6 @@ Block_table_addr_ROM:				ds.l 1					; Block table pointer(Block (16x16) definiti
 Level_layout_addr_ROM:				ds.l 1					; Level layout pointer
 Level_layout2_addr_ROM:				ds.l 1					; Level layout 2 pointer
 Object_index_addr:					ds.l 1					; Points to either the object index for levels
-
-Nem_decomp_queue:											; 6 bytes per entry, first longword is source location and next word is VRAM destination
-Nem_decomp_source:					ds.b 6*PLCNem_Count		; The compressed data location for the first entry in the queue
-Nem_decomp_destination:				= Nem_decomp_queue+4	; Destination in VRAM for the first entry in the queue
-Nem_decomp_vars:											; Various variables used by the Nemesis decompression queue processor
-Nem_write_routine:					ds.l 1					; Points to either Nem_PCD_WriteRowToVDP or Nem_PCD_WriteRowToVDP_XOR
-Nem_repeat_count:					ds.l 1					; Stored repeat count for the current palette index
-Nem_palette_index:					ds.l 1					; The current palette index
-Nem_previous_row:					ds.l 1					; Used in XOR mode
-Nem_data_word:						ds.l 1					; Contains the current compressed word being processed
-Nem_shift_value:						ds.l 1					; The number of bits the data word needs to be shifted by
-Nem_patterns_left:					ds.w 1					; The number of patterns remaining to be decompressed
-Nem_frame_patterns_left:				ds.w 3					; The number of patterns remaining to be decompressed in the current frame
-Nem_decomp_queue_End
 
 Kos_decomp_queue_count:				ds.w 1					; The number of pieces of data on the queue. Sign bit set indicates a decompression is in progress
 Kos_decomp_stored_registers:			ds.b $28					; Allows decompression to be spread over multiple frames

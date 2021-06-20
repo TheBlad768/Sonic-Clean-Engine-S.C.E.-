@@ -25,23 +25,23 @@ Map_Bubbler:
 word_2FD0E:
 		dc.w 1
 		dc.b  $FC,   0,	  0,   0, $FF, $FC
-word_2FD16:	dc.w 1
-
+word_2FD16:
+		dc.w 1
 		dc.b  $FC,   0,	  0,   1, $FF, $FC
-word_2FD1E:	dc.w 1
-
+word_2FD1E:
+		dc.w 1
 		dc.b  $FC,   0,	  0,   2, $FF, $FC
-word_2FD26:	dc.w 1
-
+word_2FD26:
+		dc.w 1
 		dc.b  $F8,   5,	  0,   3, $FF, $F8
-word_2FD2E:	dc.w 1
-
+word_2FD2E:
+		dc.w 1
 		dc.b  $F8,   5,	  0,   7, $FF, $F8
-word_2FD36:	dc.w 1
-
+word_2FD36:
+		dc.w 1
 		dc.b  $F4,  $A,	  0,  $B, $FF, $F4
-word_2FD3E:	dc.w 1
-
+word_2FD3E:
+		dc.w 1
 		dc.b  $F0,  $F,	  0, $14, $FF, $F0
 word_2FD46:
 		dc.w 4

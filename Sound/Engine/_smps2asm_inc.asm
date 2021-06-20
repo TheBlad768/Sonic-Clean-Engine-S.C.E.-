@@ -456,6 +456,11 @@ smpsAlterNote macro
 	smpsDetune	ALLARGS
 	endm
 
+; Historical version of smpsDetune
+smpsAlterNoteEcho macro
+	smpsDetune	ALLARGS-$A
+	endm
+
 smpsAlterPitch macro
 	smpsChangeTransposition	ALLARGS
 	endm

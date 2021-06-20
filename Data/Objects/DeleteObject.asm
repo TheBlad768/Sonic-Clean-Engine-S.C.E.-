@@ -12,9 +12,9 @@ DeleteChild:
 DeleteObject2:
 Delete_Referenced_Sprite:
 		moveq	#0,d0
-		moveq	#bytesToLcnt(object_size),d1
--		move.l	d0,(a1)+
-		dbf	d1,-
+	rept	bytesTo2Lcnt(object_size)
+		move.l	d0,(a1)+
+	endm
 	if object_size&2
 		move.w	d0,(a1)+
 	endif

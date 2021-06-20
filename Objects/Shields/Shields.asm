@@ -53,7 +53,7 @@ Obj_Fire_Shield_Main:
 .nothighpriority:
 Obj_Fire_Shield_Display:
 		lea	Ani_FireShield(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		move.w	#$80,priority(a0)		; Layer shield over player sprite
 		cmpi.b	#$F,mapping_frame(a0)		; Are these the frames that display in front of the player?
 		blo.s	.overplayer			; If so, branch
@@ -61,13 +61,13 @@ Obj_Fire_Shield_Display:
 ; loc_19686:
 .overplayer:
 		bsr.w	PLCLoad_Shields
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 ; loc_19692:
 Obj_Fire_Shield_DestroyUnderwater:
 		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		jsr	(Create_New_Sprite).l		; Set up for a new object
-		bne.w	Obj_Fire_Shield_Destroy		; If that can't happen, branch
+		bsr.w	Create_New_Sprite		; Set up for a new object
+		bne.s	Obj_Fire_Shield_Destroy		; If that can't happen, branch
 		move.l	#Obj_FireShield_Dissipate,address(a1)	; Create dissipate object
 		move.w	x_pos(a0),x_pos(a1)		; Put it at shields' x_pos
 		move.w	y_pos(a0),y_pos(a1)		; Put it at shields' y_pos
@@ -86,7 +86,7 @@ Obj_Lightning_Shield:
 		move.l	#ArtUnc_Obj_Lightning_Shield_Sparks,d1			; Load art source
 		move.w	#tiles_to_bytes(ArtTile_Shield_Sparks),d2	; Load art destination
 		move.w	#(ArtUnc_Obj_Lightning_Shield_Sparks_End-ArtUnc_Obj_Lightning_Shield_Sparks)/2,d3	; Size of art (in words)
-		jsr	(Add_To_DMA_Queue).l
+		jsr	(Add_To_DMA_Queue).w
 
 		move.l	#Map_LightningShield,mappings(a0)
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
@@ -138,7 +138,7 @@ Obj_Lightning_Shield_Main:
 
 Obj_Lightning_Shield_Display:
 		lea	Ani_LightningShield(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		move.w	#$80,priority(a0)			; Layer shield over player sprite
 		cmpi.b	#$E,mapping_frame(a0)			; Are these the frames that display in front of the player?
 		blo.s	.overplayer				; If so, branch
@@ -146,7 +146,7 @@ Obj_Lightning_Shield_Display:
 
 .overplayer:
 		bsr.w	PLCLoad_Shields
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_Lightning_Shield_DestroyUnderwater:
@@ -168,7 +168,7 @@ Obj_Lightning_Shield_FlashWater:
 		; Flashes the underwater palette white
 		lea	(Water_palette).w,a1
 		lea	(Target_water_palette).w,a2
-		move.w	#($80/4)-1,d0			; Size of Water_palette/4-1
+		moveq	#($80/4)-1,d0			; Size of Water_palette/4-1
 
 -		move.l	(a1),(a2)+				; Backup palette entries
 		move.l	#$0EEE0EEE,(a1)+		; Overwrite palette entries with white
@@ -215,17 +215,17 @@ SparkVelocities:
 ; ---------------------------------------------------------------------------
 ; Obj_LightningShield_Spark:
 Obj_Lightning_Shield_Spark:
-		jsr	(MoveSprite2).l
+		bsr.w	MoveSprite2
 		addi.w	#$18,y_vel(a0)
 		lea	Ani_LightningShield(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		tst.b	routine(a0)			; Changed by Animate_Sprite
 		bne.s	Obj_Lightning_Shield_Spark_Delete
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_Lightning_Shield_Spark_Delete:
-		jmp	(Delete_Current_Sprite).l
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 ; LightningShield_Destroy:
 Obj_Lightning_Shield_DestroyUnderwater2:
@@ -234,7 +234,7 @@ Obj_Lightning_Shield_DestroyUnderwater2:
 		move.l	#Obj_Insta_Shield,address(a0)		; Replace Lightning Shield with Insta-Shield
 		lea	(Target_water_palette).w,a1
 		lea	(Water_palette).w,a2
-		move.w	#($80/4)-1,d0			; Size of Water_palette/4-1
+		moveq	#($80/4)-1,d0			; Size of Water_palette/4-1
 
 -		move.l	(a1)+,(a2)+			; Restore backed-up underwater palette
 		dbf	d0,-				; Loop until entire thing is restored
@@ -290,9 +290,9 @@ Obj_Bubble_Shield_Main:
 .nothighpriority:
 ;Obj_Bubble_Shield_Display:
 		lea	Ani_BubbleShield(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		bsr.w	PLCLoad_Shields
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 Obj_Bubble_Shield_Destroy:
@@ -345,7 +345,7 @@ Obj_Insta_Shield_Main:
 .nothighpriority:
 ;Obj_Insta_Shield_Display:
 		lea	Ani_InstaShield(pc),a1
-		jsr	(Animate_Sprite).l
+		bsr.w	Animate_Sprite
 		cmpi.b	#7,mapping_frame(a0)		; Has it reached then end of its animation?
 		bne.s	.notover						; If not, branch
 		tst.b	double_jump_flag(a2)				; Is it in its attacking state?
@@ -359,10 +359,10 @@ Obj_Insta_Shield_Main:
 		bne.s	.skipDPLC					; If not, branch as we don't need to load another DPLC yet
 
 .loadnewDPLC:
-		bsr.w	PLCLoad_Shields
+		bsr.s	PLCLoad_Shields
 
 .skipDPLC:
-		jmp	(Draw_Sprite).l
+		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -393,7 +393,7 @@ PLCLoad_Shields_ReadEntry:
 		move.w	d4,d2
 		add.w	d3,d4
 		add.w	d3,d4
-		jsr	(Add_To_DMA_Queue).l
+		jsr	(Add_To_DMA_Queue).w
 		dbf	d5,PLCLoad_Shields_ReadEntry
 
 PLCLoad_Shields_Return:
@@ -405,7 +405,7 @@ Obj_Invincibility:
 		move.l	#ArtUnc_Invincibility,d1
 		move.w	#tiles_to_bytes(ArtTile_Shield),d2	; VRAM
 		move.w	#$400/2,d3						; Size/2
-		jsr	(Add_To_DMA_Queue).l
+		jsr	(Add_To_DMA_Queue).w
 		moveq	#0,d2
 		lea	off_187DE-6(pc),a2
 		lea	address(a0),a1
@@ -453,12 +453,12 @@ loc_188B0:
 		addq.w	#1,$38(a0)
 		lea	word_189A0(pc),a6
 		move.b	$34(a0),d6
-		jsr	sub_1898A(pc)
+		bsr.w	sub_1898A
 		move.w	d2,(a2)+
 		move.w	d3,(a2)+
 		move.w	d5,(a2)+
 		addi.w	#$20,d6
-		jsr	sub_1898A(pc)
+		bsr.w	sub_1898A
 		move.w	d2,(a2)+
 		move.w	d3,(a2)+
 		move.w	d5,(a2)+
@@ -509,13 +509,13 @@ loc_18946:
 		addq.w	#1,$38(a0)
 		lea	word_189A0(pc),a6
 		move.b	$34(a0),d6
-		jsr	sub_1898A(pc)
+		bsr.s	sub_1898A
 		move.w	d2,(a2)+
 		move.w	d3,(a2)+
 		move.w	d5,(a2)+
 		addi.w	#$20,d6
 		swap	d5
-		jsr	sub_1898A(pc)
+		bsr.s	sub_1898A
 		move.w	d2,(a2)+
 		move.w	d3,(a2)+
 		move.w	d5,(a2)+

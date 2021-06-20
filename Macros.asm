@@ -136,6 +136,14 @@ subObjData macro mappings,vram,priority,width,height,frame,collision
 
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 4 bytes per iteration
+bytesTo4Lcnt function n,n>>4
+
+; calculates initial loop counter value for a dbf loop
+; that writes n bytes total at 4 bytes per iteration
+bytesTo2Lcnt function n,n>>2
+
+; calculates initial loop counter value for a dbf loop
+; that writes n bytes total at 4 bytes per iteration
 bytesToLcnt function n,n>>2-1
 
 ; calculates initial loop counter value for a dbf loop
@@ -168,6 +176,44 @@ clearRAM macro startaddr,endaddr
     endif
     endm
 
+; fills a region of 68k RAM with 0
+clearRAM2 macro startaddr,endaddr
+    if ((startaddr)&$8000)==0
+	lea	(startaddr).l,a1
+    else
+	lea	(startaddr).w,a1
+    endif
+	moveq	#0,d0
+    if ((startaddr)&1)
+	move.b	d0,(a1)+
+    endif
+    rept bytesTo2Lcnt((endaddr-startaddr) - ((startaddr)&1))
+	move.l	d0,(a1)+
+    endm
+    if (((endaddr-startaddr) - ((startaddr)&1))&2)
+	move.w	d0,(a1)+
+    endif
+    if (((endaddr-startaddr) - ((startaddr)&1))&1)
+	move.b	d0,(a1)+
+    endif
+    endm
+
+; fills a region of 68k RAM with 0 (4 bytes at a time)
+clearRAM3 macro addr,length
+    if ((addr)&$8000)==0
+	lea	(addr).l,a1
+    else
+	lea	(addr).w,a1
+    endif
+	moveq	#0,d0
+	move.w	#bytesTo4Lcnt(length-addr),d1
+-	move.l	d0,(a1)+
+	move.l	d0,(a1)+
+	move.l	d0,(a1)+
+	move.l	d0,(a1)+
+	dbf	d1,-
+    endm
+
 ; ---------------------------------------------------------------------------
 ; clear the Z80 RAM
 ; ---------------------------------------------------------------------------
@@ -192,17 +238,25 @@ paddingZ80RAM macro
 
 ; tells the Z80 to stop, and waits for it to finish stopping (acquire bus)
 stopZ80 macro
+
+	if OptimiseStopZ80=0
 	move.w	#$100,(Z80_bus_request).l ; stop the Z80
 	nop
 	nop
 	nop
 -	btst	#0,(Z80_bus_request).l
 	bne.s	- 	; loop until it says it's stopped
+	endif
+
     endm
 
 ; tells the Z80 to stop, and waits for it to finish stopping (acquire bus)
 stopZ80a macro
+
+	if OptimiseStopZ80=0
 	move.w	#$100,(Z80_bus_request).l ; stop the Z80
+	endif
+
     endm
 
 ; ---------------------------------------------------------------------------
@@ -211,8 +265,12 @@ stopZ80a macro
 
 ; tells the Z80 to wait for it to finish stopping (acquire bus)
 waitZ80 macro
+
+	if OptimiseStopZ80=0
 -	btst	#0,(Z80_bus_request).l
 	bne.s	- 	; loop until
+	endif
+
     endm
 
 ; ---------------------------------------------------------------------------
@@ -221,12 +279,20 @@ waitZ80 macro
 
 ; tells the Z80 to reset
 resetZ80 macro
+
+	if OptimiseStopZ80=0
 	move.w	#$100,(Z80_reset).l
+	endif
+
     endm
 
 ; tells the Z80 to reset
 resetZ80a macro
-	move.w	#0,(Z80_reset).l
+
+	if OptimiseStopZ80=0
+	clr.w	(Z80_reset).l
+	endif
+
     endm
 
 ; ---------------------------------------------------------------------------
@@ -235,7 +301,42 @@ resetZ80a macro
 
 ; tells the Z80 to start again
 startZ80 macro
-	move.w	#0,(Z80_bus_request).l    ; start the Z80
+
+	if OptimiseStopZ80=0
+	clr.w	(Z80_bus_request).l    ; start the Z80
+	endif
+
+    endm
+
+; ---------------------------------------------------------------------------
+; stop the Z80 (2)
+; ---------------------------------------------------------------------------
+
+; tells the Z80 to stop, and waits for it to finish stopping (acquire bus)
+stopZ802 macro
+
+	if OptimiseStopZ80=2
+	move.w	#$100,(Z80_bus_request).l ; stop the Z80
+	nop
+	nop
+	nop
+-	btst	#0,(Z80_bus_request).l
+	bne.s	- 	; loop until it says it's stopped
+	endif
+
+    endm
+
+; ---------------------------------------------------------------------------
+; start the Z80 (2)
+; ---------------------------------------------------------------------------
+
+; tells the Z80 to start again
+startZ802 macro
+
+	if OptimiseStopZ80=2
+	clr.w	(Z80_bus_request).l    ; start the Z80
+	endif
+
     endm
 
 ; ---------------------------------------------------------------------------
@@ -265,6 +366,23 @@ enableInts macro
     endm
 
 ; ---------------------------------------------------------------------------
+; disable interrupts
+; ---------------------------------------------------------------------------
+
+disableIntsSave macro
+	move.w	sr,-(sp)		; Save current interrupt mask
+	disableInts			; Mask off interrupts
+    endm
+
+; ---------------------------------------------------------------------------
+; enable interrupts
+; ---------------------------------------------------------------------------
+
+enableIntsSave macro
+	move.w	(sp)+,sr		; Restore interrupts to previous state
+    endm
+
+; ---------------------------------------------------------------------------
 ; disable screen
 ; ---------------------------------------------------------------------------
 
@@ -279,8 +397,8 @@ disableScreen macro
 ; ---------------------------------------------------------------------------
 
 enableScreen macro
-		move.w	(VDP_reg_1_command).w,d0
-		ori.b	#%1000000,d0
+		moveq	#%1000000,d0
+		or.w	(VDP_reg_1_command).w,d0
 		move.w	d0,(VDP_control_port).l
     endm
 
@@ -373,6 +491,9 @@ make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
 tiles_to_bytes function addr,((addr&$7FF)<<5)
 
 ; function to calculate the location of a tile in plane mappings with a width of 40 cells
+planeLocH32 function col,line,(($40 * line) + (2 * col))
+
+; function to calculate the location of a tile in plane mappings with a width of 40 cells
 planeLocH28 function col,line,(($50 * line) + (2 * col))
 
 ; function to calculate the location of a tile in plane mappings with a width of 64 cells
@@ -395,17 +516,17 @@ _Kos_RunBitStream macro
 	move.b	(a0)+,d0				; Get desc field low-byte.
 	move.b	(a0)+,d1				; Get desc field hi-byte.
 	if _Kos_UseLUT==1
-	move.b	(a4,d0.w),d0			; Invert bit order...
-	move.b	(a4,d1.w),d1			; ... for both bytes.
+		move.b	(a4,d0.w),d0		; Invert bit order...
+		move.b	(a4,d1.w),d1		; ... for both bytes.
 	endif
 .skip
     endm
 
 _Kos_ReadBit macro
 	if _Kos_UseLUT==1
-	add.b	d0,d0				; Get a bit from the bitstream.
+		add.b	d0,d0			; Get a bit from the bitstream.
 	else
-	lsr.b	#1,d0					; Get a bit from the bitstream.
+		lsr.b	#1,d0				; Get a bit from the bitstream.
 	endif
     endm
 ; ---------------------------------------------------------------------------
@@ -499,7 +620,7 @@ music:		macro track,terminate,branch,byte
 		    endif
 		  else
 	 	    if ("byte"<>"0")
-			move.b	#track,d0
+			moveq	#track,d0
 		    else
 			move.w	#track,d0
 		    endif
@@ -511,9 +632,37 @@ music:		macro track,terminate,branch,byte
 		      endif
 		    else
 		      if ("terminate"="0")
-			jsr	(PlaySound).l
+			jsr	(PlaySound).w
 		      else
-			jmp	(PlaySound).l
+			jmp	(PlaySound).w
+		      endif
+		    endif
+		  endif
+	    endm
+
+music2:		macro track,terminate,branch,byte
+		  if (OptimiseSound<>0)
+			move.b	#track,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
+		    if ("terminate"<>"0")
+			rts
+		    endif
+		  else
+	 	    if ("byte"<>"0")
+			moveq	#track,d0
+		    else
+			move.w	#track,d0
+		    endif
+		    if ("branch"<>"0")
+		      if ("terminate"="0")
+			bsr.w	PlaySound
+		      else
+			bra.w	PlaySound
+		      endif
+		    else
+		      if ("terminate"="0")
+			jsr	(PlaySound).w
+		      else
+			jmp	(PlaySound).w
 		      endif
 		    endif
 		  endif
@@ -527,7 +676,7 @@ sfx:		macro track,terminate,branch,byte
 		    endif
 		  else
 	 	    if ("byte"<>"0")
-			move.b	#track,d0
+			moveq	#track,d0
 		    else
 			move.w	#track,d0
 		    endif
@@ -539,9 +688,37 @@ sfx:		macro track,terminate,branch,byte
 		      endif
 		    else
 		      if ("terminate"="0")
-			jsr	(PlaySound_Special).l
+			jsr	(PlaySound_Special).w
 		      else
-			jmp	(PlaySound_Special).l
+			jmp	(PlaySound_Special).w
+		      endif
+		    endif
+		  endif
+	    endm
+
+sfx2:		macro track,terminate,branch,byte
+		  if (OptimiseSound<>0)
+			move.b	#track,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
+		    if ("terminate"<>"0")
+			rts
+		    endif
+		  else
+	 	    if ("byte"<>"0")
+			moveq	#track,d0
+		    else
+			move.w	#track,d0
+		    endif
+		    if ("branch"<>"0")
+		      if ("terminate"="0")
+			bsr.w	PlaySound_Special
+		      else
+			bra.w	PlaySound_Special
+		      endif
+		    else
+		      if ("terminate"="0")
+			jsr	(PlaySound_Special).w
+		      else
+			jmp	(PlaySound_Special).w
 		      endif
 		    endif
 		  endif
@@ -658,12 +835,34 @@ gotoROM macro
 ; input: source, destination, width [cells], height [cells]
 ; ---------------------------------------------------------------------------
 
-copyTilemap	macro source,loc,width,height
-	lea	(source).l,a1
+copyTilemap	macro loc,width,height
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
-	jsr	(Plane_Map_To_VRAM).l
+	jsr	(Plane_Map_To_VRAM).w
+    endm
+; ---------------------------------------------------------------------------
+; Copy a tilemap2 from 68K (ROM/RAM) to the VRAM without using DMA
+; input: source, destination, width [cells], height [cells]
+; ---------------------------------------------------------------------------
+
+copyTilemap2	macro loc,address,width,height
+	locVRAM	loc,d0
+	moveq	#(width/8-1),d1
+	moveq	#(height/8-1),d2
+	move.w	#(address),d3
+	jsr	(Plane_Map_To_Add_VRAM).w
+    endm
+; ---------------------------------------------------------------------------
+; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; input: source, destination, width [cells], height [cells]
+; ---------------------------------------------------------------------------
+
+copyTilemap3		macro loc,width,height
+	locVRAM	loc,d0
+	moveq	#(width/8-1),d1
+	moveq	#(height/8-1),d2
+	jsr	(Plane_Map_To_VRAM_3).w
     endm
 ; ---------------------------------------------------------------------------
 
@@ -694,7 +893,7 @@ LoadMapUnc	macro offset,size,arg,vram,width,height
 	locVRAM	vram,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
-	jsr	(Plane_Map_To_VRAM).l
+	jsr	(Plane_Map_To_VRAM).w
     endm
 ; ---------------------------------------------------------------------------
 
@@ -771,15 +970,21 @@ offsetEntry macro ptr
     endm
 ; ---------------------------------------------------------------------------
 
-dScroll_Header macro plane,ram,speed,pixel
-		if plane=1
-	dc.w H_scroll_buffer+(ram<<2)
-		elseif plane=2
-	dc.w (H_scroll_buffer+(ram<<2))|2
+dScroll_header macro {INTLABEL}
+__LABEL__ label *
+	dc.w (((__LABEL___End - __LABEL__Plc) / 6) - 1)
+__LABEL__Plc:
+    endm
+
+dScroll_Data macro plane,pixel,speed,size
+		if plane=0
+	dc.w H_scroll_buffer+(pixel<<2)
+		elseif plane=1
+	dc.w H_scroll_buffer+((pixel<<2)+2)
 		else
 			fatal "Error! Non-existent plan."
 		endif
-	dc.w speed,pixel
+	dc.w speed, size
     endm
 ; ---------------------------------------------------------------------------
 

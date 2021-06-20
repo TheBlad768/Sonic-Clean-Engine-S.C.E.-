@@ -84,7 +84,7 @@ DEZ1_ScreenInit:
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_ScreenEvent:
-		tst.b (ScreenEvent_flag).w
+		tst.b (Screen_event_flag).w
 		bne.s	DEZ1_ScreenEvent_RefreshPlane
 		move.w	(Screen_shaking_flag+2).w,d0
 		add.w	d0,(Camera_Y_pos_copy).w
@@ -92,7 +92,7 @@ DEZ1_ScreenEvent:
 ; ---------------------------------------------------------------------------
 
 DEZ1_ScreenEvent_RefreshPlane:
-		sf	(ScreenEvent_flag).w
+		clr.b	(Screen_event_flag).w
 		jmp	Refresh_PlaneScreenDirect(pc)
 
 ; =============== S U B R O U T I N E =======================================
@@ -107,7 +107,7 @@ DEZ1_BackgroundInit:
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_BackgroundEvent:
-		tst.b (BackgroundEvent_flag).w
+		tst.b (Background_event_flag).w
 		bne.s	DEZ1_Transition
 		bsr.s	DEZ1_Deform
 
@@ -133,6 +133,6 @@ DEZ1_ParallaxScript:
 ; ---------------------------------------------------------------------------
 
 DEZ1_Transition:
-		sf	(BackgroundEvent_flag).w
+		clr.b	(Background_event_flag).w
 		rts
 

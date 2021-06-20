@@ -299,26 +299,3 @@ CreateChild10_NormalAdjusted:
 		moveq	#0,d0
 +		rts
 ; End of function CreateChild10_NormalAdjusted
-
-; =============== S U B R O U T I N E =======================================
-
-CreateChild11_NormalVelocity:
-		moveq	#0,d2						; Simple child creation routine, merely creates x number of the same object at the parent's position
-		move.w	(a2)+,d6
-
--		bsr.w	Create_New_Sprite3
-		bne.s	+
-		move.w	a0,parent3(a1)
-		move.l	mappings(a0),mappings(a1)
-		move.w	art_tile(a0),art_tile(a1)
-		move.l	(a2)+,address(a1)				; Object address
-		move.b	d2,subtype(a1)
-		move.w	x_pos(a0),x_pos(a1)
-		move.w	y_pos(a0),y_pos(a1)
-		move.w	(a2)+,x_vel(a1)				; X Velocity
-		move.w	(a2)+,y_vel(a1)				; Y Velocity
-		addq.w	#2,d2
-		dbf	d6,-
-		moveq	#0,d0
-+		rts
-; End of function CreateChild11_NormalVelocity

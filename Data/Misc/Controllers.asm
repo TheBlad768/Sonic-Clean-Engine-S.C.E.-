@@ -5,11 +5,15 @@
 ; =============== S U B R O U T I N E =======================================
 
 Init_Controllers:
+		stopZ80
+		stopZ802
 		moveq	#$40,d0
 		lea	(HW_Port_1_Data).l,a0
 		move.b	d0,HW_Port_1_Control-HW_Port_1_Data(a0)
 		move.b	d0,HW_Port_2_Control-HW_Port_1_Data(a0)
 		move.b	d0,HW_Expansion_Control-HW_Port_1_Data(a0)
+		startZ802
+		startZ80
 		rts
 ; End of function Init_Controllers
 ; ---------------------------------------------------------------------------

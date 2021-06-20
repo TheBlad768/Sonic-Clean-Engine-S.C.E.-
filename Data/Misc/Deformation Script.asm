@@ -2,19 +2,25 @@
 ; Simple horizontal deformation
 ; Inputs:
 ; a2 = config: initial pixel+buffer, speed, deformation size
+; a3 = deformation buffer
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 HScroll_Deform:
 		move.w	(a2)+,d6
+
 -		movea.w	(a2)+,a1
 		move.w	(a2)+,d2
-		move.w	(a2)+,d7
+		move.w	(a2)+,d5
 		ext.l	d2
 		asl.l	#8,d2
--		add.l	d2,(a1)+
-		dbf	d7,-
+
+-		add.l	d2,(a3)
+		move.w	(a3)+,(a1)+
+		addq.w	#2,a1
+		addq.w	#2,a3
+		dbf	d5,-
 		dbf	d6,--
 		rts
 ; End of function HScroll_Deform
@@ -31,6 +37,7 @@ VScroll_Deform:
 		lea	(VDP_data_port).l,a6
 		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_data_port(a6)
 		moveq	#((320*2)/16)-1,d6
+
 -		move.w	(a2)+,d2
 		ext.l	d2
 		asl.l	#8,d2
@@ -62,10 +69,12 @@ PlainDeformation:
 ; =============== S U B R O U T I N E =======================================
 
 FGScroll_Deformation:
-		moveq	#0,d0
 		move.w	(HScroll_Shift).w,d0
+		ext.l	d0
 		asl.l	#8,d0
 		add.l	d0,(HScroll_Shift+2).w
+
+FGScroll_Deformation2:
 		lea	(H_scroll_buffer).w,a1
 		move.w	(HScroll_Shift+2).w,d0
 		neg.w	d0
@@ -202,27 +211,23 @@ _linear		= $0400
 
 ExecuteParallaxScript:
 		lea	(H_scroll_table).w,a5
-		move.w	(Camera_X_pos_copy).w,d0	; d0 = BG Position
+		move.w	(Camera_X_pos_copy).w,d0			; d0 = BG Position
 		swap	d0
 		clr.w	d0
 		moveq	#0,d4
 
-.ProcessBlock:
-		move.b	(a1)+,d4						; load scrolling mode for the current block in script
-		bmi.s	.Return						; if end of list reached, branch
-		move.w	.ParallaxRoutines(pc,d4.w),d5
-		move.b	(a1)+,d4						; load scrolling mode parameter
-		jmp	.ParallaxRoutines(pc,d5.w)
+ExecuteParallaxScript_ProcessBlock:
+		move.b	(a1)+,d4								; load scrolling mode for the current block in script
+		bmi.s	locret_4F158							; if end of list reached, branch
+		move.w	ExecuteParallaxScript_Index(pc,d4.w),d5
+		move.b	(a1)+,d4								; load scrolling mode parameter
+		jmp	ExecuteParallaxScript_Index(pc,d5.w)
 ; ---------------------------------------------------------------
 
-.Return:
-		rts
-; ---------------------------------------------------------------
-
-.ParallaxRoutines:
-		dc.w	.Parallax_Normal-.ParallaxRoutines
-		dc.w	.Parallax_Moving-.ParallaxRoutines
-		dc.w	.Parallax_Linear-.ParallaxRoutines
+ExecuteParallaxScript_Index: offsetTable
+		offsetTableEntry.w ExecuteParallaxScript_Parallax_Normal		; 0
+		offsetTableEntry.w ExecuteParallaxScript_Parallax_Moving		; 2
+		offsetTableEntry.w ExecuteParallaxScript_Parallax_Linear		; 4
 ; ---------------------------------------------------------------
 ; Scrolling routine: Static solid block
 ; ---------------------------------------------------------------
@@ -233,7 +238,7 @@ ExecuteParallaxScript:
 ; Don't pollute the high byte of d4!
 ; ---------------------------------------------------------------
 
-.Parallax_Normal:
+ExecuteParallaxScript_Parallax_Normal:
 		; Calculate positions
 		move.l	d0,d1
 		swap	d1
@@ -243,7 +248,7 @@ ExecuteParallaxScript:
 		swap	d1
 		move.w	d1,(a5)+
 
-		bra.s	.ProcessBlock		; process next bloku!
+		bra.s	ExecuteParallaxScript_ProcessBlock		
 ; ---------------------------------------------------------------
 ; Scrolling routine: Moving solid block
 ; ---------------------------------------------------------------
@@ -254,7 +259,7 @@ ExecuteParallaxScript:
 ; Don't pollute the high byte of d4!
 ; ---------------------------------------------------------------
 
-.Parallax_Moving:
+ExecuteParallaxScript_Parallax_Moving:
 		; Calculate positions
 		move.l	d0,d1
 		swap	d1
@@ -269,7 +274,7 @@ ExecuteParallaxScript:
 		add.w	d3,d1
 		move.w	d1,(a5)+
 
-		bra.s	.ProcessBlock		; process next bloku!
+		bra.s	ExecuteParallaxScript_ProcessBlock		
 ; ---------------------------------------------------------------
 ; Scrolling routine: Linear Parallax / Psedo-surface
 ; ---------------------------------------------------------------
@@ -280,7 +285,7 @@ ExecuteParallaxScript:
 ; Don't pollute the high byte of d4!
 ; ---------------------------------------------------------------
 
-.Parallax_Linear:
+ExecuteParallaxScript_Parallax_Linear:
 		; Calculate positions
 		move.l	d0,d1
 		swap	d1
@@ -291,15 +296,32 @@ ExecuteParallaxScript:
 		asr.l	d4,d2
 
 		; Execute code according to number of lines set
-		move.w	(a1)+,d5		; d5 = N, where N is Number of lines
+		move.w	(a1)+,d6						; d5 = N, where N is Number of lines
+		subq.w	#1,d6
+		move.w	d6,d5						; d5 = N
+		lsr.w	#4,d5						; d5 = N/16
+		andi.w	#15,d6						; d6 = N%16
+		neg.w	d6							; d6 = -N%16
+		addi.w	#16,d6						; d6 = 16-N%16
+		move.w	d6,d4
+		add.w	d6,d6
+		add.w	d6,d6
+		add.w	d4,d6
+		add.w	d6,d6
+		jmp	.loop(pc,d6.w)
+; ---------------------------------------------------------------
 
-.loop:
+		; Main functional block (10 bytes per loop)
+
+.loop
+	rept	16
 		swap	d1
 		move.w	d1,d3
 		move.w	d3,(a5)+
 		swap	d1
 		add.l	d2,d1
+	endm
 		dbf	d5,.loop
 
-		bra.s	.ProcessBlock	; process next bloku!
+		bra.w	ExecuteParallaxScript_ProcessBlock
 ; End of function ExecuteParallaxScript

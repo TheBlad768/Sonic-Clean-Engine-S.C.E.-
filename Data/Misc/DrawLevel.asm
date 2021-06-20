@@ -47,7 +47,13 @@ VInt_DrawLevel_Return:
 ; =============== S U B R O U T I N E =======================================
 
 VInt_VRAMWrite:
-		bsr.w	CalcVRAM
+		swap	d0
+		clr.w	d0
+		swap	d0
+		lsl.l	#2,d0
+		lsr.w	#2,d0
+		ori.w	#$4000,d0
+		swap	d0
 		move.l	d0,VDP_control_port-VDP_data_port(a6)
 
 -		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
@@ -140,7 +146,7 @@ Setup_TileColumnDraw:
 		add.w	d5,d5
 		add.w	d5,d5
 		adda.w	d5,a0
-		jsr	Get_LevelChunkColumn(pc)
+		bsr.w	Get_LevelChunkColumn
 		bra.s	++
 +		neg.w	d5
 		move.w	d5,-(sp)
@@ -158,7 +164,7 @@ Setup_TileColumnDraw:
 		add.w	d4,d4
 		add.w	d4,d4
 		adda.w	d4,a0
-		jsr	Get_LevelChunkColumn(pc)
+		bsr.w	Get_LevelChunkColumn
 		bsr.s	+
 		move.w	(sp)+,d6
 		move.w	d0,d5
@@ -322,7 +328,7 @@ Setup_TileRowDraw:
 		add.w	d5,d5
 		add.w	d5,d5
 		adda.w	d5,a0
-		jsr	Get_LevelAddrChunkRow(pc)
+		bsr.w	Get_LevelAddrChunkRow
 		bra.s	++
 +		neg.w	d5			; If the length of the write wraps over the length of the nametable
 		move.w	d5,-(sp)
@@ -414,8 +420,8 @@ Refresh_PlaneFull:
 
 -		movem.l	d0-d2/a0,-(sp)
 		moveq	#$20,d6
-		jsr	Setup_TileRowDraw(pc)
-		jsr	VInt_DrawLevel(pc)
+		bsr.w	Setup_TileRowDraw
+		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/a0
 		addi.w	#$10,d0
 		dbf	d2,-
@@ -436,8 +442,8 @@ Refresh_PlaneTileDeform:
 +		move.w	(a5),d1
 		moveq	#$20,d6
 		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
-		jsr	Setup_TileRowDraw(pc)
-		jsr	VInt_DrawLevel(pc)
+		bsr.w	Setup_TileRowDraw
+		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
 		addi.w	#$10,d0
 		dbf	d3,-
@@ -463,8 +469,8 @@ Refresh_PlaneDirect:
 		moveq	#$E,d2
 
 -		movem.l	d0-d2/d6/a0,-(sp)		; Redraws the entire plane in one go during 68k execution
-		jsr	Setup_TileRowDraw(pc)
-		jsr	VInt_DrawLevel(pc)
+		bsr.w	Setup_TileRowDraw
+		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
 		addi.w	#$10,d0
 		dbf	d2,-
@@ -491,8 +497,8 @@ Refresh_PlaneDirect_BG:
 		moveq	#$F,d2
 
 -		movem.l	d0-d2/d6/a0,-(sp)		; Redraws the entire plane in one go during 68k execution
-		jsr	Setup_TileRowDraw(pc)
-		jsr	VInt_DrawLevel(pc)
+		bsr.w	Setup_TileRowDraw
+		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
 		addi.w	#$10,d0
 		dbf	d2,-
@@ -507,12 +513,12 @@ DrawTilesAsYouMove:
 		lea	(Camera_X_pos_rounded).w,a5
 		move.w	(Camera_Y_pos_copy).w,d1
 		moveq	#$F,d6
-		jsr	Draw_TileColumn(pc)
+		bsr.w	Draw_TileColumn
 		lea	(Camera_Y_pos_copy).w,a6
 		lea	(Camera_Y_pos_rounded).w,a5
 		move.w	(Camera_X_pos_copy).w,d1
 		moveq	#$15,d6
-		jmp	Draw_TileRow(pc)
+		bra.w	Draw_TileRow
 ; End of function DrawTilesAsYouMove
 
 ; =============== S U B R O U T I N E =======================================
@@ -522,12 +528,12 @@ DrawBGAsYouMove:
 		lea	(Camera_X_pos_BG_rounded).w,a5
 		move.w	(Camera_Y_pos_BG_copy).w,d1
 		moveq	#$F,d6
-		jsr	Draw_TileColumn(pc)
+		bsr.w	Draw_TileColumn
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		move.w	(Camera_X_pos_BG_copy).w,d1
 		moveq	#$15,d6
-		jmp	Draw_TileRow(pc)
+		bra.w	Draw_TileRow
 ; End of function DrawBGAsYouMove
 
 ; =============== S U B R O U T I N E =======================================
@@ -535,9 +541,9 @@ DrawBGAsYouMove:
 Draw_BG:
 		movem.l	d5/a4-a5,-(sp)
 		lea	(Camera_Y_pos_BG_copy).w,a6
-		jsr	Get_DeformDrawPosVert(pc)
+		bsr.w	Get_DeformDrawPosVert
 		lea	(Camera_Y_pos_BG_rounded).w,a5
-		jsr	Draw_TileRow2(pc)
+		bsr.w	Draw_TileRow2
 		movem.l	(sp)+,d5/a4/a6
 		move.w	(Camera_Y_pos_BG_rounded).w,d6
 		tst.w	(Camera_Y_pos_BG_copy).w
@@ -567,7 +573,7 @@ Draw_BGNoVert:
 -		movem.w	d1/d4-d6,-(sp)
 		movem.l	a4/a6,-(sp)
 		lea	2(a6),a5
-		jsr	Draw_TileColumn(pc)
+		bsr.w	Draw_TileColumn
 		movem.l	(sp)+,a4/a6
 		movem.w	(sp)+,d1/d4-d6
 		addq.w	#4,a6
@@ -599,9 +605,9 @@ Draw_BGNoVert:
 Draw_BG2:
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
-		moveq	#0,d1
+		moveq	#0,d1		; Camera_X_pos_copy
 		moveq	#$20,d6
-		jmp	Draw_TileRow(pc)
+		bra.w	Draw_TileRow
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -654,14 +660,14 @@ Reset_TileOffsetPositionEff:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Switches:
-		clearRAM Level_trigger_array, Level_trigger_array_End
+		clearRAM2 Level_trigger_array, Level_trigger_array_End
 		rts
 ; End of function Clear_Switches
 
 ; =============== S U B R O U T I N E =======================================
 
 Restart_LevelData:
-		clr.b	(BackgroundEvent_routine).w
+		clr.b	(Background_event_routine).w
 		clr.b	(Dynamic_resize_routine).w
 		clr.b	(Object_load_routine).w
 		clr.b	(Rings_manager_routine).w
@@ -765,9 +771,8 @@ LoadLevelLoadBlock:
 -		move.b	#VintID_TitleCard,(V_int_routine).w
 		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
-		bsr.w	Process_Nem_Queue_Init
 		bsr.w	Process_Kos_Module_Queue
-		tst.b	(Kos_modules_left).w
+		tst.w	(Kos_modules_left).w
 		bne.s	-
 		rts
 ; End of function LoadLevelLoadBlock
@@ -791,7 +796,7 @@ LoadLevelLoadBlock2:
 		lea	(RAM_start).l,a1
 		bsr.w	Kos_Decomp
 		bsr.s	Load_Level
-		bsr.w	LoadPLC_Nem
+		bsr.w	LoadPLC_KosM
 		movea.l	(sp)+,a2
 		moveq	#0,d0
 		move.b	(a2),d0

@@ -44,7 +44,7 @@ loc_1F606:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		bsr.w	SolidObjectFull2
+		jsr	(SolidObjectFull2).w
 		move.b	status(a0),d6
 		andi.b	#$18,d6
 		beq.s	loc_1F64A
@@ -62,7 +62,7 @@ loc_1F64A:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F5FE
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1F66C:
@@ -74,7 +74,7 @@ loc_1F66C:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		bsr.w	SolidObjectFull2
+		jsr	(SolidObjectFull2).w
 		swap	d6
 		andi.w	#3,d6
 		beq.s	loc_1F6AE
@@ -92,7 +92,7 @@ loc_1F6AE:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F742
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1F6D0:
@@ -104,7 +104,7 @@ loc_1F6D0:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		bsr.w	SolidObjectFull2
+		jsr	(SolidObjectFull2).w
 		swap	d6
 		andi.w	#$C,d6
 		beq.s	loc_1F712
@@ -122,7 +122,7 @@ loc_1F712:
 		bhi.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F742
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 

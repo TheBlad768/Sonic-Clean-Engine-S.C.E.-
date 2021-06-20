@@ -42,7 +42,7 @@ Init_VDP:
 
 ; Clear Palette
 		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a0)
-		move.w	#64-1,d7
+		moveq	#64-1,d7
 
 .clrCRAM:
 		move.w	d0,VDP_data_port-VDP_data_port(a1)

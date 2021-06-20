@@ -18,20 +18,20 @@ TitleCard_Index: offsetTable
 Obj_TitleCardInit:
 		lea	(ArtKosM_TitleCardRedAct).l,a1
 		move.w	#tiles_to_bytes($480),d2
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module).w
 		moveq	#0,d0
 		move.b	(Current_act).w,d0
 		lsl.w	#2,d0
 		movea.l	TitleCardAct_Index(pc,d0.w),a1
 		move.w	#tiles_to_bytes($4BD),d2
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module).w
 		moveq	#0,d0
 		lea	TitleCard_LevelGfx(pc),a1
 		move.b	(Current_zone).w,d0			; Otherwise, just use current zone
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
 		move.w	#tiles_to_bytes($4CD),d2
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module).w
 		move.w	#$5A,$2E(a0)				; Set wait value
 		clr.w	$32(a0)
 		st	$48(a0)
@@ -47,10 +47,10 @@ TitleCardAct_Index:
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardCreate:
-		tst.b	(Kos_modules_left).w
-		bne.s	+							; Wait for KosM queue to clear
-		jsr	(Create_New_Sprite3).l
-		bne.s	+
+		tst.w	(Kos_modules_left).w
+		bne.s	Obj_TitleCard_Return			; Wait for KosM queue to clear
+		jsr	(Create_New_Sprite3).w
+		bne.s	Obj_TitleCard_Return
 		lea	ObjArray_TtlCard(pc),a2
 		moveq	#3,d1
 		tst.b	$44(a0)
@@ -70,10 +70,12 @@ Obj_TitleCardCreate:
 		move.b	#$40,render_flags(a1)
 		move.l	#Map_TitleCard,mappings(a1)
 		move.w	a0,parent2(a1)
-		jsr	(Create_New_Sprite4).l
+		jsr	(Create_New_Sprite4).w
 		dbne	d1,.loop
 		addq.b	#2,routine(a0)
-+		rts
+
+Obj_TitleCard_Return:
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardWait:
@@ -89,7 +91,7 @@ Obj_TitleCardWait:
 		st	(Update_HUD_timer).w
 		st	(Update_HUD_ring_count).w	; Start updating timer and rings again
 		move.b	#30,(Player_1+air_left).w	; Reset air
-		jsr	(Obj_PlayLevelMusic).l			; Play music
+		jsr	(Obj_PlayLevelMusic).w		; Play music
 +		clr.w	$48(a0)
 		addq.b	#2,routine(a0)
 		rts
@@ -111,13 +113,13 @@ Obj_TitleCardWait2:
 		tst.w	$3E(a0)
 		beq.s	+
 		st	(TitleCard_end_flag).w		; If in-level, set end of title card flag.
-+		lea	PLC_Main2(pc),a1
-		jsr	(LoadPLC_Raw_Nem).l
-		jsr	(LoadPLC_KosM).l
-		bsr.w	PLCLoad_Animals
++		lea	(PLC_Main2).l,a6
+		jsr	(LoadPLC_Raw_KosM).w
+		jsr	(LoadPLC2_KosM).w
+		bsr.w	LoadPLC_Animals
 		move.b	#1,(HUD_RAM.status).w
 		clr.b	(Ctrl_1_locked).w
-+		bra.w	Delete_Current_Sprite
++		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardRedBanner:
@@ -127,7 +129,7 @@ Obj_TitleCardRedBanner:
 		tst.b	render_flags(a0)
 		bmi.s	+
 		subq.w	#1,$30(a1)
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 +		cmp.b	$28(a0),d0
 		blo.s		++
@@ -141,7 +143,7 @@ Obj_TitleCardRedBanner:
 		move.w	d0,y_pos(a0)
 		st	$34(a1)
 +		move.b	#$70,6(a0)
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardName:
@@ -156,7 +158,7 @@ Obj_TitleCardElement:
 		tst.b	render_flags(a0)
 		bmi.s	+
 		subq.w	#1,$30(a1)
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 +		cmp.b	$28(a0),d0
 		blo.s		++
@@ -169,7 +171,7 @@ Obj_TitleCardElement:
 		subi.w	#$10,d0
 		move.w	d0,x_pos(a0)
 		st	$34(a1)
-+		bra.w	Draw_Sprite
++		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardAct:
@@ -190,7 +192,7 @@ Obj_TitleCardElement2:
 		cmpi.w	#$20C,x_pos(a0)
 		blo.s		+
 		subq.w	#1,$30(a1)
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 +		cmp.b	$28(a0),d0
 		blo.s		++
@@ -203,7 +205,7 @@ Obj_TitleCardElement2:
 		subi.w	#$10,d0
 		move.w	d0,x_pos(a0)
 		st	$34(a1)
-+		bra.w	Draw_Sprite
++		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 ObjArray_TtlCard:
@@ -264,6 +266,7 @@ ObjArray_TtlCardBonus:
 
 TitleCard_LevelGfx:
 		dc.l ArtKosM_DEZTitleCard	; DEZ
+
 		zonewarning TitleCard_LevelGfx,4
 ; ---------------------------------------------------------------------------
 

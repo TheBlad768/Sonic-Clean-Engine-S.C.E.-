@@ -1,14 +1,14 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-PLCLoad_Animals:
+LoadPLC_Animals:
 		moveq	#0,d0
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#5,d0
 		move.w	Offs_PLCAnimals(pc,d0.w),d0
-		lea	Offs_PLCAnimals(pc,d0.w),a1
-		jmp	(LoadPLC_Raw_Nem).l
+		lea	Offs_PLCAnimals(pc,d0.w),a6
+		jmp	(LoadPLC_Raw_KosM).w
 ; ---------------------------------------------------------------------------
 
 Offs_PLCAnimals: offsetTable
@@ -21,6 +21,6 @@ Offs_PLCAnimals: offsetTable
 ; ---------------------------------------------------------------------------
 
 PLCAnimals_DEZ1: plrlistheader
-		plreq $580, ArtNem_BlueFlicky
-		plreq $592, ArtNem_Chicken
+		plreq $580, ArtKosM_BlueFlicky
+		plreq $592, ArtKosM_Chicken
 PLCAnimals_DEZ1_End

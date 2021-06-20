@@ -12,7 +12,7 @@ SMPS_PushSFXBehaviour	= 0
 SMPS_EnableSpecSFX	= 0
 ;	| If 1, include the Special SFX system. Used by S1's waterfall SFX
 ;
-SMPS_EnableSpinDashSFX	= 0
+SMPS_EnableSpinDashSFX	= 1
 ;	| If 1, include S2's spin dash SFX pitch system
 ;
 SMPS_EnableContSFX	= 0
@@ -59,7 +59,6 @@ PlaySound			= SMPS_QueueSound1
 Play_Sound			= SMPS_QueueSound1
 PlaySound_Special	= SMPS_QueueSound2
 Play_Sound_2		= SMPS_QueueSound2
-PlaySound_Unused	= SMPS_QueueSound3
 
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 

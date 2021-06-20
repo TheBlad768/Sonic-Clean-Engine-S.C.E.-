@@ -22,53 +22,6 @@ LoadObjects_ExtraData:
 
 ; =============== S U B R O U T I N E =======================================
 
-SetUp_ObjAttributesSlotted:
-		moveq	#0,d0
-		move.w	(a1)+,d1					; Maximum number of objects that can be made in this array
-		move.w	d1,d2
-		move.w	(a1)+,d3					; Base VRAM offset of object
-		move.w	(a1)+,d4					; Amount to add to base VRAM offset for each slot
-		moveq	#0,d5
-		move.w	(a1)+,d5					; Index of slot array to use
-		lea	(DPLC_SlottedRAM).w,a2
-		adda.w	d5,a2					; Get the address of the array to use
-		move.b	(a2),d5
-		beq.s	+						; If array is clear, just make the object
-
--		lsr.b	#1,d5						; Check slot (each bit)
-		bcc.s	+						; If clear, make object
-		addq.w	#1,d0					; Increment bit number
-		add.w	d4,d3					; Add VRAM offset
-		dbf	d1,-							; Repeat max times
-		moveq	#0,d0
-		move.l	d0,address(a0)
-		move.l	d0,x_pos(a0)
-		move.l	d0,y_pos(a0)
-		move.b	d0,subtype(a0)
-		move.b	d0,render_flags(a0)
-		move.w	d0,status(a0)				; If no open slots, then destroy this object period
-		addq.w	#8,sp
-		rts
-; ---------------------------------------------------------------------------
-+		bset	d0,(a2)						; Turn this slot on
-		move.b	d0,$3B(a0)
-		move.w	a2,$3C(a0)				; Keep track of slot address and bit number
-		move.w	d3,art_tile(a0)			; Use correct VRAM offset
-		move.l	(a1)+,mappings(a0)		; Mapping address
-		move.w	(a1)+,priority(a0)			; Priority
-		move.b	(a1)+,width_pixels(a0)		; Width
-		move.b	(a1)+,height_pixels(a0)	; Height
-		move.b	(a1)+,mapping_frame(a0)	; Frame number
-		move.b	(a1)+,collision_flags(a0)	; Collision number
-		bset	#2,status(a0)					; Turn object slotting on
-		st	objoff_3A(a0)				; CHECKLATER
-		bset	#2,render_flags(a0)			; Use screen coordinates
-		addq.b	#2,routine(a0)			; Next routine
-		rts
-; End of function SetUp_ObjAttributesSlotted
-
-; =============== S U B R O U T I N E =======================================
-
 Perform_DPLC:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0	; Get the frame number
@@ -96,7 +49,7 @@ Perform_DPLC:
 		lsl.w	#4,d3						; d3 is the total number of words to transfer (maximum 16 tiles per transaction)
 		add.w	d3,d4
 		add.w	d3,d4
-		bsr.w	Add_To_DMA_Queue		; Add to queue
+		jsr	(Add_To_DMA_Queue).w		; Add to queue
 		dbf	d5,-							; Keep going
 +		rts
 ; End of function Perform_DPLC
@@ -197,7 +150,7 @@ Obj_Song_Fade_Transition:
 		bpl.s	Displace_PlayerOffObject_Return
 		move.b	subtype(a0),d0
 		move.w	d0,(Level_music).w
-		jsr	(Play_Sound).l
+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 		bra.w	Delete_Current_Sprite
 ; End of function Obj_Song_Fade_Transition
 
@@ -219,13 +172,14 @@ Obj_PlayLevelMusic:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#6,d0
-		lea	LevelMusic_Playlist(pc),a2
+		lea	(LevelMusic_Playlist).l,a2
 		move.b	(a2,d0.w),d0
 		move.w	d0,(Level_music).w
 		btst	#Status_Invincible,(Player_1+status_secondary).w
 		beq.s	+
 		moveq	#bgm_Invincible,d0		; If invincible, play invincibility music
-+		jmp	(PlaySound).l
++		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w	; play music
+		rts
 ; End of function Obj_PlayLevelMusic
 
 ; =============== S U B R O U T I N E =======================================
@@ -254,6 +208,14 @@ Init_BossArena3:
 ObjectsRoutine:
 		moveq	#0,d0
 		move.b	routine(a0),d0
+		adda.w	(a1,d0.w),a1
+		jmp	(a1)
+
+; =============== S U B R O U T I N E =======================================
+
+StackRoutine:
+		andi.w	#$FE,d0
+		movea.l	(sp)+,a1
 		adda.w	(a1,d0.w),a1
 		jmp	(a1)
 
@@ -466,19 +428,11 @@ StartNewLevel:
 
 Wait_Play_Sound:
 		move.b	(V_int_run_count+3).w,d1
-		andi.b	#7,d1
-		bne.s	StartNewLevel.locret
-		bra.w	Play_Sound_2
+		and.b	d2,d1
+		bne.s	+
+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
++		rts
 ; End of function Wait_Play_Sound
-
-; =============== S U B R O U T I N E =======================================
-
-Wait_Play_Sound_2:
-		move.b	(V_int_run_count+3).w,d1
-		andi.b	#$1F,d1
-		bne.s	StartNewLevel.locret
-		bra.w	Play_Sound_2
-; End of function Wait_Play_Sound_2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -501,7 +455,7 @@ Wait_FadeToLevelMusic:
 ; ---------------------------------------------------------------------------
 +		bclr	#7,render_flags(a0)
 		move.w	#$77,$2E(a0)
-		jsr	(Create_New_Sprite).l
+		jsr	(Create_New_Sprite).w
 		bne.s	+
 		move.l	#Obj_Song_Fade_ToLevelMusic,(a1)
 +		movea.l	$34(a0),a1

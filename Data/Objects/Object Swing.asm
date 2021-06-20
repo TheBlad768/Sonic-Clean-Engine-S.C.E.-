@@ -13,10 +13,10 @@ Swing_Setup1:
 ; =============== S U B R O U T I N E =======================================
 
 Swing_Setup2:
-		move.w	#$800,d0
+		move.w	#$200,d0
 		move.w	d0,$3A(a0)
 		move.w	d0,x_vel(a0)
-		move.w	#$460,$3C(a0)
+		move.w	#$20,$3C(a0)
 		bclr	#3,$38(a0)
 		rts
 ; End of function Swing_Setup2
@@ -110,6 +110,8 @@ Swing_UpAndDown_Slow:
 
 Refresh_ChildPosition:
 		movea.w	parent3(a0),a1
+
+Refresh_ChildPosition2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
@@ -127,6 +129,8 @@ Refresh_ChildPosition:
 
 Refresh_Child_X_Position:
 		movea.w	parent3(a0),a1
+
+Refresh_Child_X_Position2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
@@ -139,6 +143,8 @@ Refresh_Child_X_Position:
 
 Refresh_Child_Y_Position:
 		movea.w	parent3(a0),a1
+
+Refresh_Child_Y_Position2:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
@@ -151,6 +157,8 @@ Refresh_Child_Y_Position:
 
 Refresh_ChildPositionAdjusted:
 		movea.w	parent3(a0),a1
+
+Refresh_ChildPositionAdjusted2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
@@ -178,6 +186,8 @@ Refresh_ChildPositionAdjusted:
 
 Refresh_Child_X_PositionAdjusted:
 		movea.w	parent3(a0),a1
+
+Refresh_Child_X_PositionAdjusted2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
@@ -195,6 +205,8 @@ Refresh_Child_X_PositionAdjusted:
 
 Refresh_Child_Y_PositionAdjusted:
 		movea.w	parent3(a0),a1
+
+Refresh_Child_Y_PositionAdjusted2:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
@@ -212,6 +224,8 @@ Refresh_Child_Y_PositionAdjusted:
 
 Refresh_ChildPositionAdjusted_Animate:
 		movea.w	parent3(a0),a1
+
+Refresh_ChildPositionAdjusted_Animate2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
@@ -239,6 +253,8 @@ Refresh_ChildPositionAdjusted_Animate:
 
 Refresh_Child_X_PositionAdjusted_Animate:
 		movea.w	parent3(a0),a1
+
+Refresh_Child_X_PositionAdjusted_Animate2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
@@ -256,6 +272,8 @@ Refresh_Child_X_PositionAdjusted_Animate:
 
 Refresh_Child_Y_PositionAdjusted_Animate:
 		movea.w	parent3(a0),a1
+
+Refresh_Child_Y_PositionAdjusted_Animate2:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
@@ -456,7 +474,7 @@ Shot_Object_3:
 		exg	d0,d1
 +		swap	d1
 		divu.w	d0,d1
--		move.w	#$100,d0
+-		move.w	#256,d0
 		lsl.w	d5,d0
 		moveq	#8,d6
 		sub.w	d5,d6
@@ -484,3 +502,20 @@ loc_8621A:
 		lsl.w	d5,d1
 		bra.s	-
 ; End of function Shot_Object
+
+; =============== S U B R O U T I N E =======================================
+
+sub_8619A:
+		move.w	objoff_30(a0),d2
+		move.w	objoff_34(a0),d3
+		moveq	#0,d0
+		move.b	objoff_40(a0),d0
+		addq.w	#4,d0
+		move.l	#$100,d4
+		divu.w	d0,d4
+		sub.w	d4,d2
+		sub.w	d4,d3
+		move.w	d2,x_pos(a0)
+		move.w	d3,y_pos(a0)
+		rts
+; End of function sub_8619A

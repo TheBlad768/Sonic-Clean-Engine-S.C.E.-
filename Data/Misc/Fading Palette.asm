@@ -5,13 +5,12 @@ Pal_FadeTo:
 PaletteFadeIn:
 Pal_FadeFromBlack:
 		move.w	#$3F,(Palette_fade_info).w
-		jsr	Pal_FillBlack(pc)
+		bsr.w	Pal_FillBlack
 		move.w	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromBlack
-		bsr.w	Process_Nem_Queue_Init
 		dbf	d4,-
 		rts
 ; End of function Pal_FadeFromBlack
@@ -100,7 +99,6 @@ Pal_FadeToBlack:
 -		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToBlack
-		bsr.w	Process_Nem_Queue_Init
 		dbf	d4,-
 		rts
 ; End of function Pal_FadeToBlack
@@ -176,10 +174,9 @@ Pal_FromBlackWhite:
 		bsr.s	Pal_FillWhite
 		move.w	#$15,d4
 
--		move.b	#$12,(V_int_routine).w
+-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromWhite
-		bsr.w	Process_Nem_Queue_Init
 		dbf	d4,-
 		rts
 ; End of function Pal_FromBlackWhite
@@ -251,10 +248,9 @@ Pal_FadeToWhite:
 		move.w	#$3F,(Palette_fade_info).w
 		move.w	#$15,d4
 
--		move.b	#$12,(V_int_routine).w
+-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToWhite
-		bsr.w	Process_Nem_Queue_Init
 		dbf	d4,-
 		rts
 ; End of function Pal_FadeToWhite

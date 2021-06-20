@@ -56,10 +56,10 @@ Obj_MonitorMain:
 		movem.l	(sp)+,d1-d4
 		bsr.w	Add_SpriteToCollisionResponseList
 		lea	Ani_Monitor(pc),a1
-		bsr.w	Animate_Sprite
+		jsr	(Animate_Sprite).w
 
 loc_1D61A:
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 ; ---------------------------------------------------------------------------
 
 Obj_MonitorAnimate:
@@ -69,8 +69,8 @@ Obj_MonitorAnimate:
 
 .notbroken:
 		lea	Ani_Monitor(pc),a1
-		bsr.w	Animate_Sprite
-		bra.w	Sprite_OnScreen_Test
+		jsr	(Animate_Sprite).w
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -81,7 +81,7 @@ Obj_MonitorFall:
 		bne.s	Obj_MonitorFallUpsideDown		; If so, branch
 
 Obj_MonitorFallUpsideUp:
-		bsr.w	MoveSprite
+		jsr	(MoveSprite).w
 		tst.w	y_vel(a0)						; Is monitor moving up?
 		bmi.s	locret_1D694						; If so, return
 		bsr.w	ObjCheckFloorDist
@@ -97,10 +97,9 @@ Obj_MonitorFallUpsideUp:
 ; ---------------------------------------------------------------------------
 
 Obj_MonitorFallUpsideDown:
-		bsr.w	MoveSprite2
-		subi.w	#$38,y_vel(a0)
+		jsr	(MoveSprite_ReverseGravity).w
 		tst.w	y_vel(a0)						; Is monitor moving down?
-		bpl.s	locret_1D694						; If so, return
+		bmi.s	locret_1D694						; If so, return
 		bsr.w	ObjCheckCeilingDist
 		tst.w	d1								; Is monitor in the ground (ceiling)?
 		beq.s	.inground						; If so, branch
@@ -171,7 +170,7 @@ Obj_MonitorBreak:
 Obj_MonitorSpawnIcon:
 		andi.b	#3,status(a0)
 		clr.b	collision_flags(a0)
-		bsr.w	Create_New_Sprite3
+		jsr	(Create_New_Sprite3).w
 		bne.s	.skipiconcreation
 		move.l	#Obj_MonitorContents,address(a1)
 		move.w	x_pos(a0),x_pos(a1)				; Set icon's position
@@ -181,7 +180,7 @@ Obj_MonitorSpawnIcon:
 		move.b	status(a0),status(a1)
 
 .skipiconcreation:
-		bsr.w	Create_New_Sprite3
+		jsr	(Create_New_Sprite3).w
 		bne.s	.skipexplosioncreation
 		move.l	#Obj_Explosion,address(a1)
 		addq.b	#2,routine(a1)					; => loc_1E61A
@@ -197,7 +196,7 @@ Obj_MonitorSpawnIcon:
 .notremembered:
 		move.b	#$A,anim(a0)					; Display 'broken' animation
 		move.l	#Obj_MonitorAnimate,address(a0)
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -238,7 +237,7 @@ loc_1D7FC:
 
 loc_1D81A:
 		bsr.s	sub_1D820
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -247,7 +246,7 @@ sub_1D820:
 		bne.s	loc_1D83C
 		tst.w	y_vel(a0)
 		bpl.w	loc_1D850
-		bsr.w	MoveSprite2
+		jsr	(MoveSprite2).w
 		addi.w	#$18,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -255,7 +254,7 @@ sub_1D820:
 loc_1D83C:
 		tst.w	y_vel(a0)
 		bmi.w	loc_1D850
-		bsr.w	MoveSprite2
+		jsr	(MoveSprite2).w
 		subi.w	#$18,y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -346,8 +345,8 @@ loc_1DA3E:
 
 loc_1DB2E:
 		subq.w	#1,anim_frame_timer(a0)
-		bmi.w	Delete_Current_Sprite
-		bra.w	Draw_Sprite
+		bmi.w	loc_1EBB6
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Monitor/Object Data/Anim - Monitor.asm"

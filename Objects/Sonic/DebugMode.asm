@@ -32,7 +32,7 @@ loc_92A38:
 		bclr	#Status_Underwater,status(a0)
 		beq.s	Debug_Zone
 		movea.l	a0,a1
-		jsr	(Player_ResetAirTimer).l
+		bsr.w	Player_ResetAirTimer
 		move.w	#$600,(Sonic_Knux_top_speed).w
 		move.w	#$C,(Sonic_Knux_acceleration).w
 		move.w	#$80,(Sonic_Knux_deceleration).w
@@ -65,7 +65,7 @@ Debug_Action:	; Routine 2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
 		bsr.s	Debug_Control
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -166,7 +166,7 @@ Debug_ChgItem:
 .createitem:
 		btst	#bitC,(Ctrl_1_pressed).w	; is button C pressed?
 		beq.s	.backtonormal		; if not, branch
-		jsr	(Create_New_Sprite).l
+		jsr	(Create_New_Sprite).w
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
@@ -190,7 +190,7 @@ Debug_ChgItem:
 		beq.s	.stayindebug						; if not, branch
 		clr.w	(Debug_placement_mode).w		; deactivate debug mode
 		disableInts
-		jsr	(HUD_DrawInitial).l
+		jsr	(HUD_DrawInitial).w
 		move.b	#1,(Update_HUD_score).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		enableInts

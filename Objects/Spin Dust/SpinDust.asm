@@ -62,10 +62,10 @@ loc_18BEC:
 		clr.b	status(a0)
 		andi.w	#$7FFF,art_tile(a0)
 +		lea	Ani_DashSplashDrown(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 		move.l	#ArtUnc_SplashDrown,d6
 		bsr.w	SplashDrown_Load_DPLC
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_18C20:
@@ -106,9 +106,9 @@ loc_18C84:
 
 loc_18C94:
 		lea	Ani_DashSplashDrown(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 		bsr.w	DashDust_Load_DPLC
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_18CAA:
@@ -199,7 +199,7 @@ SplashDrown_Load_DPLC:
 		move.w	d4,d2
 		add.w	d3,d4
 		add.w	d3,d4
-		jsr	(Add_To_DMA_Queue).l
+		jsr	(Add_To_DMA_Queue).w
 		dbf	d5,-
 +		rts
 ; End of function DashDust_Load_DPLC

@@ -6,13 +6,45 @@
 
 ClearScreen:
 Clear_DisplayData:
+		stopZ80
 		dmaFillVRAM 0,$0000,($1000<<4)		; clear VRAM
 		clr.l	(V_scroll_value).w
 		clr.l	(H_scroll_value).w
 		clearRAM Sprite_table_buffer, Sprite_table_buffer_End
 		clearRAM H_scroll_buffer, H_scroll_buffer_End
+		startZ80
 		bra.w	Init_SpriteTable
 ; End of function Clear_DisplayData
+; ---------------------------------------------------------------------------
+; Copies a plane map to a plane PNT, used for a 28-cell wide plane
+; Inputs:
+; a1 = map address
+; d0 = VDP command to write to the PNT
+; d1 = number of cells in a row - 1
+; d2 = number of cell rows - 1
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Plane_Map_To_VRAM_3:
+		lea	(VDP_data_port).l,a6
+		move.l	#vdpCommDelta(planeLocH32(0,1)),d4	; row increment value
+		bra.s	Plane_Map_To_VRAM.loop
+; ---------------------------------------------------------------------------
+; Copies a plane map to a plane PNT, used for a 128-cell wide plane
+; Inputs:
+; a1 = map address
+; d0 = VDP command to write to the PNT
+; d1 = number of cells in a row - 1
+; d2 = number of cell rows - 1
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Plane_Map_To_VRAM_2:
+		lea	(VDP_data_port).l,a6
+		move.l	#vdpCommDelta(planeLocH80(0,1)),d4	; row increment value
+		bra.s	Plane_Map_To_VRAM.loop
 ; ---------------------------------------------------------------------------
 ; Copies a plane map to a plane PNT
 ; Inputs:
@@ -38,21 +70,6 @@ Plane_Map_To_VRAM:
 		rts
 ; End of function Plane_Map_To_VRAM
 ; ---------------------------------------------------------------------------
-; Copies a plane map to a plane PNT, used for a 128-cell wide plane
-; Inputs:
-; a1 = map address
-; d0 = VDP command to write to the PNT
-; d1 = number of cells in a row - 1
-; d2 = number of cell rows - 1
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Plane_Map_To_VRAM_2:
-		lea	(VDP_data_port).l,a6
-		move.l	#vdpCommDelta(planeLocH80(0,1)),d4	; row increment value
-		bra.s	Plane_Map_To_VRAM.loop
-; ---------------------------------------------------------------------------
 ; Copies a plane map to a plane PNT
 ; Inputs:
 ; a1 = map address
@@ -64,7 +81,7 @@ Plane_Map_To_VRAM_2:
 
 ; =============== S U B R O U T I N E =======================================
 
-Plane_Map_To_VRAM_3:
+Plane_Map_To_Add_VRAM:
 		lea	(VDP_data_port).l,a6
 		move.l	#vdpCommDelta(planeLocH40(0,1)),d4
 
@@ -78,7 +95,7 @@ Plane_Map_To_VRAM_3:
 		add.l	d4,d0	; move onto next row
 		dbf	d2,--		; and copy it
 		rts
-; End of function Plane_Map_To_VRAM_3
+; End of function Plane_Map_To_Add_VRAM
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -106,7 +123,6 @@ Copy_Map_Line_To_VRAM:
 		enableInts
 +		rts
 ; End of function Copy_Map_Line_To_VRAM
-
 ; =============== S U B R O U T I N E =======================================
 
 RAM_Map_Data_Copy:

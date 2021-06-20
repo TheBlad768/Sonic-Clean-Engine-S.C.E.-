@@ -45,7 +45,7 @@ loc_181CC:
 
 AirCountdown_Animate:
 		lea	Ani_Shields(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 
 AirCountdown_ChkWater:
 		move.w	(Water_level).w,d0
@@ -75,14 +75,14 @@ loc_18218:
 		add.w	$34(a0),d0
 		move.w	d0,x_pos(a0)
 		bsr.w	AirCountdown_ShowNumber
-		bsr.w	MoveSprite2
+		jsr	(MoveSprite2).w
 		tst.b	render_flags(a0)
 		bpl.s	loc_1824E
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1824E:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 ; AirCountdown_Display and AirCountdown_DisplayNumber were split in this
 ; game, unlike Sonic 2, to fix a bug where the countdown numbers corrupted
@@ -92,13 +92,13 @@ loc_1824E:
 AirCountdown_Display:
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_Shields(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 		bsr.w	AirCountdown_Load_Art
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 AirCountdown_Delete:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 AirCountdown_AirLeft:
@@ -114,15 +114,15 @@ AirCountdown_AirLeft:
 
 loc_18290:
 		lea	Ani_Shields(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 		bsr.w	AirCountdown_Load_Art
 		tst.b	render_flags(a0)
 		bpl.s	loc_182AC
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_182AC:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 AirCountdown_DisplayNumber:
@@ -131,8 +131,8 @@ AirCountdown_DisplayNumber:
 		bhi.s	AirCountdown_Delete
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_Shields(pc),a1
-		jsr	(Animate_Sprite).l
-		jmp	(Draw_Sprite).l
+		jsr	(Animate_Sprite).w
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -191,7 +191,7 @@ AirCountdown_Load_Art:
 		addi.l	#ArtUnc_AirCountDown,d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2
 		move.w	#$C0/2,d3
-		jsr	(Add_To_DMA_Queue).l
+		jsr	(Add_To_DMA_Queue).w
 
 locret_18464:
 		rts
@@ -212,7 +212,7 @@ AirCountdown_Countdown:
 		bpl.w	loc_18594
 		move.w	#$3B,$3C(a0)
 		move.w	#1,$3A(a0)
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#1,d0
 		move.b	d0,$38(a0)
 		moveq	#0,d0
@@ -288,11 +288,11 @@ loc_18594:
 		bpl.s	locret_1858E
 
 loc_185A4:
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#$F,d0
 		addq.w	#8,d0
 		move.w	d0,$3E(a0)
-		jsr	(Create_New_Sprite).l
+		jsr	(Create_New_Sprite).w
 		bne.s	locret_1858E
 		move.l	address(a0),address(a1)
 		move.w	x_pos(a2),x_pos(a1)
@@ -310,7 +310,7 @@ loc_185A4:
 		move.w	y_pos(a2),d0
 		subi.w	#$C,d0
 		move.w	d0,y_pos(a1)
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		move.b	d0,$26(a1)
 		move.w	(Level_frame_counter).w,d0
 		andi.b	#3,d0
@@ -327,7 +327,7 @@ loc_1862A:
 		cmpi.b	#12,d2
 		bhs.s	loc_18676
 		lsr.w	#1,d2
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#3,d0
 		bne.s	loc_1865E
 		bset	#6,$3A(a0)
@@ -357,11 +357,11 @@ Player_ResetAirTimer:
 		move.w	(Level_music).w,d0
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.s	+
-		move.w	#bgm_Invincible,d0	; If invincible, play invincibility music
+		moveq	#bgm_Invincible,d0	; If invincible, play invincibility music
 +		tst.b	(Boss_flag).w
 		beq.s	+
-		move.w	#bgm_MidBoss,d0	; If boss, play boss music
-+		jsr	(Play_Sound).l
+		moveq	#bgm_MidBoss,d0	; If boss, play boss music
++		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 +		move.b	#30,air_left(a1)
 		rts
 ; End of function Player_ResetAirTimer

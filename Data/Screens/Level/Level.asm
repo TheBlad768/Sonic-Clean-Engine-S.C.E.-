@@ -7,17 +7,15 @@
 GM_Level:
 		bset	#GameModeFlag_TitleCard,(Game_mode).w		; Set bit 7 is indicate that we're loading the level
 		sfx	bgm_Fade,0,1,1								; fade out music
-		bsr.w	Clear_Kos_Module_Queue					; Clear KosM PLCs
-		bsr.w	Clear_Nem_Queue						; Clear Nem PLCs
-		bsr.w	Pal_FadeToBlack
+		jsr	(Clear_Kos_Module_Queue).w					; Clear KosM PLCs
+		jsr	(Pal_FadeToBlack).w
 		disableInts
-		bsr.w	Clear_DisplayData
+		jsr	(Clear_DisplayData).w
 		enableInts
 		tst.b	(Last_star_post_hit).w
 		beq.s	+										; If no lampost was set, branch
 		move.w	(Saved_zone_and_act).w,(Current_zone_and_act).w
-+		clearRAM Sprite_table_input, Sprite_table_input_End
-		clearRAM Object_RAM, Object_RAM_End
++		clearRAM Object_RAM, Object_RAM_End
 		clearRAM Lag_frame_count, Lag_frame_count_End
 		clearRAM Camera_RAM, Camera_RAM_End
 		clearRAM Oscillating_variables, Oscillating_variables_End
@@ -42,64 +40,63 @@ GM_Level:
 		ResetDMAQueue
 		moveq	#palid_Sonic,d0
 		move.w	d0,d1
-		bsr.w	LoadPalette								; load Sonic's palette
+		jsr	(LoadPalette).w								; load Sonic's palette
 		move.w	d1,d0
-		bsr.w	LoadPalette_Immediate
-		lea	(PLC_Main).l,a1
-		bsr.w	LoadPLC_Raw_Nem						; load hud and ring art
-		bsr.w	CheckLevelForWater
+		jsr	(LoadPalette_Immediate).w
+		lea	(PLC_Main).l,a6
+		jsr	(LoadPLC_Raw_KosM).w						; load hud and ring art
+		jsr	(CheckLevelForWater).w
 		clearRAM Water_palette_line_2, Normal_palette
 		tst.b	(Water_flag).w
 		beq.s	+
 		move.w	#$8014,(a6)								; H-int enabled
 		moveq	#palid_WaterSonic,d0
 		move.w	d0,d1
-		bsr.w	LoadPalette2								; load Sonic's water palette
+		jsr	(LoadPalette2).w								; load Sonic's water palette
 		move.w	d1,d0
-		bsr.w	LoadPalette2_Immediate
+		jsr	(LoadPalette2_Immediate).w
 +		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#6,d0
-		lea	LevelMusic_Playlist(pc),a1						; load music playlist
+		lea	(LevelMusic_Playlist).l,a1						; load music playlist
 		move.b	(a1,d0.w),d0
 		move.w	d0,(Level_music).w
-		bsr.w	PlaySound								; play music
-		move.l	#Obj_TitleCard,(Object_RAM+$250).w		; load title card object
+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w	; play music
+		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)).w			; load title card object
 
 -		move.b	#VintID_TitleCard,(V_int_routine).w
-		bsr.w	Process_Kos_Queue
-		bsr.w	Wait_VSync
-		bsr.w	Process_Sprites
-		bsr.w	Render_Sprites
-		bsr.w	Process_Nem_Queue_Init
-		bsr.w	Process_Kos_Module_Queue
-		tst.w	(Object_RAM+$298).w					; has title card sequence finished?
-		bne.s	-										; if not, branch
-		tst.l	(Nem_decomp_queue).w						; are there any items in the pattern load cue?
-		bne.s	-										; if yes, branch
+		jsr	(Process_Kos_Queue).w
+		jsr	(Wait_VSync).w
+		jsr	(Process_Sprites).w
+		jsr	(Render_Sprites).w
+		jsr	(Process_Kos_Module_Queue).w
+		tst.w	(Dynamic_object_RAM+(object_size*5)+objoff_48).w		; has title card sequence finished?
+		bne.s	-													; if not, branch
+		tst.w	(Kos_modules_left).w									; are there any items in the pattern load cue?
+		bne.s	-													; if yes, branch
 		disableInts
-		bsr.w	HUD_DrawInitial
+		jsr	(HUD_DrawInitial).w
 		enableInts
-		bsr.w	Get_LevelSizeStart
-		bsr.w	DeformBgLayer
-		bsr.w	LoadLevelLoadBlock
-		bsr.w	LoadLevelLoadBlock2
+		jsr	(Get_LevelSizeStart).w
+		jsr	(DeformBgLayer).w
+		jsr	(LoadLevelLoadBlock).w
+		jsr	(LoadLevelLoadBlock2).w
 		disableInts
-		bsr.w	LevelSetup
+		jsr	(LevelSetup).w
 		enableInts
-		bsr.w	Load_Solids
-		bsr.w	Handle_Onscreen_Water_Height
+		jsr	(Load_Solids).w
+		jsr	(Handle_Onscreen_Water_Height).w
 		moveq	#0,d0
 		move.w	d0,(Ctrl_1_logical).w
 		move.w	d0,(Ctrl_1).w
 		move.b	d0,(HUD_RAM.status).w
 		tst.b	(Last_star_post_hit).w							; are you starting from a lamppost?
 		bne.s	+										; if yes, branch
-		move.w	d0,(Ring_count).w						; set rings
-		move.l	d0,(Timer).w								; clear time
+		move.w	d0,(Ring_count).w						; clear rings
+		move.l	d0,(Timer).w								; clear time	
 		move.b	d0,(Saved_status_secondary).w
 +		move.b	d0,(Time_over_flag).w
-		bsr.w	OscillateNumInit
+		jsr	(OscillateNumInit).w
 		moveq	#1,d0
 		move.b	d0,(Ctrl_1_locked).w
 		move.b	d0,(Update_HUD_score).w					; update score counter
@@ -110,43 +107,42 @@ GM_Level:
 		beq.s	+
 		move.l	#Obj_WaterWave,(v_WaterWave).w
 +		bsr.w	SpawnLevelMainSprites
-		bsr.w	Load_Sprites
-		bsr.w	Load_Rings
-		bsr.w	Process_Sprites
-		bsr.w	Render_Sprites
-		bsr.w	Animate_Tiles
-		move.w	#$708,(Demo_timer).w
-		bsr.w	LoadWaterPalette
+		jsr	(Load_Sprites).w
+		jsr	(Load_Rings).w
+		jsr	(Process_Sprites).w
+		jsr	(Render_Sprites).w
+		jsr	(Animate_Tiles).w
+		jsr	(LoadWaterPalette).w
 		clearRAM Water_palette_line_2, Normal_palette
 		move.w	#$202F,(Palette_fade_info).w
-		bsr.w	Pal_FillBlack
+		jsr	(Pal_FillBlack).w
 		move.w	#$16,(Palette_fade_timer).w
 		move.w	#$7F00,(Ctrl_1).w
 		andi.b	#$7F,(Last_star_post_hit).w
 		bclr	#GameModeFlag_TitleCard,(Game_mode).w		; subtract $80 from mode to end pre-level stuff
 
--		bsr.w	Pause_Game
+Level_Loop:
+		jsr	(Pause_Game).w
 		move.b	#VintID_Level,(V_int_routine).w
-		bsr.w	Process_Kos_Queue
-		bsr.w	Wait_VSync
+		jsr	(Process_Kos_Queue).w
+		jsr	(Wait_VSync).w
 		addq.w	#1,(Level_frame_counter).w
-		bsr.w	Animate_Palette
-		bsr.w	Load_Sprites
-		bsr.w	Process_Sprites
+		jsr	(Animate_Palette).w
+		jsr	(Load_Sprites).w
+		jsr	(Process_Sprites).w
 		tst.b	(Restart_level_flag).w
 		bne.w	GM_Level
-		bsr.w	DeformBgLayer
-		bsr.w	ScreenEvents
-		bsr.w	Handle_Onscreen_Water_Height
-		bsr.w	Load_Rings
-		bsr.w	Animate_Tiles
-		bsr.w	Process_Nem_Queue_Init
-		bsr.w	Process_Kos_Module_Queue
-		bsr.w	OscillateNumDo
-		bsr.w	SynchroAnimate
-		bsr.w	Render_Sprites
-		cmpi.b	#id_Level,(Game_mode).w
-		beq.s	-
+		jsr	(DeformBgLayer).w
+		jsr	(ScreenEvents).w
+		jsr	(Handle_Onscreen_Water_Height).w
+		jsr	(Load_Rings).w
+		jsr	(Animate_Tiles).w
+		jsr	(Process_Kos_Module_Queue).w
+		jsr	(OscillateNumDo).w
+		jsr	(SynchroAnimate).w
+		jsr	(Render_Sprites).w
+		cmpi.b	#id_LevelScreen,(Game_mode).w
+		beq.s	Level_Loop
 		rts
 
 ; =============== S U B R O U T I N E =======================================

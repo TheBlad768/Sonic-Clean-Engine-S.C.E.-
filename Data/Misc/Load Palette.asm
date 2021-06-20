@@ -76,66 +76,84 @@ LoadPalette2_Immediate:
 		dbf	d7,-
 		rts
 ; End of function LoadPalette2_Immediate
-
 ; =============== S U B R O U T I N E =======================================
 
 PalTLoad_Line0:
 		lea	(Target_palette_line_1).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalTLoad_Line0
 
 ; =============== S U B R O U T I N E =======================================
 
 PalTLoad_Line1:
 		lea	(Target_palette_line_2).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalTLoad_Line1
 
 ; =============== S U B R O U T I N E =======================================
 
 PalTLoad_Line2:
 		lea	(Target_palette_line_3).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalTLoad_Line2
 
 ; =============== S U B R O U T I N E =======================================
 
 PalTLoad_Line3:
 		lea	(Target_palette_line_4).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalTLoad_Line3
 
 ; =============== S U B R O U T I N E =======================================
 
 PalLoad_Line0:
 		lea	(Normal_palette_line_1).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalLoad_Line0
 
 ; =============== S U B R O U T I N E =======================================
 
 PalLoad_Line1:
 		lea	(Normal_palette_line_2).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalLoad_Line1
 
 ; =============== S U B R O U T I N E =======================================
 
 PalLoad_Line2:
 		lea	(Normal_palette_line_3).w,a2
-		bra.s	PalLoad_Line
+		bra.s	PalLoad_Line16
 ; End of function PalLoad_Line2
 
 ; =============== S U B R O U T I N E =======================================
 
 PalLoad_Line3:
 		lea	(Normal_palette_line_4).w,a2
+		bra.s	PalLoad_Line16
+; End of function PalLoad_Line2
 
-PalLoad_Line:
-		moveq	#(16/2)-1,d0
+; =============== S U B R O U T I N E =======================================
 
-.loop	move.l	(a1)+,(a2)+
-		dbf	d0,.loop
+PalLoad_Line64:
+	rept 16/2
+		move.l	(a1)+,(a2)+
+	endm
+
+PalLoad_Line48:
+	rept 16/2
+		move.l	(a1)+,(a2)+
+	endm
+
+PalLoad_Line32:
+	rept 16/2
+		move.l	(a1)+,(a2)+
+	endm
+
+PalLoad_Line16:
+	rept 16/2
+		move.l	(a1)+,(a2)+
+	endm
+
 		rts
 ; End of function PalLoad_Line
 

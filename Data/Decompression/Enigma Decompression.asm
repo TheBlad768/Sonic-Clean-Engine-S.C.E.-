@@ -60,7 +60,7 @@ Eni_Decomp_01:
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_100:
-		bsr.w	Eni_Decomp_FetchInlineValue
+		bsr.s	Eni_Decomp_FetchInlineValue
 
 -		move.w	d1,(a1)+
 		dbf	d2,-
@@ -68,7 +68,7 @@ Eni_Decomp_100:
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_101:
-		bsr.w	Eni_Decomp_FetchInlineValue
+		bsr.s	Eni_Decomp_FetchInlineValue
 
 -		move.w	d1,(a1)+
 		addq.w	#1,d1
@@ -77,7 +77,7 @@ Eni_Decomp_101:
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_110:
-		bsr.w	Eni_Decomp_FetchInlineValue
+		bsr.s	Eni_Decomp_FetchInlineValue
 
 -		move.w	d1,(a1)+	; copy inline value
 		subq.w	#1,d1	; decrement
@@ -89,7 +89,7 @@ Eni_Decomp_111:
 		cmpi.w	#$F,d2
 		beq.s	Eni_Decomp_Done
 
--		bsr.w	Eni_Decomp_FetchInlineValue	; fetch new inline value
+-		bsr.s	Eni_Decomp_FetchInlineValue	; fetch new inline value
 		move.w	d1,(a1)+	; copy it
 		dbf	d2,-	; and repeat
 		bra.s	Eni_Decomp_Loop

@@ -16,6 +16,7 @@ Init_SpriteTable:
 		addq.w	#8,a0
 		dbf	d7,-
 		move.b	d0,-5(a0)
+		clearRAM Sprite_table_input, Sprite_table_input_End
 		rts
 ; End of function Init_SpriteTable
 
@@ -87,7 +88,7 @@ Render_Sprites_ScreenSpaceObj:
 		subq.w	#1,d4							; get number of pieces
 		bmi.s	Render_Sprites_NextObj			; if there are 0 pieces, branch
 +		move.w	art_tile(a0),d5
-		jsr	sub_1AF6C(pc)
+		bsr.w	sub_1AF6C
 
 Render_Sprites_NextObj:
 		subq.w	#2,(a5)							; decrement object count
@@ -95,7 +96,7 @@ Render_Sprites_NextObj:
 
 Render_Sprites_NextLevel:
 		lea	$80(a5),a5							; load next priority level
-		cmpa.l	#Sprite_table_input_End,a5
+		cmpa.w	#Sprite_table_input_End,a5
 		blo.w	Render_Sprites_LevelLoop
 		move.w	d7,d6
 		bmi.s	+
@@ -181,7 +182,7 @@ loc_1AEE4:
 		subq.w	#1,d4
 		bmi.s	loc_1AF1C
 		move.w	d6,d3
-		jsr	sub_1B070(pc)
+		bsr.w	sub_1B070
 		move.w	d3,d6
 		tst.w	d7
 		bmi.w	Render_Sprites_NextObj
@@ -214,7 +215,7 @@ loc_1AF46:
 		subq.w	#1,d4
 		bmi.s	loc_1AF62
 		move.w	d6,-(sp)
-		jsr	sub_1B070(pc)
+		bsr.w	sub_1B070
 		move.w	(sp)+,d6
 
 loc_1AF62:

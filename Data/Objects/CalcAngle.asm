@@ -49,7 +49,7 @@ GetArcTan:
 ; ---------------------------------------------------------------------------
 
 GetArcTan_Zero:
-		move.w	#$40,d0		; angle = 90 degrees
+		moveq	#$40,d0		; angle = 90 degrees
 		movem.l	(sp)+,d3-d4
 		rts
 ; End of function GetArcTan

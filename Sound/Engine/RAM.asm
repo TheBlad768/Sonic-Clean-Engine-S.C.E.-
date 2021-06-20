@@ -83,9 +83,10 @@ SMPS_RAM_Variables STRUCT DOTS
 
 	bitfield2:			ds.b 1
 	v_cda_playing:	ds.b 1
+	v_cda_ignore:	ds.b 1
 f_1up_playing:			= 0	; flag indicating 1-up song is playing
-f_speedup:			= 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
-f_fadeinflag			= 2
+f_speedup:				= 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
+f_fadeinflag				= 2
 f_force_pal_tempo		= 3	; flag for if the current song must play at PAL speed on PAL consoles
 f_doubleupdate			= 4
 

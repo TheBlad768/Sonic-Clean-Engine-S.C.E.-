@@ -19,6 +19,9 @@ SMPS_SFX_METADATA macro address,priority,flags
 ; ---------------------------------------------------------------------------
 SMPS_stopZ80 macro
 	move.w	#$100,(SMPS_z80_bus_request).l
+	nop
+	nop
+	nop
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -40,7 +43,7 @@ SMPS_resetZ80 macro
 ; start the Z80
 ; ---------------------------------------------------------------------------
 SMPS_startZ80 macro
-	move.w	#0,(SMPS_z80_bus_request).l
+	clr.w	(SMPS_z80_bus_request).l
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -145,4 +148,8 @@ MCDSend macro	id, arg, arg2
 		move.l arg2,(MCD_Argument2).l
 	endif
 	addq.b  #1,(MCD_Command_Clock).l
+
+.wait2
+	tst.b	(MCD_Status).l		; Waiting for the first command to be executed
+	beq.s	.wait2
 	endm

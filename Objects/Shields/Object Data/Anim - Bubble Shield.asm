@@ -7,3 +7,4 @@ byte_19A80:	dc.b    1,   0,   9,   0,   9,   0,   9,   1,  $A,   1,  $A,   1,  $
 		dc.b    9,   6,   9,   7,  $A,   7,  $A,   7,  $A,   8,   9,   8,   9,   8,   9, $FF
 byte_19AB8:	dc.b	5,   9,	 $B,  $B,  $B, $FD,   0
 byte_19ABF:	dc.b	5,  $C,	 $C,  $B, $FD,	 0,   0
+	even

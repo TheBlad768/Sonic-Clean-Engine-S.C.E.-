@@ -33,25 +33,16 @@ Obj_RingCollect:
 		addq.b	#2,routine(a0)
 		clr.b	collision_flags(a0)
 		move.w	#$80,priority(a0)
-		bsr.s	GiveRing
+		jsr	(GiveRing).w
 
 Obj_RingSparkle:
 		lea	Ani_RingSparkle(pc),a1
-		bsr.w	Animate_Sprite
-		bra.w	Draw_Sprite
+		jsr	(Animate_Sprite).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_RingDelete:
 		bra.w	Delete_Current_Sprite
-
-; =============== S U B R O U T I N E =======================================
-
-GiveRing:
-CollectRing:
-		addq.w	#1,(v_rings).w		; add 1 to rings
-		ori.b	#1,(f_ringcount).w		; update the rings counter
-		sfx	sfx_Ring,1,0,0			; play ring sound
-; End of function GiveRing
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -123,7 +114,7 @@ loc_1A6B6:
 		tst.w	d4
 		bmi.s	loc_1A728
 		move.w	d4,d0
-		bsr.w	GetSineCosine
+		jsr	(GetSineCosine).w
 		move.w	d4,d2
 		lsr.w	#8,d2
 		asl.w	d2,d0
@@ -156,7 +147,7 @@ loc_1A75C:
 		bmi.s	loc_1A7B0
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0
-		andi.b	#7,d0
+		andi.b	#3,d0
 		bne.s	loc_1A7B0
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A79C
@@ -179,32 +170,32 @@ loc_1A79C:
 
 loc_1A7B0:
 		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A7C2:
 		addq.b	#2,routine(a0)
 		clr.b	collision_flags(a0)
 		move.w	#$80,priority(a0)
-		bsr.w	GiveRing
+		jsr	(GiveRing).w
 
 loc_1A7D6:
 		lea	Ani_RingSparkle(pc),a1
-		bsr.w	Animate_Sprite
-		bra.w	Draw_Sprite
+		jsr	(Animate_Sprite).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A7E4:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A7E8:
-		bsr.w	MoveSprite_TestGravity2
+		bsr.w	MoveSprite2_TestGravity
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A83C
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0
-		andi.b	#7,d0
+		andi.b	#3,d0
 		bne.s	loc_1A83C
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A828
@@ -227,7 +218,7 @@ loc_1A828:
 
 loc_1A83C:
 		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_Attracted_Ring:
@@ -260,7 +251,7 @@ loc_1A8C6:
 		cmpi.w	#128+320+192,d0
 		bhi.s	loc_1A8E4
 		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A8E4:
@@ -270,19 +261,19 @@ loc_1A8E4:
 		bclr	#7,(a2)
 
 loc_1A8F0:
-		move.w	$30(a0),d0
+		move.w	objoff_30(a0),d0
 		beq.s	loc_1A8FC
 		movea.w	d0,a2
 		clr.w	(a2)
 
 loc_1A8FC:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 AttractedRing_GiveRing:
 		clr.b	collision_flags(a0)
 		move.w	#$80,priority(a0)
-		bsr.w	GiveRing
+		jsr	(GiveRing).w
 		move.l	#loc_1A920,address(a0)
 		clr.b	routine(a0)
 
@@ -290,12 +281,12 @@ loc_1A920:
 		tst.b	routine(a0)
 		bne.s	loc_1A934
 		lea	Ani_RingSparkle(pc),a1
-		bsr.w	Animate_Sprite
-		bra.w	Draw_Sprite
+		jsr	(Animate_Sprite).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A934:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 

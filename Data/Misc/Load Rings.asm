@@ -124,8 +124,8 @@ Test_Ring_Collisions:
 		move.w	y_pos(a0),d3
 		subi.w	#$40,d2
 		subi.w	#$40,d3
-		move.w	#6,d1
-		move.w	#$C,d6
+		moveq	#6,d1
+		moveq	#$C,d6
 		move.w	#$80,d4
 		move.w	#$80,d5
 		bra.s	Test_Ring_Collisions_NextRing
@@ -134,14 +134,14 @@ Test_Ring_Collisions:
 Test_Ring_Collisions_NoAttraction:
 		move.w	x_pos(a0),d2
 		move.w	y_pos(a0),d3
-		subi.w	#8,d2
+		subq.w	#8,d2
 		moveq	#0,d5
 		move.b	y_radius(a0),d5
 		subq.b	#3,d5
 		sub.w	d5,d3
-		move.w	#6,d1
-		move.w	#$C,d6
-		move.w	#$10,d4
+		moveq	#6,d1
+		moveq	#$C,d6
+		moveq	#$10,d4
 		add.w	d5,d5
 
 Test_Ring_Collisions_NextRing:
@@ -180,7 +180,7 @@ loc_EABE:
 
 loc_EAC6:
 		move.w	#(6<<8)|((CMap_Ring_Spark-CMap_Ring)/8),(a4)
-		jsr	(GiveRing).l
+		jsr	(GiveRing).w
 		lea	(Ring_consumption_list).w,a3
 
 -		tst.w	(a3)+
@@ -202,12 +202,12 @@ locret_EAE4:
 
 Test_Ring_Collisions_AttractRing:
 		movea.l	a1,a3
-		jsr	Create_New_Sprite(pc)
+		bsr.w	Create_New_Sprite
 		bne.s	loc_EB16
 		move.l	#Obj_Attracted_Ring,address(a1)
 		move.w	(a3),x_pos(a1)
 		move.w	2(a3),y_pos(a1)
-		move.w	a4,$30(a1)
+		move.w	a4,objoff_30(a1)
 		move.w	#-1,(a4)
 		rts
 ; ---------------------------------------------------------------------------
@@ -316,6 +316,15 @@ AddRings:
 		ori.b	#1,(Update_HUD_ring_count).w	; Update ring counter
 		rts
 ; End of function AddRings
+
+; =============== S U B R O U T I N E =======================================
+
+GiveRing:
+CollectRing:
+		addq.w	#1,(v_rings).w		; add 1 to rings
+		ori.b	#1,(f_ringcount).w		; update the rings counter
+		sfx	sfx_Ring,1,0,0			; play ring sound
+; End of function GiveRing
 
 ; =============== S U B R O U T I N E =======================================
 

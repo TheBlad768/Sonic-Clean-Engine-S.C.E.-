@@ -1,11 +1,9 @@
 Map_TitleCard:
-		dc.w word_2EE3A-Map_TitleCard	; Null
+		dc.w 0							; Null
 		dc.w word_2EE3C-Map_TitleCard	; Red ACT
 		dc.w word_2EE9E-Map_TitleCard	; ACT
 		dc.w word_2EEAC-Map_TitleCard	; ZONE
 		dc.w word_2EEC6-Map_TitleCard	; DEATH EGG
-word_2EE3A:
-		dc.w 0
 word_2EE3C:
 		dc.w $10
 		dc.b  $58, 9, $84, $90, $FF, $E8

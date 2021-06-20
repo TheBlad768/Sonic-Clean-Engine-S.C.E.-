@@ -31,22 +31,22 @@ Render_HUD_Left:
 		subq.w	#2,HUD_RAM.Xpos-HUD_RAM(a1)
 		cmpi.w	#$10,HUD_RAM.Xpos-HUD_RAM(a1)
 		bhs.s	Render_HUD_Process
-		sf	HUD_RAM.status-HUD_RAM(a1)
+		clr.b	HUD_RAM.status-HUD_RAM(a1)
 
 Render_HUD_Process:
 		moveq	#0,d4								; Frame #0
 		btst	#3,(Level_frame_counter+1).w
-		bne.s	Render_HUD_Process_Draw
+		bne.s	Render_HUD_Draw
 		tst.w	(Ring_count).w						; Do you have any rings?
 		bne.s	Render_HUD_Process_Time			; If yes, branch
 		addq.w	#1*2,d4								; Hide rings counter
 
 Render_HUD_Process_Time:
 		cmpi.b	#9,(Timer_minute).w					; Have 9 minutes elapsed?
-		bne.s	Render_HUD_Process_Draw			; If not, branch
+		bne.s	Render_HUD_Draw					; If not, branch
 		addq.w	#2*2,d4								; Hide time counter
 
-Render_HUD_Process_Draw:
+Render_HUD_Draw:
 		move.w	HUD_RAM.Xpos-HUD_RAM(a1),d0		; Xpos
 		move.w	HUD_RAM.Ypos-HUD_RAM(a1),d1		; Ypos
 		move.w	#make_art_tile(ArtTile_HUD,0,1),d5		; VRAM

@@ -19,21 +19,10 @@ Queue_Kos_Module:
 		addq.w	#6,a2	; otherwise, check next slot
 		tst.l	(a2)
 		bne.s	.findFreeSlot
-
 		move.l	a1,(a2)+	; store source address
 		move.w	d2,(a2)+	; store destination VRAM address
 		rts
 ; End of function Queue_Kos_Module
-; ---------------------------------------------------------------------------
-; Clears the Kosinski Module decompression queue and its associated variables
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Clear_Kos_Module_Queue:
-		clearRAM Kos_decomp_queue_count, Kos_module_queue_End	; Clear the KosM bytes
-		rts
-; End of function Clear_Kos_Module_Queue
 ; ---------------------------------------------------------------------------
 ; Adds pattern load requests to the Kosinski Module decompression queue
 ; Input: d0 = ID of the PLC to load
@@ -42,6 +31,20 @@ Clear_Kos_Module_Queue:
 ; =============== S U B R O U T I N E =======================================
 
 LoadPLC_KosM:
+		move.w	(Current_zone_and_act).w,d0
+		ror.b	#2,d0
+		lsr.w	#4,d0
+		lea	(Offs_PLC).l,a6
+		adda.w	(a6,d0.w),a6
+		bra.s	LoadPLC_Raw_KosM
+; ---------------------------------------------------------------------------
+; Adds pattern load requests to the Kosinski Module decompression queue
+; Input: d0 = ID of the PLC to load
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+LoadPLC2_KosM:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#4,d0
@@ -78,19 +81,29 @@ Process_Kos_Module_Queue_Init:
 		move.w	d3,d0
 		rol.w	#5,d0
 		andi.w	#$1F,d0					; get number of complete modules
-		move.b	d0,(Kos_modules_left).w
+		move.w	d0,(Kos_modules_left).w
 		andi.w	#$7FF,d3				; get size of last module in words
 		bne.s	.Gotleftover				; branch if it's non-zero
-		subq.b	#1,(Kos_modules_left).w	; otherwise decrement the number of modules
+		subq.w	#1,(Kos_modules_left).w	; otherwise decrement the number of modules
 		move.w	#$800,d3				; and take the size of the last module to be $800 words
 
 .Gotleftover:
 		move.w	d3,(Kos_last_module_size).w
 		move.w	d2,(Kos_module_destination).w
 		move.l	a1,(Kos_module_queue).w
-		addq.b	#1,(Kos_modules_left).w	; store total number of modules
+		addq.w	#1,(Kos_modules_left).w	; store total number of modules
 		rts
 ; End of function Process_Kos_Module_Queue_Init
+; ---------------------------------------------------------------------------
+; Clears the Kosinski Module decompression queue and its associated variables
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Clear_Kos_Module_Queue:
+		clearRAM2 Kos_decomp_queue_count, Kos_module_queue_End	; Clear the KosM bytes
+		rts
+; End of function Clear_Kos_Module_Queue
 ; ---------------------------------------------------------------------------
 ; Processes the first module on the queue
 ; ---------------------------------------------------------------------------
@@ -98,15 +111,15 @@ Process_Kos_Module_Queue_Init:
 ; =============== S U B R O U T I N E =======================================
 
 Process_Kos_Module_Queue:
-		tst.b	(Kos_modules_left).w
+		tst.w	(Kos_modules_left).w
 		beq.s	.Done
 		bmi.s	.DecompressionStarted
 		cmpi.w	#(Kos_decomp_queue_End-Kos_decomp_queue)/8,(Kos_decomp_queue_count).w
-		bcc.s	.Done					; branch if the Kosinski decompression queue is full
+		bhs.s	.Done						; branch if the Kosinski decompression queue is full
 		movea.l	(Kos_module_queue).w,a1
 		lea	(Kos_decomp_buffer).w,a2
-		bsr.w	Queue_Kos				; add current module to decompression queue
-		ori.b	#$80,(Kos_modules_left).w	; and set bit to signify decompression in progress
+		bsr.w	Queue_Kos					; add current module to decompression queue
+		ori.w	#$8000,(Kos_modules_left).w	; and set bit to signify decompression in progress
 
 .Done:
 		rts
@@ -117,9 +130,9 @@ Process_Kos_Module_Queue:
 		bne.s	.Done					; branch if the decompression isn't complete
 
 		; otherwise, DMA the decompressed data to VRAM
-		andi.b	#$7F,(Kos_modules_left).w
+		andi.w	#$7F,(Kos_modules_left).w
 		move.w	#$800,d3
-		subq.b	#1,(Kos_modules_left).w
+		subq.w	#1,(Kos_modules_left).w
 		bne.s	.Skip	; branch if it isn't the last module
 		move.w	(Kos_last_module_size).w,d3
 
@@ -136,11 +149,10 @@ Process_Kos_Module_Queue:
 		add.l	d0,d1						; round to the nearest $10 boundary
 		move.l	d1,(Kos_module_queue).w		; and set new source
 		move.l	#Kos_decomp_buffer,d1
-		move.w	sr,-(sp)						; Save current interrupt mask
-		disableInts							; Mask off interrupts
+		disableIntsSave
 		bsr.w	Add_To_DMA_Queue
-		move.w	(sp)+,sr						; Restore interrupts to previous state
-		tst.b	(Kos_modules_left).w
+		enableIntsSave
+		tst.w	(Kos_modules_left).w
 		bne.s	.Done						; return if this wasn't the last module
 		lea	(Kos_module_queue).w,a0
 		lea	(Kos_module_queue+6).w,a1
@@ -189,9 +201,9 @@ Set_Kos_Bookmark:
 		bpl.s	.Done							; branch if a decompression wasn't in progress
 		move.l	$42(sp),d0						; check address V-int is supposed to rte to
 		cmpi.l	#Process_Kos_Queue.Main,d0
-		bcs.s	.Done
+		blo.s		.Done
 		cmpi.l	#Process_Kos_Queue.Done,d0
-		bcc.s	.Done
+		bhs.s	.Done
 		move.l	d0,(Kos_decomp_bookmark).w
 		move.l	#Backup_Kos_Registers,$42(sp)	; force V-int to rte here instead if needed
 
@@ -213,7 +225,9 @@ Process_Kos_Queue:
 		move.l	(Kos_decomp_bookmark).w,-(sp)
 		move.w	(Kos_decomp_stored_SR).w,-(sp)
 		moveq	#(1<<_Kos_LoopUnroll)-1,d7
+	if _Kos_UseLUT==1
 		lea	KosDec_ByteMap(pc),a4		; Load LUT pointer.
+	endif
 		rte
 ; ---------------------------------------------------------------------------
 

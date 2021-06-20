@@ -19,17 +19,17 @@ Obj_LevelResultsInit:
 		sfx	bgm_Fade,0,1,1							; fade out music
 		lea	(ArtKosM_ResultsGeneral).l,a1
 		move.w	#tiles_to_bytes($480),d2
-		jsr	(Queue_Kos_Module).l						; General art for
+		jsr	(Queue_Kos_Module).w					; General art
 		moveq	#0,d0
 		lea	TitleCardAct_Index(pc),a1
 		move.b	(Current_act).w,d0
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
 		move.w	#tiles_to_bytes($4C8),d2
-		jsr	(Queue_Kos_Module).l
+		jsr	(Queue_Kos_Module).w
 		lea	(ArtKosM_ResultsSONIC).l,a1				; Select character name to use based on character of course
 		move.w	#tiles_to_bytes($4D8),d2
-		jsr	(Queue_Kos_Module).l						; Load character name graphics
+		jsr	(Queue_Kos_Module).w					; Load character name graphics
 		clr.b	(Update_HUD_timer).w					; Ensure timer isn't being updated currently
 		moveq	#0,d0
 		move.b	(Timer_minute).w,d0
@@ -67,9 +67,9 @@ loc_2DBA8:
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsCreate:
-		tst.b	(Kos_modules_left).w
+		tst.w	(Kos_modules_left).w
 		bne.s	locret_2DC34							; Don't load the objects until the art has been loaded
-		bsr.w	Create_New_Sprite3
+		jsr	(Create_New_Sprite3).w
 		bne.s	locret_2DC34
 		lea	ObjArray_LevResults(pc),a2
 		moveq	#12-1,d1								; Make 12 objects
@@ -86,14 +86,14 @@ Obj_LevelResultsCreate:
 		move.b	#$40,4(a1)
 		move.l	#Map_Results,mappings(a1)
 		move.w	a0,parent2(a1)
-		jsr	(Create_New_Sprite4).l
+		jsr	(Create_New_Sprite4).w
 		dbne	d1,-
 		addq.b	#2,routine(a0)
 		tst.b	(LastAct_end_flag).w
 		bne.s	locret_2DC34							; If this is the last act, branch
-		tst.b	(NoBackgroundEvent_flag).w
+		tst.b	(NoBackground_event_flag).w
 		bne.s	locret_2DC34
-		st	(BackgroundEvent_flag).w					; Set the background event flag for the given level (presumably for transitions)
+		st	(Background_event_flag).w					; Set the background event flag for the given level (presumably for transitions)
 
 locret_2DC34:
 		rts
@@ -126,7 +126,7 @@ loc_2DC7E:
 		add.w	d0,(Total_bonus_countup).w			; Add to total score for level
 		tst.w	d0
 		beq.s	loc_2DCA0							; Branch once score has finished counting down
-		jsr	(HUD_AddToScore).l						; Add to actual score
+		jsr	(HUD_AddToScore).w						; Add to actual score
 		move.w	(Level_frame_counter).w,d0
 		andi.w	#3,d0
 		bne.s	locret_2DC9E
@@ -166,42 +166,42 @@ loc_2DCE2:
 ; ---------------------------------------------------------------------------
 +		clr.b	(TitleCard_end_flag).w				; Stop level results flag and set title card finished flag
 		st	(LevResults_end_flag).w
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_LevResultsCharName:
 		move.l	#Obj_LevResultsGeneral,address(a0)
 
 Obj_LevResultsGeneral:
-		jsr	LevelResults_MoveElement(pc)
-		bra.w	Draw_Sprite
+		bsr.s	LevelResults_MoveElement
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsTimeBonus:
-		jsr	LevelResults_MoveElement(pc)
+		bsr.s	LevelResults_MoveElement
 		move.w	(Time_bonus_countdown).w,d0
 		bra.s	loc_2DDBE
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsRingBonus:
-		jsr	LevelResults_MoveElement(pc)
+		bsr.s	LevelResults_MoveElement
 		move.w	(Ring_bonus_countdown).w,d0
 		bra.s	loc_2DDBE
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsTotal:
-		jsr	LevelResults_MoveElement(pc)
+		bsr.s	LevelResults_MoveElement
 		move.w	(Total_bonus_countup).w,d0
 
 loc_2DDBE:
 		bsr.s	LevResults_DisplayScore
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
 LevResults_DisplayScore:
 		move.w	#7,$16(a0)
-		jsr	LevResults_GetDecimalScore(pc)
+		bsr.w	LevResults_GetDecimalScore
 		rol.l	#4,d1
 		lea	$18(a0),a1
 		move.w	$10(a0),d2
@@ -235,7 +235,7 @@ LevelResults_MoveElement:
 		bmi.s	loc_2DE20
 		subq.w	#1,$30(a1)		; If offscreen, subtract from number of elements and delete
 		addq.w	#4,sp
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_2DE20:

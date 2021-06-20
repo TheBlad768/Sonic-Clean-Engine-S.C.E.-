@@ -61,8 +61,7 @@ ObjectTable_Count:				= 768	; The maximum objects on the level. Even addresses o
 ; PLC queues
 ; ---------------------------------------------------------------------------
 
-PLCNem_Count:					= 32		; The larger the queues, the more RAM is used for the buffer
-PLCKosM_Count:					= 32
+PLCKosM_Count:					= 32		; The larger the queues, the more RAM is used for the buffer
 
 ; ---------------------------------------------------------------------------
 ; function using these variables
@@ -76,8 +75,8 @@ offset :=	GameModes
 ptrsize :=	1
 idstart :=	0
 
-id_LevelSelect =					id(ptr_GM_LevelSelect)		; 0
-id_Level =						id(ptr_GM_Level)				; 4
+id_LevelSelectScreen =				id(ptr_GM_LevelSelect)		; 0
+id_LevelScreen =					id(ptr_GM_Level)				; 4
 
 GameModeFlag_TitleCard =		7							; flag bit
 GameModeID_TitleCard =			1<<GameModeFlag_TitleCard	; flag mask
@@ -177,6 +176,8 @@ btnDn:		equ %00000010		; Down ($02)
 btnUp:		equ %00000001		; Up	($01)
 btnDir:		equ %00001111		; Any direction ($0F)
 btnABC:		equ %01110000		; A, B or C ($70)
+
+; Joypad bits
 bitStart:		equ 7
 bitA:		equ 6
 bitC:		equ 5
@@ -231,6 +232,10 @@ collision_flags =			$28 ; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
 collision_property =		$29 ; byte ; usage varies, bosses use it as a hit counter
 shield_reaction =			$2B ; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
 subtype =				$2C ; byte
+wait =					$2E ; word
+aniraw =					$30 ; long
+jump =					$34 ; long
+count =					$39 ; byte
 ros_bit =					$3B ; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
 ros_addr =				$3C ; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 routine_secondary =		$3C ; byte ; used by monitors for this purpose at least
@@ -422,6 +427,8 @@ ArtTile_Sonic				= $680
 ArtTile_Ring				= $6B4
 ArtTile_Ring_Sparks		= $6B8
 ArtTile_HUD				= $6BC
+ArtTile_HUDBoss			= $7D0
+ArtTile_HUDDeath		= $7C0
 ArtTile_Powerups			= $4AC
 ArtTile_Shield			= $79C
 ArtTile_Shield_Sparks		= $7BB

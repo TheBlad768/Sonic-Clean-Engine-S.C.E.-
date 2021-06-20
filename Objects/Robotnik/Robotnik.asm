@@ -5,12 +5,12 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_RobotnikHead3:
-		jsr	(Refresh_ChildPositionAdjusted).l
+		jsr	(Refresh_ChildPositionAdjusted).w
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	RobotnikHead3_Index(pc,d0.w),d1
 		jsr	RobotnikHead3_Index(pc,d1.w)
-		jmp	(Child_Draw_Sprite2).l
+		jmp	(Child_Draw_Sprite2).w
 ; ---------------------------------------------------------------------------
 
 RobotnikHead3_Index: offsetTable
@@ -21,7 +21,7 @@ RobotnikHead3_Index: offsetTable
 
 Obj_RobotnikHead3Init:
 		lea	ObjDat_RobotnikHead(pc),a1
-		jsr	(SetUp_ObjAttributes).l
+		jsr	(SetUp_ObjAttributes).w
 		move.l	#AniRaw_RobotnikHead,$30(a0)
 		movea.w	parent3(a0),a1
 		btst	#7,art_tile(a1)
@@ -33,7 +33,7 @@ Obj_RobotnikHead3Init:
 Obj_RobotnikHead3Main:
 		cmpi.b	#id_SonicHurt,(Player_1+routine).w
 		bhs.s	Obj_RobotnikHead3_Laugh
-		jsr	(Animate_Raw).l
+		jsr	(Animate_Raw).w
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.s	++
@@ -54,12 +54,12 @@ Obj_RobotnikHead3End:
 		btst	#7,status(a1)
 		bne.s	Obj_RobotnikHeadEnd
 		lea	AniRaw_RobotnikHead(pc),a1
-		jmp	(Animate_RawNoSST).l
+		jmp	(Animate_RawNoSST).w
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3_Laugh:
 		lea	AniRaw_RobotnikHead_Laugh(pc),a1
-		jmp	(Animate_RawNoSST).l
+		jmp	(Animate_RawNoSST).w
 ; ---------------------------------------------------------------------------
 ; Robotnik Head 4
 ; ---------------------------------------------------------------------------
@@ -67,8 +67,8 @@ Obj_RobotnikHead3_Laugh:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_RobotnikHead4:
-		jsr	(Refresh_ChildPositionAdjusted).l
-		jsr	(Child_GetPriority).l
+		jsr	(Refresh_ChildPositionAdjusted).w
+		jsr	(Child_GetPriority).w
 		moveq	#0,d0
 		move.b	routine(a0),d0
 		move.w	RobotnikHead4_Index(pc,d0.w),d1
@@ -76,7 +76,7 @@ Obj_RobotnikHead4:
 		movea.w	parent3(a0),a1
 		btst	#5,$38(a1)
 		bne.s	loc_67CFE
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 RobotnikHead4_Index: offsetTable
@@ -86,7 +86,7 @@ RobotnikHead4_Index: offsetTable
 ; ---------------------------------------------------------------------------
 
 loc_67CFE:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 ; Fire Ship
 ; ---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ loc_67CFE:
 
 Obj_RobotnikFire:
 		lea	ObjDat3_RobotnikFire(pc),a1
-		jsr	(SetUp_ObjAttributes3).l
+		jsr	(SetUp_ObjAttributes3).w
 		move.l	#+,address(a0)
 +		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
@@ -104,13 +104,13 @@ Obj_RobotnikFire:
 		bne.s	Obj_RobotnikHeadEnd
 		btst	#0,(V_int_run_count+3).w
 		bne.w	Obj_RobotnikHeadEnd
-		jsr	(Refresh_ChildPositionAdjusted).l
-		jsr	(Add_SpriteToCollisionResponseList).l
-		jmp	(Draw_Sprite).l
+		jsr	(Refresh_ChildPositionAdjusted).w
+		jsr	(Add_SpriteToCollisionResponseList).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 RobotnikFire_Remove:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 

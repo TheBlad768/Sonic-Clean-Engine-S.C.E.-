@@ -1,5 +1,6 @@
 ; ===========================================================================
 ; Sonic 2 Clone Driver v2
+; See https://github.com/Clownacy/Sonic-2-Clone-Driver-v2
 ; ===========================================================================
 
 	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.7+ prototype)"
@@ -588,6 +589,9 @@ CycleSoundQueue:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 Sound_PlayCDA:
+	bclr	#0,SMPS_RAM.variables.v_cda_ignore(a6)
+	bne.w	Sound_PlayBGM
+
 	tst.b	(SegaCD_Mode).w
 	beq.w	Sound_PlayBGM
 
@@ -601,7 +605,7 @@ Sound_PlayCDA:
 ;	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority (S2 removes this one)
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	lea	SMPS_RAM.v_1up_ram_copy(a6),a1
-	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; Backup music track data
+	moveq	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; Backup music track data
 ; loc_72012:
 .backuptrackramloop:
 	move.l	(a0)+,(a1)+
@@ -616,7 +620,7 @@ Sound_PlayCDA:
 
 	lea	SMPS_RAM.variables(a6),a0
 	lea	SMPS_RAM.variables_backup(a6),a1
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
+	moveq	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
 
 .backupvariablesloop:
 	move.l	(a0)+,(a1)+
@@ -636,23 +640,27 @@ Sound_PlayCDA:
 
 ;	subi.w	#MusID__First,d7					; subtract $E5 to get track number
 
+	move.w	d7,d1
+	add.w	d1,d1
+	add.w	d1,d1
+	lea	PlayCD_Index-4(pc,d1.w),a0
 	moveq	#0,d0
-	move.b	PlayCD_Index-1(pc,d7.w),d0			; play track repeatedly
-	MCDSend	d0, d7							; request MCD a track
+	move.b	(a0),d0								; argument
+	move.l	(a0),d1								; loop state
+	andi.l	#$FFFFFF,d1							; get loop
+	MCDSend	d0, d7, d1						; request MCD a track
 	addq.w	#4,sp								; Tamper return value so we don't return to caller
-
-.ret
 	rts
 ; ===========================================================================
 
 PlayCD_Index:
-	dc.b _MCD_PlayTrack			; $01 (DEZ)
-	dc.b _MCD_PlayTrack			; $02 (Mid Boss)
-	dc.b _MCD_PlayTrack			; $03 (Boss)
-	dc.b _MCD_PlayTrack			; $04 (Invincible)
-	dc.b _MCD_PlayTrack_Once	; $05 (Act Clear)
-	dc.b _MCD_PlayTrack_Once	; $06 (Countdown)
-	dc.b _MCD_PlayTrack			; $07 (Speedup)
+	dc.l _MCD_PlayTrack<<24|$00000000			; $01 (DEZ)
+	dc.l _MCD_PlayTrack<<24|$00000000			; $02 (Mid Boss)
+	dc.l _MCD_PlayTrack<<24|$00000000			; $03 (Boss)
+	dc.l _MCD_PlayTrack<<24|$00000000			; $04 (Invincible)
+	dc.l _MCD_PlayTrack_Once<<24|$00000000	; $05 (Act Clear)
+	dc.l _MCD_PlayTrack_Once<<24|$00000000	; $06 (Countdown)
+	dc.l _MCD_PlayTrack<<24|$00000000			; $07 (Speedup)
 	even
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -772,7 +780,7 @@ Sound_PlayBGM:
 ;	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority (S2 removes this one)
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	lea	SMPS_RAM.v_1up_ram_copy(a6),a1
-	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; Backup music track data
+	moveq	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; Backup music track data
 ; loc_72012:
 .backuptrackramloop:
 	move.l	(a0)+,(a1)+
@@ -787,7 +795,7 @@ Sound_PlayBGM:
 
 	lea	SMPS_RAM.variables(a6),a0
 	lea	SMPS_RAM.variables_backup(a6),a1
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
+	moveq	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
 
 .backupvariablesloop:
 	move.l	(a0)+,(a1)+
@@ -816,7 +824,7 @@ Sound_PlayBGM:
 	tst.b SMPS_RAM.variables.v_cda_playing(a6)
 	beq.s	.NoCD
 	MCDSend	#_MCD_PauseTrack, #0		; Stop
-	sf	SMPS_RAM.variables.v_cda_playing(a6)
+	clr.b	SMPS_RAM.variables.v_cda_playing(a6)
 
 .NoCD:
 	bsr.w	InitMusicPlayback
@@ -1676,7 +1684,7 @@ StopAllSound:
 	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
 	beq.s	.NoCD
 	MCDSend	#_MCD_PauseTrack, #0		; Stop
-	sf	SMPS_RAM.variables.v_cda_playing(a6)
+	clr.b	SMPS_RAM.variables.v_cda_playing(a6)
 
 .NoCD:
 	moveq	#$27,d0		; Timers, FM3/FM6 mode
@@ -1685,7 +1693,7 @@ StopAllSound:
 
 	; Clear variables
 	lea	SMPS_RAM.variables(a6),a0
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d1
+	moveq	#(SMPS_RAM_Variables.len/4)-1,d1
 	moveq	#0,d0
 ; loc_725B6:
 .clearvariablesloop:
@@ -1742,7 +1750,7 @@ InitMusicPlayback:
 
 	; Clear variables
 	lea	SMPS_RAM.variables(a6),a0
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d1
+	moveq	#(SMPS_RAM_Variables.len/4)-1,d1
 	moveq	#0,d0
 
 ; loc_725E4:
@@ -1759,7 +1767,7 @@ InitMusicPlayback:
 
 	; Clear music track RAM
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
-	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1
+	moveq	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1
 
 ; loc_725E4:
 .clearramloop:
@@ -2592,7 +2600,7 @@ cfFadeInToPrevious:
 	; this is so the backed-up tracks and SFX tracks start at the same place: at the end of the music tracks
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	lea	SMPS_RAM.v_1up_ram_copy(a6),a1
-	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; restore music track data
+	moveq	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; restore music track data
 ; loc_72B1E:
 .restoretrackramloop:
 	move.l	(a1)+,(a0)+
@@ -2608,7 +2616,7 @@ cfFadeInToPrevious:
 
 	lea	SMPS_RAM.variables(a6),a0
 	lea	SMPS_RAM.variables_backup(a6),a1
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; restore variables
+	moveq	#(SMPS_RAM_Variables.len/4)-1,d0	; restore variables
 ; loc_72B1E:
 .restorevariablesloop:
 	move.l	(a1)+,(a0)+
@@ -3259,6 +3267,9 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; Vladikcomper's Mega PCM DAC driver
 ; ---------------------------------------------------------------------------
+
+	align $8000
+
 	include	"Sound/Engine/MegaPCM - 68k.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79

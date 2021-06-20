@@ -65,7 +65,7 @@ sub_2D028:
 		cmpi.w	#$68,d0
 		bhs.w	locret_2D0E8
 		sfx	sfx_Lamppost,0,0,0
-		jsr	(Create_New_Sprite).l
+		jsr	(Create_New_Sprite).w
 		bne.s	loc_2D0D0
 		move.l	#Obj_StarPost,address(a1)
 		move.b	#6,routine(a1)
@@ -108,8 +108,8 @@ locret_2D0F6:
 
 loc_2D0F8:
 		lea	Ani_Starpost(pc),a1
-		jsr	(Animate_Sprite).l
-		bra.w	Sprite_OnScreen_Test
+		jsr	(Animate_Sprite).w
+		jmp	(Sprite_OnScreen_Test).w
 ; ---------------------------------------------------------------------------
 
 loc_2D10A:
@@ -122,24 +122,23 @@ loc_2D10A:
 		clr.b	mapping_frame(a1)
 
 loc_2D128:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_2D12E:
 		move.b	angle(a0),d0
 		subi.b	#$10,angle(a0)
 		subi.b	#$40,d0
-		jsr	(GetSineCosine).l
-		move.w	#$C00,d2
-		muls.w	d2,d1
+		jsr	(GetSineCosine).w
+		muls.w	#$C00,d1
 		swap	d1
 		add.w	$30(a0),d1
 		move.w	d1,x_pos(a0)
-		muls.w	d2,d0
+		muls.w	#$C00,d0
 		swap	d0
 		add.w	$32(a0),d0
 		move.w	d0,y_pos(a0)
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -197,7 +196,7 @@ sub_2D3C8:
 		moveq	#3,d1
 		moveq	#0,d2
 
--		jsr	(Create_New_Sprite).l
+-		jsr	(Create_New_Sprite).w
 		bne.s	+
 		move.l	address(a0),address(a1)
 		move.l	#Map_StarpostStars,mappings(a1)
@@ -234,7 +233,7 @@ sub_2D3C8:
 		beq.s	+
 		lea	(ArtKosM_StarPostStars2).l,a1
 +		move.w	#tiles_to_bytes($5EC),d2
-		jmp	(Queue_Kos_Module).l
+		jmp	(Queue_Kos_Module).w
 ; End of function sub_2D3C8
 ; ---------------------------------------------------------------------------
 
@@ -252,7 +251,7 @@ loc_2D47E:	; 8
 		move.b	(Player_1+status_secondary).w,d0
 		andi.b	#$71,d0
 		move.b	d0,(Saved_status_secondary).w
-		jsr	(Clear_SpriteRingMem).l
+		jsr	(Clear_SpriteRingMem).w
 
 loc_2D506:
 		clr.b	collision_property(a0)
@@ -261,7 +260,7 @@ loc_2D50A:
 		addi.w	#$A,$34(a0)
 		move.w	$34(a0),d0
 		andi.w	#$FF,d0
-		jsr	(GetSineCosine).l
+		jsr	(GetSineCosine).w
 		asr.w	#5,d0
 		asr.w	#3,d1
 		move.w	d1,d3
@@ -334,11 +333,11 @@ loc_2D58C:
 
 loc_2D5B6:
 		move.b	d0,mapping_frame(a0)
-		bra.w	RememberState_Collision
+		jmp	(RememberState_Collision).w
 ; ---------------------------------------------------------------------------
 
 loc_2D5C0:
-		jmp	(Delete_Current_Sprite).l
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 		include "Objects/StarPost/Object Data/Anim - Starpost.asm"

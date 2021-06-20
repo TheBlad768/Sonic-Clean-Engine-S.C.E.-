@@ -25,8 +25,8 @@ loc_2C5BE:
 		move.w	#4,d2
 		move.w	#5,d3
 		move.w	x_pos(a0),d4
-		jsr	(SolidObjectFull).l
-		move.b	#0,mapping_frame(a0)
+		jsr	(SolidObjectFull).w
+		clr.b	mapping_frame(a0)
 		move.b	subtype(a0),d0
 		andi.w	#$F,d0
 		lea	(Level_trigger_array).w,a3
@@ -52,7 +52,7 @@ loc_2C612:
 		move.b	#1,mapping_frame(a0)
 
 loc_2C626:
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 ; ---------------------------------------------------------------------------
 
 loc_2C62C:
@@ -61,8 +61,8 @@ loc_2C62C:
 		move.w	#$10,d1
 		move.w	#6,d3
 		move.w	$10(a0),d4
-		jsr	(SolidObjectTop).l
-		move.b	#0,mapping_frame(a0)
+		jsr	(SolidObjectTop).w
+		clr.b	mapping_frame(a0)
 		move.b	subtype(a0),d0
 		andi.w	#$F,d0
 		lea	(Level_trigger_array).w,a3
@@ -88,7 +88,7 @@ loc_2C67C:
 		move.b	#1,mapping_frame(a0)
 
 loc_2C690:
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Button/Object Data/Map - Button.asm"

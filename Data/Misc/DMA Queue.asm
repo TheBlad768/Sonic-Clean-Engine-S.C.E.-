@@ -1,6 +1,8 @@
 ; ---------------------------------------------------------------------------
 ; MACRO ResetDMAQueue
 ; Clears the DMA queue, discarding all previously-queued DMAs.
+; By Flamewing
+; See https://github.com/flamewing/ultra-dma-queue
 ; ---------------------------------------------------------------------------
 ; ROUTINE Process_DMA_Queue / ProcessDMAQueue
 ; Performs all queued DMA transfers and clears the DMA queue.
@@ -49,28 +51,36 @@
 ;
 ; Setting AssumeSourceAddressInBytes to 0 reduces all times by 10(1/0) cycles,
 ; but only if the DMA is not entirely discarded. However, all callers must be
-; edited to make sure the adresss given is correct.
+; edited to make sure the adresss given is in the correct form; you can use
+; the dmaSource function for that, which also sanitizes RAM addresses.
 ;
 ; Setting AssumeSourceAddressIsRAMSafe to 1, or UseRAMSourceSafeDMA to 0,
 ; reduces all times by 14(2/0) cycles, but only if the DMA is not entirely
 ; discarded. However, all callers must be edited to make sure the adresss given
-; in the correct form. You can use the dmaSource function for that.
+; in the correct form.
 ; ---------------------------------------------------------------------------
 ; MACRO QueueStaticDMA
 ; Directly queues a DMA on the spot. Requires all parameters to be known at
 ; assembly time; that is, no registers. Gives assembly errors when the DMA
 ; crosses a 128kB boundary, is at an odd ROM location, or is zero length.
 ;
+; The destination parameter can be either:
+; * a VRAM address literal;
+; * a register initialized with `move.l	#vdpComm(dest,VRAM,DMA)`
+; * a register initialized with `vdpCommReg <reg>,VRAM,DMA`
+;
 ; Options:
 ; 	UseVIntSafeDMA (default 0)
 ; Input:
 ; 	Source address (in bytes), transfer length (in bytes), destination address
 ; Output:
-; 	d0,a1	trashed
+; 	d0,a1	trashed; avoid using these for passing destination as a register
 ;
 ; With the default settings, runs in:
 ; * 32(7/0) cycles if queue is full (DMA discarded)
 ; * 122(21/8) cycles otherwise (DMA queued)
+; Passing a register as destination is faster by 8(2/0) when the DMA is queued,
+; but requires initializing the register elsewhere, which is probably slower.
 ;
 ; Setting UseVIntSafeDMA to 1 adds 46(6/1) cycles to both cases.
 ; ===========================================================================
@@ -170,6 +180,7 @@ dmaLength function len,((len>>1)&$7FFF)
 ; ---------------------------------------------------------------------------
 	ifndef QueueStaticDMA_defined
 QueueStaticDMA_defined = 1
+is68kRegister function expr,strstr(":d0:d1:d2:d3:d4:d5:d6:d7:a0:a1:a2:a3:a4:a5:a6:a7:sp:",":\{expr}:")>=0
 ; Expects source address and DMA length in bytes. Also, expects source, size, and dest to be known
 ; at assembly time. Gives errors if DMA starts at an odd address, transfers
 ; crosses a 128kB boundary, or has size 0.
@@ -199,7 +210,11 @@ QueueStaticDMA macro src,length,dest
 	move.l	#((dmaLength(length)&$FF)<<24)|dmaSource(src),d0	; Set d0 to bottom byte of size/2 and the low 3 bytes of source/2
 	movep.l	d0,DMAEntry.SizeL(a1)								; Write it all to the queue
 	lea	DMAEntry.Command(a1),a1									; Seek to correct RAM address to store VDP DMA command
-	move.l	#vdpComm(dest,VRAM,DMA),(a1)+						; Write VDP DMA command for destination address
+	if is68kRegister("dest")
+		move.l	dest,(a1)+
+	else
+		move.l	#vdpComm(dest,VRAM,DMA),(a1)+					; Write VDP DMA command for destination address
+	endif
 	move.w	a1,(VDP_Command_Buffer_Slot).w						; Write next queue slot
 .done:
 	if UseVIntSafeDMA==1

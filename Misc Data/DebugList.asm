@@ -11,7 +11,7 @@ DebugList: offsetTable
 		zonewarning DebugList,(2*4)
 ; ---------------------------------------------------------------------------
 
-			; Object Mappings Subtype Frame Arttile
+				; Object Mappings Subtype Frame VRAM
 .DEZ1: dbglistheader
 	dbglistobj Obj_Ring, Map_Ring, 0, 0, make_art_tile(ArtTile_Ring,1,1)
 	dbglistobj Obj_Monitor, Map_Monitor, 2, 3, make_art_tile(ArtTile_Powerups,0,0)
@@ -35,5 +35,3 @@ DebugList: offsetTable
 	dbglistobj Obj_StarPost, Map_StarPost, 1, 0, make_art_tile($5EC,0,0)
 	dbglistobj Obj_EggCapsule, Map_EggCapsule, 1, 0, make_art_tile($43E,0,0)
 .DEZ1_End:
-
-	even

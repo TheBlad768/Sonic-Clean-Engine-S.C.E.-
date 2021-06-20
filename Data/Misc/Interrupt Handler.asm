@@ -19,7 +19,7 @@ VInt:
 		move.w	#$700,d0
 		dbf	d0,*										; otherwise, waste a bit of time here
 +		move.b	(V_int_routine).w,d0
-		sf	(V_int_routine).w
+		clr.b	(V_int_routine).w
 		st	(H_int_flag).w							; Allow H Interrupt code to run
 		andi.w	#$3E,d0
 		move.w	VInt_Table(pc,d0.w),d0
@@ -29,7 +29,7 @@ VInt_Music:
 		SMPS_UpdateSoundDriver						; Update SMPS
 
 VInt_Done:
-		bsr.w	Random_Number
+		jsr	(Random_Number).w
 		addq.l	#1,(V_int_run_count).w
 		movem.l	(sp)+,d0-a6							; return saved registers from the stack
 		rte
@@ -53,22 +53,23 @@ VInt_Lag_Main:
 		addq.b	#1,(Lag_frame_count).w
 
 		; branch if a level is running
-		cmpi.b	#GameModeID_TitleCard|id_Level,(Game_mode).w
+		cmpi.b	#GameModeID_TitleCard|id_LevelScreen,(Game_mode).w
 		beq.s	VInt_Lag_Level
-		cmpi.b	#id_Level,(Game_mode).w				; is game on a level?
+		cmpi.b	#id_LevelScreen,(Game_mode).w		; is game on a level?
 		beq.s	VInt_Lag_Level
 		bra.s	VInt_Music							; otherwise, return from V-int
 ; ---------------------------------------------------------------------------
 
 VInt_Lag_Level:
 		tst.b	(Water_flag).w
-		beq.s	VInt_Lag_NoWater
+		beq.w	VInt_Lag_NoWater
 		move.w	(VDP_control_port).l,d0
 		btst	#6,(Graphics_flags).w
 		beq.s	+									; branch if it isn't a PAL system
 		move.w	#$700,d0
 		dbf	d0,*										; otherwise waste a bit of time here
 +		st	(H_int_flag).w							; set HInt flag
+		stopZ80
 		tst.b	(Water_full_screen_flag).w					; is water above top of screen?
 		bne.s	VInt_Lag_FullyUnderwater 			; if yes, branch
 		dma68kToVDP Normal_palette,$0000,$80,CRAM
@@ -80,6 +81,7 @@ VInt_Lag_FullyUnderwater:
 
 VInt_Lag_Water_Cont:
 		move.w	(H_int_counter_command).w,(a5)
+		startZ80
 		bra.w	VInt_Music
 ; ---------------------------------------------------------------------------
 
@@ -106,7 +108,6 @@ VInt_Main:
 
 VInt_Title:
 		bsr.s	Do_ControllerPal
-		bsr.w	Process_Nem_Queue
 		tst.w	(Demo_timer).w
 		beq.s	+
 		subq.w	#1,(Demo_timer).w
@@ -116,12 +117,15 @@ VInt_Title:
 VInt_Fade:
 		bsr.s	Do_ControllerPal
 		move.w	(H_int_counter_command).w,(a5)
-		bra.w	Process_Nem_Queue
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Do_ControllerPal:
-		bsr.w	Poll_Controllers
+		stopZ80
+		stopZ802
+		jsr	(Poll_Controllers).w
+		startZ802
 		tst.b	(Water_full_screen_flag).w
 		bne.s	+
 		dma68kToVDP Normal_palette,$0000,$80,CRAM
@@ -129,51 +133,49 @@ Do_ControllerPal:
 +		dma68kToVDP Water_palette,$0000,$80,CRAM
 +		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
 		dma68kToVDP H_scroll_buffer,vram_hscroll,$380,VRAM
-		bra.w	Process_DMA_Queue
+		jsr	(Process_DMA_Queue).w
+		startZ80
+		rts
 ; End of function Do_ControllerPal
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 VInt_Sega:
 		move.b	(V_int_run_count+3).w,d0
 		andi.w	#$F,d0
 		bne.s	+	; run the following code once every 16 frames
-		bsr.w	Poll_Controllers
+		stopZ80
+		stopZ802
+		jsr	(Poll_Controllers).w
+		startZ802
+		startZ80
 +		tst.w	(Demo_timer).w
 		beq.s	+
 		subq.w	#1,(Demo_timer).w
-+		bra.w	Set_Kos_Bookmark
++		jmp	(Set_Kos_Bookmark).w
 ; ---------------------------------------------------------------------------
 
 VInt_Menu:
-		bsr.w	Poll_Controllers
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
-		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
-		dma68kToVDP H_scroll_buffer,vram_hscroll,$380,VRAM
-		bsr.w	Process_DMA_Queue
-		bsr.w	Process_Nem_Queue
+		bsr.w	Do_ControllerPal
 		tst.w	(Demo_timer).w
 		beq.s	+
 		subq.w	#1,(Demo_timer).w
-+		bra.w	Set_Kos_Bookmark
++		jmp	(Set_Kos_Bookmark).w
 ; ---------------------------------------------------------------------------
 
 VInt_TitleCard:
-		bsr.w	Poll_Controllers
-		tst.b	(Water_full_screen_flag).w
-		bne.s	+
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
-		bra.s	++
-+		dma68kToVDP Water_palette,$0000,$80,CRAM
-+		move.w	(H_int_counter_command).w,(a5)
-		dma68kToVDP H_scroll_buffer,vram_hscroll,$380,VRAM
-		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
-		bsr.w	Process_DMA_Queue
-		bsr.w	Process_Nem_Queue
-		bra.w	Set_Kos_Bookmark
+		bsr.w	Do_ControllerPal
+		move.w	(H_int_counter_command).w,(a5)
+		jmp	(Set_Kos_Bookmark).w
 ; ---------------------------------------------------------------------------
 
 VInt_Level:
-		bsr.w	Poll_Controllers
+		stopZ80
+		stopZ802
+		jsr	(Poll_Controllers).w
+		startZ802
+		tst.b	(Game_paused).w
+		bne.s	VInt_Level_NoNegativeFlash
 		tst.b	(Hyper_Sonic_flash_timer).w
 		beq.s	VInt_Level_NoFlash
 
@@ -220,26 +222,26 @@ VInt_Level_NoNegativeFlash:
 VInt_Level_Cont:
 		dma68kToVDP H_scroll_buffer,vram_hscroll,$380,VRAM
 		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
-		bsr.w	Process_DMA_Queue
-		bsr.w	VInt_DrawLevel
+		jsr	(Process_DMA_Queue).w
+		jsr	(VInt_DrawLevel).w
+		startZ80
 		enableInts
 		tst.b	(Water_flag).w
 		beq.s	+
 		cmpi.b	#92,(H_int_counter).w	; is H-int occuring on or below line 92?
 		bhs.s	+
 		st	(Do_Updates_in_H_int).w
-		bsr.w	Set_Kos_Bookmark
+		jsr	(Set_Kos_Bookmark).w
 		addq.l	#4,sp
 		bra.w	VInt_Done
 +		bsr.s	Do_Updates
-		bra.w	Set_Kos_Bookmark
+		jmp	(Set_Kos_Bookmark).w
 
 ; =============== S U B R O U T I N E =======================================
 
 Do_Updates:
-		bsr.w	UpdateHUD
+		jsr	(UpdateHUD).w
 		clr.w	(Lag_frame_count).w
-		bsr.w	Process_Nem_Queue_2
 		tst.w	(Demo_timer).w ; is there time left on the demo?
 		beq.s	+
 		subq.w	#1,(Demo_timer).w ; subtract 1 from time left
@@ -255,7 +257,7 @@ HInt:
 		disableInts
 		tst.b	(H_int_flag).w
 		beq.w	HInt_Done
-		sf	(H_int_flag).w
+		clr.b	(H_int_flag).w
 		movem.l	a0-a1,-(sp)
 		lea	(VDP_data_port).l,a1
 		move.w	#$8A00+223,VDP_control_port-VDP_data_port(a1)
@@ -267,7 +269,7 @@ HInt:
 		movem.l	(sp)+,a0-a1
 		tst.b	(Do_Updates_in_H_int).w
 		beq.s	HInt_Done
-		sf	(Do_Updates_in_H_int).w
+		clr.b	(Do_Updates_in_H_int).w
 		movem.l	d0-a6,-(sp)			; move all the registers to the stack
 		bsr.w	Do_Updates
 		SMPS_UpdateSoundDriver		; Update SMPS

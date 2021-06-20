@@ -15,3 +15,4 @@ byte_2FCA2:	dc.b	2,   5,	  6, $FC
 byte_2FCA6:	dc.b	4, $FC
 byte_2FCA8:	dc.b	4,   7,	  8, $FC
 byte_2FCAC:	dc.b   $F, $13,	$14, $15, $FF,	 0
+	even

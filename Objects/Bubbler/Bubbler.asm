@@ -38,12 +38,12 @@ loc_2F996:
 		move.b	d0,anim(a0)
 		move.w	x_pos(a0),$30(a0)
 		move.w	#-$88,y_vel(a0)
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		move.b	d0,$26(a0)
 
 loc_2F9B0:
 		lea	Ani_Bubbler(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 		cmpi.b	#6,mapping_frame(a0)
 		bne.s	loc_2F9CA
 		move.b	#1,$2E(a0)
@@ -73,7 +73,7 @@ loc_2F9E2:
 		beq.s	loc_2FA2C
 
 loc_2FA14:
-		bsr.w	MoveSprite2
+		jsr	(MoveSprite2).w
 		tst.b	render_flags(a0)
 		bpl.w	loc_2FB8A
 		bra.w	loc_2FB90
@@ -81,7 +81,7 @@ loc_2FA14:
 
 loc_2FA2C:
 		lea	Ani_Bubbler(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 		tst.b	render_flags(a0)
 		bpl.w	loc_2FB8A
 		bra.w	loc_2FB90
@@ -100,7 +100,7 @@ loc_2FA50:
 		move.w	#1,$36(a0)
 
 loc_2FA78:
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		move.w	d0,d1
 		andi.w	#7,d0
 		cmpi.w	#6,d0
@@ -124,14 +124,14 @@ loc_2FAB2:
 		bpl.w	loc_2FB50
 
 loc_2FABA:
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#$1F,d0
 		move.w	d0,$38(a0)
-		bsr.w	Create_New_Sprite
+		jsr	(Create_New_Sprite).w
 		bne.s	loc_2FB34
 		move.l	address(a0),address(a1)
 		move.w	x_pos(a0),x_pos(a1)
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#$F,d0
 		subq.w	#8,d0
 		add.w	d0,x_pos(a1)
@@ -144,7 +144,7 @@ loc_2FABA:
 
 loc_2FB04:
 		beq.s	loc_2FB34
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#3,d0
 		bne.s	loc_2FB20
 		bset	#6,$36(a0)
@@ -161,7 +161,7 @@ loc_2FB20:
 loc_2FB34:
 		subq.b	#1,$34(a0)
 		bpl.s	loc_2FB50
-		jsr	(Random_Number).l
+		jsr	(Random_Number).w
 		andi.w	#$7F,d0
 		addi.w	#$80,d0
 		add.w	d0,$38(a0)
@@ -169,7 +169,7 @@ loc_2FB34:
 
 loc_2FB50:
 		lea	Ani_Bubbler(pc),a1
-		jsr	(Animate_Sprite).l
+		jsr	(Animate_Sprite).w
 
 loc_2FB5C:
 		move.w	x_pos(a0),d0
@@ -190,11 +190,11 @@ loc_2FB7E:
 		bclr	#7,(a2)
 
 loc_2FB8A:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_2FB90:
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 byte_2FB96:

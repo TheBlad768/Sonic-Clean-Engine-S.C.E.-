@@ -190,13 +190,13 @@ Game_Program:
 		move.l	#'INIT',(Checksum_string).w		; set flag so checksum won't run again
 
 GameInit:
-		bsr.w	Init_MSU_Driver
+		jsr	(Init_MSU_Driver).l
 		seq	(SegaCD_Mode).w
 		bsr.w	Init_DMA_Queue
 		bsr.s	Init_VDP
 		bsr.w	SoundDriverLoad
 		bsr.w	Init_Controllers
-		move.b	#id_LevelSelect,(Game_mode).w	; set Game Mode
+		move.b	#id_LevelSelectScreen,(Game_mode).w	; set Game Mode
 
 GameLoop:
 		move.b	(Game_mode).w,d0				; load Game Mode

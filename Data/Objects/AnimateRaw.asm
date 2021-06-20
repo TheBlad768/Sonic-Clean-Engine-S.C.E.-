@@ -2,7 +2,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSST:
 		subq.b	#1,anim_frame_timer(a0)
@@ -38,7 +38,7 @@ AnimateRaw_Jump:
 		move.b	2(a1,d0.w),d1
 		ext.w	d1
 		lea	(a1,d1.w),a1
-		move.l	a1,$30(a0)
+		move.l	a1,objoff_30(a0)
 
 AnimateRaw_Restart:
 		move.b	1(a1),mapping_frame(a0)
@@ -55,7 +55,7 @@ AnimateRaw_CustomCode:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipX:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTAdjustFlipX:
 		subq.b	#1,anim_frame_timer(a0)
@@ -78,7 +78,7 @@ Animate_RawNoSSTAdjustFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipY:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTAdjustFlipY:
 		subq.b	#1,anim_frame_timer(a0)
@@ -101,7 +101,7 @@ Animate_RawNoSSTAdjustFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawCheckResult:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTCheckResult:
 		subq.b	#1,anim_frame_timer(a0)
@@ -147,7 +147,7 @@ loc_8455E:
 		move.b	(a2)+,d1
 		ext.w	d1
 		lea	(a1,d1.w),a1
-		move.l	a1,$30(a0)
+		move.l	a1,objoff_30(a0)
 
 loc_8456A:
 		move.b	1(a1),mapping_frame(a0)
@@ -164,7 +164,7 @@ loc_84576:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelay:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTMultiDelay:
 		subq.b	#1,anim_frame_timer(a0)
@@ -206,7 +206,7 @@ loc_845E4:
 		move.b	1(a1,d0.w),d1
 		ext.w	d1
 		lea	(a1,d1.w),a1
-		move.l	a1,$30(a0)
+		move.l	a1,objoff_30(a0)
 
 loc_845F2:
 		move.b	(a1),mapping_frame(a0)
@@ -226,7 +226,7 @@ loc_84600:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipX:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTMultiDelayFlipX:
 		subq.b	#1,anim_frame_timer(a0)
@@ -253,7 +253,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipY:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	++
 		moveq	#0,d0
@@ -278,7 +278,7 @@ Animate_RawMultiDelayFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw2MultiDelay:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_Raw2NoSSTMultiDelay:
 		subq.b	#1,anim_frame_timer(a0)
@@ -323,7 +323,7 @@ loc_846D8:
 		move.b	(a2)+,d1
 		ext.w	d1
 		lea	(a1,d1.w),a1
-		move.l	a1,$30(a0)
+		move.l	a1,objoff_30(a0)
 
 loc_846E4:
 		move.b	(a1),mapping_frame(a0)
@@ -343,7 +343,7 @@ loc_846F2:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetFaster:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTGetFaster:
 		bset	#5,$38(a0)
@@ -392,7 +392,7 @@ Animate_RawNoSSTGetFaster:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetSlower:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTGetSlower:
 		bset	#5,$38(a0)
@@ -432,7 +432,7 @@ Animate_RawNoSSTGetSlower:
 ; =============== S U B R O U T I N E =======================================
 
 Set_Raw_Animation:
-		move.l	a1,$30(a0)
+		move.l	a1,objoff_30(a0)
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		rts

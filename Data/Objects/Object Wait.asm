@@ -30,6 +30,24 @@ ObjHitFloor_DoRoutine_Return:
 
 ; =============== S U B R O U T I N E =======================================
 
+ObjHitCeiling_DoRoutine:
+		tst.w	y_vel(a0)
+		bmi.s	ObjHitCeiling_DoRoutine_Return
+		bsr.w	ObjCheckCeilingDist
+		tst.w	d1
+		bmi.s	+
+		beq.s	+
+
+ObjHitCeiling_DoRoutine_Return:
+		rts
+; ---------------------------------------------------------------------------
++		sub.w	d1,y_pos(a0)
+		movea.l	$34(a0),a1
+		jmp	(a1)
+; End of function ObjHitCeiling_DoRoutine
+
+; =============== S U B R O U T I N E =======================================
+
 ObjHitFloor2_DoRoutine:
 		move.w	x_vel(a0),d3
 		ext.l	d3

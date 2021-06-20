@@ -7,6 +7,7 @@ ZoneCount:				= 1	; discrete zones are: DEZ
 GameDebug:				= 1	; if 1, enable debug mode for Sonic
 ExtendedCamera			= 0	; if 1, enable extended camera
 OptimiseSound:	  		= 1	; change to 1 to optimise sound queuing
+OptimiseStopZ80:	  		= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for controllers(ignores sound driver)
 ZeroOffsetOptimization:	= 1	; if 1, makes a handful of zero-offset instructions smaller
 AllOptimizations:			= 1	; if 1, enables all optimizations
 EnableSRAM:				= 0	; change to 1 to enable SRAM
@@ -71,6 +72,7 @@ CartRAMEndLoc:	dc.l $20202020	; SRAM end ($20xxxx)
 Modem_Info:		dc.b "                                                    "
 Country_Code:	dc.b "JUE             "
 EndOfHeader:
+
 ; ---------------------------------------------------------------------------
 ; Security Subroutine
 ; ---------------------------------------------------------------------------
@@ -84,22 +86,10 @@ EndOfHeader:
 		include "Data/Misc/VDP.asm"
 
 ; ---------------------------------------------------------------------------
-; MegaCD Driver
-; ---------------------------------------------------------------------------
-
-		include "Sound/MSU/MSU.asm"
-
-; ---------------------------------------------------------------------------
 ; Controllers Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/Controllers.asm"
-
-; ---------------------------------------------------------------------------
-; Interrupt Handler Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
 ; DMA Queue Subroutine
@@ -117,7 +107,6 @@ EndOfHeader:
 ; Decompression Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Decompression/Nemesis Decompression.asm"
 		include "Data/Decompression/Enigma Decompression.asm"
 		include "Data/Decompression/Kosinski Decompression.asm"
 		include "Data/Decompression/Kosinski Module Decompression.asm"
@@ -127,12 +116,6 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Sound/Engine/Functions.asm"
-
-; ---------------------------------------------------------------------------
-; Music playlist Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Misc Data/Music playlist.asm"
 
 ; ---------------------------------------------------------------------------
 ; Fading Palettes Subroutine
@@ -151,18 +134,6 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/Wait VSync.asm"
-
-; ---------------------------------------------------------------------------
-; Level Select screen subroutines
-; ---------------------------------------------------------------------------
-
-		include "Data/Screens/Level Select/Level Select.asm"
-
-; ---------------------------------------------------------------------------
-; Level screen Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Screens/Level/Level.asm"
 
 ; ---------------------------------------------------------------------------
 ; Pause Subroutine
@@ -187,6 +158,12 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/HUD Update.asm"
+
+; ---------------------------------------------------------------------------
+; Load Text Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/Load Text.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects Process Subroutines
@@ -214,10 +191,66 @@ EndOfHeader:
 		include "Data/Misc/Load Rings.asm"
 
 ; ---------------------------------------------------------------------------
+; Draw Level Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/DrawLevel.asm"
+
+; ---------------------------------------------------------------------------
 ; Deform Layer Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/DeformBgLayer.asm"
+
+; ---------------------------------------------------------------------------
+; Parallax Engine Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/Deformation Script.asm"
+
+; ---------------------------------------------------------------------------
+; Shake Screen Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/Shake Screen.asm"
+
+; ---------------------------------------------------------------------------
+; Objects Subroutines
+; ---------------------------------------------------------------------------
+
+		include "Data/Objects/AnimateRaw.asm"
+		include "Data/Objects/AnimateSprite.asm"
+		include "Data/Objects/CalcAngle.asm"
+		include "Data/Objects/CalcSine.asm"
+		include "Data/Objects/DisplaySprite.asm"
+		include "Data/Objects/FindFreeObj.asm"
+		include "Data/Objects/DeleteObject.asm"
+		include "Data/Objects/MoveSprite.asm"
+		include "Data/Objects/MoveSprite Circular.asm"
+		include "Data/Objects/Object Swing.asm"
+		include "Data/Objects/Object Wait.asm"
+		include "Data/Objects/ChangeFlip.asm"
+		include "Data/Objects/CreateChildSprite.asm"
+		include "Data/Objects/ChildGetPriority.asm"
+		include "Data/Objects/CheckRange.asm"
+		include "Data/Objects/FindSonic.asm"
+		include "Data/Objects/Misc.asm"
+		include "Data/Objects/Palette Script.asm"
+		include "Data/Objects/RememberState.asm"
+
+; ---------------------------------------------------------------------------
+; Objects Functions Subroutines
+; ---------------------------------------------------------------------------
+
+		include "Data/Objects/FindFloor.asm"
+		include "Data/Objects/SolidObject.asm"
+		include "Data/Objects/TouchResponse.asm"
+
+; ---------------------------------------------------------------------------
+; Interrupt Handler Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
 ; Resize Events Subroutine
@@ -256,56 +289,6 @@ EndOfHeader:
 		include "Data/Misc/LevelSetup.asm"
 
 ; ---------------------------------------------------------------------------
-; Parallax Engine Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/Deformation Script.asm"
-
-; ---------------------------------------------------------------------------
-; Shake Screen Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/Shake Screen.asm"
-
-; ---------------------------------------------------------------------------
-; Draw Level Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/DrawLevel.asm"
-
-; ---------------------------------------------------------------------------
-; Objects Functions Subroutines
-; ---------------------------------------------------------------------------
-
-		include "Data/Objects/FindFloor.asm"
-		include "Data/Objects/SolidObject.asm"
-		include "Data/Objects/TouchResponse.asm"
-
-; ---------------------------------------------------------------------------
-; Objects Subroutines
-; ---------------------------------------------------------------------------
-
-		include "Data/Objects/AnimateRaw.asm"
-		include "Data/Objects/AnimateSprite.asm"
-		include "Data/Objects/CalcAngle.asm"
-		include "Data/Objects/CalcSine.asm"
-		include "Data/Objects/DisplaySprite.asm"
-		include "Data/Objects/FindFreeObj.asm"
-		include "Data/Objects/DeleteObject.asm"
-		include "Data/Objects/MoveSprite.asm"
-		include "Data/Objects/MoveSprite Circular.asm"
-		include "Data/Objects/Object Swing.asm"
-		include "Data/Objects/Object Wait.asm"
-		include "Data/Objects/ChangeFlip.asm"
-		include "Data/Objects/CreateChildSprite.asm"
-		include "Data/Objects/ChildGetPriority.asm"
-		include "Data/Objects/CheckRange.asm"
-		include "Data/Objects/FindSonic.asm"
-		include "Data/Objects/Misc.asm"
-		include "Data/Objects/Palette Script.asm"
-		include "Data/Objects/RememberState.asm"
-
-; ---------------------------------------------------------------------------
 ; Subroutine to load sonic object
 ; ---------------------------------------------------------------------------
 
@@ -330,6 +313,18 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/Load Animals.asm"
+
+; ---------------------------------------------------------------------------
+; Level Select screen subroutines
+; ---------------------------------------------------------------------------
+
+		include "Data/Screens/Level Select/Level Select.asm"
+
+; ---------------------------------------------------------------------------
+; Level screen Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Screens/Level/Level.asm"
 
 ; ---------------------------------------------------------------------------
 ; Pattern Load Cues pointers
@@ -373,12 +368,6 @@ EndOfHeader:
 		include "Pointers/Palette Data.asm"
 
 ; ---------------------------------------------------------------------------
-; Nemesis compressed graphics pointers
-; ---------------------------------------------------------------------------
-
-		include "Pointers/Nemesis Data.asm"
-
-; ---------------------------------------------------------------------------
 ; Kosinski Module compressed graphics pointers
 ; ---------------------------------------------------------------------------
 
@@ -411,10 +400,22 @@ EndOfHeader:
 		include "Pointers/Uncompressed Data.asm"
 
 ; ---------------------------------------------------------------------------
+; Music playlist Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Misc Data/Music playlist.asm"
+
+; ---------------------------------------------------------------------------
 ; Clone sound driver subroutines
 ; ---------------------------------------------------------------------------
 
 		include "Sound/Engine/Sonic 2 Clone Driver v2.asm"
+
+; ---------------------------------------------------------------------------
+; MegaCD Driver
+; ---------------------------------------------------------------------------
+
+		include "Sound/MSU/MSU.asm"
 
 ; ---------------------------------------------------------------
 ; Error handling module

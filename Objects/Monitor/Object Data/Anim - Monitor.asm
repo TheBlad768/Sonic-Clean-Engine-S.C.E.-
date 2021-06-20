@@ -21,3 +21,4 @@ byte_1DB84:	dc.b	1,   0,	  8,   8,   1,	 8,   8, $FF
 byte_1DB8C:	dc.b	1,   0,	  9,   9,   1,	 9,   9, $FF
 byte_1DB94:	dc.b	1,   0,	 $A,  $A,   1,	$A,  $A, $FF
 byte_1DB9C:	dc.b	2,   0,	  1,  $B, $FE,	 1
+	even

@@ -5,72 +5,71 @@ Obj_Spring:
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#$494,art_tile(a0)	; set red
 		ori.b	#4,render_flags(a0)
-		move.b	#$10,width_pixels(a0)
-		move.b	#$10,height_pixels(a0)
+		move.b	#32/2,width_pixels(a0)
+		move.b	#32/2,height_pixels(a0)
 		move.w	#$200,priority(a0)
 		move.w	x_pos(a0),$32(a0)
 		move.w	y_pos(a0),$34(a0)
 		move.b	subtype(a0),d0
 		lsr.w	#3,d0
 		andi.w	#$E,d0
-		move.w	off_22D4A(pc,d0.w),d0
-		jmp	off_22D4A(pc,d0.w)
-; End of function Obj_Spring
+		move.w	Spring_Index(pc,d0.w),d0
+		jmp	Spring_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-off_22D4A: offsetTable
-		offsetTableEntry.w loc_22E8E
-		offsetTableEntry.w loc_22DB0
-		offsetTableEntry.w loc_22DEE
-		offsetTableEntry.w loc_22E28
-		offsetTableEntry.w loc_22E58
+Spring_Index: offsetTable
+		offsetTableEntry.w Spring_Up			; 0
+		offsetTableEntry.w Spring_Horizontal	; 2
+		offsetTableEntry.w Spring_Down		; 4
+		offsetTableEntry.w Spring_UpDiag		; 6
+		offsetTableEntry.w Spring_DownDiag	; 8
 ; ---------------------------------------------------------------------------
 
-loc_22DB0:
+Spring_Horizontal:
 		move.b	#2,anim(a0)
 		move.b	#3,mapping_frame(a0)
 		move.w	#$4A0,art_tile(a0)	; set yellow
-		move.b	#8,width_pixels(a0)
-		move.l	#loc_23050,address(a0)
-		bra.s	loc_22EC4
+		move.b	#16/2,width_pixels(a0)
+		move.l	#Obj_Spring_Horizontal,address(a0)
+		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
-loc_22DEE:
+Spring_Down:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_22E96
 		bset	#1,status(a0)
 
 loc_22DFC:
 		move.b	#6,mapping_frame(a0)
-		move.l	#loc_23326,address(a0)
-		bra.s	loc_22EC4
+		move.l	#Obj_Spring_Down,address(a0)
+		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
-loc_22E28:
+Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
 		move.w	#$468,art_tile(a0)	; set diagonal
-		move.l	#loc_23490,address(a0)
-		bra.s	loc_22EC4
+		move.l	#Obj_Spring_UpDiag,address(a0)
+		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
-loc_22E58:
+Spring_DownDiag:
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
 		move.w	#$468,art_tile(a0)	; set diagonal
 		bset	#1,status(a0)
-		move.l	#loc_235D2,address(a0)
-		bra.s	loc_22EC4
+		move.l	#Obj_Spring_DownDiag,address(a0)
+		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
-loc_22E8E:
+Spring_Up:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_22DFC
 
 loc_22E96:
-		move.l	#loc_22EF4,address(a0)
+		move.l	#Obj_Spring_Up,address(a0)
 
-loc_22EC4:
+Spring_Common:
 		move.b	subtype(a0),d0
 		andi.w	#2,d0
 		move.w	word_22EF0(pc,d0.w),$30(a0)
@@ -85,9 +84,10 @@ locret_22EEE:
 word_22EF0:
 		dc.w -$1000
 		dc.w -$A00
-; ---------------------------------------------------------------------------
 
-loc_22EF4:
+; =============== S U B R O U T I N E =======================================
+
+Obj_Spring_Up:
 		move.w	#$1B,d1
 		move.w	#8,d2
 		move.w	#$10,d3
@@ -103,7 +103,7 @@ loc_22EF4:
 loc_22F1C:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		bsr.w	Animate_Sprite
+		jsr	(Animate_Sprite).w
 		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
@@ -115,12 +115,12 @@ sub_22F98:
 		beq.s	+
 		subi.w	#$10,y_pos(a1)
 +		move.w	$30(a0),y_vel(a1)
-		bset	#1,status(a1)
-		bclr	#3,status(a1)
+		bset	#Status_InAir,status(a1)
+		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
 		move.b	#$10,anim(a1)
-		move.b	#2,routine(a1)
+		move.b	#id_SonicControl,routine(a1)
 		move.b	subtype(a0),d0
 		bpl.s	loc_22FE0
 		clr.w	x_vel(a1)
@@ -129,18 +129,18 @@ loc_22FE0:
 		btst	#0,d0
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
-		move.b	#1,$27(a1)
+		move.b	#1,flip_angle(a1)
 		clr.b	anim(a1)
-		clr.b	$30(a1)
-		move.b	#4,$31(a1)
+		clr.b	flips_remaining(a1)
+		move.b	#4,flip_speed(a1)
 		btst	#1,d0
 		bne.s	loc_23010
-		move.b	#1,$30(a1)
+		move.b	#1,flips_remaining(a1)
 
 loc_23010:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_23020
-		neg.b	$27(a1)
+		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
 
 loc_23020:
@@ -159,9 +159,10 @@ loc_23036:
 loc_23048:
 		sfx	sfx_Spring,1,0,0
 ; End of function sub_22F98
-; ---------------------------------------------------------------------------
 
-loc_23050:
+; =============== S U B R O U T I N E =======================================
+
+Obj_Spring_Horizontal:
 		move.w	#$13,d1
 		move.w	#$E,d2
 		move.w	#$F,d3
@@ -188,7 +189,7 @@ loc_23092:
 		movem.l	(sp)+,d1-d4
 		bsr.w	sub_2326C
 		lea	Ani_Spring(pc),a1
-		bsr.w	Animate_Sprite
+		jsr	(Animate_Sprite).w
 		move.w	$32(a0),d0
 		bra.w	Sprite_OnScreen_Test2
 
@@ -198,17 +199,17 @@ sub_23190:
 		move.w	#3<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
 		move.w	$30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
-		bset	#0,status(a1)
+		bset	#Status_Facing,status(a1)
 		btst	#0,status(a0)
 		bne.s	loc_231BE
-		bclr	#0,status(a1)
+		bclr	#Status_Facing,status(a1)
 		subi.w	#$10,x_pos(a1)
 		neg.w	x_vel(a1)
 
 loc_231BE:
-		move.w	#$F,$32(a1)
+		move.w	#$F,move_lock(a1)
 		move.w	x_vel(a1),ground_vel(a1)
-		btst	#2,status(a1)
+		btst	#Status_Roll,status(a1)
 		bne.s	loc_231D8
 		clr.b	anim(a1)
 
@@ -221,18 +222,18 @@ loc_231E4:
 		btst	#0,d0
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
-		move.b	#1,$27(a1)
+		move.b	#1,flip_angle(a1)
 		clr.b	anim(a1)
-		move.b	#1,$30(a1)
-		move.b	#8,$31(a1)
+		move.b	#1,flips_remaining(a1)
+		move.b	#8,flip_speed(a1)
 		btst	#1,d0
 		bne.s	loc_23214
-		move.b	#3,$30(a1)
+		move.b	#3,flips_remaining(a1)
 
 loc_23214:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_23224
-		neg.b	$27(a1)
+		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
 
 loc_23224:
@@ -275,7 +276,7 @@ loc_2328E:
 		subi.w	#$18,d2
 		addi.w	#$18,d3
 		lea	(Player_1).w,a1
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	locret_23324
 		move.w	ground_vel(a1),d4
 		btst	#0,status(a0)
@@ -295,16 +296,15 @@ loc_232B6:
 		blo.s		locret_23324
 		cmp.w	d3,d4
 		bhs.s	locret_23324
-		move.w	d0,-(sp)
 		bsr.w	sub_23190
-		move.w	(sp)+,d0
 
 locret_23324:
 		rts
 ; End of function sub_2326C
-; ---------------------------------------------------------------------------
 
-loc_23326:
+; =============== S U B R O U T I N E =======================================
+
+Obj_Spring_Down:
 		move.w	#$1B,d1
 		move.w	#8,d2
 		move.w	#9,d3
@@ -320,7 +320,7 @@ loc_23326:
 loc_2334C:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		bsr.w	Animate_Sprite
+		jsr	(Animate_Sprite).w
 		bra.w	Sprite_OnScreen_Test
 
 ; =============== S U B R O U T I N E =======================================
@@ -346,18 +346,18 @@ loc_23404:
 		btst	#0,d0
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
-		move.b	#1,$27(a1)
+		move.b	#1,flip_angle(a1)
 		clr.b	anim(a1)
-		clr.b	$30(a1)
-		move.b	#4,$31(a1)
+		clr.b	flips_remaining(a1)
+		move.b	#4,flip_speed(a1)
 		btst	#1,d0
 		bne.s	loc_23434
-		move.b	#1,$30(a1)
+		move.b	#1,flips_remaining(a1)
 
 loc_23434:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_23444
-		neg.b	$27(a1)
+		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
 
 loc_23444:
@@ -374,16 +374,17 @@ loc_2345A:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_2346C:
-		bset	#1,status(a1)
-		bclr	#3,status(a1)
+		bset	#Status_InAir,status(a1)
+		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#2,routine(a1)
+		move.b	#id_SonicControl,routine(a1)
 		clr.b	double_jump_flag(a1)
 		sfx	sfx_Spring,1,0,0
 ; End of function sub_233CA
-; ---------------------------------------------------------------------------
 
-loc_23490:
+; =============== S U B R O U T I N E =======================================
+
+Obj_Spring_UpDiag:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	x_pos(a0),d4
@@ -399,7 +400,7 @@ loc_23490:
 loc_234B8:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		bsr.w	Animate_Sprite
+		jsr	(Animate_Sprite).w
 		move.w	$32(a0),d0
 		bra.w	Sprite_OnScreen_Test2
 
@@ -429,35 +430,35 @@ loc_2350A:
 		move.w	$30(a0),x_vel(a1)
 		addq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
-		bset	#0,status(a1)
+		bset	#Status_Facing,status(a1)
 		btst	#0,status(a0)
 		bne.s	loc_23542
-		bclr	#0,status(a1)
+		bclr	#Status_Facing,status(a1)
 		subi.w	#$C,x_pos(a1)
 		neg.w	x_vel(a1)
 
 loc_23542:
-		bset	#1,status(a1)
-		bclr	#3,status(a1)
-		clr.b	$40(a1)
+		bset	#Status_InAir,status(a1)
+		bclr	#Status_OnObj,status(a1)
+		clr.b	jumping(a1)
 		move.b	#$10,anim(a1)
-		move.b	#2,routine(a1)
+		move.b	#id_SonicControl,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
-		move.b	#1,$27(a1)
+		move.b	#1,flip_angle(a1)
 		clr.b	anim(a1)
-		move.b	#1,$30(a1)
-		move.b	#8,$31(a1)
+		move.b	#1,flips_remaining(a1)
+		move.b	#8,flip_speed(a1)
 		btst	#1,d0
 		bne.s	loc_23592
-		move.b	#3,$30(a1)
+		move.b	#3,flips_remaining(a1)
 
 loc_23592:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_235A2
-		neg.b	$27(a1)
+		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
 
 loc_235A2:
@@ -476,9 +477,10 @@ loc_235B8:
 loc_235CA:
 		sfx	sfx_Spring,1,0,0
 ; End of function sub_234E6
-; ---------------------------------------------------------------------------
 
-loc_235D2:
+; =============== S U B R O U T I N E =======================================
+
+Obj_Spring_DownDiag:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	x_pos(a0),d4
@@ -494,7 +496,7 @@ loc_235D2:
 loc_235F8:
 		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
-		bsr.w	Animate_Sprite
+		jsr	(Animate_Sprite).w
 		move.w	$32(a0),d0
 		bra.w	Sprite_OnScreen_Test2
 
@@ -507,34 +509,34 @@ sub_23624:
 		move.w	$30(a0),x_vel(a1)
 		subq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
-		bset	#0,status(a1)
+		bset	#Status_Facing,status(a1)
 		btst	#0,status(a0)
 		bne.s	loc_23660
-		bclr	#0,status(a1)
+		bclr	#Status_Facing,status(a1)
 		subi.w	#$C,x_pos(a1)
 		neg.w	x_vel(a1)
 
 loc_23660:
-		bset	#1,status(a1)
-		bclr	#3,status(a1)
+		bset	#Status_InAir,status(a1)
+		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#2,routine(a1)
+		move.b	#id_SonicControl,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)
-		move.b	#1,$27(a1)
+		move.b	#1,flip_angle(a1)
 		clr.b	anim(a1)
-		move.b	#1,$30(a1)
-		move.b	#8,$31(a1)
+		move.b	#1,flips_remaining(a1)
+		move.b	#8,flip_speed(a1)
 		btst	#1,d0
 		bne.s	loc_236AA
-		move.b	#3,$30(a1)
+		move.b	#3,flips_remaining(a1)
 
 loc_236AA:
-		btst	#0,status(a1)
+		btst	#Status_Facing,status(a1)
 		beq.s	loc_236BA
-		neg.b	$27(a1)
+		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
 
 loc_236BA:

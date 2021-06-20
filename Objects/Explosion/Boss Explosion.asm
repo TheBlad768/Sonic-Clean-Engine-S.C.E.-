@@ -78,7 +78,7 @@ Obj_WaitForParent:
 		beq.s	loc_83EC2
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
-		bra.w	Obj_Wait
+		jmp	(Obj_Wait).w
 ; ---------------------------------------------------------------------------
 
 Obj_BossExpControl1:
@@ -93,11 +93,11 @@ loc_83E7E:
 
 sub_83E84:
 		lea	Child6_MakeBossExplosion1(pc),a2
-		bsr.w	CreateChild6_Simple
+		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
 
 loc_83E90:
-		jsr	(Random_Number).l		; Offset the explosion by a random amount capped by an effective range
+		jsr	(Random_Number).w		; Offset the explosion by a random amount capped by an effective range
 		moveq	#0,d1
 		move.b	$3A(a0),d1
 		move.w	d1,d2
@@ -122,7 +122,7 @@ locret_83EC0:
 ; ---------------------------------------------------------------------------
 
 loc_83EC2:
-		bra.w	Go_Delete_Sprite
+		jmp	(Go_Delete_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_NormalExpControl:
@@ -130,8 +130,8 @@ Obj_NormalExpControl:
 		beq.s	loc_83EC2
 		move.w	#2,$2E(a0)
 		lea	Child6_MakeNormalExplosion(pc),a2
-		bsr.w	CreateChild6_Simple
-		bne.w	locret_83EC0
+		jsr	(CreateChild6_Simple).w
+		bne.s	locret_83EC0
 		move.b	#2,routine(a1)
 		bset	#7,art_tile(a1)
 		bra.s	loc_83E90
@@ -142,8 +142,8 @@ Obj_BossExpControl2:
 		beq.s	loc_83EC2
 		move.w	#2,$2E(a0)
 		lea	Child6_MakeBossExplosion2(pc),a2
-		bsr.w	CreateChild6_Simple
-		bne.w	locret_83EC0
+		jsr	(CreateChild6_Simple).w
+		bne.s	locret_83EC0
 		bra.s	loc_83E90
 ; ---------------------------------------------------------------------------
 
@@ -152,8 +152,8 @@ Obj_BossExpControlOff:
 		beq.s	loc_83EC2
 		move.w	#2,$2E(a0)
 		lea	Child6_MakeBossExplosionOff(pc),a2
-		bsr.w	CreateChild6_Simple
-		bne.w	locret_83EC0
+		jsr	(CreateChild6_Simple).w
+		bne.s	locret_83EC0
 		bra.w	loc_83E90
 ; ---------------------------------------------------------------------------
 
@@ -171,7 +171,7 @@ Obj_BossExplosionSpecial:
 
 Obj_BossExplosion1:
 		lea	ObjDat_BossExplosion1(pc),a1
-		bsr.w	SetUp_ObjAttributes
+		jsr	(SetUp_ObjAttributes).w
 
 loc_83F52:
 		move.l	#Obj_BossExplosionAnim,address(a0)
@@ -180,43 +180,43 @@ loc_83F52:
 
 Obj_BossExplosionAnim:
 		lea	AniRaw_BossExplosion(pc),a1
-		jsr	(Animate_RawNoSSTMultiDelay).l
-		bra.w	Draw_Sprite
+		jsr	(Animate_RawNoSSTMultiDelay).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_BossExplosion2:
 		lea	ObjDat_BossExplosion2(pc),a1
-		bsr.w	SetUp_ObjAttributes
+		jsr	(SetUp_ObjAttributes).w
 		bra.s	loc_83F52
 ; ---------------------------------------------------------------------------
 
 Obj_BossExplosionOffset:
 		lea	ObjDat_BossExplosion1(pc),a1
-		bsr.w	SetUp_ObjAttributes
+		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_BossExplosionOffsetAnim,address(a0)
 		move.l	#Go_Delete_Sprite,$34(a0)
 		sfx	sfx_Bomb,0,0,0
 
 Obj_BossExplosionOffsetAnim:
 		lea	AniRaw_BossExplosion(pc),a1
-		jsr	(Animate_RawNoSSTMultiDelay).l
-		bra.w	Draw_Sprite
+		jsr	(Animate_RawNoSSTMultiDelay).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 ObjDat_BossExplosion1:
 		dc.l Map_BossExplosion
 		dc.w $8500
 		dc.w 0
-		dc.b $C
-		dc.b $C
+		dc.b 24/2
+		dc.b 24/2
 		dc.b 0
 		dc.b 0
 ObjDat_BossExplosion2:
 		dc.l Map_BossExplosion
 		dc.w $84D2
 		dc.w 0
-		dc.b $C
-		dc.b $C
+		dc.b 24/2
+		dc.b 24/2
 		dc.b 0
 		dc.b 0
 AniRaw_BossExplosion:

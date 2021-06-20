@@ -47,7 +47,7 @@ Obj_WaterWave:
 		bcs.s	+
 		move.b	#1,mapping_frame(a0)
 +		move.b	mapping_frame(a0),1(a2)
-		jmp	(Draw_Sprite).l
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Water Wave/Object Data/Map - Water Wave.asm"

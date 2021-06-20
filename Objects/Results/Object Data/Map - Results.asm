@@ -19,6 +19,7 @@ Map_Results:
 		dc.w word_2F39E-Map_Results		; 11
 		dc.w word_2F3B2-Map_Results		; 12 (Null?)
 		dc.w word_2F3C6-Map_Results		; 13
+		dc.w word_2F3DA-Map_Results		; 14
 word_2F2E0:
 		dc.w 0
 word_2F2E2:
@@ -94,3 +95,14 @@ word_2F3C6:
 		dc.b	0,  $D,	$84, $D8,   0,	 1
 		dc.b	0,  $D,	$84, $E0,   0, $21
 		dc.b	0,   1,	$84, $E8,   0, $41
+word_2F3DA:
+		dc.w 2
+		dc.b 0, $D,$86,$E4, 0, 0
+		dc.b 0, 9,$86,$EC, 0,$20
+
+
+
+
+
+
+

@@ -19,7 +19,11 @@ SMPS_LoadDACDriver:
 	nop
 	SMPS_resetZ80
 	move.w	d1,(SMPS_z80_bus_request).l	; start the Z80
-	rts
+	tst.b	(SegaCD_Mode).w
+	beq.s	+
+	MCDSend	#_MCD_SetVolume, #255
+	MCDSend	#_MCD_NoSeek, #1
++	rts
 ; End of function SMPS_LoadDACDriver
 
 ; ---------------------------------------------------------------------------
@@ -44,22 +48,18 @@ SMPS_QueueSound1:
     if SMPS_EnablePlaySoundLocal
 SMPS_QueueSound2Local:
 	tst.b	render_flags(a0)
-	bpl.s	+	; rts
+	bpl.s	++	; rts
     endif
 ; sub_1370: PlaySound:
 SMPS_QueueSound2:
+	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	bne.s	+
 	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	rts
++
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
 +	rts
 ; End of function SMPS_QueueSound2
-
-; ---------------------------------------------------------------------------
-; Queue sound for play (queue 3)
-; ---------------------------------------------------------------------------
-; sub_1376: PlaySoundStereo:
-SMPS_QueueSound3:
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
-	rts
-; End of function SMPS_QueueSound3
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample

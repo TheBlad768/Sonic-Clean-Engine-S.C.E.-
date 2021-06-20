@@ -5,7 +5,6 @@
 ; =============== S U B R O U T I N E =======================================
 
 TouchResponse:
-		nop
 		bsr.w	Test_Ring_Collisions
 		bsr.w	ShieldTouchResponse
 		tst.b	character_id(a0)								; Is the player Sonic?
@@ -16,19 +15,23 @@ TouchResponse:
 		; By this point, we're focussing purely on the Insta-Shield
 		cmpi.b	#1,double_jump_flag(a0)					; Is the Insta-Shield currently in its 'attacking' mode?
 		bne.s	.Touch_NoInstaShield						; If not, branch
-		move.b	status_secondary(a0),d0					; Get status_secondary...
-		move.w	d0,-(sp)									; ...and save it
+
+;		move.b	status_secondary(a0),d0					; Get status_secondary...
+;		move.w	d0,-(sp)									; ...and save it
+
 		bset	#Status_Invincible,status_secondary(a0)			; Make the player invincible
 		move.w	x_pos(a0),d2								; Get player's x_pos
 		move.w	y_pos(a0),d3								; Get player's y_pos
 		subi.w	#$18,d2									; Subtract width of Insta-Shield
 		subi.w	#$18,d3									; Subtract height of Insta-Shield
-		move.w	#$30,d4									; Player's width
-		move.w	#$30,d5									; Player's height
+		moveq	#$30,d4									; Player's width
+		moveq	#$30,d5									; Player's height
 		bsr.s	.Touch_Process
-		move.w	(sp)+,d0									; Get the backed-up status_secondary
-		btst	#Status_Invincible,d0							; Was the player already invincible (wait, what? An earlier check ensures that this can't happen)
-		bne.s	.alreadyinvincible							; If so, branch
+
+;		move.w	(sp)+,d0									; Get the backed-up status_secondary
+;		btst	#Status_Invincible,d0							; Was the player already invincible (wait, what? An earlier check ensures that this can't happen)
+;		bne.s	.alreadyinvincible							; If so, branch
+
 		bclr	#Status_Invincible,status_secondary(a0)			; Make the player vulnerable again
 
 .alreadyinvincible:
@@ -46,7 +49,7 @@ TouchResponse:
 		sub.w	d5,d3
 		; Note the lack of a check for if the player is ducking
 		; Height is no longer reduced by ducking
-		move.w	#$10,d4									; Player's collision width
+		moveq	#$10,d4									; Player's collision width
 		add.w	d5,d5
 
 .Touch_Process:
@@ -210,8 +213,9 @@ Touch_Monitor:
 
 .checkfall:
 		; This check is responsible for S&K's monitors not falling if hit from below (but only in regular gravity. See below)
-		btst	#1,status(a1)								; Is the monitor upside down (different way of checking)?
-		beq.s	.checkdestroy							; If not, branch
+;		btst	#1,status(a1)								; Is the monitor upside down (different way of checking)?
+;		beq.s	.checkdestroy							; If not, branch
+
 		btst	#1,render_flags(a1)						; Is the monitor upside down?
 		bne.s	.monitorupsidedown					; If so, branch
 		move.w	y_pos(a0),d0							; Get player's y_pos
@@ -287,18 +291,16 @@ Touch_Enemy:
 		; Boss related? Could be special enemies in general
 		tst.b	boss_hitcount2(a1)
 		beq.s	Touch_EnemyNormal
-		neg.w	x_vel(a0)								; Bounce player directly off boss
+		neg.w	x_vel(a0)							; Bounce player directly off boss
 		neg.w	y_vel(a0)
 		neg.w	ground_vel(a0)
 		move.b	collision_flags(a1),collision_restore_flags(a1)	; Save collision_flags
-		move.w	a0,d0									; Save value of RAM address of which player hit the boss:
-		move.b	d0,$1C(a1)
 		clr.b	collision_flags(a1)
 		subq.b	#1,boss_hitcount2(a1)
-		bne.s	.bossnotedefeated
+		bne.s	.bossnotdefeated
 		bset	#7,status(a1)
 
-.bossnotedefeated:
+.bossnotdefeated:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -407,7 +409,6 @@ Touch_ChkHurt_Bounce_Projectile:
 ; ---------------------------------------------------------------------------
 
 Touch_Hurt:
-		nop
 		tst.b	invulnerability_timer(a0)					; Is the player invulnerable?
 		bne.s	Touch_ChkHurt_Return				; If so, branch
 		movea.l	a1,a2
@@ -468,7 +469,7 @@ HurtCharacter:
 		moveq	#sfx_HitSpikes,d0						; load spikes damage sound
 
 .sound:
-		bsr.w	PlaySound_Special
+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
 		moveq	#-1,d0
 		rts
 ; ---------------------------------------------------------------------------
@@ -489,7 +490,7 @@ KillSonic:
 Kill_Character:
 		tst.w	(Debug_placement_mode).w			; is debug mode active?
 		bne.s	loc_1036E.dontdie						; if yes, branch
-		move.w	#sfx_Death,d0						; play normal death sound
+		moveq	#sfx_Death,d0						; play normal death sound
 
 loc_1036E:
 		clr.b	status_secondary(a0)
@@ -502,11 +503,10 @@ loc_1036E:
 		move.w	#-$700,y_vel(a0)
 		clr.w	x_vel(a0)
 		clr.w	ground_vel(a0)
-		clr.w	(HScroll_Shift).w
 		move.b	#id_Death,anim(a0)
 		move.w	art_tile(a0),(Saved_art_tile).w
 		bset	#7,art_tile(a0)
-		bsr.w	PlaySound_Special
+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
 
 .dontdie:
 		moveq	#-1,d0
@@ -566,8 +566,8 @@ ShieldTouchResponse:
 		move.w	y_pos(a0),d3							; Get player's y_pos
 		subi.w	#$18,d2								; Subtract width of shield
 		subi.w	#$18,d3								; Subtract height of shield
-		move.w	#$30,d4								; Player's width
-		move.w	#$30,d5								; Player's height
+		moveq	#$30,d4								; Player's width
+		moveq	#$30,d5								; Player's height
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6								; Get number of objects queued
 		beq.s	ShieldTouch_Return					; If there are none, return
