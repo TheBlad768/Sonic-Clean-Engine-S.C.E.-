@@ -16,7 +16,7 @@ set AS_MSGPATH=Win32
 set USEANSI=n
 
 REM // allow the user to choose to print error messages out by supplying the -pe parameter
-"Win32/asw.exe" -xx -q -c -A -L Sonic.asm
+"Win32/asw.exe" -xx -q -c -A -L -i "%cd%" Sonic.asm
 IF NOT EXIST Sonic.p pause & exit
 
 "Win32/s1p2bin" Sonic.p Sonic.gen Sonic.h
@@ -31,7 +31,7 @@ REM // generate debug information
 REM // "Win32/rompad" Sonic.gen 255 0
 
 REM // fix the rom header (checksum)
-"Win32/fixheadr" Sonic.gen
+"Win32/fixheader" Sonic.gen
 
 REM // Copy rom to CD folder
 copy Sonic.gen _CD

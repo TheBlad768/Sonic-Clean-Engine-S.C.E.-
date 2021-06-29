@@ -9,7 +9,7 @@ Obj_Fire_Shield:
 		; Init
 		move.l	#Map_FireShield,mappings(a0)
 		move.l	#DPLC_FireShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_FireShield,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#ArtUnc_FireShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
@@ -83,14 +83,14 @@ locret_19690:
 Obj_Lightning_Shield:
 		; init
 		; Load Spark art
-		move.l	#ArtUnc_Obj_Lightning_Shield_Sparks,d1			; Load art source
+		move.l	#ArtUnc_Obj_Lightning_Shield_Sparks>>1,d1			; Load art source
 		move.w	#tiles_to_bytes(ArtTile_Shield_Sparks),d2	; Load art destination
 		move.w	#(ArtUnc_Obj_Lightning_Shield_Sparks_End-ArtUnc_Obj_Lightning_Shield_Sparks)/2,d3	; Size of art (in words)
 		jsr	(Add_To_DMA_Queue).w
 
 		move.l	#Map_LightningShield,mappings(a0)
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_LightningShield,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#ArtUnc_LightningShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
@@ -247,7 +247,7 @@ Obj_Bubble_Shield:
 		; Init
 		move.l	#Map_BubbleShield,mappings(a0)
 		move.l	#DPLC_BubbleShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_BubbleShield,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#ArtUnc_BubbleShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
@@ -308,7 +308,7 @@ Obj_Insta_Shield:
 		; Init
 		move.l	#Map_InstaShield,mappings(a0)
 		move.l	#DPLC_InstaShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_InstaShield,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#ArtUnc_InstaShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.b	#$18,width_pixels(a0)
@@ -388,7 +388,7 @@ PLCLoad_Shields_ReadEntry:
 		andi.w	#$F0,d3
 		addi.w	#$10,d3
 		andi.w	#$FFF,d1
-		lsl.l	#5,d1
+		lsl.l	#4,d1
 		add.l	Art_Address(a0),d1
 		move.w	d4,d2
 		add.w	d3,d4
@@ -402,7 +402,7 @@ PLCLoad_Shields_Return:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invincibility:
-		move.l	#ArtUnc_Invincibility,d1
+		move.l	#ArtUnc_Invincibility>>1,d1
 		move.w	#tiles_to_bytes(ArtTile_Shield),d2	; VRAM
 		move.w	#$400/2,d3						; Size/2
 		jsr	(Add_To_DMA_Queue).w

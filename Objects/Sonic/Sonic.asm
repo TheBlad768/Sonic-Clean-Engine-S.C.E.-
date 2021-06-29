@@ -2601,7 +2601,7 @@ Sonic_Load_PLC2:
 		subq.w	#1,d5
 		bmi.s	+
 		move.w	#$D000,d4
-		move.l	#ArtUnc_Sonic,d6
+		move.l	#ArtUnc_Sonic>>1,d6
 
 -		moveq	#0,d1
 		move.w	(a2)+,d1
@@ -2610,7 +2610,7 @@ Sonic_Load_PLC2:
 		andi.w	#$F0,d3
 		addi.w	#$10,d3
 		andi.w	#$FFF,d1
-		lsl.l	#5,d1
+		lsl.l	#4,d1
 		add.l	d6,d1
 		move.w	d4,d2
 		add.w	d3,d4

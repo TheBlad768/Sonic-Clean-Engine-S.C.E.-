@@ -12,7 +12,7 @@ Handle_Onscreen_Water_Height:
 +		clr.b	(Water_full_screen_flag).w
 		moveq	#0,d0
 		move.b	(Oscillating_Data).w,d0
-		lsr.w	#1,d0
+		lsr.w	d0
 		add.w	(Mean_water_level).w,d0
 		move.w	d0,(Water_level).w
 		move.w	(Water_level).w,d0
@@ -37,12 +37,8 @@ Handle_Onscreen_Water_Height_Return:
 ; =============== S U B R O U T I N E =======================================
 
 DynamicWaterHeight:
-		moveq	#0,d0
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#5,d0
-		move.w	DynamicWaterResize(pc,d0.w),d0
-		jsr	DynamicWaterResize(pc,d0.w)
+		movea.l	(Level_data_addr_RAM.WaterResize).w,a0
+		jsr	(a0)
 		moveq	#0,d1
 		move.b	(Water_speed).w,d1
 		move.w	(Target_water_level).w,d0
@@ -55,15 +51,6 @@ DynamicWaterHeight:
 No_WaterResize:
 		rts
 ; End of function DynamicWaterHeight
-; ---------------------------------------------------------------------------
-
-DynamicWaterResize: offsetTable
-		offsetTableEntry.w No_WaterResize			; DEZ 1
-		offsetTableEntry.w No_WaterResize			; DEZ 2
-		offsetTableEntry.w No_WaterResize			; DEZ 3
-		offsetTableEntry.w No_WaterResize			; DEZ 4
-
-		zonewarning DynamicWaterResize,(2*4)
 
 ; =============== S U B R O U T I N E =======================================
 

@@ -1,88 +1,146 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using SonicRetro.SonLVL.API;
 
 namespace S3KObjectDefinitions.Common
 {
-    class InvisibleBlock : ObjectDefinition
-    {
-        private Sprite img;
+	class InvisibleShockBlock : InvisibleBlock
+	{
+		public override string Name
+		{
+			get { return "Invisible Shock Block"; }
+		}
+	}
 
-        public override void Init(ObjectData data)
-        {
-            byte[] artfile = ObjectHelper.OpenArtFile("../Objects/Monitor/Nemesis Art/Monitors.bin", CompressionType.Nemesis);
-            img = ObjectHelper.MapASMToBmp(artfile, "../Objects/Monitor/Object Data/Map - Monitor.asm", 0, 0);
-        }
+	class InvisibleLavaBlock : InvisibleBlock
+	{
+		public override string Name
+		{
+			get { return "Invisible Lava Block"; }
+		}
+	}
 
-        public override ReadOnlyCollection<byte> Subtypes
-        {
-            get { return new ReadOnlyCollection<byte>(new byte[] { 0 }); }
-        }
+	class InvisibleHurtBlockHorizontal : InvisibleBlock
+	{
+		public override string Name
+		{
+			get { return "Invisible Hurt Block (top)"; }
+		}
+	}
 
-        public override string Name
-        {
-            get { return "Invisible solid block"; }
-        }
+	class InvisibleHurtBlockVertical : InvisibleBlock
+	{
+		public override string Name
+		{
+			get { return "Invisible Hurt Block (sides)"; }
+		}
+	}
 
-        public override string SubtypeName(byte subtype)
-        {
-            return ((subtype >> 4) + 1) + "x" + ((subtype & 0xF) + 1) + " blocks";
-        }
+	class InvisibleBlock : ObjectDefinition
+	{
+		private Sprite[] img;
 
-        public override Sprite Image
-        {
-            get {
-				int w = 32;
-				int h = 32;
-				BitmapBits bmp = new BitmapBits(w, h);
-				bmp.FillRectangle(0xE, 0, 0, w - 1, h - 1);
-				bmp.DrawRectangle(0xC, 0, 0, w - 1, h - 1);
-				for (int i = 1; i < w/2; i++)
-					bmp.DrawLine(0xD, i*2, 0, i*2, h - 1);
-				//14 17 14
-				Sprite spr = new Sprite(bmp, new Point(-(w / 2), -(h / 2)));
-				//spr.Offset = new Point(spr.X + obj.X, spr.Y + obj.Y);
-				return spr;
+		public override void Init(ObjectData data)
+		{
+			var artfile = ObjectHelper.OpenArtFile("Common/RingHUDText.bin", CompressionType.KosinskiM);
+			var sprite = ObjectHelper.MapASMToBmp(artfile, "../Objects/Invisible Barrier/Object Data/Map - Invisible Block.asm", 0, 0);
+			sprite.InvertPriority();
+
+			img = new[]
+			{
+				sprite,
+				new Sprite(sprite, true, false),
+				new Sprite(sprite, false, true),
+				new Sprite(sprite, true, true)
+			};
+		}
+
+		public override ReadOnlyCollection<byte> Subtypes
+		{
+			get { return new ReadOnlyCollection<byte>(new byte[] { 0 }); }
+		}
+
+		public override string Name
+		{
+			get { return "Invisible Solid Block"; }
+		}
+
+		public override string SubtypeName(byte subtype)
+		{
+			return ((subtype >> 4) + 1) + "x" + ((subtype & 0xF) + 1) + " blocks";
+		}
+
+		public override Sprite Image
+		{
+			get { return img[0]; }
+		}
+
+		public override Sprite SubtypeImage(byte subtype)
+		{
+			return img[0];
+		}
+
+		public override Sprite GetSprite(ObjectEntry obj)
+		{
+			return img[(obj.XFlip ? 1 : 0) | (obj.YFlip ? 2 : 0)];
+		}
+
+		public override Sprite GetDebugOverlay(ObjectEntry obj)
+		{
+			int w = ((obj.SubType >> 4) + 1) * 16;
+			int h = ((obj.SubType & 0xF) + 1) * 16;
+			BitmapBits bmp = new BitmapBits(w, h);
+			bmp.DrawRectangle(LevelData.ColorWhite, 0, 0, w - 1, h - 1);
+			return new Sprite(bmp, -(w / 2), -(h / 2));
+		}
+
+		public override Rectangle GetBounds(ObjectEntry obj)
+		{
+			int w = ((obj.SubType >> 4) + 1) * 16;
+			int h = ((obj.SubType & 0xF) + 1) * 16;
+			return new Rectangle(obj.X - (w / 2), obj.Y - (h / 2), w, h);
+		}
+
+		public override int GetDepth(ObjectEntry obj)
+		{
+			return 4;
+		}
+
+		public override bool Debug { get { return true; } }
+
+		private PropertySpec[] customProperties = new PropertySpec[] {
+			new PropertySpec("Width", typeof(int), "Extended", null, null, GetWidth, SetWidth),
+			new PropertySpec("Height", typeof(int), "Extended", null, null, GetHeight, SetHeight)
+		};
+
+		public override PropertySpec[] CustomProperties
+		{
+			get
+			{
+				return customProperties;
 			}
-        }
+		}
 
-        public override Sprite SubtypeImage(byte subtype)
-        {
-            int w = 32;
-            int h = 32;
-            BitmapBits bmp = new BitmapBits(w, h);
-            bmp.FillRectangle(0xE, 0, 0, w - 1, h - 1);
-            bmp.DrawRectangle(0xC, 0, 0, w - 1, h - 1);
-			for (int i = 1; i < w/2; i++)
-				bmp.DrawLine(0xD, i*2, 0, i*2, h - 1);
-			//14 17 14
-            Sprite spr = new Sprite(bmp, new Point(-(w / 2), -(h / 2)));
-            //spr.Offset = new Point(spr.X + obj.X, spr.Y + obj.Y);
-            return spr;
-        }
+		private static object GetWidth(ObjectEntry obj)
+		{
+			return (obj.SubType & 0xF0) >> 4;
+		}
 
-        public override Sprite GetSprite(ObjectEntry obj)
-        {
-            int w = ((obj.SubType >> 4) + 1) * 16;
-            int h = ((obj.SubType & 0xF) + 1) * 16;
-            BitmapBits bmp = new BitmapBits(w, h);
-            bmp.DrawRectangle(0xC, 0, 0, w - 1, h - 1);
-			for (int i = 1; i < w/2; i++)
-				bmp.DrawLine(0xD, i*2, 0, i*2, h - 1);
-			//14 17 14
-            Sprite spr = new Sprite(bmp, new Point(-(w / 2), -(h / 2)));
-            spr.Offset = new Point(spr.X + obj.X, spr.Y + obj.Y);
-            return spr;
-        }
+		private static void SetWidth(ObjectEntry obj, object value)
+		{
+			obj.SubType = (byte)((Math.Min((int)value, 0xF) << 4) | (obj.SubType & 0xF));
+		}
 
-        public override Rectangle GetBounds(ObjectEntry obj, Point camera)
-        {
-            int w = ((obj.SubType >> 4) + 1) * 16;
-            int h = ((obj.SubType & 0xF) + 1) * 16;
-            return new Rectangle(obj.X - (w / 2) - camera.X, obj.Y - (h / 2) - camera.Y, w, h);
-        }
+		private static object GetHeight(ObjectEntry obj)
+		{
+			return obj.SubType & 0xF;
+		}
 
-        public override bool Debug { get { return true; } }
-    }
+		private static void SetHeight(ObjectEntry obj, object value)
+		{
+			obj.SubType = (byte)(Math.Min((int)value, 0xF) | (obj.SubType & 0xF0));
+		}
+	}
 }

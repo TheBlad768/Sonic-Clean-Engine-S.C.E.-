@@ -11,17 +11,11 @@ LevelSetup:
 		movea.l	(Block_table_addr_ROM).w,a2
 		movea.l	(Level_layout2_addr_ROM).w,a3
 		move.w	#vram_fg,d7
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#2,d0
-		movea.l	Offs_ScreenInit(pc,d0.w),a1
+		movea.l	(Level_data_addr_RAM.ScreenInit).w,a1
 		jsr	(a1)
 		addq.w	#2,a3
 		move.w	#vram_bg,d7
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#2,d0
-		movea.l	Offs_BackgroundInit(pc,d0.w),a1
+		movea.l	(Level_data_addr_RAM.BackgroundInit).w,a1
 		jsr	(a1)
 		move.w	(Camera_Y_pos_copy).w,(V_scroll_value).w
 		move.w	(Camera_Y_pos_BG_copy).w,(V_scroll_value_BG).w
@@ -35,51 +29,21 @@ ScreenEvents:
 		movea.l	(Block_table_addr_ROM).w,a2
 		movea.l	(Level_layout2_addr_ROM).w,a3
 		move.w	#vram_fg,d7
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#2,d0
-		movea.l	Offs_ScreenEvent(pc,d0.w),a1
+		movea.l	(Level_data_addr_RAM.ScreenEvent).w,a1
 		jsr	(a1)
 		addq.w	#2,a3
 		move.w	#vram_bg,d7
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#2,d0
-		movea.l	Offs_BackgroundEvent(pc,d0.w),a1
+		movea.l	(Level_data_addr_RAM.BackgroundEvent).w,a1
 		jsr	(a1)
 		move.w	(Camera_Y_pos_copy).w,(V_scroll_value).w
 		move.w	(Camera_Y_pos_BG_copy).w,(V_scroll_value_BG).w
 		rts
-; ---------------------------------------------------------------------------
-
-Offs_ScreenInit:
-		dc.l DEZ1_ScreenInit			; DEZ1
-Offs_BackgroundInit:
-		dc.l DEZ1_BackgroundInit		; DEZ1
-Offs_ScreenEvent:
-		dc.l DEZ1_ScreenEvent			; DEZ1
-Offs_BackgroundEvent:
-		dc.l DEZ1_BackgroundEvent	; DEZ1
-		dc.l DEZ1_ScreenInit			; DEZ2
-		dc.l DEZ1_BackgroundInit		; DEZ2
-		dc.l DEZ1_ScreenEvent			; DEZ2
-		dc.l DEZ1_BackgroundEvent	; DEZ2
-		dc.l DEZ1_ScreenInit			; DEZ3
-		dc.l DEZ1_BackgroundInit		; DEZ3
-		dc.l DEZ1_ScreenEvent			; DEZ3
-		dc.l DEZ1_BackgroundEvent	; DEZ3
-		dc.l DEZ1_ScreenInit			; DEZ4
-		dc.l DEZ1_BackgroundInit		; DEZ4
-		dc.l DEZ1_ScreenEvent			; DEZ4
-		dc.l DEZ1_BackgroundEvent	; DEZ4
-
-		zonewarning Offs_ScreenInit,(16*4)
 
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_ScreenInit:
-		jsr	Reset_TileOffsetPositionActual(pc)
-		jmp	Refresh_PlaneFull(pc)
+		bsr.w	Reset_TileOffsetPositionActual
+		bra.w	Refresh_PlaneFull
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -88,20 +52,20 @@ DEZ1_ScreenEvent:
 		bne.s	DEZ1_ScreenEvent_RefreshPlane
 		move.w	(Screen_shaking_flag+2).w,d0
 		add.w	d0,(Camera_Y_pos_copy).w
-		jmp	DrawTilesAsYouMove(pc)
+		bra.w	DrawTilesAsYouMove
 ; ---------------------------------------------------------------------------
 
 DEZ1_ScreenEvent_RefreshPlane:
 		clr.b	(Screen_event_flag).w
-		jmp	Refresh_PlaneScreenDirect(pc)
+		bra.w	Refresh_PlaneScreenDirect
 
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_BackgroundInit:
 		bsr.s	DEZ1_Deform
-		jsr	Reset_TileOffsetPositionEff(pc)
+		bsr.w	Reset_TileOffsetPositionEff
 		moveq	#0,d1	; Set XCam BG pos
-		jsr	Refresh_PlaneFull(pc)
+		bsr.w	Refresh_PlaneFull
 		bra.s	DEZ1_BackgroundEvent.deform
 
 ; =============== S U B R O U T I N E =======================================
@@ -114,8 +78,8 @@ DEZ1_BackgroundEvent:
 .deform:
 		lea	DEZ1_BGDrawArray(pc),a4
 		lea	(H_scroll_table).w,a5
-		jsr	ApplyDeformation(pc)
-		jmp	ShakeScreen_Setup(pc)
+		bsr.w	ApplyDeformation
+		bra.w	ShakeScreen_Setup
 ; ---------------------------------------------------------------------------
 
 DEZ1_BGDrawArray:	dc.w $7FFF
@@ -123,7 +87,7 @@ DEZ1_BGDrawArray:	dc.w $7FFF
 
 DEZ1_Deform:
 		lea	DEZ1_ParallaxScript(pc),a1
-		jmp	ExecuteParallaxScript(pc)
+		bra.w	ExecuteParallaxScript
 ; ---------------------------------------------------------------------------
 
 DEZ1_ParallaxScript:

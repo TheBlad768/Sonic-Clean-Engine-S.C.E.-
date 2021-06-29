@@ -77,6 +77,7 @@ GM_Level:
 		disableInts
 		jsr	(HUD_DrawInitial).w
 		enableInts
+		jsr	(LoadLevelPointer).w
 		jsr	(Get_LevelSizeStart).w
 		jsr	(DeformBgLayer).w
 		jsr	(LoadLevelLoadBlock).w

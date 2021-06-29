@@ -154,7 +154,7 @@ Save_Level_Data:
 		move.w	(Player_1+top_solid_bit).w,(Saved_solid_bits).w
 		move.w	(Ring_count).w,(Saved_ring_count).w
 		move.l	(Timer).w,(Saved_timer).w
-		move.b	(Dynamic_resize_routine).w,(Saved_dynamic_resize_routine).w
+		move.l	(Level_data_addr_RAM.Resize).w,(Saved_dynamic_resize).w
 		move.w	(Camera_max_Y_pos).w,(Saved_camera_max_Y_pos).w
 		move.w	(Camera_X_pos).w,(Saved_camera_X_pos).w
 		move.w	(Camera_Y_pos).w,(Saved_camera_Y_pos).w
@@ -178,7 +178,7 @@ Load_Starpost_Settings:
 		subq.b	#1,(Timer_second).w
 		move.w	(Saved_art_tile).w,(Player_1+art_tile).w
 		move.w	(Saved_solid_bits).w,(Player_1+top_solid_bit).w
-		move.b	(Saved_dynamic_resize_routine).w,(Dynamic_resize_routine).w
+		move.l	(Saved_dynamic_resize).w,(Level_data_addr_RAM.Resize).w
 		move.w	(Saved_camera_max_Y_pos).w,(Camera_max_Y_pos).w
 		move.w	(Saved_camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
 		move.w	(Saved_camera_X_pos).w,(Camera_X_pos).w

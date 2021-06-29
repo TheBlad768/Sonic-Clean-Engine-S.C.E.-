@@ -15,10 +15,6 @@ TouchResponse:
 		; By this point, we're focussing purely on the Insta-Shield
 		cmpi.b	#1,double_jump_flag(a0)					; Is the Insta-Shield currently in its 'attacking' mode?
 		bne.s	.Touch_NoInstaShield						; If not, branch
-
-;		move.b	status_secondary(a0),d0					; Get status_secondary...
-;		move.w	d0,-(sp)									; ...and save it
-
 		bset	#Status_Invincible,status_secondary(a0)			; Make the player invincible
 		move.w	x_pos(a0),d2								; Get player's x_pos
 		move.w	y_pos(a0),d3								; Get player's y_pos
@@ -27,11 +23,6 @@ TouchResponse:
 		moveq	#$30,d4									; Player's width
 		moveq	#$30,d5									; Player's height
 		bsr.s	.Touch_Process
-
-;		move.w	(sp)+,d0									; Get the backed-up status_secondary
-;		btst	#Status_Invincible,d0							; Was the player already invincible (wait, what? An earlier check ensures that this can't happen)
-;		bne.s	.alreadyinvincible							; If so, branch
-
 		bclr	#Status_Invincible,status_secondary(a0)			; Make the player vulnerable again
 
 .alreadyinvincible:
@@ -110,6 +101,12 @@ Touch_Height:
 		bra.w	Touch_ChkValue
 ; ---------------------------------------------------------------------------
 ; collision sizes $00-$3F (width,height)
+; $00-$3F	- Touch
+; $40-$7F	- Ring/Monitor
+; $80-$BF	- Enemy(Hurt)
+; $C0-$FF	- Special
+; ---------------------------------------------------------------------------
+
 Touch_Sizes:
 		dc.b 8/2, 8/2		; 0
 		dc.b 40/2, 40/2	; 1

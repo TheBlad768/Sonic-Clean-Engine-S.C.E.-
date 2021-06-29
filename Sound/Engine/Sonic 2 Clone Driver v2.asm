@@ -589,11 +589,11 @@ CycleSoundQueue:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 Sound_PlayCDA:
-	bclr	#0,SMPS_RAM.variables.v_cda_ignore(a6)
-	bne.w	Sound_PlayBGM
-
 	tst.b	(SegaCD_Mode).w
 	beq.w	Sound_PlayBGM
+
+	bclr	#0,SMPS_RAM.variables.v_cda_ignore(a6)
+	bne.w	Sound_PlayBGM
 
 	bsr.w	StopSFX
     if SMPS_EnableSpecSFX

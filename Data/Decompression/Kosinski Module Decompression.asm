@@ -101,7 +101,7 @@ Process_Kos_Module_Queue_Init:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Kos_Module_Queue:
-		clearRAM2 Kos_decomp_queue_count, Kos_module_queue_End	; Clear the KosM bytes
+		clearRAM Kos_decomp_queue_count, Kos_module_queue_End	; Clear the KosM bytes
 		rts
 ; End of function Clear_Kos_Module_Queue
 ; ---------------------------------------------------------------------------
@@ -148,7 +148,7 @@ Process_Kos_Module_Queue:
 		andi.l	#$F,d0
 		add.l	d0,d1						; round to the nearest $10 boundary
 		move.l	d1,(Kos_module_queue).w		; and set new source
-		move.l	#Kos_decomp_buffer,d1
+		move.l	#Kos_decomp_buffer>>1,d1
 		disableIntsSave
 		bsr.w	Add_To_DMA_Queue
 		enableIntsSave

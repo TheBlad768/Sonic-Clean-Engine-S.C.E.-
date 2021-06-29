@@ -5,28 +5,10 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Tiles:
-		moveq	#0,d0
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		move.w	Offs_AniPLC(pc,d0.w),d1
-		lea	Offs_AniFunc(pc,d1.w),a2
-		move.w	Offs_AniFunc(pc,d0.w),d0
-		jmp	Offs_AniFunc(pc,d0.w)
-; ---------------------------------------------------------------------------
-
-Offs_AniFunc: offsetTable
-		offsetTableEntry.w AnimateTiles_NULL		; DEZ 1
-Offs_AniPLC:
-		offsetTableEntry.w AniPLC_NULL			; DEZ 1
-		offsetTableEntry.w AnimateTiles_NULL		; DEZ 2
-		offsetTableEntry.w AniPLC_NULL			; DEZ 2
-		offsetTableEntry.w AnimateTiles_NULL		; DEZ 3
-		offsetTableEntry.w AniPLC_NULL			; DEZ 3
-		offsetTableEntry.w AnimateTiles_NULL		; DEZ 4
-		offsetTableEntry.w AniPLC_NULL			; DEZ 4
-
-		zonewarning Offs_AniFunc,(4*4)
+		lea	(Level_data_addr_RAM.AnimateTiles).w,a0
+		movea.l	(a0)+,a1
+		movea.l	(a0)+,a2
+		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -67,7 +49,7 @@ AnimateTiles_DoAniPLC_Part2:
 ; Prepare for DMA transfer
 		; Get relative address of frame's art
 		move.b	8(a2,d0.w),d0	; Get tile ID
-		lsl.w	#5,d0				; Turn it into an offset
+		lsl.w	#4,d0				; Turn it into an offset
 		; Get VRAM destination address
 		move.w	4(a2),d2
 		; Get ROM source address
@@ -79,7 +61,7 @@ AnimateTiles_DoAniPLC_Part2:
 		move.b	7(a2),d3
 		lsl.w	#4,d3				; Turn it into actual size (in words)
 		; Use d1, d2 and d3 to queue art for transfer
-		bsr.w	Add_To_DMA_Queue
+		jsr	(Add_To_DMA_Queue).w
 
 .nextscript:
 		move.b	6(a2),d0			; Get total size of frame data

@@ -668,7 +668,6 @@ Clear_Switches:
 
 Restart_LevelData:
 		clr.b	(Background_event_routine).w
-		clr.b	(Dynamic_resize_routine).w
 		clr.b	(Object_load_routine).w
 		clr.b	(Rings_manager_routine).w
 		clr.b	(Boss_flag).w
@@ -819,6 +818,26 @@ Load_Level2:
 		move.l	a0,(Level_layout2_addr_ROM).w
 		rts
 ; End of function Load_Level
+
+; =============== S U B R O U T I N E =======================================
+
+LoadLevelPointer:
+		moveq	#0,d0
+		move.w	(Current_zone_and_act).w,d0
+		ror.b	#2,d0
+		lsr.w	#3,d0
+		move.w	d0,d1
+		add.w	d0,d0
+		add.w	d0,d0
+		add.w	d1,d0
+		lea	(LevelLoadPointer).l,a2
+		lea	(a2,d0.w),a2
+		lea	(Level_Data_addr_RAM).w,a3
+
+	rept	(Level_data_addr_RAM_End-Level_data_addr_RAM)/4
+		move.l	(a2)+,(a3)+
+	endm
+		rts
 ; ---------------------------------------------------------------------------
 ; Collision index pointer loading subroutine
 ; Uses Sonic & Knuckles format mapping

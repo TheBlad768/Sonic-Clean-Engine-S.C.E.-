@@ -2,10 +2,6 @@
 ; RAM variables
 ; ===========================================================================
 
-; sign-extends a 32-bit integer to 64-bit
-; all RAM addresses are run through this function to allow them to work in both 16-bit and 32-bit addressing modes
-ramaddr function x,(-(x&$80000000)<<1)|x
-
 ; RAM variables - General
 	phase	ramaddr($FFFF0000)	; Pretend we're in the RAM
 RAM_Start:
@@ -54,7 +50,7 @@ Sprite_table_input:					ds.b $80*8				; Sprite table input buffer
 Sprite_table_input_End
 
 DMA_queue:
-VDP_Command_Buffer:				ds.b $FC					; Stores all the VDP commands necessary to initiate a DMA transfer
+VDP_Command_Buffer:				ds.w $12*7				; Stores all the VDP commands necessary to initiate a DMA transfer
 DMA_queue_slot:
 VDP_Command_Buffer_Slot:			ds.l 1					; Points to the next free slot on the queue
 
@@ -82,7 +78,7 @@ Pos_table_index:						ds.b 1
 Pos_table_byte:						ds.b 1
 Distance_from_screen_top:				ds.w 1					; The vertical scroll manager scrolls the screen until the player's distance from the top of the screen is equal to this (or between this and this + $40 when in the air). $60 by default
 Camera_max_Y_pos_changing:			ds.b 1					; Set when the maximum camera Y pos is undergoing a change
-Dynamic_resize_routine:				ds.b 1
+									ds.b 1					; Unused
 Fast_V_scroll_flag:					ds.b 1					; If this is set vertical scroll when the player is on the ground and has a speed of less than $800 is capped at 24 pixels per frame instead of 6
 Scroll_lock:							ds.b 1					; If this is set scrolling routines aren't called
 v_screenposx:
@@ -120,7 +116,7 @@ Ring_end_addr_ROM:					ds.l 1					; Address in the ring layout of the first ring
 Ring_start_addr_RAM:				ds.w 1					; Address in the ring status table of the first ring whose X position is >= camera X position - 8
 Ring_consumption_table:										; Stores the addresses of all rings currently being consumed
 Ring_consumption_count:				ds.w 1					; The number of rings being consumed currently
-Ring_consumption_list:				ds.b $7E					; The remaining part of the ring consumption table
+Ring_consumption_list:				ds.w $3F					; The remaining part of the ring consumption table
 Ring_consumption_table_End
 
 Plane_Buffer:							ds.b $480				; Used by level drawing routines
@@ -274,6 +270,19 @@ Level_layout_addr_ROM:				ds.l 1					; Level layout pointer
 Level_layout2_addr_ROM:				ds.l 1					; Level layout 2 pointer
 Object_index_addr:					ds.l 1					; Points to either the object index for levels
 
+Level_data_addr_RAM:
+.AnPal:								ds.l 1
+.Resize:								ds.l 1
+.WaterResize:							ds.l 1
+.AfterBoss:							ds.l 1
+.ScreenInit:							ds.l 1
+.BackgroundInit:						ds.l 1
+.ScreenEvent:							ds.l 1
+.BackgroundEvent:					ds.l 1
+.AnimateTiles:						ds.l 1
+.AniPLC:								ds.l 1
+Level_data_addr_RAM_End
+
 Kos_decomp_queue_count:				ds.w 1					; The number of pieces of data on the queue. Sign bit set indicates a decompression is in progress
 Kos_decomp_stored_registers:			ds.b $28					; Allows decompression to be spread over multiple frames
 Kos_decomp_stored_SR:				ds.w 1
@@ -369,10 +378,11 @@ Saved_camera_X_pos:					ds.w 1
 Saved_camera_Y_pos:					ds.w 1
 Saved_mean_water_level:				ds.w 1
 Saved_camera_max_Y_pos:			ds.w 1
+Saved_dynamic_resize:				ds.l 1
 Saved_water_full_screen_flag:			ds.b 1
-Saved_dynamic_resize_routine:			ds.b 1
 Saved_status_secondary:				ds.b 1
 Saved_last_star_post_hit:				ds.b 1
+									ds.b 1					; Unused
 
 Oscillating_variables:
 Oscillating_Numbers:

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Name="Bubbler" Image="spawner" Depth="1" DefaultSubtype="80">
+  <Images>
+    <ImageFromMappings id="spawner">
+      <ArtFile filename="../Objects/Bubbler/KosinskiM Art/Bubbles.bin" compression="KosinskiM" />
+      <MapFile type="ASM" filename="../Objects/Bubbler/Object Data/Map - Bubbler.asm" label="word_2FD82" />
+    </ImageFromMappings>
+  </Images>
+</ObjDef>

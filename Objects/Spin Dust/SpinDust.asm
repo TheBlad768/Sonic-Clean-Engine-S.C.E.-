@@ -171,7 +171,7 @@ loc_18CE4:
 ; =============== S U B R O U T I N E =======================================
 
 DashDust_Load_DPLC:
-		move.l	#ArtUnc_DashDust,d6
+		move.l	#ArtUnc_DashDust>>1,d6
 
 SplashDrown_Load_DPLC:
 		moveq	#0,d0
@@ -194,7 +194,7 @@ SplashDrown_Load_DPLC:
 		andi.w	#$F0,d3
 		addi.w	#$10,d3
 		andi.w	#$FFF,d1
-		lsl.l	#5,d1
+		lsl.l	#4,d1
 		add.l	d6,d1
 		move.w	d4,d2
 		add.w	d3,d4

@@ -51,7 +51,7 @@ ObjHitCeiling_DoRoutine_Return:
 ObjHitFloor2_DoRoutine:
 		move.w	x_vel(a0),d3
 		ext.l	d3
-		lsl.l	#8,d3
+		asl.l	#8,d3
 		add.l	x_pos(a0),d3
 		swap	d3
 		bsr.w	ObjCheckFloorDist2

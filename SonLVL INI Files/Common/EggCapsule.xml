@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ObjDef xmlns="http://www.sonicretro.org" Name="Egg Capsule" Image="main" Depth="4">
+  <Images>
+    <ImageFromMappings id="main">
+      <ArtFile filename="../Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin" compression="KosinskiM" />
+      <MapFile type="ASM" filename="../Objects/Egg Capsule/Object Data/Map - Egg Capsule.asm" frame="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="button">
+      <ArtFile filename="../Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin" compression="KosinskiM" />
+      <MapFile type="ASM" filename="../Objects/Egg Capsule/Object Data/Map - Egg Capsule.asm" frame="5" />
+    </ImageFromMappings>
+  </Images>
+  <Display>
+    <DisplayOption>
+      <ImageRef image="button">
+        <Offset Y="-36" />
+      </ImageRef>
+      <ImageRef image="main" />
+    </DisplayOption>
+  </Display>
+</ObjDef>

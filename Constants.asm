@@ -427,8 +427,6 @@ ArtTile_Sonic				= $680
 ArtTile_Ring				= $6B4
 ArtTile_Ring_Sparks		= $6B8
 ArtTile_HUD				= $6BC
-ArtTile_HUDBoss			= $7D0
-ArtTile_HUDDeath		= $7C0
 ArtTile_Powerups			= $4AC
 ArtTile_Shield			= $79C
 ArtTile_Shield_Sparks		= $7BB
@@ -455,6 +453,10 @@ cMagenta:			equ cBlue+cRed		; colour magenta
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
 ; ---------------------------------------------------------------------------
+flip_x				= (1<<11)
+flip_y				= (1<<12)
+palette_bit_0			= 5
+palette_bit_1			= 6
 palette_line0			= (0<<13)
 palette_line_0		= (0<<13)
 palette_line1			= (1<<13)
@@ -463,8 +465,11 @@ palette_line2			= (2<<13)
 palette_line_2		= (2<<13)
 palette_line3			= (3<<13)
 palette_line_3		= (3<<13)
+high_priority_bit		= 7
 high_priority			= (1<<15)
+palette_mask			= $6000
 tile_mask			= $7FF
+nontile_mask			= $F800
 drawing_mask		= $7FFF
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses.
@@ -472,6 +477,7 @@ drawing_mask		= $7FFF
 ; ---------------------------------------------------------------------------
 VRAM_Plane_A_Name_Table	= $C000	; Extends until $CFFF
 VRAM_Plane_B_Name_Table	= $E000	; Extends until $EFFF
+VRAM_Plane_Table_Size		= $1000	; 64 cells x 32 cells x 2 bytes per cell
 ; ---------------------------------------------------------------------------
 ; Animation flags
 ; ---------------------------------------------------------------------------

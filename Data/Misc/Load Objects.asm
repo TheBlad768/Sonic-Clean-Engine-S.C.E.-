@@ -377,3 +377,89 @@ Create_New_Sprite4:
 		dbeq	d0,-
 +		rts
 ; End of function Load_Sprites
+; ---------------------------------------------------------------------------
+; Changes the coarse back- and forward-camera edges to match new Camera_X value.
+; Also seeks to appropriate object locations in the level's object layout, so
+; that Load_Sprites will correctly load the objects again.
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Seek_Object_Manager:
+		move.w	(Camera_X_pos).w,d6
+		addi.w	#$400,d6
+		andi.w	#$FF80,d6
+		cmp.w	(Camera_X_pos_coarse).w,d6
+		beq.w	locret_1BC5E
+		bge.s	loc_1BC1C
+		move.w	d6,(Camera_X_pos_coarse).w
+		movea.l	(Object_load_addr_back).w,a1
+		movea.w	(Object_respawn_index_back).w,a3
+		subi.w	#$80,d6
+		bcs.s	loc_1BBF2
+
+loc_1BBE6:
+		cmp.w	-6(a1),d6
+		bge.s	loc_1BBF2
+		subq.w	#6,a1
+		subq.w	#1,a3
+		bra.s	loc_1BBE6
+; ---------------------------------------------------------------------------
+
+loc_1BBF2:
+		move.l	a1,(Object_load_addr_back).w
+		move.w	a3,(Object_respawn_index_back).w
+		movea.l	(Object_load_addr_front).w,a1
+		movea.w	(Object_respawn_index_front).w,a3
+		addi.w	#$300,d6
+
+loc_1BC06:
+		cmp.w	-6(a1),d6
+		bgt.s	loc_1BC12
+		subq.w	#6,a1
+		subq.w	#1,a3
+		bra.s	loc_1BC06
+; ---------------------------------------------------------------------------
+
+loc_1BC12:
+		move.l	a1,(Object_load_addr_front).w
+		move.w	a3,(Object_respawn_index_front).w
+		bra.s	locret_1BC5E
+; ---------------------------------------------------------------------------
+
+loc_1BC1C:
+		move.w	d6,(Camera_X_pos_coarse).w
+		movea.l	(Object_load_addr_front).w,a1
+		movea.w	(Object_respawn_index_front).w,a3
+		addi.w	#$280,d6
+
+loc_1BC2C:
+		cmp.w	(a1),d6
+		bls.s		loc_1BC36
+		addq.w	#6,a1
+		addq.w	#1,a3
+		bra.s	loc_1BC2C
+; ---------------------------------------------------------------------------
+
+loc_1BC36:
+		move.l	a1,(Object_load_addr_front).w
+		move.w	a3,(Object_respawn_index_front).w
+		movea.l	(Object_load_addr_back).w,a1
+		movea.w	(Object_respawn_index_back).w,a3
+		subi.w	#$300,d6
+		bcs.s	loc_1BC56
+
+loc_1BC4C:
+		cmp.w	(a1),d6
+		bls.s		loc_1BC56
+		addq.w	#6,a1
+		addq.w	#1,a3
+		bra.s	loc_1BC4C
+; ---------------------------------------------------------------------------
+
+loc_1BC56:
+		move.l	a1,(Object_load_addr_back).w
+		move.w	a3,(Object_respawn_index_back).w
+
+locret_1BC5E:
+		rts

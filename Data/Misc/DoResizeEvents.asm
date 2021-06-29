@@ -5,12 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Do_ResizeEvents:
-		moveq	#0,d0
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#5,d0
-		move.w	LevelResizeArray(pc,d0.w),d0
-		jsr	LevelResizeArray(pc,d0.w)
+		movea.l	(Level_data_addr_RAM.Resize).w,a0
+		jsr	(a0)
 		moveq	#2,d1
 		move.w	(Camera_target_max_Y_pos).w,d0
 		sub.w	(Camera_max_Y_pos).w,d0
@@ -40,14 +36,5 @@ Do_ResizeEvents:
 No_Resize:
 		rts
 ; End of function Do_ResizeEvents
-; ---------------------------------------------------------------------------
-
-LevelResizeArray: offsetTable
-		offsetTableEntry.w No_Resize	; DEZ 1
-		offsetTableEntry.w No_Resize	; DEZ 2
-		offsetTableEntry.w No_Resize	; DEZ 3
-		offsetTableEntry.w No_Resize	; DEZ 4
-
-		zonewarning LevelResizeArray,(2*4)
 
 ; =============== S U B R O U T I N E =======================================

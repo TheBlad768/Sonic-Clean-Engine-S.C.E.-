@@ -18,9 +18,9 @@ AddressSRAM:			= 0	; 0 = odd+even; 2 = even only; 3 = odd only
 ; Assembler code
 		cpu 68000
 		include "MacroSetup.asm"			; include a few basic macros
+		include "Macros.asm"				; include some simplifying macros and functions
 		include "Constants.asm"			; include constants
 		include "Variables.asm"			; include RAM variables
-		include "Macros.asm"				; include some simplifying macros and functions
 		include "Sound/Definitions.asm"	; include sound driver macros and functions
 		include "Misc Data/Debugger/ErrorHandler/Debugger.asm"	; include debugger macros and functions
 ; ---------------------------------------------------------------------------

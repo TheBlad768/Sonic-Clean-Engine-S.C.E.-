@@ -88,6 +88,11 @@ tracenum := (tracenum+1)
    endm
 tracenum := 0
 
+bit function nBits,1<<(nBits-1)
+signmask function val,nBits,-((-(val&bit(nBits)))&bit(nBits))
+signextend function val,nBits,(val+signmask(val,nBits))!signmask(val,nBits)
+signextendB function val,signextend(val,8)
+
     if zeroOffsetOptimization=0
     ; disable a space optimization in AS so we can build a bit-perfect ROM
     ; (the hard way, but it requires no modification of AS itself)

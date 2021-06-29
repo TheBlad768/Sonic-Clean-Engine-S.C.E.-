@@ -20,9 +20,9 @@ SynchroAnimate:
 ; Dynamic graphics
 .Sync:
 		moveq	#0,d0
-		move.l	#ArtUnc_Ring,d1							; Load art source
+		move.l	#ArtUnc_Ring>>1,d1						; Load art source
 		move.b	(Rings_frame).w,d0
-		lsl.w	#7,d0
+		lsl.w	#6,d0
 		add.l	d0,d1									; Get next frame
 		move.w	#tiles_to_bytes(ArtTile_Ring),d2			; Load art destination
 		move.w	#$80/2,d3								; Size of art (in words)	; We only need one frame

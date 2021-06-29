@@ -40,8 +40,7 @@ Perform_DPLC:
 
 -		move.w	(a2)+,d3					; Art source offset
 		move.l	d3,d1
-		andi.w	#-$10,d1					; Isolate all but lower 4 bits
-		add.w	d1,d1
+		andi.w	#$FFF0,d1				; Isolate all but lower 4 bits
 		add.l	a3,d1					; Get final source address of art
 		move.w	d4,d2					; Destination VRAM address
 		andi.w	#$F,d3
@@ -157,7 +156,7 @@ Obj_Song_Fade_Transition:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_ToLevelMusic:
-		move.w	#$78,$2E(a0)
+		move.w	#2*60,$2E(a0)
 		sfx	bgm_Fade,0,1,1			; fade out music
 		move.l	#+,address(a0)
 +		subq.w	#1,$2E(a0)
@@ -189,7 +188,7 @@ Init_BossArena:
 
 Init_BossArena2:
 		sfx	bgm_Fade,0,1,1			; fade out music
-		move.w	#$78,$2E(a0)
+		move.w	#2*60,$2E(a0)
 
 Init_BossArena3:
 		move.w	(Camera_min_Y_pos).w,(Saved_Camera_min_Y_pos).w
@@ -205,19 +204,14 @@ Init_BossArena3:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjectsRoutine:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		adda.w	(a1,d0.w),a1
-		jmp	(a1)
-
-; =============== S U B R O U T I N E =======================================
-
-StackRoutine:
-		andi.w	#$FE,d0
+StackLoad_Routine:
 		movea.l	(sp)+,a1
+
+Load_Routine:
+		andi.w	#$FE,d0
 		adda.w	(a1,d0.w),a1
 		jmp	(a1)
+; End of function ObjectsRoutine
 
 ; =============== S U B R O U T I N E =======================================
 

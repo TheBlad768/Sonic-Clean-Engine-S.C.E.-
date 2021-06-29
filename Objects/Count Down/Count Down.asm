@@ -187,8 +187,8 @@ AirCountdown_Load_Art:
 		move.w	d1,d0
 		add.w	d1,d1
 		add.w	d0,d1
-		lsl.w	#6,d1
-		addi.l	#ArtUnc_AirCountDown,d1
+		lsl.w	#5,d1
+		addi.l	#ArtUnc_AirCountDown>>1,d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2
 		move.w	#$C0/2,d3
 		jsr	(Add_To_DMA_Queue).w

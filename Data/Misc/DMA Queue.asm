@@ -89,7 +89,7 @@
 ; This option makes the function work as a drop-in replacement of the original
 ; functions. If you modify all callers to supply a position in words instead of
 ; bytes (i.e., divide source address by 2) you can set this to 0 to gain 10(1/0)
-AssumeSourceAddressInBytes = 1
+AssumeSourceAddressInBytes = 0
 ; ===========================================================================
 ; option: AssumeSourceAddressIsRAMSafe
 ;
@@ -125,28 +125,30 @@ UseVIntSafeDMA = 0
 ; ===========================================================================
 ; Convenience macros, for increased maintainability of the code.
 	ifndef DMA
-DMA = %100111
+		equ	DMA,%100111
 	endif
 	ifndef VRAM
-VRAM = %100001
+		equ	VRAM,%100001
 	endif
 	ifndef vdpCommReg_defined
 ; Like vdpComm, but starting from an address contained in a register
 vdpCommReg_defined = 1
 vdpCommReg macro reg,type,rwd,clr
 	lsl.l	#2,reg							; Move high bits into (word-swapped) position, accidentally moving everything else
-	if ((type&rwd)&3)<>0
-		addq.w	#((type&rwd)&3),reg			; Add upper access type bits
+	set .upperbits,(type&rwd)&3
+	if .upperbits<>0
+		addq.w	#.upperbits,reg				; Add upper access type bits
 	endif
 	ror.w	#2,reg							; Put upper access type bits into place, also moving all other bits into their correct (word-swapped) places
 	swap	reg								; Put all bits in proper places
 	if clr <> 0
 		andi.w	#3,reg						; Strip whatever junk was in upper word of reg
 	endif
-	if ((type&rwd)&$FC)==$20
+	set .lowerbits,(type&rwd)&$FC
+	if .lowerbits==$20
 		tas.b	reg							; Add in the DMA flag -- tas fails on memory, but works on registers
-	elseif ((type&rwd)&$FC)<>0
-		ori.w	#(((type&rwd)&$FC)<<2),reg	; Add in missing access type bits
+	elseif .lowerbits<>0
+		ori.w	#(.lowerbits<<2),reg		; Add in missing access type bits
 	endif
 	endm
 	endif
@@ -173,14 +175,14 @@ DMAEntry	ENDSTRUCT
 QueueSlotCount = (VDP_Command_Buffer_Slot-VDP_Command_Buffer)/DMAEntry.len
 ; ---------------------------------------------------------------------------
 	ifndef DMAfunctions_defined
-DMAfunctions_defined = 1
+		equ	DMAfunctions_defined,1
 dmaSource function addr,((addr>>1)&$7FFFFF)
 dmaLength function len,((len>>1)&$7FFF)
 	endif
 ; ---------------------------------------------------------------------------
 	ifndef QueueStaticDMA_defined
-QueueStaticDMA_defined = 1
-is68kRegister function expr,strstr(":d0:d1:d2:d3:d4:d5:d6:d7:a0:a1:a2:a3:a4:a5:a6:a7:sp:",":\{expr}:")>=0
+		equ	QueueStaticDMA_defined,1
+is68kRegister function expr,symtype(expr)==8
 ; Expects source address and DMA length in bytes. Also, expects source, size, and dest to be known
 ; at assembly time. Gives errors if DMA starts at an odd address, transfers
 ; crosses a 128kB boundary, or has size 0.
@@ -210,7 +212,7 @@ QueueStaticDMA macro src,length,dest
 	move.l	#((dmaLength(length)&$FF)<<24)|dmaSource(src),d0	; Set d0 to bottom byte of size/2 and the low 3 bytes of source/2
 	movep.l	d0,DMAEntry.SizeL(a1)								; Write it all to the queue
 	lea	DMAEntry.Command(a1),a1									; Seek to correct RAM address to store VDP DMA command
-	if is68kRegister("dest")
+	if is68kRegister(dest)
 		move.l	dest,(a1)+
 	else
 		move.l	#vdpComm(dest,VRAM,DMA),(a1)+					; Write VDP DMA command for destination address
@@ -338,14 +340,14 @@ Process_DMA_Queue:
 		trap	#0											; Just in case
 	endm
 ; ---------------------------------------------------------------------------
-c := 1
+	set	.c,1
 	rept QueueSlotCount
 		lea	(VDP_control_port).l,a5
 		lea	(VDP_Command_Buffer).w,a1
-		if c<>QueueSlotCount
-			bra.w	.jump0 - c*8
+		if .c<>QueueSlotCount
+			bra.w	.jump0 - .c*8
 		endif
-c := c + 1
+		set	.c,.c + 1
 	endm
 ; ---------------------------------------------------------------------------
 	rept QueueSlotCount
@@ -370,11 +372,11 @@ Init_DMA_Queue:
 	lea	(VDP_Command_Buffer).w,a0
 	moveq	#-$6C,d0				; fast-store $94 (sign-extended) in d0
 	move.l	#$93979695,d1
-c := 0
+	set	.c,0
 	rept QueueSlotCount
-		move.b	d0,c + DMAEntry.Reg94(a0)
-		movep.l	d1,c + DMAEntry.Reg93(a0)
-c := c + DMAEntry.len
+		move.b	d0,.c + DMAEntry.Reg94(a0)
+		movep.l	d1,.c + DMAEntry.Reg93(a0)
+		set	.c,.c + DMAEntry.len
 	endm
 
 	ResetDMAQueue

@@ -2,47 +2,47 @@
 <ObjDef xmlns="http://www.sonicretro.org" Namespace="S3KObjectDefinitions.Common" TypeName="Monitor" Language="cs" Name="Monitor" Image="static">
   <Images>
     <ImageFromMappings id="static">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="1" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="sonic">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="2" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="eggman">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="rings">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="4" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="shoes">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="5" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="fire">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="6" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="lightning">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="7" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="water">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="8" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="invincibility">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="9" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="s">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="10" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="broken">
-      <ArtFile filename="../Objects/Monitor/Nemesis Art/Monitors.bin" />
+      <ArtFile filename="../Objects/Monitor/KosinskiM Art/Monitors.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Monitor/Object Data/Map - Monitor.asm" frame="11" startpal="0" />
     </ImageFromMappings>
   </Images>
