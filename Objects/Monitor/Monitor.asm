@@ -229,7 +229,7 @@ loc_1D7FC:
 		move.b	anim(a0),d0
 		addq.b	#1,d0
 		move.b	d0,mapping_frame(a0)
-		movea.l	#Map_Monitor,a1
+		lea	Map_Monitor(pc),a1
 		add.b	d0,d0
 		adda.w	(a1,d0.w),a1
 		addq.w	#2,a1

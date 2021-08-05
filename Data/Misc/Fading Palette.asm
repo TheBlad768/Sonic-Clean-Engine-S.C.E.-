@@ -6,7 +6,7 @@ PaletteFadeIn:
 Pal_FadeFromBlack:
 		move.w	#$3F,(Palette_fade_info).w
 		bsr.w	Pal_FillBlack
-		move.w	#$15,d4
+		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
@@ -83,7 +83,7 @@ Pal_FillBlack:
 -		move.w	d1,(a0)+
 		tst.b	(Water_flag).w
 		beq.s	+
-		move.w	d1,-$82(a0)
+		move.w	d1,-(Normal_palette-(Water_palette-2))(a0)
 +		dbf	d0,-
 		rts
 ; End of function Pal_FillBlack
@@ -94,7 +94,7 @@ Pal_FadeFrom:
 PaletteFadeOut:
 Pal_FadeToBlack:
 		move.w	#$3F,(Palette_fade_info).w
-		move.w	#$15,d4
+		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
@@ -172,7 +172,7 @@ Pal_FillWhite:
 Pal_FromBlackWhite:
 		move.w	#$3F,(Palette_fade_info).w
 		bsr.s	Pal_FillWhite
-		move.w	#$15,d4
+		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync
@@ -246,7 +246,7 @@ Pal_DecColor2:
 
 Pal_FadeToWhite:
 		move.w	#$3F,(Palette_fade_info).w
-		move.w	#$15,d4
+		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Wait_VSync

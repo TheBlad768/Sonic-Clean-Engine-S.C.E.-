@@ -227,6 +227,7 @@ Debug_object:						ds.b 1					; The current position in the debug mode object li
 Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
 Debug_mode_flag:					ds.b 1
+Slotted_object_bits:					ds.w 1
 Palette_cycle_counters:				ds.b $10
 Pal_fade_delay:						ds.w 1
 Pal_fade_delay2:						ds.w 1

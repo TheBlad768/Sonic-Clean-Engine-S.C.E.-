@@ -1,1 +1,1 @@
-This is a modified version of AS Build 89. Source can be found at https://github.com/Clownacy/as-sonic
+https://github.com/flamewing/asl-releases

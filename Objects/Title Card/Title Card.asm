@@ -113,7 +113,7 @@ Obj_TitleCardWait2:
 		tst.w	$3E(a0)
 		beq.s	+
 		st	(TitleCard_end_flag).w		; If in-level, set end of title card flag.
-+		lea	(PLC_Main2).l,a6
++		lea	(PLC_Main2).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(LoadPLC2_KosM).w
 		bsr.w	LoadPLC_Animals

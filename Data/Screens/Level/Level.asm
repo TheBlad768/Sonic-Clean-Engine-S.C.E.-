@@ -43,13 +43,13 @@ GM_Level:
 		jsr	(LoadPalette).w								; load Sonic's palette
 		move.w	d1,d0
 		jsr	(LoadPalette_Immediate).w
-		lea	(PLC_Main).l,a6
+		lea	(PLC_Main).l,a5
 		jsr	(LoadPLC_Raw_KosM).w						; load hud and ring art
 		jsr	(CheckLevelForWater).w
 		clearRAM Water_palette_line_2, Normal_palette
 		tst.b	(Water_flag).w
 		beq.s	+
-		move.w	#$8014,(a6)								; H-int enabled
+		move.w	#$8014,VDP_control_port-VDP_control_port(a6)	; H-int enabled
 		moveq	#palid_WaterSonic,d0
 		move.w	d0,d1
 		jsr	(LoadPalette2).w								; load Sonic's water palette

@@ -83,11 +83,7 @@ locret_19690:
 Obj_Lightning_Shield:
 		; init
 		; Load Spark art
-		move.l	#ArtUnc_Obj_Lightning_Shield_Sparks>>1,d1			; Load art source
-		move.w	#tiles_to_bytes(ArtTile_Shield_Sparks),d2	; Load art destination
-		move.w	#(ArtUnc_Obj_Lightning_Shield_Sparks_End-ArtUnc_Obj_Lightning_Shield_Sparks)/2,d3	; Size of art (in words)
-		jsr	(Add_To_DMA_Queue).w
-
+		QueueStaticDMA ArtUnc_Obj_Lightning_Shield_Sparks,tiles_to_bytes(5),tiles_to_bytes(ArtTile_Shield_Sparks)
 		move.l	#Map_LightningShield,mappings(a0)
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
 		move.l	#ArtUnc_LightningShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
@@ -109,7 +105,7 @@ Obj_Lightning_Shield:
 Obj_Lightning_Shield_Main:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)	; Is player invincible?
-		bne.s	locret_19690				; If so, do not display and do not update variables
+		bne.w	locret_197C4				; If so, do not display and do not update variables
 		cmpi.b	#$1C,anim(a2)				; Is player in their 'blank' animation?
 		beq.w	locret_197C4				; If so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2)	; Should the player still have a shield?
@@ -402,10 +398,7 @@ PLCLoad_Shields_Return:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invincibility:
-		move.l	#ArtUnc_Invincibility>>1,d1
-		move.w	#tiles_to_bytes(ArtTile_Shield),d2	; VRAM
-		move.w	#$400/2,d3						; Size/2
-		jsr	(Add_To_DMA_Queue).w
+		QueueStaticDMA ArtUnc_Invincibility,tiles_to_bytes($20),tiles_to_bytes(ArtTile_Shield)
 		moveq	#0,d2
 		lea	off_187DE-6(pc),a2
 		lea	address(a0),a1

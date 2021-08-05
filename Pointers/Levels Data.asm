@@ -120,7 +120,7 @@ DEZ1_Solid:			binclude	"Levels/DEZ/Collision/1.bin"
 ; Level layout data
 ; ===========================================================================
 
-		align $100
+		align $8000
 
 DEZ1_Layout:		binclude	"Levels/DEZ/Layout/1.bin"
 	even

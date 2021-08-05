@@ -34,8 +34,8 @@ LoadPLC_KosM:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#4,d0
-		lea	(Offs_PLC).l,a6
-		adda.w	(a6,d0.w),a6
+		lea	(Offs_PLC).l,a5
+		adda.w	(a5,d0.w),a5
 		bra.s	LoadPLC_Raw_KosM
 ; ---------------------------------------------------------------------------
 ; Adds pattern load requests to the Kosinski Module decompression queue
@@ -48,16 +48,16 @@ LoadPLC2_KosM:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#4,d0
-		lea	(Offs_PLC).l,a6
-		adda.w	2(a6,d0.w),a6
+		lea	(Offs_PLC).l,a5
+		adda.w	2(a5,d0.w),a5
 
 LoadPLC_Raw_KosM:
-		move.w	(a6)+,d6
+		move.w	(a5)+,d6
 		bmi.s	.done
 
 .queuePieces:
-		movea.l	(a6)+,a1	; store source address
-		move.w	(a6)+,d2	; store destination VRAM address
+		movea.l	(a5)+,a1	; store source address
+		move.w	(a5)+,d2	; store destination VRAM address
 		bsr.s	Queue_Kos_Module
 		dbf	d6,.queuePieces
 

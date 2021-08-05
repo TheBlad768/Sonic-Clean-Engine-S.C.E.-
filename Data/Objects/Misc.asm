@@ -22,6 +22,53 @@ LoadObjects_ExtraData:
 
 ; =============== S U B R O U T I N E =======================================
 
+SetUp_ObjAttributesSlotted:
+		moveq	#0,d0
+		move.w	(a1)+,d1					; Maximum number of objects that can be made in this array
+		move.w	d1,d2
+		move.w	(a1)+,d3					; Base VRAM offset of object
+		move.w	(a1)+,d4					; Amount to add to base VRAM offset for each slot
+		moveq	#0,d5
+		move.w	(a1)+,d5					; Index of slot array to use
+		lea	(Slotted_object_bits).w,a2
+		adda.w	d5,a2					; Get the address of the array to use
+		move.b	(a2),d5
+		beq.s	+						; If array is clear, just make the object
+
+-		lsr.b	#1,d5						; Check slot (each bit)
+		bcc.s	+						; If clear, make object
+		addq.w	#1,d0					; Increment bit number
+		add.w	d4,d3					; Add VRAM offset
+		dbf	d1,-							; Repeat max times
+		moveq	#0,d0
+		move.l	d0,(a0)
+		move.l	d0,x_pos(a0)
+		move.l	d0,y_pos(a0)
+		move.b	d0,subtype(a0)
+		move.b	d0,render_flags(a0)
+		move.w	d0,status(a0)				; If no open slots, then destroy this object period
+		addq.w	#8,sp
+		rts
+; ---------------------------------------------------------------------------
++		bset	d0,(a2)						; Turn this slot on
+		move.b	d0,objoff_3B(a0)
+		move.w	a2,objoff_3C(a0)			; Keep track of slot address and bit number
+		move.w	d3,art_tile(a0)			; Use correct VRAM offset
+		move.l	(a1)+,mappings(a0)		; Mapping address
+		move.w	(a1)+,priority(a0)			; Priority
+		move.b	(a1)+,width_pixels(a0)		; Width
+		move.b	(a1)+,height_pixels(a0)	; Height
+		move.b	(a1)+,mapping_frame(a0)	; Frame number
+		move.b	(a1)+,collision_flags(a0)	; Collision number
+		bset	#2,status(a0)					; Turn object slotting on
+		st	objoff_3A(a0)				; Reset DPLC frame
+		bset	#2,render_flags(a0)			; Use screen coordinates
+		addq.b	#2,routine(a0)			; Next routine
+		rts
+; End of function SetUp_ObjAttributesSlotted
+
+; =============== S U B R O U T I N E =======================================
+
 Perform_DPLC:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0	; Get the frame number
@@ -36,6 +83,7 @@ Perform_DPLC:
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2				; Apply offset to script
 		move.w	(a2)+,d5					; Get number of DMA transactions
+		bmi.s	+
 		moveq	#0,d3
 
 -		move.w	(a2)+,d3					; Art source offset
@@ -451,7 +499,7 @@ Wait_FadeToLevelMusic:
 		move.w	#$77,$2E(a0)
 		jsr	(Create_New_Sprite).w
 		bne.s	+
-		move.l	#Obj_Song_Fade_ToLevelMusic,(a1)
+		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
 +		movea.l	$34(a0),a1
 		jmp	(a1)
 

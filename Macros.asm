@@ -123,18 +123,18 @@ levartptrs macro art,map16x16,map128x128,palette
 	dc.l map128x128
     endm
 
-; macro to declare sub-object slotted data
-subObjSlotData macro number,vram,vram2,index,mappings,priority,width,height,frame,collision
-	dc.w number,vram,vram2,index
-	dc.l mappings
-	dc.w priority
-	dc.b width,height,frame,collision
-    endm
-
 ; macro to declare sub-object data
 subObjData macro mappings,vram,priority,width,height,frame,collision
 	dc.l mappings
 	dc.w vram,priority
+	dc.b width,height,frame,collision
+    endm
+
+; macro to declare sub-object slotted data
+subObjSlotData macro slots,vram,offset,index,mappings,priority,width,height,frame,collision
+	dc.w slots,vram,offset,index
+	dc.l mappings
+	dc.w priority
 	dc.b width,height,frame,collision
     endm
 

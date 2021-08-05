@@ -399,7 +399,7 @@ loc_84E8C:
 		move.b	child_dx(a0),d3
 		ext.w	d3
 		add.w	d3,d2
-		btst	#0,render_flags(a1)
+		btst	#0,render_flags(a1)		; check flip
 		beq.s	+
 		neg.w	d1
 +		add.w	d1,d2
@@ -408,6 +408,68 @@ loc_84E8C:
 		move.b	child_dy(a0),d3
 		ext.w	d3
 		add.w	d3,d2
+		move.w	d2,y_pos(a0)
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+MoveSprite_AngleXLookupOffset2:
+		moveq	#0,d0
+		move.b	$3C(a0),d0
+		move.b	d0,d1
+		rol.b	#3,d1
+		andi.w	#6,d1
+		move.w	AngleX_Lookup2Index(pc,d1.w),d2
+		jmp	AngleX_Lookup2Index(pc,d2.w)
+; End of function MoveSprite_AngleXLookupOffset2
+; ---------------------------------------------------------------------------
+
+AngleX_Lookup2Index: offsetTable
+		offsetTableEntry.w loc_84EDC
+		offsetTableEntry.w loc_84EE4
+		offsetTableEntry.w loc_84EF0
+		offsetTableEntry.w loc_84F00
+; ---------------------------------------------------------------------------
+
+loc_84EDC:
+		move.b	(a1,d0.w),d1
+		bra.w	loc_84F10
+; ---------------------------------------------------------------------------
+
+loc_84EE4:
+		moveq	#$7F,d1
+		sub.w	d0,d1
+		move.w	(a1,d1.w),d1
+		bra.w	loc_84F10
+; ---------------------------------------------------------------------------
+
+loc_84EF0:
+		move.w	d0,d1
+		andi.w	#$3F,d1
+		move.w	(a1,d1.w),d1
+		neg.w	d1
+		bra.w	loc_84F10
+; ---------------------------------------------------------------------------
+
+loc_84F00:
+		move.w	#$FF,d1
+		sub.w	d0,d1
+		move.w	(a1,d1.w),d1
+		neg.w	d1
+		bra.w	loc_84F10
+
+loc_84F10:
+		movea.w	parent3(a0),a1
+		move.w	x_pos(a1),d2
+		move.b	child_dx(a0),d3
+		ext.w	d3
+		add.w	d3,d2
+		move.w	d2,x_pos(a0)
+		move.w	y_pos(a1),d2
+		move.b	child_dy(a0),d3
+		ext.w	d3
+		add.w	d3,d2
+		add.w	d1,d2
 		move.w	d2,y_pos(a0)
 		rts
 ; ---------------------------------------------------------------------------

@@ -17,7 +17,7 @@ Obj_EndSignControlDoSign:
 		move.l	#Obj_EndSignControlAwaitStart,address(a0)
 		lea	Child6_EndSign(pc),a2
 		jsr	(CreateChild6_Simple).w
-		lea	PLC_EndSignStuff(pc),a6
+		lea	PLC_EndSignStuff(pc),a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jmp	(AfterBoss_Cleanup).l
 ; ---------------------------------------------------------------------------
@@ -58,8 +58,7 @@ EndSign_Index: offsetTable
 
 Obj_EndSignInit:
 		lea	ObjSlot_EndSigns(pc),a1
-		jsr	(SetUp_ObjAttributes).w
-		st	objoff_3A(a0)					; Reset DPLC frame
+		jsr	(SetUp_ObjAttributesSlotted).w
 		move.b	#48/2,x_radius(a0)
 		move.b	#60/2,y_radius(a0)
 		move.l	#AniRaw_EndSigns1,$30(a0)
@@ -140,7 +139,7 @@ Obj_EndSignAfter:
 ; ---------------------------------------------------------------------------
 
 loc_83988:
-		lea	(PLC_Main2).l,a6
+		lea	(PLC_Main2).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(Remove_From_TrackingSlot).w
 		jmp	(Go_Delete_Sprite).w
@@ -268,40 +267,19 @@ locret_83B02:
 ; End of function EndSign_CheckWall
 ; ---------------------------------------------------------------------------
 
-EndSign_Range:	dc.w -$20, $40, -$18, $30
-ObjSlot_EndSigns:
-		dc.l Map_EndSigns
-		dc.w $5CA
-		dc.w $300
-		dc.b $18
-		dc.b $10
-		dc.b 0
-		dc.b 0
-ObjDat_SignpostStub:
-		dc.l Map_SignpostStub
-		dc.w $5E2
-		dc.w $300
-		dc.b 4
-		dc.b 8
-		dc.b 0
-		dc.b 0
-ObjDat_SignpostSparkle:
-		dc.l Map_Ring
-		dc.w make_art_tile(ArtTile_Ring,1,0)
-		dc.w $280
-		dc.b 8
-		dc.b 8
-		dc.b 4
-		dc.b 0
+EndSign_Range:			dc.w -$20, $40, -$18, $30
+ObjSlot_EndSigns:		subObjSlotData 0, $5CA, $C, 0, Map_EndSigns, $300, $18, $10, 0, 0
+ObjDat_SignpostStub:		subObjData Map_SignpostStub, $5E2, $300, 4, 8, 0, 0
+ObjDat_SignpostSparkle:	subObjData Map_Ring, make_art_tile(ArtTile_Ring,1,0), $280, 8, 8, 4, 0
 Child1_EndSignStub:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_SignpostStub
 		dc.b 0, $18
 Child6_EndSignSparkle:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_SignpostSparkle
 Child6_EndSignScore:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_EnemyScore
 PLCPtr_EndSigns:
 		dc.l ArtUnc_EndSigns>>1, DPLC_EndSigns

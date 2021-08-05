@@ -29,7 +29,7 @@ off_86566: offsetTable
 ; ---------------------------------------------------------------------------
 
 loc_8657A:
-		lea	PLC_EggCapsule(pc),a6
+		lea	PLC_EggCapsule(pc),a5
 		jsr	(LoadPLC_Raw_KosM).w
 		lea	ObjDat3_86B32(pc),a1
 		jsr	(SetUp_ObjAttributes).w
@@ -70,6 +70,7 @@ sub_865DE:
 		jsr	(CreateChild1_Normal).w
 		lea	Child6_CreateBossExplosion(pc),a2
 		jsr	(CreateChild1_Normal).w
+		bne.s	locret_8661C
 		move.b	#8,subtype(a1)
 
 locret_8661C:

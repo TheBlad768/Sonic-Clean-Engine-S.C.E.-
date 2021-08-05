@@ -1228,6 +1228,7 @@ loc_118AE:
 
 locret_118B2:
 		rts
+; End of function Sonic_Jump
 
 ; =============== S U B R O U T I N E =======================================
 

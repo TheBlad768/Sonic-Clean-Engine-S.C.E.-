@@ -57,9 +57,9 @@ loc_1CD3C:
 
 sub_1CDDA:
 		tst.b	(a2)+
-		bne.w	loc_1CE6C
+		bne.s	loc_1CE6C
 		cmp.w	x_pos(a1),d1
-		bhi.w	locret_1CEF0
+		bhi.s	locret_1CE6A
 		move.b	#1,-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
@@ -68,13 +68,13 @@ sub_1CDDA:
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
 		cmp.w	d2,d4
-		blt.w	locret_1CEF0
+		blt.s		locret_1CE6A
 		cmp.w	d3,d4
-		bge.w	locret_1CEF0
+		bge.s	locret_1CE6A
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CE1C
 		btst	#1,status(a1)
-		bne.w	locret_1CEF0
+		bne.s	locret_1CE6A
 
 loc_1CE1C:
 		move.w	x_pos(a1),d2
@@ -84,7 +84,7 @@ loc_1CE1C:
 
 loc_1CE26:
 		cmpi.w	#$40,d2
-		bcc.w	locret_1CEF0
+		bcc.s	locret_1CE6A
 		btst	#0,render_flags(a0)
 		bne.s	loc_1CE54
 		move.b	#$C,top_solid_bit(a1)
@@ -97,14 +97,16 @@ loc_1CE26:
 loc_1CE54:
 		andi.w	#$7FFF,art_tile(a1)
 		btst	#5,d0
-		beq.w	locret_1CEF0
+		beq.s	locret_1CE6A
 		ori.w	#$8000,art_tile(a1)
-		bra.w	locret_1CEF0
+
+locret_1CE6A:
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_1CE6C:
 		cmp.w	x_pos(a1),d1
-		bls.w	locret_1CEF0
+		bls.s		locret_1CEF0
 		clr.b	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
@@ -113,13 +115,13 @@ loc_1CE6C:
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
 		cmp.w	d2,d4
-		blt.w	locret_1CEF0
+		blt.s		locret_1CEF0
 		cmp.w	d3,d4
-		bge.w	locret_1CEF0
+		bge.s	locret_1CEF0
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CEA8
 		btst	#1,status(a1)
-		bne.w	locret_1CEF0
+		bne.s	locret_1CEF0
 
 loc_1CEA8:
 		move.w	x_pos(a1),d2
@@ -165,9 +167,9 @@ loc_1CEF2:
 
 sub_1CF42:
 		tst.b	(a2)+
-		bne.w	loc_1CFD4
+		bne.s	loc_1CFD4
 		cmp.w	y_pos(a1),d1
-		bhi.w	locret_1D058
+		bhi.s	locret_1CFD2
 		move.b	#1,-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
@@ -176,13 +178,13 @@ sub_1CF42:
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
 		cmp.w	d2,d4
-		blt.w	locret_1D058
+		blt.s		locret_1CFD2
 		cmp.w	d3,d4
-		bge.w	locret_1D058
+		bge.s	locret_1CFD2
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CF84
 		btst	#1,status(a1)
-		bne.w	locret_1D058
+		bne.s	locret_1CFD2
 
 loc_1CF84:
 		move.w	y_pos(a1),d2
@@ -192,7 +194,7 @@ loc_1CF84:
 
 loc_1CF8E:
 		cmpi.w	#$40,d2
-		bcc.w	locret_1D058
+		bcc.s	locret_1CFD2
 		btst	#0,render_flags(a0)
 		bne.s	loc_1CFBC
 		move.b	#$C,top_solid_bit(a1)
@@ -205,14 +207,16 @@ loc_1CF8E:
 loc_1CFBC:
 		andi.w	#$7FFF,art_tile(a1)
 		btst	#5,d0
-		beq.w	locret_1D058
+		beq.s	locret_1CFD2
 		ori.w	#$8000,art_tile(a1)
-		bra.w	locret_1D058
+
+locret_1CFD2:
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_1CFD4:
 		cmp.w	y_pos(a1),d1
-		bls.w	locret_1D058
+		bls.s		locret_1D058
 		clr.b	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
@@ -221,13 +225,13 @@ loc_1CFD4:
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
 		cmp.w	d2,d4
-		blt.w	locret_1D058
+		blt.s		locret_1D058
 		cmp.w	d3,d4
-		bge.w	locret_1D058
+		bge.s	locret_1D058
 		move.b	subtype(a0),d0
 		bpl.s	loc_1D010
 		btst	#1,status(a1)
-		bne.w	locret_1D058
+		bne.s	locret_1D058
 
 loc_1D010:
 		move.w	y_pos(a1),d2

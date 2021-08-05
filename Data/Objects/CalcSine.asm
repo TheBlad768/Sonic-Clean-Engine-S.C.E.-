@@ -4,9 +4,6 @@
 ; Optimized by Natsumi
 ; ---------------------------------------------------------------------------
 
-SineTableCos		= SineTable+($40*2)-16
-SineTableSin		= SineTable-16
-
 ; =============== S U B R O U T I N E =======================================
 
 CalcSine:
@@ -14,8 +11,8 @@ GetSineCosine:
 		andi.w	#$FF,d0
 		addq.w	#8,d0
 		add.w	d0,d0
-		move.w	SineTableCos(pc,d0.w),d1
-		move.w	SineTableSin(pc,d0.w),d0
+		move.w	SineTable+($40*2)-16(pc,d0.w),d1
+		move.w	SineTable-16(pc,d0.w),d0
 		rts
 ; End of function GetSineCosine
 ; ---------------------------------------------------------------------------

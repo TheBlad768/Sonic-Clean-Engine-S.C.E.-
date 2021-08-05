@@ -26,7 +26,7 @@ Do_ResizeEvents:
 		addq.w	#8,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
 		blo.s		+
-		btst	#1,(v_player+obStatus).w
+		btst	#1,(Player_1+status).w
 		beq.s	+
 		add.w	d1,d1
 		add.w	d1,d1

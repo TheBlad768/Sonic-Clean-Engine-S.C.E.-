@@ -7,7 +7,7 @@ LoadPLC_Animals:
 		ror.b	#2,d0
 		lsr.w	#5,d0
 		move.w	Offs_PLCAnimals(pc,d0.w),d0
-		lea	Offs_PLCAnimals(pc,d0.w),a6
+		lea	Offs_PLCAnimals(pc,d0.w),a5
 		jmp	(LoadPLC_Raw_KosM).w
 ; ---------------------------------------------------------------------------
 

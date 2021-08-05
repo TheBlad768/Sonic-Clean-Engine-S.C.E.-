@@ -78,7 +78,7 @@ FGScroll_Deformation2:
 		lea	(H_scroll_buffer).w,a1
 		move.w	(HScroll_Shift+2).w,d0
 		neg.w	d0
-		move.w	#bytestoLcnt(224*4)/4,d1
+		moveq	#bytestoLcnt(224*4)/4,d1
 
 -	rept	4
 		move.w	(a1),d2

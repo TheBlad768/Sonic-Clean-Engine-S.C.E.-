@@ -160,10 +160,14 @@ PalLoad_Line16:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Palette:
+		moveq	#0,d0
+
+Clear_Palette2:
+		moveq	#(64/2)-1,d1
+
+Clear_Palette3:
 		lea	(Target_palette).w,a1
 		lea	(Normal_palette).w,a2
-		moveq	#0,d0
-		moveq	#(64/2)-1,d1
 
 -		move.l	d0,(a1)+
 		move.l	d0,(a2)+
