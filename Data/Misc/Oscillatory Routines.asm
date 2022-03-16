@@ -11,7 +11,7 @@ SynchroAnimate:
 ; Used for rings and giant rings
 		subq.b	#1,(Rings_frame_timer).w
 		bpl.s	.Sync2
-		move.b	#7,(Rings_frame_timer).w
+		move.b	#4,(Rings_frame_timer).w
 		addq.b	#1,(Rings_frame).w
 		cmpi.b	#(ArtUnc_Ring_End-ArtUnc_Ring)>>7,(Rings_frame).w
 		bne.s	.Sync

@@ -10,7 +10,7 @@
 
 MegaPCM:
 	save
-	include	"Sound/engine/MegaPCM - Z80.asm"
+	include	"Sound/Engine/MegaPCM - Z80.asm"
 	restore
 	padding off
 	!org (MegaPCM+Size_of_Mega_PCM_guess)

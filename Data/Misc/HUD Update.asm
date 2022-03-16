@@ -24,7 +24,6 @@ HUD_AddToScore:
 ; =============== S U B R O U T I N E =======================================
 
 UpdateHUD:
-		nop
 		lea	(VDP_data_port).l,a6
 		tst.w	(Debug_placement_mode).w		; is debug mode on?
 		bne.w	HudDebug						; if yes, branch

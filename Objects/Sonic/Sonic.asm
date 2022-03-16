@@ -1530,10 +1530,9 @@ locret_11E28:
 ; =============== S U B R O U T I N E =======================================
 
 Player_SlopeRepel:
-		nop
-		tst.b	$3C(a0)
+		tst.b	stick_to_convex(a0)
 		bne.s	locret_11E6E
-		tst.w	$32(a0)
+		tst.w	move_lock(a0)
 		bne.s	loc_11E86
 		move.b	angle(a0),d0
 		addi.b	#$18,d0
@@ -1995,7 +1994,7 @@ BubbleShield_Bounce:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
 		move.b	#1,jumping(a0)
-		clr.b	$3C(a0)
+		clr.b	stick_to_convex(a0)
 		move.b	#$E,y_radius(a0)
 		move.b	#7,x_radius(a0)
 		move.b	#id_Roll,anim(a0)

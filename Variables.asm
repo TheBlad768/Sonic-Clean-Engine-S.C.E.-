@@ -400,9 +400,6 @@ Ring_spill_anim_accum:				ds.b 1
 									ds.b 1					; Unused
 Oscillating_variables_End
 
-Current_RAM_start					!org $FEF0				; Unused data
-Current_RAM_end
-
 System_stack_size					ds.b $100				; ~$100 bytes ; this is the top of the stack, it grows downwards($FEF0-$FFF0)
 System_stack:
 V_int_jump:							ds.w 1					; 6 bytes ; contains an instruction to jump to the V-int handler
@@ -414,7 +411,7 @@ Checksum_string:						ds.l 1					; set to 'INIT' once the checksum routine has r
 		fatal "The RAM variable declarations are too large by $\{*} bytes."
 	endif
 	if MOMPASS=1
-		message "The current RAM available $\{Current_RAM_end-Current_RAM_start} bytes."
+		message "The current RAM available $\{0-*} bytes."
 	endif
 
 	dephase		; Stop pretending

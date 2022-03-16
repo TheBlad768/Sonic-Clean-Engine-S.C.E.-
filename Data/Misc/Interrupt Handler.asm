@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 
 VInt:
-		nop
 		movem.l	d0-a6,-(sp)							; save all the registers to the stack
 		tst.b	(V_int_routine).w
 		beq.w	VInt_Lag_Main

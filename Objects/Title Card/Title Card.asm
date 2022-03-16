@@ -181,7 +181,7 @@ Obj_TitleCardAct:
 ; Remove a number of the act, if not needed
 ;		movea.w	parent2(a0),a1
 ;		subq.w	#1,$30(a1)
-;		bra.w	Delete_Current_Sprite
+;		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCardElement2:

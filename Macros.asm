@@ -871,14 +871,16 @@ copyTilemap3		macro loc,width,height
 ; ---------------------------------------------------------------------------
 
 LoadArtUnc macro offset,size,vram
+	lea	(VDP_data_port).l,a6
 	locVRAM	vram,VDP_control_port-VDP_data_port(a6)
 	lea	(offset).l,a0
-	move.w	#((size)>>4),d0
--	move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
-	move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
-	move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
-	move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
-	dbf	d0,-
+	moveq	#(size>>5)-1,d0
+
+-
+	rept 8
+		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
+	endr
+		dbf	d0,-
     endm
 ; ---------------------------------------------------------------------------
 

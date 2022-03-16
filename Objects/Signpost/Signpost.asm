@@ -291,6 +291,7 @@ AniRaw_EndSigns1:
 		dc.b	6,   3
 		dc.b	4,   5
 		dc.b	6, $FC
+	even
 AniRaw_EndSigns2:
 		dc.b	1,   1
 		dc.b	4,   5
@@ -299,12 +300,14 @@ AniRaw_EndSigns2:
 		dc.b	6,   3
 		dc.b	4,   5
 		dc.b	6, $FC
+	even
 AniRaw_SignpostSparkle:
 		dc.b	1,   1
 		dc.b	2,   3
 		dc.b	4, $FC
+	even
 Child6_EndSign:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_EndSign
 PLC_EndSignStuff: plrlistheader
 		plreq $5E2, ArtKosM_SignpostStub
