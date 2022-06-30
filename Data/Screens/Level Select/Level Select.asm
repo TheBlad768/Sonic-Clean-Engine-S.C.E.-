@@ -17,8 +17,8 @@ LeveSelect_ActDEZCount:		= 4	; DEZ
 LeveSelect_MusicTestCount:	= 9
 LeveSelect_SoundTestCount:	= LeveSelect_MusicTestCount+1
 LeveSelect_MaxCount:			= 11
-LeveSelect_MaxMusicNumber:	= 6
-LeveSelect_MaxSoundNumber:	= $1D
+LeveSelect_MaxMusicNumber:	= (bgm__Last-bgm__First)+1
+LeveSelect_MaxSoundNumber:	= (sfx__Last-sfx__First)
 
 ; =============== S U B R O U T I N E =======================================
 

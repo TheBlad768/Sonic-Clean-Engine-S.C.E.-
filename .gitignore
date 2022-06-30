@@ -1,6 +1,7 @@
 desktop.ini
 *.gen
-Sonic.lst
-Sonic.log
+*.lst
+*.log
+*.[ph]
 SonLVL INI Files/dllcache/*
 SonLVL INI Files/SonLVL.log
