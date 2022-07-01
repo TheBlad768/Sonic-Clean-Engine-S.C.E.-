@@ -26,7 +26,7 @@ Obj_EndSignControlAwaitStart:
 		tst.b	(Level_end_flag).w
 		bne.s	Obj_EndSignControl.locret
 		move.l	#Obj_EndSignControlDoStart,address(a0)
-		bra.w	Restore_PlayerControl
+		jmp	(Restore_PlayerControl).w
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlDoStart:
