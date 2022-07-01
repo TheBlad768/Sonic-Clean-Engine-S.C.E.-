@@ -2,6 +2,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 ShakeScreen_Setup:
+		move.w	(Screen_shaking_offset).w,(Screen_shaking_last_offset).w
 		moveq	#0,d1
 		cmpi.b	#id_SonicDeath,(Player_1+routine).w
 		bhs.s	++
@@ -19,7 +20,7 @@ ShakeScreen_Setup:
 +		move.w	(Level_frame_counter).w,d0
 		andi.w	#$3F,d0
 		move.b	ScreenShakeArray2(pc,d0.w),d1
-+		move.w	d1,(Screen_shaking_flag+2).w
++		move.w	d1,(Screen_shaking_offset).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================

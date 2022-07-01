@@ -150,6 +150,7 @@ Lamp_StoreInfo:
 Save_Level_Data:
 		move.b	(Last_star_post_hit).w,(Saved_last_star_post_hit).w
 		move.w	(Current_zone_and_act).w,(Saved_zone_and_act).w
+		move.w	(Apparent_zone_and_act).w,(Saved_apparent_zone_and_act).w
 		move.w	(Player_1+art_tile).w,(Saved_art_tile).w
 		move.w	(Player_1+top_solid_bit).w,(Saved_solid_bits).w
 		move.w	(Ring_count).w,(Saved_ring_count).w
@@ -169,6 +170,7 @@ Lamp_LoadInfo:
 Load_Starpost_Settings:
 		move.b	(Saved_last_star_post_hit).w,(Last_star_post_hit).w
 		move.w	(Saved_zone_and_act).w,(Current_zone_and_act).w
+		move.w	(Saved_apparent_zone_and_act).w,(Apparent_zone_and_act).w
 		move.w	(Saved_X_pos).w,(Player_1+x_pos).w
 		move.w	(Saved_Y_pos).w,(Player_1+y_pos).w
 		move.w	(Saved_ring_count).w,(Ring_count).w

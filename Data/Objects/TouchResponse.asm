@@ -91,14 +91,14 @@ Touch_Height:
 		bcc.s	.checktop								; If bottom of player is under the object, branch
 		add.w	d1,d1									; Double object's height value
 		add.w	d1,d0									; Add object's height*2 (now at top of object)
-		bcs.w	Touch_ChkValue							; If carry, branch (player is within the object's boundaries)
+		bcs.s	Touch_ChkValue							; If carry, branch (player is within the object's boundaries)
 		bra.s	Touch_NextObj							; If not, loop and check next object
 ; ---------------------------------------------------------------------------
 
 .checktop:
 		cmp.w	d5,d0									; Is top of player under the object?
 		bhi.s	Touch_NextObj							; If so, loop and check next object
-		bra.w	Touch_ChkValue
+		bra.s	Touch_ChkValue
 ; ---------------------------------------------------------------------------
 ; collision sizes $00-$3F (width,height)
 ; $00-$3F	- Touch

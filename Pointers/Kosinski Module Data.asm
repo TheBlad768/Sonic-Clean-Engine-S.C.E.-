@@ -20,6 +20,10 @@ ArtKosM_GrayButton:				binclude "Objects/Button/KosinskiM Art/Gray Button.bin"
 	even
 ArtKosM_DiagonalSpring:			binclude	"Objects/Spring/KosinskiM Art/Diagonal Spring.bin"
 	even
+ArtKosM_Bubbles:				binclude "Objects/Bubbler/KosinskiM Art/Bubbles.bin"
+	even
+ArtKosM_WaterWave:				binclude "Objects/Water Wave/KosinskiM Art/Water Wave.bin"
+	even
 ArtKosM_EggCapsule:				binclude	"Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin"
 	even
 ArtKosM_Seal:					binclude "Objects/Animals/KosinskiM Art/Seal.bin"

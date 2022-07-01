@@ -55,7 +55,7 @@ Render_HUD_Draw:
 		move.w	(a1)+,d4
 		subq.w	#1,d4
 		bmi.s	Render_HUD_Return
-		bra.w	sub_1AF6C							; Draw
+		jmp	(sub_1AF6C).w							; Draw
 ; ---------------------------------------------------------------------------
 
 Render_HUD_Return:

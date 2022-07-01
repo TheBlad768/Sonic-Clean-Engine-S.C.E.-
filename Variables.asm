@@ -108,7 +108,12 @@ Screen_Y_wrap_value:					ds.w 1					; Either $7FF or $FFF
 Camera_Y_pos_mask:					ds.w 1					; Either $7F0 or $FF0
 Layout_row_index_mask:				ds.w 1					; Either $3C or $7C
 Plane_buffer_2_addr:					ds.l 1					; The address of the second plane buffer to process, if applicable
-Screen_shaking_flag:					ds.l 1					; Activates screen shaking code (if existent) in layer deformation routine
+Screen_shaking_flag:					ds.w 1					; flag for enabling screen shake. Negative values cause screen to shake infinitely, positive values make the screen shake for a short amount of time
+Screen_shaking_offset:					ds.w 1					; vertical offset when screen_shake_flag is enabled. This is added to camera position later
+Screen_shaking_last_offset:			ds.w 1					; value of Screen_shake_offset for the previous frame
+Events_bg:							ds.b $18					; various flags used by background events
+Boss_events:							ds.b $10
+
 Camera_RAM_End
 
 Ring_start_addr_ROM:				ds.l 1					; Address in the ring layout of the first ring whose X position is >= camera X position - 8
@@ -234,10 +239,9 @@ Pal_fade_delay2:						ds.w 1
 Hyper_Sonic_flash_timer:				ds.b 1
 Negative_flash_timer:					ds.b 1
 									ds.b 1					; Unused
-PalRotation_flag:						ds.b 1
-PalRotation_pointer:					ds.l 1
-PalRotation_buffer:					ds.b $22
-Boss_Events:							ds.b $10
+Palette_rotation_disable:				ds.b 1
+Palette_rotation_custom:				ds.l 1
+Palette_rotation_data:					ds.w 9
 Chain_bonus_counter:					ds.w 1
 Time_bonus_countdown:				ds.w 1					; Used on the results screen
 Ring_bonus_countdown:				ds.w 1					; Used on the results screen
@@ -334,6 +338,11 @@ Current_zone:
 Current_zone_and_act:				ds.b 1
 v_act:
 Current_act:							ds.b 1
+a_zone:
+Apparent_zone:
+Apparent_zone_and_act:				ds.b 1
+a_act:
+Apparent_act:						ds.b 1
 
 f_timeover:
 Time_over_flag:						ds.b 1
@@ -368,6 +377,7 @@ DecimalScoreRAM:					ds.l 1
 DecimalScoreRAM2:					ds.l 1
 
 Saved_zone_and_act:					ds.w 1
+Saved_apparent_zone_and_act:			ds.w 1
 Saved_X_pos:						ds.w 1
 Saved_Y_pos:						ds.w 1
 Saved_ring_count:					ds.w 1

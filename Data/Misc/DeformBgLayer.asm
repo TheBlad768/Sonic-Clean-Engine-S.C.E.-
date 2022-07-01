@@ -23,7 +23,7 @@ DeformBgLayer:
 		lea	(V_scroll_amount).w,a4
 		move.w	(Distance_from_screen_top).w,d3
 		bsr.w	MoveCameraY
-+		bra.w	Do_ResizeEvents
++		jmp	Do_ResizeEvents(pc)
 ; ---------------------------------------------------------------------------
 ; Subroutine to scroll the level horizontally as Sonic moves
 ; ---------------------------------------------------------------------------

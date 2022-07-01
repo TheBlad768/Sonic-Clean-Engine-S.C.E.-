@@ -768,9 +768,9 @@ LoadLevelLoadBlock:
 		bsr.w	Queue_Kos_Module
 
 -		move.b	#VintID_TitleCard,(V_int_routine).w
-		bsr.w	Process_Kos_Queue
-		bsr.w	Wait_VSync
-		bsr.w	Process_Kos_Module_Queue
+		jsr	(Process_Kos_Queue).w
+		jsr	(Wait_VSync).w
+		jsr	(Process_Kos_Module_Queue).w
 		tst.w	(Kos_modules_left).w
 		bne.s	-
 		rts
@@ -793,13 +793,13 @@ LoadLevelLoadBlock2:
 		move.l	(a2)+,(Block_table_addr_ROM).w
 		movea.l	(a2)+,a0
 		lea	(RAM_start).l,a1
-		bsr.w	Kos_Decomp
+		jsr	(Kos_Decomp).w
 		bsr.s	Load_Level
-		bsr.w	LoadPLC_KosM
+		jsr	(LoadPLC_KosM).w
 		movea.l	(sp)+,a2
 		moveq	#0,d0
 		move.b	(a2),d0
-		bra.w	LoadPalette
+		jmp	(LoadPalette).w
 ; End of function LoadLevelLoadBlock2
 
 ; =============== S U B R O U T I N E =======================================

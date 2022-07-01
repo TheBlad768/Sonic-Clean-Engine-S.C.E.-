@@ -433,14 +433,14 @@ AngleX_Lookup2Index: offsetTable
 
 loc_84EDC:
 		move.b	(a1,d0.w),d1
-		bra.w	loc_84F10
+		bra.s	loc_84F10
 ; ---------------------------------------------------------------------------
 
 loc_84EE4:
 		moveq	#$7F,d1
 		sub.w	d0,d1
 		move.w	(a1,d1.w),d1
-		bra.w	loc_84F10
+		bra.s	loc_84F10
 ; ---------------------------------------------------------------------------
 
 loc_84EF0:
@@ -448,7 +448,7 @@ loc_84EF0:
 		andi.w	#$3F,d1
 		move.w	(a1,d1.w),d1
 		neg.w	d1
-		bra.w	loc_84F10
+		bra.s	loc_84F10
 ; ---------------------------------------------------------------------------
 
 loc_84F00:
@@ -456,7 +456,6 @@ loc_84F00:
 		sub.w	d0,d1
 		move.w	(a1,d1.w),d1
 		neg.w	d1
-		bra.w	loc_84F10
 
 loc_84F10:
 		movea.w	parent3(a0),a1

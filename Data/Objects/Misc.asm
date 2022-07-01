@@ -198,7 +198,7 @@ Obj_Song_Fade_Transition:
 		move.b	subtype(a0),d0
 		move.w	d0,(Level_music).w
 		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; End of function Obj_Song_Fade_Transition
 
 ; =============== S U B R O U T I N E =======================================
@@ -210,7 +210,7 @@ Obj_Song_Fade_ToLevelMusic:
 +		subq.w	#1,$2E(a0)
 		bpl.s	Displace_PlayerOffObject_Return
 		bsr.s	Obj_PlayLevelMusic
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; End of function Obj_Song_Fade_ToLevelMusic
 
 ; =============== S U B R O U T I N E =======================================
@@ -481,7 +481,7 @@ Wait_Play_Sound:
 Wait_NewDelay:
 		subq.w	#1,$2E(a0)
 		bmi.s	+
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 +		bclr	#7,render_flags(a0)
 		move.w	#$77,$2E(a0)
@@ -493,7 +493,7 @@ Wait_NewDelay:
 Wait_FadeToLevelMusic:
 		subq.w	#1,$2E(a0)
 		bmi.s	+
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 +		bclr	#7,render_flags(a0)
 		move.w	#$77,$2E(a0)
@@ -514,7 +514,7 @@ BossDefeated:
 BossDefeated_NoTime:
 		bclr	#7,render_flags(a0)
 		moveq	#100,d0
-		bra.w	HUD_AddToScore
+		jmp	(HUD_AddToScore).w
 ; End of function BossDefeated
 
 ; =============== S U B R O U T I N E =======================================
@@ -522,20 +522,16 @@ BossDefeated_NoTime:
 BossFlash:
 		lea	word_7A622(pc),a1
 		lea	word_7A628(pc,d0.w),a2
-		bra.w	CopyWordData_3
+		bra.s	CopyWordData_3
 ; ---------------------------------------------------------------------------
 
 word_7A622:
-		dc.w Normal_palette+$C
-		dc.w Normal_palette+$1C
-		dc.w Normal_palette+$1E
+		dc.w Normal_palette_line_1+$C
+		dc.w Normal_palette_line_1+$1C
+		dc.w Normal_palette_line_1+$1E
 word_7A628:
-		dc.w 8
-		dc.w $866
-		dc.w $222
-		dc.w $888
-		dc.w $CCC
-		dc.w $EEE
+		dc.w 8, $866, $222
+		dc.w $888, $CCC, $EEE
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -605,7 +601,7 @@ Obj_IncLevEndXGradual:
 		rts
 ; ---------------------------------------------------------------------------
 +		move.w	(Saved_Camera_max_X_pos).w,(Camera_max_X_pos).w
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -622,7 +618,7 @@ Obj_DecLevStartXGradual:
 		rts
 ; ---------------------------------------------------------------------------
 +		move.w	(Saved_Camera_min_X_pos).w,(Camera_min_X_pos).w
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -639,7 +635,7 @@ Obj_DecLevStartYGradual:
 		rts
 ; ---------------------------------------------------------------------------
 +		move.w	(Saved_Camera_min_Y_pos).w,(Camera_min_Y_pos).w
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -656,18 +652,18 @@ Obj_IncLevEndYGradual:
 		rts
 ; ---------------------------------------------------------------------------
 +		move.w	(Saved_Camera_target_max_Y_pos).w,(Camera_max_Y_pos).w
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Child6_IncLevX:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_IncLevEndXGradual
 Child6_DecLevX:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_DecLevStartXGradual
 Child6_IncLevY:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_IncLevEndYGradual
 Child6_DecLevY:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_DecLevStartYGradual

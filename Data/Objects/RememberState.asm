@@ -12,7 +12,7 @@ Sprite_OnScreen_Test2:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	.offscreen
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .offscreen:
@@ -22,7 +22,7 @@ Sprite_OnScreen_Test2:
 		bclr	#7,(a2)
 
 .delete:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -34,8 +34,8 @@ Sprite_OnScreen_Test_Collision:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	.offscreen
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jsr	(Add_SpriteToCollisionResponseList).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .offscreen:
@@ -45,7 +45,7 @@ Sprite_OnScreen_Test_Collision:
 		bclr	#7,(a2)
 
 .delete:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -65,7 +65,7 @@ Delete_Sprite_If_Not_In_Range:
 		bclr	#7,(a2)
 
 .delete:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; End of function Delete_Sprite_If_Not_In_Range
 
 ; =============== S U B R O U T I N E =======================================
@@ -76,7 +76,7 @@ Sprite_CheckDelete:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	.offscreen
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .offscreen:
@@ -98,7 +98,7 @@ Sprite_CheckDelete2:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	.offscreen
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .offscreen:
@@ -127,7 +127,7 @@ Sprite_CheckDeleteXY:
 		addi.w	#$80,d0
 		cmpi.w	#320+192,d0
 		bhi.w	Go_Delete_Sprite
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -145,7 +145,7 @@ Obj_FlickerMove:
 		bhi.w	Go_Delete_Sprite_3
 		bchg	#6,$38(a0)
 		beq.s	Sprite_CheckDelete2.return
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -155,8 +155,8 @@ Sprite_CheckDeleteTouch:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.w	Sprite_CheckDelete.offscreen
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jsr	(Add_SpriteToCollisionResponseList).w
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -166,8 +166,8 @@ Sprite_CheckDeleteTouch2:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.w	Sprite_CheckDelete2.offscreen
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jsr	(Add_SpriteToCollisionResponseList).w
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -182,8 +182,8 @@ Sprite_CheckDeleteTouchXY:
 		addi.w	#$80,d0
 		cmpi.w	#320+192,d0
 		bhi.w	Go_Delete_Sprite
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jsr	(Add_SpriteToCollisionResponseList).w
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -193,7 +193,7 @@ Sprite_CheckDeleteSlotted:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	Go_Delete_SpriteSlotted
-		bra.w	Draw_Sprite
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -224,8 +224,8 @@ Sprite_CheckDeleteTouchSlotted:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	Go_Delete_SpriteSlotted
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		jsr	(Add_SpriteToCollisionResponseList).w
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Go_Delete_SpriteSlotted3:
@@ -243,10 +243,10 @@ Obj_WaitOffscreen:
 		move.l	#+,address(a0)
 +		tst.b	render_flags(a0)
 		bmi.s	+
-		bra.w	Sprite_OnScreen_Test
+		jmp	Sprite_OnScreen_Test(pc)
 ; ---------------------------------------------------------------------------
 +		move.l	$34(a0),address(a0)			; Restore normal object operation when onscreen
 		rts
 ; End of function Obj_WaitOffscreen
 ; ---------------------------------------------------------------------------
-Map_Offscreen:	dc.w 0
+Map_Offscreen:	dc.w Map_Offscreen-Map_Offscreen

@@ -53,11 +53,11 @@ loc_1E896:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1E8C6
-		bra.w	Delete_Sprite_If_Not_In_Range
+		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
 
 loc_1E8C0:
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -170,11 +170,11 @@ loc_1E9E6:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1EA14
-		bra.w	Delete_Sprite_If_Not_In_Range
+		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
 
 loc_1EA0E:
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
