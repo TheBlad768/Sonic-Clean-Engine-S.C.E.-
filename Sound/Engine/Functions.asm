@@ -77,6 +77,8 @@ SMPS_PlayDACSample:
 	rts
 ; End of function SMPS_PlayDACSample
 
+    if SMPS_EnablePWM
+
 ; ---------------------------------------------------------------------------
 ; Play a PWM sample
 ;
@@ -84,7 +86,7 @@ SMPS_PlayDACSample:
 ; d1 = Sample volume/panning
 ; d2 = PWM channel*2 (0 = channel 1, 2 = channel 2, etc.)
 ; ---------------------------------------------------------------------------
-    if SMPS_EnablePWM
+
 SMPS_PlayPWMSample:
 	; Merge ID with volume/pan to get PWM command
 	lsl.w	#8,d1

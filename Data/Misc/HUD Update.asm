@@ -11,12 +11,11 @@ HUD_AddToScore:
 		add.l	d0,(a3)							; add d0*10 to the score
 		move.l	#999999,d1						; 9999990 maximum points
 		cmp.l	(a3),d1							; is score below 999999?
-		bhi.s	.locret							; if yes, branch
+		bhi.s	.return							; if yes, branch
 		move.l	d1,(a3)							; reset score to 999999
 
-.locret:
+.return:
 		rts
-; End of function HUD_AddToScore
 ; ---------------------------------------------------------------------------
 ; Subroutine to update the HUD
 ; ---------------------------------------------------------------------------
@@ -55,9 +54,9 @@ UpdateHUD:
 ; ---------------------------------------------------------------------------
 
 loc_DD64:
-		beq.s	HUD_AddToScore.locret
+		beq.s	HUD_AddToScore.return
 		tst.b	(Game_paused).w						; is the game paused?
-		bne.s	HUD_AddToScore.locret			; if yes, branch
+		bne.s	HUD_AddToScore.return			; if yes, branch
 		lea	(Timer).w,a1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(a1)+	; is the time 9:59:59?
 		beq.s	UpdateHUD_TimeOver			; if yes, branch
@@ -156,7 +155,6 @@ HudDebug:
 
 locret_DE7C:
 		rts
-; End of function UpdateHUD
 ; ---------------------------------------------------------------------------
 ; Subroutine to load "0" on the HUD
 ; ---------------------------------------------------------------------------
@@ -168,7 +166,6 @@ HUD_DrawZeroRings:
 		lea	HUD_Zero_Rings(pc),a2
 		move.w	#2,d2
 		bra.s	loc_1C83E
-; End of function HUD_DrawZeroRings
 ; ---------------------------------------------------------------------------
 ; Subroutine to load uncompressed HUD patterns ("E", "0", colon)
 ; ---------------------------------------------------------------------------
@@ -203,7 +200,6 @@ loc_1C85E:
 		move.l	#0,VDP_data_port-VDP_data_port(a6)
 		dbf	d1,loc_1C85E
 		bra.s	loc_1C858
-; End of function HUD_DrawInitial
 ; ---------------------------------------------------------------------------
 
 	; set the character set for HUD
@@ -262,11 +258,10 @@ HUD_DebugLoop:
 		lea	(a1,d2.w),a3
 	rept 8
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
-	endm
+	endr
 		swap	d1
 		dbf	d6,HUD_DebugLoop	; repeat 7 more	times
 		rts
-; End of function HUD_Debug
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load rings numbers patterns
 ; ---------------------------------------------------------------------------
@@ -277,7 +272,6 @@ DrawThreeDigitNumber:
 		lea	Hud_100(pc),a2
 		moveq	#3-1,d6
 		bra.s	Hud_LoadArt
-; End of function DrawThreeDigitNumber
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load score numbers patterns
 ; ---------------------------------------------------------------------------
@@ -317,13 +311,12 @@ loc_1C8FE:
 		lea	(a1,d2.w),a3
 	rept 16
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
-	endm
+	endr
 
 loc_1C92C:
 		addi.l	#$400000,d0
 		dbf	d6,Hud_ScoreLoop
 		rts
-; End of function DrawSixDigitNumber
 ; ---------------------------------------------------------------------------
 ; HUD counter sizes
 ; ---------------------------------------------------------------------------
@@ -343,7 +336,6 @@ DrawSingleDigitNumber:
 		lea	Hud_1(pc),a2
 		moveq	#1-1,d6
 		bra.s	loc_1C9BA
-; End of function DrawSingleDigitNumber
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -378,8 +370,7 @@ loc_1C9D6:
 		lea	(a1,d2.w),a3
 	rept 16
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
-	endm
+	endr
 		addi.l	#$400000,d0
 		dbf	d6,Hud_TimeLoop
 		rts
-; End of function DrawTwoDigitNumber

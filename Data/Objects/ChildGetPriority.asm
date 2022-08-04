@@ -9,7 +9,6 @@ Child_GetPriority:
 		bset	#7,art_tile(a0)
 +		move.w	priority(a1),priority(a0)
 		rts
-; End of function Child_GetPriority
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -20,7 +19,6 @@ Child_GetPriorityOnce:
 		bset	#7,art_tile(a0)
 		move.l	(sp),address(a0)
 +		rts
-; End of function Child_GetPriorityOnce
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -32,7 +30,6 @@ Child_GetVRAMPriorityOnce:
 		move.w	priority(a1),priority(a0)
 		move.l	(sp),address(a0)
 +		rts
-; End of function Child_GetVRAMPriorityOnce
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -49,4 +46,3 @@ Child_SyncDraw:
 ; ---------------------------------------------------------------------------
 +		bset	#6,$38(a0)
 		rts
-; End of function Child_SyncDraw

@@ -3268,8 +3268,6 @@ cfChanFMCommand:
 ; Vladikcomper's Mega PCM DAC driver
 ; ---------------------------------------------------------------------------
 
-	align $8000
-
 	include	"Sound/Engine/MegaPCM - 68k.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79

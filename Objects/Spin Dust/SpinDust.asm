@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Dash Dust (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -117,7 +120,7 @@ loc_18CAA:
 ; ---------------------------------------------------------------------------
 
 loc_18CB2:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_18CB6:
@@ -143,7 +146,7 @@ loc_18CE4:
 		move.b	#3,$36(a0)
 		btst	#Status_Underwater,status(a2)
 		bne.s	DashDust_Load_DPLC
-		bsr.w	Create_New_Sprite
+		jsr	(Create_New_Sprite).w
 		bne.s	DashDust_Load_DPLC
 		move.l	address(a0),address(a1)
 		move.w	x_pos(a2),x_pos(a1)
@@ -202,7 +205,6 @@ SplashDrown_Load_DPLC:
 		jsr	(Add_To_DMA_Queue).w
 		dbf	d5,-
 +		rts
-; End of function DashDust_Load_DPLC
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"

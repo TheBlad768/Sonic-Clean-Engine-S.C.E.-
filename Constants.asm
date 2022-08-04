@@ -2,6 +2,8 @@
 ; Constants
 ; ===========================================================================
 
+Ref_Checksum_String				= 'INIT'
+
 ; ---------------------------------------------------------------------------
 ; VDP addresses
 ; ---------------------------------------------------------------------------
@@ -61,22 +63,18 @@ ObjectTable_Count:				= 768	; The maximum objects on the level. Even addresses o
 ; PLC queues
 ; ---------------------------------------------------------------------------
 
-PLCKosM_Count:					= 32		; The larger the queues, the more RAM is used for the buffer
-
-; ---------------------------------------------------------------------------
-; function using these variables
-id function ptr,((ptr-offset)/ptrsize+idstart)
+PLCKosM_Count:					= 32		; The greater the queues, the more RAM is used for the buffer
 
 ; ---------------------------------------------------------------------------
 ; Game modes
 ; ---------------------------------------------------------------------------
 
-offset :=	GameModes
+offset :=	Game_Modes
 ptrsize :=	1
 idstart :=	0
 
-id_LevelSelectScreen =				id(ptr_GM_LevelSelect)		; 0
-id_LevelScreen =					id(ptr_GM_Level)				; 4
+id_LevelSelectScreen =				id(ptr_LevelSelect)			; 0
+id_LevelScreen =					id(ptr_Level)					; 4
 
 GameModeFlag_TitleCard =		7							; flag bit
 GameModeID_TitleCard =			1<<GameModeFlag_TitleCard	; flag mask
@@ -204,9 +202,9 @@ priority =		 	 	  8 ; word ; in units of $80
 art_tile =		 		$A ; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
 mappings =				$C ; long
 x_pos =					$10 ; word, or long when extra precision is required
-x_sub =					x_pos+2
+x_sub =					x_pos+2 ; word
 y_pos =					$14 ; word, or long when extra precision is required
-y_sub =					y_pos+2
+y_sub =					y_pos+2 ; word
 mapping_frame =			$22 ; byte
 ; ---------------------------------------------------------------------------
 ; Conventions followed by most objects:
@@ -243,6 +241,7 @@ vram_art =   				$40 ; word ; address of art in VRAM (same as art_tile * $20)
 parent =					$42 ; word ; address of the object that owns or spawned this one, if applicable
 child_dx = 				$42 ; byte ; X offset of child relative to parent
 child_dy = 				$43 ; byte ; Y offset of child relative to parent
+parent4 = 				$44 ; word
 parent3 = 				$46 ; word ; parent of child objects
 parent2 =				$48 ; word ; several objects use this instead
 respawn_addr =			$48 ; word ; the address of this object's entry in the respawn table
@@ -271,6 +270,7 @@ tilt =					$3B ; byte ; angle on ground
 stick_to_convex =			$3C ; byte ; used to make character stick to convex surfaces such as the rotating discs in CNZ
 spin_dash_flag =			$3D ; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
 spin_dash_counter =		$3E ; word
+restart_timer =			$3E ; word
 jumping =				$40 ; byte
 interact =				$42 ; word ; RAM address of the last object the character stood on
 default_y_radius =		$44 ; byte ; default value of y_radius
@@ -283,7 +283,7 @@ lrb_solid_bit =			$47 ; byte ; the bit to check for left/right/bottom solidity (
 boss_invulnerable_time =	$1C ; byte ; flash time
 collision_restore_flags =	$25 ; byte ; restore collision after hit
 boss_hitcount2 =			$29 ; byte ; usage varies, bosses use it as a hit counter
- ; ---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; Object variables
 ; ---------------------------------------------------------------------------
 obId =					0
@@ -314,6 +314,7 @@ obParent3 =				$46 	; word ; parent of child objects
 ; ---------------------------------------------------------------------------
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
 ; ---------------------------------------------------------------------------
+
 mainspr_childsprites 		= $16	; amount of child sprites
 sub2_x_pos				= $18
 sub2_y_pos				= $1A
@@ -340,29 +341,28 @@ sub9_x_pos				= $42
 sub9_y_pos				= $44
 sub9_mapframe			= $47
 next_subspr				= 6		; size
+
 ; ---------------------------------------------------------------------------
 ; Unknown or inconsistently used offsets that are not applicable to sonic/tails:
 ; ---------------------------------------------------------------------------
-objoff_12 =				2+x_pos
-objoff_16 =				2+y_pos
-objoff_1C =				$1C
-objoff_1D =				$1D
-objoff_26 =				$26
-objoff_27 =				$27
-objoff_2B =				$2B
-objoff_2C =				$2C
-objoff_2D =				$2D
-objoff_2E =				$2E
-objoff_2F =				$2F
-objoff_30 =				$30
+
+ enum	objoff_00=$00,objoff_01=$01,objoff_02=$02,objoff_03=$03,objoff_04=$04,objoff_05=$05,objoff_06=$06
+ enum	objoff_07=$07,objoff_08=$08,objoff_09=$09,objoff_0A=$0A,objoff_0B=$0B,objoff_0C=$0C,objoff_0D=$0D
+ enum	objoff_0E=$0E,objoff_0F=$0F,objoff_10=$10,objoff_11=$11,objoff_12=$12,objoff_13=$13,objoff_14=$14
+ enum	objoff_15=$15,objoff_16=$16,objoff_17=$17,objoff_18=$18,objoff_19=$19,objoff_1A=$1A,objoff_1B=$1B
+ enum	objoff_1C=$1C,objoff_1D=$1D,objoff_1E=$1E,objoff_1F=$1F,objoff_20=$20,objoff_21=$21,objoff_22=$22
+ enum	objoff_23=$23,objoff_24=$24,objoff_25=$25,objoff_26=$26,objoff_27=$27,objoff_28=$28,objoff_29=$29
+ enum	objoff_2A=$2A,objoff_2B=$2B,objoff_2C=$2C,objoff_2D=$2D,objoff_2E=$2E,objoff_2F=$2F,objoff_30=$30
  enum	objoff_31=$31,objoff_32=$32,objoff_33=$33,objoff_34=$34,objoff_35=$35,objoff_36=$36,objoff_37=$37
  enum	objoff_38=$38,objoff_39=$39,objoff_3A=$3A,objoff_3B=$3B,objoff_3C=$3C,objoff_3D=$3D,objoff_3E=$3E
  enum	objoff_3F=$3F,objoff_40=$40,objoff_41=$41,objoff_42=$42,objoff_43=$43,objoff_44=$44,objoff_45=$45
  enum	objoff_46=$46,objoff_47=$47,objoff_48=$48,objoff_49=$49
+
 ; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
 ; bitfield with the following meaning:
 ; ---------------------------------------------------------------------------
+
 p1_standing_bit				= 3
 p2_standing_bit				= p1_standing_bit + 1
 p1_standing					= 1<<p1_standing_bit
@@ -374,10 +374,12 @@ p1_pushing					= 1<<p1_pushing_bit
 p2_pushing					= 1<<p2_pushing_bit
 standing_mask				= p1_standing|p2_standing
 pushing_mask				= p1_pushing|p2_pushing
+
 ; ---------------------------------------------------------------------------
 ; The high word of d6 after a SolidObject call is a bitfield
 ; with the following meaning:
 ; ---------------------------------------------------------------------------
+
 p1_touch_side_bit		= 0
 p2_touch_side_bit		= p1_touch_side_bit + 1
 p1_touch_side			= 1<<p1_touch_side_bit
@@ -393,9 +395,11 @@ p2_touch_top_bit			= p1_touch_top_bit + 1
 p1_touch_top				= 1<<p1_touch_top_bit
 p2_touch_top			= 1<<p2_touch_top_bit
 touch_top_mask			= p1_touch_top|p2_touch_top
+
 ; ---------------------------------------------------------------------------
-; Player Status Variables
+; Player status variables
 ; ---------------------------------------------------------------------------
+
 Status_Facing				= 0
 Status_InAir					= 1
 Status_Roll					= 2
@@ -403,9 +407,11 @@ Status_OnObj				= 3
 Status_RollJump				= 4
 Status_Push					= 5
 Status_Underwater			= 6
+
 ; ---------------------------------------------------------------------------
-; Player status_secondary variables
+; Player status secondary variables
 ; ---------------------------------------------------------------------------
+
 Status_Shield					= 0
 Status_Invincible				= 1
 Status_SpeedShoes			= 2
@@ -413,16 +419,20 @@ Status_SpeedShoes			= 2
 Status_FireShield				= 4
 Status_LtngShield				= 5
 Status_BublShield				= 6
+
 ; ---------------------------------------------------------------------------
 ; Object Status Variables
 ; ---------------------------------------------------------------------------
+
 Status_ObjOrienX				= 0
 Status_ObjOrienY				= 1
 Status_ObjTouch				= 6
 Status_ObjDefeated			= 7
+
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels).
 ; ---------------------------------------------------------------------------
+
 ArtTile_Sonic				= $680
 ArtTile_Ring				= $6B4
 ArtTile_Ring_Sparks		= $6B8
@@ -431,17 +441,21 @@ ArtTile_Powerups			= $4AC
 ArtTile_Shield			= $79C
 ArtTile_Shield_Sparks		= $7BB
 ArtTile_DashDust			= $7F0
+
 ; ---------------------------------------------------------------------------
 ; VRAM data
 ; ---------------------------------------------------------------------------
+
 vram_fg:				= $C000 ; foreground namespace
 vram_window:		= $C000 ; window namespace
 vram_bg:			= $E000 ; background namespace
 vram_sprites:			= $D400 ; sprite table
 vram_hscroll:			= $F000 ; horizontal scroll table
+
 ; ---------------------------------------------------------------------------
 ; Colours
 ; ---------------------------------------------------------------------------
+
 cBlack:				equ $000			; colour black
 cWhite:				equ $EEE			; colour white
 cBlue:				equ $E00			; colour blue
@@ -450,9 +464,11 @@ cRed:				equ $00E			; colour red
 cYellow:				equ cGreen+cRed		; colour yellow
 cAqua:				equ cGreen+cBlue		; colour aqua
 cMagenta:			equ cBlue+cRed		; colour magenta
+
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
 ; ---------------------------------------------------------------------------
+
 flip_x				= (1<<11)
 flip_y				= (1<<12)
 palette_bit_0			= 5
@@ -471,18 +487,40 @@ palette_mask			= $6000
 tile_mask			= $7FF
 nontile_mask			= $F800
 drawing_mask		= $7FFF
+
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses.
 ; VRAM Reserved regions.
 ; ---------------------------------------------------------------------------
+
 VRAM_Plane_A_Name_Table	= $C000	; Extends until $CFFF
 VRAM_Plane_B_Name_Table	= $E000	; Extends until $EFFF
 VRAM_Plane_Table_Size		= $1000	; 64 cells x 32 cells x 2 bytes per cell
+
+; ---------------------------------------------------------------------------
+; Sprite render screen flags
+; ---------------------------------------------------------------------------
+
+rfCoord:						= 2		; screen coordinates flag
+
+rfStatic:						= 5		; static mappings flag
+rfMulti:						= 6		; multi-draw flag
+rfOnscreen:					= 7		; on-screen flag
+
 ; ---------------------------------------------------------------------------
 ; Animation flags
 ; ---------------------------------------------------------------------------
+
 afEnd:						= $FF	; return to beginning of animation
 afBack:						= $FE	; go back (specified number) bytes
 afChange:					= $FD	; run specified animation
 afRoutine:					= $FC	; increment routine counter
 afReset:						= $FB	; reset animation and 2nd object routine counter
+
+; ---------------------------------------------------------------------------
+; Animation Raw flags
+; ---------------------------------------------------------------------------
+
+arfEnd:						= $FC	; return to beginning of animation
+arfBack:						= $F8	; go back (specified number) bytes
+arfJump:						= $F4	; jump from $34(a0) address

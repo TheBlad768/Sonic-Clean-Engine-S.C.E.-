@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Level Results (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -9,14 +12,14 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 LevelResults_Index: offsetTable
-		offsetTableEntry.w Obj_LevelResultsInit
-		offsetTableEntry.w Obj_LevelResultsCreate
-		offsetTableEntry.w Obj_LevelResultsWait
-		offsetTableEntry.w Obj_LevelResultsWait2
+		offsetTableEntry.w Obj_LevelResultsInit			; 0
+		offsetTableEntry.w Obj_LevelResultsCreate		; 2
+		offsetTableEntry.w Obj_LevelResultsWait			; 4
+		offsetTableEntry.w Obj_LevelResultsWait2		; 6
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsInit:
-		sfx	bgm_Fade,0,1,1							; fade out music
+		sfx	bgm_Fade								; fade out music
 		lea	(ArtKosM_ResultsGeneral).l,a1
 		move.w	#tiles_to_bytes($480),d2
 		jsr	(Queue_Kos_Module).w					; General art
@@ -106,7 +109,7 @@ Obj_LevelResultsWait:
 		cmpi.w	#$121,$2E(a0)
 		bne.s	locret_2DC9E						; Play after eh, a second or so
 		move.b	#30,(Player_1+air_left).w				; Reset air
-		music	bgm_GotThrough,1,0,0				; Play level complete theme
+		music	bgm_GotThrough,1					; Play level complete theme
 ; ---------------------------------------------------------------------------
 
 loc_2DC5C:
@@ -130,11 +133,11 @@ loc_2DC7E:
 		move.w	(Level_frame_counter).w,d0
 		andi.w	#3,d0
 		bne.s	locret_2DC9E
-		sfx	sfx_Switch,1,0,0							; Every four frames play the score countdown sound
+		sfx	sfx_Switch,1								; Every four frames play the score countdown sound
 ; ---------------------------------------------------------------------------
 
 loc_2DCA0:
-		sfx	sfx_Cash,0,0,0							; Play the cash register sound
+		sfx	sfx_Cash									; Play the cash register sound
 		move.w	#3*60,$2E(a0)						; Set wait amount
 		addq.b	#2,routine(a0)
 
@@ -223,7 +226,6 @@ LevResults_DisplayScore:
 		addq.w	#8,d2
 		dbf	d5,-
 		rts
-; End of function LevResults_DisplayScore
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -231,8 +233,8 @@ LevelResults_MoveElement:
 		movea.w	parent2(a0),a1
 		move.w	$32(a1),d0
 		beq.s	loc_2DE38
-		tst.b	4(a0)
-		bmi.s	loc_2DE20
+		tst.b	render_flags(a0)		; Object visible on the screen?
+		bmi.s	loc_2DE20		; If yes, branch
 		subq.w	#1,$30(a1)		; If offscreen, subtract from number of elements and delete
 		addq.w	#4,sp
 		jmp	(Delete_Current_Sprite).w
@@ -247,13 +249,13 @@ loc_2DE20:
 		neg.w	d0				; Change direction depending on where it came from
 
 loc_2DE32:
-		add.w	$10(a0),d0
+		add.w	x_pos(a0),d0
 		bra.s	loc_2DE4A
 ; ---------------------------------------------------------------------------
 
 loc_2DE38:
 		moveq	#$10,d1			; Level element moving in
-		move.w	$10(a0),d0
+		move.w	x_pos(a0),d0
 		cmp.w	$46(a0),d0
 		beq.s	loc_2DE4A		; If X position has reached destination, don't do anything else
 		blt.s		loc_2DE48		; See which direction it needs to go
@@ -263,11 +265,10 @@ loc_2DE48:
 		add.w	d1,d0			; Add speed to X amount
 
 loc_2DE4A:
-		move.w	d0,$10(a0)
+		move.w	d0,x_pos(a0)
 
 locret_2DE4E:
 		rts
-; End of function LevelResults_MoveElement
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -294,7 +295,6 @@ loc_2DE70:
 		dbf	d2,loc_2DE5A
 		move.l	(DecimalScoreRAM).w,d1
 		rts
-; End of function LevResults_GetDecimalScore
 ; ---------------------------------------------------------------------------
 		dc.b 3, $27, $68
 		dc.b 1, $63, $84

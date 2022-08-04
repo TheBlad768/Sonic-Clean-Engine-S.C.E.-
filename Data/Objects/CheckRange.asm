@@ -28,7 +28,6 @@ Check_CameraInRange_Fail:
 		bsr.w	Delete_Sprite_If_Not_In_Range
 		addq.w	#4,sp
 		rts
-; End of function Check_CameraInRange
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -49,14 +48,34 @@ locret_85CA2:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_85CA4:
+Init_BossArena:
+		st	(Boss_flag).w
+
+Init_BossArena2:
+		sfx	bgm_Fade			; fade out music
+		move.w	#2*60,$2E(a0)
+
+Init_BossArena3:
+		move.w	(Camera_min_Y_pos).w,(Saved_Camera_min_Y_pos).w
+		move.w	(Camera_target_max_Y_pos).w,(Saved_Camera_target_max_Y_pos).w
+		move.w	(Camera_min_X_pos).w,(Saved_Camera_min_X_pos).w
+		move.w	(Camera_max_X_pos).w,(Saved_Camera_max_X_pos).w
+		move.w	(a1)+,(Camera_min_Y_pos_Saved).w
+		move.w	(a1)+,(Camera_max_Y_pos_Saved).w
+		move.w	(a1)+,(Camera_min_X_pos_Saved).w
+		move.w	(a1)+,(Camera_max_X_pos_Saved).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Load_BossArena:
 		btst	#0,objoff_27(a0)
 		bne.s	loc_85CC6
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
 		move.b	d0,(Level_music+1).w
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+		jsr	(SMPS_QueueSound1).w
 		bset	#0,objoff_27(a0)
 
 loc_85CC6:
@@ -146,7 +165,6 @@ Check_InTheirRange_Return:
 Check_InTheirRange_Fail:
 		moveq	#0,d0
 		rts
-; End of function Check_InTheirRange
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -174,7 +192,6 @@ Check_InMyRange:
 Check_InMyRange_Fail:
 		moveq	#0,d0
 		rts
-; End of function Check_InMyRange
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -201,4 +218,3 @@ Check_PlayerInRange:
 		bhs.s	+
 		move.w	a2,d0
 +		rts
-; End of function Check_PlayerInRange

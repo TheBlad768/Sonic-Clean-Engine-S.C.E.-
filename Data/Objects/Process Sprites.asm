@@ -20,7 +20,6 @@ Process_Sprites_Loop:
 +		lea	next_object(a0),a0
 		dbf	d7,Process_Sprites_Loop
 		rts
-; End of function Process_Sprites
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -44,4 +43,3 @@ Process_Sprites_FreezeObject_Loop:
 +		lea	next_object(a0),a0
 		dbf	d7,Process_Sprites_FreezeObject_Loop
 		rts
-; End of function Process_Sprites_FreezeObject

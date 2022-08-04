@@ -12,8 +12,8 @@ DebugMode:
 ; ---------------------------------------------------------------------------
 
 Debug_Index: offsetTable
-		offsetTableEntry.w Debug_Main
-		offsetTableEntry.w Debug_Action
+		offsetTableEntry.w Debug_Main		; 0
+		offsetTableEntry.w Debug_Action	; 2
 ; ---------------------------------------------------------------------------
 
 Debug_Main:
@@ -32,7 +32,7 @@ loc_92A38:
 		bclr	#Status_Underwater,status(a0)
 		beq.s	Debug_Zone
 		movea.l	a0,a1
-		bsr.w	Player_ResetAirTimer
+		jsr	Player_ResetAirTimer(pc)
 		move.w	#$600,(Sonic_Knux_top_speed).w
 		move.w	#$C,(Sonic_Knux_acceleration).w
 		move.w	#$80,(Sonic_Knux_deceleration).w
@@ -47,9 +47,9 @@ Debug_Zone:
 		lea	DebugList(pc),a2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
-		cmp.b	(Debug_object).w,d6	; have you gone past the last item?
-		bhi.s	.noreset				; if not, branch
-		clr.b	(Debug_object).w			; back to start of list
+		cmp.b	(Debug_object).w,d6		; have you gone past the last item?
+		bhi.s	.noreset					; if not, branch
+		clr.b	(Debug_object).w				; back to start of list
 
 .noreset:
 		bsr.w	Debug_ShowItem
@@ -73,11 +73,11 @@ Debug_Control:
 		moveq	#0,d4
 		move.w	#1,d1
 		move.b	(Ctrl_1_pressed).w,d4
-		andi.w	#btnDir,d4			; is up/down/left/right	pressed?
-		bne.s	.dirpressed			; if yes, branch
+		andi.w	#btnDir,d4				; is up/down/left/right	pressed?
+		bne.s	.dirpressed				; if yes, branch
 		move.b	(Ctrl_1_held).w,d0
-		andi.w	#btnDir,d0			; is up/down/left/right	held?
-		bne.s	.dirheld				; if yes, branch
+		andi.w	#btnDir,d0				; is up/down/left/right	held?
+		bne.s	.dirheld					; if yes, branch
 		move.b	#12,(Debug_camera_delay).w
 		move.b	#15,(Debug_camera_speed).w
 		bra.w	Debug_ChgItem
@@ -102,8 +102,8 @@ loc_1D01C:
 		asr.l	#4,d1
 		move.l	y_pos(a0),d2
 		move.l	x_pos(a0),d3
-		btst	#bitUp,d4				; is up being held?
-		beq.s	loc_1D03C			; if not, branch
+		btst	#button_up,d4				; is up being held?
+		beq.s	loc_1D03C				; if not, branch
 		sub.l	d1,d2
 		moveq	#0,d0
 		move.w	(Camera_min_Y_pos).w,d0
@@ -113,8 +113,8 @@ loc_1D01C:
 		move.l	d0,d2
 
 loc_1D03C:
-		btst	#bitDn,d4				; is down being held?
-		beq.s	loc_1D052			; if not, branch
+		btst	#button_down,d4				; is down being held?
+		beq.s	loc_1D052				; if not, branch
 		add.l	d1,d2
 		moveq	#0,d0
 		move.w	(Camera_target_max_Y_pos).w,d0
@@ -125,15 +125,15 @@ loc_1D03C:
 		move.l	d0,d2
 
 loc_1D052:
-		btst	#bitL,d4					; is left being held?
-		beq.s	loc_1D05E			; if not, branch
+		btst	#button_left,d4				; is left being held?
+		beq.s	loc_1D05E				; if not, branch
 		sub.l	d1,d3
 		bcc.s	loc_1D05E
 		moveq	#0,d3
 
 loc_1D05E:
-		btst	#bitR,d4					; is right being held?
-		beq.s	loc_1D066			; if not, branch
+		btst	#button_right,d4				; is right being held?
+		beq.s	loc_1D066				; if not, branch
 		add.l	d1,d3
 
 loc_1D066:
@@ -141,31 +141,31 @@ loc_1D066:
 		move.l	d3,x_pos(a0)
 
 Debug_ChgItem:
-		btst	#bitA,(Ctrl_1_held).w 		; is button A held?
-		beq.s	.createitem			; if not, branch
-		btst	#bitC,(Ctrl_1_pressed).w	; is button C pressed?
-		beq.s	.nextitem			; if not, branch
-		subq.b	#1,(Debug_object).w	; go back 1 item
+		btst	#button_A,(Ctrl_1_held).w 		; is button A held?
+		beq.s	.createitem				; if not, branch
+		btst	#button_C,(Ctrl_1_pressed).w	; is button C pressed?
+		beq.s	.nextitem				; if not, branch
+		subq.b	#1,(Debug_object).w		; go back 1 item
 		bcc.s	.display
 		add.b	d6,(Debug_object).w
 		bra.s	.display
 ; ---------------------------------------------------------------------------
 
 .nextitem:
-		btst	#bitA,(Ctrl_1_pressed).w	; is button A pressed?
-		beq.s	.createitem			; if not, branch
-		addq.b	#1,(Debug_object).w	; go forwards 1 item
+		btst	#button_A,(Ctrl_1_pressed).w	; is button A pressed?
+		beq.s	.createitem				; if not, branch
+		addq.b	#1,(Debug_object).w		; go forwards 1 item
 		cmp.b	(Debug_object).w,d6
 		bhi.s	.display
-		clr.b	(Debug_object).w			; loop back to first item
+		clr.b	(Debug_object).w				; loop back to first item
 
 .display:
 		bra.w	Debug_ShowItem
 ; ---------------------------------------------------------------------------
 
 .createitem:
-		btst	#bitC,(Ctrl_1_pressed).w	; is button C pressed?
-		beq.s	.backtonormal		; if not, branch
+		btst	#button_C,(Ctrl_1_pressed).w	; is button C pressed?
+		beq.s	.backtonormal			; if not, branch
 		jsr	(Create_New_Sprite).w
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
@@ -180,13 +180,13 @@ Debug_ChgItem:
 		lsl.w	#2,d0
 		add.w	d1,d0
 		move.b	4(a2,d0.w),subtype(a1)
-		move.l	(a2,d0.w),(a1)
-		clr.b	(a1)
+		move.l	(a2,d0.w),address(a1)
+		clr.b	address(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
 .backtonormal:
-		btst	#bitB,(Ctrl_1_pressed).w				; is button B pressed?
+		btst	#button_B,(Ctrl_1_pressed).w			; is button B pressed?
 		beq.s	.stayindebug						; if not, branch
 		clr.w	(Debug_placement_mode).w		; deactivate debug mode
 		disableInts
@@ -198,30 +198,27 @@ Debug_ChgItem:
 		move.l	(Saved_mappings).w,mappings(a1)
 		move.w	(Saved_art_tile).w,art_tile(a1)
 		bsr.s	sub_92C54
-		move.b	#$13,y_radius(a1)
-		move.b	#9,x_radius(a1)
+		move.b	#38/2,y_radius(a1)
+		move.b	#18/2,x_radius(a1)
 
 .stayindebug:
 		rts
-; End of function Debug_Control
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_92C54:
 		moveq	#0,d0
 		move.b	d0,anim(a1)
-		move.w	d0,x_pos+2(a1)
-		move.w	d0,y_pos+2(a1)
+		move.w	d0,x_sub(a1)
+		move.w	d0,y_sub(a1)
 		move.b	d0,object_control(a1)
 		move.b	d0,spin_dash_flag(a1)
-		move.w	d0,x_vel(a1)
-		move.w	d0,y_vel(a1)
+		move.l	d0,x_vel(a1)
 		move.w	d0,ground_vel(a1)
 		andi.b	#1,status(a1)
 		ori.b	#2,status(a1)
 		move.b	#id_SonicControl,routine(a1)
 		rts
-; End of function sub_92C54
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -236,7 +233,6 @@ Debug_ShowItem:
 		move.w	8(a2,d0.w),art_tile(a0)			; load VRAM setting for item
 		move.b	(a2,d0.w),mapping_frame(a0)	; load frame number for item
 		rts
-; End of function Debug_ShowItem
 ; ---------------------------------------------------------------------------
 
 		include "Misc Data/DebugList.asm"

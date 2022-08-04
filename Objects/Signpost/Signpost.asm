@@ -19,7 +19,7 @@ Obj_EndSignControlDoSign:
 		jsr	(CreateChild6_Simple).w
 		lea	PLC_EndSignStuff(pc),a5
 		jsr	(LoadPLC_Raw_KosM).w
-		jmp	(AfterBoss_Cleanup).l
+		jmp	AfterBoss_Cleanup(pc)
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlAwaitStart:
@@ -34,7 +34,6 @@ Obj_EndSignControlDoStart:
 		beq.s	Obj_EndSignControl.locret
 		jsr	(Change_ActSizes).w				; Set level size
 		jmp	(Delete_Current_Sprite).w
-; End of function Obj_EndSignControl
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -65,7 +64,7 @@ Obj_EndSignInit:
 		move.w	(Camera_Y_pos).w,d0
 		subi.w	#$20,d0
 		move.w	d0,y_pos(a0)					; Place vertical position at top of screen
-		sfx	sfx_Signpost,0,0,0
+		sfx	sfx_Signpost
 		lea	Child1_EndSignStub(pc),a2			; Make the little stub at the bottom of the signpost
 		jmp	(CreateChild1_Normal).w
 ; ---------------------------------------------------------------------------
@@ -201,7 +200,6 @@ EndSign_CheckPlayerHit:
 +		swap	d0
 		tst.w	d0
 		beq.s	locret_83ABC
-; End of function EndSign_CheckPlayerHit
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -219,7 +217,7 @@ sub_83A70:
 +		lsl.w	#4,d0
 		move.w	d0,x_vel(a0)				; Modify strength of X velocity based on how far to the left/right player is
 		move.w	#-$200,y_vel(a0)			; New vertical velocity is always the same
-		sfx	sfx_Signpost,0,0,0
+		sfx	sfx_Signpost
 		lea	Child6_EndSignScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		moveq	#10,d0
@@ -232,7 +230,6 @@ loc_83AB8:
 
 locret_83ABC:
 		rts
-; End of function sub_83A70
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -264,17 +261,19 @@ loc_83AFE:
 
 locret_83B02:
 		rts
-; End of function EndSign_CheckWall
 ; ---------------------------------------------------------------------------
 
 EndSign_Range:			dc.w -$20, $40, -$18, $30
 ObjSlot_EndSigns:		subObjSlotData 0, $5CA, $C, 0, Map_EndSigns, $300, $18, $10, 0, 0
 ObjDat_SignpostStub:		subObjData Map_SignpostStub, $5E2, $300, 4, 8, 0, 0
 ObjDat_SignpostSparkle:	subObjData Map_Ring, make_art_tile(ArtTile_Ring,1,0), $280, 8, 8, 4, 0
+Child6_EndSign:
+		dc.w 1-1
+		dc.l Obj_EndSign
 Child1_EndSignStub:
 		dc.w 1-1
 		dc.l Obj_SignpostStub
-		dc.b 0, $18
+		dc.b 0, 24
 Child6_EndSignSparkle:
 		dc.w 1-1
 		dc.l Obj_SignpostSparkle
@@ -290,8 +289,7 @@ AniRaw_EndSigns1:
 		dc.b	4,   5
 		dc.b	6,   3
 		dc.b	4,   5
-		dc.b	6, $FC
-	even
+		dc.b	6, arfEnd
 AniRaw_EndSigns2:
 		dc.b	1,   1
 		dc.b	4,   5
@@ -299,16 +297,13 @@ AniRaw_EndSigns2:
 		dc.b	4,   5
 		dc.b	6,   3
 		dc.b	4,   5
-		dc.b	6, $FC
-	even
+		dc.b	6, arfEnd
 AniRaw_SignpostSparkle:
 		dc.b	1,   1
 		dc.b	2,   3
-		dc.b	4, $FC
+		dc.b	4, arfEnd
 	even
-Child6_EndSign:
-		dc.w 1-1
-		dc.l Obj_EndSign
+
 PLC_EndSignStuff: plrlistheader
 		plreq $5E2, ArtKosM_SignpostStub
 PLC_EndSignStuff_End

@@ -26,15 +26,12 @@ Do_ResizeEvents:
 		addq.w	#8,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
 		blo.s		+
-		btst	#1,(Player_1+status).w
+		btst	#Status_InAir,(Player_1+status).w
 		beq.s	+
 		add.w	d1,d1
 		add.w	d1,d1
 +		add.w	d1,(Camera_max_Y_pos).w
 		move.b	#1,(Camera_max_Y_pos_changing).w
 
-No_Resize:
+LevelPointer_Null:
 		rts
-; End of function Do_ResizeEvents
-
-; =============== S U B R O U T I N E =======================================

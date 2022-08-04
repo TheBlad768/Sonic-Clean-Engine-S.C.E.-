@@ -195,3 +195,13 @@ _tst	macro
 	endm
 
     endif
+
+; alias binclude as incbin from asm68k compiler
+incbin	macro file
+		binclude	file
+	endm
+
+; dcb from asm68k compiler
+dcb	macro fill, byte
+		dc.ATTRIBUTE [fill]byte
+    endm

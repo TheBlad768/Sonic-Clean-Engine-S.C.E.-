@@ -6,9 +6,11 @@
 
 Wait_VSync:
 DelayProgram:
+	if Lagometer
+		move.w	#$9100,(VDP_control_port).l	; window H position at default
+	endif
 		enableInts
 
 -		tst.b	(V_int_routine).w
 		bne.s	-	; wait until V-int's run
 		rts
-; End of function Wait_VSync

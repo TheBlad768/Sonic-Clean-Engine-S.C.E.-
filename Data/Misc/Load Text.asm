@@ -41,4 +41,3 @@ Load_PlaneText_NextLine:
 Load_PlaneText_Return:
 		enableIntsSave
 		rts
-; End of function Load_PlaneText

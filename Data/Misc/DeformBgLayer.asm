@@ -7,8 +7,7 @@
 DeformBgLayer:
 		tst.b	(Deform_lock).w
 		bne.s	locret_1C0E6
-		clr.w	(H_scroll_amount).w
-		clr.w	(V_scroll_amount).w
+		clr.l	(H_scroll_amount).w	; clear horizontal and vertical scroll amount
 		tst.b	(Scroll_lock).w
 		bne.s	+
 		lea	(Player_1).w,a0
@@ -98,7 +97,6 @@ loc_1C112:
 		move.w	d0,(a1)
 		move.w	d1,(a4)
 		rts
-; End of function MoveCameraX
 
 	if	ExtendedCamera
 
@@ -290,4 +288,3 @@ loc_1C21A:
 		move.w	d3,(a4)
 		move.l	d1,(a1)
 		rts
-; End of function MoveCameraY

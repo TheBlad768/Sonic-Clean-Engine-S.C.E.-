@@ -1,13 +1,17 @@
+; ---------------------------------------------------------------------------
+; AutoSpin (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_SpinForcer:
+Obj_AutoSpin:
 		move.l	#Map_PathSwap,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
-		move.b	#$80,width_pixels(a0)
-		move.b	#$80,height_pixels(a0)
 		move.w	#$280,priority(a0)
+		move.b	#256/2,d0
+		move.b	d0,width_pixels(a0)
+		move.b	d0,height_pixels(a0)
 		move.b	subtype(a0),d0
 		btst	#2,d0
 		beq.s	loc_1E85C
@@ -159,8 +163,7 @@ loc_1E9C0:
 		move.b	#7,$1F(a1)
 		move.b	#2,$20(a1)
 		addq.w	#5,y_pos(a1)
-		sfx	sfx_Roll,1,0,0
-; End of function sub_1E8C6
+		sfx	sfx_Roll,1
 ; ---------------------------------------------------------------------------
 
 loc_1E9E6:
@@ -274,4 +277,3 @@ loc_1EB22:
 
 locret_1EB30:
 		rts
-; End of function Obj_SpinForcer

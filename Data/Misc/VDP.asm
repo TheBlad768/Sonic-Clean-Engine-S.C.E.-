@@ -5,7 +5,7 @@ VDP_register_values:
 		dc.w $8300+(vram_window>>10)	; Window PNT base $C000
 		dc.w $8400+(vram_bg>>13)		; Scroll B PNT base $E000
 		dc.w $8500+(vram_sprites>>9)		; Sprite attribute table base $D400
-		dc.w $8600						; unused
+		dc.w $8600						; Sprite Pattern Generator Base Address: low 64KB VRAM
 		dc.w $8700+(0<<4)				; Backdrop color is color 0 of the first palette line
 		dc.w $8800						; unused
 		dc.w $8900						; unused
@@ -13,11 +13,14 @@ VDP_register_values:
 		dc.w $8B00						; Full-screen horizontal and vertical scrolling
 		dc.w $8C81						; 40 cell wide display, no interlace
 		dc.w $8D00+(vram_hscroll>>10)	; Horizontal scroll table base $F000
-		dc.w $8E00						; unused
-		dc.w $8F02						; Auto-ncrement is 2
-		dc.w $9001						; Scroll planes are 64x32 cells
+		dc.w $8E00						; Nametable Pattern Generator Base Address: low 64KB VRAM
+		dc.w $8F02						; VDP auto increment is 2
+		dc.w $9001						; Scroll planes are 64x32 cells (512x256)
 		dc.w $9100						; Window horizontal position
 		dc.w $9200						; Window vertical position
+; ---------------------------------------------------------------------------
+; VDP init
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -25,7 +28,7 @@ Init_VDP:
 		lea	(VDP_control_port).l,a0
 		lea	(VDP_data_port).l,a1
 		lea	VDP_register_values(pc),a2
-		moveq	#18,d7
+		moveq	#19-1,d7
 
 .setreg:
 		move.w	(a2)+,VDP_control_port-VDP_control_port(a0)
@@ -53,4 +56,3 @@ Init_VDP:
 ; Clear VRAM
 		dmaFillVRAM 0,$0000,($1000<<4)	; clear entire VRAM
 		rts
-; End of function Init_VDP

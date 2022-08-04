@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Invisible vertical hurt block (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -130,10 +133,9 @@ sub_1F734:
 		move.w	d6,-(sp)
 		move.l	a0,-(sp)
 		movea.l	a1,a0
-		bsr.w	Kill_Character
+		jsr	Kill_Character(pc)
 		movea.l	(sp)+,a0
 		move.w	(sp)+,d6
 
 locret_1F742:
 		rts
-; End of function sub_1F734

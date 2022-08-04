@@ -168,7 +168,7 @@ PSGInitValues_End:
 
 Game_Program:
 		tst.w	(VDP_control_port).l
-		move.w	#$4EF9,(V_int_jump).w			; machine code for jmp
+		move.w	#$4EF9,(V_int_jump).w					; machine code for jmp
 		move.l	#VInt,(V_int_addr).w
 		move.w	#$4EF9,(H_int_jump).w
 		move.l	#HInt,(H_int_addr).w
@@ -182,32 +182,32 @@ Game_Program:
 		dbf	d6,-
 		btst	#6,(HW_Expansion_Control).l
 		beq.s	+
-		cmpi.l	#'INIT',(Checksum_string).w		; has checksum routine already run?
-		beq.s	GameInit						; if yes, branch
+		cmpi.l	#Ref_Checksum_String,(Checksum_string).w	; has checksum routine already run?
+		beq.s	Game_Init								; if yes, branch
 +		move.b	(HW_Version).l,d6
 		andi.b	#$C0,d6
-		move.b	d6,(Graphics_flags).w				; get region setting
-		move.l	#'INIT',(Checksum_string).w		; set flag so checksum won't run again
+		move.b	d6,(Graphics_flags).w						; get region setting
+		move.l	#Ref_Checksum_String,(Checksum_string).w	; set flag so checksum won't run again
 
-GameInit:
+Game_Init:
 		jsr	(Init_MSU_Driver).l
 		seq	(SegaCD_Mode).w
 		bsr.w	Init_DMA_Queue
 		bsr.s	Init_VDP
 		bsr.w	SoundDriverLoad
 		bsr.w	Init_Controllers
-		move.b	#id_LevelSelectScreen,(Game_mode).w	; set Game Mode
+		move.b	#id_LevelSelectScreen,(Game_mode).w		; set Game Mode
 
-GameLoop:
-		move.b	(Game_mode).w,d0				; load Game Mode
+Game_Loop:
+		move.b	(Game_mode).w,d0						; load Game Mode
 		andi.w	#$7C,d0
-		movea.l	GameModes(pc,d0.w),a0
+		movea.l	Game_Modes(pc,d0.w),a0
 		jsr	(a0)
-		bra.s	GameLoop
+		bra.s	Game_Loop
 ; ---------------------------------------------------------------------------
 ; Main game mode array
 ; ---------------------------------------------------------------------------
 
-GameModes:
-ptr_GM_LevelSelect:	dc.l LevelSelect_Screen		; Level Select ($00)
-ptr_GM_Level:		dc.l GM_Level			; Level ($04)
+Game_Modes:
+ptr_LevelSelect:	dc.l LevelSelect_Screen		; Level Select ($00)
+ptr_Level:		dc.l Level_Screen			; Level ($04)

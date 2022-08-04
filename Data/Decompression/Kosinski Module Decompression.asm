@@ -22,7 +22,6 @@ Queue_Kos_Module:
 		move.l	a1,(a2)+	; store source address
 		move.w	d2,(a2)+	; store destination VRAM address
 		rts
-; End of function Queue_Kos_Module
 ; ---------------------------------------------------------------------------
 ; Adds pattern load requests to the Kosinski Module decompression queue
 ; Input: d0 = ID of the PLC to load
@@ -63,7 +62,6 @@ LoadPLC_Raw_KosM:
 
 .done:
 		rts
-; End of function LoadPLC_KosM
 ; ---------------------------------------------------------------------------
 ; Initializes processing of the first module on the queue
 ; ---------------------------------------------------------------------------
@@ -93,7 +91,6 @@ Process_Kos_Module_Queue_Init:
 		move.l	a1,(Kos_module_queue).w
 		addq.w	#1,(Kos_modules_left).w	; store total number of modules
 		rts
-; End of function Process_Kos_Module_Queue_Init
 ; ---------------------------------------------------------------------------
 ; Clears the Kosinski Module decompression queue and its associated variables
 ; ---------------------------------------------------------------------------
@@ -103,7 +100,6 @@ Process_Kos_Module_Queue_Init:
 Clear_Kos_Module_Queue:
 		clearRAM Kos_decomp_queue_count, Kos_module_queue_End	; Clear the KosM bytes
 		rts
-; End of function Clear_Kos_Module_Queue
 ; ---------------------------------------------------------------------------
 ; Processes the first module on the queue
 ; ---------------------------------------------------------------------------
@@ -159,7 +155,7 @@ Process_Kos_Module_Queue:
 	rept bytesToXcnt(Kos_module_queue_End-Kos_module_queue,8)
 		move.l	(a1)+,(a0)+					; otherwise, shift all entries up
 		move.l	(a1)+,(a0)+
-	endm
+	endr
 		moveq	#0,d0
 		move.l	d0,(a0)+						; and mark the last slot as free
 		move.l	d0,(a0)+
@@ -168,7 +164,6 @@ Process_Kos_Module_Queue:
 		movea.l	d0,a1
 		move.w	(Kos_module_destination).w,d2
 		bra.w	Process_Kos_Module_Queue_Init
-; End of function Process_Kos_Module_Queue
 ; ---------------------------------------------------------------------------
 ; Adds Kosinski-compressed data to the decompression queue
 ; Inputs:
@@ -188,7 +183,6 @@ Queue_Kos:
 
 .Done:
 		rts
-; End of function Queue_Kos
 ; ---------------------------------------------------------------------------
 ; Checks if V-int occured in the middle of Kosinski queue processing
 ; and stores the location from which processing is to resume if it did
@@ -209,7 +203,6 @@ Set_Kos_Bookmark:
 
 .Done:
 		rts
-; End of function Set_Kos_Bookmark
 ; ---------------------------------------------------------------------------
 ; Processes the first entry in the Kosinski decompression queue
 ; ---------------------------------------------------------------------------
@@ -246,7 +239,7 @@ Process_Kos_Queue:
 	rept bytesToXcnt(Kos_decomp_queue_End-Kos_decomp_queue,8)
 		move.l	(a1)+,(a0)+
 		move.l	(a1)+,(a0)+
-	endm
+	endr
 
 .Done:
 		rts
@@ -257,4 +250,3 @@ Backup_Kos_Registers:
 		movem.w	d0-d6,(Kos_decomp_stored_registers).w
 		movem.l	a0-a1/a5,(Kos_decomp_stored_registers+2*7).w
 		rts
-; End of function Process_Kos_Queue

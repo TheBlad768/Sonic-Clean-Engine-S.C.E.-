@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Bubbler (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -241,10 +244,10 @@ sub_2FBA8:
 		btst	#Status_BublShield,shield_reaction(a1)
 		bne.s	locret_2FC7C
 		bsr.w	Player_ResetAirTimer
-		sfx	sfx_Air,0,0,0
+		sfx	sfx_Air
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
-		move.b	#$15,anim(a1)
+		move.b	#id_GetAir,anim(a1)
 		move.w	#$23,$32(a1)
 		clr.b	jumping(a1)
 		bclr	#5,status(a1)
@@ -262,7 +265,6 @@ sub_2FBA8:
 
 locret_2FC7C:
 		rts
-; End of function sub_2FBA8
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Bubbler/Object Data/Anim - Bubbler.asm"

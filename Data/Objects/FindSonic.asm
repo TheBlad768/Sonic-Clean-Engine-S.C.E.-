@@ -20,4 +20,3 @@ Find_OtherObject:
 		neg.w	d3
 		addq.w	#2,d1
 +		rts
-; End of function Find_OtherObject

@@ -25,7 +25,6 @@ loc_1ABDC:
 		beq.s	locret_1ABDA
 		lea	$80(a1),a1
 		bra.s	loc_1ABCE
-; End of function DisplaySprite
 
 ; =============== S U B R O U T I N E =======================================
 

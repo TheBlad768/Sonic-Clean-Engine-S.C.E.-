@@ -7,7 +7,7 @@ Player_AnglePos:
 		beq.s	+
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 +		move.b	top_solid_bit(a0),d5
-		btst	#3,status(a0)
+		btst	#Status_OnObj,status(a0)
 		beq.s	loc_EC5A
 		moveq	#0,d0
 		move.b	d0,(Primary_Angle).w
@@ -89,7 +89,7 @@ locret_ED12:
 ; ---------------------------------------------------------------------------
 
 loc_ED14:
-		tst.b	$3C(a0)
+		tst.b	stick_to_convex(a0)
 		bne.s	loc_ED32
 		move.b	x_vel(a0),d0
 		bpl.s	loc_ED22
@@ -111,11 +111,10 @@ loc_ED32:
 ; ---------------------------------------------------------------------------
 
 loc_ED38:
-		bset	#1,status(a0)
-		bclr	#5,status(a0)
-		move.b	#1,$21(a0)
+		bset	#Status_InAir,status(a0)
+		bclr	#Status_Push,status(a0)
+		move.b	#1,prev_anim(a0)
 		rts
-; End of function Player_AnglePos
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -149,7 +148,6 @@ loc_ED7A:
 		andi.b	#$C0,d2
 		move.b	d2,angle(a0)
 		rts
-; End of function Player_Angle
 ; ---------------------------------------------------------------------------
 
 Player_WalkVertR:
@@ -188,22 +186,14 @@ Player_WalkVertR:
 		bpl.s	loc_EE22
 		cmpi.w	#-$E,d1
 		blt.s		locret_EE00
-		tst.b	$41(a0)
-		bne.s	loc_EE02
 		add.w	d1,x_pos(a0)
 
 locret_EE00:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_EE02:
-		subq.b	#1,$41(a0)
-		move.b	#$C0,angle(a0)
-		rts
-; ---------------------------------------------------------------------------
-
 loc_EE22:
-		tst.b	$3C(a0)
+		tst.b	stick_to_convex(a0)
 		bne.s	loc_EE40
 		move.b	y_vel(a0),d0
 		bpl.s	loc_EE30
@@ -225,9 +215,9 @@ loc_EE40:
 ; ---------------------------------------------------------------------------
 
 loc_EE46:
-		bset	#1,status(a0)
-		bclr	#5,status(a0)
-		move.b	#1,$21(a0)
+		bset	#Status_InAir,status(a0)
+		bclr	#Status_Push,status(a0)
+		move.b	#1,prev_anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -275,7 +265,7 @@ locret_EECE:
 ; ---------------------------------------------------------------------------
 
 loc_EED0:
-		tst.b	$3C(a0)
+		tst.b	stick_to_convex(a0)
 		bne.s	loc_EEEE
 		move.b	x_vel(a0),d0
 		bpl.s	loc_EEDE
@@ -297,9 +287,9 @@ loc_EEEE:
 ; ---------------------------------------------------------------------------
 
 loc_EEF4:
-		bset	#1,status(a0)
-		bclr	#5,status(a0)
-		move.b	#1,$21(a0)
+		bset	#Status_InAir,status(a0)
+		bclr	#Status_Push,status(a0)
+		move.b	#1,prev_anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -347,7 +337,7 @@ locret_EF7C:
 ; ---------------------------------------------------------------------------
 
 loc_EF7E:
-		tst.b	$3C(a0)
+		tst.b	stick_to_convex(a0)
 		bne.s	loc_EF9C
 		move.b	y_vel(a0),d0
 		bpl.s	loc_EF8C
@@ -369,9 +359,9 @@ loc_EF9C:
 ; ---------------------------------------------------------------------------
 
 loc_EFA2:
-		bset	#1,status(a0)
-		bclr	#5,status(a0)
-		move.b	#1,$21(a0)
+		bset	#Status_InAir,status(a0)
+		bclr	#Status_Push,status(a0)
+		move.b	#1,prev_anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -381,16 +371,15 @@ GetFloorPosition:
 		lsr.w	#5,d0
 		and.w	(Layout_row_index_mask).w,d0
 		move.w	8(a1,d0.w),d0
-		andi.l	#$7FFF,d0
-		add.l	a1,d0
+		andi.w	#$7FFF,d0
+		adda.w	d0,a1
 		move.w	d3,d1
 		lsr.w	#3,d1
 		move.w	d1,d4
 		lsr.w	#4,d1
-		add.w	d1,d0
+		adda.w	d1,a1
 		moveq	#-1,d1
 		clr.w	d1
-		movea.l	d0,a1
 		move.b	(a1),d1
 		add.w	d1,d1
 		move.w	ChunkAddrArray(pc,d1.w),d1
@@ -408,7 +397,7 @@ ChunkAddrArray:
 	rept	$100
 		dc.w	 .a
 .a	set	.a+$80
-	endm
+	endr
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -488,7 +477,6 @@ loc_F2FE:
 		add.w	a3,d2
 		subi.w	#$10,d1
 		rts
-; End of function FindFloor
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -561,7 +549,6 @@ loc_F394:
 		bpl.w	loc_F31C
 		not.w	d1
 		rts
-; End of function FindFloor2
 ; ---------------------------------------------------------------------------
 
 loc_F3A4:
@@ -637,7 +624,6 @@ loc_F470:
 		add.w	a3,d2
 		subi.w	#$10,d1
 		rts
-; End of function sub_F3DE
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -717,7 +703,6 @@ loc_F576:
 		add.w	a3,d3
 		subi.w	#$10,d1
 		rts
-; End of function sub_F4DC
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -790,7 +775,6 @@ loc_F60C:
 		bpl.w	loc_F594
 		not.w	d1
 		rts
-; End of function FindWall2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -840,7 +824,6 @@ CalcRoomInFront:
 +		cmpi.b	#$40,d0
 		beq.w	CheckLeftWallDist_Part2
 		bra.w	CheckRightWallDist_Part2
-; End of function CalcRoomInFront
 ; ---------------------------------------------------------------------------
 ; Subroutine to calculate how much space is empty above Sonic's/Tails' head
 ; d0 = input angle perpendicular to the spine
@@ -865,7 +848,6 @@ CalcRoomOverHead:
 		beq.w	Sonic_CheckCeiling
 		cmpi.b	#$C0,d0
 		beq.w	CheckRightCeilingDist
-; End of function CalcRoomOverHead
 ; ---------------------------------------------------------------------------
 ; Subroutine to check if Sonic/Tails is near the floor
 ; ---------------------------------------------------------------------------
@@ -918,7 +900,6 @@ loc_F7E2:
 		beq.s	+
 		move.b	d2,d3
 +		rts
-; End of function Sonic_CheckFloor
 ; ---------------------------------------------------------------------------
 ; Checks a 16x16 block to find solid ground. May check an additional
 ; 16x16 block up for ceilings.
@@ -976,7 +957,6 @@ sub_F846:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-; End of function sub_F846
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1008,7 +988,6 @@ ChkFloorEdge_Part3:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-; End of function ChkFloorEdge_Part3
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1034,7 +1013,6 @@ SonicOnObjHitFloor:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-; End of function SonicOnObjHitFloor
 ; ---------------------------------------------------------------------------
 ; Subroutine checking if an object should interact with the floor
 ; (objects such as a monitor Sonic bumps from underneath)
@@ -1065,7 +1043,6 @@ ObjCheckFloorDist2:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-; End of function ObjCheckFloorDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1081,7 +1058,6 @@ RingCheckFloorDist:
 		move.w	#0,d6
 		moveq	#$C,d5
 		bra.w	loc_F3A4
-; End of function RingCheckFloorDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1116,7 +1092,6 @@ CheckRightCeilingDist:
 		move.w	(sp)+,d0
 		move.b	#-$40,d2
 		bra.w	loc_F7E2
-; End of function CheckRightCeilingDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1151,7 +1126,6 @@ sub_FA1A:
 		move.w	(sp)+,d0
 		move.b	#-$40,d2
 		bra.w	loc_F7E2
-; End of function sub_FA1A
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1167,7 +1141,6 @@ CheckRightWallDist_Part2:
 		bsr.w	FindWall
 		move.b	#-$40,d2
 		bra.w	loc_F81A
-; End of function CheckRightWallDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1186,7 +1159,6 @@ ObjCheckRightWallDist:
 		beq.s	+
 		move.b	#-$40,d3
 +		rts
-; End of function ObjCheckRightWallDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1223,7 +1195,6 @@ Sonic_CheckCeiling:
 		move.w	(sp)+,d0
 		move.b	#$80,d2
 		bra.w	loc_F7E2
-; End of function Sonic_CheckCeiling
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1262,7 +1233,6 @@ sub_FB5A:
 		move.w	(sp)+,d0
 		move.b	#$80,d2
 		bra.w	loc_F7E2
-; End of function sub_FB5A
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1293,7 +1263,6 @@ sub_FBEE:
 		bsr.w	FindFloor
 		move.b	#$80,d2
 		bra.w	loc_F81A
-; End of function sub_FBEE
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1316,7 +1285,6 @@ ObjCheckCeilingDist:
 		beq.s	+
 		move.b	#$80,d3
 +		rts
-; End of function ObjCheckCeilingDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1346,7 +1314,6 @@ ChkFloorEdge_ReverseGravity_Part2:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-; End of function ChkFloorEdge_ReverseGravity_Part2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1363,7 +1330,6 @@ sub_FCA0:
 		move.w	#$800,d6
 		moveq	#$C,d5
 		bra.w	loc_F3A4
-; End of function sub_FCA0
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1400,7 +1366,6 @@ CheckLeftCeilingDist:
 		move.w	(sp)+,d0
 		move.b	#$40,d2
 		bra.w	loc_F7E2
-; End of function CheckLeftCeilingDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1437,7 +1402,6 @@ sub_FD32:
 		move.w	(sp)+,d0
 		move.b	#$40,d2
 		bra.w	loc_F7E2
-; End of function sub_FD32
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1454,7 +1418,6 @@ CheckLeftWallDist_Part2:
 		bsr.w	FindWall
 		move.b	#$40,d2
 		bra.w	loc_F81A
-; End of function CheckLeftWallDist
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1480,7 +1443,6 @@ sub_FDEC:
 		beq.s	+
 		move.b	#$40,d3
 +		rts
-; End of function sub_FDEC
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1502,4 +1464,3 @@ ObjCheckLeftWallDist_Part2:
 		beq.s	+
 		move.b	#$40,d3
 +		rts
-; End of function ObjCheckLeftWallDist_Part2

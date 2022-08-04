@@ -16,3 +16,8 @@ Pal_WaterDEZ:		binclude	"Levels/DEZ/Palettes/Water Death Egg Zone.bin"
 ; ===========================================================================
 ; Dynamic palette
 ; ===========================================================================
+
+AnPal_PalDEZ12_1:	binclude "Levels/DEZ/Palettes/Animate/1.bin"
+	even
+AnPal_PalDEZ12_2:	binclude "Levels/DEZ/Palettes/Animate/2.bin"
+	even

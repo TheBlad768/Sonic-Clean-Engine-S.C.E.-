@@ -1,16 +1,18 @@
+; ---------------------------------------------------------------------------
+; Load level rings
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Load_Rings:
 		moveq	#0,d0
 		move.b	(Rings_manager_routine).w,d0
-		move.w	Load_Rings_Index(pc,d0.w),d0
-		jmp	Load_Rings_Index(pc,d0.w)
+		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-Load_Rings_Index: offsetTable
-		offsetTableEntry.w Load_Rings_Init		; 0
-		offsetTableEntry.w Load_Rings_Main	; 2
+.index:
+		bra.s	Load_Rings_Init		; 0
+		bra.s	Load_Rings_Main		; 2
 ; ---------------------------------------------------------------------------
 
 Load_Rings_Init:
@@ -106,7 +108,6 @@ sub_E994:
 
 locret_E9C8:
 		rts
-; End of function sub_E994
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -196,7 +197,6 @@ loc_EADA:
 
 locret_EAE4:
 		rts
-; End of function Test_Ring_Collisions
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -266,7 +266,6 @@ loc_EBE6:
 
 locret_EBEC:
 		rts
-; End of function Render_Rings
 ; ---------------------------------------------------------------------------
 ; Custom mappings format. Compare to Map_Ring.
 
@@ -315,16 +314,14 @@ AddRings:
 		add.w	d0,(Ring_count).w
 		ori.b	#1,(Update_HUD_ring_count).w	; Update ring counter
 		rts
-; End of function AddRings
 
 ; =============== S U B R O U T I N E =======================================
 
 GiveRing:
 CollectRing:
-		addq.w	#1,(v_rings).w		; add 1 to rings
-		ori.b	#1,(f_ringcount).w		; update the rings counter
-		sfx	sfx_Ring,1,0,0			; play ring sound
-; End of function GiveRing
+		addq.w	#1,(Ring_count).w					; add 1 to rings
+		ori.b	#1,(Update_HUD_ring_count).w	; update the rings counter
+		sfx	sfx_Ring,1							; play ring sound
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -353,4 +350,3 @@ Clear_SpriteRingMem:
 		subq.w	#1,(Ring_consumption_table).w
 		dbf	d1,-
 +		rts
-; End of function Clear_SpriteRingMem

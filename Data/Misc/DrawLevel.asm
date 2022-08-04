@@ -1,13 +1,12 @@
+; ---------------------------------------------------------------------------
+; Drawing level tiles
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 VInt_DrawLevel:
 		lea	(VDP_data_port).l,a6
 		lea	(Plane_buffer).w,a0
-		bsr.s	VInt_DrawLevel_2
-		move.l	(Plane_buffer_2_addr).w,d0
-		beq.s	VInt_DrawLevel_Return
-		movea.l	d0,a0
 
 VInt_DrawLevel_2:
 		move.w	(a0),d0
@@ -42,7 +41,6 @@ VInt_DrawLevel_Done:
 
 VInt_DrawLevel_Return:
 		rts
-; End of function VInt_DrawLevel
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -61,13 +59,12 @@ VInt_VRAMWrite:
 
 VInt_VRAMWrite_Return:
 		rts
-; End of function VInt_VRAMWrite
 
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn:
 		move.w	(a6),d0
-		andi.w	#-$10,d0
+		andi.w	#$FFF0,d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
 		move.w	d2,d3
@@ -88,13 +85,12 @@ Draw_TileColumn:
 		beq.s	VInt_VRAMWrite_Return
 		addi.w	#$10,d0
 		bra.s	Setup_TileColumnDraw
-; End of function Draw_TileColumn
 
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn2:
 		move.w	(a6),d0
-		andi.w	#-$10,d0
+		andi.w	#$FFF0,d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
 		move.w	d2,d3
@@ -216,15 +212,14 @@ Setup_TileColumnDraw:
 		swap	d7
 		clr.w	(a0)
 		rts
-; End of function Setup_TileColumnDraw
 
 ; =============== S U B R O U T I N E =======================================
 
 Get_LevelChunkColumn:
 		movea.l	(Level_layout_addr_ROM).w,a4
 		move.w	(a3,d1.w),d3
-		andi.l	#$7FFF,d3
-		adda.l	d3,a4
+		andi.w	#$7FFF,d3
+		adda.w	d3,a4
 		move.w	d0,d3
 		asr.w	#7,d3
 		adda.w	d3,a4
@@ -240,7 +235,6 @@ Get_LevelChunkColumn:
 
 Get_LevelChunkColumn_Return:
 		rts
-; End of function Get_LevelChunkColumn
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -269,7 +263,6 @@ Draw_TileRow:
 		addi.w	#$10,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		bra.s	Setup_TileRowDraw
-; End of function Draw_TileRow
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -388,7 +381,6 @@ Setup_TileRowDraw:
 +		dbf	d6,-
 		clr.w	(a0)
 		rts
-; End of function Setup_TileRowDraw
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -398,8 +390,8 @@ Get_LevelAddrChunkRow:
 		asr.w	#5,d3
 		and.w	(Layout_row_index_mask).w,d3
 		move.w	(a3,d3.w),d3
-		andi.l	#$7FFF,d3
-		adda.l	d3,a4
+		andi.w	#$7FFF,d3
+		adda.w	d3,a4
 
 Get_ChunkRow:
 		moveq	#-1,d3
@@ -411,7 +403,6 @@ Get_ChunkRow:
 		add.w	d4,d3
 		movea.l	d3,a5
 		rts
-; End of function Get_LevelAddrChunkRow
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -426,7 +417,6 @@ Refresh_PlaneFull:
 		addi.w	#$10,d0
 		dbf	d2,-
 		rts
-; End of function Refresh_PlaneFull
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -448,7 +438,9 @@ Refresh_PlaneTileDeform:
 		addi.w	#$10,d0
 		dbf	d3,-
 		rts
-; End of function Refresh_PlaneTileDeform
+; ---------------------------------------------------------------------------
+; Refresh Foreground
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -476,7 +468,9 @@ Refresh_PlaneDirect:
 		dbf	d2,-
 		enableInts
 		rts
-; End of function Refresh_PlaneDirect
+; ---------------------------------------------------------------------------
+; Refresh Background
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -504,7 +498,6 @@ Refresh_PlaneDirect_BG:
 		dbf	d2,-
 		enableInts
 		rts
-; End of function Refresh_PlaneDirect_BG
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -519,7 +512,6 @@ DrawTilesAsYouMove:
 		move.w	(Camera_X_pos_copy).w,d1
 		moveq	#$15,d6
 		bra.w	Draw_TileRow
-; End of function DrawTilesAsYouMove
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -534,7 +526,6 @@ DrawBGAsYouMove:
 		move.w	(Camera_X_pos_BG_copy).w,d1
 		moveq	#$15,d6
 		bra.w	Draw_TileRow
-; End of function DrawBGAsYouMove
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -549,7 +540,7 @@ Draw_BG:
 		tst.w	(Camera_Y_pos_BG_copy).w
 		bpl.s	Draw_BGNoVert
 		move.w	(Camera_Y_pos_BG_copy).w,d6
-		andi.w	#-$10,d6
+		andi.w	#$FFF0,d6
 
 Draw_BGNoVert:
 		move.w	d6,d1
@@ -557,7 +548,7 @@ Draw_BGNoVert:
 -		sub.w	(a4)+,d6
 		bmi.s	+
 		move.w	(a6)+,d0
-		andi.w	#-$10,d0
+		andi.w	#$FFF0,d0
 		move.w	d0,(a6)+
 		subq.w	#1,d5
 		bra.s	-
@@ -595,10 +586,9 @@ Draw_BGNoVert:
 -		subq.w	#1,d5
 		beq.s	Get_DeformDrawPosVert_Return
 		move.w	(a6)+,d0
-		andi.w	#-$10,d0
+		andi.w	#$FFF0,d0
 		move.w	d0,(a6)+
 		bra.s	-
-; End of function Draw_BG
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -628,41 +618,261 @@ Get_DeformDrawPosVert:
 
 Get_DeformDrawPosVert_Return:
 		rts
-; End of function Get_DeformDrawPosVert
+
+; =============== S U B R O U T I N E =======================================
+
+DrawTilesVDeform:
+		movem.l	d5/a4-a5,-(sp)
+		lea	(Camera_X_pos_copy).w,a6
+		bsr.w	Get_XDeformRange
+		lea	(Camera_X_pos_rounded).w,a5
+		bsr.w	Draw_TileColumn2
+		movem.l	(sp)+,d5/a4/a6
+		move.w	(Camera_X_pos_rounded).w,d6
+		bra.s	DrawTilesVDeform2.main
+
+; =============== S U B R O U T I N E =======================================
+
+DrawTilesVDeform2:
+		movem.l	d5/a4-a5,-(sp)
+		lea	(Camera_X_pos_BG_copy).w,a6
+		bsr.w	Get_XDeformRange
+		lea	(Camera_X_pos_BG_rounded).w,a5
+		bsr.w	Draw_TileColumn2
+		movem.l	(sp)+,d5/a4/a6
+		move.w	(Camera_X_pos_BG_rounded).w,d6
+
+.main:
+		move.w	d6,d1
+
+-		sub.w	(a4)+,d6
+		bcs.s	+
+		move.w	(a6)+,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	d0,(a6)+
+		subq.w	#1,d5
+		bra.s	-
+; ---------------------------------------------------------------------------
++		neg.w	d6
+		lsr.w	#4,d6
+		moveq	#$15,d4
+		sub.w	d6,d4
+		bcc.s	+
+		moveq	#0,d4
+		moveq	#$15,d6
+
++
+-		movem.w	d1/d4-d6,-(sp)
+		movem.l	a4/a6,-(sp)
+		lea	2(a6),a5
+		bsr.w	Draw_TileRow
+		movem.l	(sp)+,a4/a6
+		movem.w	(sp)+,d1/d4-d6
+		addq.w	#4,a6
+		tst.w	d4
+		beq.s	+
+		lsl.w	#4,d6
+		add.w	d6,d1
+		subq.w	#1,d5
+		move.w	(a4)+,d6
+		lsr.w	#4,d6
+		move.w	d4,d0
+		sub.w	d6,d4
+		bcc.s	-
+		move.w	d0,d6
+		moveq	#0,d4
+		bra.s	-
+; ---------------------------------------------------------------------------
++
+-		subq.w	#1,d5
+		beq.s	Get_XDeformRange_Return
+		move.w	(a6)+,d0
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	d0,(a6)+
+		bra.s	-
+
+; =============== S U B R O U T I N E =======================================
+
+Get_XDeformRange:
+		move.w	(a4)+,d2
+		move.w	(a6),d0
+		bsr.s	+
+		addi.w	#$140,d0
+
++
+-		cmp.w	d2,d0
+		blo.s		+
+		add.w	(a4)+,d2
+		addq.w	#4,a5
+		bra.s	-
+; ---------------------------------------------------------------------------
++		move.w	(a5),d1
+		swap	d1
+
+Get_XDeformRange_Return:
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneVertBottomUp:
+		movem.w	d1-d2,-(sp)
+		bsr.s	Draw_PlaneVertSingleBottomUp
+		movem.w	(sp)+,d1-d2
+		bpl.s	Draw_PlaneVertSingleBottomUp
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneVertSingleBottomUp:
+		and.w	(Camera_Y_pos_mask).w,d2
+		move.w	d2,d3
+		addi.w	#$F0,d3
+		and.w	(Camera_Y_pos_mask).w,d3
+		move.w	(Draw_delayed_position).w,d0
+		cmp.w	d2,d0
+		blo.s		+
+		cmp.w	d3,d0
+		bhi.s	+
+		moveq	#$20,d6
+		bsr.w	Setup_TileRowDraw
++		subi.w	#16,(Draw_delayed_position).w
+		subq.w	#1,(Draw_delayed_rowcount).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneVertTopDown:
+		and.w	(Camera_Y_pos_mask).w,d2
+		move.w	d2,d3
+		addi.w	#$F0,d3
+		and.w	(Camera_Y_pos_mask).w,d3
+		move.w	(Draw_delayed_position).w,d0
+		cmp.w	d2,d0
+		blo.s		+
+		cmp.w	d3,d0
+		bhi.s	+
+		moveq	#$20,d6
+		bsr.w	Setup_TileRowDraw
++		addi.w	#16,(Draw_delayed_position).w
+		subq.w	#1,(Draw_delayed_rowcount).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneHorzRightToLeft:
+		movem.w	d1-d2,-(sp)
+		bsr.s	sub_4EFCA
+		movem.w	(sp)+,d1-d2
+		bpl.s	sub_4EFCA
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_4EFCA:
+		andi.w	#$FFF0,d2
+		move.w	d2,d3
+		addi.w	#$1F0,d3
+		andi.w	#$FFF0,d3
+		move.w	(Draw_delayed_position).w,d0
+		cmp.w	d2,d0
+		blo.s		+
+		cmp.w	d3,d0
+		bhi.s	+
+		moveq	#$10,d6
+		bsr.w	Setup_TileColumnDraw
++		subi.w	#16,(Draw_delayed_position).w
+		subq.w	#1,(Draw_delayed_rowcount).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneHorzLeftToRight:
+		movem.w	d1-d2,-(sp)
+		bsr.s	sub_4F004
+		movem.w	(sp)+,d1-d2
+		bpl.s	sub_4F004
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_4F004:
+		andi.w	#$FFF0,d2
+		move.w	d2,d3
+		addi.w	#$1F0,d3
+		andi.w	#$FFF0,d3
+		move.w	(Draw_delayed_position).w,d0
+		cmp.w	d2,d0
+		blo.s		+
+		cmp.w	d3,d0
+		bhi.s	+
+		moveq	#$10,d6
+		bsr.w	Setup_TileColumnDraw
++		addi.w	#16,(Draw_delayed_position).w
+		subq.w	#1,(Draw_delayed_rowcount).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneVertBottomUpComplex:
+		movem.l	d1/a4-a5,-(sp)
+		bsr.s	sub_4F03E
+		movem.l	(sp)+,d1/a4-a5
+		bpl.s	sub_4F03E
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_4F03E:
+		and.w	(Camera_Y_pos_mask).w,d1
+		move.w	d1,d2
+		addi.w	#$F0,d2
+		and.w	(Camera_Y_pos_mask).w,d2
+		move.w	(Draw_delayed_position).w,d0
+		cmp.w	d1,d0
+		blo.s		+
+		cmp.w	d2,d0
+		bhi.s	+
+
+-		addq.w	#4,a5
+		cmp.w	(a4)+,d0
+		bpl.s	-
+		move.w	(a5),d1
+		moveq	#$20,d6
+		bsr.w	Setup_TileRowDraw
++		subi.w	#16,(Draw_delayed_position).w
+		subq.w	#1,(Draw_delayed_rowcount).w
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Reset_TileOffsetPositionActual:
 		move.w	(Camera_X_pos_copy).w,d0
 		move.w	d0,d1
-		andi.w	#-$10,d0
+		andi.w	#$FFF0,d0
 		move.w	d0,(Camera_X_pos_rounded).w
 		move.w	(Camera_Y_pos_copy).w,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(Camera_Y_pos_rounded).w
 		rts
-; End of function Reset_TileOffsetPositionActual
 
 ; =============== S U B R O U T I N E =======================================
 
 Reset_TileOffsetPositionEff:
 		move.w	(Camera_X_pos_BG_copy).w,d0
 		move.w	d0,d1
-		andi.w	#-$10,d0
+		andi.w	#$FFF0,d0
 		move.w	d0,d2
 		move.w	d0,(Camera_X_pos_BG_rounded).w
 		move.w	(Camera_Y_pos_BG_copy).w,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(Camera_Y_pos_BG_rounded).w
 		rts
-; End of function Reset_TileOffsetPositionEff
 
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Switches:
 		clearRAM2 Level_trigger_array, Level_trigger_array_End
 		rts
-; End of function Clear_Switches
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -675,7 +885,6 @@ Restart_LevelData:
 		bsr.w	Load_Level
 		bsr.w	Load_Solids
 		bra.w	CheckLevelForWater
-; End of function Restart_LevelData
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -712,7 +921,6 @@ Reset_ObjectsPosition:
 		sub.w	d1,(Camera_min_Y_pos).w
 		sub.w	d1,(Camera_max_Y_pos).w
 		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
-; End of function Reset_ObjectsPosition
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -729,7 +937,6 @@ Offset_ObjectsDuringTransition:
 +		lea	next_object(a1),a1
 		dbf	d2,-
 		rts
-; End of function Offset_ObjectsDuringTransition
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -747,7 +954,6 @@ Change_ActSizes:
 		move.l	d0,(Camera_min_Y_pos).w
 		move.l	d0,(Camera_target_min_Y_pos).w
 		rts
-; End of function Change_ActSizes
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -774,7 +980,6 @@ LoadLevelLoadBlock:
 		tst.w	(Kos_modules_left).w
 		bne.s	-
 		rts
-; End of function LoadLevelLoadBlock
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -800,7 +1005,6 @@ LoadLevelLoadBlock2:
 		moveq	#0,d0
 		move.b	(a2),d0
 		jmp	(LoadPalette).w
-; End of function LoadLevelLoadBlock2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -817,7 +1021,6 @@ Load_Level2:
 		addq.l	#8,a0
 		move.l	a0,(Level_layout2_addr_ROM).w
 		rts
-; End of function Load_Level
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -836,7 +1039,7 @@ LoadLevelPointer:
 
 	rept	(Level_data_addr_RAM_End-Level_data_addr_RAM)/4
 		move.l	(a2)+,(a3)+
-	endm
+	endr
 		rts
 ; ---------------------------------------------------------------------------
 ; Collision index pointer loading subroutine
@@ -859,4 +1062,3 @@ Load_Solids2:
 		addq.l	#1,a0
 		move.l	a0,(Secondary_collision_addr).w
 		rts
-; End of function Load_Solids

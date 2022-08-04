@@ -48,15 +48,19 @@ SMPS_SCDACSamples		= 0
 SMPS_S1PSGEnvelopes	= 0
 SMPS_S2PSGEnvelopes	= 0
 SMPS_S3PSGEnvelopes	= 1
-SMPS_SKPSGEnvelopes	= 0
+SMPS_SKPSGEnvelopes	= 1
 SMPS_S3DPSGEnvelopes	= 0
 SMPS_KCPSGEnvelopes	= 0
 
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
 SoundDriverLoad		= SMPS_LoadDACDriver
 
+PlayMusic			= SMPS_QueueSound1
+Play_Music			= SMPS_QueueSound1
 PlaySound			= SMPS_QueueSound1
 Play_Sound			= SMPS_QueueSound1
+PlaySFX				= SMPS_QueueSound2
+Play_SFX			= SMPS_QueueSound2
 PlaySound_Special	= SMPS_QueueSound2
 Play_Sound_2		= SMPS_QueueSound2
 

@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; TitleCard (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -116,7 +119,7 @@ Obj_TitleCardWait2:
 +		lea	(PLC_Main2).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(LoadPLC2_KosM).w
-		bsr.w	LoadPLC_Animals
+		jsr	LoadPLC_Animals(pc)
 		move.b	#1,(HUD_RAM.status).w
 		clr.b	(Ctrl_1_locked).w
 +		jmp	(Delete_Current_Sprite).w

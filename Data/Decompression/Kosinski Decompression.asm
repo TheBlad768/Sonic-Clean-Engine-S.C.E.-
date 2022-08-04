@@ -23,7 +23,6 @@ KosArt_To_VDP:
 		bsr.w	Add_To_DMA_Queue			; transfer *Transfer Length* of data from *Source Address* to *Destination Address*
 		movea.l	a3,a1						; restore a1
 		rts
-; End of function KosArt_To_VDP
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -33,7 +32,6 @@ Kos_Decomp:
 		include "Data/Decompression/Kosinski Internal.asm"
 		movem.l	(sp)+,d0-d7/a4-a5
 		rts
-; End of function Kos_Decomp
 ; ---------------------------------------------------------------------------
 
 	if _Kos_UseLUT==1

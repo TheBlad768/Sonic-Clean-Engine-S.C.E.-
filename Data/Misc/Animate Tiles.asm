@@ -12,19 +12,19 @@ Animate_Tiles:
 
 ; =============== S U B R O U T I N E =======================================
 
-AnimateTiles_NULL:
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
 AnimateTiles_DoAniPLC:
 		lea	(Anim_Counters).w,a3
-		move.w	(a2)+,d6			; Get number of scripts in list
-		bpl.s	.listnotempty		; If there are any, continue
+
+AnimateTiles_DoAniPLC_GetNumber:
+		move.w	(a2)+,d6							; Get number of scripts in list
+		bpl.s	AnimateTiles_DoAniPLC_Part2		; If there are any, continue
+
+AnimateTiles_NULL:
 		rts
 ; ---------------------------------------------------------------------------
-.listnotempty:
+
 AnimateTiles_DoAniPLC_Part2:
+
 .loop:
 		subq.b	#1,(a3)			; Tick down frame duration
 		bcc.s	.nextscript		; If frame isn't over, move on to next script
@@ -76,28 +76,3 @@ AnimateTiles_DoAniPLC_Part2:
 		addq.w	#2,a3			; Advance to next script's slot in a3 (usually Anim_Counters)
 		dbf	d6,.loop
 		rts
-; End of function AnimateTiles_DoAniPLC
-; ===========================================================================
-; ZONE ANIMATION SCRIPTS
-;
-; The AnimateTiles_DoAniPLC subroutine uses these scripts to reload certain tiles,
-; thus animating them. All the relevant art must be uncompressed, because
-; otherwise the subroutine would spend so much time waiting for the art to be
-; decompressed that the VBLANK window would close before all the animating was done.
-
-;    zoneanimdecl -1, ArtUnc_Flowers1, ArtTile_ArtUnc_Flowers1, 6, 2
-;	-1						Global frame duration. If -1, then each frame will use its own duration, instead
-
-;	ArtUnc_Flowers1			Source address
-;	ArtTile_ArtUnc_Flowers1	Destination VRAM address
-;	6						Number of frames
-;	2						Number of tiles to load into VRAM for each frame
-
-;    dc.b   0,$7F				Start of the script proper
-;	0						Tile ID of first tile in ArtUnc_Flowers1 to transfer
-;	$7F						Frame duration. Only here if global duration is -1
-; ---------------------------------------------------------------------------
-
-AniPLC_NULL:	zoneanimstart
-
-	zoneanimend

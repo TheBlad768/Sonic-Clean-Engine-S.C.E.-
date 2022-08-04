@@ -50,7 +50,6 @@ AnimateRaw_CustomCode:
 		clr.b	anim_frame_timer(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function Animate_Raw
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -73,7 +72,6 @@ Animate_RawNoSSTAdjustFlipX:
 +		move.b	(a1),anim_frame_timer(a0)
 		move.b	d1,mapping_frame(a0)
 +		rts
-; End of function Animate_RawAdjustFlipX
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -96,7 +94,6 @@ Animate_RawNoSSTAdjustFlipY:
 +		move.b	(a1),anim_frame_timer(a0)
 		move.b	d1,mapping_frame(a0)
 +		rts
-; End of function Animate_RawAdjustFlipY
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -159,7 +156,6 @@ loc_84576:
 		clr.b	anim_frame_timer(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function Animate_RawCheckResult
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -221,7 +217,6 @@ loc_84600:
 		jsr	(a1)
 		moveq	#-1,d2
 		rts
-; End of function Animate_RawMultiDelay
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -248,7 +243,6 @@ Animate_RawNoSSTMultiDelayFlipX:
 ; ---------------------------------------------------------------------------
 +		moveq	#0,d2
 		rts
-; End of function Animate_RawNoSSTMultiDelayFlipX
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -273,7 +267,6 @@ Animate_RawMultiDelayFlipY:
 ; ---------------------------------------------------------------------------
 +		moveq	#0,d2
 		rts
-; End of function Animate_RawMultiDelayFlipY
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -338,7 +331,6 @@ loc_846F2:
 		jsr	(a1)
 		moveq	#-1,d2
 		rts
-; End of function Animate_Raw2MultiDelay
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -387,7 +379,6 @@ Animate_RawNoSSTGetFaster:
 		jsr	(a2)
 +		moveq	#-1,d2
 		rts
-; End of function Animate_RawGetFaster
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -427,7 +418,6 @@ Animate_RawNoSSTGetSlower:
 		clr.b	$2F(a0)
 		movea.l	$34(a0),a2
 		jmp	(a2)
-; End of function Animate_RawGetSlower
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -436,4 +426,3 @@ Set_Raw_Animation:
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		rts
-; End of function Set_Raw_Animation

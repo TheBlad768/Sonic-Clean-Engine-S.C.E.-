@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Ring (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -22,11 +25,11 @@ Obj_RingInit:
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
-		move.b	#$47,collision_flags(a0)
+		move.b	#7|$40,collision_flags(a0)
 		move.b	#16/2,width_pixels(a0)
 
 Obj_RingAnimate:
-		bra.w	RememberState_Collision
+		jmp	(Sprite_OnScreen_Test_Collision).w
 ; ---------------------------------------------------------------------------
 
 Obj_RingCollect:
@@ -42,7 +45,10 @@ Obj_RingSparkle:
 ; ---------------------------------------------------------------------------
 
 Obj_RingDelete:
-		bra.w	Delete_Current_Sprite
+		jmp	(Delete_Current_Sprite).w
+; ---------------------------------------------------------------------------
+; Bouncing ring (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -94,8 +100,8 @@ loc_1A67A:
 ; ---------------------------------------------------------------------------
 
 loc_1A6AE:
-		bsr.w	Create_New_Sprite3
-		bne.w	loc_1A738
+		jsr	(Create_New_Sprite3).w
+		bne.s	loc_1A738
 
 loc_1A6B6:
 		move.l	d6,address(a1)
@@ -108,7 +114,7 @@ loc_1A6B6:
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
 		move.b	#$84,render_flags(a1)
 		move.w	#$180,priority(a1)
-		move.b	#$47,collision_flags(a1)
+		move.b	#7|$40,collision_flags(a1)
 		move.b	#8,width_pixels(a1)
 		st	(Ring_spill_anim_counter).w
 		tst.w	d4
@@ -135,14 +141,14 @@ loc_1A728:
 		dbf	d5,loc_1A6AE
 
 loc_1A738:
-		sfx	sfx_RingLoss,0,0,0	; play ring loss sound
+		sfx	sfx_RingLoss		; play ring loss sound
 		clr.w	(Ring_count).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		tst.b	(Reverse_gravity_flag).w
-		bne.w	loc_1A7E8
+		bne.s	loc_1A7E8
 
 loc_1A75C:
-		bsr.w	MoveSprite2
+		jsr	(MoveSprite2).w
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A7B0
 		move.b	(V_int_run_count+3).w,d0
@@ -151,7 +157,7 @@ loc_1A75C:
 		bne.s	loc_1A7B0
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A79C
-		bsr.w	RingCheckFloorDist
+		jsr	RingCheckFloorDist(pc)
 		tst.w	d1
 		bpl.s	loc_1A79C
 		add.w	d1,y_pos(a0)
@@ -169,7 +175,7 @@ loc_1A79C:
 		blo.s		loc_1A7E4
 
 loc_1A7B0:
-		bsr.w	Add_SpriteToCollisionResponseList
+		jsr	(Add_SpriteToCollisionResponseList).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -190,7 +196,7 @@ loc_1A7E4:
 ; ---------------------------------------------------------------------------
 
 loc_1A7E8:
-		bsr.w	MoveSprite2_TestGravity
+		jsr	(MoveSprite2_TestGravity).w
 		addi.w	#$18,y_vel(a0)
 		bmi.s	loc_1A83C
 		move.b	(V_int_run_count+3).w,d0
@@ -217,9 +223,13 @@ loc_1A828:
 		blo.s		loc_1A7E4
 
 loc_1A83C:
-		bsr.w	Add_SpriteToCollisionResponseList
+		jsr	(Add_SpriteToCollisionResponseList).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
+; Attracted ring (Object)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_Attracted_Ring:
 		; init
@@ -227,7 +237,7 @@ Obj_Attracted_Ring:
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
-		move.b	#$47,collision_flags(a0)
+		move.b	#7|$40,collision_flags(a0)
 		move.b	#8,width_pixels(a0)
 		move.b	#8,height_pixels(a0)
 		move.b	#8,y_radius(a0)
@@ -250,7 +260,7 @@ loc_1A8C6:
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
 		bhi.s	loc_1A8E4
-		bsr.w	Add_SpriteToCollisionResponseList
+		jsr	(Add_SpriteToCollisionResponseList).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -337,8 +347,7 @@ AttractedRing_MoveUp:
 
 AttractedRing_ApplyMovementY:
 		add.w	d1,y_vel(a0)
-		bra.w	MoveSprite2
-; End of function AttractedRing_Move
+		jmp	(MoveSprite2).w
 ; ---------------------------------------------------------------------------
 
 		include	"Objects/Rings/Object Data/Anim - Rings.asm"

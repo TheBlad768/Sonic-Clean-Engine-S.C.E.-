@@ -37,6 +37,8 @@ Kos_decomp_buffer:					ds.b $1000				; Each module in a KosM archive is decompre
 H_scroll_buffer:						ds.l 224					; Horizontal scroll table is built up here and then DMAed to VRAM
 H_scroll_table:						ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
 H_scroll_buffer_End
+V_scroll_buffer:						ds.l 320/16				; vertical scroll buffer used in various levels(320 pixels for MD1, 512 pixels for MD2)
+V_scroll_buffer_End
 
 Collision_response_list:				ds.b 128					; Only objects in this list are processed by the collision response routines
 Pos_table:							ds.l 64					; Recorded player XY position buffer
@@ -107,10 +109,12 @@ Screen_X_wrap_value:				ds.w 1					; Set to $FFFF
 Screen_Y_wrap_value:					ds.w 1					; Either $7FF or $FFF
 Camera_Y_pos_mask:					ds.w 1					; Either $7F0 or $FF0
 Layout_row_index_mask:				ds.w 1					; Either $3C or $7C
-Plane_buffer_2_addr:					ds.l 1					; The address of the second plane buffer to process, if applicable
 Screen_shaking_flag:					ds.w 1					; flag for enabling screen shake. Negative values cause screen to shake infinitely, positive values make the screen shake for a short amount of time
 Screen_shaking_offset:					ds.w 1					; vertical offset when screen_shake_flag is enabled. This is added to camera position later
 Screen_shaking_last_offset:			ds.w 1					; value of Screen_shake_offset for the previous frame
+Events_fg:							ds.b $18					; various flags used by foreground events
+Draw_delayed_position:				ds.w 1					; position to redraw screen from. Screen is reloaded 1 row at a time to avoid game lag
+Draw_delayed_rowcount:				ds.w 1					; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
 Events_bg:							ds.b $18					; various flags used by background events
 Boss_events:							ds.b $10
 
@@ -272,7 +276,7 @@ SegaCD_Mode:						ds.b 1
 
 Block_table_addr_ROM:				ds.l 1					; Block table pointer(Block (16x16) definitions, 8 bytes per definition)
 Level_layout_addr_ROM:				ds.l 1					; Level layout pointer
-Level_layout2_addr_ROM:				ds.l 1					; Level layout 2 pointer
+Level_layout2_addr_ROM:				ds.l 1					; Level layout 2 pointer (+8)
 Object_index_addr:					ds.l 1					; Points to either the object index for levels
 
 Level_data_addr_RAM:

@@ -28,7 +28,6 @@ CreateChild1_Normal:
 		dbf	d6,-								; Loop
 		moveq	#0,d0
 +		rts
-; End of function CreateChild1_Normal
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -64,7 +63,6 @@ CreateChild2_Complex:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild2_Complex
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -96,7 +94,6 @@ CreateChild3_NormalRepeated:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild3_NormalRepeated
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -120,7 +117,6 @@ CreateChild4_LinkListRepeated:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild4_LinkListRepeated
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -163,7 +159,6 @@ CreateChild5_ComplexAdjusted:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild5_ComplexAdjusted
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -184,7 +179,6 @@ CreateChild6_Simple:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild6_Simple
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -215,7 +209,6 @@ CreateChild7_Normal2:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild7_Normal2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -239,7 +232,6 @@ CreateChild8_TreeListRepeated:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild8_TreeListRepeated
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -263,7 +255,6 @@ CreateChild9_TreeList:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild9_TreeList
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -298,4 +289,3 @@ CreateChild10_NormalAdjusted:
 		dbf	d6,-
 		moveq	#0,d0
 +		rts
-; End of function CreateChild10_NormalAdjusted

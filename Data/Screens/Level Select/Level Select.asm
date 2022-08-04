@@ -5,8 +5,9 @@
 ; RAM
 Music_test_count:			= Object_load_addr_front		; word
 Sound_test_count:			= Object_load_addr_front+2	; word
-v_LeveSelect_VCount:			= Object_load_addr_front+4	; word
-v_LeveSelect_HCount:			= Object_load_addr_front+6	; word($10 bytes)
+Sample_test_count:			= Object_load_addr_front+4	; word
+v_LeveSelect_VCount:			= Object_load_addr_front+6	; word
+v_LeveSelect_HCount:			= Object_load_addr_front+8	; word($10 bytes)
 
 ; VRAM
 LSText_VRAM:				= $7B8
@@ -14,16 +15,18 @@ LSText_VRAM:				= $7B8
 ; Variables
 LeveSelect_ZoneCount:			= ZoneCount
 LeveSelect_ActDEZCount:		= 4	; DEZ
-LeveSelect_MusicTestCount:	= 9
+LeveSelect_MusicTestCount:	= 8
 LeveSelect_SoundTestCount:	= LeveSelect_MusicTestCount+1
+LeveSelect_SampleTestCount:	= LeveSelect_SoundTestCount+1
 LeveSelect_MaxCount:			= 11
 LeveSelect_MaxMusicNumber:	= (bgm__Last-bgm__First)+1
 LeveSelect_MaxSoundNumber:	= (sfx__Last-sfx__First)
+LeveSelect_MaxSampleNumber:	= (dac__Last-dac__First)
 
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_Screen:
-		sfx	bgm_Stop,0,1,1
+		sfx	bgm_Stop
 		jsr	(Clear_Kos_Module_Queue).w
 		jsr	(Pal_FadeToBlack).w
 		disableInts
@@ -37,6 +40,7 @@ LevelSelect_Screen:
 		move.w	#$8B03,(a6)					; Command $8B03 - Vscroll full, HScroll line-based
 		move.w	#$8C81,(a6)					; Command $8C81 - 40cell screen size, no interlacing, no s/h
 		move.w	#$9001,(a6)					; Command $9001 - 64x32 cell nametable area
+		move.w	#$9100,(a6)					; Command $9100 - Window H position at default
 		move.w	#$9200,(a6)					; Command $9200 - Window V position at default
 		clr.b	(Water_full_screen_flag).w
 		clr.b	(Water_flag).w
@@ -106,6 +110,8 @@ LevelSelect_Controls:
 		move.w	(v_LeveSelect_VCount).w,d0
 		bsr.w	LevelSelect_FindUpDownControls
 		move.w	d0,(v_LeveSelect_VCount).w
+		cmpi.w	#LeveSelect_SampleTestCount,d0
+		beq.s	LevelSelect_LoadSampleNumber
 		cmpi.w	#LeveSelect_SoundTestCount,d0
 		beq.s	LevelSelect_LoadSoundNumber
 		cmpi.w	#LeveSelect_MusicTestCount,d0
@@ -120,7 +126,7 @@ LevelSelect_LoadNewLevel:
 		add.w	d3,d3
 		move.w	(a0,d3.w),d0
 		move.w	LevelSelect_LoadMaxActs(pc,d3.w),d2
-		bsr.s	LevelSelect_FindLeftRightControls
+		bsr.w	LevelSelect_FindLeftRightControls
 		move.w	d0,(a0,d3.w)
 		move.w	(v_LeveSelect_VCount).w,d2
 		lsl.w	#8,d2
@@ -138,22 +144,17 @@ LevelSelect_LoadMaxActs:
 ; ---------------------------------------------------------------------------
 
 LevelSelect_LoadMusicNumber:
-		moveq	#0,d0
 		move.w	#LeveSelect_MaxMusicNumber,d2
 		move.w	(Music_test_count).w,d0
 		bsr.s	LevelSelect_FindLeftRightControls
 		move.w	d0,(Music_test_count).w
 		move.b	(Ctrl_1_pressed).w,d1
 		andi.b	#$70,d1
-		beq.s	LevelSelect_LoadMusicNumber_Return
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w	; play music
-
-LevelSelect_LoadMusicNumber_Return:
-		rts
+		beq.s	LevelSelect_LoadLevel_Return
+		jmp	(SMPS_QueueSound1).w	; play music
 ; ---------------------------------------------------------------------------
 
 LevelSelect_LoadSoundNumber:
-		moveq	#0,d0
 		move.w	#LeveSelect_MaxSoundNumber,d2
 		move.w	(Sound_test_count).w,d0
 		bsr.s	LevelSelect_FindLeftRightControls
@@ -161,11 +162,20 @@ LevelSelect_LoadSoundNumber:
 		addi.w	#$40,d0
 		move.b	(Ctrl_1_pressed).w,d1
 		andi.b	#$70,d1
-		beq.s	LevelSelect_LoadSoundMusic_Return
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w	; play sfx
+		beq.s	LevelSelect_LoadLevel_Return
+		jmp	(SMPS_QueueSound2).w	; play sfx
+; ---------------------------------------------------------------------------
 
-LevelSelect_LoadSoundMusic_Return:
-		rts
+LevelSelect_LoadSampleNumber:
+		move.w	#LeveSelect_MaxSampleNumber,d2
+		move.w	(Sample_test_count).w,d0
+		bsr.s	LevelSelect_FindLeftRightControls
+		move.w	d0,(Sample_test_count).w
+		addi.w	#$81,d0
+		move.b	(Ctrl_1_pressed).w,d1
+		andi.b	#$70,d1
+		beq.s	LevelSelect_LoadLevel_Return
+		jmp	(SMPS_PlayDACSample).w	; play sample
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -323,19 +333,28 @@ LevelSelect_MarkFields:
 		bne.s	+
 		bra.s	LevelSelect_DrawMusicNumber
 +		cmpi.w	#LeveSelect_SoundTestCount,(v_LeveSelect_VCount).w
-		bne.s	LevelSelect_MarkFields_Return
+		bne.s	+
 		bra.s	LevelSelect_DrawSoundNumber
++		cmpi.w	#LeveSelect_SampleTestCount,(v_LeveSelect_VCount).w
+		bne.s	LevelSelect_MarkFields_Return
+		bra.s	LevelSelect_DrawSampleNumber
 ; ---------------------------------------------------------------------------
 
 LevelSelect_DrawMusicNumber:
-		locVRAM	$CC30
+		locVRAM	$CB30
 		move.w	(Music_test_count).w,d0
 		bra.s	LevelSelect_DrawNumbers
 ; ---------------------------------------------------------------------------
 
 LevelSelect_DrawSoundNumber:
-		locVRAM	$CD30
+		locVRAM	$CC30
 		move.w	(Sound_test_count).w,d0
+		bra.s	LevelSelect_DrawNumbers
+; ---------------------------------------------------------------------------
+
+LevelSelect_DrawSampleNumber:
+		locVRAM	$CD30
+		move.w	(Sample_test_count).w,d0
 
 LevelSelect_DrawNumbers:
 		move.b	d0,d2
@@ -404,7 +423,7 @@ LevelSelect_MarkTable:
 		dc.b 15, 0, 15, $24
 		dc.b 17, 0, 17, $24
 		dc.b 19, 0, 19, $24
-		dc.b 21, 0, 21, $24
+		dc.b 22, 0, 22, $24
 		dc.b 24, 0, 24, $24
 		dc.b 26, 0, 26, $24
 Map_TitleText:
@@ -416,7 +435,7 @@ Map_TitleText:
 		dc.w planeLocH28(0,15)
 		dc.w planeLocH28(0,17)
 		dc.w planeLocH28(0,19)
-		dc.w planeLocH28(0,21)
+		dc.w planeLocH28(0,22)
 		dc.w planeLocH28(0,24)
 		dc.w planeLocH28(0,26)
 Info_Text:
@@ -428,7 +447,7 @@ Info_Text:
 		levselstr "   UNKNOWN LEVEL      - UNKNOWN                                 "
 		levselstr "   UNKNOWN LEVEL      - UNKNOWN                                 "
 		levselstr "   UNKNOWN LEVEL      - UNKNOWN                                 "
-		levselstr "   UNKNOWN LEVEL      - UNKNOWN                                 "
 		levselstr "   MUSIC TEST:        - 000                                     "
 		levselstr "   SOUND TEST:        - 000                                     "
+		levselstr "   SAMPLE TEST:       - 000                                     "
 	even

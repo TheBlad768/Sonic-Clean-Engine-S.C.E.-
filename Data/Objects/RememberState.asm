@@ -28,8 +28,11 @@ Sprite_OnScreen_Test2:
 
 MarkObjGone_Collision:
 RememberState_Collision:
+Sprite_CheckDeleteTouch3:
 Sprite_OnScreen_Test_Collision:
 		move.w	x_pos(a0),d0
+
+.skipxpos:
 		andi.w	#-128,d0
 		sub.w	(Camera_X_pos_coarse_back).w,d0
 		cmpi.w	#128+320+192,d0
@@ -66,7 +69,6 @@ Delete_Sprite_If_Not_In_Range:
 
 .delete:
 		jmp	(Delete_Current_Sprite).w
-; End of function Delete_Sprite_If_Not_In_Range
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -212,7 +214,6 @@ Remove_From_TrackingSlot:
 		movea.w	$3C(a0),a1
 		bclr	d0,(a1)
 		rts
-; End of function Remove_From_TrackingSlot
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -247,6 +248,5 @@ Obj_WaitOffscreen:
 ; ---------------------------------------------------------------------------
 +		move.l	$34(a0),address(a0)			; Restore normal object operation when onscreen
 		rts
-; End of function Obj_WaitOffscreen
 ; ---------------------------------------------------------------------------
 Map_Offscreen:	dc.w Map_Offscreen-Map_Offscreen

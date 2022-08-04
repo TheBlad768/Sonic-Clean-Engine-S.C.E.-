@@ -1,0 +1,1 @@
+This is a modified version of AS 1.42 Beta Build 212. Source can be found at https://github.com/flamewing/asl-releases

@@ -15,7 +15,6 @@ Init_Controllers:
 		startZ802
 		startZ80
 		rts
-; End of function Init_Controllers
 ; ---------------------------------------------------------------------------
 ; Subroutine to read joypad input, and send it to the RAM
 ; ---------------------------------------------------------------------------
@@ -48,4 +47,3 @@ Poll_Controller:
 		and.b	d0,d1
 		move.b	d1,(a0)+			; Put pressed controller input in F605/F607
 		rts
-; End of function Poll_Controllers

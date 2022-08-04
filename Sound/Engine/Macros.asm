@@ -43,15 +43,14 @@ SMPS_resetZ80 macro
 ; start the Z80
 ; ---------------------------------------------------------------------------
 SMPS_startZ80 macro
-	clr.w	(SMPS_z80_bus_request).l
+	move.w	#0,(SMPS_z80_bus_request).l    ; start the Z80
 	endm
 
 ; ---------------------------------------------------------------------------
 ; stop the Z80
 ; ---------------------------------------------------------------------------
 SMPS_stopZ80_safe macro
-	move.w	sr,-(sp)
-	move.w	#$2700,sr	; mask off interrupts
+	disableIntsSave	; mask off interrupts
 	SMPS_stopZ80
 	SMPS_waitZ80
 	endm
@@ -61,7 +60,7 @@ SMPS_stopZ80_safe macro
 ; ---------------------------------------------------------------------------
 SMPS_startZ80_safe macro
 	SMPS_startZ80
-	move.w	(sp)+,sr
+	enableIntsSave
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -107,11 +106,11 @@ SMPS_UnpauseMusic macro
 ; update sound driver
 ; ---------------------------------------------------------------------------
 SMPS_UpdateSoundDriver macro
-	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
+	enableInts													; enable interrupts (we can accept horizontal interrupts from now on)
 	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; set "SMPS running flag"
-	bne.s	+						; if it was set already, don't call another instance of SMPS
-	jsr	(SMPS_UpdateDriver).l 				; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; reset "SMPS running flag"
+	bne.s	+													; if it was set already, don't call another instance of SMPS
+	jsr	(SMPS_UpdateDriver).l 									; update Sonic 2 Clone Driver v2
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w		; reset "SMPS running flag"
 +
 	endm
 

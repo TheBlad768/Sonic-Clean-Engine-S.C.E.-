@@ -88,29 +88,26 @@ RobotnikHead4_Index: offsetTable
 loc_67CFE:
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
-; Fire Ship
+; Robotnik Ship Flame
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_RobotnikFire:
-		lea	ObjDat3_RobotnikFire(pc),a1
+Obj_RobotnikShipFlame:
+		lea	ObjDat2_RoboShipFlame(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		move.l	#+,address(a0)
-+		movea.w	parent3(a0),a1
-		btst	#7,status(a1)
-		bne.s	RobotnikFire_Remove
-		btst	#6,$38(a1)
-		bne.s	Obj_RobotnikHeadEnd
-		btst	#0,(V_int_run_count+3).w
-		bne.w	Obj_RobotnikHeadEnd
-		jsr	(Refresh_ChildPositionAdjusted).w
-		jsr	(Add_SpriteToCollisionResponseList).w
-		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
+		move.l	#RobotnikShipFlame_Main,address(a0)
 
-RobotnikFire_Remove:
-		jmp	(Delete_Current_Sprite).w
+RobotnikShipFlame_Main:
+		movea.w	parent3(a0),a1
+		btst	#4,$38(a1)
+		bne.s	loc_67CFE
+		jsr	(Refresh_ChildPositionAdjusted).w
+		btst	#0,(V_int_run_count+3).w
+		bne.s	Obj_RobotnikHeadEnd
+		tst.w	x_vel(a1)
+		beq.s	Obj_RobotnikHeadEnd
+		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -118,20 +115,20 @@ ObjDat_RobotnikHead:
 		dc.l Map_RobotnikShip
 		dc.w $52E
 		dc.w $280
-		dc.b $10
-		dc.b 8
+		dc.b 32/2
+		dc.b 16/2
 		dc.b 0
 		dc.b 0
-ObjDat3_RobotnikFire:
-		dc.w $200
-		dc.b 8
-		dc.b 4
+ObjDat2_RoboShipFlame:
+		dc.w $280
+		dc.b 16/2
+		dc.b 8/2
 		dc.b 8
 		dc.b 0
 AniRaw_RobotnikHead:
-		dc.b 5, 0, 1, $FC
+		dc.b 5, 0, 1, arfEnd
 AniRaw_RobotnikHead_Laugh:
-		dc.b 5, 3, 4, $FC
+		dc.b 5, 3, 4, arfEnd
 Child1_MakeRoboHead3:
 		dc.w 1-1
 		dc.l Obj_RobotnikHead3
@@ -140,6 +137,10 @@ Child1_MakeRoboHead4:
 		dc.w 1-1
 		dc.l Obj_RobotnikHead4
 		dc.b 0, -28
+Child1_MakeRoboShipFlame:
+		dc.w 1-1
+		dc.l Obj_RobotnikShipFlame
+		dc.b 30, 0
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Robotnik/Object Data/Map - Robotnik Ship.asm"

@@ -7,6 +7,9 @@ byte_23F74:
 		dc.b 32/2, 64/2
 		dc.b 32/2, 96/2
 		dc.b 32/2, 128/2
+; ---------------------------------------------------------------------------
+; Spikes (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -61,7 +64,7 @@ loc_24090:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		bsr.w	SolidObjectFull
+		jsr	SolidObjectFull(pc)
 		move.b	status(a0),d6
 		andi.b	#$18,d6
 		beq.s	loc_240D8
@@ -73,7 +76,7 @@ loc_24090:
 
 loc_240D8:
 		move.w	$30(a0),d0
-		bra.w	Sprite_OnScreen_Test2
+		jmp	(Sprite_OnScreen_Test2).w
 ; ---------------------------------------------------------------------------
 
 loc_240E2:
@@ -86,7 +89,7 @@ loc_240E2:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		bsr.w	SolidObjectFull
+		jsr	SolidObjectFull(pc)
 		swap	d6
 		andi.w	#3,d6
 		beq.s	loc_24134
@@ -99,7 +102,7 @@ loc_240E2:
 
 loc_24134:
 		move.w	$30(a0),d0
-		bra.w	Sprite_OnScreen_Test2
+		jmp	(Sprite_OnScreen_Test2).w
 ; ---------------------------------------------------------------------------
 
 loc_2413E:
@@ -112,7 +115,7 @@ loc_2413E:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		bsr.w	SolidObjectFull
+		jsr	SolidObjectFull(pc)
 		swap	d6
 		andi.w	#$C,d6
 		beq.s	loc_24184
@@ -124,7 +127,7 @@ loc_2413E:
 
 loc_24184:
 		move.w	$30(a0),d0
-		bra.w	Sprite_OnScreen_Test2
+		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -145,10 +148,9 @@ sub_24280:
 		move.l	d3,y_pos(a1)
 		movea.l	a0,a2
 		movea.l	a1,a0
-		bsr.w	HurtCharacter
+		jsr	HurtCharacter(pc)
 		movea.l	a2,a0
 +		rts
-; End of function sub_24280
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -157,7 +159,6 @@ sub_242B6:
 		move.b	subtype(a0),d0
 		move.w	off_242C4(pc,d0.w),d1
 		jmp	off_242C4(pc,d1.w)
-; End of function sub_242B6
 ; ---------------------------------------------------------------------------
 
 off_242C4: offsetTable
@@ -195,7 +196,7 @@ sub_242F6:
 		bne.s	locret_24354
 		tst.b	render_flags(a0)
 		bpl.s	locret_24354
-		sfx	sfx_SpikesMove,1,0,0
+		sfx	sfx_SpikesMove,1
 ; ---------------------------------------------------------------------------
 
 loc_24312:
@@ -219,7 +220,6 @@ loc_24334:
 
 locret_24354:
 		rts
-; End of function sub_242F6
 ; ---------------------------------------------------------------------------
 
 loc_24356:
@@ -254,7 +254,6 @@ sub_2438A:
 		addq.w	#1,x_pos(a0)
 		addq.w	#1,x_pos(a1)
 +		rts
-; End of function sub_2438A
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -263,7 +262,6 @@ sub_243BA:
 		move.b	subtype(a0),d0
 		move.w	word_243C8(pc,d0.w),d1
 		jmp	word_243C8(pc,d1.w)
-; End of function sub_243BA
 ; ---------------------------------------------------------------------------
 
 word_243C8: offsetTable
@@ -298,7 +296,7 @@ sub_243F6:
 		bne.s	locret_24454
 		tst.b	render_flags(a0)
 		bpl.s	locret_24454
-		sfx	sfx_SpikesMove,1,0,0
+		sfx	sfx_SpikesMove,1
 ; ---------------------------------------------------------------------------
 
 loc_24412:
@@ -322,7 +320,6 @@ loc_24434:
 
 locret_24454:
 		rts
-; End of function sub_243F6
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Spikes/Object Data/Map - Spikes.asm"

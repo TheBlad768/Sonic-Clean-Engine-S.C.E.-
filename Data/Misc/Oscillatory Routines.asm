@@ -43,7 +43,7 @@ SynchroAnimate:
 
 .SyncEnd:
 		rts
-; End of function SynchroAnimate
+
 ; ---------------------------------------------------------------------------
 ; Oscillating number subroutine
 ; ---------------------------------------------------------------------------
@@ -58,7 +58,6 @@ OscillateNumInit:
 -		move.w	(a2)+,(a1)+
 		dbf	d1,-
 		rts
-; End of function OscillateNumInit
 ; ---------------------------------------------------------------------------
 
 Osc_Data:
@@ -118,7 +117,6 @@ OscillateNumDo:
 
 OscillateNumDo_Return:
 		rts
-; End of function OscillateNumDo
 ; ---------------------------------------------------------------------------
 
 Osc_Data2:

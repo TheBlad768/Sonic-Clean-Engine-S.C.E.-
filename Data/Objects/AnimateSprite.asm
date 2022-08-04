@@ -78,7 +78,6 @@ loc_1AC7A:
 
 locret_1AC86:
 		rts
-; End of function Animate_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -151,7 +150,6 @@ loc_1AD0C:
 
 locret_1AD1E:
 		rts
-; End of function Animate_SpriteIrregularDelay
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -234,4 +232,3 @@ Anim_End_FB:
 
 Anim_End:
 		rts
-; End of function AnimateSprite_Reverse

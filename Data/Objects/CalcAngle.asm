@@ -19,13 +19,9 @@ GetArcTan:
 		or.w	d3,d4
 		beq.s	GetArcTan_Zero	; special case when both x and y are zero
 		move.w	d2,d4
-		tst.w	d3
-		bpl.s	+
-		neg.w	d3
-+		tst.w	d4
-		bpl.s	+
-		neg.w	d4
-+		cmp.w	d3,d4
+		absw.w	d3	; calculate absolute value of x
+		absw.w	d4	; calculate absolute value of y
+		cmp.w	d3,d4
 		bhs.s	+	; if |y| >= |x|
 		lsl.l	#8,d4
 		divu.w	d3,d4
@@ -52,7 +48,6 @@ GetArcTan_Zero:
 		moveq	#$40,d0		; angle = 90 degrees
 		movem.l	(sp)+,d3-d4
 		rts
-; End of function GetArcTan
 ; ---------------------------------------------------------------------------
 
 ArcTanTable:		binclude	"Misc Data/Arctan.bin"

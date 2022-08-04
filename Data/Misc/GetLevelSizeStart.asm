@@ -11,8 +11,9 @@ Get_LevelSizeStart:
 	if	ExtendedCamera
 		move.w	#320/2,(Camera_X_Center).w
 	endif
-		move.w	#-1,(Screen_X_wrap_value).w
-		move.w	#-1,(Screen_Y_wrap_value).w
+		move.w	#-1,d0
+		move.w	d0,(Screen_X_wrap_value).w
+		move.w	d0,(Screen_Y_wrap_value).w
 		tst.b	(Last_star_post_hit).w				; have any lampposts been hit?
 		beq.s	LevSz_StartLoc				; if not, branch
 		bsr.w	Load_Starpost_Settings

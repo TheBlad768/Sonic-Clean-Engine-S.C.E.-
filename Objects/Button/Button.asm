@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Button (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -47,7 +50,7 @@ loc_2C5BE:
 loc_2C612:
 		tst.b	(a3)
 		bne.s	+
-		sfx	sfx_Switch,0,0,0
+		sfx	sfx_Switch
 +		bset	d3,(a3)
 		move.b	#1,mapping_frame(a0)
 
@@ -83,7 +86,7 @@ loc_2C62C:
 loc_2C67C:
 		tst.b	(a3)
 		bne.s	+
-		sfx	sfx_Switch,0,0,0
+		sfx	sfx_Switch
 +		bset	d3,(a3)
 		move.b	#1,mapping_frame(a0)
 

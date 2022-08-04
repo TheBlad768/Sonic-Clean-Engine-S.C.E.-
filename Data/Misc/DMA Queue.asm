@@ -112,7 +112,7 @@ UseRAMSourceSafeDMA = 1&(AssumeSourceAddressIsRAMSafe==0)
 ; disabled by default because you can simply align the art in ROM and avoid the
 ; issue altogether. It is here so that you have a high-performance routine to do
 ; the job in situations where you can't align it in ROM.
-Use128kbSafeDMA = 0
+Use128kbSafeDMA = 1
 ; ===========================================================================
 ; option UseVIntSafeDMA
 ;
@@ -320,7 +320,7 @@ Add_To_DMA_Queue:
 		endif ;UseVIntSafeDMA==1
 		rts
 	endif	; Use128kbSafeDMA
-; End of function Add_To_DMA_Queue
+
 ; ---------------------------------------------------------------------------
 ; Subroutine for issuing all VDP commands that were queued
 ; (by earlier calls to QueueDMATransfer)
@@ -338,7 +338,7 @@ Process_DMA_Queue:
 	rts
 	rept 6
 		trap	#0											; Just in case
-	endm
+	endr
 ; ---------------------------------------------------------------------------
 	set	.c,1
 	rept QueueSlotCount
@@ -348,19 +348,18 @@ Process_DMA_Queue:
 			bra.w	.jump0 - .c*8
 		endif
 		set	.c,.c + 1
-	endm
+	endr
 ; ---------------------------------------------------------------------------
 	rept QueueSlotCount
 		move.l	(a1)+,(a5)									; Transfer length
 		move.l	(a1)+,(a5)									; Source address high
 		move.l	(a1)+,(a5)									; Source address low + destination high
 		move.w	(a1)+,(a5)									; Destination low, trigger DMA
-	endm
+	endr
 
 .jump0:
 	ResetDMAQueue
 	rts
-; End of function Process_DMA_Queue
 ; ---------------------------------------------------------------------------
 ; Subroutine for initializing the DMA queue.
 ; ---------------------------------------------------------------------------
@@ -377,8 +376,7 @@ Init_DMA_Queue:
 		move.b	d0,.c + DMAEntry.Reg94(a0)
 		movep.l	d1,.c + DMAEntry.Reg93(a0)
 		set	.c,.c + DMAEntry.len
-	endm
+	endr
 
 	ResetDMAQueue
 	rts
-; End of function Init_DMA_Queue

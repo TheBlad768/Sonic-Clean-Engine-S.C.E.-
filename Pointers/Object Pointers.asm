@@ -41,7 +41,7 @@ Obj_Index:
 		dc.l DeleteObject						; $23
 		dc.l DeleteObject						; $24
 		dc.l DeleteObject						; $25
-		dc.l Obj_SpinForcer					; $26
+		dc.l Obj_AutoSpin						; $26
 		dc.l DeleteObject						; $27
 		dc.l Obj_28_Invisible_Barrier			; $28
 		dc.l DeleteObject						; $29

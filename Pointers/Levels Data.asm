@@ -18,24 +18,24 @@ LevelLoadBlock:
 LevelLoadPointer:
 
 ; DEZ1
-		dc.l AnPal_None, No_Resize, No_WaterResize, AfterBoss_Null
-		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent
-		dc.l AnimateTiles_NULL, AniPLC_NULL
+		dc.l AnPal_DEZ, LevelPointer_Null, LevelPointer_Null, LevelPointer_Null					; Animate Palette, Resize, WaterResize, AfterBoss
+		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent	; ScreenInit, BackgroundInit, ScreenEvent, BackgroundEvent
+		dc.l AnimateTiles_DoAniPLC, AniPLC_DEZ											; Animate tiles main code, Animate tiles PLC scripts
 
 ; DEZ2
-		dc.l AnPal_None, No_Resize, No_WaterResize, AfterBoss_Null
+		dc.l AnPal_DEZ, LevelPointer_Null, LevelPointer_Null, LevelPointer_Null
 		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent
-		dc.l AnimateTiles_NULL, AniPLC_NULL
+		dc.l AnimateTiles_DoAniPLC, AniPLC_DEZ
 
 ; DEZ3
-		dc.l AnPal_None, No_Resize, No_WaterResize, AfterBoss_Null
+		dc.l AnPal_DEZ, LevelPointer_Null, LevelPointer_Null, LevelPointer_Null
 		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent
-		dc.l AnimateTiles_NULL, AniPLC_NULL
+		dc.l AnimateTiles_DoAniPLC, AniPLC_DEZ
 
 ; DEZ4
-		dc.l AnPal_None, No_Resize, No_WaterResize, AfterBoss_Null
+		dc.l AnPal_DEZ, LevelPointer_Null, LevelPointer_Null, LevelPointer_Null
 		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent
-		dc.l AnimateTiles_NULL, AniPLC_NULL
+		dc.l AnimateTiles_DoAniPLC, AniPLC_DEZ
 
 		zonewarning LevelLoadPointer,(40*4)
 

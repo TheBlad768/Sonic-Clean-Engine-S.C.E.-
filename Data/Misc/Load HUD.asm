@@ -60,7 +60,6 @@ Render_HUD_Draw:
 
 Render_HUD_Return:
 		rts
-; End of function Render_HUD
 ; ---------------------------------------------------------------------------
 
 		include	"Objects/HUD/Object Data/Map - HUD.asm"

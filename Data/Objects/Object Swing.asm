@@ -8,7 +8,6 @@ Swing_Setup1:
 		move.w	#$10,$40(a0)
 		bclr	#0,$38(a0)
 		rts
-; End of function Swing_Setup1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -19,7 +18,6 @@ Swing_Setup2:
 		move.w	#$20,$3C(a0)
 		bclr	#3,$38(a0)
 		rts
-; End of function Swing_Setup2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -36,7 +34,6 @@ Swing_UpAndDown_Count:
 ; ---------------------------------------------------------------------------
 +		moveq	#1,d0
 		rts
-; End of function Swing_UpAndDown_Count
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -65,7 +62,6 @@ Swing_UpAndDown:
 		moveq	#1,d3
 +		move.w	d1,y_vel(a0)
 		rts
-; End of function Swing_UpAndDown
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -94,7 +90,6 @@ Swing_LeftAndRight:
 		moveq	#1,d3
 +		move.w	d1,x_vel(a0)
 		rts
-; End of function Swing_LeftAndRight
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -123,7 +118,6 @@ Refresh_ChildPosition2:
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
-; End of function Refresh_ChildPosition
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -137,7 +131,6 @@ Refresh_Child_X_Position2:
 		add.w	d1,d0
 		move.w	d0,x_pos(a0)
 		rts
-; End of function Refresh_Child_X_Position
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -151,7 +144,6 @@ Refresh_Child_Y_Position2:
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
-; End of function Refresh_Child_Y_Position
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -180,7 +172,6 @@ Refresh_ChildPositionAdjusted2:
 +		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
-; End of function Refresh_ChildPositionAdjusted
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -199,7 +190,6 @@ Refresh_Child_X_PositionAdjusted2:
 +		add.w	d1,d0
 		move.w	d0,x_pos(a0)
 		rts
-; End of function Refresh_Child_X_PositionAdjusted
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -218,7 +208,6 @@ Refresh_Child_Y_PositionAdjusted2:
 +		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
-; End of function Refresh_Child_Y_PositionAdjusted
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -247,7 +236,6 @@ Refresh_ChildPositionAdjusted_Animate2:
 +		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
-; End of function Refresh_ChildPositionAdjusted_Animate
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -266,7 +254,6 @@ Refresh_Child_X_PositionAdjusted_Animate2:
 +		add.w	d1,d0
 		move.w	d0,x_pos(a0)
 		rts
-; End of function Refresh_Child_X_PositionAdjusted_Animate
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -285,7 +272,6 @@ Refresh_Child_Y_PositionAdjusted_Animate2:
 +		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
-; End of function Refresh_Child_Y_PositionAdjusted_Animate
 ; ---------------------------------------------------------------------------
 ; Set velx track sonic subroutine
 ; ---------------------------------------------------------------------------
@@ -301,7 +287,6 @@ Set_VelocityXTrackSonic:
 		bset	#0,render_flags(a0)
 +		move.w	d4,x_vel(a0)
 		rts
-; End of function Set_VelocityXTrackSonic
 ; ---------------------------------------------------------------------------
 ; Chase object subroutine
 ; ---------------------------------------------------------------------------
@@ -343,7 +328,6 @@ Chase_Object:
 		beq.s	+
 		clr.l	x_vel(a0)
 +		rts
-; End of function Chase_Object
 ; ---------------------------------------------------------------------------
 ; Chase xpos object subroutine
 ; ---------------------------------------------------------------------------
@@ -368,7 +352,6 @@ Chase_ObjectXOnly:
 		bgt.s	+
 		move.w	d3,x_vel(a0)
 +		rts
-; End of function Chase_ObjectXOnly
 ; ---------------------------------------------------------------------------
 ; Chase ypos object subroutine
 ; ---------------------------------------------------------------------------
@@ -393,7 +376,6 @@ Chase_ObjectYOnly:
 		bgt.s	+
 		move.w	d3,y_vel(a0)
 +		rts
-; End of function Chase_ObjectYOnly
 ; ---------------------------------------------------------------------------
 ; Chase object 2 subroutine
 ; ---------------------------------------------------------------------------
@@ -441,7 +423,6 @@ Chase_Object2:
 		beq.s	+
 		clr.l	x_vel(a0)
 +		rts
-; End of function Chase_Object2
 ; ---------------------------------------------------------------------------
 ; Shot object subroutine
 ; ---------------------------------------------------------------------------
@@ -501,7 +482,6 @@ loc_8621A:
 		move.w	#256,d1
 		lsl.w	d5,d1
 		bra.s	-
-; End of function Shot_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -518,4 +498,3 @@ sub_8619A:
 		move.w	d2,x_pos(a0)
 		move.w	d3,y_pos(a0)
 		rts
-; End of function sub_8619A

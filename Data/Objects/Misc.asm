@@ -18,7 +18,6 @@ LoadObjects_ExtraData:
 		bset	#2,render_flags(a0)			; Use screen coordinates
 		addq.b	#2,routine(a0)			; Next routine
 		rts
-; End of function SetUp_ObjAttributes
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -65,7 +64,6 @@ SetUp_ObjAttributesSlotted:
 		bset	#2,render_flags(a0)			; Use screen coordinates
 		addq.b	#2,routine(a0)			; Next routine
 		rts
-; End of function SetUp_ObjAttributesSlotted
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -99,7 +97,6 @@ Perform_DPLC:
 		jsr	(Add_To_DMA_Queue).w		; Add to queue
 		dbf	d5,-							; Keep going
 +		rts
-; End of function Perform_DPLC
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -115,7 +112,6 @@ Set_IndexedVelocity:
 		beq.s	+
 		neg.w	x_vel(a0)
 +		rts
-; End of function Set_IndexedVelocity
 ; ---------------------------------------------------------------------------
 
 Obj_VelocityIndex:
@@ -173,7 +169,6 @@ Displace_PlayerOffObject:
 
 Displace_PlayerOffObject_Return:
 		rts
-; End of function Displace_PlayerOffObject
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -190,28 +185,36 @@ Go_CheckPlayerRelease:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_Transition:
-		move.w	#$5A,$2E(a0)
-		sfx	bgm_Fade,0,1,1			; fade out music
-		move.l	#+,address(a0)
-+		subq.w	#1,$2E(a0)
-		bpl.s	Displace_PlayerOffObject_Return
+		sfx	bgm_Fade			; fade out music
+		move.l	#Song_Fade_Transition_Wait,address(a0)
+
+Song_Fade_Transition_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Song_Fade_Transition_Wait:
+		tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_fadeout_counter).w
+		bne.s	Song_Fade_Transition_Return
 		move.b	subtype(a0),d0
 		move.w	d0,(Level_music).w
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+		jsr	(SMPS_QueueSound1).w	; play music
 		jmp	(Delete_Current_Sprite).w
-; End of function Obj_Song_Fade_Transition
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_ToLevelMusic:
-		move.w	#2*60,$2E(a0)
-		sfx	bgm_Fade,0,1,1			; fade out music
-		move.l	#+,address(a0)
-+		subq.w	#1,$2E(a0)
-		bpl.s	Displace_PlayerOffObject_Return
+		sfx	bgm_Fade			; fade out music
+		move.l	#Song_Fade_ToLevelMusic_Wait,address(a0)
+
+Song_Fade_ToLevelMusic_Return:
+		rts
+; ---------------------------------------------------------------------------
+
+Song_Fade_ToLevelMusic_Wait:
+		tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_fadeout_counter).w
+		bne.s	Song_Fade_ToLevelMusic_Return
 		bsr.s	Obj_PlayLevelMusic
 		jmp	(Delete_Current_Sprite).w
-; End of function Obj_Song_Fade_ToLevelMusic
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -224,31 +227,8 @@ Obj_PlayLevelMusic:
 		move.w	d0,(Level_music).w
 		btst	#Status_Invincible,(Player_1+status_secondary).w
 		beq.s	+
-		moveq	#bgm_Invincible,d0		; If invincible, play invincibility music
-+		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w	; play music
-		rts
-; End of function Obj_PlayLevelMusic
-
-; =============== S U B R O U T I N E =======================================
-
-Init_BossArena:
-		st	(Boss_flag).w
-
-Init_BossArena2:
-		sfx	bgm_Fade,0,1,1			; fade out music
-		move.w	#2*60,$2E(a0)
-
-Init_BossArena3:
-		move.w	(Camera_min_Y_pos).w,(Saved_Camera_min_Y_pos).w
-		move.w	(Camera_target_max_Y_pos).w,(Saved_Camera_target_max_Y_pos).w
-		move.w	(Camera_min_X_pos).w,(Saved_Camera_min_X_pos).w
-		move.w	(Camera_max_X_pos).w,(Saved_Camera_max_X_pos).w
-		move.w	(a1)+,(Camera_min_Y_pos_Saved).w
-		move.w	(a1)+,(Camera_max_Y_pos_Saved).w
-		move.w	(a1)+,(Camera_min_X_pos_Saved).w
-		move.w	(a1)+,(Camera_max_X_pos_Saved).w
-		rts
-; End of function Init_BossArena
+		moveq	#signextendB(bgm_Invincible),d0	; if invincible, play invincibility music
++		jmp	(SMPS_QueueSound1).w				; play music
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -259,7 +239,6 @@ Load_Routine:
 		andi.w	#$FE,d0
 		adda.w	(a1,d0.w),a1
 		jmp	(a1)
-; End of function ObjectsRoutine
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -277,7 +256,6 @@ HurtCharacter_Directly:
 
 HurtCharacter_Directly_Return:
 		rts
-; End of function HurtCharacter_Directly
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -301,7 +279,6 @@ EnemyDefeated:
 .bounceup:
 		subi.w	#$100,y_vel(a1)	; Bounce up
 		rts
-; End of function EnemyDefeated
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -330,7 +307,6 @@ EnemyDefeat_Score:
 		move.l	#Obj_Explosion,address(a0)
 		clr.b	routine(a0)
 		rts
-; End of function EnemyDefeat_Score
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -344,8 +320,7 @@ HurtCharacter_WithoutDamage:
 		move.w	#-$300,y_vel(a1)
 		clr.w	ground_vel(a1)			; Zero out inertia
 		move.b	#id_Hurt,anim(a1)		; Set falling animation
-		sfx	sfx_Death,1,0,0
-; End of function HurtCharacter_WithoutDamage
+		sfx	sfx_Death,1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -392,7 +367,6 @@ Check_PlayerCollision:
 		move.w	a1,objoff_44(a0)
 		moveq	#1,d1
 +		rts
-; End of function Check_PlayerCollision
 ; ---------------------------------------------------------------------------
 
 word_85890:
@@ -417,7 +391,6 @@ Load_LevelResults:
 		bne.s	+
 		move.l	#Obj_LevelResults,address(a1)
 +		rts
-; End of function Load_LevelResults
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -431,7 +404,6 @@ Set_PlayerEndingPose:
 		bclr	#6,status(a0)
 		bclr	#Status_Push,status(a1)
 		rts
-; End of function Set_PlayerEndingPose
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -439,7 +411,6 @@ Stop_Object:
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
 		rts
-; End of function Stop_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -449,11 +420,10 @@ Restore_PlayerControl:
 Restore_PlayerControl2:
 		clr.b	object_control(a1)
 		bclr	#Status_InAir,status(a1)
-		move.w	#$0505,anim(a1)
+		move.w	#id_Wait<<8|id_Wait,anim(a1)
 		clr.b	anim_frame(a1)
 		clr.b	anim_frame_timer(a1)
 		rts
-; End of function Restore_PlayerControl
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -462,19 +432,16 @@ StartNewLevel:
 		st	(Restart_level_flag).w
 		clr.b	(Last_star_post_hit).w
 
-.locret:
+.return:
 		rts
-; End of function StartNewLevel
 
 ; =============== S U B R O U T I N E =======================================
 
-Wait_Play_Sound:
+Play_SFX_Continuous:
 		move.b	(V_int_run_count+3).w,d1
 		and.b	d2,d1
-		bne.s	+
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
-+		rts
-; End of function Wait_Play_Sound
+		bne.s	StartNewLevel.return
+		jmp	(SMPS_QueueSound2).w	; play sfx
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -515,7 +482,6 @@ BossDefeated_NoTime:
 		bclr	#7,render_flags(a0)
 		moveq	#100,d0
 		jmp	(HUD_AddToScore).w
-; End of function BossDefeated
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -563,7 +529,6 @@ CopyWordData_1:
 		movea.w	(a1)+,a3
 		move.w	(a2)+,(a3)+
 		rts
-; End of function CopyWordData
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -584,7 +549,22 @@ Check_CameraXBoundary:
 		blo.s		+
 		clr.w	x_vel(a0)
 +		rts
-; End of function Check_CameraXBoundary
+
+; =============== S U B R O U T I N E =======================================
+
+Resize_MaxYFromX:
+		move.w	(Camera_X_pos).w,d0
+
+-		move.l	(a1)+,d1
+		cmp.w	d1,d0
+		bhi.s	-
+		swap	d1
+		tst.w	d1
+		bpl.s	+
+		andi.w	#$7FFF,d1
+		move.w	d1,(Camera_max_Y_pos).w
++		move.w	d1,(Camera_target_max_Y_pos).w
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 

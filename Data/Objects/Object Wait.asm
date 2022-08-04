@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Wait and jump to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -8,7 +11,6 @@ Obj_Wait:
 Obj_Jump:
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function Obj_Wait
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -26,7 +28,6 @@ ObjHitFloor_DoRoutine_Return:
 +		add.w	d1,y_pos(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function ObjHitFloor_DoRoutine
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -44,7 +45,6 @@ ObjHitCeiling_DoRoutine_Return:
 +		sub.w	d1,y_pos(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function ObjHitCeiling_DoRoutine
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -67,7 +67,6 @@ ObjHitFloor2_DoRoutine:
 		jsr	(a1)
 		moveq	#1,d0
 		rts
-; End of function ObjHitFloor2_DoRoutine
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -78,7 +77,6 @@ ObjHitWall_DoRoutine:
 		add.w	d1,x_pos(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function ObjHitWall_DoRoutine
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -89,4 +87,3 @@ ObjHitWall2_DoRoutine:
 		add.w	d1,x_pos(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
-; End of function ObjHitWall2_DoRoutine

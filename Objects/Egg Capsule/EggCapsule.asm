@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Egg Capsule (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -75,7 +78,6 @@ sub_865DE:
 
 locret_8661C:
 		rts
-; End of function sub_865DE
 ; ---------------------------------------------------------------------------
 
 loc_8661E:
@@ -360,7 +362,6 @@ sub_86A3E:
 		move.w	#6,d3
 		move.w	$10(a0),d4
 		jmp	(SolidObjectFull).w
-; End of function sub_86A3E
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -370,7 +371,6 @@ sub_86A54:
 		moveq	#9,d3
 		move.w	$10(a0),d4
 		jmp	(SolidObjectFull).w
-; End of function sub_86A54
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -380,7 +380,6 @@ sub_86A64:
 		lsr.w	#1,d0
 		move.b	byte_86A74(pc,d0.w),mapping_frame(a0)
 		rts
-; End of function sub_86A64
 ; ---------------------------------------------------------------------------
 
 byte_86A74:
@@ -411,7 +410,6 @@ sub_868F8:
 
 locret_86930:
 		rts
-; End of function sub_868F8
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -434,7 +432,6 @@ loc_869C2:
 
 locret_869C4:
 		rts
-; End of function sub_86984
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -475,7 +472,6 @@ loc_86A28:
 
 locret_86A3C:
 		rts
-; End of function sub_869F6
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -521,7 +517,6 @@ loc_86AB0:
 loc_86B04:
 		move.w	d1,x_vel(a0)
 		jmp	(Change_FlipXWithVelocity2).w
-; End of function sub_86A7A
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -531,7 +526,6 @@ Load_EggCapsule:
 		clr.b	(Boss_flag).w
 		lea	ChildObjDat_EggCapsule(pc),a2
 		jmp	(CreateChild6_Simple).w
-; End of function Load_EggCapsule
 ; ---------------------------------------------------------------------------
 
 word_86B0E:
@@ -579,24 +573,24 @@ word_86B56:
 		dc.b 6
 		dc.b 0
 ChildObjDat_EggCapsule:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_EggCapsule
 ChildObjDat_86B5C:
-		dc.w 0
+		dc.w 1-1
 		dc.l loc_8671C
 		dc.w $DC
 ChildObjDat_86B64:
-		dc.w 0
+		dc.w 1-1
 		dc.l loc_8675C
 		dc.w $24
 ChildObjDat_86B6C:
-		dc.w 1
+		dc.w 2-1
 		dc.l loc_86802
 		dc.w $ECDC
 		dc.l loc_86802
 		dc.w $14DC
 ChildObjDat_86B7A:
-		dc.w 4
+		dc.w 5-1
 		dc.l loc_867D6
 		dc.w $F8
 		dc.l loc_867D6
@@ -608,7 +602,7 @@ ChildObjDat_86B7A:
 		dc.l loc_867D6
 		dc.w $18F8
 ChildObjDat_86B9A:
-		dc.w 8
+		dc.w 9-1			; 15-1?
 		dc.l loc_86820
 		dc.w $FC
 		dc.l loc_86820
@@ -645,7 +639,7 @@ AniRaw_86BF6:
 		dc.b 7
 		dc.b 8
 		dc.b 9
-		dc.b $FC
+		dc.b arfEnd
 PLC_EggCapsule: plrlistheader
 		plreq $43E, ArtKosM_EggCapsule
 		plreq $5A0, ArtKosM_Explosion

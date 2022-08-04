@@ -32,7 +32,6 @@ Handle_Onscreen_Water_Height:
 
 Handle_Onscreen_Water_Height_Return:
 		rts
-; End of function Handle_Onscreen_Water_Height
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -50,7 +49,6 @@ DynamicWaterHeight:
 
 No_WaterResize:
 		rts
-; End of function DynamicWaterHeight
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -90,10 +88,9 @@ LoadWaterPalette:
 		lsr.w	#6,d0
 		move.b	WaterPalette_Index(pc,d0.w),d0	; Water palette
 		move.w	d0,d1
-		bsr.w	LoadPalette2
+		jsr	(LoadPalette2).w
 		move.w	d1,d0
-		bra.w	LoadPalette2_Immediate
-; End of function CheckLevelForWater
+		jmp	(LoadPalette2_Immediate).w
 ; ---------------------------------------------------------------------------
 
 StartingWaterHeights:

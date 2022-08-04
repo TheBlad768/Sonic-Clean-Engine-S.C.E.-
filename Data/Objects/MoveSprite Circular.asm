@@ -24,7 +24,6 @@ MoveSprite_Circular:
 		add.w	d4,d1
 		move.w	d1,y_pos(a0)
 		rts
-; End of function MoveSprite_Circular
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -45,7 +44,6 @@ MoveSprite_CircularSimple:
 		move.l	d2,x_pos(a0)
 		move.l	d3,y_pos(a0)
 		rts
-; End of function MoveSprite_CircularSimple
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -69,7 +67,6 @@ MoveSprite_CircularSimpleCheckFlip:
 		move.l	d2,x_pos(a0)
 		move.l	d3,y_pos(a0)
 		rts
-; End of function MoveSprite_CircularSimpleCheckFlip
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -100,7 +97,6 @@ MoveSprite_CircularSimpleOffset:
 		move.l	d2,x_pos(a0)
 		move.l	d3,y_pos(a0)
 		rts
-; End of function MoveSprite_CircularSimpleOffset
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -136,7 +132,6 @@ MoveSprite_CircularLookup:
 		move.w	d2,x_pos(a0)
 		move.w	d3,y_pos(a0)
 		rts
-; End of function MoveSprite_CircularLookup
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -160,7 +155,6 @@ MoveSprite_AtAngleLookup:
 		move.w	d2,x_pos(a0)
 		move.w	d3,y_pos(a0)
 		rts
-; End of function MoveSprite_AtAngleLookup
 ; ---------------------------------------------------------------------------
 
 AtAngle_LookupIndex: offsetTable
@@ -224,7 +218,6 @@ MoveSprite_AngleYLookup:
 		add.w	d1,d3
 		move.w	d3,y_pos(a0)
 		rts
-; End of function MoveSprite_AngleYLookup
 ; ---------------------------------------------------------------------------
 
 AngleY_LookupIndex: offsetTable
@@ -345,7 +338,6 @@ loc_862A6:
 		subi.w	#$C0,d0
 		neg.w	d0
 		rts
-; End of function CalcObjAngle
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -357,7 +349,6 @@ MoveSprite_AngleXLookupOffset:
 		andi.w	#6,d1
 		move.w	AngleX_LookupIndex(pc,d1.w),d2
 		jmp	AngleX_LookupIndex(pc,d2.w)
-; End of function MoveSprite_AngleXLookupOffset
 ; ---------------------------------------------------------------------------
 
 AngleX_LookupIndex: offsetTable
@@ -421,7 +412,6 @@ MoveSprite_AngleXLookupOffset2:
 		andi.w	#6,d1
 		move.w	AngleX_Lookup2Index(pc,d1.w),d2
 		jmp	AngleX_Lookup2Index(pc,d2.w)
-; End of function MoveSprite_AngleXLookupOffset2
 ; ---------------------------------------------------------------------------
 
 AngleX_Lookup2Index: offsetTable

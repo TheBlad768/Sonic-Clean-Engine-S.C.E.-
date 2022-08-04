@@ -143,7 +143,7 @@
 .largecopy:
 	rept (1<<_Kos_LoopUnroll)
 		move.b	(a5)+,(a1)+
-	endm
+	endr
 		dbra	d4,.largecopy
 		bra.w	.FetchNewCode
 ; ---------------------------------------------------------------------------
@@ -164,7 +164,7 @@
 .mediumcopy:
 	rept 8
 		move.b	(a5)+,(a1)+
-	endm
+	endr
 		bra.w	.FetchNewCode
 	endif
 ; ---------------------------------------------------------------------------

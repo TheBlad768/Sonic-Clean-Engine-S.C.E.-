@@ -31,7 +31,6 @@ NFree_Loop:
 
 NFree_Found:
 		rts
-; End of function Create_New_Sprite
 ; ---------------------------------------------------------------------------
 
 Find_First_Sprite_Table:
@@ -41,5 +40,5 @@ Find_First_Sprite_Table:
 		rept	(.b-.a)/$40				; repeat for all slots, minus exception
 .c	set		.c-$40					; address for previous $40 (also skip last part)
 		dc.b	(.b-.c-1)/object_size-1		; write possible slots according to object_size division + hack + dbf hack
-		endm
+		endr
 	even

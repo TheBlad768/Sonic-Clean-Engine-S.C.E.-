@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Subroutine to check solid object
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -26,10 +29,9 @@ SolidObjectFull_1P:
 		rts
 ; ---------------------------------------------------------------------------
 +		move.w	d4,d2
-		jsr	MvSonicOnPtfm(pc)
+		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 		rts
-; End of function SolidObjectFull
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -61,10 +63,9 @@ loc_1DCF0:
 
 loc_1DD04:
 		move.w	d4,d2
-		jsr	MvSonicOnPtfm(pc)
+		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 		rts
-; End of function SolidObjectFull2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -96,13 +97,12 @@ loc_1DD48:
 
 loc_1DD5C:
 		move.w	d4,d2
-		jsr	SolidObjSloped2(pc)
+		bsr.w	SolidObjSloped2
 		move.w	d6,d4
 		addi.b	#$11,d4
 		bset	d4,d6
 		moveq	#0,d4
 		rts
-; End of function sub_1DD24
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -134,10 +134,9 @@ loc_1DDA8:
 
 loc_1DDBC:
 		move.w	d4,d2
-		jsr	SolidObjSloped4(pc)
+		bsr.w	SolidObjSloped4
 		moveq	#0,d4
 		rts
-; End of function sub_1DD84
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -168,13 +167,12 @@ loc_1DE00:
 
 loc_1DE0E:
 		move.w	d4,d2
-		jsr	SolidObjSloped2(pc)
+		bsr.w	SolidObjSloped2
 		move.w	d6,d4
 		addi.b	#$11,d4
 		bset	d4,d6
 		moveq	#0,d4
 		rts
-; End of function sub_1DDDC
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -547,7 +545,7 @@ loc_1E17E:
 		sub.w	d3,y_pos(a1)
 		tst.w	y_vel(a1)
 		bmi.s	loc_1E198
-		jsr	RideObject_SetRide(pc)
+		bsr.w	RideObject_SetRide
 		move.w	d6,d4
 		addi.b	#$11,d4
 		bset	d4,d6
@@ -609,7 +607,6 @@ loc_1E1F4:
 
 locret_1E21C:
 		rts
-; End of function MvSonicOnPtfm
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -627,7 +624,6 @@ SolidObjSloped:
 
 loc_1E23E:
 		bra.s	loc_1E260
-; End of function SolidObjSloped
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -657,7 +653,6 @@ loc_1E260:
 
 locret_1E280:
 		rts
-; End of function SolidObjSloped2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -675,7 +670,6 @@ SolidObjSloped4:
 loc_1E2A0:
 		andi.w	#-2,d0
 		bra.s	loc_1E260
-; End of function SolidObjSloped4
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -708,10 +702,9 @@ loc_1E2E0:
 
 loc_1E2F4:
 		move.w	d4,d2
-		jsr	MvSonicOnPtfm(pc)
+		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 		rts
-; End of function sub_1E2BC
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -744,10 +737,9 @@ loc_1E338:
 
 loc_1E34C:
 		move.w	d4,d2
-		jsr	SolidObjSloped2(pc)
+		bsr.w	SolidObjSloped2
 		moveq	#0,d4
 		rts
-; End of function sub_1E314
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -780,10 +772,9 @@ loc_1E390:
 
 loc_1E3A4:
 		move.w	d4,d2
-		jsr	SolidObjSloped(pc)
+		bsr.w	SolidObjSloped
 		moveq	#0,d4
 		rts
-; End of function sub_1E36C
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -943,4 +934,3 @@ CheckPlayerReleaseFromObj:
 
 locret_1E5DE:
 		rts
-; End of function CheckPlayerReleaseFromObj

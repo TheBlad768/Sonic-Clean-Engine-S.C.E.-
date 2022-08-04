@@ -1,3 +1,6 @@
+; ----------------------------------------------------------------------------
+; Boss explosions
+; ----------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -118,7 +121,6 @@ loc_83E90:
 
 locret_83EC0:
 		rts
-; End of function sub_83E84
 ; ---------------------------------------------------------------------------
 
 loc_83EC2:
@@ -176,7 +178,7 @@ Obj_BossExplosion1:
 loc_83F52:
 		move.l	#Obj_BossExplosionAnim,address(a0)
 		move.l	#Go_Delete_Sprite,$34(a0)
-		sfx	sfx_Bomb,0,0,0
+		sfx	sfx_Bomb
 
 Obj_BossExplosionAnim:
 		lea	AniRaw_BossExplosion(pc),a1
@@ -195,7 +197,7 @@ Obj_BossExplosionOffset:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_BossExplosionOffsetAnim,address(a0)
 		move.l	#Go_Delete_Sprite,$34(a0)
-		sfx	sfx_Bomb,0,0,0
+		sfx	sfx_Bomb
 
 Obj_BossExplosionOffsetAnim:
 		lea	AniRaw_BossExplosion(pc),a1
@@ -219,32 +221,32 @@ ObjDat_BossExplosion2:
 		dc.b 24/2
 		dc.b 0
 		dc.b 0
-AniRaw_BossExplosion:
-		dc.b	0,   0
-		dc.b	0,   1
-		dc.b	1,   1
-		dc.b	2,   2
-		dc.b	3,   3
-		dc.b	4,   4
-		dc.b	5,   4
-		dc.b  $F4,   0
 Child6_MakeBossExplosion1:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_BossExplosion1
 Child6_MakeBossExplosion2:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_BossExplosion2
 Child6_MakeBossExplosionOff:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_BossExplosionOffset
 Child6_CreateBossExplosion:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_CreateBossExplosion
-		dc.b 0
-		dc.b 0
+		dc.b 0, 0
 Child6_MakeNormalExplosion:
-		dc.w 0
+		dc.w 1-1
 		dc.l Obj_Explosion
+AniRaw_BossExplosion:
+		dc.b	0, 0
+		dc.b	0, 1
+		dc.b	1, 1
+		dc.b	2, 2
+		dc.b	3, 3
+		dc.b	4, 4
+		dc.b	5, 4
+		dc.b arfJump
+	even
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Explosion/Object Data/Map - Boss Explosion.asm"

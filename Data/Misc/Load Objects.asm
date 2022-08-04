@@ -1,20 +1,22 @@
+; ---------------------------------------------------------------------------
+; Load level objects
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Load_Sprites:
 		moveq	#0,d0
 		move.b	(Object_load_routine).w,d0
-		move.w	Load_Sprites_Index(pc,d0.w),d0
-		jmp	Load_Sprites_Index(pc,d0.w)
+		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-Load_Sprites_Index: offsetTable
-		offsetTableEntry.w Load_Sprites_Init	; 0
-		offsetTableEntry.w Load_Sprites_Main	; 2
+.index:
+		bra.w	Load_Sprites_Init		; 0
+		bra.w	Load_Sprites_Main	; 4
 ; ---------------------------------------------------------------------------
 
 Load_Sprites_Init:
-		addq.b	#2,(Object_load_routine).w
+		addq.b	#4,(Object_load_routine).w
 		move.l	#Obj_Index,(Object_index_addr).w
 		clearRAM Object_respawn_table, Object_respawn_table_End
 		move.w	(Current_zone_and_act).w,d0
@@ -376,7 +378,6 @@ Create_New_Sprite4:
 		tst.l	address(a1)
 		dbeq	d0,-
 +		rts
-; End of function Load_Sprites
 ; ---------------------------------------------------------------------------
 ; Changes the coarse back- and forward-camera edges to match new Camera_X value.
 ; Also seeks to appropriate object locations in the level's object layout, so

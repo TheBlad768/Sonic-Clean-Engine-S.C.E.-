@@ -3,6 +3,8 @@ offset :=	MegaPCM_DAC_Table
 ptrsize :=	8
 idstart :=	$81
 
+dac__First = idstart
+
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 ; Sonic 1 & 2
 dKick =						SMPS_id(ptr_dac81)
@@ -134,3 +136,5 @@ dHey =						SMPS_id(ptr_dacDF)
 
 ; Sonic 2
 dSega_S2 =					SMPS_id(ptr_dacE0)
+
+dac__Last = dSega_S2

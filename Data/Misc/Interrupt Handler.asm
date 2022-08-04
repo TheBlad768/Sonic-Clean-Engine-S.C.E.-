@@ -30,6 +30,9 @@ VInt_Music:
 VInt_Done:
 		jsr	(Random_Number).w
 		addq.l	#1,(V_int_run_count).w
+	if Lagometer
+		move.w	#$9193,(VDP_control_port).l			; window H right side, base point $80
+	endif
 		movem.l	(sp)+,d0-a6							; return saved registers from the stack
 		rte
 ; ---------------------------------------------------------------------------
@@ -110,13 +113,13 @@ VInt_Title:
 		tst.w	(Demo_timer).w
 		beq.s	+
 		subq.w	#1,(Demo_timer).w
-+		rts
++		jmp	(Set_Kos_Bookmark).w
 ; ---------------------------------------------------------------------------
 
 VInt_Fade:
 		bsr.s	Do_ControllerPal
 		move.w	(H_int_counter_command).w,(a5)
-		rts
+		jmp	(Set_Kos_Bookmark).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -135,7 +138,6 @@ Do_ControllerPal:
 		jsr	(Process_DMA_Queue).w
 		startZ80
 		rts
-; End of function Do_ControllerPal
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -233,6 +235,7 @@ VInt_Level_Cont:
 		jsr	(Set_Kos_Bookmark).w
 		addq.l	#4,sp
 		bra.w	VInt_Done
+; ---------------------------------------------------------------------------
 +		bsr.s	Do_Updates
 		jmp	(Set_Kos_Bookmark).w
 
@@ -245,7 +248,7 @@ Do_Updates:
 		beq.s	+
 		subq.w	#1,(Demo_timer).w ; subtract 1 from time left
 +		rts
-; End of function Do_Updates
+
 ; ---------------------------------------------------------------------------
 ; Horizontal interrupt
 ; ---------------------------------------------------------------------------
@@ -262,9 +265,9 @@ HInt:
 		move.w	#$8A00+223,VDP_control_port-VDP_data_port(a1)
 		lea	(Water_palette).w,a0
 		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_data_port(a1)
-	rept 32
+	rept 64/2
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a1)
-	endm
+	endr
 		movem.l	(sp)+,a0-a1
 		tst.b	(Do_Updates_in_H_int).w
 		beq.s	HInt_Done

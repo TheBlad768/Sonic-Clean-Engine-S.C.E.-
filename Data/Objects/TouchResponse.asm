@@ -410,7 +410,6 @@ Touch_Hurt:
 		bne.s	Touch_ChkHurt_Return				; If so, branch
 		movea.l	a1,a2
 
-; End of function TouchResponse
 ; continue straight to HurtCharacter
 ; ---------------------------------------------------------------------------
 ; Hurting Sonic/Tails/Knuckles subroutine
@@ -435,7 +434,7 @@ HurtCharacter:
 		move.w	a0,$3E(a1)
 
 .hasshield:
-		andi.b	#-$72,status_secondary(a0)
+		andi.b	#$8E,status_secondary(a0)
 
 .bounce:
 		move.b	#id_SonicHurt,routine(a0)
@@ -458,26 +457,26 @@ HurtCharacter:
 		clr.w	ground_vel(a0)
 		move.b	#id_Hurt,anim(a0)
 		move.b	#2*60,invulnerability_timer(a0)			; set temp invincible time to 2 seconds
-		moveq	#sfx_Death,d0						; load normal damage sound
+		moveq	#signextendB(sfx_Death),d0			; load normal damage sound
 		cmpi.l	#Obj_Spikes,address(a2)				; was damage caused by spikes?
 		blo.s		.sound								; if not, branch
 		cmpi.l	#sub_24280,address(a2)
 		bhs.s	.sound
-		moveq	#sfx_HitSpikes,d0						; load spikes damage sound
+		moveq	#signextendB(sfx_HitSpikes),d0			; load spikes damage sound
 
 .sound:
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+		jsr	(SMPS_QueueSound2).w
 		moveq	#-1,d0
 		rts
 ; ---------------------------------------------------------------------------
 
 .norings:
-		moveq	#sfx_Death,d0						; load normal damage sound
+		moveq	#signextendB(sfx_Death),d0			; load normal damage sound
 		cmpi.l	#Obj_Spikes,address(a2)				; was damage caused by spikes?
 		blo.s		loc_10364							; if not, branch
 		cmpi.l	#sub_24280,address(a2)
 		bhs.s	loc_10364
-		moveq	#sfx_HitSpikes,d0						; load spikes damage sound
+		moveq	#signextendB(sfx_HitSpikes),d0			; load spikes damage sound
 
 loc_10364:
 		bra.s	loc_1036E
@@ -487,7 +486,7 @@ KillSonic:
 Kill_Character:
 		tst.w	(Debug_placement_mode).w			; is debug mode active?
 		bne.s	loc_1036E.dontdie						; if yes, branch
-		moveq	#sfx_Death,d0						; play normal death sound
+		moveq	#signextendB(sfx_Death),d0			; play normal death sound
 
 loc_1036E:
 		clr.b	status_secondary(a0)
@@ -503,7 +502,7 @@ loc_1036E:
 		move.b	#id_Death,anim(a0)
 		move.w	art_tile(a0),(Saved_art_tile).w
 		bset	#7,art_tile(a0)
-		move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+		jsr	(SMPS_QueueSound2).w
 
 .dontdie:
 		moveq	#-1,d0
@@ -537,7 +536,6 @@ Touch_Special:
 loc_103FA:
 		addq.b	#1,collision_property(a1)				; Otherwise, it seems everything else does double
 		rts
-; End of function Touch_Special
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -551,7 +549,6 @@ Add_SpriteToCollisionResponseList:
 
 .locret:
 		rts
-; End of function Add_SpriteToCollisionResponseList
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -643,4 +640,3 @@ ShieldTouch_Height:
 		move.w	d0,y_vel(a1)
 		clr.b	collision_flags(a1)
 		rts
-; End of function ShieldTouchResponse

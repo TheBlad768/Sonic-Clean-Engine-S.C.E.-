@@ -1,19 +1,40 @@
+; ---------------------------------------------------------------------------
+; Fade palette subroutine
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Pal_FillBlack:
+		moveq	#0,d0
+		lea	(Normal_palette).w,a0
+		move.b	(Palette_fade_info).w,d0
+		adda.w	d0,a0
+		moveq	#0,d1
+		move.b	(Palette_fade_count).w,d0
+
+-		move.w	d1,(a0)+
+		tst.b	(Water_flag).w
+		beq.s	+
+		move.w	d1,-(Normal_palette-(Water_palette-2))(a0)
++		dbf	d0,-
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Pal_FadeTo:
 PaletteFadeIn:
 Pal_FadeFromBlack:
-		move.w	#$3F,(Palette_fade_info).w
-		bsr.w	Pal_FillBlack
+		move.w	#64-1,(Palette_fade_info).w
+		bsr.s	Pal_FillBlack
 		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
+		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromBlack
+		bsr.w	Process_Kos_Module_Queue
 		dbf	d4,-
 		rts
-; End of function Pal_FadeFromBlack
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -43,7 +64,6 @@ FadeIn_FromBlack:
 -		bsr.s	Pal_AddColor
 		dbf	d0,-
 +		rts
-; End of function Pal_FromBlack
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -68,40 +88,22 @@ Pal_AddColor:
 		rts
 +		addq.w	#2,a0
 		rts
-; End of function Pal_AddColor
-
-; =============== S U B R O U T I N E =======================================
-
-Pal_FillBlack:
-		moveq	#0,d0
-		lea	(Normal_palette).w,a0
-		move.b	(Palette_fade_info).w,d0
-		adda.w	d0,a0
-		moveq	#0,d1
-		move.b	(Palette_fade_count).w,d0
-
--		move.w	d1,(a0)+
-		tst.b	(Water_flag).w
-		beq.s	+
-		move.w	d1,-(Normal_palette-(Water_palette-2))(a0)
-+		dbf	d0,-
-		rts
-; End of function Pal_FillBlack
 
 ; =============== S U B R O U T I N E =======================================
 
 Pal_FadeFrom:
 PaletteFadeOut:
 Pal_FadeToBlack:
-		move.w	#$3F,(Palette_fade_info).w
+		move.w	#64-1,(Palette_fade_info).w
 		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
+		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToBlack
+		bsr.w	Process_Kos_Module_Queue
 		dbf	d4,-
 		rts
-; End of function Pal_FadeToBlack
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -125,7 +127,6 @@ FadeOut_ToBlack:
 -		bsr.s	Pal_DecColor
 		dbf	d0,-
 		rts
-; End of function Pal_ToBlack
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -149,7 +150,6 @@ Pal_DecColor:
 		rts
 +		addq.w	#2,a0
 		rts
-; End of function Pal_DecColor
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -165,21 +165,22 @@ Pal_FillWhite:
 		dbf	d0,-
 		clr.w	(Pal_fade_delay2).w
 		rts
-; End of function Pal_FillWhite
 
 ; =============== S U B R O U T I N E =======================================
 
+Pal_FadeFromWhite:
 Pal_FromBlackWhite:
-		move.w	#$3F,(Palette_fade_info).w
+		move.w	#64-1,(Palette_fade_info).w
 		bsr.s	Pal_FillWhite
 		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
+		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromWhite
+		bsr.w	Process_Kos_Module_Queue
 		dbf	d4,-
 		rts
-; End of function Pal_FromBlackWhite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -210,7 +211,6 @@ Pal_FromWhite:
 -		bsr.s	Pal_DecColor2
 		dbf	d0,-
 +		rts
-; End of function Pal_FromWhite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -240,7 +240,6 @@ Pal_DecColor2:
 +		or.b	d5,d3
 		move.b	d3,(a0)+
 		rts
-; End of function Pal_DecColor2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -249,11 +248,12 @@ Pal_FadeToWhite:
 		moveq	#$15,d4
 
 -		move.b	#VintID_Fade,(V_int_routine).w
+		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToWhite
+		bsr.w	Process_Kos_Module_Queue
 		dbf	d4,-
 		rts
-; End of function Pal_FadeToWhite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -275,7 +275,6 @@ Pal_ToWhite:
 -		bsr.s	Pal_AddColor2
 		dbf	d0,-
 		rts
-; End of function Pal_ToWhite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -303,4 +302,3 @@ Pal_AddColor2:
 		rts
 +		addq.w	#2,a0
 		rts
-; End of function Pal_AddColor2

@@ -18,6 +18,9 @@ vdpComm function addr,type,rwd,(((type&rwd)&3)<<30)|((addr&$3FFF)<<16)|(((type&r
 ; all RAM addresses are run through this function to allow them to work in both 16-bit and 32-bit addressing modes
 ramaddr function x,(-(x&$80000000)<<1)|x
 
+; function using these variables
+id function ptr,((ptr-offset)/ptrsize+idstart)
+
 ; values for the type argument
 VRAM = %100001
 CRAM = %101011
@@ -37,6 +40,18 @@ dma68kToVDP macro source,dest,length,type
 	move.w	#((vdpComm(dest,type,DMA)>>16)&$FFFF),VDP_control_port-VDP_control_port(a5)
 	move.w	#(vdpComm(dest,type,DMA)&$FFFF),(DMA_trigger_word).w
 	move.w	(DMA_trigger_word).w,VDP_control_port-VDP_control_port(a5)
+	; From '  § 7  DMA TRANSFER' of https://emu-docs.org/Genesis/sega2f.htm:
+	;
+	; "In the case of ROM to VRAM transfers,
+	; a hardware feature causes occasional failure of DMA unless the
+	; following two conditions are observed:
+	;
+	; --The destination address write (to address $C00004) must be a word
+	;   write.
+	;
+	; --The final write must use the work RAM.
+	;   There are two ways to accomplish this, by copying the DMA program
+	;   into RAM or by doing a final "move.w ram address $C00004""
     endm
 
 ; tells the VDP to fill a region of VRAM with a certain byte
@@ -193,7 +208,7 @@ clearRAM2 macro startaddr,endaddr
     endif
     rept bytesTo2Lcnt((endaddr-startaddr) - ((startaddr)&1))
 	move.l	d0,(a1)+
-    endm
+    endr
     if (((endaddr-startaddr) - ((startaddr)&1))&2)
 	move.w	d0,(a1)+
     endif
@@ -294,7 +309,7 @@ resetZ80 macro
 resetZ80a macro
 
 	if OptimiseStopZ80=0
-	clr.w	(Z80_reset).l
+	move.w	#0,(Z80_reset).l
 	endif
 
     endm
@@ -307,7 +322,7 @@ resetZ80a macro
 startZ80 macro
 
 	if OptimiseStopZ80=0
-	clr.w	(Z80_bus_request).l    ; start the Z80
+	move.w	#0,(Z80_bus_request).l    ; start the Z80
 	endif
 
     endm
@@ -338,7 +353,7 @@ stopZ802 macro
 startZ802 macro
 
 	if OptimiseStopZ80=2
-	clr.w	(Z80_bus_request).l    ; start the Z80
+	move.w	#0,(Z80_bus_request).l    ; start the Z80
 	endif
 
     endm
@@ -349,7 +364,11 @@ startZ802 macro
 
 waitZ80time macro time
 	move.w	#(time),d0
+
 -	nop
+	nop
+	nop
+	nop
 	dbf	d0,-
     endm
 
@@ -595,6 +614,14 @@ palscriptdata	macro frames, data
 	dc.w .framec
     endm
 
+; macro to define a palette script data from an external file
+palscriptfile	macro frames, data
+.framec :=	frames-1
+	shift
+	binclude ALLARGS
+	dc.w .framec
+    endm
+
 ; macro to repeat script from start
 palscriptrept	macro header
 	dc.w -4
@@ -616,116 +643,43 @@ palscriptrun	macro header
 ; input: track, terminate routine, branch or jump, move operand size
 ; ---------------------------------------------------------------------------
 
-music:		macro track,terminate,branch,byte
-		  if (OptimiseSound<>0)
-			move.b	#track,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
-		    if ("terminate"<>"0")
-			rts
-		    endif
-		  else
-	 	    if ("byte"<>"0")
+music:		macro track,terminate,byte
+	 	    if ("byte"="0") || ("byte"="")
 			moveq	#signextendB(track),d0
 		    else
 			move.w	#track,d0
 		    endif
-		    if ("branch"<>"0")
-		      if ("terminate"="0")
-			bsr.w	PlaySound
+		      if ("terminate"="0") || ("terminate"="")
+			jsr	(SMPS_QueueSound1).w
 		      else
-			bra.w	PlaySound
+			jmp	(SMPS_QueueSound1).w
 		      endif
-		    else
-		      if ("terminate"="0")
-			jsr	(PlaySound).w
-		      else
-			jmp	(PlaySound).w
-		      endif
-		    endif
-		  endif
 	    endm
 
-music2:		macro track,terminate,branch,byte
-		  if (OptimiseSound<>0)
-			move.b	#track,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
-		    if ("terminate"<>"0")
-			rts
-		    endif
-		  else
-	 	    if ("byte"<>"0")
+sfx:		macro track,terminate,byte
+	 	    if ("byte"="0") || ("byte"="")
 			moveq	#signextendB(track),d0
 		    else
 			move.w	#track,d0
 		    endif
-		    if ("branch"<>"0")
-		      if ("terminate"="0")
-			bsr.w	PlaySound
+		      if ("terminate"="0") || ("terminate"="")
+			jsr	(SMPS_QueueSound2).w
 		      else
-			bra.w	PlaySound
+			jmp	(SMPS_QueueSound2).w
 		      endif
-		    else
-		      if ("terminate"="0")
-			jsr	(PlaySound).w
-		      else
-			jmp	(PlaySound).w
-		      endif
-		    endif
-		  endif
 	    endm
 
-sfx:		macro track,terminate,branch,byte
-		  if (OptimiseSound<>0)
-			move.b	#track,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
-		    if ("terminate"<>"0")
-			rts
-		    endif
-		  else
-	 	    if ("byte"<>"0")
+sample:		macro track,terminate,byte
+	 	    if ("byte"="0") || ("byte"="")
 			moveq	#signextendB(track),d0
 		    else
 			move.w	#track,d0
 		    endif
-		    if ("branch"<>"0")
-		      if ("terminate"="0")
-			bsr.w	PlaySound_Special
+		      if ("terminate"="0") || ("terminate"="")
+			jsr	(SMPS_PlayDACSample).w
 		      else
-			bra.w	PlaySound_Special
+			jmp	(SMPS_PlayDACSample).w
 		      endif
-		    else
-		      if ("terminate"="0")
-			jsr	(PlaySound_Special).w
-		      else
-			jmp	(PlaySound_Special).w
-		      endif
-		    endif
-		  endif
-	    endm
-
-sfx2:		macro track,terminate,branch,byte
-		  if (OptimiseSound<>0)
-			move.b	#track,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
-		    if ("terminate"<>"0")
-			rts
-		    endif
-		  else
-	 	    if ("byte"<>"0")
-			moveq	#signextendB(track),d0
-		    else
-			move.w	#track,d0
-		    endif
-		    if ("branch"<>"0")
-		      if ("terminate"="0")
-			bsr.w	PlaySound_Special
-		      else
-			bra.w	PlaySound_Special
-		      endif
-		    else
-		      if ("terminate"="0")
-			jsr	(PlaySound_Special).w
-		      else
-			jmp	(PlaySound_Special).w
-		      endif
-		    endif
-		  endif
 	    endm
 
 ; ---------------------------------------------------------------------------
@@ -893,7 +847,7 @@ LoadMapUnc	macro offset,size,arg,vram,width,height
 	move.l	(a0)+,(a1)
 	add.w	d0,(a1)+
 	add.w	d0,(a1)+
- endm
+ endr
 	dbf	d1,-
 	lea	(RAM_start).l,a1
 	locVRAM	vram,d0

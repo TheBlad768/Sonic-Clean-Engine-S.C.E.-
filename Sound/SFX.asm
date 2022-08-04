@@ -70,13 +70,13 @@ Sound49:	include	"Sound/SFX/Snd49 - Insta Attack.asm"
 	even
 Sound4A:	include	"Sound/SFX/Snd4A - Fire Shield.asm"
 	even
-Sound4B:	include	"Sound/SFX/Snd4B - Buble Shield.asm"
+Sound4B:	include	"Sound/SFX/Snd4B - Bubble Shield.asm"
 	even
 Sound4C:	include	"Sound/SFX/Snd4C - Light Shield.asm"
 	even
 Sound4D:	include	"Sound/SFX/Snd4D - Fire Attack.asm"
 	even
-Sound4E:	include	"Sound/SFX/Snd4E - Buble Attack.asm"
+Sound4E:	include	"Sound/SFX/Snd4E - Bubble Attack.asm"
 	even
 Sound4F:	include	"Sound/SFX/Snd4F - Light Attack.asm"
 	even

@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Spring (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -8,8 +11,8 @@ Obj_Spring:
 		move.b	#32/2,width_pixels(a0)
 		move.b	#32/2,height_pixels(a0)
 		move.w	#$200,priority(a0)
-		move.w	x_pos(a0),$32(a0)
-		move.w	y_pos(a0),$34(a0)
+		move.w	x_pos(a0),objoff_32(a0)
+		move.w	y_pos(a0),objoff_34(a0)
 		move.b	subtype(a0),d0
 		lsr.w	#3,d0
 		andi.w	#$E,d0
@@ -72,7 +75,7 @@ loc_22E96:
 Spring_Common:
 		move.b	subtype(a0),d0
 		andi.w	#2,d0
-		move.w	word_22EF0(pc,d0.w),$30(a0)
+		move.w	word_22EF0(pc,d0.w),objoff_30(a0)
 		btst	#1,d0
 		beq.s	locret_22EEE
 		move.l	#Map_Spring2,mappings(a0)	; set yellow
@@ -93,18 +96,16 @@ Obj_Spring_Up:
 		move.w	#$10,d3
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1
-		moveq	#3,d6
-		movem.l	d1-d4,-(sp)
-		bsr.w	SolidObjectFull2_1P
-		btst	#3,status(a0)
+		moveq	#p1_standing_bit,d6
+		jsr	SolidObjectFull2_1P(pc)
+		btst	#p1_standing_bit,status(a0)
 		beq.s	loc_22F1C
 		bsr.s	sub_22F98
 
 loc_22F1C:
-		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -114,12 +115,12 @@ sub_22F98:
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	+
 		subi.w	#$10,y_pos(a1)
-+		move.w	$30(a0),y_vel(a1)
++		move.w	objoff_30(a0),y_vel(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
-		move.b	#$10,anim(a1)
+		move.b	#id_Spring,anim(a1)
 		move.b	#id_SonicControl,routine(a1)
 		move.b	subtype(a0),d0
 		bpl.s	loc_22FE0
@@ -157,8 +158,7 @@ loc_23036:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_23048:
-		sfx	sfx_Spring,1,0,0
-; End of function sub_22F98
+		sfx	sfx_Spring,1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -168,9 +168,8 @@ Obj_Spring_Horizontal:
 		move.w	#$F,d3
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1
-		moveq	#3,d6
-		movem.l	d1-d4,-(sp)
-		bsr.w	SolidObjectFull2_1P
+		moveq	#p1_standing_bit,d6
+		jsr	SolidObjectFull2_1P(pc)
 		swap	d6
 		andi.w	#1,d6
 		beq.s	loc_23092
@@ -186,18 +185,17 @@ loc_23088:
 		bsr.s	sub_23190
 
 loc_23092:
-		movem.l	(sp)+,d1-d4
 		bsr.w	sub_2326C
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	$32(a0),d0
-		bra.w	Sprite_OnScreen_Test2
+		move.w	objoff_32(a0),d0
+		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_23190:
 		move.w	#3<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
-		move.w	$30(a0),x_vel(a1)
+		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
 		bset	#Status_Facing,status(a1)
 		btst	#0,status(a0)
@@ -254,8 +252,7 @@ loc_2324C:
 		bclr	#6,status(a0)
 		bclr	#Status_Push,status(a1)
 		clr.b	double_jump_flag(a1)
-		sfx	sfx_Spring,1,0,0
-; End of function sub_23190
+		sfx	sfx_Spring,1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -300,7 +297,6 @@ loc_232B6:
 
 locret_23324:
 		rts
-; End of function sub_2326C
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -310,18 +306,16 @@ Obj_Spring_Down:
 		move.w	#9,d3
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1
-		moveq	#3,d6
-		movem.l	d1-d4,-(sp)
-		bsr.w	SolidObjectFull2_1P
+		moveq	#p1_standing_bit,d6
+		jsr	SolidObjectFull2_1P(pc)
 		cmpi.w	#-2,d4
 		bne.s	loc_2334C
 		bsr.s	sub_233CA
 
 loc_2334C:
-		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		bra.w	Sprite_OnScreen_Test
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -331,7 +325,7 @@ sub_233CA:
 		beq.s	+
 		addi.w	#$10,y_pos(a1)
 +		move.w	#1<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
-		move.w	$30(a0),y_vel(a1)
+		move.w	objoff_30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		cmpi.w	#$1000,y_vel(a1)
 		bne.s	loc_233F8
@@ -379,8 +373,7 @@ loc_2346C:
 		clr.b	jumping(a1)
 		move.b	#id_SonicControl,routine(a1)
 		clr.b	double_jump_flag(a1)
-		sfx	sfx_Spring,1,0,0
-; End of function sub_233CA
+		sfx	sfx_Spring,1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -388,21 +381,19 @@ Obj_Spring_UpDiag:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	x_pos(a0),d4
-		lea	byte_236EA(pc),a2
+		lea	ObjSpring_SlopeData_DiagUp(pc),a2
 		lea	(Player_1).w,a1
-		moveq	#3,d6
-		movem.l	d1-d4,-(sp)
-		bsr.w	sub_1DD24
-		btst	#3,status(a0)
+		moveq	#p1_standing_bit,d6
+		jsr	sub_1DD24(pc)
+		btst	#p1_standing_bit,status(a0)
 		beq.s	loc_234B8
 		bsr.s	sub_234E6
 
 loc_234B8:
-		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	$32(a0),d0
-		bra.w	Sprite_OnScreen_Test2
+		move.w	objoff_32(a0),d0
+		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -426,8 +417,8 @@ loc_234FC:
 
 loc_2350A:
 		move.w	#5<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
-		move.w	$30(a0),y_vel(a1)
-		move.w	$30(a0),x_vel(a1)
+		move.w	objoff_30(a0),y_vel(a1)
+		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -441,7 +432,7 @@ loc_23542:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#$10,anim(a1)
+		move.b	#id_Spring,anim(a1)
 		move.b	#id_SonicControl,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
@@ -475,8 +466,7 @@ loc_235B8:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_235CA:
-		sfx	sfx_Spring,1,0,0
-; End of function sub_234E6
+		sfx	sfx_Spring,1
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -484,29 +474,27 @@ Obj_Spring_DownDiag:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	x_pos(a0),d4
-		lea	byte_23706(pc),a2
+		lea	ObjSpring_SlopeData_DiagDown(pc),a2
 		lea	(Player_1).w,a1
-		moveq	#3,d6
-		movem.l	d1-d4,-(sp)
-		bsr.w	sub_1DD24
+		moveq	#p1_standing_bit,d6
+		jsr	sub_1DD24(pc)
 		cmpi.w	#-2,d4
 		bne.s	loc_235F8
 		bsr.s	sub_23624
 
 loc_235F8:
-		movem.l	(sp)+,d1-d4
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	$32(a0),d0
-		bra.w	Sprite_OnScreen_Test2
+		move.w	objoff_32(a0),d0
+		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_23624:
 		move.w	#5<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
-		move.w	$30(a0),y_vel(a1)
+		move.w	objoff_30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
-		move.w	$30(a0),x_vel(a1)
+		move.w	objoff_30(a0),x_vel(a1)
 		subq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -553,68 +541,15 @@ loc_236D0:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_236E2:
-		sfx	sfx_Spring,1,0,0
-; End of function sub_23624
+		sfx	sfx_Spring,1
 ; ---------------------------------------------------------------------------
 
-byte_236EA:
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $E
-		dc.b $C
-		dc.b $A
-		dc.b 8
-		dc.b 6
-		dc.b 4
-		dc.b 2
-		dc.b 0
-		dc.b $FE
-		dc.b $FC
-		dc.b $FC
-		dc.b $FC
-		dc.b $FC
-		dc.b $FC
-		dc.b $FC
-		dc.b $FC
-byte_23706:
-		dc.b $F4
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F0
-		dc.b $F2
-		dc.b $F4
-		dc.b $F6
-		dc.b $F8
-		dc.b $FA
-		dc.b $FC
-		dc.b $FE
-		dc.b 0
-		dc.b 2
-		dc.b 4
-		dc.b 4
-		dc.b 4
-		dc.b 4
-		dc.b 4
-		dc.b 4
-		dc.b 4
+ObjSpring_SlopeData_DiagUp:
+		dc.b $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $E, $C, $A, 8
+		dc.b 6, 4, 2, 0, $FE, $FC, $FC, $FC, $FC, $FC, $FC, $FC
+ObjSpring_SlopeData_DiagDown:
+		dc.b $F4, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F2, $F4, $F6, $F8
+		dc.b $FA, $FC, $FE, 0, 2, 4, 4, 4, 4, 4, 4, 4
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Spring/Object Data/Anim - Spring.asm"

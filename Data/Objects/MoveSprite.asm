@@ -13,7 +13,6 @@ MoveSprite:
 		asl.l	#8,d0				; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d0,y_pos(a0)		; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		rts
-; End of function MoveSprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -28,7 +27,6 @@ MoveSprite2:
 		asl.l	#8,d0				; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d0,y_pos(a0)		; add to y-axis position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		rts
-; End of function MoveSprite2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -48,7 +46,6 @@ MoveSprite_ReverseGravity:
 		asl.l	#8,d0				; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d0,y_pos(a0)		; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		rts
-; End of function MoveSprite_TestGravity
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -67,7 +64,6 @@ MoveSprite2_ReverseGravity:
 		asl.l	#8,d0				; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d0,y_pos(a0)		; add to y-axis position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		rts
-; End of function MoveSprite_TestGravity2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -85,7 +81,6 @@ MoveSprite_CustomGravity:
 		asl.l	#8,d0
 		add.l	d0,y_pos(a0)
 		rts
-; End of function MoveSprite_LightGravity
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -101,7 +96,6 @@ MoveSprite_NormGravity:
 		asl.l	#8,d0
 		add.l	d0,y_pos(a1)
 		rts
-; End of function MoveSprite_NormGravity
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -116,7 +110,6 @@ MoveSprite_Reserve:
 		asl.l	#8,d0
 		add.l	d0,objoff_34(a0)
 		rts
-; End of function MoveSprite_Reserve
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -130,4 +123,3 @@ MoveSprite2_Reserve:
 		asl.l	#8,d0
 		add.l	d0,objoff_34(a0)
 		rts
-; End of function MoveSprite2_Reserve

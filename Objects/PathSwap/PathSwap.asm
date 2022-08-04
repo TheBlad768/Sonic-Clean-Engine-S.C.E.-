@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Path Swapper (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -49,9 +52,9 @@ loc_1CD3C:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1CDDA
-		bra.w	Delete_Sprite_If_Not_In_Range
+		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
-+		bra.w	Sprite_OnScreen_Test
++		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -149,7 +152,6 @@ loc_1CEDE:
 
 locret_1CEF0:
 		rts
-; End of function sub_1CDDA
 ; ---------------------------------------------------------------------------
 
 loc_1CEF2:
@@ -159,9 +161,9 @@ loc_1CEF2:
 		lea	$34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1CF42
-		bra.w	Delete_Sprite_If_Not_In_Range
+		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
-+		bra.w	Sprite_OnScreen_Test
++		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -259,7 +261,6 @@ loc_1D046:
 
 locret_1D058:
 		rts
-; End of function sub_1CF42
 ; ---------------------------------------------------------------------------
 
 		include "Objects/PathSwap/Object Data/Map - Path Swap.asm"

@@ -7,7 +7,7 @@
 		include "Objects/Monitor/Monitor.asm"
 		include "Objects/Spring/Spring.asm"
 		include "Objects/Spikes/Spikes.asm"
-		include "Objects/SpinForcer/SpinForcer.asm"
+		include "Objects/AutoSpin/AutoSpin.asm"
 		include "Objects/Invisible Barrier/Invisible Barrier.asm"
 		include "Objects/Invisible Hurt Block/Invisible Hurt Block Horizontal.asm"
 		include "Objects/Invisible Hurt Block/Invisible HurtBlock Vertical.asm"

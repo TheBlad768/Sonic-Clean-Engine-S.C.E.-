@@ -11,10 +11,9 @@ GetSineCosine:
 		andi.w	#$FF,d0
 		addq.w	#8,d0
 		add.w	d0,d0
-		move.w	SineTable+($40*2)-16(pc,d0.w),d1
-		move.w	SineTable-16(pc,d0.w),d0
+		move.w	SineTable+($40*2)-16(pc,d0.w),d1	; cos
+		move.w	SineTable-16(pc,d0.w),d0			; sin
 		rts
-; End of function GetSineCosine
 ; ---------------------------------------------------------------------------
 
 SineTable:	binclude	"Misc Data/Sine.bin"

@@ -14,7 +14,6 @@ Clear_DisplayData:
 		clearRAM H_scroll_buffer, H_scroll_buffer_End
 		startZ80
 		bra.w	Init_SpriteTable
-; End of function Clear_DisplayData
 ; ---------------------------------------------------------------------------
 ; Copies a plane map to a plane PNT, used for a 28-cell wide plane
 ; Inputs:
@@ -68,7 +67,6 @@ Plane_Map_To_VRAM:
 		add.l	d4,d0			; move onto next row
 		dbf	d2,.loop				; and copy it
 		rts
-; End of function Plane_Map_To_VRAM
 ; ---------------------------------------------------------------------------
 ; Copies a plane map to a plane PNT
 ; Inputs:
@@ -95,7 +93,6 @@ Plane_Map_To_Add_VRAM:
 		add.l	d4,d0	; move onto next row
 		dbf	d2,--		; and copy it
 		rts
-; End of function Plane_Map_To_Add_VRAM
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -122,7 +119,7 @@ Copy_Map_Line_To_VRAM:
 		bsr.s	RAM_Map_Data_Copy
 		enableInts
 +		rts
-; End of function Copy_Map_Line_To_VRAM
+
 ; =============== S U B R O U T I N E =======================================
 
 RAM_Map_Data_Copy:
@@ -131,7 +128,6 @@ RAM_Map_Data_Copy:
 -		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,-				; copy one row
 		rts
-; End of function RAM_Map_Data_Copy
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -147,7 +143,6 @@ RAM_Map_Data_To_VDP:
 		addi.l	#vdpCommDelta(planeLocH40(0,1)),d0
 		dbf	d2,-
 		rts
-; End of function RAM_Map_Data_To_VDP
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -155,10 +150,10 @@ ClearVRAMArea:
 		lea	(VDP_data_port).l,a6
 		move.l	d0,VDP_control_port-VDP_data_port(a6)
 		moveq	#0,d0
+
 -		move.l	d0,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,-
 		rts
-; End of function ClearVRAMArea
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -173,4 +168,3 @@ CalcVRAM2:
 		ori.w	#$4000,d0
 		swap	d0
 		rts
-; End of function CalcVRAM

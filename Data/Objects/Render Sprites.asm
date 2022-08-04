@@ -18,7 +18,6 @@ Init_SpriteTable:
 		move.b	d0,-5(a0)
 		clearRAM Sprite_table_input, Sprite_table_input_End
 		rts
-; End of function Init_SpriteTable
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -49,7 +48,7 @@ Render_Sprites_ObjLoop:
 		btst	#6,d6								; is the multi-draw flag set?
 		bne.w	Render_Sprites_MultiDraw			; if it is, branch
 		btst	#2,d6								; is this to be positioned by screen coordinates?
-		beq.s	Render_Sprites_ScreenSpaceObj	; if it is, branch
+		beq.s	Render_Sprites_ScreenSpaceObj	; if not, branch
 		moveq	#0,d2
 		move.b	width_pixels(a0),d2
 		sub.w	(a3),d0
@@ -121,11 +120,11 @@ Render_Sprites_MultiDraw:
 		subi.w	#128,d0
 		move.w	d0,d3
 		add.w	d2,d3
-		bmi.w	Render_Sprites_NextObj
+		bmi.s	Render_Sprites_NextObj
 		move.w	d0,d3
 		sub.w	d2,d3
 		cmpi.w	#320,d3
-		bge.w	Render_Sprites_NextObj
+		bge.s	Render_Sprites_NextObj
 		addi.w	#128,d0
 
 		; check if object is within Y bounds
@@ -133,11 +132,11 @@ Render_Sprites_MultiDraw:
 		subi.w	#128,d1
 		move.w	d1,d3
 		add.w	d2,d3
-		bmi.w	Render_Sprites_NextObj
+		bmi.s	Render_Sprites_NextObj
 		move.w	d1,d3
 		sub.w	d2,d3
 		cmpi.w	#224,d3
-		bge.w	Render_Sprites_NextObj
+		bge.s	Render_Sprites_NextObj
 		addi.w	#128,d1
 		bra.s	loc_1AEE4
 ; ---------------------------------------------------------------------------
@@ -148,26 +147,26 @@ loc_1AEA2:
 		sub.w	(a3),d0
 		move.w	d0,d3
 		add.w	d2,d3
-		bmi.w	Render_Sprites_NextObj
+		bmi.s	Render_Sprites_NextObj
 		move.w	d0,d3
 		sub.w	d2,d3
-		cmpi.w	#$140,d3
+		cmpi.w	#320,d3
 		bge.w	Render_Sprites_NextObj
-		addi.w	#$80,d0
+		addi.w	#128,d0
 		sub.w	4(a3),d1
 		move.b	height_pixels(a0),d2
 		add.w	d2,d1
 		and.w	(Screen_Y_wrap_value).w,d1
 		move.w	d2,d3
 		add.w	d2,d2
-		addi.w	#$E0,d2
+		addi.w	#224,d2
 		cmp.w	d2,d1
 		bhs.w	Render_Sprites_NextObj
-		addi.w	#$80,d1
+		addi.w	#128,d1
 		sub.w	d3,d1
 
 loc_1AEE4:
-		ori.b	#$80,render_flags(a0)
+		ori.b	#$80,render_flags(a0)				; set on-screen flag
 		tst.w	d7
 		bmi.w	Render_Sprites_NextObj
 		move.w	art_tile(a0),d5
@@ -196,12 +195,12 @@ loc_1AF1C:
 loc_1AF2A:
 		move.w	(a0)+,d0
 		move.w	(a0)+,d1
-		btst	#2,d6
-		beq.s	loc_1AF46
+		btst	#2,d6								; is this to be positioned by screen coordinates?
+		beq.s	loc_1AF46						; if not, branch
 		sub.w	(a3),d0
-		addi.w	#$80,d0
+		addi.w	#128,d0
 		sub.w	4(a3),d1
-		addi.w	#$80,d1
+		addi.w	#128,d1
 		and.w	(Screen_Y_wrap_value).w,d1
 
 loc_1AF46:
@@ -222,7 +221,6 @@ loc_1AF62:
 		tst.w	d7
 		dbmi	d3,loc_1AF2A
 		bra.w	Render_Sprites_NextObj
-; End of function Render_Sprites
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -288,22 +286,10 @@ loc_1AFCE:
 ; ---------------------------------------------------------------------------
 
 byte_1AFD8:
-		dc.b 8
-		dc.b 8
-		dc.b 8
-		dc.b 8
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $18
-		dc.b $18
-		dc.b $18
-		dc.b $18
-		dc.b $20
-		dc.b $20
-		dc.b $20
-		dc.b $20
+		dc.b 8, 8, 8, 8
+		dc.b 16, 16, 16, 16
+		dc.b 24, 24, 24, 24
+		dc.b 32, 32, 32, 32
 ; ---------------------------------------------------------------------------
 
 loc_1AFE8:
@@ -339,22 +325,10 @@ loc_1B01E:
 ; ---------------------------------------------------------------------------
 
 byte_1B028:
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
+		dc.b 8, 16, 24, 32
+		dc.b 8, 16, 24, 32
+		dc.b 8, 16, 24, 32
+		dc.b 8, 16, 24, 32
 ; ---------------------------------------------------------------------------
 
 loc_1B038:
@@ -383,7 +357,6 @@ loc_1B066:
 		subq.w	#1,d7
 		dbmi	d4,loc_1B038
 		rts
-; End of function sub_1AF6C
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -398,7 +371,7 @@ loc_1B07A:
 		ext.w	d2
 		add.w	d1,d2
 		cmpi.w	#$60,d2
-		bls.s	loc_1B0BA
+		bls.s		loc_1B0BA
 		cmpi.w	#$160,d2
 		bhs.s	loc_1B0BA
 		move.w	d2,(a6)+
@@ -410,7 +383,7 @@ loc_1B07A:
 		move.w	(a1)+,d2
 		add.w	d0,d2
 		cmpi.w	#$60,d2
-		bls.s	loc_1B0B2
+		bls.s		loc_1B0B2
 		cmpi.w	#$1C0,d2
 		bhs.s	loc_1B0B2
 		move.w	d2,(a6)+
@@ -479,22 +452,10 @@ loc_1B114:
 ; ---------------------------------------------------------------------------
 
 byte_1B11C:
-		dc.b 8
-		dc.b 8
-		dc.b 8
-		dc.b 8
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $10
-		dc.b $18
-		dc.b $18
-		dc.b $18
-		dc.b $18
-		dc.b $20
-		dc.b $20
-		dc.b $20
-		dc.b $20
+		dc.b 8, 8, 8, 8
+		dc.b 16, 16, 16, 16
+		dc.b 24, 24, 24, 24
+		dc.b 32, 32, 32, 32
 ; ---------------------------------------------------------------------------
 
 loc_1B12C:
@@ -545,22 +506,10 @@ loc_1B184:
 ; ---------------------------------------------------------------------------
 
 byte_1B18C:
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
-		dc.b 8
-		dc.b $10
-		dc.b $18
-		dc.b $20
+		dc.b 8, 16, 24, 32
+		dc.b 8, 16, 24, 32
+		dc.b 8, 16, 24, 32
+		dc.b 8, 16, 24, 32
 ; ---------------------------------------------------------------------------
 
 loc_1B19C:
@@ -604,4 +553,3 @@ loc_1B1EC:
 		addq.w	#4,a1
 		dbf	d4,loc_1B19C
 		rts
-; End of function sub_1B070

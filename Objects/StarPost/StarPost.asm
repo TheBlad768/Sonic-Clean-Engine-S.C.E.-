@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; StarPost (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -64,7 +67,7 @@ sub_2D028:
 		addi.w	#$40,d0
 		cmpi.w	#$68,d0
 		bhs.w	locret_2D0E8
-		sfx	sfx_Lamppost,0,0,0
+		sfx	sfx_Lamppost
 		jsr	(Create_New_Sprite).w
 		bne.s	loc_2D0D0
 		move.l	#Obj_StarPost,address(a1)
@@ -103,7 +106,6 @@ loc_2D0EA:
 
 locret_2D0F6:
 		rts
-; End of function sub_2D028
 ; ---------------------------------------------------------------------------
 
 loc_2D0F8:
@@ -162,7 +164,6 @@ Save_Level_Data:
 		move.w	(Mean_water_level).w,(Saved_mean_water_level).w
 		move.b	(Water_full_screen_flag).w,(Saved_water_full_screen_flag).w
 		rts
-; End of function Save_Level_Data
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -190,7 +191,6 @@ Load_Starpost_Settings:
 		move.w	(Saved_mean_water_level).w,(Mean_water_level).w
 		move.b	(Saved_water_full_screen_flag).w,(Water_full_screen_flag).w
 +		rts
-; End of function Load_Starpost_Settings
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -236,7 +236,6 @@ sub_2D3C8:
 		lea	(ArtKosM_StarPostStars2).l,a1
 +		move.w	#tiles_to_bytes($5EC),d2
 		jmp	(Queue_Kos_Module).w
-; End of function sub_2D3C8
 ; ---------------------------------------------------------------------------
 
 loc_2D47E:	; 8

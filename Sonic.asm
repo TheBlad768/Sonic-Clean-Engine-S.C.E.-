@@ -5,6 +5,7 @@
 ; Assembly options
 ZoneCount:				= 1	; discrete zones are: DEZ
 GameDebug:				= 1	; if 1, enable debug mode for Sonic
+Lagometer:				= 1	; if 1, enable debug lagometer
 ExtendedCamera			= 0	; if 1, enable extended camera
 OptimiseSound:	  		= 1	; change to 1 to optimise sound queuing
 OptimiseStopZ80:	  		= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for controllers(ignores sound driver)
@@ -247,12 +248,6 @@ EndOfHeader:
 		include "Data/Objects/TouchResponse.asm"
 
 ; ---------------------------------------------------------------------------
-; Interrupt Handler Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/Interrupt Handler.asm"
-
-; ---------------------------------------------------------------------------
 ; Resize Events Subroutine
 ; ---------------------------------------------------------------------------
 
@@ -287,6 +282,12 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/LevelSetup.asm"
+
+; ---------------------------------------------------------------------------
+; Interrupt Handler Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load sonic object
@@ -355,6 +356,12 @@ EndOfHeader:
 		include "Objects/Sonic/Object Data/Sonic pattern load cues.asm"
 
 ; ---------------------------------------------------------------------------
+; Subroutine to load level events
+; ---------------------------------------------------------------------------
+
+		include "Pointers/Levels Events.asm"
+
+; ---------------------------------------------------------------------------
 ; Levels data pointers
 ; ---------------------------------------------------------------------------
 
@@ -389,15 +396,11 @@ EndOfHeader:
 ; Uncompressed player graphics pointers
 ; ---------------------------------------------------------------------------
 
-		align $8000
-
 		include "Pointers/Uncompressed Player Data.asm"
 
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics pointers
 ; ---------------------------------------------------------------------------
-
-		align $8000
 
 		include "Pointers/Uncompressed Data.asm"
 

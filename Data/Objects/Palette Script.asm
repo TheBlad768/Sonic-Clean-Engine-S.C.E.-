@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Palette script subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -33,7 +36,6 @@ loc_85994:
 loc_859CA:
 		addq.w	#8,a1						; go to next script
 		bra.s	loc_85994					; run the code again
-; End of function Run_PalRotationScript
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -77,7 +79,6 @@ loc_85A02:
 		movea.l	(sp)+,a1
 		addq.w	#4,sp
 		bra.s	loc_859CA
-; End of function Run_PalRotationScript_Main
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -107,7 +108,6 @@ Run_PalRotationScript2:
 
 locret_85A58:
 		rts
-; End of function Run_PalRotationScript2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -117,7 +117,6 @@ SetPointer_PalRotation:
 		move.l	(a1)+,(a2)+
 		clr.w	(a2)
 		rts
-; End of function SetPointer_PalRotation
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -161,7 +160,6 @@ DecColor_Obj:
 
 locret_855B0:
 		rts
-; End of function DecColor_Obj
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -213,7 +211,6 @@ IncColor_Obj:
 +		or.b	d3,d4
 		move.b	d4,(a1)+
 		rts
-; End of function IncColor_Obj
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -268,7 +265,6 @@ IncColor_Obj2:
 
 locret_85EE4:
 		rts
-; End of function IncColor_Obj2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -318,4 +314,3 @@ DecColor_Obj2:
 +		or.b	d4,d5
 		move.b	d5,(a1)+
 		rts
-; End of function DecColor_Obj2
