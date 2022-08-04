@@ -19,7 +19,7 @@ LeveSelect_MusicTestCount:	= 8
 LeveSelect_SoundTestCount:	= LeveSelect_MusicTestCount+1
 LeveSelect_SampleTestCount:	= LeveSelect_SoundTestCount+1
 LeveSelect_MaxCount:			= 11
-LeveSelect_MaxMusicNumber:	= (bgm__Last-bgm__First)+1
+LeveSelect_MaxMusicNumber:	= (bgm__Last-bgm__First)
 LeveSelect_MaxSoundNumber:	= (sfx__Last-sfx__First)
 LeveSelect_MaxSampleNumber:	= (dac__Last-dac__First)
 
@@ -148,6 +148,7 @@ LevelSelect_LoadMusicNumber:
 		move.w	(Music_test_count).w,d0
 		bsr.s	LevelSelect_FindLeftRightControls
 		move.w	d0,(Music_test_count).w
+		addq.w	#1,d0
 		move.b	(Ctrl_1_pressed).w,d1
 		andi.b	#$70,d1
 		beq.s	LevelSelect_LoadLevel_Return
