@@ -6,85 +6,85 @@
 	IncludeDAC	SegaPCM,	snd
 
     if SMPS_S1DACSamples||SMPS_S2DACSamples
-	IncludeDAC	Kick,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Snare,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Timpani,	dpcm,		Sonic 1 & 2
+	IncludeDAC	Kick,		snd,		Sonic 1 & 2
+	IncludeDAC	Snare,		snd,		Sonic 1 & 2
+	IncludeDAC	Timpani,	snd,		Sonic 1 & 2
     endif
 
     if SMPS_S2DACSamples
-	IncludeDAC	Clap,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Scratch,	dpcm,		Sonic 1 & 2
-	IncludeDAC	Tom,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Bongo,		dpcm,		Sonic 1 & 2
+	IncludeDAC	Clap,		snd,		Sonic 1 & 2
+	IncludeDAC	Scratch,	snd,		Sonic 1 & 2
+	IncludeDAC	Tom,		snd,		Sonic 1 & 2
+	IncludeDAC	Bongo,		snd,		Sonic 1 & 2
     endif
 
     if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
-	IncludeDAC	SnareS3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	TomS3,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	KickS3,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MuffledSnare,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	CrashCymbal,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	RideCymbal,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalHit2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalHit3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ClapS3,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ElectricTom,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareS32,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	TimpaniS3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareS33,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	Click,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	PowerKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	QuickGlassCrash,dpcm,		Sonic 3 & K & 3D
+	IncludeDAC	SnareS3,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	TomS3,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	KickS3,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	MuffledSnare,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	CrashCymbal,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	RideCymbal,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	MetalHit,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	MetalHit2,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	MetalHit3,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	ClapS3,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	ElectricTom,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	SnareS32,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	TimpaniS3,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	SnareS33,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	Click,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	PowerKick,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	QuickGlassCrash,snd,		Sonic 3 & K & 3D
     endif
 
     if SMPS_S3DACSamples||SMPS_SKDACSamples
-	IncludeDAC	GlassCrashSnare,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	GlassCrash,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	GlassCrashKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	QuietGlassCrash,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	KickBass,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ComeOn,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	DanceSnare,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	LooseKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	LooseKick2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	Woo,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	Go,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareGo,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	PowerTom,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	WoodBlock,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HitDrum,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalCrashHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	EchoedClapHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HipHopHitKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HipHopPowerKick,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	BassHey,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	DanceStyleKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HipHopHitKick2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	RevFadingWind,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ScratchS3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	LooseSnareNoise,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	PowerKick2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	CrashNoiseWoo,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	QuickHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	KickHey,	dpcm,		Sonic 3 & K & 3D
+	IncludeDAC	GlassCrashSnare,snd,		Sonic 3 & K & 3D
+	IncludeDAC	GlassCrash,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	GlassCrashKick,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	QuietGlassCrash,snd,		Sonic 3 & K & 3D
+	IncludeDAC	SnareKick,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	KickBass,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	ComeOn,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	DanceSnare,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	LooseKick,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	LooseKick2,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	Woo,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	Go,		snd,		Sonic 3 & K & 3D
+	IncludeDAC	SnareGo,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	PowerTom,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	WoodBlock,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	HitDrum,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	MetalCrashHit,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	EchoedClapHit,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	HipHopHitKick,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	HipHopPowerKick,snd,		Sonic 3 & K & 3D
+	IncludeDAC	BassHey,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	DanceStyleKick,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	HipHopHitKick2,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	RevFadingWind,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	ScratchS3,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	LooseSnareNoise,snd,		Sonic 3 & K & 3D
+	IncludeDAC	PowerKick2,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	CrashNoiseWoo,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	QuickHit,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	KickHey,	snd,		Sonic 3 & K & 3D
     endif
 
     if SMPS_S3DDACSamples
-	IncludeDAC	MetalCrashS3D,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	IntroKickS3D,	dpcm,		Sonic 3 & K & 3D
+	IncludeDAC	MetalCrashS3D,	snd,		Sonic 3 & K & 3D
+	IncludeDAC	IntroKickS3D,	snd,		Sonic 3 & K & 3D
     endif
 
     if SMPS_S3DACSamples
-	IncludeDAC	EchoedClapHitS3,dpcm,		Sonic 3 & K & 3D
+	IncludeDAC	EchoedClapHitS3,snd,		Sonic 3 & K & 3D
     endif
 
     if SMPS_SCDACSamples
-	IncludeDAC	Beat,		dpcm,		Sonic Crackers
-	IncludeDAC	SnareSC,	dpcm,		Sonic Crackers
-	IncludeDAC	TimTom,		dpcm,		Sonic Crackers
-	IncludeDAC	LetsGo,		dpcm,		Sonic Crackers
-	IncludeDAC	Hey,		dpcm,		Sonic Crackers
+	IncludeDAC	Beat,		snd,		Sonic Crackers
+	IncludeDAC	SnareSC,	snd,		Sonic Crackers
+	IncludeDAC	TimTom,		snd,		Sonic Crackers
+	IncludeDAC	LetsGo,		snd,		Sonic Crackers
+	IncludeDAC	Hey,		snd,		Sonic Crackers
     endif
 	even

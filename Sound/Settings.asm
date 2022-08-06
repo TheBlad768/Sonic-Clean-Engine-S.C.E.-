@@ -1,6 +1,6 @@
 ; ========SONIC 1 GIT EQUATES========
 
-Size_of_Mega_PCM_guess = $3D0
+Size_of_Mega_PCM_guess = $3F0
 
 ; ---FLAGS---
 SMPS_GloopSFXBehaviour	= 0
@@ -40,7 +40,7 @@ SMPS_EnablePWM	= 0
 
 SMPS_S1DACSamples		= 0
 SMPS_S2DACSamples		= 0
-SMPS_S3DACSamples		= 0
+SMPS_S3DACSamples		= 1
 SMPS_SKDACSamples		= 1
 SMPS_S3DDACSamples	= 0
 SMPS_SCDACSamples		= 0
