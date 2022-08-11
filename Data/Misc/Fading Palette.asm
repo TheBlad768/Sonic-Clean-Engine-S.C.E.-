@@ -28,11 +28,13 @@ Pal_FadeFromBlack:
 		bsr.s	Pal_FillBlack
 		moveq	#$15,d4
 
--		move.b	#VintID_Fade,(V_int_routine).w
+-		move.w	d4,-(sp)
+		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromBlack
 		bsr.w	Process_Kos_Module_Queue
+		move.w	(sp)+,d4
 		dbf	d4,-
 		rts
 
@@ -97,11 +99,13 @@ Pal_FadeToBlack:
 		move.w	#64-1,(Palette_fade_info).w
 		moveq	#$15,d4
 
--		move.b	#VintID_Fade,(V_int_routine).w
+-		move.w	d4,-(sp)
+		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToBlack
 		bsr.w	Process_Kos_Module_Queue
+		move.w	(sp)+,d4
 		dbf	d4,-
 		rts
 
@@ -174,11 +178,13 @@ Pal_FromBlackWhite:
 		bsr.s	Pal_FillWhite
 		moveq	#$15,d4
 
--		move.b	#VintID_Fade,(V_int_routine).w
+-		move.w	d4,-(sp)
+		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromWhite
 		bsr.w	Process_Kos_Module_Queue
+		move.w	(sp)+,d4
 		dbf	d4,-
 		rts
 
@@ -247,11 +253,13 @@ Pal_FadeToWhite:
 		move.w	#$3F,(Palette_fade_info).w
 		moveq	#$15,d4
 
--		move.b	#VintID_Fade,(V_int_routine).w
+-		move.w	d4,-(sp)
+		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_Kos_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToWhite
 		bsr.w	Process_Kos_Module_Queue
+		move.w	(sp)+,d4
 		dbf	d4,-
 		rts
 
