@@ -20,7 +20,7 @@ Do_ResizeEvents:
 		andi.w	#$FFFE,(Camera_max_Y_pos).w
 +
 		add.w	d1,(Camera_max_Y_pos).w
-		move.b	#1,(Camera_max_Y_pos_changing).w
+		st	(Camera_max_Y_pos_changing).w
 +
 		rts
 ; ---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ Do_ResizeEvents:
 		add.w	d1,d1
 +
 		add.w	d1,(Camera_max_Y_pos).w
-		move.b	#1,(Camera_max_Y_pos_changing).w
+		st	(Camera_max_Y_pos_changing).w
 
 LevelPointer_Null:
 		rts

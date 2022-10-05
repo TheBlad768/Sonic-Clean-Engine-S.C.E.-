@@ -39,7 +39,7 @@ Obj_WaterWave:
 		tst.b	(Ctrl_1_pressed_logical).w		; is Start pressed?
 		bpl.s	.anim					; if not, branch
 		addq.b	#3,mapping_frame(a0)
-		move.b	#1,objoff_32(a0)			; set pause flag
+		st	objoff_32(a0)					; set pause flag
 		bra.s	.setframe
 ; ---------------------------------------------------------------------------
 
