@@ -125,7 +125,8 @@ locret_83EC0:
 
 loc_83EC2:
 		jmp	(Go_Delete_Sprite).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_NormalExpControl:
 		subq.b	#1,$39(a0)				; Same as above, but uses regular explosions (no animals of course)
@@ -137,7 +138,8 @@ Obj_NormalExpControl:
 		move.b	#2,routine(a1)
 		bset	#7,art_tile(a1)
 		bra.s	loc_83E90
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_BossExpControl2:
 		subq.b	#1,$39(a0)
@@ -147,7 +149,8 @@ Obj_BossExpControl2:
 		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
 		bra.s	loc_83E90
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_BossExpControlOff:
 		subq.b	#1,$39(a0)
@@ -157,7 +160,8 @@ Obj_BossExpControlOff:
 		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
 		bra.w	loc_83E90
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosionSpecial:
 		move.w	#2,$2E(a0)
@@ -169,7 +173,8 @@ Obj_BossExplosionSpecial:
 		move.w	d0,y_pos(a0)
 		move.b	#2,$2C(a0)
 		bra.w	Obj_CreateBossExplosion
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosion1:
 		lea	ObjDat_BossExplosion1(pc),a1
@@ -184,13 +189,15 @@ Obj_BossExplosionAnim:
 		lea	AniRaw_BossExplosion(pc),a1
 		jsr	(Animate_RawNoSSTMultiDelay).w
 		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosion2:
 		lea	ObjDat_BossExplosion2(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		bra.s	loc_83F52
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosionOffset:
 		lea	ObjDat_BossExplosion1(pc),a1
@@ -203,7 +210,8 @@ Obj_BossExplosionOffsetAnim:
 		lea	AniRaw_BossExplosion(pc),a1
 		jsr	(Animate_RawNoSSTMultiDelay).w
 		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 ObjDat_BossExplosion1:
 		dc.l Map_BossExplosion
@@ -233,10 +241,12 @@ Child6_MakeBossExplosionOff:
 Child6_CreateBossExplosion:
 		dc.w 1-1
 		dc.l Obj_CreateBossExplosion
-		dc.b 0, 0
 Child6_MakeNormalExplosion:
 		dc.w 1-1
 		dc.l Obj_Explosion
+ChildObjDat_ExplosionSpecial:
+		dc.w 1-1
+		dc.l Obj_BossExplosionSpecial
 AniRaw_BossExplosion:
 		dc.b	0, 0
 		dc.b	0, 1

@@ -6,7 +6,7 @@
 
 DeleteObject:
 Delete_Current_Sprite:
-		movea.l	a0,a1
+		movea.w	a0,a1
 
 DeleteChild:
 DeleteObject2:
@@ -23,7 +23,7 @@ Delete_Referenced_Sprite:
 ; =============== S U B R O U T I N E =======================================
 
 Go_Delete_Sprite_3:
-		bset	#4,$38(a0)
+		bset	#4,objoff_38(a0)
 
 Go_Delete_Sprite:
 		move.l	#Delete_Current_Sprite,address(a0)
@@ -34,5 +34,5 @@ Go_Delete_Sprite:
 
 Go_Delete_Sprite_2:
 		move.l	#Delete_Current_Sprite,address(a0)
-		bset	#4,$38(a0)
+		bset	#4,objoff_38(a0)
 		rts

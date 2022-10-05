@@ -1,11 +1,11 @@
-DPLC_83B6C:
-		dc.w word_83B7A-DPLC_83B6C
-		dc.w word_83B80-DPLC_83B6C
-		dc.w word_83B86-DPLC_83B6C
-		dc.w word_83B8C-DPLC_83B6C
-		dc.w word_83B92-DPLC_83B6C
-		dc.w word_83B96-DPLC_83B6C
-		dc.w word_83B9A-DPLC_83B6C
+DPLC_EndSigns:
+		dc.w word_83B7A-DPLC_EndSigns
+		dc.w word_83B80-DPLC_EndSigns
+		dc.w word_83B86-DPLC_EndSigns
+		dc.w word_83B8C-DPLC_EndSigns
+		dc.w word_83B92-DPLC_EndSigns
+		dc.w word_83B96-DPLC_EndSigns
+		dc.w word_83B9A-DPLC_EndSigns
 word_83B7A:	dc.w 1
 		dc.w $20B
 		dc.w $2CB

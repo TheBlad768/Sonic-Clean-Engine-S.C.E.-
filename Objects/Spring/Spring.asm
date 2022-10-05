@@ -91,9 +91,9 @@ word_22EF0:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_Up:
-		move.w	#$1B,d1
-		move.w	#8,d2
-		move.w	#$10,d3
+		moveq	#$1B,d1
+		moveq	#8,d2
+		moveq	#$10,d3
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
@@ -131,7 +131,7 @@ loc_22FE0:
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)
+		clr.b	anim(a1)		; id_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -209,7 +209,7 @@ loc_231BE:
 		move.w	x_vel(a1),ground_vel(a1)
 		btst	#Status_Roll,status(a1)
 		bne.s	loc_231D8
-		clr.b	anim(a1)
+		clr.b	anim(a1)		; id_Walk
 
 loc_231D8:
 		move.b	subtype(a0),d0
@@ -221,7 +221,7 @@ loc_231E4:
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)
+		clr.b	anim(a1)		; id_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -341,7 +341,7 @@ loc_23404:
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)
+		clr.b	anim(a1)		; id_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -378,8 +378,8 @@ loc_2346C:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_UpDiag:
-		move.w	#$1B,d1
-		move.w	#$10,d2
+		moveq	#$1B,d1
+		moveq	#$10,d2
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagUp(pc),a2
 		lea	(Player_1).w,a1
@@ -416,7 +416,7 @@ loc_234FC:
 ; ---------------------------------------------------------------------------
 
 loc_2350A:
-		move.w	#5<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
+		move.w	#5<<8,anim(a0)	; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),y_vel(a1)
 		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#6,y_pos(a1)
@@ -439,7 +439,7 @@ loc_23542:
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)
+		clr.b	anim(a1)		; id_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -471,8 +471,8 @@ loc_235CA:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_DownDiag:
-		move.w	#$1B,d1
-		move.w	#$10,d2
+		moveq	#$1B,d1
+		moveq	#$10,d2
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagDown(pc),a2
 		lea	(Player_1).w,a1
@@ -514,7 +514,7 @@ loc_23660:
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)
+		clr.b	anim(a1)		; id_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0

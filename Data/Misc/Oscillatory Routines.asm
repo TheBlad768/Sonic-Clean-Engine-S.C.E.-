@@ -55,8 +55,9 @@ OscillateNumInit:
 		lea	(Oscillating_Numbers).w,a1
 		moveq	#bytesToWcnt(Osc_Data_End-Osc_Data),d1
 
--		move.w	(a2)+,(a1)+
-		dbf	d1,-
+.copy
+		move.w	(a2)+,(a1)+
+		dbf	d1,.copy
 		rts
 ; ---------------------------------------------------------------------------
 

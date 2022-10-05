@@ -605,7 +605,7 @@ Get_DeformDrawPosVert:
 		move.w	(a4)+,d2
 		move.w	(a6),d0
 		bsr.s	+
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 +
 -		cmp.w	d2,d0
 		bmi.s	+
@@ -878,8 +878,8 @@ Clear_Switches:
 
 Restart_LevelData:
 		clr.b	(Background_event_routine).w
-		clr.b	(Object_load_routine).w
-		clr.b	(Rings_manager_routine).w
+		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
+		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		clr.b	(Boss_flag).w
 		bsr.s	Clear_Switches
 		bsr.w	Load_Level
@@ -928,14 +928,17 @@ Offset_ObjectsDuringTransition:
 		lea	(Dynamic_object_RAM+next_object).w,a1
 		moveq	#((Dynamic_object_RAM_End-Dynamic_object_RAM)/object_size)-1,d2
 
--		tst.l	address(a1)
-		beq.s	+
+.check
+		tst.l	address(a1)
+		beq.s	.nextobj
 		btst	#2,render_flags(a1)
-		beq.s	+
+		beq.s	.nextobj
 		sub.w	d0,x_pos(a1)
 		sub.w	d1,y_pos(a1)
-+		lea	next_object(a1),a1
-		dbf	d2,-
+
+.nextobj
+		lea	next_object(a1),a1
+		dbf	d2,.check
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -973,12 +976,13 @@ LoadLevelLoadBlock:
 		moveq	#0,d2
 		bsr.w	Queue_Kos_Module
 
--		move.b	#VintID_TitleCard,(V_int_routine).w
+.waitplc
+		move.b	#VintID_Fade,(V_int_routine).w
 		jsr	(Process_Kos_Queue).w
 		jsr	(Wait_VSync).w
 		jsr	(Process_Kos_Module_Queue).w
 		tst.w	(Kos_modules_left).w
-		bne.s	-
+		bne.s	.waitplc
 		rts
 
 ; =============== S U B R O U T I N E =======================================

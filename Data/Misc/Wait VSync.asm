@@ -11,6 +11,7 @@ DelayProgram:
 	endif
 		enableInts
 
--		tst.b	(V_int_routine).w
-		bne.s	-	; wait until V-int's run
+.wait
+		tst.b	(V_int_routine).w
+		bne.s	.wait	; wait until V-int's run
 		rts

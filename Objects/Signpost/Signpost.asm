@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Signpost (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -90,7 +93,7 @@ Obj_EndSignFall:
 		tst.w	d1
 		bpl.s	+
 		add.w	d1,y_pos(a0)
-		move.b	#4,routine(a0)				; If signpost has landed
+		move.b	#4,routine(a0)				; if signpost has landed
 		bset	#0,$38(a0)
 		move.w	#$40,$2E(a0)
 +		rts
@@ -98,12 +101,12 @@ Obj_EndSignFall:
 
 Obj_EndSignLanded:
 		jsr	(Animate_Raw).w
-		subq.w	#1,$2E(a0)					; Keep animating while landing for X amount of frames
+		subq.w	#1,$2E(a0)					; keep animating while landing for X amount of frames
 		bmi.s	+
 		rts
 ; ---------------------------------------------------------------------------
 +		move.b	#6,routine(a0)
-		clr.l	x_vel(a0)						; Null velocity
+		clr.l	x_vel(a0)						; clear velocity
 		clr.b	mapping_frame(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -111,7 +114,7 @@ Obj_EndSignLanded:
 Obj_EndSignResults:
 		lea	(Player_1).w,a1
 		btst	#Status_InAir,obStatus(a1)
-		bne.s	locret_83936					; If player is not standing on the ground, wait until he is
+		bne.s	locret_83936					; if player is not standing on the ground, wait until he is
 		move.b	#8,routine(a0)
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Sprite).w
@@ -123,17 +126,9 @@ locret_83936:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignAfter:
-		clr.w	y_vel(a0)					; Null vertical velocity
-		move.w	x_pos(a0),d0					; Check for whether signpost goes out of range
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.s	loc_83988
-		move.w	y_pos(a0),d0
-		sub.w	(Camera_Y_pos).w,d0
-		addi.w	#$80,d0
-		cmpi.w	#$200,d0
-		bhi.s	loc_83988
+		clr.w	y_vel(a0)					; clear vertical velocity
+		out_of_xrange.s	loc_83988			; check for whether signpost goes out of range
+		out_of_yrange.s	loc_83988
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -142,7 +137,8 @@ loc_83988:
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(Remove_From_TrackingSlot).w
 		jmp	(Go_Delete_Sprite).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_SignpostSparkle:
 		lea	ObjDat_SignpostSparkle(pc),a1
@@ -151,7 +147,7 @@ Obj_SignpostSparkle:
 		jsr	(Random_Number).w
 		andi.w	#$1F,d0
 		subi.w	#$10,d0
-		add.w	d0,y_pos(a0)			; Random vertical position
+		add.w	d0,y_pos(a0)					; random vertical position
 		move.w	x_pos(a0),$3A(a0)
 		move.w	#$1000,x_vel(a0)
 		move.w	#$20,$2E(a0)
@@ -188,7 +184,7 @@ Obj_SignpostStubMain:
 ; =============== S U B R O U T I N E =======================================
 
 EndSign_CheckPlayerHit:
-		tst.b	$20(a0)
+		tst.b	objoff_20(a0)
 		bne.s	loc_83AB8
 		lea	EndSign_Range(pc),a1
 		jsr	(Check_PlayerInRange).w
@@ -209,7 +205,7 @@ sub_83A70:
 		bne.s	locret_83ABC				; only go on if Player is currently jumping
 		tst.w	y_vel(a1)
 		bpl.s	locret_83ABC				; And if he's actually moving upwards
-		move.b	#$20,$20(a0)			; Set delay for when it checks for the next hit
+		move.b	#$20,objoff_20(a0)		; Set delay for when it checks for the next hit
 		move.w	x_pos(a0),d0
 		sub.w	x_pos(a1),d0
 		bne.s	+
@@ -221,12 +217,11 @@ sub_83A70:
 		lea	Child6_EndSignScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		moveq	#10,d0
-		movea.l	a1,a3
 		jmp	(HUD_AddToScore).w			; Add 100 points whenever hit
 ; ---------------------------------------------------------------------------
 
 loc_83AB8:
-		subq.b	#1,$20(a0)
+		subq.b	#1,objoff_20(a0)
 
 locret_83ABC:
 		rts
@@ -261,7 +256,8 @@ loc_83AFE:
 
 locret_83B02:
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 EndSign_Range:			dc.w -$20, $40, -$18, $30
 ObjSlot_EndSigns:		subObjSlotData 0, $5CA, $C, 0, Map_EndSigns, $300, $18, $10, 0, 0
@@ -309,6 +305,6 @@ PLC_EndSignStuff: plrlistheader
 PLC_EndSignStuff_End
 ; ---------------------------------------------------------------------------
 
-DPLC_EndSigns:		include "Objects/Signpost/Object Data/DPLC - End Signs.asm"
-Map_EndSigns:		include "Objects/Signpost/Object Data/Map - End Signs.asm"
-Map_SignpostStub:	include "Objects/Signpost/Object Data/Map - Signpost Stub.asm"
+		include "Objects/Signpost/Object Data/DPLC - End Signs.asm"
+		include "Objects/Signpost/Object Data/Map - End Signs.asm"
+		include "Objects/Signpost/Object Data/Map - Signpost Stub.asm"

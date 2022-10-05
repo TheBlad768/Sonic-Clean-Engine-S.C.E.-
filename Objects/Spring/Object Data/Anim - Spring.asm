@@ -1,10 +1,10 @@
-Ani_Spring:
-		dc.w byte_2372E-Ani_Spring
-		dc.w byte_23731-Ani_Spring
-		dc.w byte_2373D-Ani_Spring
-		dc.w byte_23740-Ani_Spring
-		dc.w byte_2374C-Ani_Spring
-		dc.w byte_2374F-Ani_Spring
+Ani_Spring: offsetTable
+		offsetTableEntry.w byte_2372E
+		offsetTableEntry.w byte_23731
+		offsetTableEntry.w byte_2373D
+		offsetTableEntry.w byte_23740
+		offsetTableEntry.w byte_2374C
+		offsetTableEntry.w byte_2374F
 byte_2372E:	dc.b   $F,   0,	afEnd
 byte_23731:	dc.b	0,   1,	  0,   0,   2,	 2,   2,   2,	2,   2,	afChange,   0
 byte_2373D:	dc.b   $F,   3,	afEnd

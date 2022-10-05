@@ -141,6 +141,7 @@ Snd_Minib_SK_Loop03:
 
 ; DAC Data
 Snd_Minib_SK_DAC:
+	smpsPan             panCenter, $00
 	dc.b	dSnareS3, $06, dSnareS3, dSnareS3, $18, dSnareS3, $06, dSnareS3, dSnareS3, $18, dSnareS3, $06
 	dc.b	dSnareS3, dSnareS3, dSnareS3
 

@@ -23,12 +23,13 @@
 		include "Objects/Button/Button.asm"
 		include "Objects/Animals/Animals.asm"
 		include "Objects/Egg Capsule/EggCapsule.asm"
+		include "Objects/Smooth Palette/Smooth Palette.asm"
 
 ; ===========================================================================
 ; Levels objects data
 ; ===========================================================================
 
-
+		include "Objects/Spikebonker/Spikebonker.asm"
 
 ; ===========================================================================
 ; Bosses objects data

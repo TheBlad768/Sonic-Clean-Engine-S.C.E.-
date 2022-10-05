@@ -24,9 +24,9 @@ loc_2C5B8:
 loc_2C5BE:
 		tst.b	render_flags(a0)
 		bpl.s	loc_2C626
-		move.w	#$1B,d1
-		move.w	#4,d2
-		move.w	#5,d3
+		moveq	#$1B,d1
+		moveq	#4,d2
+		moveq	#5,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).w
 		clr.b	mapping_frame(a0)
@@ -61,9 +61,9 @@ loc_2C626:
 loc_2C62C:
 		tst.b	render_flags(a0)
 		bpl.s	loc_2C690
-		move.w	#$10,d1
-		move.w	#6,d3
-		move.w	$10(a0),d4
+		moveq	#$10,d1
+		moveq	#6,d3
+		move.w	x_pos(a0),d4
 		jsr	(SolidObjectTop).w
 		clr.b	mapping_frame(a0)
 		move.b	subtype(a0),d0

@@ -113,7 +113,7 @@ locret_1ACDA:
 ; ---------------------------------------------------------------------------
 
 loc_1ACDC:
-		addq.b	#1,d0
+		addq.b	#1,d0			; Code FF - Repeat animation from beginning
 		bne.s	loc_1ACEA
 		moveq	#0,d1
 		move.b	d1,anim_frame(a0)
@@ -122,7 +122,7 @@ loc_1ACDC:
 ; ---------------------------------------------------------------------------
 
 loc_1ACEA:
-		addq.b	#1,d0
+		addq.b	#1,d0			; Code FE - Repeat animation from earlier point
 		bne.s	loc_1AD00
 		move.b	1(a1,d1.w),d0
 		sub.b	d0,anim_frame(a0)
@@ -133,14 +133,14 @@ loc_1ACEA:
 ; ---------------------------------------------------------------------------
 
 loc_1AD00:
-		addq.b	#1,d0
+		addq.b	#1,d0			; Code FD - Start new animation
 		bne.s	loc_1AD0C
 		move.b	1(a1,d1.w),anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1AD0C:
-		addq.b	#1,d0
+		addq.b	#1,d0			; Code FC - Increment routine counter
 		bne.s	locret_1AD1E
 		addq.b	#2,routine(a0)
 		clr.b	anim_frame_timer(a0)

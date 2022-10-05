@@ -6,16 +6,18 @@
 
 Pause_Game:
 		tst.b	(Game_paused).w
-		bne.s	+
+		bne.s	.paused
 		tst.b	(Ctrl_1_pressed).w						; is Start pressed?
 		bpl.s	Pause_NoPause						; if not, branch
-+		st	(Game_paused).w
+
+.paused
+		st	(Game_paused).w
 		SMPS_PauseMusic
 
 Pause_Loop:
 		move.b	#VintID_Level,(V_int_routine).w
 		bsr.w	Wait_VSync
-	if GameDebug=1
+	if GameDebug
 		btst	#button_A,(Ctrl_1_pressed).w				; is button A pressed?
 		beq.s	Pause_ChkFrameAdvance				; if not, branch
 		move.b	#id_LevelSelectScreen,(Game_mode).w	; set game mode
@@ -41,7 +43,7 @@ Pause_Unpause:
 Pause_NoPause:
 		rts
 ; ---------------------------------------------------------------------------
-	if GameDebug=1
+	if GameDebug
 Pause_FrameAdvance:
 		st	(Game_paused).w
 		SMPS_UnpauseMusic

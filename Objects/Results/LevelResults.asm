@@ -47,7 +47,7 @@ Obj_LevelResultsInit:
 ; ---------------------------------------------------------------------------
 
 loc_2DB90:
-		divu.w	#$1E,d0		; Divide time by 30
+		divu.w	#30,d0		; Divide time by 30
 		moveq	#7,d1
 		cmp.w	d1,d0		; If result is above 7, make it 7
 		blo.s		loc_2DB9C
@@ -203,13 +203,13 @@ loc_2DDBE:
 ; =============== S U B R O U T I N E =======================================
 
 LevResults_DisplayScore:
-		move.w	#7,$16(a0)
+		move.w	#7,mainspr_childsprites(a0)
 		bsr.w	LevResults_GetDecimalScore
 		rol.l	#4,d1
-		lea	$18(a0),a1
-		move.w	$10(a0),d2
+		lea	sub2_x_pos(a0),a1
+		move.w	x_pos(a0),d2
 		subi.w	#$38,d2
-		move.w	$14(a0),d3
+		move.w	y_pos(a0),d3
 		moveq	#0,d4
 		moveq	#6,d5
 

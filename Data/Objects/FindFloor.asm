@@ -113,7 +113,7 @@ loc_ED32:
 loc_ED38:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#1,prev_anim(a0)
+		move.b	#id_Run,prev_anim(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -217,7 +217,7 @@ loc_EE40:
 loc_EE46:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#1,prev_anim(a0)
+		move.b	#id_Run,prev_anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -289,7 +289,7 @@ loc_EEEE:
 loc_EEF4:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#1,prev_anim(a0)
+		move.b	#id_Run,prev_anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -361,7 +361,7 @@ loc_EF9C:
 loc_EFA2:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#1,prev_anim(a0)
+		move.b	#id_Run,prev_anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -993,6 +993,8 @@ ChkFloorEdge_Part3:
 
 SonicOnObjHitFloor:
 		move.w	x_pos(a1),d3
+
+SonicOnObjHitFloor2:
 		move.w	y_pos(a1),d2
 		moveq	#0,d0
 		move.b	y_radius(a1),d0

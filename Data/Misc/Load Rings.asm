@@ -5,18 +5,13 @@
 ; =============== S U B R O U T I N E =======================================
 
 Load_Rings:
-		moveq	#0,d0
-		move.b	(Rings_manager_routine).w,d0
-		jmp	.index(pc,d0.w)
-; ---------------------------------------------------------------------------
+		movea.l	(Rings_manager_addr_RAM).w,a0
+		jmp	(a0)
 
-.index:
-		bra.s	Load_Rings_Init		; 0
-		bra.s	Load_Rings_Main		; 2
-; ---------------------------------------------------------------------------
+; =============== S U B R O U T I N E =======================================
 
 Load_Rings_Init:
-		addq.b	#2,(Rings_manager_routine).w
+		move.l	#Load_Rings_Main,(Rings_manager_addr_RAM).w
 		clearRAM Ring_status_table, Ring_status_table_End
 		clearRAM Ring_consumption_table, Ring_consumption_table_End
 		move.w	(Current_zone_and_act).w,d0
@@ -201,7 +196,7 @@ locret_EAE4:
 ; =============== S U B R O U T I N E =======================================
 
 Test_Ring_Collisions_AttractRing:
-		movea.l	a1,a3
+		movea.l	a1,a3				; save ROM address
 		bsr.w	Create_New_Sprite
 		bne.s	loc_EB16
 		move.l	#Obj_Attracted_Ring,address(a1)
@@ -213,7 +208,7 @@ Test_Ring_Collisions_AttractRing:
 ; ---------------------------------------------------------------------------
 
 loc_EB16:
-		movea.l	a3,a1
+		movea.l	a3,a1				; return ROM address
 		bra.s	loc_EAC6
 
 ; =============== S U B R O U T I N E =======================================
@@ -312,7 +307,7 @@ CMap_Ring_End
 
 AddRings:
 		add.w	d0,(Ring_count).w
-		ori.b	#1,(Update_HUD_ring_count).w	; Update ring counter
+		ori.b	#1,(Update_HUD_ring_count).w	; update ring counter
 		rts
 
 ; =============== S U B R O U T I N E =======================================

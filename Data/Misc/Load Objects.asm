@@ -5,18 +5,13 @@
 ; =============== S U B R O U T I N E =======================================
 
 Load_Sprites:
-		moveq	#0,d0
-		move.b	(Object_load_routine).w,d0
-		jmp	.index(pc,d0.w)
-; ---------------------------------------------------------------------------
+		movea.l	(Object_load_addr_RAM).w,a0
+		jmp	(a0)
 
-.index:
-		bra.w	Load_Sprites_Init		; 0
-		bra.w	Load_Sprites_Main	; 4
-; ---------------------------------------------------------------------------
+; =============== S U B R O U T I N E =======================================
 
 Load_Sprites_Init:
-		addq.b	#4,(Object_load_routine).w
+		move.l	#Load_Sprites_Main,(Object_load_addr_RAM).w
 		move.l	#Obj_Index,(Object_index_addr).w
 		clearRAM Object_respawn_table, Object_respawn_table_End
 		move.w	(Current_zone_and_act).w,d0

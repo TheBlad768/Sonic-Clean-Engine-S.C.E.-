@@ -58,11 +58,7 @@ loc_1F606:
 		bsr.w	sub_1F734
 
 loc_1F64A:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_1EBAA
+		out_of_xrange.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F5FE
 		jmp	(Draw_Sprite).w
@@ -88,11 +84,7 @@ loc_1F66C:
 		bsr.s	sub_1F734
 
 loc_1F6AE:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_1EBAA
+		out_of_xrange.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F742
 		jmp	(Draw_Sprite).w
@@ -118,11 +110,7 @@ loc_1F6D0:
 		bsr.s	sub_1F734
 
 loc_1F712:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_1EBAA
+		out_of_xrange.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F742
 		jmp	(Draw_Sprite).w
@@ -130,12 +118,10 @@ loc_1F712:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1F734:
-		move.w	d6,-(sp)
-		move.l	a0,-(sp)
-		movea.l	a1,a0
+		movem.w	d6/a0,-(sp)
+		movea.w	a1,a0
 		jsr	Kill_Character(pc)
-		movea.l	(sp)+,a0
-		move.w	(sp)+,d6
+		movem.w	(sp)+,d6/a0
 
 locret_1F742:
 		rts

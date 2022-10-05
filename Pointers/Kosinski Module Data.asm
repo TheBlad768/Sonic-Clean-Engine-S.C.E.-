@@ -10,6 +10,8 @@ ArtKosM_Monitors:				binclude	"Objects/Monitor/KosinskiM Art/Monitors.bin"
 	even
 ArtKosM_SpikesSprings:			binclude	"Objects/Spikes/KosinskiM Art/SpikesSprings.bin"
 	even
+ArtKosM_RobotnikShip:			binclude "Objects/Robotnik/KosinskiM Art/Robotnik Ship.bin"
+	even
 ArtKosM_BossExplosion:			binclude	"Objects/Explosion/KosinskiM Art/Boss Explosion.bin"
 	even
 ArtKosM_Explosion:				binclude	"Objects/Explosion/KosinskiM Art/Explosion.bin"
@@ -71,8 +73,8 @@ ArtKosM_DEZTitleCard:			binclude "Objects/Title Card/KosinskiM Art/Levels/DEZ - 
 	even
 
 ; ===========================================================================
-; Kosinski Module compressed levels graphics
+; Kosinski Module compressed DEZ graphics
 ; ===========================================================================
 
-ArtKosM_RobotnikShip:			binclude "Objects/Robotnik/KosinskiM Art/Robotnik Ship.bin"
+ArtKosM_Spikebonker:			binclude "Objects/Spikebonker/KosinskiM Art/Spikebonker.bin"
 	even

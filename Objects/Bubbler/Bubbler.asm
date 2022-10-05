@@ -175,11 +175,7 @@ loc_2FB50:
 		jsr	(Animate_Sprite).w
 
 loc_2FB5C:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.s	loc_2FB7E
+		out_of_xrange.s	loc_2FB7E
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0
 		blo.s		loc_2FB90
@@ -200,25 +196,8 @@ loc_2FB90:
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-byte_2FB96:
-		dc.b 0
-		dc.b 1
-		dc.b 0
-		dc.b 0
-		dc.b 0
-		dc.b 0
-		dc.b 1
-		dc.b 0
-		dc.b 0
-		dc.b 0
-		dc.b 0
-		dc.b 1
-		dc.b 0
-		dc.b 1
-		dc.b 0
-		dc.b 0
-		dc.b 1
-		dc.b 0
+byte_2FB96:	dc.b 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0
+	even
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -233,7 +212,7 @@ sub_2FBA8:
 		bhs.w	locret_2FC7C
 		addi.w	#$20,d1
 		cmp.w	d0,d1
-		blo.w	locret_2FC7C
+		blo.s		locret_2FC7C
 		move.w	y_pos(a1),d0
 		move.w	y_pos(a0),d1
 		cmp.w	d0,d1
@@ -248,15 +227,15 @@ sub_2FBA8:
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
 		move.b	#id_GetAir,anim(a1)
-		move.w	#$23,$32(a1)
+		move.w	#$23,move_lock(a1)
 		clr.b	jumping(a1)
-		bclr	#5,status(a1)
-		bclr	#4,status(a1)
-		btst	#2,status(a1)
+		bclr	#Status_Push,status(a1)
+		bclr	#Status_RollJump,status(a1)
+		btst	#Status_Roll,status(a1)
 		beq.s	+
-		bclr	#2,status(a1)
-		move.b	#$13,y_radius(a1)
-		move.b	#9,x_radius(a1)
+		bclr	#Status_Roll,status(a1)
+		move.b	#38/2,y_radius(a1)
+		move.b	#18/2,x_radius(a1)
 		subq.w	#5,y_pos(a1)
 +		cmpi.b	#6,routine(a0)
 		beq.s	locret_2FC7C

@@ -9,7 +9,7 @@ DeformBgLayer:
 		bne.s	locret_1C0E6
 		clr.l	(H_scroll_amount).w	; clear horizontal and vertical scroll amount
 		tst.b	(Scroll_lock).w
-		bne.s	+
+		bne.s	.events
 		lea	(Player_1).w,a0
 		lea	(Camera_X_pos).w,a1
 		lea	(Camera_min_X_pos).w,a2
@@ -22,7 +22,9 @@ DeformBgLayer:
 		lea	(V_scroll_amount).w,a4
 		move.w	(Distance_from_screen_top).w,d3
 		bsr.w	MoveCameraY
-+		jmp	Do_ResizeEvents(pc)
+
+.events
+		jmp	Do_ResizeEvents(pc)
 ; ---------------------------------------------------------------------------
 ; Subroutine to scroll the level horizontally as Sonic moves
 ; ---------------------------------------------------------------------------
@@ -59,9 +61,9 @@ loc_1C0D6:
 		blt.s		loc_1C0E8
 		bge.s	loc_1C0FC
 	else
-		subi.w	#$90,d0
+		subi.w	#144,d0
 		blt.s		loc_1C0E8
-		subi.w	#$10,d0
+		subi.w	#16,d0
 		bge.s	loc_1C0FC
 	endif
 		clr.w	(a4)

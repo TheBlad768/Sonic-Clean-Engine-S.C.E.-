@@ -90,11 +90,9 @@ idstart :=	0
 VintID_Lag =						id(ptr_VInt_Lag)			; 0
 VintID_Main =					id(ptr_VInt_Main)		; 2
 VintID_Sega =					id(ptr_VInt_Sega)			; 4
-VintID_Title =					id(ptr_VInt_Title)			; 6
-VintID_Menu =					id(ptr_VInt_Menu)		; 8
-VintID_Level =					id(ptr_VInt_Level)		; A
-VintID_TitleCard =				id(ptr_VInt_TitleCard)		; C
-VintID_Fade =					id(ptr_VInt_Fade)		; E
+VintID_Menu =					id(ptr_VInt_Menu)		; 6
+VintID_Level =					id(ptr_VInt_Level)		; 8
+VintID_Fade =					id(ptr_VInt_Fade)		; A
 
 ; ---------------------------------------------------------------------------
 ; Sonic routines
@@ -133,27 +131,9 @@ button_A:						equ	6
 button_start:						equ	7
 
 ; ---------------------------------------------------------------------------
-; Buttons masks
+; Buttons masks (1 << x == pow(2, x))
 ; ---------------------------------------------------------------------------
 
-JoyUp:							equ	1
-JoyDown:						equ	2
-JoyUpDown:						equ	3
-JoyLeft:							equ	4
-JoyRight:						equ	8
-JoyLeftRight:						equ	$C
-JoyCursor:						equ	$F
-JoyB:							equ	$10
-JoyC:							equ	$20
-JoyA:							equ	$40
-JoyAB:							equ	$50
-JoyAC:							equ	$60
-JoyABC:							equ	$70
-JoyStart:							equ	$80
-JoyBStart:						equ	$90
-JoyABCS:						equ	$F0
-; ---------------------------------------------------------------------------
-; Buttons masks (1 << x == pow(2, x))
 button_up_mask:					equ	1<<button_up	; $01
 button_down_mask:				equ	1<<button_down	; $02
 button_left_mask:					equ	1<<button_left	; $04
@@ -162,20 +142,32 @@ button_B_mask:					equ	1<<button_B		; $10
 button_C_mask:					equ	1<<button_C		; $20
 button_A_mask:					equ	1<<button_A		; $40
 button_start_mask:				equ	1<<button_start	; $80
+
 ; ---------------------------------------------------------------------------
 ; Joypad input
-btnStart:		equ %10000000		; Start button	($80)
-btnA:		equ %01000000		; A ($40)
-btnC:		equ %00100000		; C ($20)
-btnB:		equ %00010000		; B ($10)
+; ---------------------------------------------------------------------------
+
 btnR:		equ %00001000		; Right ($08)
 btnL:		equ %00000100		; Left ($04)
+btnUD:		equ %00000011		; Up or Down ($03)
 btnDn:		equ %00000010		; Down ($02)
 btnUp:		equ %00000001		; Up	($01)
+btnLR:		equ %00001100		; Left or Right ($0C)
 btnDir:		equ %00001111		; Any direction ($0F)
+btnABCS:	equ %11110000		; A, B, C or Start ($F0)
+btnStart:		equ %10000000		; Start button	($80)
 btnABC:		equ %01110000		; A, B or C ($70)
+btnAC:		equ %01100000		; A or C ($60)
+btnAB:		equ %01010000		; A or B ($50)
+btnA:		equ %01000000		; A ($40)
+btnBC:		equ %00110000		; B or C ($30)
+btnC:		equ %00100000		; C ($20)
+btnB:		equ %00010000		; B ($10)
 
+; ---------------------------------------------------------------------------
 ; Joypad bits
+; ---------------------------------------------------------------------------
+
 bitStart:		equ 7
 bitA:		equ 6
 bitC:		equ 5
@@ -184,15 +176,19 @@ bitR:		equ 3
 bitL:		equ 2
 bitDn:		equ 1
 bitUp:		equ 0
+
 ; ---------------------------------------------------------------------------
-; property of all objects:
+; property of all objects
+; ---------------------------------------------------------------------------
+
 object_size =				$4A	; the size of an object's status table entry
 next_object =				object_size
+
 ; ---------------------------------------------------------------------------
 ; Object Status Table offsets
-; ---------------------------------------------------------------------------
 ; Universally followed object conventions:
 ; ---------------------------------------------------------------------------
+
 id =						  0 ; long
 address =				  id ; long
 render_flags =		 	  4 ; bitfield ; refer to SCHG for details
@@ -206,9 +202,11 @@ x_sub =					x_pos+2 ; word
 y_pos =					$14 ; word, or long when extra precision is required
 y_sub =					y_pos+2 ; word
 mapping_frame =			$22 ; byte
+
 ; ---------------------------------------------------------------------------
 ; Conventions followed by most objects:
 ; ---------------------------------------------------------------------------
+
 routine =		 	 	    	    5 ; byte
 x_vel =					$18 ; word
 y_vel =					$1A ; word
@@ -221,9 +219,11 @@ anim_frame =			$23 ; byte
 anim_frame_timer =		$24 ; byte
 angle =					$26 ; byte ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
 status =					$2A ; bitfield ; refer to SCHG for details
+
 ; ---------------------------------------------------------------------------
 ; Conventions followed by many objects but not Sonic/Tails/Knuckles:
 ; ---------------------------------------------------------------------------
+
 x_pixel =				x_pos ; word ; x-coordinate for objects using screen positioning
 y_pixel =					y_pos ; word ; y-coordinate for objects using screen positioning
 collision_flags =			$28 ; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
@@ -245,9 +245,11 @@ parent4 = 				$44 ; word
 parent3 = 				$46 ; word ; parent of child objects
 parent2 =				$48 ; word ; several objects use this instead
 respawn_addr =			$48 ; word ; the address of this object's entry in the respawn table
+
 ; ---------------------------------------------------------------------------
 ; Conventions specific to Sonic/Tails/Knuckles:
 ; ---------------------------------------------------------------------------
+
 ground_vel =				$1C ; word ; overall velocity along ground, not updated when in the air
 double_jump_property =	$25 ; byte ; remaining frames of flight / 2 for Tails, gliding-related for Knuckles
 flip_angle =				$27 ; byte ; angle about horizontal axis (360 degrees = 256)
@@ -277,15 +279,19 @@ default_y_radius =		$44 ; byte ; default value of y_radius
 default_x_radius =		$45 ; byte ; default value of x_radius
 top_solid_bit =			$46 ; byte ; the bit to check for top solidity (either $C or $E)
 lrb_solid_bit =			$47 ; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
+
 ; ---------------------------------------------------------------------------
 ; Conventions followed by some/most bosses:
 ; ---------------------------------------------------------------------------
+
 boss_invulnerable_time =	$1C ; byte ; flash time
 collision_restore_flags =	$25 ; byte ; restore collision after hit
 boss_hitcount2 =			$29 ; byte ; usage varies, bosses use it as a hit counter
+
 ; ---------------------------------------------------------------------------
 ; Object variables
 ; ---------------------------------------------------------------------------
+
 obId =					0
 obRender =				4	; bitfield for x/y flip, display mode
 obRoutine =				5	; routine number
@@ -311,11 +317,13 @@ obTimer =				$2E	; object timer
 obParent =				$42 	; word ; parent of child objects
 obParent2 =				$48 	; word ; parent of child objects
 obParent3 =				$46 	; word ; parent of child objects
+
 ; ---------------------------------------------------------------------------
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
 ; ---------------------------------------------------------------------------
 
-mainspr_childsprites 		= $16	; amount of child sprites
+mainspr_childsprites 		= $16	; word ; amount of child sprites
+
 sub2_x_pos				= $18
 sub2_y_pos				= $1A
 sub2_mapframe			= $1D
@@ -340,40 +348,41 @@ sub8_mapframe			= $41
 sub9_x_pos				= $42
 sub9_y_pos				= $44
 sub9_mapframe			= $47
+
 next_subspr				= 6		; size
 
 ; ---------------------------------------------------------------------------
 ; Unknown or inconsistently used offsets that are not applicable to sonic/tails:
 ; ---------------------------------------------------------------------------
 
- enum	objoff_00=$00,objoff_01=$01,objoff_02=$02,objoff_03=$03,objoff_04=$04,objoff_05=$05,objoff_06=$06
- enum	objoff_07=$07,objoff_08=$08,objoff_09=$09,objoff_0A=$0A,objoff_0B=$0B,objoff_0C=$0C,objoff_0D=$0D
- enum	objoff_0E=$0E,objoff_0F=$0F,objoff_10=$10,objoff_11=$11,objoff_12=$12,objoff_13=$13,objoff_14=$14
- enum	objoff_15=$15,objoff_16=$16,objoff_17=$17,objoff_18=$18,objoff_19=$19,objoff_1A=$1A,objoff_1B=$1B
- enum	objoff_1C=$1C,objoff_1D=$1D,objoff_1E=$1E,objoff_1F=$1F,objoff_20=$20,objoff_21=$21,objoff_22=$22
- enum	objoff_23=$23,objoff_24=$24,objoff_25=$25,objoff_26=$26,objoff_27=$27,objoff_28=$28,objoff_29=$29
- enum	objoff_2A=$2A,objoff_2B=$2B,objoff_2C=$2C,objoff_2D=$2D,objoff_2E=$2E,objoff_2F=$2F,objoff_30=$30
- enum	objoff_31=$31,objoff_32=$32,objoff_33=$33,objoff_34=$34,objoff_35=$35,objoff_36=$36,objoff_37=$37
- enum	objoff_38=$38,objoff_39=$39,objoff_3A=$3A,objoff_3B=$3B,objoff_3C=$3C,objoff_3D=$3D,objoff_3E=$3E
- enum	objoff_3F=$3F,objoff_40=$40,objoff_41=$41,objoff_42=$42,objoff_43=$43,objoff_44=$44,objoff_45=$45
- enum	objoff_46=$46,objoff_47=$47,objoff_48=$48,objoff_49=$49
+ enum		objoff_00=$00,objoff_01,objoff_02,objoff_03,objoff_04,objoff_05,objoff_06
+ nextenum	objoff_07,objoff_08,objoff_09,objoff_0A,objoff_0B,objoff_0C,objoff_0D
+ nextenum	objoff_0E,objoff_0F,objoff_10,objoff_11,objoff_12,objoff_13,objoff_14
+ nextenum	objoff_15,objoff_16,objoff_17,objoff_18,objoff_19,objoff_1A,objoff_1B
+ nextenum	objoff_1C,objoff_1D,objoff_1E,objoff_1F,objoff_20,objoff_21,objoff_22
+ nextenum	objoff_23,objoff_24,objoff_25,objoff_26,objoff_27,objoff_28,objoff_29
+ nextenum	objoff_2A,objoff_2B,objoff_2C,objoff_2D,objoff_2E,objoff_2F,objoff_30
+ nextenum	objoff_31,objoff_32,objoff_33,objoff_34,objoff_35,objoff_36,objoff_37
+ nextenum	objoff_38,objoff_39,objoff_3A,objoff_3B,objoff_3C,objoff_3D,objoff_3E
+ nextenum	objoff_3F,objoff_40,objoff_41,objoff_42,objoff_43,objoff_44,objoff_45
+ nextenum	objoff_46,objoff_47,objoff_48,objoff_49
 
 ; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
 ; bitfield with the following meaning:
 ; ---------------------------------------------------------------------------
 
-p1_standing_bit				= 3
-p2_standing_bit				= p1_standing_bit + 1
-p1_standing					= 1<<p1_standing_bit
-p2_standing					= 1<<p2_standing_bit
-pushing_bit_delta				= 2
-p1_pushing_bit				= p1_standing_bit + pushing_bit_delta
-p2_pushing_bit				= p1_pushing_bit + 1
-p1_pushing					= 1<<p1_pushing_bit
-p2_pushing					= 1<<p2_pushing_bit
-standing_mask				= p1_standing|p2_standing
-pushing_mask				= p1_pushing|p2_pushing
+p1_standing_bit			= 3
+p2_standing_bit			= p1_standing_bit + 1
+p1_standing				= 1<<p1_standing_bit
+p2_standing				= 1<<p2_standing_bit
+pushing_bit_delta			= 2
+p1_pushing_bit			= p1_standing_bit + pushing_bit_delta
+p2_pushing_bit			= p1_pushing_bit + 1
+p1_pushing				= 1<<p1_pushing_bit
+p2_pushing				= 1<<p2_pushing_bit
+standing_mask			= p1_standing|p2_standing
+pushing_mask			= p1_pushing|p2_pushing
 
 ; ---------------------------------------------------------------------------
 ; The high word of d6 after a SolidObject call is a bitfield
@@ -400,34 +409,34 @@ touch_top_mask			= p1_touch_top|p2_touch_top
 ; Player status variables
 ; ---------------------------------------------------------------------------
 
-Status_Facing				= 0
-Status_InAir					= 1
-Status_Roll					= 2
-Status_OnObj				= 3
-Status_RollJump				= 4
-Status_Push					= 5
-Status_Underwater			= 6
+Status_Facing			= 0
+Status_InAir				= 1
+Status_Roll				= 2
+Status_OnObj			= 3
+Status_RollJump			= 4
+Status_Push				= 5
+Status_Underwater		= 6
 
 ; ---------------------------------------------------------------------------
 ; Player status secondary variables
 ; ---------------------------------------------------------------------------
 
-Status_Shield					= 0
-Status_Invincible				= 1
-Status_SpeedShoes			= 2
+Status_Shield				= 0
+Status_Invincible			= 1
+Status_SpeedShoes		= 2
 
-Status_FireShield				= 4
-Status_LtngShield				= 5
-Status_BublShield				= 6
+Status_FireShield			= 4
+Status_LtngShield			= 5
+Status_BublShield			= 6
 
 ; ---------------------------------------------------------------------------
 ; Object Status Variables
 ; ---------------------------------------------------------------------------
 
-Status_ObjOrienX				= 0
-Status_ObjOrienY				= 1
-Status_ObjTouch				= 6
-Status_ObjDefeated			= 7
+Status_ObjOrienX			= 0
+Status_ObjOrienY			= 1
+Status_ObjTouch			= 6
+Status_ObjDefeated		= 7
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels).
@@ -446,47 +455,50 @@ ArtTile_DashDust			= $7F0
 ; VRAM data
 ; ---------------------------------------------------------------------------
 
-vram_fg:				= $C000 ; foreground namespace
-vram_window:		= $C000 ; window namespace
-vram_bg:			= $E000 ; background namespace
-vram_sprites:			= $D400 ; sprite table
-vram_hscroll:			= $F000 ; horizontal scroll table
+vram_fg:					= $C000 ; foreground namespace
+vram_window:			= $C000 ; window namespace
+vram_bg:				= $E000 ; background namespace
+vram_sprites:				= $D400 ; sprite table
+vram_hscroll:				= $F000 ; horizontal scroll table
 
 ; ---------------------------------------------------------------------------
 ; Colours
 ; ---------------------------------------------------------------------------
 
-cBlack:				equ $000			; colour black
-cWhite:				equ $EEE			; colour white
-cBlue:				equ $E00			; colour blue
-cGreen:				equ $0E0			; colour green
-cRed:				equ $00E			; colour red
-cYellow:				equ cGreen+cRed		; colour yellow
-cAqua:				equ cGreen+cBlue		; colour aqua
-cMagenta:			equ cBlue+cRed		; colour magenta
+cBlack:					equ $000			; colour black
+cWhite:					equ $EEE			; colour white
+cBlue:					equ $E00			; colour blue
+cGreen:					equ $0E0			; colour green
+cRed:					equ $00E			; colour red
+cYellow:					equ cGreen+cRed		; colour yellow
+cAqua:					equ cGreen+cBlue		; colour aqua
+cMagenta:				equ cBlue+cRed		; colour magenta
+
+palette_line_size			= 16*2				; 16 word entries
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
 ; ---------------------------------------------------------------------------
 
-flip_x				= (1<<11)
-flip_y				= (1<<12)
-palette_bit_0			= 5
-palette_bit_1			= 6
-palette_line0			= (0<<13)
-palette_line_0		= (0<<13)
-palette_line1			= (1<<13)
-palette_line_1		= (1<<13)
-palette_line2			= (2<<13)
-palette_line_2		= (2<<13)
-palette_line3			= (3<<13)
-palette_line_3		= (3<<13)
-high_priority_bit		= 7
-high_priority			= (1<<15)
-palette_mask			= $6000
-tile_mask			= $7FF
-nontile_mask			= $F800
-drawing_mask		= $7FFF
+flip_x					= (1<<11)
+flip_y					= (1<<12)
+palette_bit_0				= 5
+palette_bit_1				= 6
+palette_line0				= (0<<13)
+palette_line_0			= (0<<13)
+palette_line1				= (1<<13)
+palette_line_1			= (1<<13)
+palette_line2				= (2<<13)
+palette_line_2			= (2<<13)
+palette_line3				= (3<<13)
+palette_line_3			= (3<<13)
+high_priority_bit			= 7
+high_priority				= (1<<15)
+palette_mask				= $6000
+tile_size					= $20
+tile_mask				= $7FF
+nontile_mask				= $F800
+drawing_mask			= $7FFF
 
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses.
@@ -501,26 +513,36 @@ VRAM_Plane_Table_Size		= $1000	; 64 cells x 32 cells x 2 bytes per cell
 ; Sprite render screen flags
 ; ---------------------------------------------------------------------------
 
-rfCoord:						= 2		; screen coordinates flag
+rfCoord						= %00000100	; screen coordinates flag ($04)
 
-rfStatic:						= 5		; static mappings flag
-rfMulti:						= 6		; multi-draw flag
-rfOnscreen:					= 7		; on-screen flag
+rfStatic						= %00100000	; static mappings flag ($20)
+rfMulti						= %01000000	; multi-draw flag ($40)
+rfOnscreen					= %10000000	; on-screen flag ($80)
+
+; ---------------------------------------------------------------------------
+; Sprite render screen bits
+; ---------------------------------------------------------------------------
+
+rbCoord						= 2		; screen coordinates bit
+
+rbStatic						= 5		; static mappings bit
+rbMulti						= 6		; multi-draw bit
+rbOnscreen					= 7		; on-screen bit
 
 ; ---------------------------------------------------------------------------
 ; Animation flags
 ; ---------------------------------------------------------------------------
 
-afEnd:						= $FF	; return to beginning of animation
-afBack:						= $FE	; go back (specified number) bytes
-afChange:					= $FD	; run specified animation
-afRoutine:					= $FC	; increment routine counter
-afReset:						= $FB	; reset animation and 2nd object routine counter
+afEnd						= $FF	; return to beginning of animation
+afBack						= $FE	; go back (specified number) bytes
+afChange						= $FD	; run specified animation
+afRoutine					= $FC	; increment routine counter and continue load next anim bytes
+afReset						= $FB	; move offscreen for remove(Using the Sprite_OnScreen_Test, etc...)
 
 ; ---------------------------------------------------------------------------
 ; Animation Raw flags
 ; ---------------------------------------------------------------------------
 
-arfEnd:						= $FC	; return to beginning of animation
-arfBack:						= $F8	; go back (specified number) bytes
-arfJump:						= $F4	; jump from $34(a0) address
+arfEnd						= $FC	; return to beginning of animation
+arfBack						= $F8	; go back (specified number) bytes
+arfJump						= $F4	; jump from $34(a0) address

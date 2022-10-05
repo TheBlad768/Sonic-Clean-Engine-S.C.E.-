@@ -1,12 +1,14 @@
 ; ===========================================================================
-; Sonic: TEST HACK
+; Sonic: TEST GAME
 ; ===========================================================================
 
 ; Assembly options
 ZoneCount:				= 1	; discrete zones are: DEZ
 GameDebug:				= 1	; if 1, enable debug mode for Sonic
+GameDebugAlt:			= 0	; if 1, enable alt debug mode for Sonic
 Lagometer:				= 1	; if 1, enable debug lagometer
-ExtendedCamera			= 0	; if 1, enable extended camera
+ExtendedCamera:			= 0	; if 1, enable extended camera
+RollInAir:				= 1	; if 1, enable roll in air for Sonic
 OptimiseSound:	  		= 1	; change to 1 to optimise sound queuing
 OptimiseStopZ80:	  		= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for controllers(ignores sound driver)
 ZeroOffsetOptimization:	= 1	; if 1, makes a handful of zero-offset instructions smaller
@@ -333,12 +335,17 @@ EndOfHeader:
 
 		include "Pointers/Pattern Load Cues.asm"
 
-	if GameDebug=1
+	if GameDebug
 ; ---------------------------------------------------------------------------
 ; Debug Mode Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Objects/Sonic/DebugMode.asm"
+		if GameDebugAlt
+			include "Objects/Sonic/DebugMode(Crackers).asm"
+		else
+			include "Objects/Sonic/DebugMode.asm"
+		endif
+
 	endif
 
 ; ---------------------------------------------------------------------------

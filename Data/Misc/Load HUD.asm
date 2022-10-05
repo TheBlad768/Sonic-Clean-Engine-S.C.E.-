@@ -1,52 +1,55 @@
+; ---------------------------------------------------------------------------
+; HUD
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Render_HUD:
 		lea	(HUD_RAM).w,a1
 		move.b	HUD_RAM.status-HUD_RAM(a1),d0
-		beq.s	Render_HUD_Return
-		bmi.s	Render_HUD_Left
+		beq.s	.return
+		bmi.s	.left
 		cmpi.b	#3,d0
-		beq.s	Render_HUD_Check
+		beq.s	.check
 		subq.b	#1,d0
-		bne.s	Render_HUD_Right					; If 2, branch
+		bne.s	.right								; if 2, branch
 
-Render_HUD_Init:
+.init
 		move.w	#$10,HUD_RAM.Xpos-HUD_RAM(a1)
 		move.w	#$108,HUD_RAM.Ypos-HUD_RAM(a1)
-		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)		; Set 2
+		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)		; set 2
 
-Render_HUD_Right:
+.right
 		addq.w	#2,HUD_RAM.Xpos-HUD_RAM(a1)
 		cmpi.w	#$90,HUD_RAM.Xpos-HUD_RAM(a1)
-		bne.s	Render_HUD_Check
-		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)		; Set 3
+		bne.s	.check
+		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)		; set 3
 
-Render_HUD_Check:
+.check
 		tst.b	(Level_end_flag).w
-		beq.s	Render_HUD_Process
+		beq.s	.process
 		st	HUD_RAM.status-HUD_RAM(a1)
 
-Render_HUD_Left:
+.left
 		subq.w	#2,HUD_RAM.Xpos-HUD_RAM(a1)
 		cmpi.w	#$10,HUD_RAM.Xpos-HUD_RAM(a1)
-		bhs.s	Render_HUD_Process
+		bhs.s	.process
 		clr.b	HUD_RAM.status-HUD_RAM(a1)
 
-Render_HUD_Process:
-		moveq	#0,d4								; Frame #0
+.process
+		moveq	#0,d4								; frame #0
 		btst	#3,(Level_frame_counter+1).w
-		bne.s	Render_HUD_Draw
-		tst.w	(Ring_count).w						; Do you have any rings?
-		bne.s	Render_HUD_Process_Time			; If yes, branch
-		addq.w	#1*2,d4								; Hide rings counter
+		bne.s	.draw
+		tst.w	(Ring_count).w						; do you have any rings?
+		bne.s	.time								; if yes, branch
+		addq.w	#1*2,d4								; hide rings counter
 
-Render_HUD_Process_Time:
-		cmpi.b	#9,(Timer_minute).w					; Have 9 minutes elapsed?
-		bne.s	Render_HUD_Draw					; If not, branch
-		addq.w	#2*2,d4								; Hide time counter
+.time
+		cmpi.b	#9,(Timer_minute).w					; have 9 minutes elapsed?
+		bne.s	.draw								; if not, branch
+		addq.w	#2*2,d4								; hide time counter
 
-Render_HUD_Draw:
+.draw
 		move.w	HUD_RAM.Xpos-HUD_RAM(a1),d0		; Xpos
 		move.w	HUD_RAM.Ypos-HUD_RAM(a1),d1		; Ypos
 		move.w	#make_art_tile(ArtTile_HUD,0,1),d5		; VRAM
@@ -54,11 +57,11 @@ Render_HUD_Draw:
 		adda.w	(a1,d4.w),a1
 		move.w	(a1)+,d4
 		subq.w	#1,d4
-		bmi.s	Render_HUD_Return
-		jmp	(sub_1AF6C).w							; Draw
+		bmi.s	.return
+		jmp	(sub_1AF6C).w							; draw
 ; ---------------------------------------------------------------------------
 
-Render_HUD_Return:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 

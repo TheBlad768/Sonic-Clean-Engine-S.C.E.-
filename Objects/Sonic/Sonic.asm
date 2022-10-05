@@ -9,7 +9,7 @@ Obj_Sonic:
 		lea	(Distance_from_screen_top).w,a5
 		lea	(v_Dust).w,a6
 
-	if GameDebug=1
+	if GameDebug
 		tst.w	(Debug_placement_mode).w
 		beq.s	Sonic_Normal
 
@@ -88,7 +88,7 @@ Sonic_Init_Continued:
 ; ---------------------------------------------------------------------------
 
 Sonic_Control:								; Routine 2
-	if GameDebug=1
+	if GameDebug
 		tst.b	(Debug_mode_flag).w				; is debug cheat enabled?
 		beq.s	loc_10BF0					; if not, branch
 		bclr	#button_A,(Ctrl_1_pressed).w		; is button A pressed?
@@ -266,7 +266,7 @@ Sonic_InWater:
 		bset	#Status_Underwater,status(a0)						; set underwater flag
 		bne.s	locret_10E2C									; if already underwater, branch
 		addq.b	#1,(Water_entered_counter).w
-		movea.l	a0,a1
+		movea.w	a0,a1
 		bsr.w	Player_ResetAirTimer
 		move.l	#Obj_Air_CountDown,(v_Breathing_bubbles).w		; load Sonic's breathing bubbles
 		move.b	#$81,(v_Breathing_bubbles+subtype).w
@@ -285,10 +285,10 @@ Sonic_InWater:
 
 Sonic_OutWater:
 		bclr	#Status_Underwater,status(a0)	; unset underwater flag
-		beq.w	locret_10E2C			; if already above water, branch
+		beq.s	locret_10E2C				; if already above water, branch
 		addq.b	#1,(Water_entered_counter).w
 
-		movea.l	a0,a1
+		movea.w	a0,a1
 		bsr.w	Player_ResetAirTimer
 		move.w	#$600,Sonic_Knux_top_speed-Sonic_Knux_top_speed(a4)
 		move.w	#$C,Sonic_Knux_acceleration-Sonic_Knux_top_speed(a4)
@@ -350,6 +350,9 @@ Call_Player_AnglePos:
 ; Called if Sonic is airborne, but not in a ball (thus, probably not jumping)
 ; Sonic_Stand_Freespace:
 Sonic_MdAir:
+	if RollInAir
+		bsr.w	Sonic_ChgFallAnim
+	endif
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_ChgJumpDir
 		bsr.w	Player_LevelBound
@@ -395,6 +398,30 @@ Sonic_MdJump:
 loc_11056:
 		bsr.w	Player_JumpAngle
 		bra.w	Player_DoLevelCollision
+
+	if RollInAir
+
+; ---------------------------------------------------------------------------
+; Subroutine to make Sonic roll
+; ---------------------------------------------------------------------------
+
+Sonic_ChgFallAnim:
+		cmpi.b	#id_Roll,anim(a0)				; rolling animation?
+		beq.s	Sonic_ChgFallAnim_Return 	; if yes, branch
+		tst.b	anim(a0)						; walk animation?
+		bne.s	Sonic_ChgFallAnim_Return 	; if not, branch
+		btst	#Status_OnObj,status(a0)			; is Sonic standing on an object?
+		bne.s	Sonic_ChgFallAnim_Return 	; if yes, branch
+		move.b	(Ctrl_1_pressed_logical).w,d0	; get button presses
+		andi.b	#btnABC,d0					; read only A/B/C buttons
+		beq.s	Sonic_ChgFallAnim_Return
+		move.b	#id_Roll,anim(a0)				; use "rolling"	animation
+
+Sonic_ChgFallAnim_Return:
+		rts
+
+	endif
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to make Sonic walk/run
 ; ---------------------------------------------------------------------------
@@ -421,10 +448,10 @@ Sonic_NotLeft:
 Sonic_NotRight:
 		move.w	(HScroll_Shift).w,d1
 		beq.s	+
-		bclr	#0,status(a0)
+		bclr	#Status_Facing,status(a0)
 		tst.w	d1
 		bpl.s	+
-		bset	#0,status(a0)
+		bset	#Status_Facing,status(a0)
 +		move.b	angle(a0),d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0						; is Sonic on a slope?
@@ -727,7 +754,7 @@ loc_113FE:
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_11412
 		bclr	#Status_Push,status(a0)
-		move.b	#1,prev_anim(a0)
+		move.b	#id_Run,prev_anim(a0)
 
 loc_11412:
 		sub.w	d5,d0
@@ -742,7 +769,7 @@ loc_11412:
 
 loc_11424:
 		move.w	d0,ground_vel(a0)
-		clr.b	anim(a0)
+		clr.b	anim(a0)	; id_Walk
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -780,7 +807,7 @@ sub_11482:
 		bclr	#Status_Facing,status(a0)
 		beq.s	loc_1149C
 		bclr	#Status_Push,status(a0)
-		move.b	#1,prev_anim(a0)
+		move.b	#id_Run,prev_anim(a0)
 
 loc_1149C:
 		add.w	d5,d0
@@ -793,7 +820,7 @@ loc_1149C:
 
 loc_114AA:
 		move.w	d0,ground_vel(a0)
-		clr.b	anim(a0)
+		clr.b	anim(a0)	; id_Walk
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -814,7 +841,7 @@ loc_114BE:
 		bmi.s	locret_11506
 		sfx	sfx_Skid
 		move.b	#id_Stop,anim(a0)
-		bset	#0,status(a0)
+		bset	#Status_Facing,status(a0)
 		cmpi.b	#12,air_left(a0)
 		bcs.s	locret_11506
 		move.b	#6,routine(a6)			; v_Dust
@@ -877,7 +904,7 @@ loc_11578:
 		bcc.s	loc_115C6
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_115B4
-		bclr	#2,status(a0)
+		bclr	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
 		move.b	default_y_radius(a0),y_radius(a0)
 		move.b	default_x_radius(a0),x_radius(a0)
@@ -895,7 +922,7 @@ loc_115AE:
 
 loc_115B4:
 		move.w	#$400,ground_vel(a0)
-		btst	#0,status(a0)
+		btst	#Status_Facing,status(a0)
 		beq.s	loc_115C6
 		neg.w	ground_vel(a0)
 
@@ -937,7 +964,7 @@ sub_11608:
 		bpl.s	loc_1161E
 
 loc_11610:
-		bset	#0,status(a0)
+		bset	#Status_Facing,status(a0)
 		move.b	#id_Roll,anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -956,7 +983,7 @@ loc_11626:
 sub_1162C:
 		move.w	ground_vel(a0),d0
 		bmi.s	loc_11640
-		bclr	#0,status(a0)
+		bclr	#Status_Facing,status(a0)
 		move.b	#id_Roll,anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -984,7 +1011,7 @@ Sonic_ChgJumpDir:
 		move.w	x_vel(a0),d0
 		btst	#button_left,(Ctrl_1_logical).w
 		beq.s	loc_11682
-		bset	#0,status(a0)
+		bset	#Status_Facing,status(a0)
 		sub.w	d5,d0
 		move.w	d6,d1
 		neg.w	d1
@@ -998,7 +1025,7 @@ Sonic_ChgJumpDir:
 loc_11682:
 		btst	#button_right,(Ctrl_1_logical).w
 		beq.s	loc_1169E
-		bclr	#0,status(a0)
+		bclr	#Status_Facing,status(a0)
 		add.w	d5,d0
 		cmp.w	d6,d0
 		blt.s		loc_1169E
@@ -1069,7 +1096,7 @@ Player_Boundary_CheckBottom:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_11722
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
 		blt.s		Player_Boundary_Bottom
 
@@ -1112,7 +1139,7 @@ SonicKnux_Roll:
 loc_1176A:
 		cmpi.w	#$100,d0
 		bcc.s	loc_11790
-		btst	#3,status(a0)
+		btst	#Status_OnObj,status(a0)
 		bne.s	locret_1177E
 		move.b	#id_Duck,anim(a0)
 
@@ -1123,12 +1150,12 @@ locret_1177E:
 loc_11780:
 		cmpi.b	#id_Duck,anim(a0)
 		bne.s	locret_1177E
-		move.b	#id_Walk,anim(a0)
+		clr.b	anim(a0)	; id_Walk
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_11790:
-		btst	#2,status(a0)
+		btst	#Status_Roll,status(a0)
 		beq.s	loc_1179A
 		rts
 ; ---------------------------------------------------------------------------
@@ -1363,7 +1390,7 @@ loc_11C8C:
 		addi.w	#$2000,d0
 		lea	(H_scroll_frame_offset).w,a1
 		move.w	d0,(a1)
-		btst	#0,status(a0)
+		btst	#Status_Facing,status(a0)
 		beq.s	loc_11CDC
 		neg.w	ground_vel(a0)
 
@@ -1409,7 +1436,7 @@ loc_11D2E:
 		move.b	(Ctrl_1_pressed_logical).w,d0
 		andi.b	#btnA+btnB+btnC,d0
 		beq.w	loc_11D5E
-		move.w	#id_SpinDash<<8,anim(a0)
+		move.w	#id_SpinDash<<8|id_Walk,anim(a0)
 		sfx	sfx_SpinDash
 		addi.w	#$200,spin_dash_counter(a0)
 		cmpi.w	#$800,spin_dash_counter(a0)
@@ -1422,7 +1449,7 @@ loc_11D5E:
 		move.b	spin_dash_counter(a0),d0
 		add.w	d0,d0
 		move.w	word_11CF2(pc,d0.w),ground_vel(a0)
-		btst	#0,status(a0)
+		btst	#Status_Facing,status(a0)
 		beq.s	+
 		neg.w	ground_vel(a0)
 +
@@ -1924,7 +1951,7 @@ locret_12170:
 Player_TouchFloor_Check_Spindash:
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_121D8
-		move.b	#id_Walk,anim(a0)
+		clr.b	anim(a0)	; id_Walk
 
 Sonic_ResetOnFloor:
 		move.b	y_radius(a0),d0
@@ -1933,7 +1960,7 @@ Sonic_ResetOnFloor:
 		btst	#Status_Roll,status(a0)
 		beq.s	loc_121D8
 		bclr	#Status_Roll,status(a0)
-		move.b	#id_Walk,anim(a0)
+		clr.b	anim(a0)	; id_Walk
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -2017,7 +2044,7 @@ BubbleShield_Bounce:
 ; ---------------------------------------------------------------------------
 
 Sonic_Hurt:
-	if GameDebug=1
+	if GameDebug
 		tst.b	(Debug_mode_flag).w
 		beq.s	+
 		btst	#button_B,(Ctrl_1_pressed).w
@@ -2053,7 +2080,7 @@ sub_12318:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_12336
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
 		blt.w	loc_1238A
 		bra.s	loc_12344
@@ -2077,7 +2104,7 @@ loc_12344:
 		move.w	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
 		move.b	d0,object_control(a0)
-		move.b	#id_Walk,anim(a0)
+		clr.b	anim(a0)	; id_Walk
 		move.w	#$100,priority(a0)
 		move.b	#id_SonicControl,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
@@ -2093,7 +2120,7 @@ loc_1238A:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_Death:
-	if GameDebug=1
+	if GameDebug
 		tst.b	(Debug_mode_flag).w
 		beq.s	+
 		btst	#button_B,(Ctrl_1_pressed).w
@@ -2162,7 +2189,7 @@ loc_12590:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_Drown:
-	if GameDebug=1
+	if GameDebug
 		tst.b	(Debug_mode_flag).w
 		beq.s	+
 		btst	#button_B,(Ctrl_1_pressed).w
@@ -2603,7 +2630,7 @@ Sonic_Load_PLC2:
 		move.w	(a2)+,d5
 		subq.w	#1,d5
 		bmi.s	+
-		move.w	#$D000,d4
+		move.w	#tiles_to_bytes(ArtTile_Sonic),d4
 		move.l	#ArtUnc_Sonic>>1,d6
 
 -		moveq	#0,d1

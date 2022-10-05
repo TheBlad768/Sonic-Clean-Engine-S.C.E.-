@@ -7,23 +7,23 @@
 TouchResponse:
 		bsr.w	Test_Ring_Collisions
 		bsr.w	ShieldTouchResponse
-		tst.b	character_id(a0)								; Is the player Sonic?
-		bne.s	.Touch_NoInstaShield						; If not, branch
+		tst.b	character_id(a0)								; is the player Sonic?
+		bne.s	.Touch_NoInstaShield						; if not, branch
 		move.b	status_secondary(a0),d0
-		andi.b	#$73,d0									; Does the player have any shields or is invincible?
-		bne.s	.Touch_NoInstaShield						; If so, branch
+		andi.b	#$73,d0									; does the player have any shields or is invincible?
+		bne.s	.Touch_NoInstaShield						; if so, branch
 		; By this point, we're focussing purely on the Insta-Shield
-		cmpi.b	#1,double_jump_flag(a0)					; Is the Insta-Shield currently in its 'attacking' mode?
-		bne.s	.Touch_NoInstaShield						; If not, branch
-		bset	#Status_Invincible,status_secondary(a0)			; Make the player invincible
-		move.w	x_pos(a0),d2								; Get player's x_pos
-		move.w	y_pos(a0),d3								; Get player's y_pos
-		subi.w	#$18,d2									; Subtract width of Insta-Shield
-		subi.w	#$18,d3									; Subtract height of Insta-Shield
-		moveq	#$30,d4									; Player's width
-		moveq	#$30,d5									; Player's height
+		cmpi.b	#1,double_jump_flag(a0)					; is the Insta-Shield currently in its 'attacking' mode?
+		bne.s	.Touch_NoInstaShield						; if not, branch
+		bset	#Status_Invincible,status_secondary(a0)			; make the player invincible
+		move.w	x_pos(a0),d2								; get player's x_pos
+		move.w	y_pos(a0),d3								; get player's y_pos
+		subi.w	#$18,d2									; subtract width of Insta-Shield
+		subi.w	#$18,d3									; subtract height of Insta-Shield
+		moveq	#$30,d4									; player's width
+		moveq	#$30,d5									; player's height
 		bsr.s	.Touch_Process
-		bclr	#Status_Invincible,status_secondary(a0)			; Make the player vulnerable again
+		bclr	#Status_Invincible,status_secondary(a0)			; make the player vulnerable again
 
 .alreadyinvincible:
 		moveq	#0,d0
@@ -31,8 +31,8 @@ TouchResponse:
 ; ---------------------------------------------------------------------------
 
 .Touch_NoInstaShield:
-		move.w	x_pos(a0),d2								; Get player's x_pos
-		move.w	y_pos(a0),d3								; Get player's y_pos
+		move.w	x_pos(a0),d2								; get player's x_pos
+		move.w	y_pos(a0),d3								; get player's y_pos
 		subq.w	#8,d2
 		moveq	#0,d5
 		move.b	y_radius(a0),d5							; load Sonic's height
@@ -40,22 +40,22 @@ TouchResponse:
 		sub.w	d5,d3
 		; Note the lack of a check for if the player is ducking
 		; Height is no longer reduced by ducking
-		moveq	#$10,d4									; Player's collision width
+		moveq	#$10,d4									; player's collision width
 		add.w	d5,d5
 
 .Touch_Process:
 		lea	(Collision_response_list).w,a4
-		move.w	(a4)+,d6									; Get number of objects queued
-		beq.s	locret_FF1C								; If there are none, return
+		move.w	(a4)+,d6									; get number of objects queued
+		beq.s	locret_FF1C								; if there are none, return
 
 Touch_Loop:
-		movea.w	(a4)+,a1									; Get address of first object's RAM
-		move.b	collision_flags(a1),d0						; Get its collision_flags
-		bne.s	Touch_Width								; If it actually has collision, branch
+		movea.w	(a4)+,a1									; get address of first object's RAM
+		move.b	collision_flags(a1),d0						; get its collision_flags
+		bne.s	Touch_Width								; if it actually has collision, branch
 
 Touch_NextObj:
-		subq.w	#2,d6									; Count the object as done
-		bne.s	Touch_Loop								; If there are still objects left, loop
+		subq.w	#2,d6									; count the object as done
+		bne.s	Touch_Loop								; if there are still objects left, loop
 		moveq	#0,d0
 
 locret_FF1C:
@@ -63,41 +63,41 @@ locret_FF1C:
 ; ---------------------------------------------------------------------------
 
 Touch_Width:
-		andi.w	#$3F,d0									; Get only collision size
-		add.w	d0,d0									; Turn into index
+		andi.w	#$3F,d0									; get only collision size
+		add.w	d0,d0									; turn into index
 		lea	Touch_Sizes(pc,d0.w),a2
 		moveq	#0,d1
-		move.b	(a2)+,d1									; Get width value from Touch_Sizes
-		move.w	x_pos(a1),d0								; Get object's x_pos
-		sub.w	d1,d0									; Subtract object's width
-		sub.w	d2,d0									; Subtract player's left collision boundary
-		bcc.s	.checkrightside							; If player's left side is to the left of the object, branch
-		add.w	d1,d1									; Double object's width value
-		add.w	d1,d0									; Add object's width*2 (now at right of object)
-		bcs.s	Touch_Height							; If carry, branch (player is within the object's boundaries)
-		bra.s	Touch_NextObj							; If not, loop and check next object
+		move.b	(a2)+,d1									; get width value from Touch_Sizes
+		move.w	x_pos(a1),d0								; get object's x_pos
+		sub.w	d1,d0									; subtract object's width
+		sub.w	d2,d0									; subtract player's left collision boundary
+		bcc.s	.checkrightside							; if player's left side is to the left of the object, branch
+		add.w	d1,d1									; double object's width value
+		add.w	d1,d0									; add object's width*2 (now at right of object)
+		bcs.s	Touch_Height							; if carry, branch (player is within the object's boundaries)
+		bra.s	Touch_NextObj							; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 
 .checkrightside:
-		cmp.w	d4,d0									; Is player's right side to the left of the object?
-		bhi.s	Touch_NextObj							; If so, loop and check next object
+		cmp.w	d4,d0									; is player's right side to the left of the object?
+		bhi.s	Touch_NextObj							; if so, loop and check next object
 
 Touch_Height:
 		moveq	#0,d1
-		move.b	(a2)+,d1									; Get height value from Touch_Sizes
-		move.w	y_pos(a1),d0								; Get object's y_pos
-		sub.w	d1,d0									; Subtract object's height
-		sub.w	d3,d0									; Subtract player's bottom collision boundary
-		bcc.s	.checktop								; If bottom of player is under the object, branch
-		add.w	d1,d1									; Double object's height value
-		add.w	d1,d0									; Add object's height*2 (now at top of object)
-		bcs.s	Touch_ChkValue							; If carry, branch (player is within the object's boundaries)
-		bra.s	Touch_NextObj							; If not, loop and check next object
+		move.b	(a2)+,d1									; get height value from Touch_Sizes
+		move.w	y_pos(a1),d0								; get object's y_pos
+		sub.w	d1,d0									; subtract object's height
+		sub.w	d3,d0									; subtract player's bottom collision boundary
+		bcc.s	.checktop								; if bottom of player is under the object, branch
+		add.w	d1,d1									; double object's height value
+		add.w	d1,d0									; add object's height*2 (now at top of object)
+		bcs.s	Touch_ChkValue							; if carry, branch (player is within the object's boundaries)
+		bra.s	Touch_NextObj							; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 
 .checktop:
-		cmp.w	d5,d0									; Is top of player under the object?
-		bhi.s	Touch_NextObj							; If so, loop and check next object
+		cmp.w	d5,d0									; is top of player under the object?
+		bhi.s	Touch_NextObj							; if so, loop and check next object
 		bra.s	Touch_ChkValue
 ; ---------------------------------------------------------------------------
 ; collision sizes $00-$3F (width,height)
@@ -168,77 +168,77 @@ Touch_Sizes:
 ; ---------------------------------------------------------------------------
 
 Touch_ChkValue:
-		move.b	collision_flags(a1),d1					; Get its collision_flags
-		andi.b	#$C0,d1								; Get only collision type bits
-		beq.w	Touch_Enemy						; If 00, enemy, branch
+		move.b	collision_flags(a1),d1					; get its collision_flags
+		andi.b	#$C0,d1								; get only collision type bits
+		beq.w	Touch_Enemy						; if 00, enemy, branch
 		cmpi.b	#$C0,d1
-		beq.w	Touch_Special						; If 11, "special thing for starpole", branch
+		beq.w	Touch_Special						; if 11, "special thing for starpole", branch
 		tst.b	d1
-		bmi.w	Touch_ChkHurt						; If 10, "harmful", branch
+		bmi.w	Touch_ChkHurt						; if 10, "harmful", branch
 		; If 01...
-		move.b	collision_flags(a1),d0					; Get collision_flags
-		andi.b	#$3F,d0								; Get only collision size
-		cmpi.b	#6,d0								; Is touch response $46 ?
+		move.b	collision_flags(a1),d0					; get collision_flags
+		andi.b	#$3F,d0								; get only collision size
+		cmpi.b	#6,d0								; is touch response $46 ?
 		beq.s	Touch_Monitor						; if yes, branch
-		move.b	(Player_1+invulnerability_timer).w,d0	; Get the main character's invulnerability_timer
-		cmpi.b	#90,d0								; Is there more than 90 frames on the timer remaining?
-		bhs.s	.locret								; If so, branch
-		move.b	#4,routine(a1)						; Set target object's routine to 4 (must be reserved for collision response)
+		move.b	(Player_1+invulnerability_timer).w,d0	; get the main character's invulnerability_timer
+		cmpi.b	#90,d0								; is there more than 90 frames on the timer remaining?
+		bhs.s	.locret								; if so, branch
+		move.b	#4,routine(a1)						; set target object's routine to 4 (must be reserved for collision response)
 
 .locret:
 		rts
 ; ---------------------------------------------------------------------------
 
 Touch_Monitor:
-		move.w	y_vel(a0),d0							; Get player's y_vel
-		tst.b	(Reverse_gravity_flag).w					; Are we in reverse gravity mode?
-		beq.s	.normalgravity						; If not, branch
-		neg.w	d0									; Negate player's y_vel
+		move.w	y_vel(a0),d0							; get player's y_vel
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.normalgravity						; if not, branch
+		neg.w	d0									; negate player's y_vel
 
 .normalgravity:
-		btst	#1,render_flags(a1)						; Is the monitor upside down?
-		beq.s	.monitornotupsidedown				; If not, branch
+		btst	#1,render_flags(a1)						; is the monitor upside down?
+		beq.s	.monitornotupsidedown				; if not, branch
 		tst.w	d0
-		beq.s	.checkdestroy							; If player isn't moving up or down at all, branch
-		bmi.s	.checkdestroy							; If player is moving up, branch
-		bra.s	.checkfall								; If player is moving down, branch
+		beq.s	.checkdestroy							; if player isn't moving up or down at all, branch
+		bmi.s	.checkdestroy							; if player is moving up, branch
+		bra.s	.checkfall								; if player is moving down, branch
 ; ---------------------------------------------------------------------------
 
 .monitornotupsidedown:
 		tst.w	d0
-		bpl.s	.checkdestroy							; If player is moving down, branch
+		bpl.s	.checkdestroy							; if player is moving down, branch
 
 .checkfall:
-		; This check is responsible for S&K's monitors not falling if hit from below (but only in regular gravity. See below)
-;		btst	#1,status(a1)								; Is the monitor upside down (different way of checking)?
-;		beq.s	.checkdestroy							; If not, branch
+		; this check is responsible for S&K's monitors not falling if hit from below (but only in regular gravity. see below)
+;		btst	#1,status(a1)								; is the monitor upside down (different way of checking)?
+;		beq.s	.checkdestroy							; if not, branch
 
-		btst	#1,render_flags(a1)						; Is the monitor upside down?
-		bne.s	.monitorupsidedown					; If so, branch
-		move.w	y_pos(a0),d0							; Get player's y_pos
-		subi.w	#$10,d0								; Subtract height of monitor from it
+		btst	#1,render_flags(a1)						; is the monitor upside down?
+		bne.s	.monitorupsidedown					; if so, branch
+		move.w	y_pos(a0),d0							; get player's y_pos
+		subi.w	#$10,d0								; subtract height of monitor from it
 		cmp.w	y_pos(a1),d0
-		blo.s		.locret								; If new value is lower than monitor's y_pos, return
+		blo.s		.locret								; if new value is lower than monitor's y_pos, return
 		bra.s	.monitorfall
 ; ---------------------------------------------------------------------------
 
 .monitorupsidedown:
-		move.w	y_pos(a0),d0							; Get player's y_pos
-		addi.w	#$10,d0								; Add height of monitor from it
+		move.w	y_pos(a0),d0							; get player's y_pos
+		addi.w	#$10,d0								; add height of monitor from it
 		cmp.w	y_pos(a1),d0
-		bhs.s	.locret								; If new value is higher than monitor's y_pos, return
+		bhs.s	.locret								; if new value is higher than monitor's y_pos, return
 
 .monitorfall:
-		; Fun fact: In S3, like the games before it, hitting a monitor from below would make it fall
-		; In S&K, that was removed, and they are destroyed as normal.
-		; However, according to this code, if a monitor is upside down, and player is in reverse gravity,
+		; fun fact: In S3, like the games before it, hitting a monitor from below would make it fall
+		; in S&K, that was removed, and they are destroyed as normal.
+		; however, according to this code, if a monitor is upside down, and player is in reverse gravity,
 		; hitting the monitor from below will still make it fall.
-		; Playing with Debug Mode confirms this.
-		neg.w	y_vel(a0)							; Reverse Sonic's y-motion
+		; playing with Debug Mode confirms this.
+		neg.w	y_vel(a0)							; reverse Sonic's y-motion
 		move.w	#-$180,y_vel(a1)
 		tst.b	routine_secondary(a1)
 		bne.s	.locret
-		move.b	#4,routine_secondary(a1)				; Set the monitor's routine_secondary counter
+		move.b	#4,routine_secondary(a1)				; set the monitor's routine_secondary counter
 
 .locret:
 		rts
@@ -259,22 +259,22 @@ Touch_Enemy:
 		beq.s	.checkhurtenemy						; if yes, branch
 		cmpi.b	#id_Roll,anim(a0)						; is Sonic rolling/jumping?
 		beq.s	.checkhurtenemy						; if not, branch
-		cmpi.b	#2,character_id(a0)					; Is player Knuckles?
-		bne.s	.notknuckles							; If not, branch
-		cmpi.b	#1,double_jump_flag(a0)				; Is Knuckles gliding?
-		beq.s	.checkhurtenemy						; If so, branch
-		cmpi.b	#3,double_jump_flag(a0)				; Is Knuckles sliding across the ground after gliding?
-		beq.s	.checkhurtenemy						; If so, branch
+		cmpi.b	#2,character_id(a0)					; is player Knuckles?
+		bne.s	.notknuckles							; if not, branch
+		cmpi.b	#1,double_jump_flag(a0)				; is Knuckles gliding?
+		beq.s	.checkhurtenemy						; if so, branch
+		cmpi.b	#3,double_jump_flag(a0)				; is Knuckles sliding across the ground after gliding?
+		beq.s	.checkhurtenemy						; if so, branch
 		bra.w	Touch_ChkHurt
 ; ---------------------------------------------------------------------------
 
 .notknuckles:
-		cmpi.b	#1,character_id(a0)					; Is player Tails
-		bne.w	Touch_ChkHurt						; If not, branch
-		tst.b	double_jump_flag(a0)						; Is Tails flying ("gravity-affected")
-		beq.w	Touch_ChkHurt						; If not, branch
-		btst	#Status_Underwater,status(a0)				; Is Tails underwater
-		bne.w	Touch_ChkHurt						; If not, branch
+		cmpi.b	#1,character_id(a0)					; is player Tails
+		bne.w	Touch_ChkHurt						; if not, branch
+		tst.b	double_jump_flag(a0)						; is Tails flying ("gravity-affected")
+		beq.w	Touch_ChkHurt						; if not, branch
+		btst	#Status_Underwater,status(a0)				; is Tails underwater
+		bne.w	Touch_ChkHurt						; if not, branch
 		move.w	x_pos(a0),d1
 		move.w	y_pos(a0),d2
 		sub.w	x_pos(a1),d1
@@ -288,10 +288,10 @@ Touch_Enemy:
 		; Boss related? Could be special enemies in general
 		tst.b	boss_hitcount2(a1)
 		beq.s	Touch_EnemyNormal
-		neg.w	x_vel(a0)							; Bounce player directly off boss
+		neg.w	x_vel(a0)								; bounce player directly off boss
 		neg.w	y_vel(a0)
 		neg.w	ground_vel(a0)
-		move.b	collision_flags(a1),collision_restore_flags(a1)	; Save collision_flags
+		move.b	collision_flags(a1),collision_restore_flags(a1)	; save current collision
 		clr.b	collision_flags(a1)
 		subq.b	#1,boss_hitcount2(a1)
 		bne.s	.bossnotdefeated
@@ -302,11 +302,11 @@ Touch_Enemy:
 ; ---------------------------------------------------------------------------
 
 Touch_EnemyNormal:
-		btst	#2,status(a1)								; Should the object remember that it's been destroyed (Remember Sprite State flag)?
-		beq.s	.dontremember						; If not, branch
+		btst	#2,status(a1)								; should the object remember that it's been destroyed (Remember Sprite State flag)?
+		beq.s	.dontremember						; if not, branch
 		move.b	ros_bit(a1),d0
 		movea.w	ros_addr(a1),a2
-		bclr	d0,(a2)									; Mark object as destroyed
+		bclr	d0,(a2)									; mark object as destroyed
 
 .dontremember:
 		bset	#7,status(a1)
@@ -326,32 +326,31 @@ Touch_EnemyNormal:
 		move.w	#10,objoff_3E(a1)
 
 .notreachedlimit2:
-		movea.w	a0,a3
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,address(a1)			; change object to explosion
 		clr.b	routine(a1)
 		tst.w	y_vel(a0)
 		bmi.s	.bouncedown
 		move.w	y_pos(a0),d0
-		cmp.w	y_pos(a1),d0							; Was player above, or at the same height as, the enemy when it was destroyed
+		cmp.w	y_pos(a1),d0							; was player above, or at the same height as, the enemy when it was destroyed
 		bhs.s	.bounceup
 		neg.w	y_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .bouncedown:
-		addi.w	#$100,y_vel(a0)						; Bounce down
+		addi.w	#$100,y_vel(a0)						; bounce down
 		rts
 ; ---------------------------------------------------------------------------
 
 .bounceup:
-		subi.w	#$100,y_vel(a0)						; Bounce up
+		subi.w	#$100,y_vel(a0)						; bounce up
 		rts
 ; ---------------------------------------------------------------------------
 
 Enemy_Points:	dc.w 10, 20, 50, 100					; points awarded div 10
 ; ---------------------------------------------------------------------------
-; Subroutine for checking if Sonic/Tails/Knuckles should be hurt and hurting them if so
+; subroutine for checking if Sonic/Tails/Knuckles should be hurt and hurting them if so
 ; note: character must be at a0
 ; ---------------------------------------------------------------------------
 
@@ -359,12 +358,12 @@ Enemy_Points:	dc.w 10, 20, 50, 100					; points awarded div 10
 
 Touch_ChkHurt:
 		move.b	status_secondary(a0),d0
-		andi.b	#$73,d0								; Does player have any shields or is invincible?
-		beq.s	Touch_ChkHurt_NoPowerUp			; If not, branch
-		and.b	shield_reaction(a1),d0					; Does one of the player's shields grant immunity to this object??
-		bne.s	Touch_ChkHurt_Return				; If so, branch
-		btst	#Status_Shield,status_secondary(a0)		; Does the player have a shield (strange time to ask)
-		bne.s	Touch_ChkHurt_HaveShield			; If so, branch
+		andi.b	#$73,d0								; does player have any shields or is invincible?
+		beq.s	Touch_ChkHurt_NoPowerUp			; if not, branch
+		and.b	shield_reaction(a1),d0					; does one of the player's shields grant immunity to this object??
+		bne.s	Touch_ChkHurt_Return				; if so, branch
+		btst	#Status_Shield,status_secondary(a0)		; does the player have a shield (strange time to ask)
+		bne.s	Touch_ChkHurt_HaveShield			; if so, branch
 
 Touch_ChkHurt2:
 		btst	#Status_Invincible,status_secondary(a0)		; does Sonic have invincibility?
@@ -376,16 +375,17 @@ Touch_ChkHurt_Return:
 ; ---------------------------------------------------------------------------
 
 Touch_ChkHurt_NoPowerUp:
-		; Note that this check could apply to the Insta-Shield,
+
+		; note that this check could apply to the Insta-Shield,
 		; but the check that branches to this requires the player not be invincible.
-		; The Insta-Shield grants temporary invincibility. See the problem?
-		cmpi.b	#1,double_jump_flag(a0)				; Is player Insta-Shield-attacking (Sonic), flying (Tails) or gliding (Knuckles)?
-		bne.s	Touch_ChkHurt2						; If not, branch
+		; the Insta-Shield grants temporary invincibility. see the problem?
+		cmpi.b	#1,double_jump_flag(a0)				; is player Insta-Shield-attacking (Sonic), flying (Tails) or gliding (Knuckles)?
+		bne.s	Touch_ChkHurt2						; if not, branch
 
 Touch_ChkHurt_HaveShield:
 		move.b	shield_reaction(a1),d0
-		andi.b	#8,d0								; Should the object be bounced away by a shield?
-		beq.s	Touch_ChkHurt2						; If not, branch
+		andi.b	#8,d0								; should the object be bounced away by a shield?
+		beq.s	Touch_ChkHurt2						; if not, branch
 
 Touch_ChkHurt_Bounce_Projectile:
 		move.w	x_pos(a0),d1
@@ -406,9 +406,9 @@ Touch_ChkHurt_Bounce_Projectile:
 ; ---------------------------------------------------------------------------
 
 Touch_Hurt:
-		tst.b	invulnerability_timer(a0)					; Is the player invulnerable?
-		bne.s	Touch_ChkHurt_Return				; If so, branch
-		movea.l	a1,a2
+		tst.b	invulnerability_timer(a0)					; is the player invulnerable?
+		bne.s	Touch_ChkHurt_Return				; if so, branch
+		movea.w	a1,a2
 
 ; continue straight to HurtCharacter
 ; ---------------------------------------------------------------------------
@@ -510,8 +510,8 @@ loc_1036E:
 ; ---------------------------------------------------------------------------
 
 Touch_Special:
-		move.b	collision_flags(a1),d1					; Get collision_flags
-		andi.b	#$3F,d1								; Get only collision size (but that doesn't seems to be its use here)
+		move.b	collision_flags(a1),d1					; get collision_flags
+		andi.b	#$3F,d1								; get only collision size (but that doesn't seems to be its use here)
 		cmpi.b	#7,d1
 		beq.s	loc_103FA
 		cmpi.b	#6,d1
@@ -534,18 +534,18 @@ Touch_Special:
 ; ---------------------------------------------------------------------------
 
 loc_103FA:
-		addq.b	#1,collision_property(a1)				; Otherwise, it seems everything else does double
+		addq.b	#1,collision_property(a1)				; otherwise, it seems everything else does double
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Add_SpriteToCollisionResponseList:
 		lea	(Collision_response_list).w,a1
-		cmpi.w	#$7E,(a1)							; Is list full?
-		bhs.s	.locret								; If so, return
-		addq.w	#2,(a1)								; Count this new entry
-		adda.w	(a1),a1								; Offset into right area of list
-		move.w	a0,(a1)								; Store RAM address in list
+		cmpi.w	#$7E,(a1)							; is list full?
+		bhs.s	.locret								; if so, return
+		addq.w	#2,(a1)								; count this new entry
+		adda.w	(a1),a1								; offset into right area of list
+		move.w	a0,(a1)								; store RAM address in list
 
 .locret:
 		rts
@@ -554,77 +554,77 @@ Add_SpriteToCollisionResponseList:
 
 ShieldTouchResponse:
 		move.b	status_secondary(a0),d0
-		andi.b	#$71,d0								; Does the player have any shields?
+		andi.b	#$71,d0								; does the player have any shields?
 		beq.s	ShieldTouch_Return
-		move.w	x_pos(a0),d2							; Get player's x_pos
-		move.w	y_pos(a0),d3							; Get player's y_pos
-		subi.w	#$18,d2								; Subtract width of shield
-		subi.w	#$18,d3								; Subtract height of shield
-		moveq	#$30,d4								; Player's width
-		moveq	#$30,d5								; Player's height
+		move.w	x_pos(a0),d2							; get player's x_pos
+		move.w	y_pos(a0),d3							; get player's y_pos
+		subi.w	#$18,d2								; subtract width of shield
+		subi.w	#$18,d3								; subtract height of shield
+		moveq	#$30,d4								; player's width
+		moveq	#$30,d5								; player's height
 		lea	(Collision_response_list).w,a4
-		move.w	(a4)+,d6								; Get number of objects queued
-		beq.s	ShieldTouch_Return					; If there are none, return
+		move.w	(a4)+,d6								; get number of objects queued
+		beq.s	ShieldTouch_Return					; if there are none, return
 
 ShieldTouch_Loop:
-		movea.w	(a4)+,a1								; Get address of first object's RAM
-		move.b	collision_flags(a1),d0					; Get its collision_flags
-		andi.b	#$C0,d0								; Get only collision type bits
-		cmpi.b	#$80,d0								; Is only the high bit set ("harmful")?
-		beq.s	ShieldTouch_Width					; If so, branch
+		movea.w	(a4)+,a1								; get address of first object's RAM
+		move.b	collision_flags(a1),d0					; get its collision_flags
+		andi.b	#$C0,d0								; get only collision type bits
+		cmpi.b	#$80,d0								; is only the high bit set ("harmful")?
+		beq.s	ShieldTouch_Width					; if so, branch
 
 ShieldTouch_NextObj:
-		subq.w	#2,d6								; Count the object as done
-		bne.s	ShieldTouch_Loop					; If there are still objects left, loop
+		subq.w	#2,d6								; count the object as done
+		bne.s	ShieldTouch_Loop					; if there are still objects left, loop
 
 ShieldTouch_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
 ShieldTouch_Width:
-		move.b	collision_flags(a1),d0					; Get collision_flags
-		andi.w	#$3F,d0								; Get only collision size
-		beq.s	ShieldTouch_NextObj					; If it doesn't have a size, branch
-		add.w	d0,d0								; Turn into index
+		move.b	collision_flags(a1),d0					; get collision_flags
+		andi.w	#$3F,d0								; get only collision size
+		beq.s	ShieldTouch_NextObj					; if it doesn't have a size, branch
+		add.w	d0,d0								; turn into index
 		lea	Touch_Sizes(pc),a2
-		lea	(a2,d0.w),a2								; Go to correct entry
+		lea	(a2,d0.w),a2								; go to correct entry
 		moveq	#0,d1
-		move.b	(a2)+,d1								; Get width value from Touch_Sizes
-		move.w	x_pos(a1),d0							; Get object's x_pos
-		sub.w	d1,d0								; Subtract object's width
-		sub.w	d2,d0								; Subtract player's left collision boundary
-		bhs.s	.checkrightside						; If player's left side is to the left of the object, branch
-		add.w	d1,d1								; Double object's width value
-		add.w	d1,d0								; Add object's width*2 (now at right of object)
-		blo.s		ShieldTouch_Height					; If carry, branch (player is within the object's boundaries)
-		bra.s	ShieldTouch_NextObj					; If not, loop and check next object
+		move.b	(a2)+,d1								; get width value from Touch_Sizes
+		move.w	x_pos(a1),d0							; get object's x_pos
+		sub.w	d1,d0								; subtract object's width
+		sub.w	d2,d0								; subtract player's left collision boundary
+		bhs.s	.checkrightside						; if player's left side is to the left of the object, branch
+		add.w	d1,d1								; double object's width value
+		add.w	d1,d0								; add object's width*2 (now at right of object)
+		blo.s		ShieldTouch_Height					; if carry, branch (player is within the object's boundaries)
+		bra.s	ShieldTouch_NextObj					; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 
 .checkrightside:
-		cmp.w	d4,d0								; Is player's right side to the left of the object?
-		bhi.s	ShieldTouch_NextObj					; If so, loop and check next object
+		cmp.w	d4,d0								; is player's right side to the left of the object?
+		bhi.s	ShieldTouch_NextObj					; if so, loop and check next object
 
 ShieldTouch_Height:
 		moveq	#0,d1
-		move.b	(a2)+,d1								; Get height value from Touch_Sizes
-		move.w	y_pos(a1),d0							; Get object's y_pos
-		sub.w	d1,d0								; Subtract object's height
-		sub.w	d3,d0								; Subtract player's bottom collision boundary
-		bcc.s	.checktop							; If bottom of player is under the object, branch
-		add.w	d1,d1								; Double object's height value
-		add.w	d1,d0								; Add object's height*2 (now at top of object)
-		bcs.s	.checkdeflect							; If carry, branch (player is within the object's boundaries)
-		bra.s	ShieldTouch_NextObj					; If not, loop and check next object
+		move.b	(a2)+,d1								; get height value from Touch_Sizes
+		move.w	y_pos(a1),d0							; get object's y_pos
+		sub.w	d1,d0								; subtract object's height
+		sub.w	d3,d0								; subtract player's bottom collision boundary
+		bcc.s	.checktop							; if bottom of player is under the object, branch
+		add.w	d1,d1								; double object's height value
+		add.w	d1,d0								; add object's height*2 (now at top of object)
+		bcs.s	.checkdeflect							; if carry, branch (player is within the object's boundaries)
+		bra.s	ShieldTouch_NextObj					; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 
 .checktop:
-		cmp.w	d5,d0								; Is top of player under the object?
-		bhi.s	ShieldTouch_NextObj					; If so, loop and check next object
+		cmp.w	d5,d0								; is top of player under the object?
+		bhi.s	ShieldTouch_NextObj					; if so, loop and check next object
 
 .checkdeflect:
 		move.b	shield_reaction(a1),d0
-		andi.b	#8,d0								; Should the object be bounced away by a shield?
-		beq.s	ShieldTouch_NextObj					; If not, branch
+		andi.b	#8,d0								; should the object be bounced away by a shield?
+		beq.s	ShieldTouch_NextObj					; if not, branch
 		move.w	x_pos(a0),d1
 		move.w	y_pos(a0),d2
 		sub.w	x_pos(a1),d1

@@ -1,15 +1,15 @@
-Ani_Monitor:
-		dc.w byte_1DB50-Ani_Monitor
-		dc.w byte_1DB54-Ani_Monitor
-		dc.w byte_1DB5C-Ani_Monitor
-		dc.w byte_1DB64-Ani_Monitor
-		dc.w byte_1DB6C-Ani_Monitor
-		dc.w byte_1DB74-Ani_Monitor
-		dc.w byte_1DB7C-Ani_Monitor
-		dc.w byte_1DB84-Ani_Monitor
-		dc.w byte_1DB8C-Ani_Monitor
-		dc.w byte_1DB94-Ani_Monitor
-		dc.w byte_1DB9C-Ani_Monitor
+Ani_Monitor: offsetTable
+		offsetTableEntry.w byte_1DB50
+		offsetTableEntry.w byte_1DB54
+		offsetTableEntry.w byte_1DB5C
+		offsetTableEntry.w byte_1DB64
+		offsetTableEntry.w byte_1DB6C
+		offsetTableEntry.w byte_1DB74
+		offsetTableEntry.w byte_1DB7C
+		offsetTableEntry.w byte_1DB84
+		offsetTableEntry.w byte_1DB8C
+		offsetTableEntry.w byte_1DB94
+		offsetTableEntry.w byte_1DB9C
 byte_1DB50:	dc.b	1,   0,	  1, afEnd
 byte_1DB54:	dc.b	1,   0,	  2,   2,   1,	 2,   2, afEnd
 byte_1DB5C:	dc.b	1,   0,	  3,   3,   1,	 3,   3, afEnd

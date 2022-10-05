@@ -16,6 +16,7 @@ Snd_Results_Header:
 
 ; DAC Data
 Snd_Results_DAC:
+	smpsPan             panCenter, $00
 	dc.b	dSnareS3, $06, dKickS3, dKickS3, dSnareS3, dKickS3, dKickS3, dSnareS3, dKickS3, dSnareS3, dKickS3, dKickS3
 	dc.b	dSnareS3, dKickS3, dKickS3, dSnareS3, dKickS3, $01, nRst, dKickS3, dKickS3, nRst, dKickS3, dHighTom
 	dc.b	$06, dMidTomS3, dLowTomS3, dHighTom, dMidTomS3, dLowTomS3, dHighTom, dMidTomS3, dLowTomS3, dSnareS3

@@ -15,7 +15,7 @@ LoadObjects_ExtraData:
 		move.b	(a1)+,height_pixels(a0)	; Height
 		move.b	(a1)+,mapping_frame(a0)	; Frame number
 		move.b	(a1)+,collision_flags(a0)	; Collision number
-		bset	#2,render_flags(a0)			; Use screen coordinates
+		bset	#rbCoord,render_flags(a0)		; Use screen coordinates
 		addq.b	#2,routine(a0)			; Next routine
 		rts
 
@@ -28,7 +28,7 @@ SetUp_ObjAttributesSlotted:
 		move.w	(a1)+,d3					; Base VRAM offset of object
 		move.w	(a1)+,d4					; Amount to add to base VRAM offset for each slot
 		moveq	#0,d5
-		move.w	(a1)+,d5					; Index of slot array to use
+		move.w	(a1)+,d5					; Index of slot array to use (RAM shift)
 		lea	(Slotted_object_bits).w,a2
 		adda.w	d5,a2					; Get the address of the array to use
 		move.b	(a2),d5
@@ -40,7 +40,7 @@ SetUp_ObjAttributesSlotted:
 		add.w	d4,d3					; Add VRAM offset
 		dbf	d1,-							; Repeat max times
 		moveq	#0,d0
-		move.l	d0,(a0)
+		move.l	d0,address(a0)
 		move.l	d0,x_pos(a0)
 		move.l	d0,y_pos(a0)
 		move.b	d0,subtype(a0)
@@ -105,9 +105,7 @@ Set_IndexedVelocity:
 		move.b	subtype(a0),d1
 		add.w	d1,d1
 		add.w	d1,d0
-		lea	Obj_VelocityIndex(pc,d0.w),a1
-		move.w	(a1)+,x_vel(a0)
-		move.w	(a1)+,y_vel(a0)
+		move.l	Obj_VelocityIndex(pc,d0.w),x_vel(a0)
 		btst	#0,render_flags(a0)
 		beq.s	+
 		neg.w	x_vel(a0)
@@ -115,44 +113,44 @@ Set_IndexedVelocity:
 ; ---------------------------------------------------------------------------
 
 Obj_VelocityIndex:
-		dc.w  -$100, -$100	; 0
-		dc.w   $100, -$100		; 4
-		dc.w  -$200, -$200	; 8
-		dc.w   $200, -$200	; Ñ
-		dc.w  -$300, -$200	; 10
-		dc.w   $300, -$200	; 14
-		dc.w  -$200, -$200	; 18
-		dc.w	  0, -$200		; 1Ñ
-		dc.w  -$400, -$300	; 20
-		dc.w   $400, -$300	; 24
-		dc.w   $300, -$300	; 28
-		dc.w  -$400, -$300	; 2Ñ
-		dc.w   $400, -$300	; 30
-		dc.w  -$200, -$200	; 34
-		dc.w   $200, -$200	; 38
-		dc.w	  0, -$100		; 3Ñ
-		dc.w  -$40, -$700		; 40
-		dc.w  -$80, -$700		; 44
-		dc.w  -$180, -$700	; 48
-		dc.w  -$100, -$700	; 4Ñ
-		dc.w  -$200, -$700	; 50
-		dc.w  -$280, -$700	; 54
-		dc.w  -$300, -$700	; 58
-		dc.w	  0, -$100		; 5Ñ
-		dc.w  -$100, -$100	; 60
-		dc.w   $100, -$100		; 64
-		dc.w  -$200, -$100	; 68
-		dc.w   $200, -$100	; 6Ñ
-		dc.w  -$200, -$200	; 70
-		dc.w   $200, -$200	; 74
-		dc.w  -$300, -$200	; 78
-		dc.w   $300, -$200	; 7Ñ
-		dc.w  -$300, -$300	; 80
-		dc.w   $300, -$300	; 84
-		dc.w  -$400, -$300	; 88
-		dc.w   $400, -$300	; 8Ñ
-		dc.w  -$200, -$300	; 90
-		dc.w   $200, -$300	; 94
+		dc.w -$100, -$100		; 0
+		dc.w $100, -$100		; 4
+		dc.w -$200, -$200	; 8
+		dc.w $200, -$200		; Ñ
+		dc.w -$300, -$200	; 10
+		dc.w $300, -$200		; 14
+		dc.w -$200, -$200	; 18
+		dc.w 0, -$200		; 1Ñ
+		dc.w -$400, -$300	; 20
+		dc.w $400, -$300		; 24
+		dc.w $300, -$300		; 28
+		dc.w -$400, -$300	; 2Ñ
+		dc.w $400, -$300		; 30
+		dc.w -$200, -$200	; 34
+		dc.w $200, -$200		; 38
+		dc.w 0, -$100			; 3Ñ
+		dc.w -$40, -$700		; 40
+		dc.w -$80, -$700		; 44
+		dc.w -$180, -$700		; 48
+		dc.w -$100, -$700		; 4Ñ
+		dc.w -$200, -$700	; 50
+		dc.w -$280, -$700	; 54
+		dc.w -$300, -$700	; 58
+		dc.w 0, -$100			; 5Ñ
+		dc.w -$100, -$100		; 60
+		dc.w $100, -$100		; 64
+		dc.w -$200, -$100		; 68
+		dc.w $200, -$100		; 6Ñ
+		dc.w -$200, -$200	; 70
+		dc.w $200, -$200		; 74
+		dc.w -$300, -$200	; 78
+		dc.w $300, -$200		; 7Ñ
+		dc.w -$300, -$300	; 80
+		dc.w $300, -$300		; 84
+		dc.w -$400, -$300	; 88
+		dc.w $400, -$300		; 8Ñ
+		dc.w -$200, -$300	; 90
+		dc.w $200, -$300		; 94
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -175,7 +173,7 @@ Displace_PlayerOffObject_Return:
 Go_CheckPlayerRelease:
 		movem.l	d7-a0/a2-a3,-(sp)
 		lea	(Player_1).w,a1
-		btst	#3,status(a1)
+		btst	#Status_OnObj,status(a1)
 		beq.s	+
 		movea.w	interact(a1),a0
 		bsr.w	CheckPlayerReleaseFromObj
@@ -185,7 +183,7 @@ Go_CheckPlayerRelease:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_Transition:
-		sfx	bgm_Fade			; fade out music
+		sfx	bgm_Fade	; fade out music
 		move.l	#Song_Fade_Transition_Wait,address(a0)
 
 Song_Fade_Transition_Return:
@@ -203,7 +201,7 @@ Song_Fade_Transition_Wait:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_ToLevelMusic:
-		sfx	bgm_Fade			; fade out music
+		sfx	bgm_Fade	; fade out music
 		move.l	#Song_Fade_ToLevelMusic_Wait,address(a0)
 
 Song_Fade_ToLevelMusic_Return:
@@ -213,13 +211,13 @@ Song_Fade_ToLevelMusic_Return:
 Song_Fade_ToLevelMusic_Wait:
 		tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_fadeout_counter).w
 		bne.s	Song_Fade_ToLevelMusic_Return
-		bsr.s	Obj_PlayLevelMusic
+		bsr.s	Restore_LevelMusic
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_PlayLevelMusic:
-		move.w	(Current_zone_and_act).w,d0
+Restore_LevelMusic:
+		move.w	(Apparent_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#6,d0
 		lea	(LevelMusic_Playlist).l,a2
@@ -249,10 +247,10 @@ HurtCharacter_Directly2:
 		bne.s	HurtCharacter_Directly_Return
 
 HurtCharacter_Directly:
-		movea.l	a0,a2
-		movea.l	a1,a0
+		movea.w	a0,a2
+		movea.w	a1,a0
 		bsr.w	HurtCharacter
-		movea.l	a2,a0
+		movea.w	a2,a0
 
 HurtCharacter_Directly_Return:
 		rts
@@ -302,7 +300,6 @@ EnemyDefeat_Score:
 		move.w	#10,objoff_3E(a0)
 
 .notreachedlimit2:
-		movea.w	a1,a3
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,address(a0)
 		clr.b	routine(a0)
@@ -395,13 +392,13 @@ Load_LevelResults:
 ; =============== S U B R O U T I N E =======================================
 
 Set_PlayerEndingPose:
-		move.b	#-$7F,object_control(a1)
+		move.b	#$81,object_control(a1)
 		move.b	#id_Landing,anim(a1)
 		clr.b	spin_dash_flag(a1)
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
-		bclr	#5,status(a0)
-		bclr	#6,status(a0)
+		bclr	#Status_Push,status(a0)
+		bclr	#Status_Underwater,status(a0)
 		bclr	#Status_Push,status(a1)
 		rts
 
@@ -500,6 +497,10 @@ word_7A628:
 		dc.w $888, $CCC, $EEE
 
 ; =============== S U B R O U T I N E =======================================
+
+CopyWordData_8:
+		movea.w	(a1)+,a3
+		move.w	(a2)+,(a3)+
 
 CopyWordData_7:
 		movea.w	(a1)+,a3

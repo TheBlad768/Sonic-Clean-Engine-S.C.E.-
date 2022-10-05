@@ -1,36 +1,49 @@
+; ---------------------------------------------------------------------------
+; Water handle
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Handle_Onscreen_Water_Height:
-		tst.b	(Water_flag).w
-		beq.s	Handle_Onscreen_Water_Height_Return
+		tst.b	(Water_flag).w							; does level have water?
+		beq.s	.return								; if not, branch
 		tst.b	(Deform_lock).w
-		bne.s	+
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w
-		bhs.s	+
+		bne.s	.skip
+		cmpi.b	#id_SonicDeath,(Player_1+routine).w	; is player dead?
+		bhs.s	.skip								; if yes, branch
 		bsr.s	DynamicWaterHeight
-+		clr.b	(Water_full_screen_flag).w
+
+.skip
+		clr.b	(Water_full_screen_flag).w
 		moveq	#0,d0
 		move.b	(Oscillating_Data).w,d0
 		lsr.w	d0
 		add.w	(Mean_water_level).w,d0
 		move.w	d0,(Water_level).w
+
+		; calculate distance between water surface and top of screen
 		move.w	(Water_level).w,d0
 		sub.w	(Camera_Y_pos).w,d0
-		beq.s	+
-		bcc.s	++
+		beq.s	.set
+		bhs.s	.check
 		tst.w	d0
-		bpl.s	++
-+		move.b	#1,(Water_full_screen_flag).w
-		move.b	#256-1,(H_int_counter).w
+		bpl.s	.check
+
+.set
+		st	(Water_full_screen_flag).w
+		st	(H_int_counter).w	; set 256-1
 		rts
 ; ---------------------------------------------------------------------------
-+		cmpi.w	#224-1,d0
-		blo.s		+
-		move.w	#256-1,d0
-+		move.b	d0,(H_int_counter).w
 
-Handle_Onscreen_Water_Height_Return:
+.check
+		cmpi.w	#224-1,d0
+		blo.s		.counter
+		move.w	#256-1,d0
+
+.counter
+		move.b	d0,(H_int_counter).w
+
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -43,9 +56,11 @@ DynamicWaterHeight:
 		move.w	(Target_water_level).w,d0
 		sub.w	(Mean_water_level).w,d0
 		beq.s	No_WaterResize
-		bcc.s	+
+		bhs.s	.skip
 		neg.w	d1
-+		add.w	d1,(Mean_water_level).w
+
+.skip
+		add.w	d1,(Mean_water_level).w
 
 No_WaterResize:
 		rts
@@ -64,7 +79,8 @@ CheckLevelForWater_Return:
 ; ---------------------------------------------------------------------------
 
 StartLevelWater:
-		move.b	#1,(Water_flag).w
+		st	(Water_flag).w
+
 		tst.b	(Water_flag).w
 		beq.s	LoadWaterPalette
 		moveq	#0,d0
@@ -86,7 +102,7 @@ LoadWaterPalette:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#6,d0
-		move.b	WaterPalette_Index(pc,d0.w),d0	; Water palette
+		move.b	WaterPalette_Index(pc,d0.w),d0	; water palette
 		move.w	d0,d1
 		jsr	(LoadPalette2).w
 		move.w	d1,d0

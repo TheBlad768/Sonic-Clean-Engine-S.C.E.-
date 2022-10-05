@@ -87,10 +87,10 @@ loc_1A67A:
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	+
 		move.l	#Obj_Bouncing_Ring_Reverse_Gravity,d6
-+		movea.l	a0,a1
++		movea.w	a0,a1
 		moveq	#0,d5
 		move.w	(Ring_count).w,d5
-		moveq	#$20,d0
+		moveq	#32,d0	; max rings
 		cmp.w	d0,d5
 		blo.s		+
 		move.w	d0,d5
@@ -170,7 +170,7 @@ loc_1A79C:
 		tst.b	(Ring_spill_anim_counter).w
 		beq.s	loc_1A7E4
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
 		blo.s		loc_1A7E4
 
@@ -218,7 +218,7 @@ loc_1A828:
 		tst.b	(Ring_spill_anim_counter).w
 		beq.s	loc_1A7E4
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
 		blo.s		loc_1A7E4
 
@@ -255,11 +255,7 @@ loc_1A88C:
 		st	(Ring_spill_anim_counter).w
 
 loc_1A8C6:
-		move.w	x_pos(a0),d0
-		andi.w	#-128,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#128+320+192,d0
-		bhi.s	loc_1A8E4
+		out_of_xrange.s	loc_1A8E4
 		jsr	(Add_SpriteToCollisionResponseList).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------

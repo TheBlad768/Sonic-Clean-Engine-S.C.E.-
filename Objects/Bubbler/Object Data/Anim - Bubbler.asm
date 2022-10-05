@@ -1,13 +1,13 @@
-Ani_Bubbler:
-		dc.w byte_2FC90-Ani_Bubbler
-		dc.w byte_2FC95-Ani_Bubbler
-		dc.w byte_2FC9B-Ani_Bubbler
-		dc.w byte_2FCA2-Ani_Bubbler
-		dc.w byte_2FCA6-Ani_Bubbler
-		dc.w byte_2FCA6-Ani_Bubbler
-		dc.w byte_2FCA8-Ani_Bubbler
-		dc.w byte_2FCA8-Ani_Bubbler
-		dc.w byte_2FCAC-Ani_Bubbler
+Ani_Bubbler: offsetTable
+		offsetTableEntry.w byte_2FC90
+		offsetTableEntry.w byte_2FC95
+		offsetTableEntry.w byte_2FC9B
+		offsetTableEntry.w byte_2FCA2
+		offsetTableEntry.w byte_2FCA6
+		offsetTableEntry.w byte_2FCA6
+		offsetTableEntry.w byte_2FCA8
+		offsetTableEntry.w byte_2FCA8
+		offsetTableEntry.w byte_2FCAC
 byte_2FC90:	dc.b   $E,   0,	  1,   2, afRoutine
 byte_2FC95:	dc.b   $E,   1,	  2,   3,   4, afRoutine
 byte_2FC9B:	dc.b   $E,   2,	  3,   4,   5,	 6, afRoutine

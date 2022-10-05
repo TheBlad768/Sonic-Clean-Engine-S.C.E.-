@@ -52,7 +52,7 @@ Init_BossArena:
 		st	(Boss_flag).w
 
 Init_BossArena2:
-		sfx	bgm_Fade			; fade out music
+		sfx	bgm_Fade	; fade out music
 		move.w	#2*60,$2E(a0)
 
 Init_BossArena3:

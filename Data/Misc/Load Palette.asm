@@ -11,11 +11,12 @@ LoadPalette:
 		adda.w	d0,a1
 		movea.l	(a1)+,a2		; get palette data address
 		movea.w	(a1)+,a3		; get target RAM address
-		adda.w	#Target_palette-Normal_palette,a3	; skip to "Normal_palette" RAM address
-		move.w	(a1)+,d7		; get length of palette data
+		lea	Target_palette-Normal_palette(a3),a3	; skip to "Normal_palette" RAM address
+		move.w	(a1)+,d0		; get length of palette data
 
--		move.l	(a2)+,(a3)+	; move data to RAM
-		dbf	d7,-
+.copy
+		move.l	(a2)+,(a3)+	; move data to RAM
+		dbf	d0,.copy
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -31,10 +32,11 @@ LoadPalette_Immediate:
 		adda.w	d0,a1
 		movea.l	(a1)+,a2		; get palette data address
 		movea.w	(a1)+,a3		; get target RAM address
-		move.w	(a1)+,d7		; get length of palette
+		move.w	(a1)+,d0		; get length of palette
 
--		move.l	(a2)+,(a3)+	; move data to RAM
-		dbf	d7,-
+.copy
+		move.l	(a2)+,(a3)+	; move data to RAM
+		dbf	d0,.copy
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -50,10 +52,11 @@ PalLoad3_Water:
 		adda.w	d0,a1
 		movea.l	(a1)+,a2		; get palette data address
 		movea.w	(a1)+,a3		; get target RAM address
-		move.w	(a1)+,d7		; get length of palette data
+		move.w	(a1)+,d0		; get length of palette data
 
--		move.l	(a2)+,(a3)+	; move data to RAM
-		dbf	d7,-
+.copy
+		move.l	(a2)+,(a3)+	; move data to RAM
+		dbf	d0,.copy
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -69,60 +72,17 @@ LoadPalette2_Immediate:
 		adda.w	d0,a1
 		movea.l	(a1)+,a2		; get palette data address
 		movea.w	(a1)+,a3		; get target RAM address
-		suba.w	#Water_palette-Target_water_palette,a3	; skip to "Water_palette" RAM address
-		move.w	(a1)+,d7		; get length of palette data
+		lea	-(Water_palette-Target_water_palette)(a3),a3	; skip to "Water_palette" RAM address
+		move.w	(a1)+,d0		; get length of palette data
 
--		move.l	(a2)+,(a3)+	; move data to RAM
-		dbf	d7,-
+.copy
+		move.l	(a2)+,(a3)+	; move data to RAM
+		dbf	d0,.copy
 		rts
 
-; =============== S U B R O U T I N E =======================================
-
-PalTLoad_Line0:
-		lea	(Target_palette_line_1).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalTLoad_Line1:
-		lea	(Target_palette_line_2).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalTLoad_Line2:
-		lea	(Target_palette_line_3).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalTLoad_Line3:
-		lea	(Target_palette_line_4).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalLoad_Line0:
-		lea	(Normal_palette_line_1).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalLoad_Line1:
-		lea	(Normal_palette_line_2).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalLoad_Line2:
-		lea	(Normal_palette_line_3).w,a2
-		bra.s	PalLoad_Line16
-
-; =============== S U B R O U T I N E =======================================
-
-PalLoad_Line3:
-		lea	(Normal_palette_line_4).w,a2
-		bra.s	PalLoad_Line16
+; ---------------------------------------------------------------------------
+; Load palette
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -148,13 +108,17 @@ PalLoad_Line16:
 
 		rts
 
+; ---------------------------------------------------------------------------
+; Clear palette
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Palette:
-		moveq	#0,d0
+		moveq	#cBlack,d0
 
 Clear_Palette2:
-		moveq	#(64/2)-1,d1
+		moveq	#64/2-1,d1
 
 Clear_Palette3:
 		lea	(Target_palette).w,a1

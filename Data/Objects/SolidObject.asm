@@ -448,7 +448,9 @@ loc_1E0A2:
 		beq.s	sub_1E0C2
 		cmpi.b	#id_SpinDash,anim(a1)
 		beq.s	sub_1E0C2
-		move.w	#id_Run,anim(a1)
+		cmpi.b	#id_Landing,anim(a1)
+		beq.s	sub_1E0C2
+		move.w	#id_Walk<<8|id_Run,anim(a1)
 
 sub_1E0C2:
 		move.l	d6,d4
@@ -513,10 +515,10 @@ loc_1E126:
 loc_1E134:
 		cmpi.w	#$10,d4
 		blo.w	loc_1E042
-		move.l	a0,-(sp)
-		movea.l	a1,a0
+		move.w	a0,-(sp)
+		movea.w	a1,a0
 		jsr	Kill_Character(pc)
-		movea.l	(sp)+,a0
+		movea.w	(sp)+,a0
 		move.w	d6,d4
 		addi.b	#$F,d4
 		bset	d4,d6
@@ -840,10 +842,10 @@ loc_1E4A0:
 		bset	d6,status(a0)
 		bclr	#Status_InAir,status(a1)
 		beq.s	locret_1E4D4
-		move.l	a0,-(sp)
-		movea.l	a1,a0
+		move.w	a0,-(sp)
+		movea.w	a1,a0
 		jsr	Sonic_ResetOnFloor(pc)
-		movea.l	(sp)+,a0
+		movea.w	(sp)+,a0
 
 locret_1E4D4:
 		rts

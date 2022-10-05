@@ -12,13 +12,13 @@ Load_PlaneText:
 		disableIntsSave
 		lea	(VDP_data_port).l,a6
 		lea	VDP_control_port-VDP_data_port(a6),a5
-		move.l	#$800000,d2
+		move.l	#vdpCommDelta(planeLocH40(0,1)),d2
 
 Load_PlaneText_SetPos:
 		move.l	d1,VDP_control_port-VDP_control_port(a5)
 
 Load_PlaneText_Loop:
-		moveq	#0,d0						; VRAM
+		moveq	#0,d0
 		move.b	(a1)+,d0
 		bmi.s	Load_PlaneText_Options
 		add.w	d3,d0						; VRAM shift

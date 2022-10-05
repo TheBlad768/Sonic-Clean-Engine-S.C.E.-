@@ -1,363 +1,402 @@
+; ---------------------------------------------------------------------------
+; Shields (Object)
+; ---------------------------------------------------------------------------
+
 ; Elemental Shield DPLC variables
 LastLoadedDPLC				= $34
 Art_Address					= $38
 DPLC_Address		 		= $3C
 
+; ---------------------------------------------------------------------------
+; Fire Shield
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Fire_Shield:
-		; Init
-		move.l	#Map_FireShield,mappings(a0)
-		move.l	#DPLC_FireShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_FireShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.b	#$18,width_pixels(a0)
-		move.b	#$18,height_pixels(a0)
-		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
-		btst	#7,(Player_1+art_tile).w
-		beq.s	loc_195F0
-		bset	#7,art_tile(a0)
-loc_195F0:	; +
-		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#Obj_Fire_Shield_Main,address(a0)
-; loc_19602:
-Obj_Fire_Shield_Main:
-		lea	(Player_1).w,a2
-		btst	#Status_Invincible,status_secondary(a2)		; Is player invincible?
-		bne.w	locret_19690							; If so, do not display and do not update variables
-		cmpi.b	#id_Null,anim(a2)					; Is player in their 'blank' animation?
-		beq.w	locret_19690							; If so, do not display and do not update variables
-		btst	#Status_Shield,status_secondary(a2) 		; Should the player still have a shield?
-		beq.w	Obj_Fire_Shield_Destroy				; If not, change to Insta-Shield
-		btst	#Status_Underwater,status(a2)				; Is player underwater?
-		bne.s	Obj_Fire_Shield_DestroyUnderwater	; If so, branch
-		move.w	x_pos(a2),x_pos(a0)
-		move.w	y_pos(a2),y_pos(a0)
-		tst.b	anim(a0)				; Is shield in its 'dashing' state?
-		bne.s	Obj_Fire_Shield_Display			; If so, do not update orientation or allow changing of the priority art_tile bit
-		move.b	status(a2),status(a0)			; Inherit status
-		andi.b	#1,status(a0)				; Limit inheritance to 'orientation' bit
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.normalgravity
-		ori.b	#2,status(a0)				; If in reverse gravity, reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
-; loc_19654:
-.normalgravity:
-		andi.w	#drawing_mask,art_tile(a0)
-		tst.w	art_tile(a2)
-		bpl.s	.nothighpriority
-		ori.w	#high_priority,art_tile(a0)
-; loc_19666:
-.nothighpriority:
-Obj_Fire_Shield_Display:
-		lea	Ani_FireShield(pc),a1
-		jsr	(Animate_Sprite).w
-		move.w	#$80,priority(a0)		; Layer shield over player sprite
-		cmpi.b	#$F,mapping_frame(a0)		; Are these the frames that display in front of the player?
-		blo.s	.overplayer			; If so, branch
-		move.w	#$200,priority(a0)		; If not, layer shield behind player sprite
-; loc_19686:
-.overplayer:
-		bsr.w	PLCLoad_Shields
-		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
-; loc_19692:
-Obj_Fire_Shield_DestroyUnderwater:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		jsr	(Create_New_Sprite).w		; Set up for a new object
-		bne.s	Obj_Fire_Shield_Destroy		; If that can't happen, branch
-		move.l	#Obj_FireShield_Dissipate,address(a1)	; Create dissipate object
-		move.w	x_pos(a0),x_pos(a1)		; Put it at shields' x_pos
-		move.w	y_pos(a0),y_pos(a1)		; Put it at shields' y_pos
 
-Obj_Fire_Shield_Destroy:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Fire Shield with the Insta-Shield
-
-locret_19690:
-		rts
-; ---------------------------------------------------------------------------
-
-Obj_Lightning_Shield:
 		; init
-		; Load Spark art
-		QueueStaticDMA ArtUnc_Obj_Lightning_Shield_Sparks,tiles_to_bytes(5),tiles_to_bytes(ArtTile_Shield_Sparks)
-		move.l	#Map_LightningShield,mappings(a0)
-		move.l	#DPLC_LightningShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_LightningShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#Map_FireShield,mappings(a0)
+		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
+		move.l	#ArtUnc_FireShield>>1,Art_Address(a0)				; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#$18,width_pixels(a0)
-		move.b	#$18,height_pixels(a0)
+		move.b	#48/2,width_pixels(a0)
+		move.b	#48/2,height_pixels(a0)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#7,art_tile(a0)
 
-.nothighpriority:
-		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#Obj_Lightning_Shield_Main,address(a0)
+.nothighpriority
+		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
+		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		move.l	#.main,address(a0)
 
-Obj_Lightning_Shield_Main:
+.main
 		lea	(Player_1).w,a2
-		btst	#Status_Invincible,status_secondary(a2)			; Is player invincible?
-		bne.w	locret_197C4								; If so, do not display and do not update variables
-		cmpi.b	#id_Null,anim(a2)						; Is player in their 'blank' animation?
-		beq.w	locret_197C4								; If so, do not display and do not update variables
-		btst	#Status_Shield,status_secondary(a2)				; Should the player still have a shield?
-		beq.s	Obj_Lightning_Shield_Destroy				; If not, change to Insta-Shield
-		btst	#Status_Underwater,status(a2)					; Is player underwater?
-		bne.s	Obj_Lightning_Shield_DestroyUnderwater	; If so, branch
+		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
+		bne.w	.return											; if so, do not display and do not update variables
+		cmpi.b	#id_Null,anim(a2)								; is player in their 'blank' animation?
+		beq.w	.return											; if so, do not display and do not update variables
+		btst	#Status_Shield,status_secondary(a2) 					; should the player still have a shield?
+		beq.w	.destroy											; if not, change to Insta-Shield
+		btst	#Status_Underwater,status(a2)							; is player underwater?
+		bne.s	.destroyunderwater								; if so, branch
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
-		move.b	status(a2),status(a0)			; Inherit status
-		andi.b	#1,status(a0)				; Limit inheritance to 'orientation' bit
+		tst.b	anim(a0)											; is shield in its 'dashing' state?
+		bne.s	.nothighpriority2									; if so, do not update orientation or allow changing of the priority art_tile bit
+		move.b	status(a2),status(a0)								; inherit status
+		andi.b	#1,status(a0)										; limit inheritance to 'orientation' bit
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.normalgravity
-		ori.b	#2,status(a0)				; If in reverse gravity, reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
+		ori.b	#2,status(a0)										; if in reverse gravity, reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
-.normalgravity:
+.normalgravity
 		andi.w	#drawing_mask,art_tile(a0)
 		tst.w	art_tile(a2)
-		bpl.s	.nothighpriority
+		bpl.s	.nothighpriority2
 		ori.w	#high_priority,art_tile(a0)
 
-.nothighpriority:
-		tst.b	anim(a0)				; Is shield in its 'double jump' state?
-		beq.s	Obj_Lightning_Shield_Display		; Is not, branch and display
-		bsr.s	Obj_Lightning_Shield_Create_Spark	; Create sparks
-		clr.b	anim(a0)				; Once done, return to non-'double jump' state
-
-Obj_Lightning_Shield_Display:
-		lea	Ani_LightningShield(pc),a1
+.nothighpriority2
+		lea	Ani_FireShield(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	#$80,priority(a0)			; Layer shield over player sprite
-		cmpi.b	#$E,mapping_frame(a0)			; Are these the frames that display in front of the player?
-		blo.s	.overplayer				; If so, branch
-		move.w	#$200,priority(a0)			; If not, layer shield behind player sprite
+		move.w	#$80,priority(a0)									; layer shield over player sprite
+		cmpi.b	#$F,mapping_frame(a0)							; are these the frames that display in front of the player?
+		blo.s		.overplayer										; if so, branch
+		move.w	#$200,priority(a0)								; if not, layer shield behind player sprite
 
-.overplayer:
+.overplayer
 		bsr.w	PLCLoad_Shields
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-Obj_Lightning_Shield_DestroyUnderwater:
+.destroyunderwater
+		andi.b	#$8E,status_secondary(a2)							; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		jsr	(Create_New_Sprite).w								; set up for a new object
+		bne.s	.destroy											; if that can't happen, branch
+		move.l	#Obj_FireShield_Dissipate,address(a1)				; create dissipate object
+		move.w	x_pos(a0),x_pos(a1)								; put it at shields' x_pos
+		move.w	y_pos(a0),y_pos(a1)								; put it at shields' y_pos
+
+.destroy
+		andi.b	#$8E,status_secondary(a2)							; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		move.l	#Obj_Insta_Shield,address(a0)						; replace the Fire Shield with the Insta-Shield
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
+; Lightning Shield
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_Lightning_Shield:
+
+		; load spark art
+		QueueStaticDMA ArtUnc_Obj_Lightning_Shield_Sparks,tiles_to_bytes(5),tiles_to_bytes(ArtTile_Shield_Sparks)
+
+		; init
+		move.l	#Map_LightningShield,mappings(a0)
+		move.l	#DPLC_LightningShield,DPLC_Address(a0)			; used by PLCLoad_Shields
+		move.l	#ArtUnc_LightningShield>>1,Art_Address(a0)		; used by PLCLoad_Shields
+		move.b	#4,render_flags(a0)
+		move.w	#$80,priority(a0)
+		move.b	#48/2,width_pixels(a0)
+		move.b	#48/2,height_pixels(a0)
+		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
+		btst	#7,(Player_1+art_tile).w
+		beq.s	.nothighpriority
+		bset	#7,art_tile(a0)
+
+.nothighpriority
+		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
+		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		move.l	#.main,address(a0)
+
+.main
+		lea	(Player_1).w,a2
+		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
+		bne.w	.return											; if so, do not display and do not update variables
+		cmpi.b	#id_Null,anim(a2)								; is player in their 'blank' animation?
+		beq.w	.return											; if so, do not display and do not update variables
+		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
+		beq.s	.destroy											; if not, change to Insta-Shield
+		btst	#Status_Underwater,status(a2)							; is player underwater?
+		bne.s	.destroyunderwater								; if so, branch
+		move.w	x_pos(a2),x_pos(a0)
+		move.w	y_pos(a2),y_pos(a0)
+		move.b	status(a2),status(a0)								; inherit status
+		andi.b	#1,status(a0)										; limit inheritance to 'orientation' bit
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.normalgravity
+		ori.b	#2,status(a0)										; if in reverse gravity, reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
+
+.normalgravity
+		andi.w	#drawing_mask,art_tile(a0)
+		tst.w	art_tile(a2)
+		bpl.s	.nothighpriority2
+		ori.w	#high_priority,art_tile(a0)
+
+.nothighpriority2
+		tst.b	anim(a0)											; is shield in its 'double jump' state?
+		beq.s	.display											; is not, branch and display
+		bsr.s	Obj_Lightning_Shield_Create_Spark				; create sparks
+		clr.b	anim(a0)											; once done, return to non-'double jump' state
+
+.display
+		lea	Ani_LightningShield(pc),a1
+		jsr	(Animate_Sprite).w
+		move.w	#$80,priority(a0)									; layer shield over player sprite
+		cmpi.b	#$E,mapping_frame(a0)							; are these the frames that display in front of the player?
+		blo.s		.overplayer										; if so, branch
+		move.w	#$200,priority(a0)								; if not, layer shield behind player sprite
+
+.overplayer
+		bsr.w	PLCLoad_Shields
+		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.destroyunderwater
 		tst.w	(Palette_fade_timer).w
-		beq.s	Obj_Lightning_Shield_FlashWater
+		beq.s	.flashwater
 
-Obj_Lightning_Shield_Destroy:
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Lightning Shield with the Insta-Shield
+.destroy
+		andi.b	#$8E,status_secondary(a2)							; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		move.l	#Obj_Insta_Shield,address(a0)						; replace the Lightning Shield with the Insta-Shield
 
-locret_197C4:
+.return
 		rts
 ; ---------------------------------------------------------------------------
-; LightningShield_FlashWater:
-Obj_Lightning_Shield_FlashWater:
+
+.flashwater
 		move.l	#Obj_Lightning_Shield_DestroyUnderwater2,address(a0)
-		andi.b	#$8E,status_secondary(a2)	; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#$8E,status_secondary(a2)							; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 
 		; Flashes the underwater palette white
 		lea	(Water_palette).w,a1
 		lea	(Target_water_palette).w,a2
-		moveq	#($80/4)-1,d0			; Size of Water_palette/4-1
+		moveq	#(128/4)-1,d0										; size of Water_palette/4-1
 
--		move.l	(a1),(a2)+				; Backup palette entries
-		move.l	#$0EEE0EEE,(a1)+		; Overwrite palette entries with white
-		dbf	d0,-							; Loop until entire thing is overwritten
-
+.loop
+		move.l	(a1),(a2)+										; backup palette entries
+		move.l	#$0EEE0EEE,(a1)+								; overwrite palette entries with white
+		dbf	d0,.loop												; loop until entire thing is overwritten
 		move.b	#3,anim_frame_timer(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Create Lightning Shield (Spark)
+; ---------------------------------------------------------------------------
+
+SparkVelocities:	; x_vel, y_vel
+		dc.w -$200, -$200
+		dc.w $200, -$200
+		dc.w -$200, $200
+		dc.w $200, $200
+
 ; =============== S U B R O U T I N E =======================================
 
-; LightningShield_Create_Spark:
 Obj_Lightning_Shield_Create_Spark:
-		moveq	#1,d2
-; HyperSonic_Create_Spark:
-Obj_Lightning_Shield_Create_Spark_Part2:
+		moveq	#1,d2											; set anim
+
+.part2															; skip anim
 		lea	SparkVelocities(pc),a2
 		moveq	#4-1,d1
 
--		jsr	(Create_New_Sprite).w						; Find free object slot
-		bne.s	locret_19862								; If one can't be found, return
-		move.l	#Obj_Lightning_Shield_Spark,address(a1)	; Make new object a Spark
-		move.w	x_pos(a0),x_pos(a1)						; (Spark) Inherit x_pos from source object (Lightning Shield, Hyper Sonic Stars)
-		move.w	y_pos(a0),y_pos(a1)						; (Spark) Inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
-		move.l	mappings(a0),mappings(a1)				; (Spark) Inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
-		move.w	art_tile(a0),art_tile(a1)					; (Spark) Inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
+.loop
+		jsr	(Create_New_Sprite).w								; find free object slot
+		bne.s	.return											; if one can't be found, return
+		move.l	#Obj_Lightning_Shield_Spark,address(a1)			; make new object a Spark
+		move.w	x_pos(a0),x_pos(a1)								; (Spark) inherit x_pos from source object (Lightning Shield, Hyper Sonic Stars)
+		move.w	y_pos(a0),y_pos(a1)								; (Spark) inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
+		move.l	mappings(a0),mappings(a1)						; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
+		move.w	art_tile(a0),art_tile(a1)							; (Spark) inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
 		move.b	#4,render_flags(a1)
 		move.w	#$80,priority(a1)
-		move.b	#8,width_pixels(a1)
-		move.b	#8,height_pixels(a1)
+		move.b	#16/2,width_pixels(a1)
+		move.b	#16/2,height_pixels(a1)
 		move.b	d2,anim(a1)
-		move.l	(a2)+,x_vel(a1)							; (Spark) Give x_vel (unique to each of the four Sparks)
-		dbf	d1,-
+		move.l	(a2)+,x_vel(a1)									; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
+		dbf	d1,.loop
 
-locret_19862:
+.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Lightning Shield (Spark)
 ; ---------------------------------------------------------------------------
 
-SparkVelocities:
-		dc.w  -$200, -$200
-		dc.w   $200, -$200
-		dc.w  -$200,  $200
-		dc.w   $200,  $200
-; ---------------------------------------------------------------------------
-; Obj_LightningShield_Spark:
+; =============== S U B R O U T I N E =======================================
+
 Obj_Lightning_Shield_Spark:
 		jsr	(MoveSprite2).w
 		addi.w	#$18,y_vel(a0)
 		lea	Ani_LightningShield(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)			; Changed by Animate_Sprite
-		bne.s	Obj_Lightning_Shield_Spark_Delete
+		tst.b	routine(a0)											; changed by Animate_Sprite
+		bne.s	.delete
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-Obj_Lightning_Shield_Spark_Delete:
+.delete
 		jmp	(Delete_Current_Sprite).w
-; ---------------------------------------------------------------------------
-; LightningShield_Destroy:
+
+; =============== S U B R O U T I N E =======================================
+
 Obj_Lightning_Shield_DestroyUnderwater2:
-		subq.b	#1,anim_frame_timer(a0)			; Is it time to end the white flash?
-		bpl.s	locret_198BC						; If not, return
-		move.l	#Obj_Insta_Shield,address(a0)		; Replace Lightning Shield with Insta-Shield
+		subq.b	#1,anim_frame_timer(a0)							; is it time to end the white flash?
+		bpl.s	.return											; if not, return
+		move.l	#Obj_Insta_Shield,address(a0)						; replace Lightning Shield with Insta-Shield
 		lea	(Target_water_palette).w,a1
 		lea	(Water_palette).w,a2
-		moveq	#(128/4)-1,d0						; Size of Water_palette/4-1
+		moveq	#(128/4)-1,d0										; size of Water_palette/4-1
 
--		move.l	(a1)+,(a2)+						; Restore backed-up underwater palette
-		dbf	d0,-									; Loop until entire thing is restored
+.loop
+		move.l	(a1)+,(a2)+										; restore backed-up underwater palette
+		dbf	d0,.loop												; loop until entire thing is restored
 
-locret_198BC:
+.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Bubble Shield
 ; ---------------------------------------------------------------------------
 
+; =============== S U B R O U T I N E =======================================
+
 Obj_Bubble_Shield:
-		; Init
+
+		; init
 		move.l	#Map_BubbleShield,mappings(a0)
-		move.l	#DPLC_BubbleShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_BubbleShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
+		move.l	#ArtUnc_BubbleShield>>1,Art_Address(a0)			; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#$18,width_pixels(a0)
-		move.b	#$18,height_pixels(a0)
+		move.b	#48/2,width_pixels(a0)
+		move.b	#48/2,height_pixels(a0)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#7,art_tile(a0)
 
-.nothighpriority:
-		move.w	#1,anim(a0)				; Clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)			; Reset LastLoadedDPLC (used by PLCLoad_Shields)
+.nothighpriority
+		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
+		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
 		lea	(Player_1).w,a1
 		jsr	Player_ResetAirTimer(pc)
-		move.l	#Obj_Bubble_Shield_Main,address(a0)
+		move.l	#.main,address(a0)
 
-Obj_Bubble_Shield_Main:
+.main
 		lea	(Player_1).w,a2
-		btst	#Status_Invincible,status_secondary(a2)		; Is player invincible?
-		bne.s	locret_1998A							; If so, do not display and do not update variables
-		cmpi.b	#id_Null,anim(a2)					; Is player in their 'blank' animation?
-		beq.s	locret_1998A							; If so, do not display and do not update variables
-		btst	#Status_Shield,status_secondary(a2)			; Should the player still have a shield?
-		beq.s	Obj_Bubble_Shield_Destroy			; If not, change to Insta-Shield
+		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
+		bne.s	.return											; if so, do not display and do not update variables
+		cmpi.b	#id_Null,anim(a2)								; is player in their 'blank' animation?
+		beq.s	.return											; if so, do not display and do not update variables
+		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
+		beq.s	.destroy											; if not, change to Insta-Shield
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
-		move.b	status(a2),status(a0)					; Inherit status
-		andi.b	#1,status(a0)							; Limit inheritance to 'orientation' bit
+		move.b	status(a2),status(a0)								; inherit status
+		andi.b	#1,status(a0)										; limit inheritance to 'orientation' bit
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.normalgravity
-		ori.b	#2,status(a0)							; Reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
+		ori.b	#2,status(a0)										; reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
-.normalgravity:
+.normalgravity
 		andi.w	#drawing_mask,art_tile(a0)
 		tst.w	art_tile(a2)
-		bpl.s	.nothighpriority
+		bpl.s	.nothighpriority2
 		ori.w	#high_priority,art_tile(a0)
 
-.nothighpriority:
-;Obj_Bubble_Shield_Display:
+.nothighpriority2
 		lea	Ani_BubbleShield(pc),a1
 		jsr	(Animate_Sprite).w
 		bsr.w	PLCLoad_Shields
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-Obj_Bubble_Shield_Destroy:
-		andi.b	#$8E,status_secondary(a2)			; Sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
-		move.l	#Obj_Insta_Shield,address(a0)		; Replace the Bubble Shield with the Insta-Shield
+.destroy
+		andi.b	#$8E,status_secondary(a2)							; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		move.l	#Obj_Insta_Shield,address(a0)						; replace the Bubble Shield with the Insta-Shield
 
-locret_1998A:
+.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Insta Shield
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Insta_Shield:
-		; Init
+
+		; init
 		move.l	#Map_InstaShield,mappings(a0)
-		move.l	#DPLC_InstaShield,DPLC_Address(a0)			; Used by PLCLoad_Shields
-		move.l	#ArtUnc_InstaShield>>1,Art_Address(a0)			; Used by PLCLoad_Shields
+		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
+		move.l	#ArtUnc_InstaShield>>1,Art_Address(a0)			; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#$18,width_pixels(a0)
-		move.b	#$18,height_pixels(a0)
+		move.b	#48/2,width_pixels(a0)
+		move.b	#48/2,height_pixels(a0)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)	; Used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#7,art_tile(a0)
 
-.nothighpriority:
-		move.w	#1,anim(a0)					; Clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)				; Reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#Obj_Insta_Shield_Main,address(a0)
+.nothighpriority
+		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
+		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		move.l	#.main,address(a0)
 
-Obj_Insta_Shield_Main:
+.main
 		lea	(Player_1).w,a2
-		btst	#Status_Invincible,status_secondary(a2) ; Is the player invincible?
-		bne.s	locret_1998A					; If so, return
-		move.w	x_pos(a2),x_pos(a0)			; Inherit player's x_pos
-		move.w	y_pos(a2),y_pos(a0)			; Inherit player's y_pos
-		move.b	status(a2),status(a0)			; Inherit status
-		andi.b	#1,status(a0)					; Limit inheritance to 'orientation' bit
+		btst	#Status_Invincible,status_secondary(a2)					; is the player invincible?
+		bne.s	Obj_Bubble_Shield.return							; if so, return
+		move.w	x_pos(a2),x_pos(a0)								; inherit player's x_pos
+		move.w	y_pos(a2),y_pos(a0)								; inherit player's y_pos
+		move.b	status(a2),status(a0)								; inherit status
+		andi.b	#1,status(a0)										; limit inheritance to 'orientation' bit
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.normalgravity
-		ori.b	#2,status(a0)					; Reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
+		ori.b	#2,status(a0)										; reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
-.normalgravity:
+.normalgravity
 		andi.w	#drawing_mask,art_tile(a0)
 		tst.w	art_tile(a2)
-		bpl.s	.nothighpriority
+		bpl.s	.nothighpriority2
 		ori.w	#high_priority,art_tile(a0)
 
-.nothighpriority:
-;Obj_Insta_Shield_Display:
+.nothighpriority2
 		lea	Ani_InstaShield(pc),a1
 		jsr	(Animate_Sprite).w
-		cmpi.b	#7,mapping_frame(a0)		; Has it reached then end of its animation?
-		bne.s	.notover						; If not, branch
-		tst.b	double_jump_flag(a2)				; Is it in its attacking state?
-		beq.s	.notover						; If not, branch
-		move.b	#2,double_jump_flag(a2)		; Mark attack as over
+		cmpi.b	#7,mapping_frame(a0)							; has it reached then end of its animation?
+		bne.s	.notover											; if not, branch
+		tst.b	double_jump_flag(a2)									; is it in its attacking state?
+		beq.s	.notover											; if not, branch
+		move.b	#2,double_jump_flag(a2)							; mark attack as over
 
-.notover:
-		tst.b	mapping_frame(a0)				; Is this the first frame?
-		beq.s	.loadnewDPLC				; If so, branch and load the DPLC for this and the next few frames
-		cmpi.b	#3,mapping_frame(a0)		; Is this the third frame?
-		bne.s	.skipDPLC					; If not, branch as we don't need to load another DPLC yet
+.notover
+		tst.b	mapping_frame(a0)									; is this the first frame?
+		beq.s	.loadnewdplc										; if so, branch and load the DPLC for this and the next few frames
+		cmpi.b	#3,mapping_frame(a0)							; is this the third frame?
+		bne.s	.skipdplc											; if not, branch as we don't need to load another DPLC yet
 
-.loadnewDPLC:
+.loadnewdplc
 		bsr.s	PLCLoad_Shields
 
-.skipDPLC:
+.skipdplc
 		jmp	(Draw_Sprite).w
+
+; ---------------------------------------------------------------------------
+; Shields (DPLC)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -365,17 +404,17 @@ PLCLoad_Shields:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
 		cmp.b	LastLoadedDPLC(a0),d0
-		beq.s	PLCLoad_Shields_Return
+		beq.s	.return
 		move.b	d0,LastLoadedDPLC(a0)
 		movea.l	DPLC_Address(a0),a2
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d5
 		subq.w	#1,d5
-		bmi.s	PLCLoad_Shields_Return
+		bmi.s	.return
 		move.w	vram_art(a0),d4
 
-PLCLoad_Shields_ReadEntry:
+.readentry
 		moveq	#0,d1
 		move.w	(a2)+,d1
 		move.w	d1,d3
@@ -389,10 +428,14 @@ PLCLoad_Shields_ReadEntry:
 		add.w	d3,d4
 		add.w	d3,d4
 		jsr	(Add_To_DMA_Queue).w
-		dbf	d5,PLCLoad_Shields_ReadEntry
+		dbf	d5,.readentry
 
-PLCLoad_Shields_Return:
+.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Invincibility
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -403,28 +446,27 @@ Obj_Invincibility:
 		lea	address(a0),a1
 		moveq	#4-1,d1
 
-loc_1880E:
+.loop
 		move.l	#Obj_188E8,address(a1)
 		move.l	#Map_Invincibility,mappings(a1)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a1)
 		move.w	#$80,priority(a1)
-		move.b	#4,render_flags(a1)
-		bset	#6,render_flags(a1)
+		move.b	#$44,render_flags(a1)								; set screen coordinates and multi-draw flag
 		move.b	#32/2,width_pixels(a1)
 		move.w	#2,mainspr_childsprites(a1)
-		move.b	d2,$36(a1)
+		move.b	d2,objoff_36(a1)
 		addq.w	#1,d2
-		move.l	(a2)+,$30(a1)
-		move.w	(a2)+,$34(a1)
+		move.l	(a2)+,objoff_30(a1)
+		move.w	(a2)+,objoff_34(a1)
 		lea	next_object(a1),a1
-		dbf	d1,loc_1880E
-		move.l	#loc_18868,address(a0)
-		move.b	#4,$34(a0)
+		dbf	d1,.loop
+		move.l	#.main,address(a0)
+		move.b	#4,objoff_34(a0)
 
-loc_18868:
+.main
 		lea	(Player_1).w,a1
-		btst	#Status_Invincible,status_secondary(a1)
-		beq.w	Delete_Current_Sprite
+		btst	#Status_Invincible,status_secondary(a1)					; should the player still have a invincible?
+		beq.w	Delete_Current_Sprite								; if not, delete
 		move.w	x_pos(a1),d0
 		move.w	d0,x_pos(a0)
 		move.w	y_pos(a1),d1
@@ -434,17 +476,17 @@ loc_18868:
 		moveq	#0,d5
 
 loc_188A0:
-		move.w	$38(a0),d2
+		move.w	objoff_38(a0),d2
 		move.b	(a3,d2.w),d5
 		bpl.s	loc_188B0
-		clr.w	$38(a0)
+		clr.w	objoff_38(a0)
 		bra.s	loc_188A0
 ; ---------------------------------------------------------------------------
 
 loc_188B0:
-		addq.w	#1,$38(a0)
+		addq.w	#1,objoff_38(a0)
 		lea	word_189A0(pc),a6
-		move.b	$34(a0),d6
+		move.b	objoff_34(a0),d6
 		bsr.w	sub_1898A
 		move.w	d2,(a2)+
 		move.w	d3,(a2)+
@@ -460,18 +502,18 @@ loc_188B0:
 		neg.w	d0
 
 loc_188E0:
-		add.b	d0,$34(a0)
+		add.b	d0,objoff_34(a0)
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_188E8:
 		lea	(Player_1).w,a1
-		btst	#Status_Invincible,status_secondary(a1)
-		beq.w	Delete_Current_Sprite
+		btst	#Status_Invincible,status_secondary(a1)					; should the player still have a invincible?
+		beq.w	Delete_Current_Sprite								; if not, delete
 		lea	(Pos_table_index).w,a5
 		lea	(Pos_table).w,a6
-		move.b	$36(a0),d1
+		move.b	objoff_36(a0),d1
 		lsl.b	#2,d1
 		move.w	d1,d2
 		add.w	d1,d1
@@ -484,23 +526,23 @@ Obj_188E8:
 		move.w	d0,x_pos(a0)
 		move.w	d1,y_pos(a0)
 		lea	sub2_x_pos(a0),a2
-		movea.l	$30(a0),a3
+		movea.l	objoff_30(a0),a3
 
 loc_18936:
-		move.w	$38(a0),d2
+		move.w	objoff_38(a0),d2
 		move.b	(a3,d2.w),d5
 		bpl.s	loc_18946
-		clr.w	$38(a0)
+		clr.w	objoff_38(a0)
 		bra.s	loc_18936
 ; ---------------------------------------------------------------------------
 
 loc_18946:
 		swap	d5
-		add.b	$35(a0),d2
+		add.b	objoff_35(a0),d2
 		move.b	(a3,d2.w),d5
-		addq.w	#1,$38(a0)
+		addq.w	#1,objoff_38(a0)
 		lea	word_189A0(pc),a6
-		move.b	$34(a0),d6
+		move.b	objoff_34(a0),d6
 		bsr.s	sub_1898A
 		move.w	d2,(a2)+
 		move.w	d3,(a2)+
@@ -517,7 +559,7 @@ loc_18946:
 		neg.w	d0
 
 loc_18982:
-		add.b	d0,$34(a0)
+		add.b	d0,objoff_34(a0)
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================

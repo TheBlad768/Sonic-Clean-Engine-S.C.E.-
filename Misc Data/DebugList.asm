@@ -31,7 +31,8 @@ DebugList: offsetTable
 	dbglistobj Obj_Spring, Map_Spring2, $A2, 6, make_art_tile($494,0,0)
 	dbglistobj Obj_Spikes, Map_Spikes, 0, 0, make_art_tile($48C,0,0)
 	dbglistobj Obj_Spikes, Map_Spikes, $40, 4, make_art_tile($484,0,0)
+	dbglistobj Obj_Spikebonker, Map_Spikebonker, $40, 0, make_art_tile($100,0,1)
 	dbglistobj Obj_Button,	Map_Button, 0, 2, make_art_tile($47E,0,0)
 	dbglistobj Obj_StarPost, Map_StarPost, 1, 0, make_art_tile($5EC,0,0)
 	dbglistobj Obj_EggCapsule, Map_EggCapsule, 1, 0, make_art_tile($43E,0,0)
-.DEZ1_End:
+.DEZ1_End

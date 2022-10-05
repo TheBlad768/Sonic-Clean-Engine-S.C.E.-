@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; VDP init
+; ---------------------------------------------------------------------------
+
 VDP_register_values:
 		dc.w $8004						; H-int disabled
 		dc.w $8134						; V-int enabled, display blanked, DMA enabled, 224 line display
@@ -18,41 +22,55 @@ VDP_register_values:
 		dc.w $9001						; Scroll planes are 64x32 cells (512x256)
 		dc.w $9100						; Window horizontal position
 		dc.w $9200						; Window vertical position
-; ---------------------------------------------------------------------------
-; VDP init
-; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Init_VDP:
-		lea	(VDP_control_port).l,a0
-		lea	(VDP_data_port).l,a1
-		lea	VDP_register_values(pc),a2
-		moveq	#19-1,d7
+		lea	(VDP_data_port).l,a6
+		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	VDP_register_values(pc),a1
+		moveq	#19-1,d1
 
-.setreg:
-		move.w	(a2)+,VDP_control_port-VDP_control_port(a0)
-		dbf	d7,.setreg	; set the VDP registers
+.setreg
+		move.w	(a1)+,VDP_control_port-VDP_control_port(a5)
+		dbf	d1,.setreg	; set the VDP registers
 		move.w	VDP_register_values+2(pc),d0
 		move.w	d0,(VDP_reg_1_command).w
 		move.w	#$8A00+223,(H_int_counter_command).w
 		moveq	#0,d0
 
 ; Clear Vertical Scrolling
-		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a0)
-		move.w	d0,VDP_data_port-VDP_data_port(a1)	; FG
-		move.w	d0,VDP_data_port-VDP_data_port(a1)	; BG
+		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
+		move.l	d0,VDP_data_port-VDP_data_port(a6)	; FG/BG
 
 ; Clear Palette
-		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a0)
-		moveq	#64-1,d7
+		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
+		moveq	#64/2-1,d1
 
-.clrCRAM:
-		move.w	d0,VDP_data_port-VDP_data_port(a1)
-		dbf	d7,.clrCRAM	; clear the CRAM
+.clrCRAM
+		move.l	d0,VDP_data_port-VDP_data_port(a6)
+		dbf	d1,.clrCRAM	; clear the CRAM
 		clr.l	(V_scroll_value).w
 		clr.l	(H_scroll_value).w
 
 ; Clear VRAM
 		dmaFillVRAM 0,$0000,($1000<<4)	; clear entire VRAM
+		rts
+
+; ---------------------------------------------------------------------------
+; VDP load
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Load_VDP:
+		lea	(VDP_control_port).l,a6
+
+.main
+		move.w	(a1)+,d0
+
+.loop
+		move.w	d0,VDP_control_port-VDP_control_port(a6)
+		move.w	(a1)+,d0
+		bmi.s	.loop
 		rts

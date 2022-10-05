@@ -243,13 +243,13 @@ loc_1850A:
 		bcc.w	loc_18592
 		move.b	#$81,object_control(a2)
 		sfx	sfx_Drown
-		move.b	#$A,objoff_38(a0)
+		move.b	#10,objoff_38(a0)
 		move.w	#1,objoff_3A(a0)
-		move.w	#$78,objoff_30(a0)
-		movea.l	a2,a1
+		move.w	#120,objoff_30(a0)
+		movea.w	a2,a1
 		bsr.w	Player_ResetAirTimer
-		move.l	a0,-(sp)
-		movea.l	a2,a0
+		move.w	a0,-(sp)
+		movea.w	a2,a0
 		jsr	Sonic_ResetOnFloor(pc)
 		move.b	#id_Drown,anim(a0)
 		bset	#Status_InAir,status(a0)
@@ -257,7 +257,7 @@ loc_1850A:
 		clr.l	x_vel(a0)
 		clr.w	ground_vel(a0)
 		move.b	#id_SonicDrown,routine(a0)
-		movea.l	(sp)+,a0
+		movea.w	(sp)+,a0
 		st	(Deform_lock).w
 		rts
 ; ---------------------------------------------------------------------------

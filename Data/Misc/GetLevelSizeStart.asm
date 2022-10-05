@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Get level size
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -36,7 +39,7 @@ LevSz_StartLoc:
 
 LevSz_SkipStartPos:
 		subi.w	#160,d1						; is Sonic more than 160px from left edge?
-		bcc.s	SetScr_WithinLeft			; if yes, branch
+		bhs.s	SetScr_WithinLeft			; if yes, branch
 		moveq	#0,d1
 
 SetScr_WithinLeft:
@@ -48,7 +51,7 @@ SetScr_WithinLeft:
 SetScr_WithinRight:
 		move.w	d1,(Camera_X_pos).w			; set horizontal screen position
 		subi.w	#96,d0						; is Sonic within 96px of upper edge?
-		bcc.s	SetScr_WithinTop			; if yes, branch
+		bhs.s	SetScr_WithinTop			; if yes, branch
 		moveq	#0,d0
 
 SetScr_WithinTop:

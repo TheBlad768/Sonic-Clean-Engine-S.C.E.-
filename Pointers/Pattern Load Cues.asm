@@ -48,6 +48,7 @@ PLC1_DEZ1_Misc_End
 ; ===========================================================================
 
 PLC2_DEZ1_Enemy: plrlistheader
+		plreq $100, ArtKosM_Spikebonker					; Spikebonker badnik
 PLC2_DEZ1_Enemy_End
 
 ; ===========================================================================

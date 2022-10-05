@@ -124,8 +124,10 @@ Obj_EnemyScore:
 		move.w	#$80,priority(a0)
 		move.b	#8,width_pixels(a0)
 		move.w	#-$300,y_vel(a0)
-		move.l	#+,address(a0)
-+		addi.w	#$18,y_vel(a0)
+		move.l	#.main,address(a0)
+
+.main
+		addi.w	#$18,y_vel(a0)
 		bpl.s	loc_1E758
 		jsr	(MoveSprite2).w
 		jmp	(Draw_Sprite).w

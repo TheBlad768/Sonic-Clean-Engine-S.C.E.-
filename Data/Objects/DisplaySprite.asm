@@ -76,7 +76,7 @@ loc_84984:
 
 Child_Draw_Sprite2:
 		movea.w	parent3(a0),a1
-		btst	#4,$38(a1)
+		btst	#4,objoff_38(a1)
 		bne.s	loc_8499E
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ loc_8499E:
 
 Child_DrawTouch_Sprite2:
 		movea.w	parent3(a0),a1
-		btst	#4,$38(a1)
+		btst	#4,objoff_38(a1)
 		bne.s	loc_8499E
 		btst	#7,status(a1)
 		bne.s	loc_849BC
@@ -114,7 +114,7 @@ loc_849D8:
 
 Child_Draw_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1
-		btst	#4,$38(a1)
+		btst	#4,objoff_38(a1)
 		bne.s	loc_849D8
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
@@ -131,7 +131,7 @@ loc_84A3C:
 
 Child_DrawTouch_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1
-		btst	#4,$38(a1)
+		btst	#4,objoff_38(a1)
 		bne.s	loc_849D8
 		btst	#7,status(a1)
 		beq.s	loc_84A3C

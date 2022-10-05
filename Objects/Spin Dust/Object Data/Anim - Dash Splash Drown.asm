@@ -1,9 +1,9 @@
-Ani_DashSplashDrown:
-		dc.w byte_18DCA-Ani_DashSplashDrown
-		dc.w byte_18DCD-Ani_DashSplashDrown
-		dc.w byte_18DD9-Ani_DashSplashDrown
-		dc.w byte_18DE2-Ani_DashSplashDrown
-		dc.w byte_18DE8-Ani_DashSplashDrown
+Ani_DashSplashDrown: offsetTable
+		offsetTableEntry.w byte_18DCA
+		offsetTableEntry.w byte_18DCD
+		offsetTableEntry.w byte_18DD9
+		offsetTableEntry.w byte_18DE2
+		offsetTableEntry.w byte_18DE8
 byte_18DCA:	dc.b  $1F,   0,	afEnd
 byte_18DCD:	dc.b	3,   1,	  2,   3,   4,	 5,   6,   7,	8,   9,	afChange,   0
 byte_18DD9:	dc.b	1,  $A,	 $B,  $C,  $D,	$E,  $F, $10, afEnd

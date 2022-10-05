@@ -58,11 +58,7 @@ loc_1F45E:
 		bsr.w	sub_1F58C
 
 loc_1F4A2:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_1EBAA
+		out_of_xrange.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F456
 		jmp	(Draw_Sprite).w
@@ -88,11 +84,7 @@ loc_1F4C4:
 		bsr.s	sub_1F58C
 
 loc_1F506:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_1EBAA
+		out_of_xrange.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F59E
 		jmp	(Draw_Sprite).w
@@ -118,11 +110,7 @@ loc_1F528:
 		bsr.s	sub_1F58C
 
 loc_1F56A:
-		move.w	x_pos(a0),d0
-		andi.w	#-$80,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_1EBAA
+		out_of_xrange.w	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1F59E
 		jmp	(Draw_Sprite).w

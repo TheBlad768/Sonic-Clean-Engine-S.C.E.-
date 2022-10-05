@@ -164,7 +164,7 @@ loc_18CE4:
 		move.l	mappings(a0),mappings(a1)
 		move.b	render_flags(a0),render_flags(a1)
 		move.w	#$80,priority(a1)
-		move.b	#4,width_pixels(a1)
+		move.b	#8/2,width_pixels(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		andi.w	#$7FFF,art_tile(a1)
 		tst.w	art_tile(a2)

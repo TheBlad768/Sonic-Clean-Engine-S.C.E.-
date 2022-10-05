@@ -18,12 +18,12 @@ Obj_PathSwap:
 		move.b	d0,mapping_frame(a0)
 		andi.w	#3,d0
 		add.w	d0,d0
-		move.w	word_1CD34(pc,d0.w),$32(a0)
+		move.w	word_1CD34(pc,d0.w),objoff_32(a0)
 		move.w	y_pos(a0),d1
 		lea	(Player_1).w,a1
 		cmp.w	y_pos(a1),d1
 		bcc.s	+
-		move.b	#1,$34(a0)
+		move.b	#1,objoff_34(a0)
 +		move.l	#loc_1CEF2,address(a0)
 		bra.w	loc_1CEF2
 ; ---------------------------------------------------------------------------
@@ -39,17 +39,17 @@ loc_1CD3C:
 		andi.w	#3,d0
 		move.b	d0,mapping_frame(a0)
 		add.w	d0,d0
-		move.w	word_1CD34(pc,d0.w),$32(a0)
+		move.w	word_1CD34(pc,d0.w),objoff_32(a0)
 		move.w	x_pos(a0),d1
 		lea	(Player_1).w,a1
 		cmp.w	x_pos(a1),d1
 		bcc.s	+
-		move.b	#1,$34(a0)
+		move.b	#1,objoff_34(a0)
 +		move.l	#+,address(a0)
 +		tst.w	(Debug_placement_mode).w
 		bne.s	+
 		move.w	x_pos(a0),d1
-		lea	$34(a0),a2
+		lea	objoff_34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1CDDA
 		jmp	(Delete_Sprite_If_Not_In_Range).w
@@ -66,7 +66,7 @@ sub_1CDDA:
 		move.b	#1,-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
-		move.w	$32(a0),d4
+		move.w	objoff_32(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
@@ -76,7 +76,7 @@ sub_1CDDA:
 		bge.s	locret_1CE6A
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CE1C
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	locret_1CE6A
 
 loc_1CE1C:
@@ -113,7 +113,7 @@ loc_1CE6C:
 		clr.b	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
-		move.w	$32(a0),d4
+		move.w	objoff_32(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
@@ -123,7 +123,7 @@ loc_1CE6C:
 		bge.s	locret_1CEF0
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CEA8
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	locret_1CEF0
 
 loc_1CEA8:
@@ -158,7 +158,7 @@ loc_1CEF2:
 		tst.w	(Debug_placement_mode).w
 		bne.s	+
 		move.w	y_pos(a0),d1
-		lea	$34(a0),a2
+		lea	objoff_34(a0),a2
 		lea	(Player_1).w,a1
 		bsr.s	sub_1CF42
 		jmp	(Delete_Sprite_If_Not_In_Range).w
@@ -175,7 +175,7 @@ sub_1CF42:
 		move.b	#1,-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
-		move.w	$32(a0),d4
+		move.w	objoff_32(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
@@ -185,7 +185,7 @@ sub_1CF42:
 		bge.s	locret_1CFD2
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CF84
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	locret_1CFD2
 
 loc_1CF84:
@@ -222,7 +222,7 @@ loc_1CFD4:
 		clr.b	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
-		move.w	$32(a0),d4
+		move.w	objoff_32(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
@@ -232,7 +232,7 @@ loc_1CFD4:
 		bge.s	locret_1D058
 		move.b	subtype(a0),d0
 		bpl.s	loc_1D010
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	locret_1D058
 
 loc_1D010:

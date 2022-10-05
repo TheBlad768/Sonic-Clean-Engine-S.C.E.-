@@ -10,18 +10,20 @@
 HScroll_Deform:
 		move.w	(a2)+,d6
 
--		movea.w	(a2)+,a1
+.loop2
+		movea.w	(a2)+,a1
 		move.w	(a2)+,d2
 		move.w	(a2)+,d5
 		ext.l	d2
 		asl.l	#8,d2
 
--		add.l	d2,(a3)
-		move.w	(a3)+,(a1)+
-		addq.w	#2,a1
+.loop
+		add.l	d2,(a3)
+		move.w	(a3)+,(a1)
+		addq.w	#4,a1
 		addq.w	#2,a3
-		dbf	d5,-
-		dbf	d6,--
+		dbf	d5,.loop
+		dbf	d6,.loop2
 		rts
 ; ---------------------------------------------------------------------------
 ; Simple vertical deformation
@@ -35,14 +37,15 @@ HScroll_Deform:
 VScroll_Deform:
 		lea	(VDP_data_port).l,a6
 		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_data_port(a6)
-		moveq	#((320*2)/16)-1,d6
+		moveq	#bytesToXcnt((320*2),16),d6
 
--		move.w	(a2)+,d2
+.loop
+		move.w	(a2)+,d2
 		ext.l	d2
 		asl.l	#8,d2
 		add.l	d2,(a1)
 		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
-		dbf	d6,-
+		dbf	d6,.loop
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -54,13 +57,13 @@ PlainDeformation:
 		swap	d0
 		move.w	(Camera_X_pos_BG_copy).w,d0
 		neg.w	d0
-		moveq	#224/4-1,d1
+		moveq	#bytesToXcnt(224,8),d1
 
--		move.l	d0,(a1)+
+.loop
+	rept 8
 		move.l	d0,(a1)+
-		move.l	d0,(a1)+
-		move.l	d0,(a1)+
-		dbf	d1,-
+	endr
+		dbf	d1,.loop
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -72,13 +75,13 @@ PlainDeformation_Flipped:
 		swap	d0
 		move.w	(Camera_X_pos_copy).w,d0
 		neg.w	d0
-		moveq	#224/4-1,d1
+		moveq	#bytesToXcnt(224,8),d1
 
--		move.l	d0,(a1)+
+.loop
+	rept 8
 		move.l	d0,(a1)+
-		move.l	d0,(a1)+
-		move.l	d0,(a1)+
-		dbf	d1,-
+	endr
+		dbf	d1,.loop
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -86,16 +89,18 @@ PlainDeformation_Flipped:
 MakeFGDeformArray:
 		move.w	d1,d0
 		lsr.w	#1,d0
-		bcc.s	+
+		bcc.s	.skip
 
--		move.w	(a6)+,d5
-		add.w	d6,d5
-		move.w	d5,(a1)+
-+
+.loop
 		move.w	(a6)+,d5
 		add.w	d6,d5
 		move.w	d5,(a1)+
-		dbf	d0,-
+
+.skip
+		move.w	(a6)+,d5
+		add.w	d6,d5
+		move.w	d5,(a1)+
+		dbf	d0,.loop
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -110,15 +115,16 @@ FGScroll_Deformation2:
 		lea	(H_scroll_buffer).w,a1
 		move.w	(HScroll_Shift+2).w,d0
 		neg.w	d0
-		moveq	#bytestoLcnt(224*4)/4,d1
+		moveq	#bytesToXcnt(224,8),d1
 
--	rept	4
+.loop
+	rept	8
 		move.w	(a1),d2
 		add.w	d0,d2
-		move.w	d2,(a1)+
-		addq.w	#2,a1
+		move.w	d2,(a1)
+		addq.w	#4,a1		; skip FBG
 	endr
-		dbf	d1,-
+		dbf	d1,.loop
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -488,6 +494,7 @@ loc_4F2BE:
 
 locret_4F2D8:
 		rts
+
 ; ---------------------------------------------------------------
 ; Vladikcomper's Parallax Engine
 ; ---------------------------------------------------------------

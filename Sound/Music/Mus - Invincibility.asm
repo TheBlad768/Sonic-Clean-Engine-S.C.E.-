@@ -151,8 +151,11 @@ Snd_Invic_Loop04:
 
 ; DAC Data
 Snd_Invic_DAC:
+	smpsPan             panCenter, $00
+
+Snd_Invic_Jump01:
 	dc.b	dKickS3, $10, dKickS3, dKickS3, dKickS3
-	smpsJump            Snd_Invic_DAC
+	smpsJump            Snd_Invic_Jump01
 
 ; PSG1 Data
 Snd_Invic_PSG1:

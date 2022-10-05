@@ -32,11 +32,7 @@ loc_1EC6C:
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull2).w
-		move.w	x_pos(a0),d0
-		andi.w	#-128,d0
-		sub.w	(Camera_X_pos_coarse_back).w,d0
-		cmpi.w	#640,d0
-		bhi.s	loc_1EBAA
+		out_of_xrange.s	loc_1EBAA
 		tst.w	(Debug_placement_mode).w
 		beq.s	locret_1ECA8
 		jmp	(Draw_Sprite).w

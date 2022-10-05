@@ -72,7 +72,7 @@ sub_865DE:
 		lea	ChildObjDat_86B9A(pc),a2
 		jsr	(CreateChild1_Normal).w
 		lea	Child6_CreateBossExplosion(pc),a2
-		jsr	(CreateChild1_Normal).w
+		jsr	(CreateChild6_Simple).w
 		bne.s	locret_8661C
 		move.b	#8,subtype(a1)
 
@@ -94,14 +94,14 @@ loc_8662A:
 		move.w	$3A(a0),d1
 		bmi.s	loc_86642
 		addi.w	#$110,d0
-		cmp.w	$10(a0),d0
+		cmp.w	x_pos(a0),d0
 		bcs.s	loc_8664C
 		bra.w	loc_8664E
 ; ---------------------------------------------------------------------------
 
 loc_86642:
 		addi.w	#$30,d0
-		cmp.w	$10(a0),d0
+		cmp.w	x_pos(a0),d0
 		bcs.s	loc_8664E
 
 loc_8664C:
@@ -109,16 +109,16 @@ loc_8664C:
 
 loc_8664E:
 		move.w	d1,$3A(a0)
-		add.w	d1,$10(a0)
+		add.w	d1,x_pos(a0)
 		move.w	(Camera_Y_pos).w,d0
 		addi.w	#$40,d0
 		move.l	#$4000,d1
-		cmp.w	$14(a0),d0
+		cmp.w	y_pos(a0),d0
 		bhi.s	loc_86678
 		neg.l	d1
 
 loc_86678:
-		add.l	d1,$14(a0)
+		add.l	d1,y_pos(a0)
 		btst	#1,$38(a0)
 		beq.s	loc_86698
 		moveq	#0,d0
@@ -161,13 +161,13 @@ loc_866F4:
 		jsr	(Swing_UpAndDown).w
 		move.w	(Camera_X_pos).w,d0
 		subi.w	#$60,d0
-		cmp.w	$10(a0),d0
+		cmp.w	x_pos(a0),d0
 		bcs.s	loc_8670C
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_8670C:
-		subq.w	#2,$10(a0)
+		subq.w	#2,x_pos(a0)
 		jmp	(MoveSprite2).w
 ; ---------------------------------------------------------------------------
 
@@ -202,7 +202,7 @@ loc_86754:
 
 loc_8675C:
 		move.l	#loc_86770,address(a0)
-		bset	#1,4(a0)
+		bset	#1,render_flags(a0)
 		lea	word_86B3E(pc),a1
 		jmp	(SetUp_ObjAttributes3).w
 ; ---------------------------------------------------------------------------
@@ -217,9 +217,9 @@ loc_86770:
 		tst.w	d0
 		beq.s	loc_867A0
 		movea.w	d0,a1
-		tst.w	$1A(a1)
+		tst.w	y_vel(a1)
 		bpl.s	loc_867A0
-		cmpi.b	#2,$20(a1)
+		cmpi.b	#id_Roll,anim(a1)
 		beq.s	loc_867AA
 		cmpi.b	#1,$38(a1)
 		beq.s	loc_867AA
@@ -227,7 +227,7 @@ loc_86770:
 loc_867A0:
 		swap	d0
 		movea.w	d0,a1
-		tst.w	$1A(a1)
+		tst.w	y_vel(a1)
 		bpl.s	loc_867BE
 
 loc_867AA:
@@ -274,7 +274,7 @@ loc_86820:
 		lea	word_86B50(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#loc_8683E,address(a0)
-		move.b	#8,$1E(a0)
+		move.b	#16/2,y_radius(a0)
 		bsr.w	sub_86A7A
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -283,7 +283,7 @@ loc_8683E:
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_86850
 		move.l	#loc_86854,address(a0)
-		move.w	#$80,8(a0)
+		move.w	#$80,priority(a0)
 
 loc_86850:
 		jmp	(Sprite_CheckDelete).w
@@ -294,8 +294,8 @@ loc_86854:
 		jsr	(ObjHitFloor).w
 		tst.w	d1
 		bpl.s	loc_86888
-		add.w	d1,$14(a0)
-		move.w	$3E(a0),$1A(a0)
+		add.w	d1,y_pos(a0)
+		move.w	$3E(a0),y_vel(a0)
 		jsr	(Find_Sonic).w
 		move.w	#-$200,d1
 		tst.b	(Level_end_flag).w
@@ -305,7 +305,7 @@ loc_86854:
 		neg.w	d1
 
 loc_86880:
-		move.w	d1,$18(a0)
+		move.w	d1,x_vel(a0)
 		jsr	(Change_FlipXWithVelocity2).w
 
 loc_86888:
@@ -344,32 +344,32 @@ loc_868B6:
 		tst.b	(Level_end_flag).w
 		bne.s	loc_868F0
 		move.l	#loc_868F2,address(a0)
-		bset	#0,4(a0)
+		bset	#0,render_flags(a0)
 
 loc_868F0:
 		bra.s	loc_86888
 ; ---------------------------------------------------------------------------
 
 loc_868F2:
-		subq.w	#2,$10(a0)
+		subq.w	#2,x_pos(a0)
 		bra.s	loc_86888
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_86A3E:
-		move.w	#$1B,d1
-		move.w	#4,d2
-		move.w	#6,d3
-		move.w	$10(a0),d4
+		moveq	#$1B,d1
+		moveq	#4,d2
+		moveq	#6,d3
+		move.w	x_pos(a0),d4
 		jmp	(SolidObjectFull).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_86A54:
-		moveq	#5,d2
 		moveq	#$1B,d1
+		moveq	#5,d2
 		moveq	#9,d3
-		move.w	$10(a0),d4
+		move.w	x_pos(a0),d4
 		jmp	(SolidObjectFull).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -419,9 +419,9 @@ sub_86984:
 		lea	(Player_1).w,a1
 		cmpi.b	#id_SonicDeath,routine(a1)
 		bhs.s	locret_869C4
-		tst.b	4(a1)
+		tst.b	render_flags(a1)
 		bpl.s	locret_869C4
-		move.w	#-$100,$18(a0)
+		move.w	#-$100,x_vel(a0)
 		move.b	d0,routine(a0)
 		jsr	(Create_New_Sprite).w
 		bne.s	loc_869C2
@@ -437,38 +437,38 @@ locret_869C4:
 
 sub_869F6:
 		move.w	d2,d5
-		move.w	$10(a1),d6
+		move.w	x_pos(a1),d6
 		add.w	d3,d6
-		cmp.w	$10(a0),d6
+		cmp.w	x_pos(a0),d6
 		bhs.s	loc_86A06
 		neg.w	d2
 
 loc_86A06:
-		move.w	$18(a0),d6
+		move.w	x_vel(a0),d6
 		add.w	d2,d6
 		cmp.w	d0,d6
 		bgt.s	loc_86A1A
 		neg.w	d0
 		cmp.w	d0,d6
 		blt.s		loc_86A1A
-		move.w	d6,$18(a0)
+		move.w	d6,x_vel(a0)
 
 loc_86A1A:
-		move.w	$14(a1),d6
+		move.w	y_pos(a1),d6
 		add.w	d4,d6
-		cmp.w	$14(a0),d6
+		cmp.w	y_pos(a0),d6
 		bhs.s	loc_86A28
 		neg.w	d5
 
 loc_86A28:
-		move.w	$1A(a0),d6
+		move.w	y_vel(a0),d6
 		add.w	d5,d6
 		cmp.w	d1,d6
 		bgt.s	locret_86A3C
 		neg.w	d1
 		cmp.w	d1,d6
-		blt.s	loc_86A1A
-		move.w	d6,$1A(a0)
+		blt.s		loc_86A1A
+		move.w	d6,y_vel(a0)
 
 locret_86A3C:
 		rts
@@ -482,19 +482,19 @@ sub_86A7A:
 		andi.w	#6,d0
 		lea	word_86B0E(pc),a1
 		move.w	(a1,d0.w),d2
-		move.w	d2,$1A(a0)
+		move.w	d2,y_vel(a0)
 		move.w	d2,$3E(a0)
 		movea.w	$46(a0),a1
-		btst	#1,4(a1)
+		btst	#1,render_flags(a1)
 		beq.s	loc_86AB0
 		move.l	#loc_8689C,address(a0)
 		addq.b	#8,$43(a0)
-		clr.w	$1A(a0)
+		clr.w	y_vel(a0)
 
 loc_86AB0:
 		andi.w	#2,d0
 		move.w	d0,d2
-		move.w	word_86B16(pc,d2.w),$A(a0)
+		move.w	word_86B16(pc,d2.w),art_tile(a0)
 		moveq	#0,d2
 		move.b	(Current_zone).w,d2
 		add.w	d2,d2
@@ -529,10 +529,10 @@ Load_EggCapsule:
 ; ---------------------------------------------------------------------------
 
 word_86B0E:
-		dc.w $FC80
-		dc.w $FD00
-		dc.w $FD80
-		dc.w $FE00
+		dc.w -$380
+		dc.w -$300
+		dc.w -$280
+		dc.w -$200
 word_86B16:
 		dc.w $8580
 		dc.w $8592
@@ -602,7 +602,7 @@ ChildObjDat_86B7A:
 		dc.l loc_867D6
 		dc.w $18F8
 ChildObjDat_86B9A:
-		dc.w 9-1			; 15-1?
+		dc.w 9-1			; why not 15-1?
 		dc.l loc_86820
 		dc.w $FC
 		dc.l loc_86820

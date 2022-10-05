@@ -21,6 +21,12 @@ ramaddr function x,(-(x&$80000000)<<1)|x
 ; function using these variables
 id function ptr,((ptr-offset)/ptrsize+idstart)
 
+; function to convert two separate bytes into a word
+bytes_to_word function byte1,byte2,(((byte1)<<8)&$FF00)|((byte2)&$FF)
+
+; function to convert two separate word into a long
+words_to_long function word1,word2,(((word1)<<16)&$FFFF0000)|((word2)&$FFFF)
+
 ; values for the type argument
 VRAM = %100001
 CRAM = %101011
@@ -33,7 +39,6 @@ DMA = %100111
 
 ; tells the VDP to copy a region of 68k memory to VRAM or CRAM or VSRAM
 dma68kToVDP macro source,dest,length,type
-	lea	(VDP_control_port).l,a5
 	move.l	#(($9400|((((length)>>1)&$FF00)>>8))<<16)|($9300|(((length)>>1)&$FF)),VDP_control_port-VDP_control_port(a5)
 	move.l	#(($9600|((((source)>>1)&$FF00)>>8))<<16)|($9500|(((source)>>1)&$FF)),VDP_control_port-VDP_control_port(a5)
 	move.w	#$9700|(((((source)>>1)&$FF0000)>>16)&$7F),VDP_control_port-VDP_control_port(a5)
@@ -56,7 +61,6 @@ dma68kToVDP macro source,dest,length,type
 
 ; tells the VDP to fill a region of VRAM with a certain byte
 dmaFillVRAM macro byte,addr,length
-	lea	(VDP_control_port).l,a5
 	move.w	#$8F01,VDP_control_port-VDP_control_port(a5) ; VRAM pointer increment: $0001
 	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5) ; DMA length ...
 	move.w	#$9780,VDP_control_port-VDP_control_port(a5) ; VRAM fill
@@ -139,9 +143,21 @@ levartptrs macro art,map16x16,map128x128,palette
     endm
 
 ; macro to declare sub-object data
-subObjData macro mappings,vram,priority,width,height,frame,collision
+subObjData	macro mappings,vram,priority,width,height,frame,collision
 	dc.l mappings
 	dc.w vram,priority
+	dc.b width,height,frame,collision
+    endm
+
+; macro to declare sub-object data
+subObjData2	macro vram,priority,width,height,frame,collision
+	dc.w vram,priority
+	dc.b width,height,frame,collision
+    endm
+
+; macro to declare sub-object data
+subObjData3	macro priority,width,height,frame,collision
+	dc.w priority
 	dc.b width,height,frame,collision
     endm
 
@@ -234,18 +250,87 @@ clearRAM3 macro addr,length
     endm
 
 ; ---------------------------------------------------------------------------
+; check if object moves out of range
+; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
+; ---------------------------------------------------------------------------
+
+out_of_xrange	macro exit, xpos
+	if ("xpos"<>"")
+		move.w	xpos,d0							; get object position (if specified as not x_pos)
+	else
+		move.w	x_pos(a0),d0						; get object position
+	endif
+	andi.w	#$FF80,d0							; round down to nearest $80
+	sub.w	(Camera_X_pos_coarse_back).w,d0		; get screen position
+	cmpi.w	#$80+320+$40+$80,d0				; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
+	bhi.ATTRIBUTE	exit
+    endm
+
+out_of_xrange2	macro exit
+	andi.w	#$FF80,d0							; round down to nearest $80
+	sub.w	(Camera_X_pos_coarse_back).w,d0		; get screen position
+	cmpi.w	#$80+320+$40+$80,d0				; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
+	bhi.ATTRIBUTE	exit
+    endm
+
+; ---------------------------------------------------------------------------
+; check if object moves out of range
+; input: location to jump to if out of range, x-axis pos (y_pos(a0) by default)
+; ---------------------------------------------------------------------------
+
+out_of_yrange	macro exit, ypos
+	if ("ypos"<>"")
+		move.w	ypos,d0							; get object position (if specified as not y_pos)
+	else
+		move.w	y_pos(a0),d0						; get object position
+	endif
+	sub.w	(Camera_Y_pos).w,d0
+	addi.w	#$80,d0
+	cmpi.w	#$80+256+$80,d0
+	bhi.ATTRIBUTE	exit
+    endm
+
+out_of_yrange2	macro exit
+	sub.w	(Camera_Y_pos).w,d0
+	addi.w	#$80,d0
+	cmpi.w	#$80+256+$80,d0
+	bhi.ATTRIBUTE	exit
+    endm
+
+out_of_yrange3	macro exit, ypos
+	if ("ypos"<>"")
+		move.w	ypos,d0							; get object position (if specified as not y_pos)
+	else
+		move.w	y_pos(a0),d0						; get object position
+	endif
+	andi.w	#$FF80,d0
+	sub.w	(Camera_Y_pos_coarse_back).w,d0
+	cmpi.w	#$80+256+$80,d0
+	bhi.ATTRIBUTE	exit
+    endm
+
+out_of_yrange4	macro exit
+	andi.w	#$FF80,d0
+	sub.w	(Camera_Y_pos_coarse_back).w,d0
+	cmpi.w	#$80+256+$80,d0
+	bhi.ATTRIBUTE	exit
+    endm
+
+; ---------------------------------------------------------------------------
 ; clear the Z80 RAM
 ; ---------------------------------------------------------------------------
 
 clearZ80RAM macro
 	lea	(Z80_RAM).l,a0
 	move.w	#$1FFF,d0
+
 -	clr.b (a0)+
 	dbf	d0,-
     endm
 
 paddingZ80RAM macro
 	moveq	#0,d0
+
 -	move.b	d0,(a1)+
 	cmpa.l	#(Z80_RAM_end),a1
 	bne.s	-
@@ -263,6 +348,7 @@ stopZ80 macro
 	nop
 	nop
 	nop
+
 -	btst	#0,(Z80_bus_request).l
 	bne.s	- 	; loop until it says it's stopped
 	endif
@@ -339,6 +425,7 @@ stopZ802 macro
 	nop
 	nop
 	nop
+
 -	btst	#0,(Z80_bus_request).l
 	bne.s	- 	; loop until it says it's stopped
 	endif
@@ -788,39 +875,70 @@ gotoSRAM macro
 gotoROM macro
 	move.b  #0,(SRAM_access_flag).l
     endm
+
 ; ---------------------------------------------------------------------------
 ; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
-; input: source, destination, width [cells], height [cells]
+; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap	macro loc,width,height
+copyTilemap	macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
+      if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM).w
+      else
+	jmp	(Plane_Map_To_VRAM).w
+      endif
     endm
+
 ; ---------------------------------------------------------------------------
 ; Copy a tilemap2 from 68K (ROM/RAM) to the VRAM without using DMA
-; input: source, destination, width [cells], height [cells]
+; input: destination, VRAM shift, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap2	macro loc,address,width,height
+copyTilemap2	macro loc,address,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
 	move.w	#(address),d3
+      if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_Add_VRAM).w
+      else
+	jmp	(Plane_Map_To_Add_VRAM).w
+      endif
     endm
+
 ; ---------------------------------------------------------------------------
 ; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
-; input: source, destination, width [cells], height [cells]
+; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap3		macro loc,width,height
+copyTilemap3		macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
+      if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM_3).w
+      else
+	jmp	(Plane_Map_To_VRAM_3).w
+      endif
+    endm
+
+; ---------------------------------------------------------------------------
+; Clear a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; input: source, destination, width [cells], height [cells], terminate
+; ---------------------------------------------------------------------------
+
+clearTilemap	macro loc,width,height,terminate
+	locVRAM	loc,d0
+	moveq	#(width/8-1),d1
+	moveq	#(height/8-1),d2
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(Clear_Plane_Map).w
+      else
+	jmp	(Clear_Plane_Map).w
+      endif
     endm
 ; ---------------------------------------------------------------------------
 
@@ -830,27 +948,27 @@ LoadArtUnc macro offset,size,vram
 	lea	(offset).l,a0
 	moveq	#(size>>5)-1,d0
 
--
+.load
 	rept 8
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
 	endr
-		dbf	d0,-
+		dbf	d0,.load
     endm
 ; ---------------------------------------------------------------------------
 
-LoadMapUnc	macro offset,size,arg,vram,width,height
+LoadMapUnc	macro offset,size,arg,loc,width,height
 	lea	(offset).l,a0
-	lea	(RAM_start).l,a1
 	move.w	#arg,d0
 	move.w	#((size)>>4),d1
-- rept 4
-	move.l	(a0)+,(a1)
-	add.w	d0,(a1)+
-	add.w	d0,(a1)+
- endr
-	dbf	d1,-
-	lea	(RAM_start).l,a1
-	locVRAM	vram,d0
+
+.load
+	rept 4
+		move.l	(a0)+,(a1)
+		add.w	d0,(a1)+
+		add.w	d0,(a1)+
+	endr
+		dbf	d1,.load
+	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
 	jsr	(Plane_Map_To_VRAM).w
