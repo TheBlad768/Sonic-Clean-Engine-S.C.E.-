@@ -3,7 +3,7 @@ SONIC-CLEAN-ENGINE-S.C.E.-
 SPECIAL CREDITS:
 
 - mrcat-pixel — New smooth ring graphics, act 3 and 4 numbers graphics.
-- FoxConED — Level Select font.
+- FoxConED — Level Select font graphics.
 
 DISCLAIMER:
 Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty.
