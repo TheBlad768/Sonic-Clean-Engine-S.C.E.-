@@ -87,21 +87,25 @@ LoadPalette2_Immediate:
 ; =============== S U B R O U T I N E =======================================
 
 PalLoad_Line64:
+
 	rept 16/2
 		move.l	(a1)+,(a2)+
 	endr
 
 PalLoad_Line48:
+
 	rept 16/2
 		move.l	(a1)+,(a2)+
 	endr
 
 PalLoad_Line32:
+
 	rept 16/2
 		move.l	(a1)+,(a2)+
 	endr
 
 PalLoad_Line16:
+
 	rept 16/2
 		move.l	(a1)+,(a2)+
 	endr

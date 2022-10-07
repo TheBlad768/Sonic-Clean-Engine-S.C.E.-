@@ -25,6 +25,7 @@ HScroll_Deform:
 		dbf	d5,.loop
 		dbf	d6,.loop2
 		rts
+
 ; ---------------------------------------------------------------------------
 ; Simple vertical deformation
 ; Inputs:
@@ -48,6 +49,10 @@ VScroll_Deform:
 		dbf	d6,.loop
 		rts
 
+; ---------------------------------------------------------------------------
+; Plain deformation
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 PlainDeformation:
@@ -66,6 +71,10 @@ PlainDeformation:
 		dbf	d1,.loop
 		rts
 
+; ---------------------------------------------------------------------------
+; Plain deformation (flipped)
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 PlainDeformation_Flipped:
@@ -83,6 +92,10 @@ PlainDeformation_Flipped:
 	endr
 		dbf	d1,.loop
 		rts
+
+; ---------------------------------------------------------------------------
+; FG deform
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -103,27 +116,36 @@ MakeFGDeformArray:
 		dbf	d0,.loop
 		rts
 
+; ---------------------------------------------------------------------------
+; Foreground scrolling
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 FGScroll_Deformation:
-		move.w	(HScroll_Shift).w,d0
+		lea	(HScroll_Shift).w,a1
+
+.main
+		move.w	(a1)+,d0
 		ext.l	d0
 		asl.l	#8,d0
-		add.l	d0,(HScroll_Shift+2).w
+		add.l	d0,(a1)	; HScroll_Shift+2
 
-FGScroll_Deformation2:
-		lea	(H_scroll_buffer).w,a1
-		move.w	(HScroll_Shift+2).w,d0
+.scroll
+		move.w	(a1),d0	; HScroll_Shift+2
 		neg.w	d0
+		lea	(H_scroll_buffer).w,a1
 		moveq	#bytesToXcnt(224,8),d1
 
 .loop
+
 	rept	8
 		move.w	(a1),d2
 		add.w	d0,d2
 		move.w	d2,(a1)
 		addq.w	#4,a1		; skip FBG
 	endr
+
 		dbf	d1,.loop
 		rts
 

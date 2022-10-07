@@ -309,15 +309,16 @@ LevelSelect_LoadAct:
 		add.w	d1,d1
 		add.w	d0,d0
 		add.w	d1,d0
-		move.w	LevelSelect_LoadActText(pc,d0.w),d0
-		lea	LevelSelect_LoadActText(pc,d0.w),a0
+		move.w	LevelSelect_ActTextIndex(pc,d0.w),d0
+		lea	LevelSelect_ActTextIndex(pc,d0.w),a0
 		bra.s	LevelSelect_LoadMainText.loadtext
 
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_LoadMainText:
 		lea	(VDP_data_port).l,a6
-		locVRAM	$C080,VDP_control_port-VDP_data_port(a6)
+		lea	VDP_control_port-VDP_data_port(a6),a5
+		locVRAM	$C080,VDP_control_port-VDP_control_port(a5)
 		lea	LevelSelect_MainText(pc),a0
 
 .loadtext
@@ -333,13 +334,13 @@ LevelSelect_LoadMainText:
 		rts
 ; --------------------------------------------------------------------------
 
-LevelSelect_LoadActText: offsetTable
+LevelSelect_ActTextIndex: offsetTable
 		offsetTableEntry.w LevelSelect_LoadAct1		; DEZ1
 		offsetTableEntry.w LevelSelect_LoadAct2		; DEZ2
 		offsetTableEntry.w LevelSelect_LoadAct3		; DEZ3
 		offsetTableEntry.w LevelSelect_LoadAct4		; DEZ4
 
-		zonewarning LevelSelect_LoadActText,(2*4)
+		zonewarning LevelSelect_ActTextIndex,(2*4)
 ; --------------------------------------------------------------------------
 
 LevelSelect_LoadAct1:
@@ -362,6 +363,7 @@ LevelSelect_MainText:
 
 LevelSelect_MarkFields:
 		lea	(VDP_data_port).l,a6
+		lea	VDP_control_port-VDP_data_port(a6),a5
 		lea	(RAM_start).l,a4
 		lea	LevelSelect_MarkTable(pc),a3
 		move.w	(vLevelSelect_VCount).w,d0
@@ -383,7 +385,7 @@ LevelSelect_MarkFields:
 		lsr.w	#2,d1
 		ori.w	#vdpComm($0000,VRAM,WRITE)>>16,d1
 		swap	d1
-		move.l	d1,VDP_control_port-VDP_data_port(a6)
+		move.l	d1,VDP_control_port-VDP_control_port(a5)
 		moveq	#40-1,d2	; load line
 
 .copy
@@ -408,19 +410,19 @@ LevelSelect_MarkFields:
 		bne.s	.return
 
 		; draw music
-		locVRAM	$CB30
+		locVRAM	$CB30,VDP_control_port-VDP_control_port(a5)
 		move.w	(vLevelSelect_MusicCount).w,d0
 		bra.s	.drawnumbers
 ; ---------------------------------------------------------------------------
 
 .drawsound
-		locVRAM	$CC30
+		locVRAM	$CC30,VDP_control_port-VDP_control_port(a5)
 		move.w	(vLevelSelect_SoundCount).w,d0
 		bra.s	.drawnumbers
 ; ---------------------------------------------------------------------------
 
 .drawsample
-		locVRAM	$CD30
+		locVRAM	$CD30,VDP_control_port-VDP_control_port(a5)
 		move.w	(vLevelSelect_SampleCount).w,d0
 
 .drawnumbers
