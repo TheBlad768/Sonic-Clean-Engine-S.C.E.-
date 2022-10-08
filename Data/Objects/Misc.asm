@@ -417,7 +417,7 @@ Restore_PlayerControl:
 Restore_PlayerControl2:
 		clr.b	object_control(a1)
 		bclr	#Status_InAir,status(a1)
-		move.w	#id_Wait<<8|id_Wait,anim(a1)
+		move.w	#bytes_to_word(id_Wait,id_Wait),anim(a1)
 		clr.b	anim_frame(a1)
 		clr.b	anim_frame_timer(a1)
 		rts

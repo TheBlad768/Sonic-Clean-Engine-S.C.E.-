@@ -140,7 +140,7 @@ Level_Screen:
 		jsr	(Animate_Tiles).l
 		jsr	(LoadWaterPalette).l
 		clearRAM Water_palette_line_2, Normal_palette
-		move.w	#(16*2)<<8|(48-1),(Palette_fade_info).w		; set fade info and fade count
+		move.w	#bytes_to_word(16*2,48-1),(Palette_fade_info).w	; set fade info and fade count
 		jsr	(Pal_FillBlack).w
 		move.w	#22,(Palette_fade_timer).w					; for Pal_FromBlack
 		move.w	#$7F00,(Ctrl_1).w

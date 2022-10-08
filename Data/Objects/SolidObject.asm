@@ -450,7 +450,7 @@ loc_1E0A2:
 		beq.s	sub_1E0C2
 		cmpi.b	#id_Landing,anim(a1)
 		beq.s	sub_1E0C2
-		move.w	#id_Walk<<8|id_Run,anim(a1)
+		move.w	#bytes_to_word(id_Walk,id_Run),anim(a1)
 
 sub_1E0C2:
 		move.l	d6,d4

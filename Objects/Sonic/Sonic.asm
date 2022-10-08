@@ -1436,7 +1436,7 @@ loc_11D2E:
 		move.b	(Ctrl_1_pressed_logical).w,d0
 		andi.b	#btnA+btnB+btnC,d0
 		beq.w	loc_11D5E
-		move.w	#id_SpinDash<<8|id_Walk,anim(a0)
+		move.w	#bytes_to_word(id_SpinDash,id_Walk),anim(a0)
 		sfx	sfx_SpinDash
 		addi.w	#$200,spin_dash_counter(a0)
 		cmpi.w	#$800,spin_dash_counter(a0)
