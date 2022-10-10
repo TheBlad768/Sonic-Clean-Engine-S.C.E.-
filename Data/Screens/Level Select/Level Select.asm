@@ -302,7 +302,7 @@ LevelSelect_LoadAct:
 		dbf	d0,.loop
 
 .zero
-		move.l	d2,VDP_control_port-VDP_data_port(a6)
+		move.l	d2,VDP_control_port-VDP_control_port(a5)
 		add.w	d1,d1
 		move.w	(a0,d1.w),d0
 		add.w	d1,d1

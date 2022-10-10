@@ -9,11 +9,11 @@ Clear_DisplayData:
 		stopZ80
 		lea	(VDP_control_port).l,a5
 		dmaFillVRAM 0,$0000,($1000<<4)		; clear VRAM
+		startZ80
 		clr.l	(V_scroll_value).w
 		clr.l	(H_scroll_value).w
 		clearRAM Sprite_table_buffer, Sprite_table_buffer_End
 		clearRAM H_scroll_buffer, H_scroll_buffer_End
-		startZ80
 		bra.w	Init_SpriteTable
 
 ; ---------------------------------------------------------------------------

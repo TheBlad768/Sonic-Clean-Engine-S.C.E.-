@@ -4,5 +4,9 @@
 *.cs text
 *.cpp text
 *.ini text
+*.eni binary
+*.kos binary
+*.kosm binary
+*.snd binary
 *.bin binary
 *.gen binary

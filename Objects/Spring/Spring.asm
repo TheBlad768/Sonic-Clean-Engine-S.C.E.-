@@ -110,7 +110,7 @@ loc_22F1C:
 ; =============== S U B R O U T I N E =======================================
 
 sub_22F98:
-		move.w	#1<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(1,0),anim(a0)	; set anim and clear next_anim/prev_anim
 		addq.w	#8,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	+
@@ -194,7 +194,7 @@ loc_23092:
 ; =============== S U B R O U T I N E =======================================
 
 sub_23190:
-		move.w	#3<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(3,0),anim(a0)	; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -324,7 +324,7 @@ sub_233CA:
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	+
 		addi.w	#$10,y_pos(a1)
-+		move.w	#1<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
++		move.w	#bytes_to_word(1,0),anim(a0)	; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		cmpi.w	#$1000,y_vel(a1)
@@ -416,7 +416,7 @@ loc_234FC:
 ; ---------------------------------------------------------------------------
 
 loc_2350A:
-		move.w	#5<<8,anim(a0)	; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(5,0),anim(a0)	; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),y_vel(a1)
 		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#6,y_pos(a1)
@@ -491,7 +491,7 @@ loc_235F8:
 ; =============== S U B R O U T I N E =======================================
 
 sub_23624:
-		move.w	#5<<8,anim(a0)	; Set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(5,0),anim(a0)	; Set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		move.w	objoff_30(a0),x_vel(a1)

@@ -7,7 +7,7 @@
 Animate_Tiles:
 		lea	(Level_data_addr_RAM.AnimateTiles).w,a0
 		movea.l	(a0)+,a1
-		movea.l	(a0)+,a2
+		movea.l	(a0),a2
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================

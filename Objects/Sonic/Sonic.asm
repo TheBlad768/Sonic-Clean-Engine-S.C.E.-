@@ -279,7 +279,7 @@ Sonic_InWater:
 		asr	y_vel(a0)				; memory operands can only be shifted one bit at a time
 		asr	y_vel(a0)
 		beq.s	locret_10E2C
-		move.w	#1<<8,anim(a6)		; splash animation, write 1 to anim and clear prev_anim
+		move.w	#bytes_to_word(1,0),anim(a6)	; splash animation, write 1 to anim and clear prev_anim
 		sfx	sfx_Splash,1				; splash sound
 ; ---------------------------------------------------------------------------
 
@@ -307,7 +307,7 @@ loc_10EFC:
 		beq.w	locret_10E2C			; if so, branch
 		tst.w	y_vel(a0)
 		beq.w	locret_10E2C
-		move.w	#1<<8,anim(a6)		; splash animation, write 1 to anim and clear prev_anim
+		move.w	#bytes_to_word(1,0),anim(a6)	; splash animation, write 1 to anim and clear prev_anim
 		cmpi.w	#-$1000,y_vel(a0)
 		bgt.s	loc_10F22
 		move.w	#-$1000,y_vel(a0)	; limit upward y velocity exiting the water

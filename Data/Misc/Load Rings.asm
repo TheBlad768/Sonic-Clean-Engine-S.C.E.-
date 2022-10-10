@@ -175,7 +175,7 @@ loc_EABE:
 		bne.s	Test_Ring_Collisions_AttractRing
 
 loc_EAC6:
-		move.w	#(6<<8)|((CMap_Ring_Spark-CMap_Ring)/8),(a4)
+		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/8),(a4)
 		jsr	(GiveRing).w
 		lea	(Ring_consumption_list).w,a3
 
