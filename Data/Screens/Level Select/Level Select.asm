@@ -37,6 +37,8 @@ LevelSelect_Screen:
 		jsr	(Clear_Kos_Module_Queue).w
 		jsr	(Pal_FadeToBlack).w
 		disableInts
+		move.l	#VInt,(V_int_addr).w
+		move.l	#HInt,(H_int_addr).w
 		disableScreen
 		jsr	(Clear_DisplayData).w
 		lea	Level_VDP(pc),a1
@@ -427,7 +429,7 @@ LevelSelect_MarkFields:
 
 .drawnumbers
 		move.b	d0,d2
-		lsr.b #8,d0
+		lsr.w #8,d0
 		bsr.s	.drawnumber
 		move.b	d2,d0
 		lsr.b	#4,d0

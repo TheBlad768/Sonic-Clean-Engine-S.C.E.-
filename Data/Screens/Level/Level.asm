@@ -23,6 +23,8 @@ Level_Screen:
 		jsr	(Clear_Kos_Module_Queue).w								; clear KosM PLCs
 		jsr	(Pal_FadeToBlack).w
 		disableInts
+		move.l	#VInt,(V_int_addr).w
+		move.l	#HInt,(H_int_addr).w
 		jsr	(Clear_DisplayData).w
 		enableInts
 		tst.b	(Last_star_post_hit).w
@@ -142,7 +144,9 @@ Level_Screen:
 		clearRAM Water_palette_line_2, Normal_palette
 		move.w	#bytes_to_word(16*2,48-1),(Palette_fade_info).w	; set fade info and fade count
 		jsr	(Pal_FillBlack).w
-		move.w	#22,(Palette_fade_timer).w					; for Pal_FromBlack
+		moveq	#22,d0
+		move.w	d0,(Palette_fade_timer).w								; time for Pal_FromBlack
+		move.w	d0,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w	; time for Title Card
 		move.w	#$7F00,(Ctrl_1).w
 		andi.b	#$7F,(Last_star_post_hit).w
 		bclr	#GameModeFlag_TitleCard,(Game_mode).w		; subtract $80 from mode to end pre-level stuff
