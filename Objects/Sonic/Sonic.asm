@@ -1926,12 +1926,12 @@ loc_1213C:
 		tst.b	(WindTunnel_flag).w
 		bne.s	loc_12148
 		tst.w	y_vel(a0)
-		bmi.s	locret_12170
+		bmi.s	locret_1213A
 
 loc_12148:
 		bsr.w	sub_11FD6
 		tst.w	d1
-		bpl.s	locret_12170
+		bpl.s	locret_1213A
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_12158
 		neg.w	d1
@@ -1941,10 +1941,6 @@ loc_12158:
 		move.b	d3,angle(a0)
 		clr.w	y_vel(a0)
 		move.w	x_vel(a0),ground_vel(a0)
-		bsr.s	Player_TouchFloor_Check_Spindash
-
-locret_12170:
-		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -2082,7 +2078,7 @@ sub_12318:
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
-		blt.w	loc_1238A
+		blt.s		loc_1238A
 		bra.s	loc_12344
 ; ---------------------------------------------------------------------------
 
@@ -2090,7 +2086,7 @@ loc_12336:
 		move.w	(Camera_min_Y_pos).w,d0
 		cmp.w	y_pos(a0),d0
 		blt.s		loc_12344
-		bra.w	loc_1238A
+		bra.s	loc_1238A
 ; ---------------------------------------------------------------------------
 
 loc_12344:

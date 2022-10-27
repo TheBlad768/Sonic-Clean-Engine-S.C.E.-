@@ -33,10 +33,10 @@ Level_Screen:
 		move.w	(Saved_apparent_zone_and_act).w,(Apparent_zone_and_act).w
 
 .nostarpost
-		clearRAM Object_RAM, Object_RAM_End
-		clearRAM Lag_frame_count, Lag_frame_count_End
-		clearRAM Camera_RAM, Camera_RAM_End
-		clearRAM Oscillating_variables, Oscillating_variables_End
+		clearRAM Object_RAM, Object_RAM_end
+		clearRAM Lag_frame_count, Lag_frame_count_end
+		clearRAM Camera_RAM, Camera_RAM_end
+		clearRAM Oscillating_variables, Oscillating_variables_end
 		lea	Level_VDP(pc),a1
 		jsr	(Load_VDP).w
 

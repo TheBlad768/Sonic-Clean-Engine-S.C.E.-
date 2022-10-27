@@ -71,7 +71,7 @@ Perform_DPLC:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0	; Get the frame number
 		cmp.b	objoff_3A(a0),d0			; If frame number remains the same as before, don't do anything
-		beq.s	+
+		beq.s	.return
 		move.b	d0,objoff_3A(a0)
 		movea.l	(a2)+,a3					; Source address of art
 		move.w	art_tile(a0),d4
@@ -81,10 +81,11 @@ Perform_DPLC:
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2				; Apply offset to script
 		move.w	(a2)+,d5					; Get number of DMA transactions
-		bmi.s	+
+		bmi.s	.return					; skip if zero queues
 		moveq	#0,d3
 
--		move.w	(a2)+,d3					; Art source offset
+.loop
+		move.w	(a2)+,d3					; Art source offset
 		move.l	d3,d1
 		andi.w	#$FFF0,d1				; Isolate all but lower 4 bits
 		add.l	a3,d1					; Get final source address of art
@@ -95,8 +96,10 @@ Perform_DPLC:
 		add.w	d3,d4
 		add.w	d3,d4
 		jsr	(Add_To_DMA_Queue).w		; Add to queue
-		dbf	d5,-							; Keep going
-+		rts
+		dbf	d5,.loop						; Keep going
+
+.return
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -435,8 +438,7 @@ StartNewLevel:
 ; =============== S U B R O U T I N E =======================================
 
 Play_SFX_Continuous:
-		move.b	(V_int_run_count+3).w,d1
-		and.b	d2,d1
+		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
 		jmp	(SMPS_QueueSound2).w	; play sfx
 
@@ -444,11 +446,13 @@ Play_SFX_Continuous:
 
 Wait_NewDelay:
 		subq.w	#1,$2E(a0)
-		bmi.s	+
+		bmi.s	.end
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
-+		bclr	#7,render_flags(a0)
-		move.w	#$77,$2E(a0)
+
+.end
+		bclr	#7,render_flags(a0)
+		move.w	#(2*60)-1,$2E(a0)
 		movea.l	$34(a0),a1
 		jmp	(a1)
 
@@ -456,15 +460,19 @@ Wait_NewDelay:
 
 Wait_FadeToLevelMusic:
 		subq.w	#1,$2E(a0)
-		bmi.s	+
+		bmi.s	.end
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
-+		bclr	#7,render_flags(a0)
-		move.w	#$77,$2E(a0)
+
+.end
+		bclr	#7,render_flags(a0)
+		move.w	#(2*60)-1,$2E(a0)
 		jsr	(Create_New_Sprite).w
-		bne.s	+
+		bne.s	.notfree
 		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
-+		movea.l	$34(a0),a1
+
+.notfree
+		movea.l	$34(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -483,16 +491,16 @@ BossDefeated_NoTime:
 ; =============== S U B R O U T I N E =======================================
 
 BossFlash:
-		lea	word_7A622(pc),a1
-		lea	word_7A628(pc,d0.w),a2
+		lea	.palram(pc),a1
+		lea	.palcycle(pc,d0.w),a2
 		bra.s	CopyWordData_3
 ; ---------------------------------------------------------------------------
 
-word_7A622:
+.palram
 		dc.w Normal_palette_line_1+$C
 		dc.w Normal_palette_line_1+$1C
 		dc.w Normal_palette_line_1+$1E
-word_7A628:
+.palcycle
 		dc.w 8, $866, $222
 		dc.w $888, $CCC, $EEE
 

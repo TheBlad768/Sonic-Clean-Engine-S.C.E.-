@@ -4,9 +4,9 @@
 
 ; RAM variables - General
 	phase	ramaddr($FFFF0000)	; Pretend we're in the RAM
-RAM_Start:							= *
+RAM_start:							= *
 Chunk_table:							ds.b $8000				; Chunk (128x128) definitions, $80 bytes per definition
-Chunk_table_End						= *
+Chunk_table_end						= *
 
 Player_1:								= *						; Main character in 1 player mode
 v_player:								= *
@@ -14,7 +14,7 @@ Object_RAM:							ds.b object_size
 									ds.b object_size
 Reserved_object_3:					ds.b object_size			; During a level, an object whose sole purpose is to clear the collision response list is stored here
 Dynamic_object_RAM:				ds.b object_size*90		; 90 objects
-Dynamic_object_RAM_End			= *
+Dynamic_object_RAM_end				= *
 									ds.b object_size
 v_Dust:								ds.b object_size
 v_Shield:							ds.b object_size
@@ -30,26 +30,26 @@ v_Breathing_bubbles:					ds.b object_size
 v_WaterWave:						ds.b object_size
 v_Invincibility_stars:					ds.b object_size*4			; 4 objects
 									ds.b $34					; null
-Object_RAM_End						= *
+Object_RAM_end						= *
 
 Kos_decomp_buffer:					ds.b $1000				; Each module in a KosM archive is decompressed here and then DMAed to VRAM
 
 H_scroll_buffer:						ds.l 224					; Horizontal scroll table is built up here and then DMAed to VRAM
 H_scroll_table:						ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
-H_scroll_buffer_End					= *
+H_scroll_buffer_end					= *
 V_scroll_buffer:						ds.l 320/16				; vertical scroll buffer used in various levels(320 pixels for MD1, 512 pixels for MD2)
-V_scroll_buffer_End					= *
+V_scroll_buffer_end					= *
 
 Collision_response_list:				ds.b 128					; Only objects in this list are processed by the collision response routines
 Pos_table:							ds.l 64					; Recorded player XY position buffer
 Ring_status_table:					ds.w RingTable_Count		; Ring status table(1 word)
-Ring_status_table_End				= *
+Ring_status_table_end				= *
 Object_respawn_table:					ds.b ObjectTable_Count	; Object respawn table(1 byte)
-Object_respawn_table_End				= *
+Object_respawn_table_end				= *
 Sprite_table_buffer:					ds.b 80*8
-Sprite_table_buffer_End				= *
+Sprite_table_buffer_end				= *
 Sprite_table_input:					ds.b $80*8				; Sprite table input buffer
-Sprite_table_input_End				= *
+Sprite_table_input_end				= *
 
 DMA_queue:							= *
 VDP_Command_Buffer:				ds.w $12*7				; Stores all the VDP commands necessary to initiate a DMA transfer
@@ -117,7 +117,7 @@ Draw_delayed_position:				ds.w 1					; position to redraw screen from. Screen is
 Draw_delayed_rowcount:				ds.w 1					; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
 Events_bg:							ds.b $18					; various flags used by background events
 Boss_events:							ds.b $10
-Camera_RAM_End					= *
+Camera_RAM_end					= *
 
 Ring_start_addr_ROM:				ds.l 1					; Address in the ring layout of the first ring whose X position is >= camera X position - 8
 Ring_end_addr_ROM:					ds.l 1					; Address in the ring layout of the first ring whose X position is >= camera X position + 328
@@ -125,7 +125,7 @@ Ring_start_addr_RAM:				ds.w 1					; Address in the ring status table of the fir
 Ring_consumption_table:				= *						; Stores the addresses of all rings currently being consumed
 Ring_consumption_count:				ds.w 1					; The number of rings being consumed currently
 Ring_consumption_list:				ds.w $3F					; The remaining part of the ring consumption table
-Ring_consumption_table_End			= *
+Ring_consumption_table_end			= *
 
 Plane_Buffer:							ds.b $480				; Used by level drawing routines
 
@@ -249,7 +249,7 @@ Chain_bonus_counter:					ds.w 1
 Time_bonus_countdown:				ds.w 1					; Used on the results screen
 Ring_bonus_countdown:				ds.w 1					; Used on the results screen
 Total_bonus_countup:					ds.w 1
-Lag_frame_count_End					= *
+Lag_frame_count_end					= *
 
 Water_level:							= *						; Keeps fluctuating
 Water_Level_1:						ds.w 1
@@ -291,7 +291,7 @@ Level_data_addr_RAM:				= *
 .BackgroundEvent:					ds.l 1
 .AnimateTiles:						ds.l 1
 .AniPLC:								ds.l 1
-Level_data_addr_RAM_End			= *
+Level_data_addr_RAM_end			= *
 
 Kos_decomp_queue_count:				ds.w 1					; The number of pieces of data on the queue. Sign bit set indicates a decompression is in progress
 Kos_decomp_stored_registers:			ds.w 20					; Allows decompression to be spread over multiple frames
@@ -301,13 +301,13 @@ Kos_description_field:					ds.w 1					; Used by the Kosinski queue processor the
 Kos_decomp_queue:					ds.l 2*4					; 2 longwords per entry, first is source location and second is decompression location
 Kos_decomp_source:					= Kos_decomp_queue		; The compressed data location for the first entry in the queue
 Kos_decomp_destination:				= Kos_decomp_queue+4	; The decompression location for the first entry in the queue
-Kos_decomp_queue_End				= *
+Kos_decomp_queue_end				= *
 Kos_modules_left:						ds.w 1					; The number of modules left to decompresses. Sign bit set indicates a module is being decompressed/has been decompressed
 Kos_last_module_size:					ds.w 1					; The uncompressed size of the last module in words. All other modules are $800 words
 Kos_module_queue:					ds.b 6*PLCKosM_Count	; 6 bytes per entry, first longword is source location and next word is VRAM destination
 Kos_module_source:					= Kos_module_queue		; The compressed data location for the first module in the queue
 Kos_module_destination:				= Kos_module_queue+4	; The VRAM destination for the first module in the queue
-Kos_module_queue_End				= *
+Kos_module_queue_end				= *
 
 v_pal_water_dup:						= *
 Target_water_palette:					= *						; Used by palette fading routines
@@ -406,14 +406,14 @@ Oscillation_Control:					ds.w 1
 Oscillating_Data:						ds.b $40
 Anim_Counters:						ds.b $10					; Each word stores data on animated level art, including duration and current frame
 Level_trigger_array:					ds.b $10					; Used by buttons, etc
-Level_trigger_array_End				= *
+Level_trigger_array_end				= *
 Rings_frame_timer:					ds.b 1
 Rings_frame:							ds.b 1
 Ring_spill_anim_counter:				ds.b 1
 Ring_spill_anim_frame:				ds.b 1
 Ring_spill_anim_accum:				ds.b 1
 									ds.b 1					; even
-Oscillating_variables_End				= *
+Oscillating_variables_end				= *
 
 System_stack_size					ds.b $100				; ~$100 bytes ; this is the top of the stack, it grows downwards
 System_stack:						= *

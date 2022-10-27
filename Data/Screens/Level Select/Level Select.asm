@@ -47,10 +47,10 @@ LevelSelect_Screen:
 		clr.b	(Water_full_screen_flag).w
 		clr.b	(Water_flag).w
 		clearRAM RAM_start, (RAM_start+$1000)
-		clearRAM Object_RAM, Object_RAM_End
-		clearRAM Lag_frame_count, Lag_frame_count_End
-		clearRAM Camera_RAM, Camera_RAM_End
-		clearRAM Oscillating_variables, Oscillating_variables_End
+		clearRAM Object_RAM, Object_RAM_end
+		clearRAM Lag_frame_count, Lag_frame_count_end
+		clearRAM Camera_RAM, Camera_RAM_end
+		clearRAM Oscillating_variables, Oscillating_variables_end
 		moveq	#0,d0
 		move.w	d0,(Current_zone_and_act).w
 		move.w	d0,(Apparent_zone_and_act).w
@@ -457,14 +457,14 @@ LevelSelect_MarkFields:
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_Deform:
-		lea	(RAM_Start).l,a3
+		lea	(RAM_start).l,a3
 		lea	LevelSelectScroll_Data(pc),a2
 		jmp	(HScroll_Deform).w
 ; ---------------------------------------------------------------------------
 
 LevelSelectScroll_Data: dScroll_Header
 		dScroll_Data 0, 8, -$100, 8
-LevelSelectScroll_Data_End
+LevelSelectScroll_Data_end
 
 ; ---------------------------------------------------------------------------
 ; Load text

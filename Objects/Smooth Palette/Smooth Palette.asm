@@ -13,7 +13,7 @@ Obj_SmoothPalette:
 .main
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
-	        move.w  subtype(a0),objoff_2E(a0)
+	        move.w	subtype(a0),objoff_2E(a0)
 		movea.w	objoff_30(a0),a1			; palette ram
 		movea.l	objoff_32(a0),a2			; palette pointer
 		move.w	objoff_36(a0),d0			; palette size
