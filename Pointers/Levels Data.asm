@@ -93,27 +93,27 @@ RingLocPtrs:
 
 DEZ_8x8_KosM:		binclude "Levels/DEZ/Tiles/Primary.bin"
 	even
-DEZ_16x16_Unc:		binclude	"Levels/DEZ/Blocks/Primary.bin"
+DEZ_16x16_Unc:		binclude "Levels/DEZ/Blocks/Primary.bin"
 	even
-DEZ_128x128_Kos:	binclude	"Levels/DEZ/Chunks/Primary.bin"
+DEZ_128x128_Kos:	binclude "Levels/DEZ/Chunks/Primary.bin"
 	even
 
 ; ===========================================================================
 ; Collision data
 ; ===========================================================================
 
-AngleArray:			binclude	"Misc Data/Angle Map.bin"
+AngleArray:			binclude "Misc Data/Angle Map.bin"
 	even
-HeightMaps:			binclude	"Misc Data/Height Maps.bin"
+HeightMaps:			binclude "Misc Data/Height Maps.bin"
 	even
-HeightMapsRot:		binclude	"Misc Data/Height Maps Rotated.bin"
+HeightMapsRot:		binclude "Misc Data/Height Maps Rotated.bin"
 	even
 
 ; ===========================================================================
 ; Level collision data
 ; ===========================================================================
 
-DEZ1_Solid:			binclude	"Levels/DEZ/Collision/1.bin"
+DEZ1_Solid:			binclude "Levels/DEZ/Collision/1.bin"
 	even
 
 ; ===========================================================================
@@ -122,23 +122,23 @@ DEZ1_Solid:			binclude	"Levels/DEZ/Collision/1.bin"
 
 		align $8000
 
-DEZ1_Layout:		binclude	"Levels/DEZ/Layout/1.bin"
+DEZ1_Layout:		binclude "Levels/DEZ/Layout/1.bin"
 	even
 
 ; ===========================================================================
-; Level sprite data
+; Level object data
 ; ===========================================================================
 
-		dc.w -1, 0, 0
-DEZ1_Sprites:		binclude	"Levels/DEZ/Object Pos/1.bin"
-		dc.w -1, 0, 0
+	ObjectLayoutBoundary
+DEZ1_Sprites:		binclude "Levels/DEZ/Object Pos/1.bin"
+	ObjectLayoutBoundary
 	even
 
 ; ===========================================================================
 ; Level ring data
 ; ===========================================================================
 
-		dc.w -1, 0, 0
-DEZ1_Rings:			binclude	"Levels/DEZ/Ring Pos/1.bin"
-		dc.w -1, 0, 0
+	RingLayoutBoundary
+DEZ1_Rings:			binclude "Levels/DEZ/Ring Pos/1.bin"
+	RingLayoutBoundary
 	even

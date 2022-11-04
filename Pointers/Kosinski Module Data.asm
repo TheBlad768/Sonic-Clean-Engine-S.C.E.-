@@ -2,31 +2,31 @@
 ; Kosinski Module compressed main graphics
 ; ===========================================================================
 
-ArtKosM_Ring_Sparks:			binclude	"Objects/Rings/KosinskiM Art/Sparks.bin"
+ArtKosM_Ring_Sparks:			binclude "Objects/Rings/KosinskiM Art/Sparks.bin"
 	even
-ArtKosM_Hud:					binclude	"Objects/HUD/KosinskiM Art/HUD.bin"
+ArtKosM_Hud:					binclude "Objects/HUD/KosinskiM Art/HUD.bin"
 	even
-ArtKosM_Monitors:				binclude	"Objects/Monitor/KosinskiM Art/Monitors.bin"
+ArtKosM_Monitors:				binclude "Objects/Monitor/KosinskiM Art/Monitors.bin"
 	even
-ArtKosM_SpikesSprings:			binclude	"Objects/Spikes/KosinskiM Art/SpikesSprings.bin"
+ArtKosM_SpikesSprings:			binclude "Objects/Spikes/KosinskiM Art/SpikesSprings.bin"
 	even
 ArtKosM_RobotnikShip:			binclude "Objects/Robotnik/KosinskiM Art/Robotnik Ship.bin"
 	even
-ArtKosM_BossExplosion:			binclude	"Objects/Explosion/KosinskiM Art/Boss Explosion.bin"
+ArtKosM_BossExplosion:			binclude "Objects/Explosion/KosinskiM Art/Boss Explosion.bin"
 	even
-ArtKosM_Explosion:				binclude	"Objects/Explosion/KosinskiM Art/Explosion.bin"
+ArtKosM_Explosion:				binclude "Objects/Explosion/KosinskiM Art/Explosion.bin"
 	even
-ArtKosM_Lamp:					binclude	"Objects/StarPost/KosinskiM Art/Enemy points.bin"
+ArtKosM_Lamp:					binclude "Objects/StarPost/KosinskiM Art/Enemy points.bin"
 	even
 ArtKosM_GrayButton:				binclude "Objects/Button/KosinskiM Art/Gray Button.bin"
 	even
-ArtKosM_DiagonalSpring:			binclude	"Objects/Spring/KosinskiM Art/Diagonal Spring.bin"
+ArtKosM_DiagonalSpring:			binclude "Objects/Spring/KosinskiM Art/Diagonal Spring.bin"
 	even
 ArtKosM_Bubbles:				binclude "Objects/Bubbler/KosinskiM Art/Bubbles.bin"
 	even
 ArtKosM_WaterWave:				binclude "Objects/Water Wave/KosinskiM Art/Water Wave.bin"
 	even
-ArtKosM_EggCapsule:				binclude	"Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin"
+ArtKosM_EggCapsule:				binclude "Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin"
 	even
 ArtKosM_Seal:					binclude "Objects/Animals/KosinskiM Art/Seal.bin"
 	even

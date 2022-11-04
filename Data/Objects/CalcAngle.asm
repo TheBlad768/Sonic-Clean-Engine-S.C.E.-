@@ -88,9 +88,9 @@ OctantAdjust:
 		dc.b %10111111					; -X, -Y, |X|<|Y|
 ; -------------------------------------------------------------------------
 
-WordShiftTable:	binclude	"Misc Data/Angle/WordShift.bin"
+WordShiftTable:	binclude "Misc Data/Angle/WordShift.bin"
 	even
-LogarithmTable:	binclude	"Misc Data/Angle/Logarithmic.bin"	; log base 2
+LogarithmTable:	binclude "Misc Data/Angle/Logarithmic.bin"	; log base 2
 	even
-ArcTanTable:		binclude	"Misc Data/Angle/Arctan.bin"	; 2-argument
+ArcTanTable:		binclude "Misc Data/Angle/Arctan.bin"	; 2-argument
 	even

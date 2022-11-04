@@ -100,93 +100,93 @@ ptr_kcpsg0E:	dc.l KC_PSG0E
 ; ---------------------------------------------------------------------------
 	if SMPS_S1PSGEnvelopes||SMPS_S2PSGEnvelopes
 ; Envelopes found in S1 and S2
-S1_PSG01:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 1.bin"
-S1_PSG02:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 2.bin"
-S1_PSG03:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 3.bin"
-S1_PSG04:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 4.bin"
-S1_PSG05:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 5.bin"
-S1_PSG06:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 6.bin"
-S1_PSG07:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 7.bin"
-S1_PSG08:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 8.bin"
-S1_PSG09:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG 9.bin"
+S1_PSG01:	binclude "Sound/PSG/Sonic 1 & 2/PSG 1.bin"
+S1_PSG02:	binclude "Sound/PSG/Sonic 1 & 2/PSG 2.bin"
+S1_PSG03:	binclude "Sound/PSG/Sonic 1 & 2/PSG 3.bin"
+S1_PSG04:	binclude "Sound/PSG/Sonic 1 & 2/PSG 4.bin"
+S1_PSG05:	binclude "Sound/PSG/Sonic 1 & 2/PSG 5.bin"
+S1_PSG06:	binclude "Sound/PSG/Sonic 1 & 2/PSG 6.bin"
+S1_PSG07:	binclude "Sound/PSG/Sonic 1 & 2/PSG 7.bin"
+S1_PSG08:	binclude "Sound/PSG/Sonic 1 & 2/PSG 8.bin"
+S1_PSG09:	binclude "Sound/PSG/Sonic 1 & 2/PSG 9.bin"
 	endif
 
 	if SMPS_S2PSGEnvelopes
 ; Envelopes found in S2 only
-S2_PSG0A:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG A (S2).bin"
-S2_PSG0B:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG B (S2).bin"
-S2_PSG0C:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG C (S2).bin"
-S2_PSG0D:	BINCLUDE	"Sound/PSG/Sonic 1 & 2/PSG D (S2).bin"
+S2_PSG0A:	binclude "Sound/PSG/Sonic 1 & 2/PSG A (S2).bin"
+S2_PSG0B:	binclude "Sound/PSG/Sonic 1 & 2/PSG B (S2).bin"
+S2_PSG0C:	binclude "Sound/PSG/Sonic 1 & 2/PSG C (S2).bin"
+S2_PSG0D:	binclude "Sound/PSG/Sonic 1 & 2/PSG D (S2).bin"
 	endif
 
 	if SMPS_S3PSGEnvelopes||SMPS_SKPSGEnvelopes||SMPS_S3DPSGEnvelopes
 ; Envelopes found in S3, S&K, and S3D (some aren't here, since they're just duplicates)
-S3_PSG01:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 1.bin"
-S3_PSG02:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 2.bin"
-S3_PSG03:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 3.bin"
-S3_PSG05:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 5.bin"
-S3_PSG06:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 6.bin"
-S3_PSG07:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 7.bin"
-S3_PSG08:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 8.bin"
-S3_PSG09:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 9.bin"
-S3_PSG0A:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG A.bin"
-S3_PSG0B:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG B.bin"
-S3_PSG0C:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG C.bin"
-S3_PSG0D:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG D.bin"
-S3_PSG10:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 10.bin"
-S3_PSG11:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 11.bin"
-S3_PSG14:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 14.bin"
-S3_PSG18:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 18.bin"
-S3_PSG1A:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 1A.bin"
-S3_PSG1C:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 1C.bin"
-S3_PSG1D:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 1D.bin"
-S3_PSG1E:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 1E.bin"
-S3_PSG1F:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 1F.bin"
-S3_PSG20:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 20.bin"
-S3_PSG21:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 21.bin"
-S3_PSG22:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 22.bin"
-S3_PSG23:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 23.bin"
-S3_PSG24:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 24.bin"
-S3_PSG25:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 25.bin"
-S3_PSG27:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 27.bin"
+S3_PSG01:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 1.bin"
+S3_PSG02:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 2.bin"
+S3_PSG03:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 3.bin"
+S3_PSG05:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 5.bin"
+S3_PSG06:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 6.bin"
+S3_PSG07:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 7.bin"
+S3_PSG08:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 8.bin"
+S3_PSG09:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 9.bin"
+S3_PSG0A:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG A.bin"
+S3_PSG0B:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG B.bin"
+S3_PSG0C:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG C.bin"
+S3_PSG0D:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG D.bin"
+S3_PSG10:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 10.bin"
+S3_PSG11:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 11.bin"
+S3_PSG14:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 14.bin"
+S3_PSG18:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 18.bin"
+S3_PSG1A:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 1A.bin"
+S3_PSG1C:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 1C.bin"
+S3_PSG1D:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 1D.bin"
+S3_PSG1E:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 1E.bin"
+S3_PSG1F:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 1F.bin"
+S3_PSG20:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 20.bin"
+S3_PSG21:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 21.bin"
+S3_PSG22:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 22.bin"
+S3_PSG23:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 23.bin"
+S3_PSG24:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 24.bin"
+S3_PSG25:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 25.bin"
+S3_PSG27:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 27.bin"
 	endif
 
 	if SMPS_S3PSGEnvelopes
 ; Envelopes found in S3 only
-S3_PSG26:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 26 (S3).bin"
+S3_PSG26:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 26 (S3).bin"
 	endif
 
 	if SMPS_S3PSGEnvelopes||SMPS_SKPSGEnvelopes
 ; Envelopes found in S3 and S&K only
-S3_PSG04:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 4 (S3, SK).bin"
+S3_PSG04:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 4 (S3, SK).bin"
 	endif
 
 	if SMPS_SKPSGEnvelopes||SMPS_S3DPSGEnvelopes
 ; Envelopes found in S&K and S3D only
-SK_PSG26:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 26 (SK, S3D).bin"
+SK_PSG26:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 26 (SK, S3D).bin"
 	endif
 
 	if SMPS_S3DPSGEnvelopes
 ; Envelopes found in S3D only
-S3D_PSG04:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 4 (S3D).bin"
-S3D_PSG28:	BINCLUDE	"Sound/PSG/Sonic 3 & K & 3D/PSG 28 (S3D).bin"
+S3D_PSG04:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 4 (S3D).bin"
+S3D_PSG28:	binclude "Sound/PSG/Sonic 3 & K & 3D/PSG 28 (S3D).bin"
 	endif
 
 	if SMPS_KCPSGEnvelopes
-KC_PSG01:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 1.bin"
-KC_PSG02:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 2.bin"
-KC_PSG03:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 3.bin"
-KC_PSG04:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 4.bin"
-KC_PSG05:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 5.bin"
-KC_PSG06:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 6.bin"
-KC_PSG07:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 7.bin"
-KC_PSG08:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 8.bin"
-KC_PSG09:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG 9.bin"
-KC_PSG0A:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG A.bin"
-KC_PSG0B:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG B.bin"
-KC_PSG0C:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG C.bin"
-KC_PSG0D:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG D.bin"
-KC_PSG0E:	BINCLUDE	"Sound/PSG/Knuckles' Chaotix/PSG E.bin"
+KC_PSG01:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 1.bin"
+KC_PSG02:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 2.bin"
+KC_PSG03:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 3.bin"
+KC_PSG04:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 4.bin"
+KC_PSG05:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 5.bin"
+KC_PSG06:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 6.bin"
+KC_PSG07:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 7.bin"
+KC_PSG08:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 8.bin"
+KC_PSG09:	binclude "Sound/PSG/Knuckles' Chaotix/PSG 9.bin"
+KC_PSG0A:	binclude "Sound/PSG/Knuckles' Chaotix/PSG A.bin"
+KC_PSG0B:	binclude "Sound/PSG/Knuckles' Chaotix/PSG B.bin"
+KC_PSG0C:	binclude "Sound/PSG/Knuckles' Chaotix/PSG C.bin"
+KC_PSG0D:	binclude "Sound/PSG/Knuckles' Chaotix/PSG D.bin"
+KC_PSG0E:	binclude "Sound/PSG/Knuckles' Chaotix/PSG E.bin"
 	endif
 
 	; Insert custom envelopes here

@@ -13,7 +13,7 @@ SynchroAnimate:
 		bpl.s	.Sync2
 		move.b	#4,(Rings_frame_timer).w
 		addq.b	#1,(Rings_frame).w
-		cmpi.b	#(ArtUnc_Ring_End-ArtUnc_Ring)>>7,(Rings_frame).w
+		cmpi.b	#(ArtUnc_Ring_end-ArtUnc_Ring)>>7,(Rings_frame).w
 		bne.s	.Sync
 		clr.b	(Rings_frame).w
 
