@@ -1,5 +1,16 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to check solid object
+; These check collision of Sonic with objects on the screen
+
+; input variables:
+; d1 = object width / 2
+; d2 = object height / 2 (when jumping)
+; d3 = object height / 2 (when walking)
+; d4 = object x-axis position
+
+; address registers:
+; a0 = the object to check collision with
+; a1 = Sonic (set inside these subroutines)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -11,7 +22,7 @@ SolidObjectFull:
 
 SolidObjectFull_1P:
 		btst	d6,status(a0)
-		beq.w	loc_1DF88
+		beq.w	SolidObject_OnScreenTest
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)
@@ -32,6 +43,10 @@ SolidObjectFull_1P:
 		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 		rts
+
+; ---------------------------------------------------------------------------
+; These check for solidity even if the object is off-screen
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -67,13 +82,30 @@ loc_1DD04:
 		moveq	#0,d4
 		rts
 
+; ---------------------------------------------------------------------------
+; Subroutine to collide Sonic with the top of a sloped solid like diagonal springs
+
+; input variables:
+; d1 = object width
+; d2 = object height / 2 (when jumping)
+; d3 = object height / 2 (when walking)
+; d4 = object x-axis position
+
+; address registers:
+; a0 = the object to check collision with
+; a1 = Sonic or Tails (set inside these subroutines)
+; a2 = height data for slope
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 sub_1DD0E:
+SolidObjectFullSloped_Spring:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 
 sub_1DD24:
+SolidObjectFullSloped_Spring_1P:
 		btst	d6,status(a0)
 		beq.w	loc_1DECE
 		move.w	d1,d2
@@ -141,10 +173,12 @@ loc_1DDBC:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1DDC6:
+SolidObjectFullSloped:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 
 sub_1DDDC:
+SolidObjectFullSloped_1P:
 		btst	d6,status(a0)
 		beq.w	loc_1DECE
 		move.w	d1,d2
@@ -220,11 +254,11 @@ loc_1DE8C:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		move.w	d1,d4
 		add.w	d4,d4
 		cmp.w	d4,d0
-		bhi.w	loc_1E0A2
+		bhi.w	SolidObject_TestClearPush
 		move.w	y_pos(a0),d5
 		add.w	d3,d5
 		move.b	y_radius(a1),d3
@@ -234,31 +268,31 @@ loc_1DE8C:
 		sub.w	d5,d3
 		addq.w	#4,d3
 		add.w	d2,d3
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		move.w	d2,d4
 		add.w	d4,d4
 		cmp.w	d4,d3
-		bhs.w	loc_1E0A2
-		bra.w	loc_1DFFE
+		bhs.w	SolidObject_TestClearPush
+		bra.w	SolidObject_ChkBounds
 ; ---------------------------------------------------------------------------
 
 loc_1DECE:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		move.w	d1,d3
 		add.w	d3,d3
 		cmp.w	d3,d0
-		bhi.w	loc_1E0A2
+		bhi.w	SolidObject_TestClearPush
 		move.w	d0,d5
 		btst	#0,render_flags(a0)
-		beq.s	loc_1DEF4
+		beq.s	.notflipx
 		not.w	d5
 		add.w	d3,d5
 
-loc_1DEF4:
-		lsr.w	#1,d5
+.notflipx
+		lsr.w	d5
 		move.b	(a2,d5.w),d3
 		sub.b	(a2),d3
 		ext.w	d3
@@ -271,23 +305,23 @@ loc_1DEF4:
 		sub.w	d5,d3
 		addq.w	#4,d3
 		add.w	d2,d3
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		move.w	d2,d4
 		add.w	d4,d4
 		cmp.w	d4,d3
-		bhs.w	loc_1E0A2
-		bra.w	loc_1DFFE
+		bhs.w	SolidObject_TestClearPush
+		bra.w	SolidObject_ChkBounds
 ; ---------------------------------------------------------------------------
 
 loc_1DF28:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		move.w	d1,d3
 		add.w	d3,d3
 		cmp.w	d3,d0
-		bhi.w	loc_1E0A2
+		bhi.w	SolidObject_TestClearPush
 		move.w	d0,d5
 		btst	#0,render_flags(a0)
 		beq.s	loc_1DF4E
@@ -295,7 +329,7 @@ loc_1DF28:
 		add.w	d3,d5
 
 loc_1DF4E:
-		andi.w	#-2,d5
+		andi.w	#$FFFE,d5
 		move.b	(a2,d5.w),d3
 		move.b	1(a2,d5.w),d2
 		ext.w	d2
@@ -308,18 +342,18 @@ loc_1DF4E:
 		ext.w	d5
 		add.w	d5,d3
 		addq.w	#4,d3
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		add.w	d5,d2
 		move.w	d2,d4
 		add.w	d5,d4
 		cmp.w	d4,d3
-		bhs.w	loc_1E0A2
-		bra.w	loc_1DFFE
+		bhs.w	SolidObject_TestClearPush
+		bra.w	SolidObject_ChkBounds
 ; ---------------------------------------------------------------------------
 
-loc_1DF88:
+SolidObject_OnScreenTest:
 		tst.b	render_flags(a0)
-		bpl.w	loc_1E0A2
+		bpl.w	SolidObject_TestClearPush
 
 SolidObject_cont:
 		move.w	x_pos(a1),d0
@@ -328,9 +362,9 @@ SolidObject_cont:
 		move.w	d1,d3
 		add.w	d3,d3
 		cmp.w	d3,d0
-		bhi.w	loc_1E0A2
+		bhi.w	SolidObject_TestClearPush
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_1DFD6
+		beq.s	.notgrav
 		move.b	default_y_radius(a1),d4
 		ext.w	d4
 		add.w	d2,d4
@@ -345,11 +379,11 @@ SolidObject_cont:
 		andi.w	#$FFF,d3
 		add.w	d2,d4
 		cmp.w	d4,d3
-		bhs.w	loc_1E0A2
-		bra.s	loc_1DFFE
+		bhs.w	SolidObject_TestClearPush
+		bra.s	SolidObject_ChkBounds
 ; ---------------------------------------------------------------------------
 
-loc_1DFD6:
+.notgrav
 		move.b	default_y_radius(a1),d4
 		ext.w	d4
 		add.w	d2,d4
@@ -363,15 +397,15 @@ loc_1DFD6:
 		andi.w	#$FFF,d3
 		add.w	d2,d4
 		cmp.w	d4,d3
-		bhs.w	loc_1E0A2
+		bhs.w	SolidObject_TestClearPush
 
-loc_1DFFE:
+SolidObject_ChkBounds:
 		tst.b	object_control(a1)
-		bmi.w	loc_1E0A2
+		bmi.w	SolidObject_TestClearPush
 		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.w	loc_1E0D0
+		bhs.w	SolidObject_NoCollision
 		tst.w	(Debug_placement_mode).w
-		bne.w	loc_1E0D0
+		bne.w	SolidObject_NoCollision
 		move.w	d0,d5
 		cmp.w	d0,d1
 		bhs.s	loc_1E026
@@ -391,36 +425,38 @@ loc_1E026:
 
 loc_1E034:
 		cmp.w	d1,d5
-		bhi.w	loc_1E0D4
+		bhi.w	SolidObject_TopBottom
 		cmpi.w	#4,d1
-		bls.w	loc_1E0D4
+		bls.w	SolidObject_TopBottom
 
-loc_1E042:
+SolidObject_LeftRight:
 		tst.w	d0
-		beq.s	loc_1E06E
-		bmi.s	loc_1E050
+		beq.s	SolidObject_AtEdge
+		bmi.s	SolidObject_InsideRight
+
+; SolidObject_InsideLeft:
 		tst.w	x_vel(a1)
-		bmi.s	loc_1E06E
-		bra.s	loc_1E056
+		bmi.s	SolidObject_AtEdge
+		bra.s	SolidObject_StopCharacter
 ; ---------------------------------------------------------------------------
 
-loc_1E050:
+SolidObject_InsideRight:
 		tst.w	x_vel(a1)
-		bpl.s	loc_1E06E
+		bpl.s	SolidObject_AtEdge
 
-loc_1E056:
+SolidObject_StopCharacter:
 		clr.w	ground_vel(a1)
 		clr.w	x_vel(a1)
 		tst.b	status_tertiary(a1)
-		bpl.s	loc_1E06E
+		bpl.s	SolidObject_AtEdge
 		bset	#6,status_tertiary(a1)
 
-loc_1E06E:
+SolidObject_AtEdge:
 		sub.w	d0,x_pos(a1)
 		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E094
+		bne.s	SolidObject_SideAir
 		move.l	d6,d4
-		addq.b	#2,d4
+		addq.b	#pushing_bit_delta,d4
 		bset	d4,status(a0)
 		bset	#Status_Push,status(a1)
 		move.w	d6,d4
@@ -430,8 +466,8 @@ loc_1E06E:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E094:
-		bsr.s	sub_1E0C2
+SolidObject_SideAir:
+		bsr.s	Solid_NotPushing
 		move.w	d6,d4
 		addi.b	#$D,d4
 		bset	d4,d6
@@ -439,43 +475,49 @@ loc_1E094:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E0A2:
+SolidObject_TestClearPush:
 		move.l	d6,d4
-		addq.b	#2,d4
+		addq.b	#pushing_bit_delta,d4
 		btst	d4,status(a0)
-		beq.s	loc_1E0D0
+		beq.s	SolidObject_NoCollision
 		cmpi.b	#id_Roll,anim(a1)
-		beq.s	sub_1E0C2
+		beq.s	Solid_NotPushing
 		cmpi.b	#id_SpinDash,anim(a1)
-		beq.s	sub_1E0C2
+		beq.s	Solid_NotPushing
+		cmpi.b	#id_Death,anim(a1)
+		beq.s	Solid_NotPushing
+		cmpi.b	#id_Drown,anim(a1)
+		beq.s	Solid_NotPushing
 		cmpi.b	#id_Landing,anim(a1)
-		beq.s	sub_1E0C2
+		beq.s	Solid_NotPushing
 		move.w	#bytes_to_word(id_Walk,id_Run),anim(a1)
 
-sub_1E0C2:
+Solid_NotPushing:
 		move.l	d6,d4
-		addq.b	#2,d4
+		addq.b	#pushing_bit_delta,d4
 		bclr	d4,status(a0)
 		bclr	#Status_Push,status(a1)
 
-loc_1E0D0:
+SolidObject_NoCollision:
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E0D4:
+SolidObject_TopBottom:
 		tst.w	d3
-		bmi.s	loc_1E0E0
+		bmi.s	SolidObject_InsideBottom
+
+; SolidObject_InsideTop:
 		cmpi.w	#$10,d3
-		blo.s		loc_1E154
-		bra.s	loc_1E0A2
+		blo.s		SolidObject_Landed
+		bra.s	SolidObject_TestClearPush
 ; ---------------------------------------------------------------------------
 
-loc_1E0E0:
+SolidObject_InsideBottom:
 		btst	#Status_InAir,status(a1)
 		bne.s	loc_1E0F6
 		tst.w	y_vel(a1)
-		beq.s	loc_1E126
+		beq.s	SolidObject_Squash
 		bpl.s	loc_1E10E
 		tst.w	d3
 		bpl.s	loc_1E10E
@@ -486,10 +528,6 @@ loc_1E0F6:
 		clr.w	ground_vel(a1)
 
 loc_1E0FC:
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	+
-		neg.w	d3
-+		sub.w	d3,y_pos(a1)
 		clr.w	y_vel(a1)
 
 loc_1E10E:
@@ -498,6 +536,12 @@ loc_1E10E:
 		bset	#5,status_tertiary(a1)
 
 loc_1E11A:
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.notgrav
+		neg.w	d3
+
+.notgrav
+		sub.w	d3,y_pos(a1)
 		move.w	d6,d4
 		addi.b	#$F,d4
 		bset	d4,d6
@@ -505,16 +549,13 @@ loc_1E11A:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E126:
+SolidObject_Squash:
 		btst	#Status_InAir,status(a1)
 		bne.s	loc_1E10E
-		move.w	d0,d4
-		bpl.s	loc_1E134
-		neg.w	d4
+		mvabs.w	d0,d4
 
-loc_1E134:
 		cmpi.w	#$10,d4
-		blo.w	loc_1E042
+		blo.w	SolidObject_LeftRight
 		move.w	a0,-(sp)
 		movea.w	a1,a0
 		jsr	Kill_Character(pc)
@@ -526,17 +567,17 @@ loc_1E134:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E154:
+SolidObject_Landed:
 		subq.w	#4,d3
 		moveq	#0,d1
-		move.b	7(a0),d1
+		move.b	width_pixels(a0),d1
 		move.w	d1,d2
 		add.w	d2,d2
 		add.w	x_pos(a1),d1
 		sub.w	x_pos(a0),d1
-		bmi.s	loc_1E198
+		bmi.s	SolidObject_Miss
 		cmp.w	d2,d1
-		bhs.s	loc_1E198
+		bhs.s	SolidObject_Miss
 		subq.w	#1,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_1E17E
@@ -546,7 +587,7 @@ loc_1E154:
 loc_1E17E:
 		sub.w	d3,y_pos(a1)
 		tst.w	y_vel(a1)
-		bmi.s	loc_1E198
+		bmi.s	SolidObject_Miss
 		bsr.w	RideObject_SetRide
 		move.w	d6,d4
 		addi.b	#$11,d4
@@ -555,7 +596,7 @@ loc_1E17E:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E198:
+SolidObject_Miss:
 		moveq	#0,d4
 		rts
 
@@ -635,7 +676,7 @@ SolidObjSloped2:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		lsr.w	#1,d0
+		lsr.w	d0
 		btst	#0,render_flags(a0)
 		beq.s	loc_1E260
 		not.w	d0
@@ -670,7 +711,7 @@ SolidObjSloped4:
 		add.w	d1,d0
 
 loc_1E2A0:
-		andi.w	#-2,d0
+		andi.w	#$FFFE,d0
 		bra.s	loc_1E260
 
 ; =============== S U B R O U T I N E =======================================
@@ -780,6 +821,48 @@ loc_1E3A4:
 
 ; =============== S U B R O U T I N E =======================================
 
+sub_1E3AE:
+		lea	(Player_1).w,a1
+		moveq	#p1_standing_bit,d6
+
+sub_1E3C4:
+		btst	d6,status(a0)
+		bne.s	loc_1E3D6
+		btst	#3,status(a1)
+		bne.s	loc_1E402
+		bra.s	loc_1E42E
+; ---------------------------------------------------------------------------
+
+loc_1E3D6:
+		move.w	d1,d2
+		add.w	d2,d2
+		btst	#Status_InAir,status(a1)
+		bne.s	loc_1E3F2
+		move.w	x_pos(a1),d0
+		sub.w	x_pos(a0),d0
+		add.w	d1,d0
+		bmi.s	loc_1E3F2
+		cmp.w	d2,d0
+		blo.s		loc_1E406
+
+loc_1E3F2:
+		bclr	#3,status(a1)
+		bset	#1,status(a1)
+		bclr	d6,status(a0)
+
+loc_1E402:
+		moveq	#0,d4
+		rts
+; ---------------------------------------------------------------------------
+
+loc_1E406:
+		move.w	d4,d2
+		bsr.w	MvSonicOnPtfm
+		moveq	#0,d4
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 sub_1E410:
 		tst.w	y_vel(a1)
 		bmi.w	locret_1E4D4
@@ -826,6 +909,8 @@ loc_1E45A:
 		add.w	d0,d2
 		addq.w	#3,d2
 		move.w	d2,y_pos(a1)
+
+; =============== S U B R O U T I N E =======================================
 
 RideObject_SetRide:
 		btst	#Status_OnObj,status(a1)
@@ -890,7 +975,7 @@ SolidObjCheckSloped2:
 		add.w	d1,d0
 
 loc_1E534:
-		lsr.w	#1,d0
+		lsr.w	d0
 		move.b	(a2,d0.w),d3
 		ext.w	d3
 		move.w	y_pos(a0),d0

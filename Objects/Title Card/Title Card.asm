@@ -55,11 +55,11 @@ Obj_TitleCardCreate:
 		jsr	(Create_New_Sprite3).w
 		bne.s	Obj_TitleCard_Return
 		lea	ObjArray_TtlCard(pc),a2
-		moveq	#3,d1
+		moveq	#4-1,d1
 		tst.b	$44(a0)
 		beq.s	.loop
 		lea	ObjArray_TtlCard2(pc),a2
-		moveq	#0,d1
+		moveq	#1-1,d1
 
 .loop	addq.w	#1,$30(a0)
 		move.l	(a2)+,address(a1)

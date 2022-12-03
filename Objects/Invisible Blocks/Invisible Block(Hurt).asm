@@ -1,12 +1,33 @@
 ; ---------------------------------------------------------------------------
+; Invisible horizontal shock block (Object)
+; Set no flipX to Up/Down hurt
+; Set flipX to Left/Right hurt
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_Invisible_ShockBlock:
+		bset	#Status_LtngShield,shield_reaction(a0)
+		bra.s	Obj_Invisible_HurtBlock
+
+; ---------------------------------------------------------------------------
+; Invisible horizontal lava block (Object)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_Invisible_LavaBlock:
+		bset	#Status_FireShield,shield_reaction(a0)
+
+; ---------------------------------------------------------------------------
 ; Invisible horizontal hurt block (Object)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_InvisibleHurtBlockHorizontal:
+Obj_Invisible_HurtBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Powerups,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)

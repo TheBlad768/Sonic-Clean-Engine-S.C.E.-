@@ -38,7 +38,7 @@ DEZ1_BackgroundEvent:
 		bsr.s	DEZ1_Deform
 
 .deform:
-		lea	DEZ1_BGDrawArray(pc),a4
+		lea	DEZ1_BGDeformArray(pc),a4
 		lea	(H_scroll_table).w,a5
 		jsr	(ApplyDeformation).w
 		jmp	(ShakeScreen_Setup).w
@@ -49,27 +49,16 @@ DEZ1_Transition:
 		rts
 ; ---------------------------------------------------------------------------
 
-DEZ1_BGDrawArray:
+DEZ1_BGDeformArray:
+	rept 15
 		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
-		dc.w 16
+	endr
 		dc.w $7FFF
 ; ---------------------------------------------------------------------------
 
 DEZ1_Deform:
 		lea	(H_scroll_table).w,a1
-		move.l	(Camera_X_pos_copy),d0
+		move.l	(Camera_X_pos_copy).w,d0
 		neg.l	d0
 		move.w	(Level_frame_counter).w,d1
 		swap	d1

@@ -19,11 +19,11 @@ SME_mlzjJ_2E:	dc.b 0, 2
 		dc.b $F8, $D, 0, $10, $FF, $EC
 		dc.b $F8, 1, 0, $18, 0, $C
 SME_mlzjJ_3C:	dc.b 0, 2
-		dc.b $F8, $D, 0, $1A, $FF, $EC
-		dc.b $F8, 1, 0, $22, 0, $C
+		dc.b $F8, $D, 0, $1A, $FF, $EB
+		dc.b $F8, 1, 0, $22, 0, $B
 SME_mlzjJ_4A:	dc.b 0, 2
-		dc.b $F8, $D, 0, $24, $FF, $EC
-		dc.b $F8, 1, 0, $2C, 0, $C
+		dc.b $F8, $D, 0, $24, $FF, $EB
+		dc.b $F8, 1, 0, $2C, 0, $B
 SME_mlzjJ_58:	dc.b 0, 1
 		dc.b $F8, $D, 0, $2E, $FF, $F0
 SME_mlzjJ_60:	dc.b 0, 1

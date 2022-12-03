@@ -8,8 +8,7 @@ Obj_Spring:
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#$494,art_tile(a0)	; set red
 		ori.b	#4,render_flags(a0)
-		move.b	#32/2,width_pixels(a0)
-		move.b	#32/2,height_pixels(a0)
+		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)		; set height and width
 		move.w	#$200,priority(a0)
 		move.w	x_pos(a0),objoff_32(a0)
 		move.w	y_pos(a0),objoff_34(a0)

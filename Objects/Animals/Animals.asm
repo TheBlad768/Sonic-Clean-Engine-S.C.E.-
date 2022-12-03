@@ -39,8 +39,7 @@ off_2C786: offsetTable
 		offsetTableEntry.w loc_2CC3C
 		offsetTableEntry.w loc_2CB9C
 byte_2C7BA:
-		dc.b 5	; DEZ
-		dc.b 5	; Null
+		dc.b 5, 1	; DEZ
 word_2C7EA:
 		dc.w -$200
 		dc.w -$400
@@ -136,7 +135,7 @@ loc_2C8B8:
 		move.b	#4,render_flags(a0)
 		bset	#0,render_flags(a0)
 		move.w	#$300,priority(a0)
-		move.b	#8,width_pixels(a0)
+		move.b	#16/2,width_pixels(a0)
 		move.b	#7,anim_frame_timer(a0)
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -166,7 +165,7 @@ loc_2C924:
 		move.b	#4,render_flags(a0)
 		bset	#0,render_flags(a0)
 		move.w	#$300,priority(a0)
-		move.b	#8,width_pixels(a0)
+		move.b	#16/2,width_pixels(a0)
 		move.b	#7,anim_frame_timer(a0)
 		move.b	#2,mapping_frame(a0)
 		move.w	#-$400,y_vel(a0)

@@ -8,8 +8,7 @@ Obj_WaterWave:
 		move.l	#Map_WaterWave,mappings(a0)
 		move.w	#$87C0,art_tile(a0)
 		move.b	#rfCoord+rfMulti,render_flags(a0)		; set screen coordinates and multi-draw flag
-		move.b	#256/2,width_pixels(a0)
-		move.b	#24/2,height_pixels(a0)
+		move.w	#bytes_to_word(24/2,256/2),height_pixels(a0)	; set height and width
 		move.w	#1,mainspr_childsprites(a0)
 		lea	sub2_x_pos(a0),a2
 		move.w	x_pos(a0),(a2)

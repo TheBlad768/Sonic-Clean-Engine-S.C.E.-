@@ -257,12 +257,12 @@ loc_1B9A4:
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
 		andi.w	#3,d2
-		move.b	d2,4(a1)
+		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.b	2(a0),d2
 		add.w	d2,d2
 		add.w	d2,d2
-		move.l	(a4,d2.w),(a1)
+		move.l	(a4,d2.w),address(a1)
 		move.b	3(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		bsr.w	Create_New_Sprite4
@@ -311,12 +311,12 @@ loc_1BA64:
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
 		andi.w	#3,d2
-		move.b	d2,4(a1)
+		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.b	(a0)+,d2
 		add.w	d2,d2
 		add.w	d2,d2
-		move.l	(a4,d2.w),(a1)
+		move.l	(a4,d2.w),address(a1)
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		bra.s	Create_New_Sprite4
@@ -356,7 +356,7 @@ loc_1BAB6:
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
 		andi.w	#3,d2
-		move.b	d2,4(a1)
+		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.b	(a0)+,d2
 		add.w	d2,d2

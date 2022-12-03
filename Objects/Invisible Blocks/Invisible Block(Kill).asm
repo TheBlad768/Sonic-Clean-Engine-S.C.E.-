@@ -1,12 +1,14 @@
 ; ---------------------------------------------------------------------------
-; Invisible vertical hurt block (Object)
+; Invisible vertical kill block (Object)
+; Set no flipX to Up/Down kill
+; Set flipX to Left/Right kill
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_InvisibleHurtBlockVertical:
+Obj_Invisible_KillBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Ring,0,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Powerups,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)
@@ -66,10 +68,10 @@ loc_1F64A:
 
 loc_1F66C:
 		moveq	#0,d1
-		move.b	7(a0),d1
+		move.b	width_pixels(a0),d1
 		addi.w	#$B,d1
 		moveq	#0,d2
-		move.b	6(a0),d2
+		move.b	height_pixels(a0),d2
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4

@@ -52,14 +52,11 @@ ptr_Sonic_Drown:	offsetTableEntry.w Sonic_Drown	; C
 
 Sonic_Init:	; Routine 0
 		addq.b	#2,routine(a0)				; => Obj01_Control
-		move.b	#38/2,y_radius(a0)			; this sets Sonic's collision height (2*pixels)
-		move.b	#18/2,x_radius(a0)
-		move.b	#38/2,default_y_radius(a0)
-		move.b	#18/2,default_x_radius(a0)
+		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)	; set y_radius and x_radius	; this sets Sonic's collision height (2*pixels)
+		move.w	#bytes_to_word(38/2,18/2),default_y_radius(a0)	; set default_y_radius and default_x_radius
 		move.l	#Map_Sonic,mappings(a0)
 		move.w	#$100,priority(a0)
-		move.b	#48/2,width_pixels(a0)
-		move.b	#48/2,height_pixels(a0)
+		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)		; set height and width
 		move.b	#4,render_flags(a0)
 		clr.b	character_id(a0)
 		move.w	#$600,Sonic_Knux_top_speed-Sonic_Knux_top_speed(a4)
@@ -69,8 +66,7 @@ Sonic_Init:	; Routine 0
 		bne.s	Sonic_Init_Continued
 		; only happens when not starting at a checkpoint:
 		move.w	#make_art_tile(ArtTile_Sonic,0,0),art_tile(a0)
-		move.b	#$C,top_solid_bit(a0)
-		move.b	#$D,lrb_solid_bit(a0)
+		move.w	#bytes_to_word($C,$D),top_solid_bit(a0)
 
 Sonic_Init_Continued:
 		clr.b	flips_remaining(a0)
@@ -178,29 +174,29 @@ Sonic_Display:
 loc_10CA6:
 		jsr	(Draw_Sprite).w
 
-Sonic_ChkInvin:										; Checks if invincibility has expired and disables it if it has.
+Sonic_ChkInvin:										; checks if invincibility has expired and disables it if it has.
 		btst	#Status_Invincible,status_secondary(a0)
 		beq.s	Sonic_ChkShoes
 		tst.b	invincibility_timer(a0)
-		beq.s	Sonic_ChkShoes						; If there wasn't any time left, that means we're in Super/Hyper mode
+		beq.s	Sonic_ChkShoes						; if there wasn't any time left, that means we're in Super/Hyper mode
 		move.b	(Level_frame_counter+1).w,d0
 		andi.b	#7,d0
 		bne.s	Sonic_ChkShoes
 		subq.b	#1,invincibility_timer(a0)				; reduce invincibility_timer only on every 8th frame
 		bne.s	Sonic_ChkShoes						; if time is still left, branch
-		tst.b	(Level_end_flag).w						; Don't change music if level is end
+		tst.b	(Level_end_flag).w						; don't change music if level is end
 		bne.s	Sonic_RmvInvin
-		tst.b	(Boss_flag).w								; Don't change music if in a boss fight
+		tst.b	(Boss_flag).w								; don't change music if in a boss fight
 		bne.s	Sonic_RmvInvin
-		cmpi.b	#12,air_left(a0)						; Don't change music if drowning
+		cmpi.b	#12,air_left(a0)						; don't change music if drowning
 		blo.s		Sonic_RmvInvin
-		move.w	(Level_music).w,d0
+		move.w	(Current_music).w,d0
 		jsr	(SMPS_QueueSound1).w					; stop playing invincibility theme and resume normal level music
 
 Sonic_RmvInvin:
 		bclr	#Status_Invincible,status_secondary(a0)
 
-Sonic_ChkShoes:										; Checks if Speed Shoes have expired and disables them if they have.
+Sonic_ChkShoes:										; checks if Speed Shoes have expired and disables them if they have.
 		btst	#Status_SpeedShoes,status_secondary(a0)	; does Sonic have speed shoes?
 		beq.s	Sonic_ExitChk						; if so, branch
 		tst.b	speed_shoes_timer(a0)
@@ -780,9 +776,9 @@ loc_11430:
 
 loc_11438:
 		move.w	d0,ground_vel(a0)
-		move.b	angle(a0),d0
-		addi.b	#$20,d0
-		andi.b	#$C0,d0
+		move.b	angle(a0),d1
+		addi.b	#$20,d1
+		andi.b	#$C0,d1
 		bne.s	locret_11480
 		cmpi.w	#$400,d0
 		blt.s		locret_11480
@@ -831,9 +827,9 @@ loc_114B6:
 
 loc_114BE:
 		move.w	d0,ground_vel(a0)
-		move.b	angle(a0),d0
-		addi.b	#$20,d0
-		andi.b	#$C0,d0
+		move.b	angle(a0),d1
+		addi.b	#$20,d1
+		andi.b	#$C0,d1
 		bne.s	locret_11506
 		cmpi.w	#-$400,d0
 		bgt.s	locret_11506
@@ -1096,6 +1092,8 @@ Player_Boundary_CheckBottom:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_11722
 		move.w	(Camera_max_Y_pos).w,d0
+		cmp.w	(Camera_target_max_Y_pos).w,d0
+		blt.s		locret_11720
 		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
 		blt.s		Player_Boundary_Bottom
@@ -1162,8 +1160,7 @@ loc_11790:
 
 loc_1179A:
 		bset	#Status_Roll,status(a0)
-		move.b	#28/2,y_radius(a0)
-		move.b	#14/2,x_radius(a0)
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
 		move.b	#id_Roll,anim(a0)
 		addq.w	#5,y_pos(a0)
 		tst.b	(Reverse_gravity_flag).w
@@ -1229,8 +1226,7 @@ loc_1182E:
 		move.b	default_x_radius(a0),x_radius(a0)
 		btst	#Status_Roll,status(a0)
 		bne.s	locret_118B2
-		move.b	#28/2,y_radius(a0)
-		move.b	#14/2,x_radius(a0)
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
 		move.b	#id_Roll,anim(a0)
 		bset	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
@@ -1368,8 +1364,7 @@ loc_11C24:
 loc_11C5E:
 		btst	#button_down,(Ctrl_1_logical).w
 		bne.w	loc_11D16
-		move.b	#28/2,y_radius(a0)
-		move.b	#14/2,x_radius(a0)
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
 		move.b	#id_Roll,anim(a0)
 		addq.w	#5,y_pos(a0)
 		tst.b	(Reverse_gravity_flag).w
@@ -2024,8 +2019,7 @@ BubbleShield_Bounce:
 		bclr	#Status_Push,status(a0)
 		move.b	#1,jumping(a0)
 		clr.b	stick_to_convex(a0)
-		move.b	#28/2,y_radius(a0)
-		move.b	#14/2,x_radius(a0)
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
 		move.b	#id_Roll,anim(a0)
 		bset	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
@@ -2231,8 +2225,8 @@ SAnim_Do:
 		bmi.s	SAnim_WalkRun
 		move.b	status(a0),d1
 		andi.b	#1,d1
-		andi.b	#-4,4(a0)
-		or.b	d1,4(a0)
+		andi.b	#-4,render_flags(a0)
+		or.b	d1,render_flags(a0)
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	SAnim_Delay
 		move.b	d0,anim_frame_timer(a0)
@@ -2305,9 +2299,9 @@ loc_126D4:
 		moveq	#3,d1
 
 loc_126DC:
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		eor.b	d1,d2
-		or.b	d2,4(a0)
+		or.b	d2,render_flags(a0)
 		btst	#Status_Push,status(a0)
 		bne.w	SAnim_Push
 		lsr.b	#4,d0
@@ -2368,10 +2362,10 @@ loc_127C0:
 		move.b	status(a0),d2
 		andi.b	#1,d2
 		bne.s	loc_1281E
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		tst.b	flip_type(a0)
 		bpl.s	loc_12806
-		ori.b	#2,4(a0)
+		ori.b	#2,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		bra.s	loc_1280A
@@ -2389,8 +2383,8 @@ loc_1280A:
 ; ---------------------------------------------------------------------------
 
 loc_1281E:
-		andi.b	#-4,4(a0)
-		ori.b	#3,4(a0)
+		andi.b	#-4,render_flags(a0)
+		ori.b	#3,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		divu.w	#$16,d0
@@ -2416,7 +2410,7 @@ loc_12872:
 		move.b	status(a0),d2
 		andi.b	#1,d2
 		bne.s	loc_128A8
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		addi.b	#-8,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2426,8 +2420,8 @@ loc_12872:
 ; ---------------------------------------------------------------------------
 
 loc_128A8:
-		andi.b	#-4,4(a0)
-		ori.b	#1,4(a0)
+		andi.b	#-4,render_flags(a0)
+		ori.b	#1,render_flags(a0)
 		addi.b	#-8,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2444,7 +2438,7 @@ loc_128CA:
 		move.b	status(a0),d2
 		andi.b	#1,d2
 		bne.s	loc_128FC
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		addi.b	#$B,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2454,8 +2448,8 @@ loc_128CA:
 ; ---------------------------------------------------------------------------
 
 loc_128FC:
-		andi.b	#-4,4(a0)
-		ori.b	#3,4(a0)
+		andi.b	#-4,render_flags(a0)
+		ori.b	#3,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		divu.w	#$16,d0
@@ -2473,8 +2467,8 @@ loc_12920:
 		move.b	status(a0),d2
 		andi.b	#1,d2
 		bne.s	loc_1295A
-		andi.b	#-4,4(a0)
-		ori.b	#2,4(a0)
+		andi.b	#-4,render_flags(a0)
+		ori.b	#2,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		divu.w	#$16,d0
@@ -2485,8 +2479,8 @@ loc_12920:
 ; ---------------------------------------------------------------------------
 
 loc_1295A:
-		andi.b	#-4,4(a0)
-		ori.b	#1,4(a0)
+		andi.b	#-4,render_flags(a0)
+		ori.b	#1,render_flags(a0)
 		addi.b	#$B,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2503,7 +2497,7 @@ loc_1297C:
 		move.b	status(a0),d2
 		andi.b	#1,d2
 		bne.s	loc_129BC
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		tst.b	flip_type(a0)
 		bpl.s	loc_129A4
 		addi.b	#$B,d0
@@ -2522,17 +2516,17 @@ loc_129A8:
 ; ---------------------------------------------------------------------------
 
 loc_129BC:
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		tst.b	flip_type(a0)
 		bpl.s	loc_129D6
-		ori.b	#3,4(a0)
+		ori.b	#3,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		bra.s	loc_129E2
 ; ---------------------------------------------------------------------------
 
 loc_129D6:
-		ori.b	#3,4(a0)
+		ori.b	#3,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 
@@ -2546,12 +2540,12 @@ loc_129E2:
 
 loc_129F6:
 		move.b	flip_angle(a0),d0
-		andi.b	#-4,4(a0)
+		andi.b	#-4,render_flags(a0)
 		moveq	#0,d1
 		move.b	status(a0),d2
 		andi.b	#1,d2
 		beq.s	loc_12A12
-		ori.b	#1,4(a0)
+		ori.b	#1,render_flags(a0)
 
 loc_12A12:
 		addi.b	#$B,d0
@@ -2565,8 +2559,8 @@ loc_12A12:
 loc_12A2A:
 		move.b	status(a0),d1
 		andi.b	#1,d1
-		andi.b	#-4,4(a0)
-		or.b	d1,4(a0)
+		andi.b	#-4,render_flags(a0)
+		or.b	d1,render_flags(a0)
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.w	SAnim_Delay
 		move.w	ground_vel(a0),d2

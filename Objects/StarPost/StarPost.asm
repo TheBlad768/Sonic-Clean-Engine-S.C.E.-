@@ -24,10 +24,11 @@ loc_2CFC0:
 		move.l	#Map_StarPost,mappings(a0)
 		move.w	#$5EC,art_tile(a0)
 		move.b	#4,render_flags(a0)
-		move.b	#16/2,width_pixels(a0)
-		move.b	#80/2,height_pixels(a0)
+		move.w	#bytes_to_word(80/2,16/2),height_pixels(a0)		; set height and width
 		move.w	#$280,priority(a0)
-		movea.w	respawn_addr(a0),a2
+		move.w	respawn_addr(a0),d0							; get address in respawn table
+		beq.s	loc_2D012									; if it's zero, it isn't remembered
+		movea.w	d0,a2										; load address into a2
 		btst	#0,(a2)
 		bne.s	loc_2D008
 		move.b	(Last_star_post_hit).w,d1
@@ -78,8 +79,7 @@ sub_2D028:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.b	#4,render_flags(a1)
-		move.b	#16/2,width_pixels(a1)
-		move.b	#16/2,height_pixels(a1)
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)		; set height and width
 		move.w	#$200,priority(a1)
 		move.b	#2,mapping_frame(a1)
 		move.w	#$20,$36(a1)
@@ -92,7 +92,9 @@ loc_2D0D0:
 		move.b	#1,anim(a0)
 		bsr.w	Lamp_StoreInfo
 		move.b	#4,routine(a0)
-		movea.w	respawn_addr(a0),a2
+		move.w	respawn_addr(a0),d0				; get address in respawn table
+		beq.s	locret_2D0E8					; if it's zero, it isn't remembered
+		movea.w	d0,a2							; load address into a2
 		bset	#0,(a2)
 
 locret_2D0E8:

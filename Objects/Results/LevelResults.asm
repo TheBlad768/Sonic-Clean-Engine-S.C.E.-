@@ -79,14 +79,14 @@ Obj_LevelResultsCreate:
 
 -		move.l	(a2)+,address(a1)
 		move.w	(a2)+,$46(a1)
-		move.w	(a2)+,$10(a1)
+		move.w	(a2)+,x_pos(a1)
 		spl	5(a1)
-		move.w	(a2)+,$14(a1)
-		move.b	(a2)+,$22(a1)
-		move.b	(a2)+,7(a1)
+		move.w	(a2)+,y_pos(a1)
+		move.b	(a2)+,mapping_frame(a1)
+		move.b	(a2)+,width_pixels(a1)
 		move.w	(a2)+,d2
 		move.b	d2,$28(a1)
-		move.b	#$40,4(a1)
+		move.b	#$40,render_flags(a1)
 		move.l	#Map_Results,mappings(a1)
 		move.w	a0,parent2(a1)
 		jsr	(Create_New_Sprite4).w

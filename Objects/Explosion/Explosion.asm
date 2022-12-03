@@ -40,8 +40,7 @@ loc_1E626:
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
 		clr.b	collision_flags(a0)
-		move.b	#24/2,width_pixels(a0)
-		move.b	#24/2,height_pixels(a0)
+		move.w	#bytes_to_word(24/2,24/2),height_pixels(a0)		; set height and width
 		move.b	#3,anim_frame_timer(a0)
 		clr.b	mapping_frame(a0)
 		move.l	#loc_1E66E,address(a0)
@@ -65,8 +64,7 @@ Obj_FireShield_Dissipate:
 		move.w	#$5A0,art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$280,priority(a0)
-		move.b	#24/2,width_pixels(a0)
-		move.b	#24/2,height_pixels(a0)
+		move.w	#bytes_to_word(24/2,24/2),height_pixels(a0)		; set height and width
 		move.b	#3,anim_frame_timer(a0)
 		move.b	#1,mapping_frame(a0)
 		move.l	#+,address(a0)
@@ -89,8 +87,7 @@ sub_1E6EC:
 		move.w	#$85A0,art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
-		move.b	#24/2,width_pixels(a0)
-		move.b	#24/2,height_pixels(a0)
+		move.w	#bytes_to_word(24/2,24/2),height_pixels(a0)		; set height and width
 		clr.b	mapping_frame(a0)
 		move.l	#+,address(a0)
 +		subq.b	#1,anim_frame_timer(a0)
@@ -122,7 +119,7 @@ Obj_EnemyScore:
 		move.w	#$85E4,art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#8,width_pixels(a0)
+		move.b	#16/2,width_pixels(a0)
 		move.w	#-$300,y_vel(a0)
 		move.l	#.main,address(a0)
 

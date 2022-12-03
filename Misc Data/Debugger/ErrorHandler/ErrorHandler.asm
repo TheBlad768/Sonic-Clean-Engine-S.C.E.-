@@ -14,11 +14,10 @@
 ; Screen appearence flags
 _eh_address_error	equ	$01		; use for address and bus errors only (tells error handler to display additional "Address" field)
 _eh_show_sr_usp		equ	$02		; displays SR and USP registers content on error screen
-_eh_disassemble		equ	$10		; disassembles the instruction where the error happened + vint and hint handlers
 
 ; Advanced execution flags
 ; WARNING! For experts only, DO NOT USES them unless you know what you're doing
-_eh_return		equ	$20
+_eh_return			equ	$20
 _eh_enter_console	equ	$40
 _eh_align_offset	equ	$80
 
@@ -32,40 +31,40 @@ _eh_default			equ	0 ;_eh_show_sr_usp
 ; ---------------------------------------------------------------
 
 BusError:
-	__ErrorMessage "BUS ERROR", _eh_default|_eh_address_error|_eh_disassemble
+	__ErrorMessage "BUS ERROR", _eh_default|_eh_address_error
 
 AddressError:
-	__ErrorMessage "ADDRESS ERROR", _eh_default|_eh_address_error|_eh_disassemble
+	__ErrorMessage "ADDRESS ERROR", _eh_default|_eh_address_error
 
 IllegalInstr:
-	__ErrorMessage "ILLEGAL INSTRUCTION", _eh_default|_eh_disassemble
+	__ErrorMessage "ILLEGAL INSTRUCTION", _eh_default
 
 ZeroDivide:
-	__ErrorMessage "ZERO DIVIDE", _eh_default|_eh_disassemble
+	__ErrorMessage "ZERO DIVIDE", _eh_default
 
 ChkInstr:
-	__ErrorMessage "CHK INSTRUCTION", _eh_default|_eh_disassemble
+	__ErrorMessage "CHK INSTRUCTION", _eh_default
 
 TrapvInstr:
-	__ErrorMessage "TRAPV INSTRUCTION", _eh_default|_eh_disassemble
+	__ErrorMessage "TRAPV INSTRUCTION", _eh_default
 
 PrivilegeViol:
-	__ErrorMessage "PRIVILEGE VIOLATION", _eh_default|_eh_disassemble
+	__ErrorMessage "PRIVILEGE VIOLATION", _eh_default
 
 Trace:
-	__ErrorMessage "TRACE", _eh_default|_eh_disassemble
+	__ErrorMessage "TRACE", _eh_default
 
 Line1010Emu:
-	__ErrorMessage "LINE A EMULATOR", _eh_default|_eh_disassemble
+	__ErrorMessage "LINE 1010 EMULATOR", _eh_default
 
 Line1111Emu:
-	__ErrorMessage "LINE F EMULATOR", _eh_default|_eh_disassemble
+	__ErrorMessage "LINE 1111 EMULATOR", _eh_default
 
 ErrorExcept:
-	__ErrorMessage "ERROR EXCEPTION", _eh_default|_eh_disassemble
+	__ErrorMessage "ERROR EXCEPTION", _eh_default
 
 ErrorTrap:
-	__ErrorMessage "ERROR TRAP", _eh_default|_eh_disassemble
+	__ErrorMessage "ERROR TRAP", _eh_default
 
 
 
@@ -87,8 +86,8 @@ ErrorHandler___extern__scrollconsole:
 ;	ifused ErrorHandler___extern__console_only
 ErrorHandler___extern__console_only:
 	dc.l	$46FC2700, $4FEFFFF2, $48E7FFFE, $47EF003C
-	jsr	ErrorHandler___global__errorhandler_setupvdp(pc)
-	jsr	ErrorHandler___global__error_initconsole(pc)
+	jsr		ErrorHandler___global__errorhandler_setupvdp(pc)
+	jsr		ErrorHandler___global__error_initconsole(pc)
 	dc.l	$4CDF7FFF, $487A0008, $2F2F0012, $4E7560FE
 ;	endif
 
@@ -102,8 +101,7 @@ ErrorHandler___extern__vsync:
 ; Include error handler binary module
 ; ---------------------------------------------------------------
 
-ErrorHandler:
-	binclude "Misc Data/Debugger/ErrorHandler/ErrorHandler.bin"
+ErrorHandler:	binclude "Misc Data/Debugger/ErrorHandler/ErrorHandler.bin"
 
 ; ---------------------------------------------------------------
 ; WARNING!

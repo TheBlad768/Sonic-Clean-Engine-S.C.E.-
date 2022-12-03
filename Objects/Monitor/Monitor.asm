@@ -21,14 +21,12 @@ Monitor_Index: offsetTable
 
 Obj_MonitorInit:
 		addq.b	#2,routine(a0)
-		move.b	#$F,y_radius(a0)
-		move.b	#$F,x_radius(a0)
+		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)	; set y_radius and x_radius
 		move.l	#Map_Monitor,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Powerups,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$180,priority(a0)
-		move.b	#28/2,width_pixels(a0)
-		move.b	#32/2,height_pixels(a0)
+		move.w	#bytes_to_word(32/2,28/2),height_pixels(a0)		; set height and width
 		move.w	respawn_addr(a0),d0				; Get address in respawn table
 		beq.s	.notbroken						; If it's zero, it isn't remembered
 		movea.w	d0,a2							; Load address into a2
@@ -219,7 +217,7 @@ loc_1D7CE:
 		move.w	#make_art_tile(ArtTile_Powerups,0,0),art_tile(a0)
 		ori.b	#$24,render_flags(a0)
 		move.w	#$180,priority(a0)
-		move.b	#8,width_pixels(a0)
+		move.b	#16/2,width_pixels(a0)
 		move.w	#-$300,y_vel(a0)
 		btst	#1,render_flags(a0)
 		beq.s	loc_1D7FC
@@ -291,7 +289,7 @@ Monitor_Give_Eggman:
 Monitor_Give_Rings:
 		addi.w	#10,(Ring_count).w				; add 10 rings to the number of rings you have
 		ori.b	#1,(Update_HUD_ring_count).w	; update the ring counter
-		music	sfx_Ring,1						; play ring sound
+		sfx	sfx_Ring,1							; play ring sound
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Super_Sneakers:
@@ -300,7 +298,7 @@ Monitor_Give_Super_Sneakers:
 		move.w	#$C00,(Sonic_Knux_top_speed).w
 		move.w	#$18,(Sonic_Knux_acceleration).w
 		move.w	#$80,(Sonic_Knux_deceleration).w
-		music	bgm_Speedup,1					; speed up the music
+		music	bgm_Speedup,1						; speed up the music
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Fire_Shield:
@@ -308,7 +306,7 @@ Monitor_Give_Fire_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_FireShield,status_secondary(a1)
 		move.l	#Obj_Fire_Shield,(v_Shield).w
-		music	sfx_FireShield,1
+		sfx	sfx_FireShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Lightning_Shield:
@@ -316,7 +314,7 @@ Monitor_Give_Lightning_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
 		move.l	#Obj_Lightning_Shield,(v_Shield).w
-		music	sfx_LightShield,1
+		sfx	sfx_LightShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Bubble_Shield:
@@ -324,7 +322,7 @@ Monitor_Give_Bubble_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_BublShield,status_secondary(a1)
 		move.l	#Obj_Bubble_Shield,(v_Shield).w
-		music	sfx_BubbleShield,1
+		sfx	sfx_BubbleShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:

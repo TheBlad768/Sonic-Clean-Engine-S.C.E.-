@@ -234,8 +234,7 @@ sub_2FBA8:
 		btst	#Status_Roll,status(a1)
 		beq.s	+
 		bclr	#Status_Roll,status(a1)
-		move.b	#38/2,y_radius(a1)
-		move.b	#18/2,x_radius(a1)
+		move.w	#bytes_to_word(38/2,18/2),y_radius(a1)	; set y_radius and x_radius
 		subq.w	#5,y_pos(a1)
 +		cmpi.b	#6,routine(a0)
 		beq.s	locret_2FC7C

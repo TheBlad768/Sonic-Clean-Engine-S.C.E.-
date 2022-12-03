@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Music	macros and constants
+; Music macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_MUSIC_METADATA macro address,fasttempo,flags
 	dc.l	((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)

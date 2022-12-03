@@ -236,6 +236,7 @@ Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
 Debug_mode_flag:					ds.b 1
 Slotted_object_bits:					ds.b 8					; Index of slot array to use
+Signpost_addr:						ds.w 1
 Palette_cycle_counters:				ds.b $10
 Pal_fade_delay:						ds.w 1
 Pal_fade_delay2:						ds.w 1
@@ -268,7 +269,7 @@ Water_flag:							ds.b 1
 Graphics_flags:						ds.b 1					; Bit 7 set = English system, bit 6 set = PAL system
 Last_star_post_hit:					= *
 Last_star_pole_hit:					ds.b 1
-Level_music:							ds.w 1
+Current_music:						ds.w 1
 Palette_fade_timer:					ds.w 1					; The palette gets faded in until this timer expires
 SegaCD_Mode:						ds.b 1
 									ds.b 1					; even

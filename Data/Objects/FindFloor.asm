@@ -58,7 +58,7 @@ loc_EC88:
 		add.w	d0,d3
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindFloor
 		move.w	d1,-(sp)
 		move.w	y_pos(a0),d2
@@ -73,7 +73,7 @@ loc_EC88:
 		add.w	d0,d3
 		lea	(Secondary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindFloor
 		move.w	(sp)+,d0
 		bsr.w	Player_Angle
@@ -163,7 +163,7 @@ Player_WalkVertR:
 		add.w	d0,d3
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.w	d1,-(sp)
 		move.w	y_pos(a0),d2
@@ -177,7 +177,7 @@ Player_WalkVertR:
 		add.w	d0,d3
 		lea	(Secondary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.w	(sp)+,d0
 		bsr.w	Player_Angle
@@ -871,7 +871,7 @@ Sonic_CheckFloor:
 		add.w	d0,d3
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindFloor
 		move.w	d1,-(sp)
 		move.w	y_pos(a0),d2
@@ -885,7 +885,7 @@ Sonic_CheckFloor:
 		sub.w	d0,d3
 		lea	(Secondary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindFloor
 		move.w	(sp)+,d0
 		move.b	#0,d2
@@ -921,7 +921,7 @@ CheckFloorDist_Part2:
 		addi.w	#$A,d2
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindFloor
 		move.b	#0,d2
 
@@ -945,9 +945,9 @@ sub_F846:
 		beq.s	+
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 +		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		move.b	lrb_solid_bit(a0),d5
 		movem.l	a4-a6,-(sp)
 		bsr.w	FindFloor
@@ -976,9 +976,9 @@ ChkFloorEdge_Part3:
 		beq.s	+
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 +		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		move.b	top_solid_bit(a0),d5
 		movem.l	a4-a6,-(sp)
 		bsr.w	FindFloor
@@ -1005,9 +1005,9 @@ SonicOnObjHitFloor2:
 		beq.s	+
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 +		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		move.b	top_solid_bit(a1),d5
 		bsr.w	FindFloor
 		move.b	(Primary_Angle).w,d3
@@ -1035,9 +1035,9 @@ ObjCheckFloorDist2:
 		ext.w	d0
 		add.w	d0,d2
 		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		moveq	#$C,d5
 		bsr.w	FindFloor
 		move.b	(Primary_Angle).w,d3
@@ -1055,9 +1055,9 @@ RingCheckFloorDist:
 		ext.w	d0
 		add.w	d0,d2
 		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		moveq	#$C,d5
 		bra.w	loc_F3A4
 
@@ -1075,7 +1075,7 @@ CheckRightCeilingDist:
 		add.w	d0,d3
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.w	d1,-(sp)
 		move.w	y_pos(a0),d2
@@ -1089,7 +1089,7 @@ CheckRightCeilingDist:
 		add.w	d0,d3
 		lea	(Secondary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.w	(sp)+,d0
 		move.b	#-$40,d2
@@ -1109,7 +1109,7 @@ sub_FA1A:
 		add.w	d0,d3
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.w	d1,-(sp)
 		move.w	y_pos(a0),d2
@@ -1123,7 +1123,7 @@ sub_FA1A:
 		add.w	d0,d3
 		lea	(Secondary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.w	(sp)+,d0
 		move.b	#-$40,d2
@@ -1139,7 +1139,7 @@ CheckRightWallDist_Part2:
 		addi.w	#$A,d3
 		lea	(Primary_Angle).w,a4
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		bsr.w	FindWall
 		move.b	#-$40,d2
 		bra.w	loc_F81A
@@ -1147,13 +1147,14 @@ CheckRightWallDist_Part2:
 ; =============== S U B R O U T I N E =======================================
 
 ; ObjHitWall:
+ObjHitWallRight:
 ObjCheckRightWallDist:
 		add.w	x_pos(a0),d3
 		move.w	y_pos(a0),d2
 		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#$10,a3
-		move.w	#0,d6
+		moveq	#0,d6
 		moveq	#$D,d5
 		bsr.w	FindWall
 		move.b	(Primary_Angle).w,d3
@@ -1304,7 +1305,7 @@ ChkFloorEdge_ReverseGravity_Part2:
 		beq.s	+
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 +		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		move.b	top_solid_bit(a0),d5
@@ -1327,7 +1328,7 @@ sub_FCA0:
 		sub.w	d0,d2
 		eori.w	#$F,d2
 		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$C,d5
@@ -1435,7 +1436,7 @@ sub_FDEC:
 		sub.w	d0,d3
 		eori.w	#$F,d3
 		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#-$10,a3
 		move.w	#$400,d6
 		move.b	lrb_solid_bit(a0),d5
@@ -1449,6 +1450,7 @@ sub_FDEC:
 ; =============== S U B R O U T I N E =======================================
 
 ; ObjHitWall2:
+ObjHitWallLeft:
 ObjCheckLeftWallDist:
 		add.w	x_pos(a0),d3
 		eori.w	#$F,d3	; this was not here in S1/S2, resulting in a bug
@@ -1456,7 +1458,7 @@ ObjCheckLeftWallDist:
 ObjCheckLeftWallDist_Part2:
 		move.w	y_pos(a0),d2
 		lea	(Primary_Angle).w,a4
-		move.b	#0,(a4)
+		clr.b	(a4)
 		movea.w	#-$10,a3
 		move.w	#$400,d6
 		moveq	#$D,d5

@@ -4,7 +4,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_28_Invisible_Barrier:
+Obj_Invisible_SolidBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Powerups,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
@@ -52,4 +52,4 @@ loc_1EBB6:
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
-		include "Objects/Invisible Barrier/Object Data/Map - Invisible Block.asm"
+		include "Objects/Invisible Blocks/Object Data/Map - Invisible Block.asm"

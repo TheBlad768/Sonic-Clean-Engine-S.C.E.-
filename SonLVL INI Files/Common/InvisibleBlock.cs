@@ -22,19 +22,19 @@ namespace S3KObjectDefinitions.Common
 		}
 	}
 
-	class InvisibleHurtBlockHorizontal : InvisibleBlock
+	class InvisibleHurtBlock : InvisibleBlock
 	{
 		public override string Name
 		{
-			get { return "Invisible Hurt Block (top)"; }
+			get { return "Invisible Hurt Block"; }
 		}
 	}
 
-	class InvisibleHurtBlockVertical : InvisibleBlock
+	class InvisibleKillBlock : InvisibleBlock
 	{
 		public override string Name
 		{
-			get { return "Invisible Hurt Block (sides)"; }
+			get { return "Invisible Kill Block"; }
 		}
 	}
 
@@ -45,7 +45,7 @@ namespace S3KObjectDefinitions.Common
 		public override void Init(ObjectData data)
 		{
 			var artfile = ObjectHelper.OpenArtFile("Common/RingHUDText.bin", CompressionType.KosinskiM);
-			var sprite = ObjectHelper.MapASMToBmp(artfile, "../Objects/Invisible Barrier/Object Data/Map - Invisible Block.asm", 0, 0);
+			var sprite = ObjectHelper.MapASMToBmp(artfile, "../Objects/Invisible Blocks/Object Data/Map - Invisible Block.asm", 0, 0);
 			sprite.InvertPriority();
 
 			img = new[]

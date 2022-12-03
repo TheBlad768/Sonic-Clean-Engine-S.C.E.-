@@ -74,7 +74,7 @@ Load_BossArena:
 		subq.w	#1,$2E(a0)
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
-		move.b	d0,(Level_music+1).w
+		move.b	d0,(Current_music+1).w
 		jsr	(SMPS_QueueSound1).w
 		bset	#0,objoff_27(a0)
 
@@ -218,3 +218,26 @@ Check_PlayerInRange:
 		bhs.s	+
 		move.w	a2,d0
 +		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Check_PlayerInRange2:
+		move.w	(Player_1+y_pos).w,d0
+		cmp.w	(a1)+,d0
+		blo.s		.fail
+		cmp.w	(a1)+,d0
+		bhi.s	.fail
+		move.w	(Player_1+x_pos).w,d1
+		cmp.w	(a1)+,d1
+		blo.s		.fail
+		cmp.w	(a1),d1
+		bhi.s	.fail
+
+.done
+		moveq	#0,d0
+		rts
+; ---------------------------------------------------------------------------
+
+.fail
+		moveq	#-1,d0
+		rts

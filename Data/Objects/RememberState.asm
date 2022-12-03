@@ -222,8 +222,7 @@ Go_Delete_SpriteSlotted3:
 Obj_WaitOffscreen:
 		move.l	#Map_Offscreen,mappings(a0)
 		bset	#2,render_flags(a0)
-		move.b	#64/2,width_pixels(a0)
-		move.b	#64/2,height_pixels(a0)
+		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)		; set height and width
 		move.l	(sp)+,objoff_34(a0)
 		move.l	#.main,address(a0)
 

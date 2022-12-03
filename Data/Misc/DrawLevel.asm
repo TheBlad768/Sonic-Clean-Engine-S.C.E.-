@@ -529,6 +529,18 @@ DrawBGAsYouMove:
 
 ; =============== S U B R O U T I N E =======================================
 
+Draw_FG:
+		movem.l	d5/a4-a5,-(sp)
+		lea	(Camera_Y_pos_copy).w,a6
+		bsr.w	Get_DeformDrawPosVert
+		lea	(Camera_Y_pos_rounded).w,a5
+		bsr.w	Draw_TileRow2
+		movem.l	(sp)+,d5/a4/a6
+		move.w	(Camera_Y_pos_rounded).w,d6
+		bra.s	Draw_BGNoVert
+
+; =============== S U B R O U T I N E =======================================
+
 Draw_BG:
 		movem.l	d5/a4-a5,-(sp)
 		lea	(Camera_Y_pos_BG_copy).w,a6
@@ -997,7 +1009,7 @@ LoadLevelLoadBlock2:
 		add.w	d1,d0
 		lea	(LevelLoadBlock).l,a2
 		lea	(a2,d0.w),a2
-		move.l	a2,-(sp)
+		pea	(a2)
 		addq.w	#4,a2
 		move.l	(a2)+,(Block_table_addr_ROM).w
 		movea.l	(a2)+,a0

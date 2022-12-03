@@ -421,6 +421,33 @@ Animate_RawNoSSTGetSlower:
 
 ; =============== S U B R O U T I N E =======================================
 
+Animate_ExternalPlayerSprite:
+		subq.b	#1,anim_frame_timer(a1)
+		bpl.s	loc_84500
+		move.b	(a2),anim_frame_timer(a1)
+		moveq	#0,d0
+		move.b	anim_frame(a1),d0
+		addq.b	#2,d0
+		move.b	d0,anim_frame(a1)
+		move.b	1(a2,d0.w),d1
+		beq.s	loc_84504
+		move.b	d1,mapping_frame(a1)
+		bclr	#0,render_flags(a1)
+		tst.b	2(a2,d0.w)
+		beq.s	loc_84500
+		bset	#0,render_flags(a1)
+
+loc_84500:
+		jmp	Sonic_Load_PLC2(pc)
+; ---------------------------------------------------------------------------
+
+loc_84504:
+		jsr	Sonic_Load_PLC2(pc)
+		movea.l	objoff_34(a0),a1
+		jmp	(a1)
+
+; =============== S U B R O U T I N E =======================================
+
 Set_Raw_Animation:
 		move.l	a1,objoff_30(a0)
 		clr.b	anim_frame(a0)

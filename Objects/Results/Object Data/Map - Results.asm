@@ -59,7 +59,7 @@ word_2F332:
 		dc.b  $F6,   6,	$84, $94,   0, $24
 word_2F346:		; Bonus
 		dc.w 3
-		dc.b	0,  $D,	$A4, $9A,   0,	 0
+		dc.b	0,  $D,	$A4, $9A,   $FF,	 $FF
 		dc.b	0,   1,	$A6, $BC,   0, $20
 		dc.b  $F6,   6,	$84, $94,   0, $24
 word_2F35A:

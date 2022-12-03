@@ -61,14 +61,19 @@ EndSign_Index: offsetTable
 Obj_EndSignInit:
 		lea	ObjSlot_EndSigns(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).w
-		move.b	#48/2,x_radius(a0)
-		move.b	#60/2,y_radius(a0)
+		btst	#7,(Player_1+art_tile).w
+		beq.s	.nothighpriority
+		bset	#7,art_tile(a0)								; signs have same priority as Sonic
+
+.nothighpriority
+		move.w	a0,(Signpost_addr).w						; put RAM address here for use by hidden monitor object
+		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)	; set y_radius and x_radius
 		move.l	#AniRaw_EndSigns1,$30(a0)
 		move.w	(Camera_Y_pos).w,d0
 		subi.w	#$20,d0
-		move.w	d0,y_pos(a0)					; Place vertical position at top of screen
+		move.w	d0,y_pos(a0)								; place vertical position at top of screen
 		sfx	sfx_Signpost
-		lea	Child1_EndSignStub(pc),a2			; Make the little stub at the bottom of the signpost
+		lea	Child1_EndSignStub(pc),a2						; make the little stub at the bottom of the signpost
 		jmp	(CreateChild1_Normal).w
 ; ---------------------------------------------------------------------------
 

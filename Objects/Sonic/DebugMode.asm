@@ -157,9 +157,10 @@ DebugMode:
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		move.b	render_flags(a0),render_flags(a1)
-		move.b	render_flags(a0),status(a1)
-		andi.b	#$7F,status(a1)
+		move.b	render_flags(a0),d0
+		andi.b	#$7F,d0
+		move.b	d0,render_flags(a1)
+		move.b	d0,status(a1)
 		moveq	#0,d0
 		move.b	(Debug_object).w,d0
 		add.w	d0,d0
@@ -197,8 +198,7 @@ DebugMode:
 		andi.b	#1,status(a1)
 		ori.b	#2,status(a1)
 		move.b	#id_SonicControl,routine(a1)
-		move.b	#38/2,y_radius(a1)
-		move.b	#18/2,x_radius(a1)
+		move.w	#bytes_to_word(38/2,18/2),y_radius(a1)	; set y_radius and x_radius
 		rts
 ; ---------------------------------------------------------------------------
 

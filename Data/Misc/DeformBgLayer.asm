@@ -74,9 +74,11 @@ locret_1C0E6:
 
 loc_1C0E8:
 		cmpi.w	#-24,d0
-		bgt.s	+
+		bgt.s	.skip
 		move.w	#-24,d0
-+		add.w	(a1),d0
+
+.skip
+		add.w	(a1),d0
 		cmp.w	(a2),d0
 		bgt.s	loc_1C112
 		move.w	(a2),d0
@@ -85,9 +87,11 @@ loc_1C0E8:
 
 loc_1C0FC:
 		cmpi.w	#24,d0
-		blo.s		+
+		blo.s		.skip2
 		move.w	#24,d0
-+		add.w	(a1),d0
+
+.skip2
+		add.w	(a1),d0
 		cmp.w	Camera_max_X_pos-Camera_min_X_pos(a2),d0
 		blt.s		loc_1C112
 		move.w	Camera_max_X_pos-Camera_min_X_pos(a2),d0
@@ -162,12 +166,22 @@ MoveCameraY:
 		move.w	y_pos(a0),d0
 		sub.w	(a1),d0
 		cmpi.w	#-$100,(Camera_min_Y_pos).w
-		bne.s	+
+		bne.s	.notwrap
 		and.w	(Screen_Y_wrap_value).w,d0
-+		btst	#Status_Roll,status(a0)
-		beq.s	+
-		subq.w	#5,d0
-+		move.w	d3,d1
+
+.notwrap
+		btst	#Status_Roll,status(a0)
+		beq.s	.notroll
+		moveq	#5,d1		; fix camera pos
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.notgravity
+		neg.w	d1
+
+.notgravity
+		sub.w	d1,d0
+
+.notroll
+		move.w	d3,d1
 		btst	#Status_InAir,status(a0)
 		beq.s	loc_1C164
 		addi.w	#32,d0
@@ -197,9 +211,11 @@ loc_1C172:
 		tst.b	(Fast_V_scroll_flag).w
 		bne.s	loc_1C1B0
 		move.w	ground_vel(a0),d1
-		bpl.s	+
+		bpl.s	.ground
 		neg.w	d1
-+		cmpi.w	#$800,d1
+
+.ground
+		cmpi.w	#$800,d1
 		bhs.s	loc_1C1B0
 		move.w	#$600,d1
 		cmpi.w	#6,d0

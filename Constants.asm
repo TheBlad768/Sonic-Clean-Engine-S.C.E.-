@@ -316,8 +316,9 @@ obSubtype =				$2C	; object subtype
 obTimer =				$2E	; object timer
 obParent =				$42 	; word ; parent of child objects
 obParent4 =				$44 	; word ; parent of child objects
-obParent2 =				$48 	; word ; parent of child objects
 obParent3 =				$46 	; word ; parent of child objects
+obParent2 =				$48 	; word ; parent of child objects
+obRespawnNo =			$48 ; word ; the address of this object's entry in the respawn table
 
 ; ---------------------------------------------------------------------------
 ; When childsprites are activated (i.e. bit #6 of render_flags set)

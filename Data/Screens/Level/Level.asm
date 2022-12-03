@@ -63,7 +63,7 @@ Level_Screen:
 		jsr	(LoadPalette_Immediate).w
 		lea	(PLC_Main).l,a5
 		jsr	(LoadPLC_Raw_KosM).w									; load hud and ring art
-		jsr	(CheckLevelForWater).w
+		jsr	(CheckLevelForWater).l
 		clearRAM Water_palette_line_2, Normal_palette
 		tst.b	(Water_flag).w
 		beq.s	.notwater
@@ -80,7 +80,7 @@ Level_Screen:
 		lsr.w	#6,d0
 		lea	(LevelMusic_Playlist).l,a1									; load music playlist
 		move.b	(a1,d0.w),d0
-		move.w	d0,(Level_music).w
+		move.w	d0,(Current_music).w
 		jsr	(SMPS_QueueSound1).w									; play music
 		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)).w	; load title card object
 
@@ -107,7 +107,7 @@ Level_Screen:
 		jsr	(LevelSetup).l
 		enableInts
 		jsr	(Load_Solids).w
-		jsr	(Handle_Onscreen_Water_Height).w
+		jsr	(Handle_Onscreen_Water_Height).l
 		moveq	#0,d0
 		move.w	d0,(Ctrl_1_logical).w
 		move.w	d0,(Ctrl_1).w
@@ -164,7 +164,7 @@ Level_Screen:
 		bne.w	Level_Screen
 		jsr	(DeformBgLayer).w
 		jsr	(ScreenEvents).l
-		jsr	(Handle_Onscreen_Water_Height).w
+		jsr	(Handle_Onscreen_Water_Height).l
 		jsr	(Load_Rings).w
 		jsr	(Animate_Tiles).l
 		jsr	(Process_Kos_Module_Queue).w

@@ -9,9 +9,7 @@ Obj_AutoSpin:
 		move.w	#make_art_tile(ArtTile_Ring,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$280,priority(a0)
-		move.b	#256/2,d0
-		move.b	d0,width_pixels(a0)
-		move.b	d0,height_pixels(a0)
+		move.w	#bytes_to_word(256/2,256/2),height_pixels(a0)		; set height and width
 		move.b	subtype(a0),d0
 		btst	#2,d0
 		beq.s	loc_1E85C
@@ -83,7 +81,7 @@ sub_1E8C6:
 		bcc.w	locret_1E9B4
 		btst	#5,subtype(a0)
 		beq.s	loc_1E908
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.w	locret_1E9B4
 
 loc_1E908:
@@ -92,19 +90,19 @@ loc_1E908:
 		btst	#4,subtype(a0)
 		bne.s	loc_1E930
 		move.w	#$580,ground_vel(a1)
-		move.b	#1,$3D(a1)
+		move.b	#1,spin_dash_flag(a1)
 		tst.b	subtype(a0)
 		bpl.s	loc_1E930
-		move.b	#$81,$3D(a1)
+		move.b	#$81,spin_dash_flag(a1)
 
 loc_1E930:
-		bra.w	loc_1E9B6
+		bra.s	loc_1E9B6
 ; ---------------------------------------------------------------------------
 
 loc_1E934:
 		btst	#4,subtype(a0)
 		bne.s	locret_1E9B4
-		clr.b	$3D(a1)
+		clr.b	spin_dash_flag(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -124,8 +122,8 @@ loc_1E944:
 		bcc.s	locret_1E9B4
 		btst	#5,subtype(a0)
 		beq.s	loc_1E97C
-		btst	#1,status(a1)
-		bne.w	locret_1E9B4
+		btst	#Status_InAir,status(a1)
+		bne.s	locret_1E9B4
 
 loc_1E97C:
 		btst	#0,render_flags(a0)
@@ -133,10 +131,10 @@ loc_1E97C:
 		btst	#4,subtype(a0)
 		bne.s	loc_1E9A4
 		move.w	#-$580,ground_vel(a1)
-		move.b	#1,$3D(a1)
+		move.b	#1,spin_dash_flag(a1)
 		tst.b	subtype(a0)
 		bpl.s	loc_1E9A4
-		move.b	#$81,$3D(a1)
+		move.b	#$81,spin_dash_flag(a1)
 
 loc_1E9A4:
 		bra.s	loc_1E9B6
@@ -145,23 +143,22 @@ loc_1E9A4:
 loc_1E9A6:
 		btst	#4,subtype(a0)
 		bne.s	locret_1E9B4
-		clr.b	$3D(a1)
+		clr.b	spin_dash_flag(a1)
 
 locret_1E9B4:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1E9B6:
-		btst	#2,status(a1)
+		btst	#Status_Roll,status(a1)
 		beq.s	loc_1E9C0
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1E9C0:
-		bset	#2,status(a1)
-		move.b	#$E,$1E(a1)
-		move.b	#7,$1F(a1)
-		move.b	#2,$20(a1)
+		bset	#Status_Roll,status(a1)
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a1)	; set y_radius and x_radius
+		move.b	#id_Roll,anim(a1)
 		addq.w	#5,y_pos(a1)
 		sfx	sfx_Roll,1
 ; ---------------------------------------------------------------------------
@@ -199,7 +196,7 @@ sub_1EA14:
 		bcc.w	locret_1EB30
 		btst	#5,subtype(a0)
 		beq.s	loc_1EA58
-		btst	#1,status(a1)
+		btst	#Status_InAir,status(a1)
 		bne.w	locret_1EB30
 
 loc_1EA58:
@@ -207,16 +204,16 @@ loc_1EA58:
 		bne.s	loc_1EA9E
 		btst	#4,subtype(a0)
 		bne.s	loc_1EA9A
-		move.b	#1,$3D(a1)
+		move.b	#1,spin_dash_flag(a1)
 		tst.b	subtype(a0)
 		bpl.s	loc_1EA7A
-		move.b	#$81,$3D(a1)
+		move.b	#$81,spin_dash_flag(a1)
 
 loc_1EA7A:
 		btst	#6,subtype(a0)
 		beq.s	loc_1EA9A
-		bclr	#1,status(a1)
-		move.b	#$40,$26(a1)
+		bclr	#Status_InAir,status(a1)
+		move.b	#$40,angle(a1)
 		move.w	y_vel(a1),ground_vel(a1)
 		clr.w	x_vel(a1)
 
@@ -227,7 +224,7 @@ loc_1EA9A:
 loc_1EA9E:
 		btst	#4,subtype(a0)
 		bne.w	locret_1EB30
-		clr.b	$3D(a1)
+		clr.b	spin_dash_flag(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -247,24 +244,24 @@ loc_1EAB0:
 		bcc.s	locret_1EB30
 		btst	#5,subtype(a0)
 		beq.s	loc_1EAE8
-		btst	#1,status(a1)
-		bne.w	locret_1EB30
+		btst	#Status_InAir,status(a1)
+		bne.s	locret_1EB30
 
 loc_1EAE8:
 		btst	#0,render_flags(a0)
 		beq.s	loc_1EB22
 		btst	#4,subtype(a0)
 		bne.s	loc_1EB1E
-		move.b	#1,$3D(a1)
+		move.b	#1,spin_dash_flag(a1)
 		tst.b	subtype(a0)
 		bpl.s	loc_1EB0A
-		move.b	#$81,$3D(a1)
+		move.b	#$81,spin_dash_flag(a1)
 
 loc_1EB0A:
 		btst	#6,subtype(a0)
 		beq.s	loc_1EB1E
-		bclr	#1,status(a1)
-		move.b	#$40,$26(a1)
+		bclr	#Status_InAir,status(a1)
+		move.b	#$40,angle(a1)
 
 loc_1EB1E:
 		bra.w	loc_1E9B6
@@ -273,7 +270,7 @@ loc_1EB1E:
 loc_1EB22:
 		btst	#4,subtype(a0)
 		bne.s	locret_1EB30
-		clr.b	$3D(a1)
+		clr.b	spin_dash_flag(a1)
 
 locret_1EB30:
 		rts

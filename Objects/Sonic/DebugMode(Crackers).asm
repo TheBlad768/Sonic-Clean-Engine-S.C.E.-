@@ -56,8 +56,7 @@ DebugMode:
 		andi.b	#1,status(a1)
 		ori.b	#2,status(a1)
 		move.b	#id_SonicControl,routine(a1)
-		move.b	#38/2,y_radius(a1)
-		move.b	#18/2,x_radius(a1)
+		move.w	#bytes_to_word(38/2,18/2),y_radius(a1)	; set y_radius and x_radius
 		rts
 ; ---------------------------------------------------------------------------
 

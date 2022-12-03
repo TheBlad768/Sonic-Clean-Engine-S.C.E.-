@@ -208,10 +208,8 @@ Eni_Decomp_GetInlineCopyVal:
 		add.w	d0,d0
 		and.w	Eni_Decomp_AndVals-2(pc,d0.w),d1	; only keep as many bits as required
 		add.w	d3,d1				; add starting art tile
-		move.b	(a0)+,d5				; get current byte, move onto next byte
-		move.b	d5,(sp)				; shift up by a byte
-		move.w	(sp),d5
-		clr.b	d5
+		move.b	(a0)+,(sp)			; get current byte, move onto next byte
+		move.w	(sp),d5				; shift up by a byte
 		move.b	(a0)+,d5				; store next byte in lower register byte
 		rts
 ; ---------------------------------------------------------------------------

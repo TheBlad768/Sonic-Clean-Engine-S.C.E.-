@@ -106,8 +106,7 @@ loc_1A6AE:
 loc_1A6B6:
 		move.l	d6,address(a1)
 		addq.b	#2,routine(a1)
-		move.b	#8,y_radius(a1)
-		move.b	#8,x_radius(a1)
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)	; set y_radius and x_radius
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		move.l	#Map_Ring,mappings(a1)
@@ -115,7 +114,7 @@ loc_1A6B6:
 		move.b	#$84,render_flags(a1)
 		move.w	#$180,priority(a1)
 		move.b	#7|$40,collision_flags(a1)
-		move.b	#8,width_pixels(a1)
+		move.b	#16/2,width_pixels(a1)
 		st	(Ring_spill_anim_counter).w
 		tst.w	d4
 		bmi.s	loc_1A728
@@ -238,10 +237,8 @@ Obj_Attracted_Ring:
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#7|$40,collision_flags(a0)
-		move.b	#8,width_pixels(a0)
-		move.b	#8,height_pixels(a0)
-		move.b	#8,y_radius(a0)
-		move.b	#8,x_radius(a0)
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a0)	; set y_radius and x_radius
 		move.l	#loc_1A88C,address(a0)
 
 loc_1A88C:

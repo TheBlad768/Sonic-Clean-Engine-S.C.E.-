@@ -356,7 +356,7 @@ loc_18676:
 Player_ResetAirTimer:
 		cmpi.b	#12,air_left(a1)
 		bhi.s	.end								; branch if countdown hasn't started yet
-		move.w	(Level_music).w,d0				; prepare to play current level's music
+		move.w	(Current_music).w,d0				; prepare to play current level's music
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.s	.notinvincible						; branch if Sonic is not invincible
 		moveq	#signextendB(bgm_Invincible),d0	; prepare to play invincibility music

@@ -74,7 +74,7 @@ loc_85A02:
 		cmp.b	3(a1),d2
 		bhi.s	loc_859FC			; Wait for counter to finish
 		movea.l	(Palette_rotation_custom).w,a2
-		move.l	a1,-(sp)
+		pea	(a1)
 		jsr	(a2)						; Run custom routine
 		movea.l	(sp)+,a1
 		addq.w	#4,sp

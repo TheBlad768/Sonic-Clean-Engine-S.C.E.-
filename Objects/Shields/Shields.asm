@@ -21,8 +21,7 @@ Obj_Fire_Shield:
 		move.l	#ArtUnc_FireShield>>1,Art_Address(a0)				; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#48/2,width_pixels(a0)
-		move.b	#48/2,height_pixels(a0)
+		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
@@ -105,8 +104,7 @@ Obj_Lightning_Shield:
 		move.l	#ArtUnc_LightningShield>>1,Art_Address(a0)		; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#48/2,width_pixels(a0)
-		move.b	#48/2,height_pixels(a0)
+		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
@@ -218,8 +216,7 @@ Obj_Lightning_Shield_Create_Spark:
 		move.w	art_tile(a0),art_tile(a1)							; (Spark) inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
 		move.b	#4,render_flags(a1)
 		move.w	#$80,priority(a1)
-		move.b	#16/2,width_pixels(a1)
-		move.b	#16/2,height_pixels(a1)
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)			; set height and width
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)									; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
 		dbf	d1,.loop
@@ -277,8 +274,7 @@ Obj_Bubble_Shield:
 		move.l	#ArtUnc_BubbleShield>>1,Art_Address(a0)			; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#48/2,width_pixels(a0)
-		move.b	#48/2,height_pixels(a0)
+		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
@@ -342,8 +338,7 @@ Obj_Insta_Shield:
 		move.l	#ArtUnc_InstaShield>>1,Art_Address(a0)			; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
 		move.w	#$80,priority(a0)
-		move.b	#48/2,width_pixels(a0)
-		move.b	#48/2,height_pixels(a0)
+		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#7,(Player_1+art_tile).w
