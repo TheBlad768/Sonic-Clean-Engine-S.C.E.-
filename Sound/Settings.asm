@@ -91,7 +91,7 @@ MusID_ExtraLife		= $00
 ;	| ID of your Extra Life jingle
 ;
 ; ---SFX CONSTANTS---
-SndID_Ring			= sfx_Ring
+SndID_Ring			= sfx_RingRight
 ;	| ID of your ring SFX
 ;
 SndID_RingLeft		= sfx_RingLeft

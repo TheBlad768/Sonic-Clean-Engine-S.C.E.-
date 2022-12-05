@@ -289,7 +289,7 @@ Monitor_Give_Eggman:
 Monitor_Give_Rings:
 		addi.w	#10,(Ring_count).w				; add 10 rings to the number of rings you have
 		ori.b	#1,(Update_HUD_ring_count).w	; update the ring counter
-		sfx	sfx_Ring,1							; play ring sound
+		sfx	sfx_RingRight,1						; play ring sound
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Super_Sneakers:
@@ -314,7 +314,7 @@ Monitor_Give_Lightning_Shield:
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
 		move.l	#Obj_Lightning_Shield,(v_Shield).w
-		sfx	sfx_LightShield,1
+		sfx	sfx_LightningShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Bubble_Shield:

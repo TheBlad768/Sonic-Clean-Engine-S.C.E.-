@@ -57,7 +57,7 @@ Obj_Spikebonker:
 .attack
 		move.l	#.wait,address(a0)
 		bset	#3,objoff_38(a0)	; set attack flag
-		sfx	sfx_Teleport,1
+		sfx	sfx_Dash,1
 ; ---------------------------------------------------------------------------
 
 .changeside

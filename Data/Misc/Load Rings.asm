@@ -93,7 +93,7 @@ sub_E994:
 
 ; Frame
 		addq.b	#1,1(a1)
-		cmpi.b	#(CMap_Ring_End-CMap_Ring)/8,1(a1)	; 5 frames
+		cmpi.b	#(CMap_Ring_End-CMap_Ring)/2,1(a1)	; 5 frames
 		bne.s	+
 		move.w	#-1,(a1)
 
@@ -175,7 +175,7 @@ loc_EABE:
 		bne.s	Test_Ring_Collisions_AttractRing
 
 loc_EAC6:
-		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/8),(a4)
+		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/2),(a4)
 		jsr	(GiveRing).w
 		lea	(Ring_consumption_list).w,a3
 
@@ -233,25 +233,17 @@ loc_EBA6:
 		and.w	d3,d1
 		cmp.w	d5,d1
 		bhs.s	loc_EBE6
-		addi.w	#$78,d1
 		move.w	(a0),d0
 		sub.w	(a3),d0
-		addi.w	#$80,d0
 		move.b	-1(a4),d6
-		bne.s	loc_EBCE
-		moveq	#0,d6
-
-loc_EBCE:
-		lsl.w	#3,d6
-		lea	(a1,d6.w),a2
-		add.w	(a2)+,d1
-		move.w	d1,(a6)+
-		move.w	(a2)+,d6
-		move.b	d6,(a6)
-		addq.w	#2,a6
-		move.w	(a2)+,(a6)+
-		add.w	(a2)+,d0
-		move.w	d0,(a6)+
+		add.w	d6,d6				; 2 bytes
+		addi.w	#$70,d1				; add ypos
+		move.w	d1,(a6)+				; set ypos
+		move.b	#5,(a6)				; load the size of the sprite
+		addq.w	#2,a6				; skip link parameter
+		move.w	(a1,d6.w),(a6)+		; VRAM
+		addi.w	#$78,d0				; add xpos
+		move.w	d0,(a6)+				; set xpos
 		subq.w	#1,d7
 
 loc_EBE6:
@@ -265,42 +257,28 @@ locret_EBEC:
 ; Custom mappings format. Compare to Map_Ring.
 
 ; Differences include...
-;  No offset table (each sprite assumed to be 8 bytes)
-;  No 'sprite pieces per frame' value (hardcoded to 1)
-;  Sign-extended Y-pos value
-;  Sign-extended sprite size value
+; No offset table (each sprite assumed to be 2 bytes)
+; No 'sprite pieces per frame' value (hardcoded to 1)
+; ---------------------------------------------------------------------------
+
 CMap_Ring:
 
-;frame1:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$0000+make_art_tile(ArtTile_Ring,1,0)
-	dc.w	$FFF8
+; frame1
+	dc.w $0000+make_art_tile(ArtTile_Ring,1,0)
 
-;frame2:
+; frame2
 CMap_Ring_Spark:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$0000+make_art_tile(ArtTile_Ring_Sparks,1,0)
-	dc.w	$FFF8
+	dc.w $0000+make_art_tile(ArtTile_Ring_Sparks,1,0)
 
-;frame3:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$1800+make_art_tile(ArtTile_Ring_Sparks,1,0)
-	dc.w	$FFF8
+; frame3
+	dc.w $1800+make_art_tile(ArtTile_Ring_Sparks,1,0)
 
-;frame4:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$0800+make_art_tile(ArtTile_Ring_Sparks,1,0)
-	dc.w	$FFF8
+; frame4
+	dc.w $0800+make_art_tile(ArtTile_Ring_Sparks,1,0)
 
-;frame5:
-	dc.w	$FFF8
-	dc.w	$0005
-	dc.w	$1000+make_art_tile(ArtTile_Ring_Sparks,1,0)
-	dc.w	$FFF8
+; frame5
+	dc.w $1000+make_art_tile(ArtTile_Ring_Sparks,1,0)
+
 CMap_Ring_End
 
 ; =============== S U B R O U T I N E =======================================
@@ -316,7 +294,7 @@ GiveRing:
 CollectRing:
 		addq.w	#1,(Ring_count).w					; add 1 to rings
 		ori.b	#1,(Update_HUD_ring_count).w	; update the rings counter
-		sfx	sfx_Ring,1							; play ring sound
+		sfx	sfx_RingRight,1						; play ring sound
 
 ; =============== S U B R O U T I N E =======================================
 

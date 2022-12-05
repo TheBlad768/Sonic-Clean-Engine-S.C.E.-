@@ -197,7 +197,7 @@ sub_242F6:
 		bne.s	locret_24354
 		tst.b	render_flags(a0)
 		bpl.s	locret_24354
-		sfx	sfx_SpikesMove,1
+		sfx	sfx_SpikeMove,1
 ; ---------------------------------------------------------------------------
 
 loc_24312:

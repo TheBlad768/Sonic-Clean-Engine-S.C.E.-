@@ -292,7 +292,7 @@ EndOfHeader:
 		include "Data/Misc/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
-; Subroutine to load sonic object
+; Subroutine to load Sonic object
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Sonic/Sonic.asm"
@@ -355,7 +355,7 @@ EndOfHeader:
 		include "Pointers/Object Pointers.asm"
 
 ; ---------------------------------------------------------------------------
-; Subroutine to load sonic object data
+; Subroutine to load Sonic object data
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Sonic/Object Data/Anim - Sonic.asm"

@@ -48,7 +48,7 @@ UpdateHUD:
 		bsr.w	DrawThreeDigitNumber
 
 .chktime
-		tst.b	(Update_HUD_timer).w				; does the time	need updating?
+		tst.b	(Update_HUD_timer).w				; does the time need updating?
 		bpl.s	loc_DD64						; if not, branch
 		move.b	#1,(Update_HUD_timer).w
 		bra.s	loc_DD9E

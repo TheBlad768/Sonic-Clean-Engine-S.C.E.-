@@ -48,63 +48,63 @@ ptr_sndend
 ; SFX data ($40-$EF)
 ; ---------------------------------------------------------------------------
 
-Sound40:	include	"Sound/SFX/Snd40 - Ring.asm"
+Sound40:	include	"Sound/SFX/Snd - Ring.asm"
 	even
-Sound41:		include	"Sound/SFX/Snd41 - Ring Left Speaker.asm"
+Sound41:		include	"Sound/SFX/Snd - Ring Left Speaker.asm"
 	even
-Sound42:	include	"Sound/SFX/Snd42 - Ring Loss.asm"
+Sound42:	include	"Sound/SFX/Snd - Ring Loss.asm"
 	even
-Sound43:	include	"Sound/SFX/Snd43 - Jump.asm"
+Sound43:	include	"Sound/SFX/Snd - Jump.asm"
 	even
-Sound44:	include	"Sound/SFX/Snd44 - Roll.asm"
+Sound44:	include	"Sound/SFX/Snd - Roll.asm"
 	even
-Sound45:	include	"Sound/SFX/Snd45 - Skid.asm"
+Sound45:	include	"Sound/SFX/Snd - Skid.asm"
 	even
-Sound46:	include	"Sound/SFX/Snd46 - Death.asm"
+Sound46:	include	"Sound/SFX/Snd - Death.asm"
 	even
-Sound47:	include	"Sound/SFX/Snd47 - SpinDash.asm"
+Sound47:	include	"Sound/SFX/Snd - SpinDash.asm"
 	even
-Sound48:	include	"Sound/SFX/Snd48 - Splash.asm"
+Sound48:	include	"Sound/SFX/Snd - Splash.asm"
 	even
-Sound49:	include	"Sound/SFX/Snd49 - Insta Attack.asm"
+Sound49:	include	"Sound/SFX/Snd - Insta Attack.asm"
 	even
-Sound4A:	include	"Sound/SFX/Snd4A - Fire Shield.asm"
+Sound4A:	include	"Sound/SFX/Snd - Fire Shield.asm"
 	even
-Sound4B:	include	"Sound/SFX/Snd4B - Bubble Shield.asm"
+Sound4B:	include	"Sound/SFX/Snd - Bubble Shield.asm"
 	even
-Sound4C:	include	"Sound/SFX/Snd4C - Light Shield.asm"
+Sound4C:	include	"Sound/SFX/Snd - Lightning Shield.asm"
 	even
-Sound4D:	include	"Sound/SFX/Snd4D - Fire Attack.asm"
+Sound4D:	include	"Sound/SFX/Snd - Fire Attack.asm"
 	even
-Sound4E:	include	"Sound/SFX/Snd4E - Bubble Attack.asm"
+Sound4E:	include	"Sound/SFX/Snd - Bubble Attack.asm"
 	even
-Sound4F:	include	"Sound/SFX/Snd4F - Light Attack.asm"
+Sound4F:	include	"Sound/SFX/Snd - Electric Attack.asm"
 	even
-Sound50:	include	"Sound/SFX/Snd50 - Hit Spikes.asm"
+Sound50:	include	"Sound/SFX/Snd - Spike Hit.asm"
 	even
-Sound51:		include	"Sound/SFX/Snd51 - Spikes Move.asm"
+Sound51:		include	"Sound/SFX/Snd - Spike Move.asm"
 	even
-Sound52:	include	"Sound/SFX/Snd52 - Drown Death.asm"
+Sound52:	include	"Sound/SFX/Snd - Drown.asm"
 	even
-Sound53:	include	"Sound/SFX/Snd53 - Lamppost.asm"
+Sound53:	include	"Sound/SFX/Snd - Starpost.asm"
 	even
-Sound54:	include	"Sound/SFX/Snd54 - Spring.asm"
+Sound54:	include	"Sound/SFX/Snd - Spring.asm"
 	even
-Sound55:	include	"Sound/SFX/Snd55 - Teleport.asm"
+Sound55:	include	"Sound/SFX/Snd - Dash.asm"
 	even
-Sound56:	include	"Sound/SFX/Snd56 - Break Item.asm"
+Sound56:	include	"Sound/SFX/Snd - Break.asm"
 	even
-Sound57:	include	"Sound/SFX/Snd57 - Hit Boss.asm"
+Sound57:	include	"Sound/SFX/Snd - Boss Hit.asm"
 	even
-Sound58:	include	"Sound/SFX/Snd58 - Drown Warning.asm"
+Sound58:	include	"Sound/SFX/Snd - Air Ding.asm"
 	even
-Sound59:	include	"Sound/SFX/Snd59 - Air.asm"
+Sound59:	include	"Sound/SFX/Snd - Bubble.asm"
 	even
-Sound5A:	include	"Sound/SFX/Snd5A - Bomb.asm"
+Sound5A:	include	"Sound/SFX/Snd - Explode.asm"
 	even
-Sound5B:	include	"Sound/SFX/Snd5B - Signpost.asm"
+Sound5B:	include	"Sound/SFX/Snd - Signpost.asm"
 	even
-Sound5C:	include	"Sound/SFX/Snd5C - Switch.asm"
+Sound5C:	include	"Sound/SFX/Snd - Switch.asm"
 	even
-Sound5D:	include	"Sound/SFX/Snd5D - Cash Register.asm"
+Sound5D:	include	"Sound/SFX/Snd - Register.asm"
 	even

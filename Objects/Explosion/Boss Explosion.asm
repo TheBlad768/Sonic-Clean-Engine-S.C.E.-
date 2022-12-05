@@ -183,7 +183,7 @@ Obj_BossExplosion1:
 loc_83F52:
 		move.l	#Obj_BossExplosionAnim,address(a0)
 		move.l	#Go_Delete_Sprite,$34(a0)
-		sfx	sfx_Bomb
+		sfx	sfx_Explode
 
 Obj_BossExplosionAnim:
 		lea	AniRaw_BossExplosion(pc),a1
@@ -204,7 +204,7 @@ Obj_BossExplosionOffset:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_BossExplosionOffsetAnim,address(a0)
 		move.l	#Go_Delete_Sprite,$34(a0)
-		sfx	sfx_Bomb
+		sfx	sfx_Explode
 
 Obj_BossExplosionOffsetAnim:
 		lea	AniRaw_BossExplosion(pc),a1

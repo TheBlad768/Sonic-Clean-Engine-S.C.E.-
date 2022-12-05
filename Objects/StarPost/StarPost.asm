@@ -68,7 +68,7 @@ sub_2D028:
 		addi.w	#$40,d0
 		cmpi.w	#$68,d0
 		bhs.w	locret_2D0E8
-		sfx	sfx_Lamppost
+		sfx	sfx_Starpost
 		jsr	(Create_New_Sprite).w
 		bne.s	loc_2D0D0
 		move.l	#Obj_StarPost,address(a1)

@@ -223,7 +223,7 @@ sub_2FBA8:
 		btst	#Status_BublShield,shield_reaction(a1)
 		bne.s	locret_2FC7C
 		bsr.w	Player_ResetAirTimer
-		sfx	sfx_Air
+		sfx	sfx_Bubble
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
 		move.b	#id_GetAir,anim(a1)

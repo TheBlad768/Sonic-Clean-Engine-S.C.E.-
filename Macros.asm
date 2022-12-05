@@ -21,6 +21,9 @@ ramaddr function x,(-(x&$80000000)<<1)|x
 ; function using these variables
 id function ptr,((ptr-offset)/ptrsize+idstart)
 
+; function to convert two separate nibble into a byte
+nibble_to_byte function nibble1,nibble2,((nibble1)&$F0)|((nibble2)&$F)
+
 ; function to convert two separate bytes into a word
 bytes_to_word function byte1,byte2,(((byte1)<<8)&$FF00)|((byte2)&$FF)
 
@@ -750,7 +753,7 @@ music:		macro track,terminate,byte
 	 	    if ("byte"="0") || ("byte"="")
 			moveq	#signextendB(track),d0
 		    else
-			move.w	#track,d0
+			move.w	#(track),d0
 		    endif
 		      if ("terminate"="0") || ("terminate"="")
 			jsr	(SMPS_QueueSound1).w
@@ -763,7 +766,7 @@ sfx:		macro track,terminate,byte
 	 	    if ("byte"="0") || ("byte"="")
 			moveq	#signextendB(track),d0
 		    else
-			move.w	#track,d0
+			move.w	#(track),d0
 		    endif
 		      if ("terminate"="0") || ("terminate"="")
 			jsr	(SMPS_QueueSound2).w
@@ -776,7 +779,7 @@ sample:		macro track,terminate,byte
 	 	    if ("byte"="0") || ("byte"="")
 			moveq	#signextendB(track),d0
 		    else
-			move.w	#track,d0
+			move.w	#(track),d0
 		    endif
 		      if ("terminate"="0") || ("terminate"="")
 			jsr	(SMPS_PlayDACSample).w

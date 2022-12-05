@@ -1312,7 +1312,7 @@ Sonic_LightningShield:
 		move.b	#1,double_jump_flag(a0)
 		move.w	#-$580,y_vel(a0)						; bounce Sonic up, creating the double jump effect
 		clr.b	jumping(a0)
-		sfx	sfx_LightAttack,1							; play Lightning Shield attack sound
+		sfx	sfx_ElectricAttack,1						; play Lightning Shield attack sound
 ; ---------------------------------------------------------------------------
 
 Sonic_BubbleShield:
@@ -1392,7 +1392,7 @@ loc_11C8C:
 loc_11CDC:
 		bset	#Status_Roll,status(a0)
 		clr.b	anim(a6)		; v_Dust
-		sfx	sfx_Teleport
+		sfx	sfx_Dash
 		bra.s	loc_11D5E
 ; ---------------------------------------------------------------------------
 

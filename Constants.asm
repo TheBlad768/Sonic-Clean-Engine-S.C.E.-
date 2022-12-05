@@ -354,7 +354,7 @@ sub9_mapframe			= $47
 next_subspr				= 6		; size
 
 ; ---------------------------------------------------------------------------
-; Unknown or inconsistently used offsets that are not applicable to sonic/tails:
+; Unknown or inconsistently used offsets that are not applicable to Sonic:
 ; ---------------------------------------------------------------------------
 
  enum		objoff_00=$00,objoff_01,objoff_02,objoff_03,objoff_04,objoff_05,objoff_06

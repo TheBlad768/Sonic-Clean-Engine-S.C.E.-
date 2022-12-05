@@ -28,7 +28,7 @@ loc_1E5F6:
 		move.w	objoff_3E(a0),objoff_3E(a1)
 
 loc_1E61A:
-		sfx	sfx_BreakItem
+		sfx	sfx_Break
 		addq.b	#2,routine(a0)
 
 loc_1E626:

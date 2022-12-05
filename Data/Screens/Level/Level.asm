@@ -169,7 +169,7 @@ Level_Screen:
 		jsr	(Animate_Tiles).l
 		jsr	(Process_Kos_Module_Queue).w
 		jsr	(OscillateNumDo).w
-		jsr	(SynchroAnimate).w
+		jsr	(ChangeRingFrame).w
 		jsr	(Render_Sprites).w
 		cmpi.b	#id_LevelScreen,(Game_mode).w
 		beq.s	.loop

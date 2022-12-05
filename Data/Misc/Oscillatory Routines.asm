@@ -4,21 +4,19 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-SynchroAnimate:
+ChangeRingFrame:
 		cmpi.b	#id_SonicDeath,(Player_1+routine).w		; has Sonic just died?
-		bhs.s	.SyncEnd									; if yes, branch
+		bhs.s	.syncend									; if yes, branch
 
 ; Used for rings and giant rings
+.syncrings
 		subq.b	#1,(Rings_frame_timer).w
-		bpl.s	.Sync2
+		bpl.s	.syncrings2
 		move.b	#4,(Rings_frame_timer).w
 		addq.b	#1,(Rings_frame).w
-		cmpi.b	#(ArtUnc_Ring_end-ArtUnc_Ring)>>7,(Rings_frame).w
-		bne.s	.Sync
-		clr.b	(Rings_frame).w
+		andi.b	#7,(Rings_frame).w
 
 ; Dynamic graphics
-.Sync:
 		moveq	#0,d0
 		move.l	#ArtUnc_Ring>>1,d1						; Load art source
 		move.b	(Rings_frame).w,d0
@@ -29,9 +27,9 @@ SynchroAnimate:
 		bsr.w	Add_To_DMA_Queue
 
 ; Used for bouncing rings
-.Sync2:
+.syncrings2
 		tst.b	(Ring_spill_anim_counter).w
-		beq.s	.SyncEnd
+		beq.s	.syncend
 		moveq	#0,d0
 		move.b	(Ring_spill_anim_counter).w,d0
 		add.w	(Ring_spill_anim_accum).w,d0
@@ -41,7 +39,7 @@ SynchroAnimate:
 		move.b	d0,(Ring_spill_anim_frame).w
 		subq.b	#1,(Ring_spill_anim_counter).w
 
-.SyncEnd:
+.syncend
 		rts
 
 ; ---------------------------------------------------------------------------

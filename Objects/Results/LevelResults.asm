@@ -137,7 +137,7 @@ loc_2DC7E:
 ; ---------------------------------------------------------------------------
 
 loc_2DCA0:
-		sfx	sfx_Cash									; Play the cash register sound
+		sfx	sfx_Register								; Play the cash register sound
 		move.w	#3*60,$2E(a0)						; Set wait amount
 		addq.b	#2,routine(a0)
 
@@ -151,7 +151,7 @@ locret_2DC9E:
 ; ---------------------------------------------------------------------------
 
 loc_2DCD6:
-		tst.w	$30(a0)						; Wait for title screen objects to disappear
+		tst.w	$30(a0)								; Wait for title screen objects to disappear
 		beq.s	loc_2DCE2
 		addq.w	#1,$32(a0)
 		rts
@@ -162,12 +162,12 @@ loc_2DCE2:
 		tst.b	(LastAct_end_flag).w
 		bne.s	+
 		clr.b	(Last_star_post_hit).w
-		move.l	#Obj_TitleCard,address(a0)	; Change current object to title card
+		move.l	#Obj_TitleCard,address(a0)			; Change current object to title card
 		clr.b	routine(a0)
 		st	$3E(a0)
 		rts
 ; ---------------------------------------------------------------------------
-+		clr.b	(TitleCard_end_flag).w				; Stop level results flag and set title card finished flag
++		clr.b	(TitleCard_end_flag).w						; Stop level results flag and set title card finished flag
 		st	(LevResults_end_flag).w
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------

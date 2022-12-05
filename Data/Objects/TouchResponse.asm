@@ -462,7 +462,7 @@ HurtCharacter:
 		blo.s		.sound								; if not, branch
 		cmpi.l	#sub_24280,address(a2)
 		bhs.s	.sound
-		moveq	#signextendB(sfx_HitSpikes),d0			; load spikes damage sound
+		moveq	#signextendB(sfx_SpikeHit),d0			; load spikes damage sound
 
 .sound:
 		jsr	(SMPS_QueueSound2).w
@@ -476,7 +476,7 @@ HurtCharacter:
 		blo.s		loc_10364							; if not, branch
 		cmpi.l	#sub_24280,address(a2)
 		bhs.s	loc_10364
-		moveq	#signextendB(sfx_HitSpikes),d0			; load spikes damage sound
+		moveq	#signextendB(sfx_SpikeHit),d0			; load spikes damage sound
 
 loc_10364:
 		bra.s	loc_1036E
