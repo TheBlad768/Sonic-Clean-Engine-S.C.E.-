@@ -8,7 +8,7 @@
 
 Obj_Invisible_KillBlock:
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Powerups,0,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Monitors,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
 		bset	#7,status(a0)

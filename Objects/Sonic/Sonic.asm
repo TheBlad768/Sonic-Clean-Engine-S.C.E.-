@@ -461,7 +461,7 @@ Sonic_NotRight:
 		btst	#Status_OnObj,status(a0)
 		beq.w	Sonic_Balance
 		movea.w	interact(a0),a1				; load interacting object's RAM space
-		tst.b	status(a1)						; is status bit 7 set? (unused?)
+		tst.b	status(a1)						; is status bit 7 set? (Balance anim off)
 		bmi.w	loc_11276					; if so, branch
 
 		; Calculations to determine where on the object Sonic is, and make him balance accordingly
@@ -2149,6 +2149,7 @@ loc_123FA:
 loc_12410:
 		move.b	#id_SonicRestart,routine(a0)
 		move.w	#1*60,restart_timer(a0)
+		clr.b	(Respawn_table_keep).w
 
 locret_124C6:
 		rts

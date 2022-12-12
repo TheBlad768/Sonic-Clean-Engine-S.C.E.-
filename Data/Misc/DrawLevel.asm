@@ -893,6 +893,7 @@ Restart_LevelData:
 		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		clr.b	(Boss_flag).w
+		clr.b	(Respawn_table_keep).w
 		bsr.s	Clear_Switches
 		bsr.w	Load_Level
 		bsr.w	Load_Solids

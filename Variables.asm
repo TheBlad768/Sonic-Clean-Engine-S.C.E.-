@@ -272,7 +272,7 @@ Last_star_pole_hit:					ds.b 1
 Current_music:						ds.w 1
 Palette_fade_timer:					ds.w 1					; The palette gets faded in until this timer expires
 SegaCD_Mode:						ds.b 1
-									ds.b 1					; even
+Respawn_table_keep:					ds.b 1					; If set, respawn table is not reset during level load
 
 Block_table_addr_ROM:				ds.l 1					; Block table pointer(Block (16x16) definitions, 8 bytes per definition)
 Level_layout_addr_ROM:				ds.l 1					; Level layout pointer

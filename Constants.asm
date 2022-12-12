@@ -441,16 +441,18 @@ Status_ObjTouch			= 6
 Status_ObjDefeated		= 7
 
 ; ---------------------------------------------------------------------------
-; Universal (used on all standard levels).
+; Universal (used on all standard levels)
 ; ---------------------------------------------------------------------------
 
+ArtTile_SpikesSprings		= $484
+ArtTile_Monitors			= $4AC
+ArtTile_StarPost			= $5E4
 ArtTile_Sonic				= $680
-ArtTile_Ring				= $6B4
-ArtTile_Ring_Sparks		= $6B8
-ArtTile_HUD				= $6BC
-ArtTile_Powerups			= $4AC
+ArtTile_Ring				= $6BC
+ArtTile_Ring_Sparks		= ArtTile_Ring+4
+ArtTile_HUD				= $6C4
 ArtTile_Shield			= $79C
-ArtTile_Shield_Sparks		= $7BB
+ArtTile_Shield_Sparks		= ArtTile_Shield+$1F
 ArtTile_DashDust			= $7F0
 
 ; ---------------------------------------------------------------------------

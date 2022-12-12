@@ -50,7 +50,7 @@ Level_Screen:
 		beq.s	.anotheld												; if not, branch
 		move.b	#1,(Debug_mode_flag).w 								; enable debug mode
 
-.anotheld	
+.anotheld
 	endif
 
 		move.w	#$8A00+255,(H_int_counter_command).w				; set palette change position (for water)
@@ -115,8 +115,9 @@ Level_Screen:
 		tst.b	(Last_star_post_hit).w							; are you starting from a starpost?
 		bne.s	.starpost									; if yes, branch
 		move.w	d0,(Ring_count).w						; clear rings
-		move.l	d0,(Timer).w								; clear time	
+		move.l	d0,(Timer).w								; clear time
 		move.b	d0,(Saved_status_secondary).w
+		move.b	d0,(Respawn_table_keep).w
 
 .starpost
 		move.b	d0,(Time_over_flag).w

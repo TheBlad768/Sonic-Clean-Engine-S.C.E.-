@@ -13,7 +13,11 @@ Load_Sprites:
 Load_Sprites_Init:
 		move.l	#Load_Sprites_Main,(Object_load_addr_RAM).w
 		move.l	#Obj_Index,(Object_index_addr).w
+		tst.b	(Respawn_table_keep).w
+		bne.s	.skip
 		clearRAM Object_respawn_table, Object_respawn_table_End
+
+.skip
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#4,d0

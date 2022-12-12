@@ -884,11 +884,11 @@ loc_1E42E:
 		bmi.w	locret_1E4D4
 		add.w	d1,d1
 		cmp.w	d1,d0
-		bhs.w	locret_1E4D4
+		bhs.s	locret_1E4D4
 
 loc_1E44C:
 		tst.b	(Reverse_gravity_flag).w
-		bne.w	loc_1E4D6
+		bne.s	loc_1E4D6
 		move.w	y_pos(a0),d0
 		sub.w	d3,d0
 
@@ -900,12 +900,12 @@ loc_1E45A:
 		addq.w	#4,d1
 		sub.w	d1,d0
 		bhi.w	locret_1E4D4
-		cmpi.w	#-$10,d0
-		blo.w	locret_1E4D4
+		cmpi.w	#-16,d0
+		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
-		bmi.w	locret_1E4D4
+		bmi.s	locret_1E4D4
 		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.w	locret_1E4D4
+		bhs.s	locret_1E4D4
 		add.w	d0,d2
 		addq.w	#3,d2
 		move.w	d2,y_pos(a1)

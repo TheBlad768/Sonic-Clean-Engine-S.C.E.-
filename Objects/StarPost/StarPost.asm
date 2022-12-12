@@ -22,7 +22,7 @@ off_2CFB6: offsetTable
 loc_2CFC0:
 		addq.b	#2,routine(a0)
 		move.l	#Map_StarPost,mappings(a0)
-		move.w	#$5EC,art_tile(a0)
+		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#bytes_to_word(80/2,16/2),height_pixels(a0)		; set height and width
 		move.w	#$280,priority(a0)
@@ -177,7 +177,11 @@ Load_Starpost_Settings:
 		move.w	(Saved_X_pos).w,(Player_1+x_pos).w
 		move.w	(Saved_Y_pos).w,(Player_1+y_pos).w
 		move.w	(Saved_ring_count).w,(Ring_count).w
+		tst.b	(Respawn_table_keep).w
+		bne.s	.skip
 		clr.w	(Ring_count).w
+
+.skip
 		move.l	(Saved_timer).w,(Timer).w
 		move.b	#59,(Timer_frame).w
 		subq.b	#1,(Timer_second).w
@@ -197,14 +201,14 @@ Load_Starpost_Settings:
 ; =============== S U B R O U T I N E =======================================
 
 sub_2D3C8:
-		moveq	#3,d1
+		moveq	#4-1,d1
 		moveq	#0,d2
 
 -		jsr	(Create_New_Sprite).w
 		bne.s	+
 		move.l	address(a0),address(a1)
 		move.l	#Map_StarpostStars,mappings(a1)
-		move.w	#$5EC,art_tile(a1)
+		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a1)
 		move.b	#4,render_flags(a1)
 		move.b	#8,routine(a1)
 		move.w	x_pos(a0),d0
@@ -254,6 +258,7 @@ loc_2D47E:	; 8
 		move.b	(Player_1+status_secondary).w,d0
 		andi.b	#$71,d0
 		move.b	d0,(Saved_status_secondary).w
+		st	(Respawn_table_keep).w
 		jsr	(Clear_SpriteRingMem).w
 
 loc_2D506:

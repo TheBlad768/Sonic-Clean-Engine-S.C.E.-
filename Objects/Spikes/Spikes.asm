@@ -25,13 +25,13 @@ Obj_Spikes:
 		move.b	(a1)+,height_pixels(a0)
 		move.l	#loc_24090,address(a0)
 		move.l	#Map_Spikes,mappings(a0)
-		move.w	#$48C,art_tile(a0)
+		move.w	#make_art_tile(ArtTile_SpikesSprings+8,0,0),art_tile(a0)
 		lsr.w	#1,d0
 		move.b	d0,mapping_frame(a0)
 		cmpi.b	#4,d0
 		blo.s		loc_23FE8
 		move.l	#loc_240E2,address(a0)
-		move.w	#$484,art_tile(a0)
+		move.w	#make_art_tile(ArtTile_SpikesSprings,0,0),art_tile(a0)
 
 loc_23FE8:
 		move.b	status(a0),d0

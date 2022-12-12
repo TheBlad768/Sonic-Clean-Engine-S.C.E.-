@@ -68,7 +68,7 @@ word_8379E:		dc.w  -$E, $1C, -$80, $C0
 
 ObjDat_HiddenMonitor:
 		dc.l Map_Monitor
-		dc.w make_art_tile(ArtTile_Powerups,0,0)
+		dc.w make_art_tile(ArtTile_Monitors,0,0)
 		dc.w $280
 		dc.b 28/2
 		dc.b 32/2

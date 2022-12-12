@@ -12,7 +12,11 @@ Load_Rings:
 
 Load_Rings_Init:
 		move.l	#Load_Rings_Main,(Rings_manager_addr_RAM).w
+		tst.b	(Respawn_table_keep).w
+		bne.s	.skip
 		clearRAM Ring_status_table, Ring_status_table_End
+
+.skip
 		clearRAM Ring_consumption_table, Ring_consumption_table_End
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0

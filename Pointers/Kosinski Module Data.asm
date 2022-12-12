@@ -16,7 +16,7 @@ ArtKosM_BossExplosion:			binclude "Objects/Explosion/KosinskiM Art/Boss Explosio
 	even
 ArtKosM_Explosion:				binclude "Objects/Explosion/KosinskiM Art/Explosion.bin"
 	even
-ArtKosM_Lamp:					binclude "Objects/StarPost/KosinskiM Art/Enemy points.bin"
+ArtKosM_EnemyPtsStarPost:		binclude "Objects/StarPost/KosinskiM Art/Enemy points.bin"
 	even
 ArtKosM_GrayButton:				binclude "Objects/Button/KosinskiM Art/Gray Button.bin"
 	even
