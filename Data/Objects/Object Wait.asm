@@ -6,7 +6,7 @@
 
 Obj_Wait:
 		tst.w	objoff_2E(a0)
-		bmi.s	Obj_Jump
+		beq.s	Obj_Jump
 		subq.w	#1,objoff_2E(a0)
 		rts
 ; ---------------------------------------------------------------------------

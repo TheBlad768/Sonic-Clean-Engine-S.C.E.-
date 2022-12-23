@@ -357,19 +357,16 @@ Player_ResetAirTimer:
 		cmpi.b	#12,air_left(a1)
 		bhi.s	.end								; branch if countdown hasn't started yet
 		move.w	(Current_music).w,d0				; prepare to play current level's music
+		tst.b	(Boss_flag).w
+		bne.s	.notinvincible						; branch if in a boss fight
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.s	.notinvincible						; branch if Sonic is not invincible
 		moveq	#signextendB(bgm_Invincible),d0	; prepare to play invincibility music
 
-.notinvincible:
-		tst.b	(Boss_flag).w
-		beq.s	.notboss							; branch if not in a boss fight
-		moveq	#signextendB(bgm_MidBoss),d0	; prepare to play boss music
-
-.notboss:
+.notinvincible
 		jsr	(SMPS_QueueSound1).w
 
-.end:
+.end
 		move.b	#30,air_left(a1)					; reset air to full
 		rts
 ; ---------------------------------------------------------------------------

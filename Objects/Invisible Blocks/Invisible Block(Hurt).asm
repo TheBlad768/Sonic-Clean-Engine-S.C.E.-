@@ -60,9 +60,8 @@ loc_1F458:
 		move.l	#loc_1F45E,address(a0)
 
 loc_1F45E:
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3
@@ -86,9 +85,8 @@ loc_1F4A2:
 ; ---------------------------------------------------------------------------
 
 loc_1F4C4:
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3
@@ -112,9 +110,8 @@ loc_1F506:
 ; ---------------------------------------------------------------------------
 
 loc_1F528:
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3

@@ -23,9 +23,8 @@ Obj_Invisible_SolidBlock:
 		move.l	#loc_1EC6C,address(a0)
 
 loc_1EC6C:
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3

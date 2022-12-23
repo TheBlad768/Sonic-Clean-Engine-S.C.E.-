@@ -12,12 +12,12 @@ Obj_Bubbler:
 ; ---------------------------------------------------------------------------
 
 off_2F946: offsetTable
-		offsetTableEntry.w loc_2F952
-		offsetTableEntry.w loc_2F9B0
-		offsetTableEntry.w loc_2F9CA
-		offsetTableEntry.w loc_2FA2C
-		offsetTableEntry.w loc_2FB8A
-		offsetTableEntry.w loc_2FA50
+		offsetTableEntry.w loc_2F952	; 0
+		offsetTableEntry.w loc_2F9B0	; 2
+		offsetTableEntry.w loc_2F9CA	; 4
+		offsetTableEntry.w loc_2FA2C	; 6
+		offsetTableEntry.w loc_2FB8A	; 8
+		offsetTableEntry.w loc_2FA50	; A
 ; ---------------------------------------------------------------------------
 
 loc_2F952:
@@ -79,7 +79,7 @@ loc_2FA14:
 		jsr	(MoveSprite2).w
 		tst.b	render_flags(a0)
 		bpl.w	loc_2FB8A
-		bra.w	loc_2FB90
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_2FA2C:
@@ -87,7 +87,7 @@ loc_2FA2C:
 		jsr	(Animate_Sprite).w
 		tst.b	render_flags(a0)
 		bpl.w	loc_2FB8A
-		bra.w	loc_2FB90
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_2FA50:
@@ -110,7 +110,7 @@ loc_2FA78:
 		bhs.s	loc_2FA78
 		move.b	d0,$34(a0)
 		andi.w	#$C,d1
-		lea	byte_2FB96(pc),a1
+		lea	Bub_BblTypes(pc),a1
 		adda.w	d1,a1
 		move.l	a1,$3C(a0)
 		subq.b	#1,$32(a0)
@@ -144,8 +144,6 @@ loc_2FABA:
 		movea.l	$3C(a0),a2
 		move.b	(a2,d0.w),$2C(a1)
 		btst	#7,$36(a0)
-
-loc_2FB04:
 		beq.s	loc_2FB34
 		jsr	(Random_Number).w
 		andi.w	#3,d0
@@ -195,8 +193,11 @@ loc_2FB8A:
 loc_2FB90:
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
+; bubble production sequence
 
-byte_2FB96:	dc.b 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0
+; 0 = small bubble, 1 =	large bubble
+
+Bub_BblTypes:	dc.b 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0
 	even
 
 ; =============== S U B R O U T I N E =======================================
@@ -209,7 +210,7 @@ sub_2FBA8:
 		move.w	x_pos(a0),d1
 		subi.w	#$10,d1
 		cmp.w	d0,d1
-		bhs.w	locret_2FC7C
+		bhs.s	locret_2FC7C
 		addi.w	#$20,d1
 		cmp.w	d0,d1
 		blo.s		locret_2FC7C

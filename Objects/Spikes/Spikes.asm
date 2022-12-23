@@ -57,9 +57,8 @@ loc_24002:
 
 loc_24090:
 		bsr.w	sub_242B6
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3
@@ -82,9 +81,8 @@ loc_240D8:
 
 loc_240E2:
 		bsr.w	sub_242B6
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3
@@ -108,9 +106,8 @@ loc_24134:
 
 loc_2413E:
 		bsr.w	sub_242B6
-		moveq	#0,d1
-		move.b	width_pixels(a0),d1
-		addi.w	#$B,d1
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1
 		moveq	#0,d2
 		move.b	height_pixels(a0),d2
 		move.w	d2,d3

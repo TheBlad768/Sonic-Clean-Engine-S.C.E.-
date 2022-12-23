@@ -848,6 +848,7 @@ CalcRoomOverHead:
 		beq.w	Sonic_CheckCeiling
 		cmpi.b	#$C0,d0
 		beq.w	CheckRightCeilingDist
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to check if Sonic/Tails is near the floor
 ; ---------------------------------------------------------------------------
@@ -860,6 +861,8 @@ Sonic_CheckFloor:
 		beq.s	+
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
 +		move.b	top_solid_bit(a0),d5
+
+Sonic_CheckFloor2:
 		move.w	y_pos(a0),d2
 		move.w	x_pos(a0),d3
 		moveq	#0,d0
@@ -900,6 +903,7 @@ loc_F7E2:
 		beq.s	+
 		move.b	d2,d3
 +		rts
+
 ; ---------------------------------------------------------------------------
 ; Checks a 16x16 block to find solid ground. May check an additional
 ; 16x16 block up for ceilings.
@@ -1015,6 +1019,7 @@ SonicOnObjHitFloor2:
 		beq.s	+
 		move.b	#0,d3
 +		rts
+
 ; ---------------------------------------------------------------------------
 ; Subroutine checking if an object should interact with the floor
 ; (objects such as a monitor Sonic bumps from underneath)
@@ -1271,8 +1276,13 @@ sub_FBEE:
 
 ObjHitCeiling:
 ObjCheckCeilingDist:
-		move.w	y_pos(a0),d2
+		moveq	#$D,d5
+
+ObjCheckCeilingDist_Part2:
 		move.w	x_pos(a0),d3
+
+ObjCheckCeilingDist_Part3:
+		move.w	y_pos(a0),d2
 		moveq	#0,d0
 		move.b	y_radius(a0),d0
 		ext.w	d0
@@ -1281,7 +1291,6 @@ ObjCheckCeilingDist:
 		lea	(Primary_Angle).w,a4
 		movea.w	#-$10,a3
 		move.w	#$800,d6
-		moveq	#$D,d5
 		bsr.w	FindFloor
 		move.b	(Primary_Angle).w,d3
 		btst	#0,d3
