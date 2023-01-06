@@ -3,6 +3,7 @@
 ; ---------------------------------------------------------------
 ; Error handling and debugging modules
 ; 2016-2017, Vladikcomper
+; See https://github.com/vladikcomper/md-modules
 ; ---------------------------------------------------------------
 ; Error handler functions and calls
 ; ---------------------------------------------------------------
