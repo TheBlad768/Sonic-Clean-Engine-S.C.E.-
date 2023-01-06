@@ -86,7 +86,7 @@ Scroll_lock:							ds.b 1					; If this is set scrolling routines aren't called
 v_screenposx:						= *
 Camera_X_pos:						ds.l 1
 v_screenposy:							= *
-Camera_Y_Pos:						ds.l 1
+Camera_Y_pos:						ds.l 1
 Camera_X_pos_copy:					ds.l 1
 Camera_Y_pos_copy:					ds.l 1
 Camera_X_pos_rounded:				ds.w 1					; rounded down to the nearest block boundary ($10th pixel)
@@ -103,7 +103,7 @@ Plane_double_update_flag:				ds.w 1					; Set when two block are to be updated i
 HScroll_Shift:						= *
 Camera_Hscroll_shift:					ds.w 3
 	if ExtendedCamera
-Camera_X_Center:					ds.w 1
+Camera_X_center:					ds.w 1
 	endif
 Screen_X_wrap_value:				ds.w 1					; Set to $FFFF
 Screen_Y_wrap_value:					ds.w 1					; Either $7FF or $FFF
@@ -127,7 +127,7 @@ Ring_consumption_count:				ds.w 1					; The number of rings being consumed curre
 Ring_consumption_list:				ds.w $3F					; The remaining part of the ring consumption table
 Ring_consumption_table_end			= *
 
-Plane_Buffer:							ds.b $480				; Used by level drawing routines
+Plane_buffer:							ds.b $480				; Used by level drawing routines
 
 v_snddriver_ram:						ds.b $400				; Start of RAM for the sound driver data
 
@@ -216,7 +216,7 @@ Player_prev_frame:					ds.b 1
 Reverse_gravity_flag:					ds.b 1
 Primary_Angle:						ds.b 1
 Secondary_Angle:						ds.b 1
-Deform_Lock:						ds.b 1
+Deform_lock:							ds.b 1
 Boss_flag:							ds.b 1					; Set if a boss fight is going on
 TitleCard_end_flag:					ds.b 1
 LevResults_end_flag:					ds.b 1

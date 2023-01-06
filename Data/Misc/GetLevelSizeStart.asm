@@ -6,13 +6,13 @@
 
 Get_LevelSizeStart:
 		moveq	#0,d0
-		move.b	d0,(Deform_Lock).w
-		move.b	d0,(Scroll_Lock).w
+		move.b	d0,(Deform_lock).w
+		move.b	d0,(Scroll_lock).w
 		move.b	d0,(Fast_V_scroll_flag).w
 		bsr.w	Change_ActSizes
 		move.w	#$60,(Distance_from_screen_top).w
 	if	ExtendedCamera
-		move.w	#320/2,(Camera_X_Center).w
+		move.w	#320/2,(Camera_X_center).w
 	endif
 		move.w	#-1,d0
 		move.w	d0,(Screen_X_wrap_value).w

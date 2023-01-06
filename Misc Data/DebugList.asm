@@ -35,4 +35,4 @@ DebugList: offsetTable
 	dbglistobj Obj_Button,	Map_Button, 0, 2, make_art_tile($47E,0,0)
 	dbglistobj Obj_StarPost, Map_StarPost, 1, 0, make_art_tile(ArtTile_StarPost+8,0,0)
 	dbglistobj Obj_EggCapsule, Map_EggCapsule, 1, 0, make_art_tile($43E,0,0)
-.DEZ1_End
+.DEZ1_end

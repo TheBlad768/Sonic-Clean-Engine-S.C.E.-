@@ -14,10 +14,10 @@ Load_Rings_Init:
 		move.l	#Load_Rings_Main,(Rings_manager_addr_RAM).w
 		tst.b	(Respawn_table_keep).w
 		bne.s	.skip
-		clearRAM Ring_status_table, Ring_status_table_End
+		clearRAM Ring_status_table, Ring_status_table_end
 
 .skip
-		clearRAM Ring_consumption_table, Ring_consumption_table_End
+		clearRAM Ring_consumption_table, Ring_consumption_table_end
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#4,d0
@@ -304,7 +304,7 @@ CollectRing:
 
 Clear_SpriteRingMem:
 		lea	(Dynamic_object_RAM).w,a1
-		moveq	#((Dynamic_object_RAM_End-Dynamic_object_RAM)/object_size)-1,d1
+		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d1
 
 -		lea	next_object(a1),a1
 		tst.l	address(a1)

@@ -10,7 +10,7 @@ Process_Sprites:
 		bhs.s	Process_Sprites_FreezeObject	; if yes, branch
 
 Process_Sprites_Skip:
-		moveq	#((Object_RAM_End-Object_RAM)/object_size)-1,d7
+		moveq	#((Object_RAM_end-Object_RAM)/object_size)-1,d7
 
 Process_Sprites_Loop:
 		move.l	address(a0),d0
@@ -30,9 +30,9 @@ Process_Sprites_FreezeObject:
 		beq.s	Process_Sprites_Skip
 		moveq	#((Dynamic_object_RAM-Object_RAM)/object_size)-1,d7
 		bsr.s	Process_Sprites_Loop
-		moveq	#((Dynamic_object_RAM_End-Dynamic_object_RAM)/object_size)-1,d7
+		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d7
 		bsr.s	Process_Sprites_FreezeObject_Loop
-		moveq	#((Object_RAM_End-Dynamic_object_RAM_End)/object_size)-1,d7
+		moveq	#((Object_RAM_end-Dynamic_object_RAM_end)/object_size)-1,d7
 		bra.s	Process_Sprites_Loop
 ; ---------------------------------------------------------------------------
 

@@ -120,10 +120,10 @@ locVRAM:	macro loc,controlport
     endm
 
 ; macro for a debug object list header
-; must be on the same line as a label that has a corresponding _End label later
+; must be on the same line as a label that has a corresponding _end label later
 dbglistheader macro {INTLABEL}
 __LABEL__ label *
-	dc.w ((__LABEL___End - __LABEL__ - 2) / $A)
+	dc.w ((__LABEL___end - __LABEL__ - 2) / $A)
     endm
 
 ; macro to define debug list object data
@@ -671,7 +671,7 @@ zoneanimcur := "__LABEL__"
 watertransheader macro {INTLABEL}
 __LABEL__ label *
 ; Number of entries in list minus one
-	dc.w (((__LABEL___End - __LABEL__ - 2) / 2) - 1)
+	dc.w (((__LABEL___end - __LABEL__ - 2) / 2) - 1)
 	endm
 
 zoneanimend macro
@@ -807,11 +807,11 @@ mappingsTableEntry macro ptr
 spriteHeader macro {INTLABEL}
 __LABEL__ label *
 	if SonicMappingsVer==1
-	dc.b ((__LABEL___End - __LABEL__ - 1) / 5)
+	dc.b ((__LABEL___end - __LABEL__ - 1) / 5)
 	elseif SonicMappingsVer==2
-	dc.w ((__LABEL___End - __LABEL__ - 2) / 8)
+	dc.w ((__LABEL___end - __LABEL__ - 2) / 8)
 	else
-	dc.w ((__LABEL___End - __LABEL__ - 2) / 6)
+	dc.w ((__LABEL___end - __LABEL__ - 2) / 6)
 	endif
     endm
 
@@ -856,11 +856,11 @@ spritePiece2P macro xpos,ypos,width,height,tile,xflip,yflip,pal,pri,tile2,xflip2
 dplcHeader macro {INTLABEL}
 __LABEL__ label *
 	if SonicMappingsVer==1
-	dc.b ((__LABEL___End - __LABEL__ - 1) / 2)
+	dc.b ((__LABEL___end - __LABEL__ - 1) / 2)
 	elseif SonicMappingsVer==2
-	dc.w ((__LABEL___End - __LABEL__ - 2) / 2)
+	dc.w ((__LABEL___end - __LABEL__ - 2) / 2)
 	else
-	dc.w ((__LABEL___End - __LABEL__ - 4) / 2)
+	dc.w ((__LABEL___end - __LABEL__ - 4) / 2)
 	endif
     endm
 
@@ -876,7 +876,7 @@ dplcEntry macro tiles,offset
 ; So to avoid having to set and reset SonicMappingsVer I'll just make special macros
 s3kPlayerDplcHeader macro {INTLABEL}
 __LABEL__ label *
-	dc.w ((__LABEL___End - __LABEL__ - 2) / 2)
+	dc.w ((__LABEL___end - __LABEL__ - 2) / 2)
     endm
 
 s3kPlayerDplcEntry macro tiles,offset
@@ -995,10 +995,10 @@ LoadMapUnc	macro offset,size,arg,loc,width,height
 ; ---------------------------------------------------------------------------
 
 ; macro for a pattern load request list header
-; must be on the same line as a label that has a corresponding _End label later
+; must be on the same line as a label that has a corresponding _end label later
 plrlistheader macro {INTLABEL}
 __LABEL__ label *
-	dc.w (((__LABEL___End - __LABEL__Plc) / 6) - 1)
+	dc.w (((__LABEL___end - __LABEL__Plc) / 6) - 1)
 __LABEL__Plc:
     endm
 
@@ -1067,9 +1067,9 @@ offsetEntry macro ptr
     endm
 ; ---------------------------------------------------------------------------
 
-dScroll_header macro {INTLABEL}
+dScroll_Header macro {INTLABEL}
 __LABEL__ label *
-	dc.w (((__LABEL___End - __LABEL__Plc) / 6) - 1)
+	dc.w (((__LABEL___end - __LABEL__Plc) / 6) - 1)
 __LABEL__Plc:
     endm
 

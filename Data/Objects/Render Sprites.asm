@@ -16,7 +16,7 @@ Init_SpriteTable:
 		addq.w	#8,a0
 		dbf	d7,-
 		move.b	d0,-5(a0)
-		clearRAM Sprite_table_input, Sprite_table_input_End
+		clearRAM Sprite_table_input, Sprite_table_input_end
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -95,7 +95,7 @@ Render_Sprites_NextObj:
 
 Render_Sprites_NextLevel:
 		lea	$80(a5),a5							; load next priority level
-		cmpa.w	#Sprite_table_input_End,a5
+		cmpa.w	#Sprite_table_input_end,a5
 		blo.w	Render_Sprites_LevelLoop
 		move.w	d7,d6
 		bmi.s	+

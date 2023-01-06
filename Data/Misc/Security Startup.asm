@@ -179,7 +179,7 @@ Game_Program:
 		bne.s	.wait	; wait till a DMA is completed
 		lea	((RAM_start&$FFFFFF)).l,a6
 		moveq	#0,d7
-		move.w	#bytesToLcnt(System_Stack&$FFFF),d6
+		move.w	#bytesToLcnt(System_stack&$FFFF),d6
 
 .clear
 		move.l	d7,(a6)+

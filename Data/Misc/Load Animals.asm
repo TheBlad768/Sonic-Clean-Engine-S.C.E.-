@@ -26,4 +26,4 @@ Offs_PLCAnimals: offsetTable
 PLCAnimals_DEZ1: plrlistheader
 		plreq $580, ArtKosM_BlueFlicky
 		plreq $592, ArtKosM_Chicken
-PLCAnimals_DEZ1_End
+PLCAnimals_DEZ1_end

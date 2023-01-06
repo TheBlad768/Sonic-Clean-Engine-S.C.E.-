@@ -307,7 +307,7 @@ AniRaw_SignpostSparkle:
 
 PLC_EndSignStuff: plrlistheader
 		plreq $5E2, ArtKosM_SignpostStub
-PLC_EndSignStuff_End
+PLC_EndSignStuff_end
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Signpost/Object Data/DPLC - End Signs.asm"

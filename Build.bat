@@ -13,13 +13,14 @@ REM // '-xx' shows the most detailed error output
 REM // '-q' shuts up AS
 REM // '-c' outputs a shared file (Sonic.h)
 REM // '-A' gives us a small speedup
+REM // '-U' forces case-sensitivity
 REM // '-L' listing to file
 REM // '-i .' allows (b)include paths to be absolute
 set AS_MSGPATH=Win32/as
 set USEANSI=n
 
 REM // allow the user to choose to print error messages out by supplying the -pe parameter
-"Win32/as/asw.exe" -xx -q -c -A -L -i . Sonic.asm
+"Win32/as/asw.exe" -xx -q -c -A -L -U -i . Sonic.asm
 IF NOT EXIST Sonic.p pause & exit
 
 "Win32/s1p2bin" Sonic.p Sonic.gen Sonic.h

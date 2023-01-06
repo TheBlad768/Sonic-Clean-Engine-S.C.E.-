@@ -643,7 +643,7 @@ AniRaw_86BF6:
 PLC_EggCapsule: plrlistheader
 		plreq $43E, ArtKosM_EggCapsule
 		plreq $5A0, ArtKosM_Explosion
-PLC_EggCapsule_End
+PLC_EggCapsule_end
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Egg Capsule/Object Data/Map - Egg Capsule.asm"

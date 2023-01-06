@@ -57,7 +57,7 @@ loc_1C0D2:
 loc_1C0D6:
 		sub.w	(a1),d0
 	if	ExtendedCamera
-		sub.w	(Camera_X_Center).w,d0
+		sub.w	(Camera_X_center).w,d0
 		blt.s		loc_1C0E8
 		bge.s	loc_1C0FC
 	else
@@ -114,7 +114,7 @@ loc_1C112:
 ; ---------------------------------------------------------------------------
 
 Camera_Extended:
-		move.w	Camera_X_Center-Camera_X_pos(a1),d1		; Get camera X center position
+		move.w	Camera_X_center-Camera_X_pos(a1),d1		; Get camera X center position
 		move.w	ground_vel(a0),d0						; Get how fast we are moving
 		bpl.s	.PosInertia
 		neg.w	d0
@@ -150,7 +150,7 @@ Camera_Extended:
 		subq.w	#2,d1									; Pan back to the left
 
 .SetPanVal:
-		move.w	d1,Camera_X_Center-Camera_X_pos(a1)		; Update camera X center position
+		move.w	d1,Camera_X_center-Camera_X_pos(a1)		; Update camera X center position
 		rts
 
 	endif

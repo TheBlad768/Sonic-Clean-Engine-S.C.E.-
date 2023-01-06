@@ -21,7 +21,7 @@ locret_1ABDA:
 ; ---------------------------------------------------------------------------
 
 loc_1ABDC:
-		cmpa.w	#(Sprite_table_input_End-$80),a1
+		cmpa.w	#(Sprite_table_input_end-$80),a1
 		beq.s	locret_1ABDA
 		lea	$80(a1),a1
 		bra.s	loc_1ABCE

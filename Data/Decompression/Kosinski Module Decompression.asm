@@ -98,7 +98,7 @@ Process_Kos_Module_Queue_Init:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Kos_Module_Queue:
-		clearRAM Kos_decomp_queue_count, Kos_module_queue_End	; Clear the KosM bytes
+		clearRAM Kos_decomp_queue_count, Kos_module_queue_end	; Clear the KosM bytes
 		rts
 ; ---------------------------------------------------------------------------
 ; Processes the first module on the queue
@@ -110,7 +110,7 @@ Process_Kos_Module_Queue:
 		tst.w	(Kos_modules_left).w
 		beq.s	.Done
 		bmi.s	.DecompressionStarted
-		cmpi.w	#(Kos_decomp_queue_End-Kos_decomp_queue)/8,(Kos_decomp_queue_count).w
+		cmpi.w	#(Kos_decomp_queue_end-Kos_decomp_queue)/8,(Kos_decomp_queue_count).w
 		bhs.s	.Done						; branch if the Kosinski decompression queue is full
 		movea.l	(Kos_module_queue).w,a1
 		lea	(Kos_decomp_buffer).w,a2
@@ -152,7 +152,7 @@ Process_Kos_Module_Queue:
 		bne.s	.Done						; return if this wasn't the last module
 		lea	(Kos_module_queue).w,a0
 		lea	(Kos_module_queue+6).w,a1
-	rept bytesToXcnt(Kos_module_queue_End-Kos_module_queue,8)
+	rept bytesToXcnt(Kos_module_queue_end-Kos_module_queue,8)
 		move.l	(a1)+,(a0)+					; otherwise, shift all entries up
 		move.l	(a1)+,(a0)+
 	endr
@@ -236,7 +236,7 @@ Process_Kos_Queue:
 		beq.s	.Done								; branch if there aren't any entries remaining in the queue
 		lea	(Kos_decomp_queue).w,a0
 		lea	(Kos_decomp_queue+8).w,a1				; otherwise, shift all entries up
-	rept bytesToXcnt(Kos_decomp_queue_End-Kos_decomp_queue,8)
+	rept bytesToXcnt(Kos_decomp_queue_end-Kos_decomp_queue,8)
 		move.l	(a1)+,(a0)+
 		move.l	(a1)+,(a0)+
 	endr

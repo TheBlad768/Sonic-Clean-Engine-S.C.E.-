@@ -12,8 +12,8 @@ Clear_DisplayData:
 		startZ80
 		clr.l	(V_scroll_value).w
 		clr.l	(H_scroll_value).w
-		clearRAM Sprite_table_buffer, Sprite_table_buffer_End
-		clearRAM H_scroll_buffer, H_scroll_buffer_End
+		clearRAM Sprite_table_buffer, Sprite_table_buffer_end
+		clearRAM H_scroll_buffer, H_scroll_buffer_end
 		bra.w	Init_SpriteTable
 
 ; ---------------------------------------------------------------------------
