@@ -64,9 +64,16 @@ Sonic_Init:	; Routine 0
 		move.w	#$80,Sonic_Knux_deceleration-Sonic_Knux_top_speed(a4)
 		tst.b	(Last_star_post_hit).w
 		bne.s	Sonic_Init_Continued
+
 		; only happens when not starting at a checkpoint:
 		move.w	#make_art_tile(ArtTile_Sonic,0,0),art_tile(a0)
 		move.w	#bytes_to_word($C,$D),top_solid_bit(a0)
+
+		; only happens when not starting at a Special Stage ring:
+		move.w	x_pos(a0),(Saved_X_pos).w
+		move.w	y_pos(a0),(Saved_Y_pos).w
+		move.w	art_tile(a0),(Saved_art_tile).w
+		move.w	top_solid_bit(a0),(Saved_solid_bits).w
 
 Sonic_Init_Continued:
 		clr.b	flips_remaining(a0)
@@ -2357,7 +2364,7 @@ locret_12764:
 loc_127C0:
 		move.b	flip_type(a0),d1
 		andi.w	#$7F,d1
-		bne.w	loc_12872
+		bne.s	loc_12872
 		move.b	flip_angle(a0),d0
 		moveq	#0,d1
 		move.b	status(a0),d2

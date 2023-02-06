@@ -54,7 +54,7 @@ loc_83760:
 		move.b	#2,routine(a0)
 		move.b	#4,objoff_3C(a0)
 		move.w	#-$500,y_vel(a0)
-		sfx	sfx_BubbleShield
+		sfx	sfx_BubbleAttack
 		bclr	#0,render_flags(a0)
 		beq.s	loc_83798
 		bset	#7,art_tile(a0)

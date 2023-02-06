@@ -8,6 +8,7 @@ Obj_EndSignControl:
 		move.l	#Obj_Wait,address(a0)
 		st	(Level_end_flag).w		; End of level is in effect
 		clr.b	(TitleCard_end_flag).w
+		clr.b	(LevResults_end_flag).w
 		bset	#4,$38(a0)
 		move.w	#$77,$2E(a0)
 		move.l	#Obj_EndSignControlDoSign,$34(a0)
@@ -18,6 +19,7 @@ Obj_EndSignControl:
 
 Obj_EndSignControlDoSign:
 		move.l	#Obj_EndSignControlAwaitStart,address(a0)
+		clr.b	(Boss_flag).w
 		lea	Child6_EndSign(pc),a2
 		jsr	(CreateChild6_Simple).w
 		lea	PLC_EndSignStuff(pc),a5

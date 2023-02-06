@@ -429,6 +429,7 @@ Restore_PlayerControl2:
 
 StartNewLevel:
 		move.w	d0,(Current_zone_and_act).w
+		move.w	d0,(Apparent_zone_and_act).w
 		st	(Restart_level_flag).w
 		clr.b	(Last_star_post_hit).w
 
