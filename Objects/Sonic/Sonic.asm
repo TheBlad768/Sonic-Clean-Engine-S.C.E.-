@@ -409,18 +409,26 @@ loc_11056:
 ; ---------------------------------------------------------------------------
 
 Sonic_ChgFallAnim:
-		cmpi.b	#id_Roll,anim(a0)				; rolling animation?
-		beq.s	Sonic_ChgFallAnim_Return 	; if yes, branch
-		tst.b	anim(a0)						; walk animation?
-		bne.s	Sonic_ChgFallAnim_Return 	; if not, branch
+		btst	#Status_Roll,status(a0)			; is Sonic rolling?
+		bne.s	.return					 	; if yes, branch
 		btst	#Status_OnObj,status(a0)			; is Sonic standing on an object?
-		bne.s	Sonic_ChgFallAnim_Return 	; if yes, branch
-		move.b	(Ctrl_1_pressed_logical).w,d0	; get button presses
-		andi.b	#btnABC,d0					; read only A/B/C buttons
-		beq.s	Sonic_ChgFallAnim_Return
+		bne.s	.return 						; if yes, branch
+		tst.b	flip_angle(a0)					; flip angle?
+		bne.s	.return 						; if yes, branch
+		tst.b	anim(a0)						; walk animation?
+		bne.s	.return 						; if not, branch
+		moveq	#btnABC,d0					; read only A/B/C buttons
+		and.b	(Ctrl_1_pressed_logical).w,d0	; get button presses
+		beq.s	.return
+		bset	#Status_Roll,status(a0)
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
 		move.b	#id_Roll,anim(a0)				; use "rolling"	animation
+		addq.w	#5,y_pos(a0)
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.return
+		subi.w	#5+5,y_pos(a0)
 
-Sonic_ChgFallAnim_Return:
+.return
 		rts
 
 	endif
