@@ -7,20 +7,20 @@ ptrsize :=	4
 idstart :=	1
 ; $00 is reserved for silence
 
-bgm__First = idstart
+mus__First = idstart
 ; Levels
-bgm_DEZ1 =			SMPS_id(ptr_mus_dez1)
+mus_DEZ1 =			SMPS_id(ptr_mus_dez1)
 
 ; Bosses
-bgm_MidBoss =		SMPS_id(ptr_mus_boss)
-bgm_ZoneBoss =		SMPS_id(ptr_mus_boss2)
+mus_MidBoss =		SMPS_id(ptr_mus_boss)
+mus_ZoneBoss =		SMPS_id(ptr_mus_boss2)
 
 ; Misc
-bgm_Invincible =		SMPS_id(ptr_mus_invin)
-bgm_GotThrough =	SMPS_id(ptr_mus_through)
-bgm_Drowning =		SMPS_id(ptr_mus_drowning)
+mus_Invincible =		SMPS_id(ptr_mus_invin)
+mus_GotThrough =	SMPS_id(ptr_mus_through)
+mus_Drowning =		SMPS_id(ptr_mus_drowning)
 
-bgm__Last =			SMPS_id(ptr_musend)-1
+mus__Last =			SMPS_id(ptr_musend)-1
 
 ; Sound effects
 offset :=	SoundIndex
@@ -68,9 +68,9 @@ idstart :=	$FA
 
 flg__First = idstart
 sfx_Fade =			SMPS_id(ptr_flgFA)
-bgm_Fade =			SMPS_id(ptr_flgFB)
+mus_Fade =			SMPS_id(ptr_flgFB)
 sfx_Sega =			SMPS_id(ptr_flgFC)
-bgm_Speedup =		SMPS_id(ptr_flgFD)
-bgm_Slowdown =		SMPS_id(ptr_flgFE)
-bgm_Stop =			SMPS_id(ptr_flgFF)
+mus_Speedup =		SMPS_id(ptr_flgFD)
+mus_Slowdown =		SMPS_id(ptr_flgFE)
+mus_Stop =			SMPS_id(ptr_flgFF)
 flg__Last =			SMPS_id(ptr_flgend)-1

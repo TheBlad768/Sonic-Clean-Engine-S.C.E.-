@@ -225,7 +225,7 @@ AirCountdown_Countdown:
 		cmpi.w	#12,d0
 		bhi.s	loc_1850A
 		bne.s	loc_184E8
-		music	bgm_Drowning	; Drowning music
+		music	mus_Drowning	; Drowning music
 
 loc_184E8:
 		subq.b	#1,objoff_36(a0)
@@ -361,7 +361,7 @@ Player_ResetAirTimer:
 		bne.s	.notinvincible						; branch if in a boss fight
 		btst	#Status_Invincible,status_secondary(a1)
 		beq.s	.notinvincible						; branch if Sonic is not invincible
-		moveq	#signextendB(bgm_Invincible),d0	; prepare to play invincibility music
+		moveq	#signextendB(mus_Invincible),d0	; prepare to play invincibility music
 
 .notinvincible
 		jsr	(SMPS_QueueSound1).w

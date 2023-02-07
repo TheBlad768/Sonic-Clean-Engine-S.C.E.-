@@ -298,7 +298,7 @@ Monitor_Give_Super_Sneakers:
 		move.w	#$C00,(Sonic_Knux_top_speed).w
 		move.w	#$18,(Sonic_Knux_acceleration).w
 		move.w	#$80,(Sonic_Knux_deceleration).w
-		music	bgm_Speedup,1						; speed up the music
+		music	mus_Speedup,1					; speed up the music
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Fire_Shield:
@@ -334,7 +334,7 @@ Monitor_Give_Invincibility:
 		bne.s	.skipmusic
 		cmpi.b	#12,air_left(a1)
 		bls.s		.skipmusic
-		music	bgm_Invincible					; if invincible, play invincibility music
+		music	mus_Invincible					; if invincible, play invincibility music
 
 .skipmusic:
 		move.l	#Obj_Invincibility,(v_Invincibility_stars).w

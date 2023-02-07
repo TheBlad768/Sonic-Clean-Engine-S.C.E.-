@@ -4,7 +4,7 @@
 
 ; Constants
 LevelSelect_Offset:				= *
-LevelSelect_VRAM:				= $7B8
+LevelSelect_VRAM:				= 0
 
 ; Variables
 LevelSelect_ZoneCount:			= ZoneCount
@@ -13,7 +13,7 @@ LevelSelect_MusicTestCount:		= 8
 LevelSelect_SoundTestCount:		= LevelSelect_MusicTestCount+1
 LevelSelect_SampleTestCount:		= LevelSelect_SoundTestCount+1
 LevelSelect_MaxCount:			= 11
-LevelSelect_MaxMusicNumber:		= (bgm__Last-bgm__First)
+LevelSelect_MaxMusicNumber:		= (mus__Last-mus__First)
 LevelSelect_MaxSoundNumber:		= (sfx__Last-sfx__First)
 LevelSelect_MaxSampleNumber:	= (dac__Last-dac__First)
 
@@ -33,7 +33,7 @@ vLevelSelect_HCount:				ds.w $10
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_Screen:
-		sfx	bgm_Stop
+		music	mus_Stop
 		jsr	(Clear_Kos_Module_Queue).w
 		jsr	(Pal_FadeToBlack).w
 		disableInts
@@ -58,7 +58,7 @@ LevelSelect_Screen:
 		move.b	d0,(Level_started_flag).w
 		ResetDMAQueue
 		lea	(ArtKosM_LevelSelectText).l,a1
-		move.w	#tiles_to_bytes($7C0),d2
+		move.w	#tiles_to_bytes(1),d2
 		jsr	(Queue_Kos_Module).w
 		lea	(Pal_LevelSelect).l,a1
 		lea	(Target_palette).w,a2
@@ -164,7 +164,7 @@ LevelSelect_LoadMusicNumber:
 		andi.b	#btnABC,d1
 		beq.s	LevelSelect_LoadLevel_Return
 		move.w	d3,d0
-		addq.w	#bgm__First,d0		; $00 is reserved for silence
+		addq.w	#mus__First,d0		; $00 is reserved for silence
 		jmp	(SMPS_QueueSound1).w	; play music
 
 ; ---------------------------------------------------------------------------
@@ -443,7 +443,7 @@ LevelSelect_MarkFields:
 		addq.b	#7,d0
 
 .skipsymbols
-		addq.b	#8,d0
+		addq.b	#1,d0
 		add.w	d3,d0
 		move.w	d0,VDP_data_port-VDP_data_port(a6)
 

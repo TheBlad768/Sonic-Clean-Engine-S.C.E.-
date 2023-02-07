@@ -67,10 +67,10 @@ Play_Sound_2		= SMPS_QueueSound2
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 
 ; ---SOUND ID BOUNDARIES---
-MusID__First		= bgm__First
+MusID__First	= mus__First
 ;	| ID of your first song
 ;
-MusID__End		= bgm__Last+1
+MusID__End		= mus__Last+1
 ;	| ID of your last song+1
 ;
 SndID__First		= sfx__First

@@ -186,7 +186,7 @@ Go_CheckPlayerRelease:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_Transition:
-		sfx	bgm_Fade	; fade out music
+		music	mus_Fade	; fade out music
 		move.l	#Song_Fade_Transition_Wait,address(a0)
 
 Song_Fade_Transition_Return:
@@ -204,7 +204,7 @@ Song_Fade_Transition_Wait:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_ToLevelMusic:
-		sfx	bgm_Fade	; fade out music
+		music	mus_Fade	; fade out music
 		move.l	#Song_Fade_ToLevelMusic_Wait,address(a0)
 
 Song_Fade_ToLevelMusic_Return:
@@ -228,7 +228,7 @@ Restore_LevelMusic:
 		move.w	d0,(Current_music).w
 		btst	#Status_Invincible,(Player_1+status_secondary).w
 		beq.s	+
-		moveq	#signextendB(bgm_Invincible),d0	; if invincible, play invincibility music
+		moveq	#signextendB(mus_Invincible),d0	; if invincible, play invincibility music
 +		jmp	(SMPS_QueueSound1).w				; play music
 
 ; =============== S U B R O U T I N E =======================================

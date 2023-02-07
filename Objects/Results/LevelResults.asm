@@ -19,7 +19,7 @@ LevelResults_Index: offsetTable
 ; ---------------------------------------------------------------------------
 
 Obj_LevelResultsInit:
-		sfx	bgm_Fade								; fade out music
+		music	mus_Fade							; fade out music
 		lea	(ArtKosM_ResultsGeneral).l,a1
 		move.w	#tiles_to_bytes($480),d2
 		jsr	(Queue_Kos_Module).w					; General art
@@ -109,7 +109,7 @@ Obj_LevelResultsWait:
 		cmpi.w	#$121,$2E(a0)
 		bne.s	locret_2DC9E						; Play after eh, a second or so
 		move.b	#30,(Player_1+air_left).w				; Reset air
-		music	bgm_GotThrough,1					; Play level complete theme
+		music	mus_GotThrough,1					; Play level complete theme
 ; ---------------------------------------------------------------------------
 
 loc_2DC5C:
