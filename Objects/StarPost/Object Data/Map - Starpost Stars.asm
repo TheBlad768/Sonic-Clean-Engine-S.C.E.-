@@ -1,7 +1,7 @@
-Map_StarpostStars:
-		dc.w word_2D3B0-Map_StarpostStars
-		dc.w word_2D3B8-Map_StarpostStars
-		dc.w word_2D3C0-Map_StarpostStars
+Map_StarPostStars:
+		dc.w word_2D3B0-Map_StarPostStars
+		dc.w word_2D3B8-Map_StarPostStars
+		dc.w word_2D3C0-Map_StarPostStars
 word_2D3B0:	dc.w 1
 		dc.b  $F8,   5,	  0,   0, $FF, $F8
 word_2D3B8:	dc.w 1

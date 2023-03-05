@@ -19,7 +19,7 @@ Get_LevelSizeStart:
 		move.w	d0,(Screen_Y_wrap_value).w
 		tst.b	(Last_star_post_hit).w				; have any lampposts been hit?
 		beq.s	LevSz_StartLoc				; if not, branch
-		bsr.w	Load_Starpost_Settings
+		bsr.w	Load_StarPost_Settings
 		move.w	(Player_1+x_pos).w,d1
 		move.w	(Player_1+y_pos).w,d0
 		bra.s	LevSz_SkipStartPos

@@ -68,7 +68,7 @@ sub_2D028:
 		addi.w	#$40,d0
 		cmpi.w	#$68,d0
 		bhs.w	locret_2D0E8
-		sfx	sfx_Starpost
+		sfx	sfx_StarPost
 		jsr	(Create_New_Sprite).w
 		bne.s	loc_2D0D0
 		move.l	#Obj_StarPost,address(a1)
@@ -111,7 +111,7 @@ locret_2D0F6:
 ; ---------------------------------------------------------------------------
 
 loc_2D0F8:
-		lea	Ani_Starpost(pc),a1
+		lea	Ani_StarPost(pc),a1
 		jsr	(Animate_Sprite).w
 		jmp	(Sprite_OnScreen_Test).w
 ; ---------------------------------------------------------------------------
@@ -170,7 +170,7 @@ Save_Level_Data:
 ; =============== S U B R O U T I N E =======================================
 
 Lamp_LoadInfo:
-Load_Starpost_Settings:
+Load_StarPost_Settings:
 		move.b	(Saved_last_star_post_hit).w,(Last_star_post_hit).w
 		move.w	(Saved_zone_and_act).w,(Current_zone_and_act).w
 		move.w	(Saved_apparent_zone_and_act).w,(Apparent_zone_and_act).w
@@ -207,7 +207,7 @@ sub_2D3C8:
 -		jsr	(Create_New_Sprite).w
 		bne.s	+
 		move.l	address(a0),address(a1)
-		move.l	#Map_StarpostStars,mappings(a1)
+		move.l	#Map_StarPostStars,mappings(a1)
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a1)
 		move.b	#4,render_flags(a1)
 		move.b	#8,routine(a1)
@@ -348,7 +348,7 @@ loc_2D5C0:
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
-		include "Objects/StarPost/Object Data/Anim - Starpost.asm"
-		include "Objects/StarPost/Object Data/Map - Starpost.asm"
-		include "Objects/StarPost/Object Data/Map - Starpost Stars.asm"
+		include "Objects/StarPost/Object Data/Anim - StarPost.asm"
+		include "Objects/StarPost/Object Data/Map - StarPost.asm"
+		include "Objects/StarPost/Object Data/Map - StarPost Stars.asm"
 		include "Objects/StarPost/Object Data/Map - Enemy Points.asm"

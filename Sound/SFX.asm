@@ -86,7 +86,7 @@ Sound51:		include	"Sound/SFX/Snd - Spike Move.asm"
 	even
 Sound52:	include	"Sound/SFX/Snd - Drown.asm"
 	even
-Sound53:	include	"Sound/SFX/Snd - Starpost.asm"
+Sound53:	include	"Sound/SFX/Snd - StarPost.asm"
 	even
 Sound54:	include	"Sound/SFX/Snd - Spring.asm"
 	even
