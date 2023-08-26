@@ -78,11 +78,11 @@ Level_Screen:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#6,d0
-		lea	(LevelMusic_Playlist).l,a1									; load music playlist
+		lea	(LevelMusic_Playlist).l,a1											; load music playlist
 		move.b	(a1,d0.w),d0
 		move.w	d0,(Current_music).w
-		jsr	(SMPS_QueueSound1).w									; play music
-		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)).w	; load title card object
+		jsr	(SMPS_QueueSound1).w											; play music
+		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)+address).w	; load title card object
 
 .wait
 		move.b	#VintID_Fade,(V_int_routine).w
@@ -132,7 +132,7 @@ Level_Screen:
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		tst.b	(Water_flag).w
 		beq.s	.notwater2
-		move.l	#Obj_WaterWave,(v_WaterWave).w
+		move.l	#Obj_WaterWave,(v_WaterWave+address).w
 
 .notwater2
 		bsr.w	SpawnLevelMainSprites
@@ -179,10 +179,10 @@ Level_Screen:
 ; =============== S U B R O U T I N E =======================================
 
 SpawnLevelMainSprites:
-		move.l	#Obj_ResetCollisionResponseList,(Reserved_object_3).w
-		move.l	#Obj_Sonic,(Player_1).w
-		move.l	#Obj_DashDust,(v_Dust).w
-		move.l	#Obj_Insta_Shield,(v_Shield).w
+		move.l	#Obj_ResetCollisionResponseList,(Reserved_object_3+address).w
+		move.l	#Obj_Sonic,(Player_1+address).w
+		move.l	#Obj_DashDust,(v_Dust+address).w
+		move.l	#Obj_Insta_Shield,(v_Shield+address).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================

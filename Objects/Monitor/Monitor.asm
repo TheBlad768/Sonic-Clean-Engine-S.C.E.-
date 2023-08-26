@@ -305,7 +305,7 @@ Monitor_Give_Fire_Shield:
 		andi.b	#$8E,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_FireShield,status_secondary(a1)
-		move.l	#Obj_Fire_Shield,(v_Shield).w
+		move.l	#Obj_Fire_Shield,(v_Shield+address).w
 		sfx	sfx_FireShield,1
 ; ---------------------------------------------------------------------------
 
@@ -313,7 +313,7 @@ Monitor_Give_Lightning_Shield:
 		andi.b	#$8E,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
-		move.l	#Obj_Lightning_Shield,(v_Shield).w
+		move.l	#Obj_Lightning_Shield,(v_Shield+address).w
 		sfx	sfx_LightningShield,1
 ; ---------------------------------------------------------------------------
 
@@ -321,7 +321,7 @@ Monitor_Give_Bubble_Shield:
 		andi.b	#$8E,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_BublShield,status_secondary(a1)
-		move.l	#Obj_Bubble_Shield,(v_Shield).w
+		move.l	#Obj_Bubble_Shield,(v_Shield+address).w
 		sfx	sfx_BubbleShield,1
 ; ---------------------------------------------------------------------------
 
@@ -337,7 +337,7 @@ Monitor_Give_Invincibility:
 		music	mus_Invincible					; if invincible, play invincibility music
 
 .skipmusic:
-		move.l	#Obj_Invincibility,(v_Invincibility_stars).w
+		move.l	#Obj_Invincibility,(v_Invincibility_stars+address).w
 		rts
 ; ---------------------------------------------------------------------------
 

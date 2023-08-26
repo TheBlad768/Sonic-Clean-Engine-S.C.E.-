@@ -271,7 +271,7 @@ Sonic_InWater:
 		addq.b	#1,(Water_entered_counter).w
 		movea.w	a0,a1
 		bsr.w	Player_ResetAirTimer
-		move.l	#Obj_Air_CountDown,(v_Breathing_bubbles).w		; load Sonic's breathing bubbles
+		move.l	#Obj_Air_CountDown,(v_Breathing_bubbles+address).w	; load Sonic's breathing bubbles
 		move.b	#$81,(v_Breathing_bubbles+subtype).w
 		move.w	#$300,Sonic_Knux_top_speed-Sonic_Knux_top_speed(a4)
 		move.w	#6,Sonic_Knux_acceleration-Sonic_Knux_top_speed(a4)
