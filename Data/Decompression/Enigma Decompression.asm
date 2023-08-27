@@ -139,6 +139,7 @@ Eni_Decomp_End:
 .even_loc:
 		movem.l	(sp)+,d0-d7/a1-a5
 		rts
+
 ; ---------------------------------------------------------------------------
 ; Part of the Enigma decompressor
 ; Fetches an inline copy value and stores it in d1
@@ -247,6 +248,7 @@ Eni_Decomp_AndVals:
 		dc.w $3FFF
 		dc.w $7FFF
 		dc.w $FFFF
+
 ; ---------------------------------------------------------------------------
 ; Part of the Enigma decompressor, fetches the next byte if needed
 ; ---------------------------------------------------------------------------

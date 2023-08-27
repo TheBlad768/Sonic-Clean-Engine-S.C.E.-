@@ -179,7 +179,7 @@ Obj_TitleCardElement:
 
 Obj_TitleCardAct:
 		move.l	#Obj_TitleCardElement,address(a0)
-		rts
+		bra.s	Obj_TitleCardElement
 
 ; Remove a number of the act, if not needed
 ;		movea.w	parent2(a0),a1
