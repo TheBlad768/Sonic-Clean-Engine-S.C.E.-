@@ -9,22 +9,22 @@ DisplaySprite:
 		lea	(Sprite_table_input).w,a1
 		adda.w	priority(a0),a1
 
-loc_1ABCE:
+.main
 		cmpi.w	#$80-2,(a1)
-		bhs.s	loc_1ABDC
+		bhs.s	.end
 		addq.w	#2,(a1)
 		adda.w	(a1),a1
 		move.w	a0,(a1)
 
-locret_1ABDA:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1ABDC:
+.end
 		cmpa.w	#(Sprite_table_input_end-$80),a1
-		beq.s	locret_1ABDA
+		beq.s	.return
 		lea	$80(a1),a1
-		bra.s	loc_1ABCE
+		bra.s	.main
 
 ; =============== S U B R O U T I N E =======================================
 
