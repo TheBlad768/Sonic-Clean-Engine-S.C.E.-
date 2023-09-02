@@ -27,7 +27,6 @@ Level_Screen:
 		move.l	#HInt,(H_int_addr).w
 		jsr	(Clear_DisplayData).w
 		enableInts
-		clr.w	(Level_frame_counter).w
 		tst.b	(Last_star_post_hit).w
 		beq.s	.nostarpost											; if no starpost was set, branch
 		move.w	(Saved_zone_and_act).w,(Current_zone_and_act).w
