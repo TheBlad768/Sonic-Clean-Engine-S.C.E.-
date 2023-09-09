@@ -30,6 +30,8 @@ ArtKosM_EggCapsule:				binclude "Objects/Egg Capsule/KosinskiM Art/Egg Capsule.b
 	even
 ArtKosM_Seal:					binclude "Objects/Animals/KosinskiM Art/Seal.bin"
 	even
+ArtKosM_Pig:					binclude "Objects/Animals/KosinskiM Art/Pig.bin"
+	even
 ArtKosM_BlueFlicky:				binclude "Objects/Animals/KosinskiM Art/Blue Flicky.bin"
 	even
 ArtKosM_Chicken:				binclude "Objects/Animals/KosinskiM Art/Chicken.bin"
