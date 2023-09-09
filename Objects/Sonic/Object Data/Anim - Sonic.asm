@@ -67,7 +67,7 @@ SonAni_Landing:		dc.b	7, $B0,	$B2, $B2, $B2, $B2, $B2, $B2, $B1, $B2,	$B3, $B2, 
 SonAni_Surf:			dc.b  $13, $91,	$FF
 SonAni_Bubble:		dc.b   $B, $AC,	$AC,   3,   4, $FD,   0
 SonAni_Death1:		dc.b  $20, $A8,	$FF
-SonAni_Drown:		dc.b  $20, $A7,	$FF
+SonAni_Drown:		dc.b  $20, $A9,	$FF
 SonAni_Death2:		dc.b	$20, $A7,	$FF
 SonAni_Shrink:		dc.b  $40, $8D,	$FF
 SonAni_Hurt:		dc.b 9, $8C, $8D, $FF
