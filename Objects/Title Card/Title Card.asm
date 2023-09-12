@@ -20,20 +20,20 @@ TitleCard_Index: offsetTable
 
 Obj_TitleCardInit:
 		lea	(ArtKosM_TitleCardRedAct).l,a1
-		move.w	#tiles_to_bytes($480),d2
+		move.w	#tiles_to_bytes($500),d2
 		jsr	(Queue_Kos_Module).w
 		moveq	#0,d0
 		move.b	(Current_act).w,d0
 		lsl.w	#2,d0
 		movea.l	TitleCardAct_Index(pc,d0.w),a1
-		move.w	#tiles_to_bytes($4BD),d2
+		move.w	#tiles_to_bytes($53D),d2
 		jsr	(Queue_Kos_Module).w
 		moveq	#0,d0
 		lea	TitleCard_LevelGfx(pc),a1
 		move.b	(Current_zone).w,d0			; Otherwise, just use current zone
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
-		move.w	#tiles_to_bytes($4CD),d2
+		move.w	#tiles_to_bytes($54D),d2
 		jsr	(Queue_Kos_Module).w
 		move.w	#$5A,$2E(a0)				; Set wait value
 		clr.w	$32(a0)

@@ -209,7 +209,7 @@ Obj_Spikebonker_SpikeBall:
 
 ObjDat_Spikebonker:
 		dc.l Map_Spikebonker
-		dc.w $8100
+		dc.w $8500
 		dc.w $280
 		dc.b 40/2
 		dc.b 40/2
