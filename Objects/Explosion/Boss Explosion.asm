@@ -53,23 +53,23 @@ CreateBossExpParameterIndex: offsetTable
 		offsetTableEntry.w CreateBossExp_1C
 		offsetTableEntry.w CreateBossExp_1E
 		offsetTableEntry.w CreateBossExp_20
-CreateBossExp_00:	dc.b $20, $20, $20, 0		; Explosion timer, X offset range, Y offset range, routine set
-CreateBossExp_02:	dc.b $28, $80, $80, $18
-CreateBossExp_04:	dc.b $80, $20, $20, 8
-CreateBossExp_06:	dc.b	4, $10, $10, 0
-CreateBossExp_08:	dc.b	8, $20, $20, $10
-CreateBossExp_0A:	dc.b $20, $20, $20, 0
-CreateBossExp_0C:	dc.b $40, $80, $20, 0
-CreateBossExp_0E:	dc.b $80, $40, $40, 8
-CreateBossExp_10:	dc.b $20, $20, $20, $18
-CreateBossExp_12:	dc.b $80, $20, $20, $20
-CreateBossExp_14:	dc.b	8, $80, $20, $10
-CreateBossExp_16:	dc.b $80, $80, $80, 8
-CreateBossExp_18:	dc.b $80, $80, $80, $28
-CreateBossExp_1A:	dc.b $80, $40, $40, $28
-CreateBossExp_1C:	dc.b $80, $80, $40, 8
-CreateBossExp_1E:	dc.b $80, $10, $10, 8
-CreateBossExp_20:	dc.b $80, $20, $20, $30
+CreateBossExp_00:	dc.b $20, 64/2, 64/2, 0		; explosion timer, x offset range, y offset range, routine set
+CreateBossExp_02:	dc.b $28, 256/2, 256/2, $18
+CreateBossExp_04:	dc.b $80, 64/2, 64/2, 8
+CreateBossExp_06:	dc.b	4, 32/2, 32/2, 0
+CreateBossExp_08:	dc.b	8, 64/2, 64/2, $10
+CreateBossExp_0A:	dc.b $20, 64/2, 64/2, 0
+CreateBossExp_0C:	dc.b $40, 256/2, 64/2, 0
+CreateBossExp_0E:	dc.b $80, 128/2, 128/2, 8
+CreateBossExp_10:	dc.b $20, 64/2, 64/2, $18
+CreateBossExp_12:	dc.b $80, 64/2, 64/2, $20
+CreateBossExp_14:	dc.b	8, 256/2, 64/2, $10
+CreateBossExp_16:	dc.b $80, 256/2, 256/2, 8
+CreateBossExp_18:	dc.b $80, 256/2, 256/2, $28
+CreateBossExp_1A:	dc.b $80, 128/2, 128/2, $28
+CreateBossExp_1C:	dc.b $80, 256/2, $40, 8
+CreateBossExp_1E:	dc.b $80, 32/2, 32/2, 8
+CreateBossExp_20:	dc.b $80, 64/2, 64/2, $30
 
 ; =============== S U B R O U T I N E =======================================
 
