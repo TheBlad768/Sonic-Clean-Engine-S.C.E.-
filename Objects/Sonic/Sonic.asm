@@ -80,10 +80,10 @@ Sonic_Init_Continued:
 		move.b	#4,flip_speed(a0)
 		move.b	#30,air_left(a0)
 		subi.w	#$20,x_pos(a0)
-		addi.w	#4,y_pos(a0)
+		addq.w	#4,y_pos(a0)
 		bsr.w	Reset_Player_Position_Array
 		addi.w	#$20,x_pos(a0)
-		subi.w	#4,y_pos(a0)
+		subq.w	#4,y_pos(a0)
 		rts
 
 ; ---------------------------------------------------------------------------
