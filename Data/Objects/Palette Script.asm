@@ -100,8 +100,7 @@ Run_PalRotationScript2:
 +		move.b	d1,$3B(a0)
 		move.b	1(a1,d1.w),$3A(a0)
 		add.w	d2,d2
-		move.w	(a3,d2.w),d2
-		lea	(a3,d2.w),a3
+		adda.w	(a3,d2.w),a3
 
 -		move.w	(a3)+,(a2)+
 		dbf	d0,-

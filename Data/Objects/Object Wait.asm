@@ -5,11 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Wait:
-		tst.w	objoff_2E(a0)
-		beq.s	Obj_Jump
 		subq.w	#1,objoff_2E(a0)
-		rts
-; ---------------------------------------------------------------------------
+		bpl.s	ObjHitFloor_DoRoutine_Return
 
 Obj_Jump:
 		movea.l	objoff_34(a0),a1

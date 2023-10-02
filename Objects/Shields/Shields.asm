@@ -37,7 +37,7 @@ Obj_Fire_Shield:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.w	.return											; if so, do not display and do not update variables
-		cmpi.b	#id_Null,anim(a2)								; is player in their 'blank' animation?
+		cmpi.b	#id_Blank,anim(a2)								; is player in their 'blank' animation?
 		beq.w	.return											; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2) 					; should the player still have a shield?
 		beq.w	.destroy											; if not, change to Insta-Shield
@@ -120,7 +120,7 @@ Obj_Lightning_Shield:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.w	.return											; if so, do not display and do not update variables
-		cmpi.b	#id_Null,anim(a2)								; is player in their 'blank' animation?
+		cmpi.b	#id_Blank,anim(a2)								; is player in their 'blank' animation?
 		beq.w	.return											; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
 		beq.s	.destroy											; if not, change to Insta-Shield
@@ -292,7 +292,7 @@ Obj_Bubble_Shield:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.s	.return											; if so, do not display and do not update variables
-		cmpi.b	#id_Null,anim(a2)								; is player in their 'blank' animation?
+		cmpi.b	#id_Blank,anim(a2)								; is player in their 'blank' animation?
 		beq.s	.return											; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
 		beq.s	.destroy											; if not, change to Insta-Shield

@@ -1,7 +1,8 @@
 ; --------------------------------------------------------------------------------
-; Dynamic Pattern Loading Cues - output from SonMapEd - Sonic 3 & Knuckles format; --------------------------------------------------------------------------------
+; Dynamic Pattern Loading Cues - output from SonMapEd - Sonic 3 & Knuckles format
+; --------------------------------------------------------------------------------
 
-PLC_Sonic:
+DPLC_Sonic:
 SonicDynPLC:
 		dc.w SME_nyT38_2EA-SonicDynPLC, SME_nyT38_2EC-SonicDynPLC
 		dc.w SME_nyT38_2F4-SonicDynPLC, SME_nyT38_2FC-SonicDynPLC

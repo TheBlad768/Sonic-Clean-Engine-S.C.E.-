@@ -278,7 +278,7 @@ VInt_Level_Cont:
 		bhs.s	.notwater				; if it is, branch
 		st	(Do_Updates_in_H_int).w
 		jsr	(Set_Kos_Bookmark).w
-		addq.l	#4,sp
+		addq.w	#4,sp
 		bra.w	VInt_Done
 ; ---------------------------------------------------------------------------
 

@@ -13,7 +13,7 @@ Obj_Sonic:
 		tst.w	(Debug_placement_mode).w
 		beq.s	Sonic_Normal
 
-; Debug only code
+		; debug only code
 		cmpi.b	#1,(Debug_placement_type).w	; Are Sonic in debug object placement mode?
 		beq.s	JmpTo_DebugMode			; If so, skip to debug mode routine
 		; By this point, we're assuming you're in frame cycling mode
@@ -51,8 +51,8 @@ ptr_Sonic_Drown:	offsetTableEntry.w Sonic_Drown	; C
 ; ---------------------------------------------------------------------------
 
 Sonic_Init:	; Routine 0
-		addq.b	#2,routine(a0)				; => Obj01_Control
-		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)	; set y_radius and x_radius	; this sets Sonic's collision height (2*pixels)
+		addq.b	#2,routine(a0)								; => Sonic_Control
+		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)			; set y_radius and x_radius	; this sets Sonic's collision height (2*pixels)
 		move.w	#bytes_to_word(38/2,18/2),default_y_radius(a0)	; set default_y_radius and default_x_radius
 		move.l	#Map_Sonic,mappings(a0)
 		move.w	#$100,priority(a0)
@@ -130,36 +130,47 @@ loc_10C0C:
 		move.b	status(a0),d0
 		andi.w	#6,d0
 		move.w	Sonic_Modes(pc,d0.w),d1
-		jsr	Sonic_Modes(pc,d1.w)	; run Sonic's movement control code
+		jsr	Sonic_Modes(pc,d1.w)					; run Sonic's movement control code
 		movem.l	(sp)+,a4-a6
 
 loc_10C26:
 		cmpi.w	#-$100,(Camera_min_Y_pos).w		; is vertical wrapping enabled?
-		bne.s	+								; if not, branch
+		bne.s	.display							; if not, branch
 		move.w	(Screen_Y_wrap_value).w,d0
 		and.w	d0,y_pos(a0)						; perform wrapping of Sonic's y position
-+		bsr.s	Sonic_Display
+
+.display
+		bsr.s	Sonic_Display
 		bsr.w	Sonic_RecordPos
 		bsr.w	Sonic_Water
 		move.b	(Primary_Angle).w,next_tilt(a0)
 		move.b	(Secondary_Angle).w,tilt(a0)
 		tst.b	(WindTunnel_flag).w
-		beq.s	+
+		beq.s	.anim
 		tst.b	anim(a0)
-		bne.s	+
+		bne.s	.anim
 		move.b	prev_anim(a0),anim(a0)
-+		btst	#1,object_control(a0)
-		bne.s	++
+
+.anim
+		btst	#1,object_control(a0)
+		bne.s	.touch
 		bsr.w	Animate_Sonic
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	+
+		beq.s	.plc
 		eori.b	#2,render_flags(a0)
-+		bsr.w	Sonic_Load_PLC
-+		move.b	object_control(a0),d0
+
+.plc
+		bsr.w	Sonic_Load_PLC
+
+.touch
+		move.b	object_control(a0),d0
 		andi.b	#$A0,d0
-		bne.s	+
-		jsr	TouchResponse(pc)
-+		rts
+		bne.s	.return
+		jmp	TouchResponse(pc)
+; ---------------------------------------------------------------------------
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
 ; secondary states under state Sonic_Control
 
@@ -217,10 +228,12 @@ Sonic_ChkShoes:										; checks if Speed Shoes have expired and disables them 
 		move.w	#$C,2(a4)							; set Sonic_Knux_acceleration
 		move.w	#$80,4(a4)							; set Sonic_Knux_deceleration
 		bclr	#Status_SpeedShoes,status_secondary(a0)
-		music	mus_Slowdown						; run music at normal speed
+		music	mus_Slowdown,1						; run music at normal speed
+; ---------------------------------------------------------------------------
 
 Sonic_ExitChk:
 		rts
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to record Sonic's previous positions for invincibility stars
 ; and input/status flags for Tails' AI to follow
@@ -243,11 +256,13 @@ Reset_Player_Position_Array:
 		lea	(Pos_table).w,a1
 		moveq	#$3F,d0
 
--		move.w	x_pos(a0),(a1)+			; write location to pos_table
+.loop
+		move.w	x_pos(a0),(a1)+			; write location to pos_table
 		move.w	y_pos(a0),(a1)+
-		dbf	d0,-
+		dbf	d0,.loop
 		clr.w	(Pos_table_index).w
 		rts
+
 ; ---------------------------------------------------------------------------
 ; Subroutine for Sonic when he's underwater
 ; ---------------------------------------------------------------------------
@@ -278,12 +293,12 @@ Sonic_InWater:
 		move.w	#$40,Sonic_Knux_deceleration-Sonic_Knux_top_speed(a4)
 		tst.b	object_control(a0)
 		bne.s	locret_10E2C
-		asr	x_vel(a0)
-		asr	y_vel(a0)				; memory operands can only be shifted one bit at a time
-		asr	y_vel(a0)
+		asr.w	x_vel(a0)
+		asr.w	y_vel(a0)					; memory operands can only be shifted one bit at a time
+		asr.w	y_vel(a0)
 		beq.s	locret_10E2C
 		move.w	#bytes_to_word(1,0),anim(a6)	; splash animation, write 1 to anim and clear prev_anim
-		sfx	sfx_Splash,1				; splash sound
+		sfx	sfx_Splash,1						; splash sound
 ; ---------------------------------------------------------------------------
 
 Sonic_OutWater:
@@ -303,10 +318,10 @@ Sonic_OutWater:
 		move.w	y_vel(a0),d0
 		cmpi.w	#-$400,d0
 		blt.s		loc_10EFC
-		asl	y_vel(a0)
+		asl.w	y_vel(a0)
 
 loc_10EFC:
-		cmpi.b	#id_Null,anim(a0)	; is Sonic in his 'blank' animation
+		cmpi.b	#id_Blank,anim(a0)	; is Sonic in his 'blank' animation
 		beq.w	locret_10E2C			; if so, branch
 		tst.w	y_vel(a0)
 		beq.w	locret_10E2C
@@ -787,7 +802,7 @@ loc_11424:
 loc_11430:
 		sub.w	d4,d0
 		bcc.s	loc_11438
-		move.w	#-$80,d0
+		moveq	#-$80,d0
 
 loc_11438:
 		move.w	d0,ground_vel(a0)
@@ -865,9 +880,9 @@ locret_11506:
 
 Sonic_RollSpeed:
 		move.w	(a4),d6
-		asl.w	#1,d6
+		asl.w	d6
 		move.w	2(a4),d5
-		asr.w	#1,d5
+		asr.w	d5
 		move.w	#$20,d4
 		tst.b	spin_dash_flag(a0)
 		bmi.w	loc_115C6
@@ -983,7 +998,7 @@ loc_11610:
 loc_1161E:
 		sub.w	d4,d0
 		bcc.s	loc_11626
-		move.w	#-$80,d0
+		moveq	#-$80,d0
 
 loc_11626:
 		move.w	d0,ground_vel(a0)
@@ -1007,6 +1022,7 @@ loc_11640:
 loc_11648:
 		move.w	d0,ground_vel(a0)
 		rts
+
 ; ---------------------------------------------------------------------------
 ; Subroutine for moving Sonic left or right when he's in the air
 ; ---------------------------------------------------------------------------
@@ -1104,6 +1120,8 @@ Player_LevelBound:
 		bcs.s	loc_11732
 
 Player_Boundary_CheckBottom:
+		tst.b	(Disable_death_plane).w
+		bne.s	locret_11720
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_11722
 		move.w	(Camera_max_Y_pos).w,d0
@@ -1233,7 +1251,7 @@ loc_1182E:
 		add.w	d0,y_vel(a0)
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		addq.l	#4,sp
+		addq.w	#4,sp
 		move.b	#1,jumping(a0)
 		clr.b	stick_to_convex(a0)
 		sfx	sfx_Jump
@@ -1364,7 +1382,7 @@ SonicKnux_Spindash:
 		beq.s	locret_11A14
 		move.b	#id_SpinDash,anim(a0)
 		sfx	sfx_SpinDash
-		addq.l	#4,sp
+		addq.w	#4,sp
 		move.b	#1,spin_dash_flag(a0)
 		clr.w	spin_dash_counter(a0)
 		cmpi.b	#12,air_left(a0)
@@ -1379,7 +1397,7 @@ loc_11C24:
 loc_11C5E:
 		btst	#button_down,(Ctrl_1_logical).w
 		bne.w	loc_11D16
-		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)		; set y_radius and x_radius
 		move.b	#id_Roll,anim(a0)
 		addq.w	#5,y_pos(a0)
 		tst.b	(Reverse_gravity_flag).w
@@ -1464,7 +1482,7 @@ loc_11D5E:
 		neg.w	ground_vel(a0)
 +
 	endif
-		addq.l	#4,sp
+		addq.w	#4,sp
 		cmpi.w	#$60,(a5)
 		beq.s	loc_11D6C
 		bcc.s	loc_11D6A
@@ -2082,6 +2100,8 @@ loc_12302:
 ; =============== S U B R O U T I N E =======================================
 
 sub_12318:
+		tst.b	(Disable_death_plane).w
+		bne.s	loc_12344
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_12336
 		move.w	(Camera_max_Y_pos).w,d0
@@ -2105,15 +2125,14 @@ loc_12344:
 		btst	#Status_InAir,status(a0)
 		bne.s	locret_12388
 		moveq	#0,d0
-		move.w	d0,y_vel(a0)
-		move.w	d0,x_vel(a0)
+		move.l	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
 		move.b	d0,object_control(a0)
-		clr.b	anim(a0)	; id_Walk
+		move.b	d0,anim(a0)				; id_Walk
+		move.b	d0,spin_dash_flag(a0)
 		move.w	#$100,priority(a0)
 		move.b	#id_SonicControl,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
-		clr.b	spin_dash_flag(a0)
 
 locret_12388:
 		rts
@@ -2153,13 +2172,15 @@ sub_123C2:
 		subi.w	#$10,d0
 		cmp.w	y_pos(a0),d0
 		bge.s	loc_12410
+
+locret_123F8:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_123FA:
 		addi.w	#$100,d0
 		cmp.w	y_pos(a0),d0
-		bge.s	locret_124C6
+		bge.s	locret_123F8
 
 loc_12410:
 		move.b	#id_SonicRestart,routine(a0)
@@ -2410,11 +2431,8 @@ loc_1281E:
 		rts
 ; ---------------------------------------------------------------------------
 
-byte_1286E:
-		dc.b 0
-		dc.b $3D
-		dc.b $49
-		dc.b $49
+byte_1286E:	dc.b 0, $3D, $49, $49
+	even
 ; ---------------------------------------------------------------------------
 
 loc_12872:
@@ -2628,18 +2646,19 @@ Sonic_Load_PLC:
 
 Sonic_Load_PLC2:
 		cmp.b	(Player_prev_frame).w,d0
-		beq.s	+
+		beq.s	.return
 		move.b	d0,(Player_prev_frame).w
-		lea	(PLC_Sonic).l,a2
+		lea	(DPLC_Sonic).l,a2
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d5
 		subq.w	#1,d5
-		bmi.s	+
+		bmi.s	.return
 		move.w	#tiles_to_bytes(ArtTile_Sonic),d4
 		move.l	#ArtUnc_Sonic>>1,d6
 
--		moveq	#0,d1
+.loop
+		moveq	#0,d1
 		move.w	(a2)+,d1
 		move.w	d1,d3
 		lsr.w	#8,d3
@@ -2652,5 +2671,7 @@ Sonic_Load_PLC2:
 		add.w	d3,d4
 		add.w	d3,d4
 		jsr	(Add_To_DMA_Queue).w
-		dbf	d5,-
-+		rts
+		dbf	d5,.loop
+
+.return
+		rts

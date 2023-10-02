@@ -191,6 +191,8 @@ f_hbla_pal:							= *
 H_int_flag:							ds.b 1					; Unless this is set H-int will return immediately
 Do_Updates_in_H_int:				ds.b 1					; If this is set Do_Updates will be called from H-int instead of V-int
 WindTunnel_flag:						ds.b 1
+									ds.b 1					; even
+Disable_death_plane:					ds.b 1					; if set, going below the screen wont kill the player
 f_lockctrl:							= *
 Ctrl_1_locked:						ds.b 1
 v_framecount:						= *

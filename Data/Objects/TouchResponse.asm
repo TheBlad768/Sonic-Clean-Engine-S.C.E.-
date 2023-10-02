@@ -455,7 +455,7 @@ HurtCharacter:
 
 .isleft:
 		clr.w	ground_vel(a0)
-		move.b	#id_Hurt,anim(a0)
+		move.b	#id_Hurt2,anim(a0)
 		move.b	#2*60,invulnerability_timer(a0)			; set temp invincible time to 2 seconds
 		moveq	#signextendB(sfx_Death),d0			; load normal damage sound
 		cmpi.l	#Obj_Spikes,address(a2)				; was damage caused by spikes?
