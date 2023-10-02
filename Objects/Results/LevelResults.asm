@@ -291,7 +291,7 @@ LevResults_GetDecimalScore:
 		moveq	#16-1,d2
 
 .loop
-		ror.w	#1,d0
+		ror.w	d0
 		bcs.s	.found
 		subq.w	#3,a1								; back in 3 bytes
 		bra.s	.next
@@ -311,23 +311,8 @@ LevResults_GetDecimalScore:
 		rts
 ; ---------------------------------------------------------------------------
 
-		; decimal data end
-		dc.b 3, $27, $68
-		dc.b 1, $63, $84
-		dc.b 0, $81, $92
-		dc.b 0, $40, $96
-		dc.b 0, $20, $48
-		dc.b 0, $10, $24
-		dc.b 0, 5, $12
-		dc.b 0, 2, $56
-		dc.b 0, 1, $28
-		dc.b 0, 0, $64
-		dc.b 0, 0, $32
-		dc.b 0, 0, $16
-		dc.b 0, 0, 8
-		dc.b 0, 0, 4
-		dc.b 0, 0, 2
-		dc.b 0, 0, 1
+		; decimal (hex) data end
+		tribyte $32768, $16384, $8192, $4096, $2048, $1024, $512, $256, $128, $64, $32, $16, 8, 4, 2, 1
 .decdata
 
 TimeBonus:	dc.w 5000, 5000, 1000, 500, 400, 300, 100, 10
