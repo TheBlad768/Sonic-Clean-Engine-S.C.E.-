@@ -25,6 +25,7 @@ DeformBgLayer:
 
 .events
 		jmp	Do_ResizeEvents(pc)
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to scroll the level horizontally as Sonic moves
 ; ---------------------------------------------------------------------------

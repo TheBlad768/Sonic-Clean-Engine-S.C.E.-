@@ -114,7 +114,7 @@ CreateChild4_LinkListRepeated:
 		bsr.w	Create_New_Sprite3
 		bne.s	.notfree
 		move.w	a3,parent3(a1)
-		move.w	a1,$44(a3)
+		move.w	a1,parent4(a3)
 		movea.w	a1,a3
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
@@ -245,7 +245,7 @@ CreateChild8_TreeListRepeated:
 		bsr.w	Create_New_Sprite3
 		bne.s	.notfree
 		move.w	a3,parent3(a1)
-		move.w	a0,$44(a1)
+		move.w	a0,parent4(a1)
 		movea.w	a1,a3
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
@@ -271,7 +271,7 @@ CreateChild9_TreeList:
 		bsr.w	Create_New_Sprite3
 		bne.s	.notfree
 		move.w	a3,parent3(a1)
-		move.w	a0,$44(a1)
+		move.w	a0,parent4(a1)
 		movea.w	a1,a3
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
