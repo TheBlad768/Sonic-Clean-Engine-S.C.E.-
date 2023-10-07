@@ -4,221 +4,235 @@
 
 ; =============== S U B R O U T I N E =======================================
 
+TitleCardAct_Index:
+		dc.l ArtKosM_TitleCardNum1		; 0
+		dc.l ArtKosM_TitleCardNum2		; 1
+		dc.l ArtKosM_TitleCardNum3		; 2
+		dc.l ArtKosM_TitleCardNum4		; 3
+; ---------------------------------------------------------------------------
+
 Obj_TitleCard:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		move.w	TitleCard_Index(pc,d0.w),d1
-		jmp	TitleCard_Index(pc,d1.w)
-; ---------------------------------------------------------------------------
 
-TitleCard_Index: offsetTable
-		offsetTableEntry.w Obj_TitleCardInit
-		offsetTableEntry.w Obj_TitleCardCreate
-		offsetTableEntry.w Obj_TitleCardWait
-		offsetTableEntry.w Obj_TitleCardWait2
-; ---------------------------------------------------------------------------
-
-Obj_TitleCardInit:
+		; load general art
 		lea	(ArtKosM_TitleCardRedAct).l,a1
 		move.w	#tiles_to_bytes($500),d2
 		jsr	(Queue_Kos_Module).w
+
+		; load act number art
 		moveq	#0,d0
 		move.b	(Current_act).w,d0
-		lsl.w	#2,d0
+		add.w	d0,d0
+		add.w	d0,d0
 		movea.l	TitleCardAct_Index(pc,d0.w),a1
 		move.w	#tiles_to_bytes($53D),d2
 		jsr	(Queue_Kos_Module).w
+
+		; load zone name art
 		moveq	#0,d0
-		lea	TitleCard_LevelGfx(pc),a1
-		move.b	(Current_zone).w,d0			; Otherwise, just use current zone
-		lsl.w	#2,d0
-		movea.l	(a1,d0.w),a1
+		move.b	(Current_zone).w,d0							; otherwise, just use current zone
+		add.w	d0,d0
+		add.w	d0,d0
+		movea.l	.levelgfx(pc,d0.w),a1
 		move.w	#tiles_to_bytes($54D),d2
 		jsr	(Queue_Kos_Module).w
-		move.w	#$5A,$2E(a0)				; Set wait value
-		clr.w	$32(a0)
-		st	$48(a0)
-		addq.b	#2,routine(a0)
+
+		; next
+		move.w	#1*60+30,objoff_2E(a0)						; set wait value
+		clr.w	objoff_32(a0)
+		st	objoff_48(a0)
+		move.l	#.create,address(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; The letters for the name of the zone.
+; Exception: ENOZ/ZONE. These letters are already in VRAM.
 ; ---------------------------------------------------------------------------
 
-TitleCardAct_Index:
-		dc.l ArtKosM_TitleCardNum1
-		dc.l ArtKosM_TitleCardNum2
-		dc.l ArtKosM_TitleCardNum3
-		dc.l ArtKosM_TitleCardNum4
+.levelgfx
+		dc.l ArtKosM_DEZTitleCard	; DEZ
+
+		zonewarning .levelgfx,4
 ; ---------------------------------------------------------------------------
 
-Obj_TitleCardCreate:
+.create
 		tst.w	(Kos_modules_left).w
-		bne.s	Obj_TitleCard_Return			; Wait for KosM queue to clear
+		bne.s	.return										; don't load the objects until the art has been loaded
 		jsr	(Create_New_Sprite3).w
-		bne.s	Obj_TitleCard_Return
+		bne.s	.return
 		lea	ObjArray_TtlCard(pc),a2
-		moveq	#4-1,d1
-		tst.b	$44(a0)
-		beq.s	.loop
-		lea	ObjArray_TtlCard2(pc),a2
-		moveq	#1-1,d1
+		moveq	#4-1,d1										; make 4 objects
 
-.loop	addq.w	#1,$30(a0)
+.loop
+		addq.w	#1,objoff_30(a0)
 		move.l	(a2)+,address(a1)
-		move.w	(a2)+,$46(a1)
+		move.w	(a2)+,objoff_46(a1)
 		move.w	(a2)+,x_pos(a1)
 		move.w	(a2)+,y_pos(a1)
 		move.b	(a2)+,mapping_frame(a1)
 		move.b	(a2)+,width_pixels(a1)
 		move.w	(a2)+,d2
-		move.b	d2,$28(a1)
-		move.b	#$40,render_flags(a1)
+		move.b	d2,objoff_28(a1)
+		move.b	#rfMulti,render_flags(a1)
 		move.l	#Map_TitleCard,mappings(a1)
+		move.w	#$500,art_tile(a1)
 		move.w	a0,parent2(a1)
 		jsr	(Create_New_Sprite4).w
 		dbne	d1,.loop
-		addq.b	#2,routine(a0)
 
-Obj_TitleCard_Return:
+		; next
+		move.l	#.wait,address(a0)
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_TitleCardWait:
-		tst.w	$34(a0)
-		beq.s	+
-		clr.w	$34(a0)
+.wait
+		tst.w	objoff_34(a0)
+		beq.s	.branch
+		clr.w	objoff_34(a0)
 		rts
 ; ---------------------------------------------------------------------------
-+		tst.w	$3E(a0)
-		beq.s	+
-		clr.l	(Timer).w					; If using in-level title card
-		clr.w	(Ring_count).w			; Reset HUD rings and timer
+
+.branch
+		tst.w	objoff_3E(a0)
+		beq.s	.skiplevel
+
+		; reset level flags
+		clr.l	(Timer).w										; if using in-level title card
+		clr.w	(Ring_count).w								; reset HUD rings and timer
 		st	(Update_HUD_timer).w
-		st	(Update_HUD_ring_count).w	; Start updating timer and rings again
-		move.b	#30,(Player_1+air_left).w	; Reset air
-		jsr	(Restore_LevelMusic).w		; Play music
-+		clr.w	$48(a0)
-		addq.b	#2,routine(a0)
+		st	(Update_HUD_ring_count).w						; start updating timer and rings again
+		move.b	#30,(Player_1+air_left).w						; reset air
+		jsr	(Restore_LevelMusic).w							; play music
+
+.skiplevel
+		clr.w	objoff_48(a0)
+		move.l	#.wait2,address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_TitleCardWait2:
-		tst.w	$2E(a0)
-		beq.s	+
-		subq.w	#1,$2E(a0)
+.wait2
+		tst.w	objoff_2E(a0)
+		beq.s	.endtimer
+		subq.w	#1,objoff_2E(a0)
 		rts
 ; ---------------------------------------------------------------------------
-+		tst.w	$30(a0)
-		beq.s	+
-		addq.w	#1,$32(a0)
+
+.endtimer
+		tst.w	objoff_30(a0)
+		beq.s	.branch2
+		addq.w	#1,objoff_32(a0)
 		rts
 ; ---------------------------------------------------------------------------
-+		tst.b	$44(a0)
-		bne.s	++
-		tst.w	$3E(a0)
-		beq.s	+
-		st	(TitleCard_end_flag).w		; If in-level, set end of title card flag.
-+		lea	(PLC_Main2).l,a5
+
+.branch2
+		tst.w	objoff_3E(a0)
+		beq.s	.skiplevel2
+		st	(TitleCard_end_flag).w								; if in-level, set end of title card flag
+
+.skiplevel2
+		lea	(PLC_Main2).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(LoadPLC2_KosM).w
-		jsr	LoadPLC_Animals(pc)
-		move.b	#1,(HUD_RAM.status).w
+		jsr	(LoadPLC_Animals).l
+		move.b	#1,(HUD_RAM.status).w						; load HUD
 		clr.b	(Ctrl_1_locked).w
-+		jmp	(Delete_Current_Sprite).w
-; ---------------------------------------------------------------------------
+
+		; delete
+		jmp	(Delete_Current_Sprite).w
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_TitleCardRedBanner:
 		movea.w	parent2(a0),a1
-		move.w	$32(a1),d0
-		beq.s	++
+		move.w	objoff_32(a1),d0
+		beq.s	.loc_2D90A
 		tst.b	render_flags(a0)
-		bmi.s	+
-		subq.w	#1,$30(a1)
+		bmi.s	.loc_2D8FC
+		subq.w	#1,objoff_30(a1)
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
-+		cmp.b	$28(a0),d0
-		blo.s		++
-		subi.w	#$20,y_pos(a0)
-		bra.s	++
+
+.loc_2D8FC
+		cmp.b	objoff_28(a0),d0
+		blo.s		.loc_2D920
+		subi.w	#32,y_pos(a0)
+		bra.s	.loc_2D920
 ; ---------------------------------------------------------------------------
-+		move.w	y_pos(a0),d0
-		cmp.w	$46(a0),d0
-		beq.s	+
-		addi.w	#$10,d0
+
+.loc_2D90A
+		move.w	y_pos(a0),d0
+		cmp.w	objoff_46(a0),d0
+		beq.s	.loc_2D920
+		addi.w	#16,d0
 		move.w	d0,y_pos(a0)
-		st	$34(a1)
-+		move.b	#$70,6(a0)
+		st	objoff_34(a1)
+
+.loc_2D920
+		move.b	#224/2,height_pixels(a0)
 		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_TitleCardName:
 		move.b	(Current_zone).w,d0
 		add.b	d0,mapping_frame(a0)
 		move.l	#Obj_TitleCardElement,address(a0)
 
+; =============== S U B R O U T I N E =======================================
+
 Obj_TitleCardElement:
 		movea.w	parent2(a0),a1
-		move.w	$32(a1),d0
-		beq.s	++
+		move.w	objoff_32(a1),d0
+		beq.s	.loc_2D984
 		tst.b	render_flags(a0)
-		bmi.s	+
-		subq.w	#1,$30(a1)
+		bmi.s	.loc_2D976
+		subq.w	#1,objoff_30(a1)
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
-+		cmp.b	$28(a0),d0
-		blo.s		++
-		addi.w	#$20,x_pos(a0)
-		bra.s	++
+
+.loc_2D976
+		cmp.b	objoff_28(a0),d0
+		blo.s		.loc_2D99A
+		addi.w	#32,x_pos(a0)
+		bra.s	.loc_2D99A
 ; ---------------------------------------------------------------------------
-+		move.w	x_pos(a0),d0
-		cmp.w	$46(a0),d0
-		beq.s	+
-		subi.w	#$10,d0
+
+.loc_2D984
+		move.w	x_pos(a0),d0
+		cmp.w	objoff_46(a0),d0
+		beq.s	.loc_2D99A
+		subi.w	#16,d0
 		move.w	d0,x_pos(a0)
-		st	$34(a1)
-+		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
+		st	objoff_34(a1)
+
+.loc_2D99A
+		jmp	(Draw_Sprite).w
+
+; =============== S U B R O U T I N E =======================================
 
 Obj_TitleCardAct:
 		move.l	#Obj_TitleCardElement,address(a0)
 		bra.s	Obj_TitleCardElement
 
-; Remove a number of the act, if not needed
-;		movea.w	parent2(a0),a1
-;		subq.w	#1,$30(a1)
+		; delete
+;		movea.w	parent2(a0),a1								; remove a number of the act, if not needed
+;		subq.w	#1,objoff_30(a1)
 ;		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
-Obj_TitleCardElement2:
-		clr.b	render_flags(a0)			; I'm not entirely sure what this is used for
-		movea.w	parent2(a0),a1
-		move.w	$32(a1),d0
-		beq.s	++
-		cmpi.w	#$20C,x_pos(a0)
-		blo.s		+
-		subq.w	#1,$30(a1)
-		jmp	(Delete_Current_Sprite).w
-; ---------------------------------------------------------------------------
-+		cmp.b	$28(a0),d0
-		blo.s		++
-		addi.w	#$20,x_pos(a0)
-		bra.s	++
-; ---------------------------------------------------------------------------
-+		move.w	x_pos(a0),d0
-		cmp.w	$46(a0),d0
-		beq.s	+
-		subi.w	#$10,d0
-		move.w	d0,x_pos(a0)
-		st	$34(a1)
-+		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
-
 ObjArray_TtlCard:
-		dc.l Obj_TitleCardName
+
+		; 1
+		dc.l Obj_TitleCardName								; object address
 		dc.w $120
 		dc.w $260
 		dc.w $E0
 		dc.b 4
 		dc.b $80
 		dc.w 3
+
+		; 2
 		dc.l Obj_TitleCardElement
 		dc.w $17C
 		dc.w $2FC
@@ -226,6 +240,8 @@ ObjArray_TtlCard:
 		dc.b 3
 		dc.b $24
 		dc.w 5
+
+		; 3
 		dc.l Obj_TitleCardAct
 		dc.w $184
 		dc.w $344
@@ -233,6 +249,8 @@ ObjArray_TtlCard:
 		dc.b 2
 		dc.b $1C
 		dc.w 7
+
+		; 4
 		dc.l Obj_TitleCardRedBanner
 		dc.w $C0
 		dc.w $E0
@@ -240,15 +258,10 @@ ObjArray_TtlCard:
 		dc.b 1
 		dc.b 0
 		dc.w 1
-ObjArray_TtlCard2:
-		dc.l Obj_TitleCardElement2
-		dc.w $15C
-		dc.w $21C
-		dc.w $BC
-		dc.b $12
-		dc.b $80
-		dc.w 1
+
 ObjArray_TtlCardBonus:
+
+		; 1
 		dc.l Obj_TitleCardElement
 		dc.w $C8
 		dc.w $188
@@ -256,6 +269,8 @@ ObjArray_TtlCardBonus:
 		dc.b $13
 		dc.b $80
 		dc.w 1
+
+		; 2
 		dc.l Obj_TitleCardElement
 		dc.w $128
 		dc.w $1E8
@@ -263,14 +278,6 @@ ObjArray_TtlCardBonus:
 		dc.b $14
 		dc.b $80
 		dc.w 1
-; ---------------------------------------------------------------------------
-; The letters for the name of the zone.
-; Exception: ENOZ>ZONE. These letters are already in VRAM.
-
-TitleCard_LevelGfx:
-		dc.l ArtKosM_DEZTitleCard	; DEZ
-
-		zonewarning TitleCard_LevelGfx,4
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Title Card/Object Data/Map - Title Card.asm"
