@@ -10,7 +10,7 @@ https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Flamedriver-
 
 SPECIAL CREDITS:
 
-- mrcat-pixel — New smooth ring graphics, act 3 and 4 numbers graphics.
+- pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
 - FoxConED — Level Select font graphics.
 - Dolphman — Robotnik Head graphics.
 
