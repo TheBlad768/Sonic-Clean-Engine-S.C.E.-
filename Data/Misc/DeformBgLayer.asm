@@ -43,7 +43,8 @@ MoveCameraX:
 		move.w	d1,(a5)
 		moveq	#0,d1
 		move.b	(a5),d1
-		lsl.b	#2,d1
+		add.b	d1,d1
+		add.b	d1,d1
 		addq.b	#4,d1
 		move.w	Pos_table_index-H_scroll_frame_offset(a5),d0
 		sub.b	d1,d0

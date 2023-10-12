@@ -182,8 +182,6 @@ v_pfade_size:							= *
 Palette_fade_count:					ds.b 1					; The number of colours to fade
 
 Lag_frame_count:						ds.w 1					; More specifically, the number of times V-int routine 0 has run. Reset at the end of a normal frame
-v_spritecount:						= *
-Sprites_drawn:						ds.w 1					; Used to ensure the sprite limit isn't exceeded
 v_vdp_buffer2:						= *
 DMA_data_thunk:					= *						; Used as a RAM holder for the final DMA command word. Data will NOT be preserved across V-INTs, so consider this space reserved
 DMA_trigger_word:					ds.w 1					; Transferred from RAM to avoid crashing the Mega Drive
@@ -203,7 +201,8 @@ f_pause:								= *
 Game_paused:						ds.b 1
 f_restart:							= *
 Restart_level_flag:					ds.b 1
-									ds.b 1					; even
+v_spritecount:						= *
+Sprites_drawn:						ds.b 1					; Used to ensure the sprite limit isn't exceeded
 Sonic_Knux_top_speed:				ds.w 1
 Sonic_Knux_acceleration:				ds.w 1
 Sonic_Knux_deceleration:				ds.w 1

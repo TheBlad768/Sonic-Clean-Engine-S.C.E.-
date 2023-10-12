@@ -505,7 +505,8 @@ loc_86AB0:
 		lsl.w	#3,d0
 		lea	word_2C7EA(pc),a2
 		move.l	4(a2,d0.w),mappings(a0)
-		lsl.w	#2,d1
+		add.w	d1,d1
+		add.w	d1,d1
 		move.w	d1,$2E(a0)
 		movea.w	$46(a0),a1
 		move.w	x_pos(a0),d0

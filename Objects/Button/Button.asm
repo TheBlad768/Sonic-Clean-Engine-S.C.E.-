@@ -13,8 +13,8 @@ Obj_Button:
 		addq.w	#4,y_pos(a0)
 		btst	#5,subtype(a0)
 		beq.s	loc_2C5B8
-		move.l	#loc_2C62C,address(a0)
-		bra.s	loc_2C62C
+		move.l	#sub_2C62C,address(a0)						; HCZ only?
+		bra.s	sub_2C62C
 ; ---------------------------------------------------------------------------
 
 loc_2C5B8:
@@ -23,9 +23,9 @@ loc_2C5B8:
 loc_2C5BE:
 		tst.b	render_flags(a0)
 		bpl.s	loc_2C626
-		moveq	#$1B,d1
-		moveq	#4,d2
-		moveq	#5,d3
+		moveq	#(32/2)+$B,d1								; width
+		moveq	#8/2,d2										; height
+		moveq	#(8/2)+1,d3									; height+1
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).w
 		clr.b	mapping_frame(a0)
@@ -55,13 +55,14 @@ loc_2C612:
 
 loc_2C626:
 		jmp	(Sprite_OnScreen_Test).w
-; ---------------------------------------------------------------------------
 
-loc_2C62C:
+; =============== S U B R O U T I N E =======================================
+
+sub_2C62C:
 		tst.b	render_flags(a0)
 		bpl.s	loc_2C690
-		moveq	#$10,d1
-		moveq	#6,d3
+		moveq	#32/2,d1										; width
+		moveq	#(10/2)+1,d3									; height+1
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectTop).w
 		clr.b	mapping_frame(a0)

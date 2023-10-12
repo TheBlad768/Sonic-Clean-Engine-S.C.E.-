@@ -142,7 +142,7 @@ Clear_Plane_Map:
 
 Copy_Map_Line_To_VRAM:
 		subi.w	#16,d1
-		bcs.s	.return
+		blo.s		.return
 		move.w	d1,d3
 		andi.w	#7,d3
 		bne.s	.return
@@ -150,7 +150,8 @@ Copy_Map_Line_To_VRAM:
 		move.w	d1,d2
 		add.w	d1,d1
 		move.w	d1,d3
-		lsl.w	#2,d1
+		add.w	d1,d1
+		add.w	d1,d1
 		add.w	d3,d1
 		lea	(a1,d1.w),a1
 		lsl.w	#4,d2

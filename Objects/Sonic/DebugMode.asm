@@ -165,7 +165,8 @@ DebugMode:
 		move.b	(Debug_object).w,d0
 		add.w	d0,d0
 		move.w	d0,d1
-		lsl.w	#2,d0
+		add.w	d0,d0
+		add.w	d0,d0
 		add.w	d1,d0
 		move.b	4(a2,d0.w),subtype(a1)
 		move.l	(a2,d0.w),address(a1)
@@ -207,7 +208,8 @@ DebugMode:
 		move.b	(Debug_object).w,d0
 		add.w	d0,d0
 		move.w	d0,d1
-		lsl.w	#2,d0
+		add.w	d0,d0
+		add.w	d0,d0
 		add.w	d1,d0
 		move.l	4(a2,d0.w),mappings(a0)		; load mappings for item
 		move.w	8(a2,d0.w),art_tile(a0)			; load VRAM setting for item
