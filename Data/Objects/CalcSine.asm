@@ -9,10 +9,10 @@ CalcSine:
 GetSineCosine:
 		andi.w	#$FF,d0
 		add.w	d0,d0
-		addi.w	#$40*2,d0	; $40 = 90 degrees, sin(x+90) = cos(x)
-		move.w	SineTable(pc,d0.w),d1	; cos
+		addi.w	#$40*2,d0				; $40 = 90 degrees, sin(x+90) = cos(x)
+		move.w	SineTable(pc,d0.w),d1		; cos
 		subi.w	#$40*2,d0
-		move.w	SineTable(pc,d0.w),d0	; sin
+		move.w	SineTable(pc,d0.w),d0		; sin
 		rts
 ; ---------------------------------------------------------------------------
 
