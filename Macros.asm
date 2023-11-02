@@ -22,7 +22,7 @@ ramaddr function x,(-(x&$80000000)<<1)|x
 id function ptr,((ptr-offset)/ptrsize+idstart)
 
 ; function to convert two separate nibble into a byte
-nibble_to_byte function nibble1,nibble2,((nibble1)&$F0)|((nibble2)&$F)
+nibbles_to_byte function nibble1,nibble2,((nibble1)&$F0)|((nibble2)&$F)
 
 ; function to convert two separate bytes into a word
 bytes_to_word function byte1,byte2,(((byte1)<<8)&$FF00)|((byte2)&$FF)
