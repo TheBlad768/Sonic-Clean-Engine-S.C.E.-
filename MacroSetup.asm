@@ -197,8 +197,8 @@ _tst	macro
     endif
 
 ; alias binclude as incbin from asm68k compiler
-incbin	macro file
-		binclude	file
+incbin	macro
+		binclude	ALLARGS
 	endm
 
 ; dcb from asm68k compiler
