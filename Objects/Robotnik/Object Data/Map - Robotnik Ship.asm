@@ -1,7 +1,3 @@
-; --------------------------------------------------------------------------------
-; Sprite mappings - output from SonMapEd - Sonic 3 & Knuckles format
-; --------------------------------------------------------------------------------
-
 Map_RobotnikShip:
 		dc.w SME_mlzjJ_1E-Map_RobotnikShip, SME_mlzjJ_26-Map_RobotnikShip
 		dc.w SME_mlzjJ_2E-Map_RobotnikShip, SME_mlzjJ_3C-Map_RobotnikShip
