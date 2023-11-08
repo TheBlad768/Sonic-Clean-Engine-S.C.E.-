@@ -1197,7 +1197,12 @@ Sound_PlaySFX:
 	move.b	d0,(SMPS_psg_input).l	; Silence PSG 4 (noise), too
 ; loc_7226E:
 .sfxoverridedone:
+
+;	lea	SFX_SFXChannelRAM(pc),a5
+;	movea.w	(a5,d3.w),a5
+
 	movea.w	SFX_SFXChannelRAM(pc,d3.w),a5
+
 	adda.l	a6,a5
 	movea.l	a5,a2
 	moveq	#(SMPS_Track.len/4)-1,d0	; $30 bytes

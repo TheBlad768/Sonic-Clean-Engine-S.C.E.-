@@ -457,7 +457,7 @@ LevelSelect_MarkFields:
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_Deform:
-		lea	(RAM_start).l,a3
+		lea	(H_scroll_table).w,a3
 		lea	LevelSelectScroll_Data(pc),a2
 		jmp	(HScroll_Deform).w
 ; ---------------------------------------------------------------------------
