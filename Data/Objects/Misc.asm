@@ -578,6 +578,25 @@ Resize_MaxYFromX:
 
 ; =============== S U B R O U T I N E =======================================
 
+Change_ActSizes2:
+		move.w	(Current_zone_and_act).w,d0
+		ror.b	#1,d0
+		lsr.w	#4,d0
+		lea	(LevelSizes).l,a1
+		lea	(a1,d0.w),a1
+		move.w	(a1)+,(Camera_stored_min_X_pos).w
+		move.w	(a1)+,(Camera_stored_max_X_pos).w
+		move.w	(a1)+,(Camera_stored_min_Y_pos).w
+		move.w	(a1)+,d1
+		move.w	d1,(Camera_stored_max_Y_pos).w
+		move.w	d1,(Camera_target_max_Y_pos).w
+
+		; create change level size object
+		lea	Child7_ChangeLevSize(pc),a2
+		jmp	(CreateChild7_Normal2).w
+
+; =============== S U B R O U T I N E =======================================
+
 Obj_IncLevEndXGradual:
 		move.w	(Camera_max_X_pos).w,d0
 		move.l	objoff_30(a0),d1
@@ -585,12 +604,14 @@ Obj_IncLevEndXGradual:
 		move.l	d1,objoff_30(a0)
 		swap	d1
 		add.w	d1,d0
-		cmp.w	(Saved_Camera_max_X_pos).w,d0
-		bhs.s	+
+		cmp.w	(Camera_stored_max_X_pos).w,d0
+		bhs.s	.end
 		move.w	d0,(Camera_max_X_pos).w
 		rts
 ; ---------------------------------------------------------------------------
-+		move.w	(Saved_Camera_max_X_pos).w,(Camera_max_X_pos).w
+
+.end
+		move.w	(Camera_stored_max_X_pos).w,(Camera_max_X_pos).w
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -602,29 +623,14 @@ Obj_DecLevStartXGradual:
 		move.l	d1,objoff_30(a0)
 		swap	d1
 		sub.w	d1,d0
-		cmp.w	(Saved_Camera_min_X_pos).w,d0
-		ble.s		+
+		cmp.w	(Camera_stored_min_X_pos).w,d0
+		ble.s		.end
 		move.w	d0,(Camera_min_X_pos).w
 		rts
 ; ---------------------------------------------------------------------------
-+		move.w	(Saved_Camera_min_X_pos).w,(Camera_min_X_pos).w
-		jmp	(Delete_Current_Sprite).w
 
-; =============== S U B R O U T I N E =======================================
-
-Obj_DecLevStartYGradual:
-		move.w	(Camera_min_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		sub.w	d1,d0
-		cmp.w	(Saved_Camera_min_Y_pos).w,d0
-		ble.s		+
-		move.w	d0,(Camera_min_Y_pos).w
-		rts
-; ---------------------------------------------------------------------------
-+		move.w	(Saved_Camera_min_Y_pos).w,(Camera_min_Y_pos).w
+.end
+		move.w	(Camera_stored_min_X_pos).w,(Camera_min_X_pos).w
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -636,12 +642,33 @@ Obj_IncLevEndYGradual:
 		move.l	d1,objoff_30(a0)
 		swap	d1
 		add.w	d1,d0
-		cmp.w	(Saved_Camera_target_max_Y_pos).w,d0
-		bgt.s	+
+		cmp.w	(Camera_stored_max_Y_pos).w,d0
+		bgt.s	.end
 		move.w	d0,(Camera_max_Y_pos).w
 		rts
 ; ---------------------------------------------------------------------------
-+		move.w	(Saved_Camera_target_max_Y_pos).w,(Camera_max_Y_pos).w
+
+.end
+		move.w	(Camera_stored_max_Y_pos).w,(Camera_max_Y_pos).w
+		jmp	(Delete_Current_Sprite).w
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_DecLevStartYGradual:
+		move.w	(Camera_min_Y_pos).w,d0
+		move.l	objoff_30(a0),d1
+		addi.l	#$4000,d1
+		move.l	d1,objoff_30(a0)
+		swap	d1
+		sub.w	d1,d0
+		cmp.w	(Camera_stored_min_Y_pos).w,d0
+		ble.s		.end
+		move.w	d0,(Camera_min_Y_pos).w
+		rts
+; ---------------------------------------------------------------------------
+
+.end
+		move.w	(Camera_stored_min_Y_pos).w,(Camera_min_Y_pos).w
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -657,3 +684,21 @@ Child6_IncLevY:
 Child6_DecLevY:
 		dc.w 1-1
 		dc.l Obj_DecLevStartYGradual
+Child1_ActLevelSize:
+		dc.w 3-1
+		dc.l Obj_IncLevEndXGradual
+		dc.b 0, 0
+		dc.l Obj_DecLevStartYGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndYGradual
+		dc.b 0, 0
+Child7_ChangeLevSize:
+		dc.w 4-1
+		dc.l Obj_DecLevStartYGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndYGradual
+		dc.b 0, 0
+		dc.l Obj_DecLevStartXGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndXGradual
+		dc.b 0, 0

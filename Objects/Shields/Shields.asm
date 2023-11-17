@@ -5,7 +5,7 @@
 ; Elemental Shield DPLC variables
 LastLoadedDPLC				= $34
 Art_Address					= $38
-DPLC_Address		 		= $3C
+DPLC_Address				= $3C
 
 ; ---------------------------------------------------------------------------
 ; Fire Shield

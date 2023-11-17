@@ -16,7 +16,7 @@ Pal_FillBlack:
 		move.w	d1,(a0)+	; fill palette with $000 (black)
 		tst.b	(Water_flag).w
 		beq.s	.notwater
-		move.w	d1,-(Normal_palette-(Water_palette-2))(a0)	; fill water palette with $000 (black)
+		move.w	d1,-(Normal_palette-(Water_palette-2))(a0)			; fill water palette with $000 (black)
 
 .notwater
 		dbf	d0,.palettewrite
@@ -27,7 +27,7 @@ Pal_FillBlack:
 Pal_FadeTo:
 PaletteFadeIn:
 Pal_FadeFromBlack:
-		move.w	#64-1,(Palette_fade_info).w
+		move.w	#bytes_to_word(0,64-1),(Palette_fade_info).w			; set fade info and fade count
 		bsr.s	Pal_FillBlack
 		moveq	#$15,d4
 
@@ -117,7 +117,7 @@ Pal_AddColor:
 Pal_FadeFrom:
 PaletteFadeOut:
 Pal_FadeToBlack:
-		move.w	#64-1,(Palette_fade_info).w
+		move.w	#bytes_to_word(0,64-1),(Palette_fade_info).w			; set fade info and fade count
 		moveq	#$15,d4
 
 .nextframe
@@ -216,7 +216,7 @@ Pal_FillWhite:
 
 Pal_FadeFromWhite:
 Pal_FromBlackWhite:
-		move.w	#64-1,(Palette_fade_info).w
+		move.w	#bytes_to_word(0,64-1),(Palette_fade_info).w			; set fade info and fade count
 		bsr.s	Pal_FillWhite
 		moveq	#$15,d4
 
@@ -299,7 +299,7 @@ Pal_DecColor2:
 ; =============== S U B R O U T I N E =======================================
 
 Pal_FadeToWhite:
-		move.w	#$3F,(Palette_fade_info).w
+		move.w	#bytes_to_word(0,64-1),(Palette_fade_info).w			; set fade info and fade count
 		moveq	#$15,d4
 
 .nextframe

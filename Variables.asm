@@ -67,10 +67,10 @@ Camera_min_X_pos:					ds.w 1
 Camera_max_X_pos:					ds.w 1
 Camera_min_Y_pos:					ds.w 1
 Camera_max_Y_pos:					ds.w 1
-Saved_Camera_max_X_pos:			ds.w 1
-Saved_Camera_min_X_pos:			ds.w 1
-Saved_Camera_min_Y_pos:			ds.w 1
-Saved_Camera_target_max_Y_pos:		ds.w 1
+Camera_stored_max_X_pos:			ds.w 1
+Camera_stored_min_X_pos:			ds.w 1
+Camera_stored_min_Y_pos:			ds.w 1
+Camera_stored_max_Y_pos:			ds.w 1
 Camera_min_X_pos_Saved:			ds.w 1
 Camera_max_X_pos_Saved:			ds.w 1
 Camera_min_Y_pos_Saved:			ds.w 1
