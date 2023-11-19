@@ -1004,8 +1004,8 @@ __LABEL__Plc:
 
 ; macro for a pattern load request
 plreq macro toVRAMaddr,fromROMaddr
-	dc.l	fromROMaddr
-	dc.w	tiles_to_bytes(toVRAMaddr)
+	dc.l fromROMaddr
+	dc.w tiles_to_bytes(toVRAMaddr)
     endm
 ; ---------------------------------------------------------------------------
 ; compare the size of an index with ZoneCount constant

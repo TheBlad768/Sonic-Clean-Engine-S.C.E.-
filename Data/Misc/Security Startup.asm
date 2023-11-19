@@ -114,7 +114,7 @@ VDPInitValues:		; values for VDP registers
 		dc.b $80		; Command $9700 - See above + VRAM fill mode
 VDPInitValues_End:
 
-		dc.l	vdpComm($0000,VRAM,DMA) ; value for VRAM write mode
+		dc.l vdpComm($0000,VRAM,DMA) ; value for VRAM write mode
 
 		; Z80 instructions (not the sound driver; that gets loaded later)
 Z80StartupCodeBegin:
@@ -159,8 +159,8 @@ Z80StartupCodeEnd:
 
 		dc.w	$8104	; value for VDP display mode
 		dc.w	$8F02	; value for VDP increment
-		dc.l	vdpComm($0000,CRAM,WRITE)	; value for CRAM write mode
-		dc.l	vdpComm($0000,VSRAM,WRITE)	; value for VSRAM write mode
+		dc.l vdpComm($0000,CRAM,WRITE)	; value for CRAM write mode
+		dc.l vdpComm($0000,VSRAM,WRITE)	; value for VSRAM write mode
 
 PSGInitValues:
 		dc.b	$9F,$BF,$DF,$FF	; values for PSG channel volumes
