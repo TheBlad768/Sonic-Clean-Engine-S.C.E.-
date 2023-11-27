@@ -30,8 +30,8 @@ CalcAngle_CheckY:
 
 CalcAngle_CheckOctet:
 		cmp.w	d2,d1					; Are we horizontally closer to the center?
-		bcc.s	CalcAngle_Divide			; If not, branch
-		exg.l	d1,d2						; If so, divide Y from X instead
+		bhs.s	CalcAngle_Divide			; If not, branch
+		exg	d1,d2						; If so, divide Y from X instead
 		addq.b	#1,d0					; Use octant that's horizontally closer to the center
 
 CalcAngle_Divide:
