@@ -26,7 +26,6 @@ Handle_Onscreen_Water_Height:
 		sub.w	(Camera_Y_pos).w,d0
 		beq.s	.set
 		bhs.s	.check
-		tst.w	d0
 		bpl.s	.check
 
 .set

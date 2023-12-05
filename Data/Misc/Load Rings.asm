@@ -84,39 +84,42 @@ sub_E994:
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
 		subq.w	#1,d1
-		bcs.s	locret_E9C8
+		bcs.s	.return
 
--		move.w	(a2)+,d0
-		beq.s	-
+.find
+		move.w	(a2)+,d0
+		beq.s	.find
 		movea.w	d0,a1
 
-; Wait
+		; wait
 		subq.b	#1,(a1)
-		bne.s	+
-		move.b	#6,(a1)
+		bne.s	.next
+		addq.b	#6,(a1)
 
-; Frame
+		; frame
 		addq.b	#1,1(a1)
 		cmpi.b	#(CMap_Ring_End-CMap_Ring)/2,1(a1)	; 5 frames
-		bne.s	+
+		bne.s	.next
 		move.w	#-1,(a1)
 
 		clr.w	-2(a2)
 		subq.w	#1,(Ring_consumption_table).w
-+		dbf	d1,-
 
-locret_E9C8:
+.next
+		dbf	d1,.find
+
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Test_Ring_Collisions:
 		cmpi.b	#90,invulnerability_timer(a0)
-		bhs.s	locret_E9C8
+		bhs.s	sub_E994.return
 		movea.l	(Ring_start_addr_ROM).w,a1
 		movea.l	(Ring_end_addr_ROM).w,a2
 		cmpa.l	a1,a2
-		beq.s	locret_E9C8
+		beq.s	sub_E994.return
 		movea.w	(Ring_start_addr_RAM).w,a4
 		btst	#Status_LtngShield,status_secondary(a0)
 		beq.s	Test_Ring_Collisions_NoAttraction
@@ -183,8 +186,9 @@ loc_EAC6:
 		jsr	(GiveRing).w
 		lea	(Ring_consumption_list).w,a3
 
--		tst.w	(a3)+
-		bne.s	-
+.find
+		tst.w	(a3)+
+		bne.s	.find
 		move.w	a4,-(a3)
 		addq.w	#1,(Ring_consumption_table).w
 
@@ -303,27 +307,37 @@ CollectRing:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_SpriteRingMem:
+
+		; objects
 		lea	(Dynamic_object_RAM).w,a1
 		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d1
 
--		lea	next_object(a1),a1
+.findos
+		lea	next_object(a1),a1						; next object slot
 		tst.l	address(a1)
-		beq.s	+
-		move.w	respawn_addr(a1),d0
-		beq.s	+
-		movea.w	d0,a2
+		beq.s	.nextos
+		move.w	respawn_addr(a1),d0				; get address in respawn table
+		beq.s	.nextos							; if it's zero, it isn't remembered
+		movea.w	d0,a2							; load address into a2
 		bclr	#7,(a2)
-+		dbf	d1,-
+
+.nextos
+		dbf	d1,.findos
+
+		; rings
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
 		subq.w	#1,d1
-		bcs.s	+
+		bcs.s	.return
 
--		move.w	(a2)+,d0
-		beq.s	-
+.find
+		move.w	(a2)+,d0
+		beq.s	.find
 		movea.w	d0,a1
 		move.w	#-1,(a1)
 		clr.w	-2(a2)
 		subq.w	#1,(Ring_consumption_table).w
-		dbf	d1,-
-+		rts
+		dbf	d1,.find
+
+.return
+		rts

@@ -74,6 +74,12 @@ even macro
 	align0 2
     endm
 
+evenRAM macro
+      if (*)&1
+		ds.b 1
+      endif
+    endm
+
 ; define a trace macro
 ; lets you easily check what address a location in this disassembly assembles to
 trace macro optionalMessageWithoutQuotes

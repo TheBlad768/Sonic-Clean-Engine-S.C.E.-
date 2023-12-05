@@ -34,8 +34,7 @@ Init_VDP:
 .setreg
 		move.w	(a1)+,VDP_control_port-VDP_control_port(a5)
 		dbf	d1,.setreg	; set the VDP registers
-		move.w	VDP_register_values+2(pc),d0
-		move.w	d0,(VDP_reg_1_command).w
+		move.w	VDP_register_values+2(pc),(VDP_reg_1_command).w
 		move.w	#$8A00+223,(H_int_counter_command).w
 		moveq	#0,d0
 

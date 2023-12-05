@@ -2,14 +2,14 @@
 ; Uncompressed graphics
 ; ===========================================================================
 
-ArtUnc_Ring:		binclude "Objects/Rings/Uncompressed Art/Rings.bin"
+ArtUnc_Ring:				binclude "Objects/Rings/Uncompressed Art/Rings.bin"
 ArtUnc_Ring_end
 	even
-ArtUnc_Hud:			binclude "Objects/HUD/Uncompressed Art/HUD Numbers.bin"
+ArtUnc_HUDDigits:			binclude "Objects/HUD/Uncompressed Art/HUD Digits.bin"
 	even
-ArtUnc_DebugText:	binclude "Objects/HUD/Uncompressed Art/Debug Numbers.bin"
+ArtUnc_DebugDigits:			binclude "Objects/HUD/Uncompressed Art/Debug Digits.bin"
 	even
-ArtUnc_EndSigns:	binclude "Objects/Signpost/Uncompressed Art/End Signs.bin"
+ArtUnc_EndSigns:			binclude "Objects/Signpost/Uncompressed Art/End Signs.bin"
 	even
 
 ; ===========================================================================

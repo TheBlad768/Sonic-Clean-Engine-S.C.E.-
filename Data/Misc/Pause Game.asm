@@ -16,7 +16,7 @@ Pause_Game:
 
 Pause_Loop:
 		move.b	#VintID_Level,(V_int_routine).w
-		bsr.w	Wait_VSync
+		bsr.s	Wait_VSync
 	if GameDebug
 		btst	#button_A,(Ctrl_1_pressed).w				; is button A pressed?
 		beq.s	Pause_ChkFrameAdvance				; if not, branch

@@ -39,7 +39,7 @@ Eni_Decomp_Loop:
 		cmpi.w	#$40,d1					; is bit 6 set?
 		bhs.s	.got_field				; if it is, branch
 		moveq	#6,d0					; if not, process 6 bits instead of 7
-		lsr.w	#1,d2					; bitfield now becomes TTSSSS instead of TTTSSSS
+		lsr.w	d2						; bitfield now becomes TTSSSS instead of TTTSSSS
 
 .got_field:
 		bsr.w	Eni_Decomp_ChkGetNextByte
@@ -132,7 +132,7 @@ Eni_Decomp_End:
 
 .got_byte:
 		move.w	a0,d0
-		lsr.w	#1,d0		; are we on an odd byte?
+		lsr.w	d0			; are we on an odd byte?
 		bhs.s	.even_loc		; if not, branch
 		addq.w	#1,a0		; ensure we're on an even byte
 

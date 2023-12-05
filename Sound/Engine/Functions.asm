@@ -1,10 +1,20 @@
 ; ---------------------------------------------------------------------------
-; Load DAC driver (Mega PCM)
+; Perform sound driver initialisation and load the DAC driver
 ; ---------------------------------------------------------------------------
-; SoundDriverLoad: JmpTo_SoundDriverLoad 
+; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_LoadDACDriver:
+
+	; mask off interrupts so that an interrupt cannot occur and mess with
+	; the Z80 bus request or DAC driver before they are finished with
+	disableIntsSave
 	SMPS_stopZ80
 	SMPS_resetZ80
+
+	; detect PAL consoles and set the PAL flag if needed
+	btst	#6,(Graphics_flags).w
+	beq.s	.not_pal
+	bset	#f_pal,(Clone_Driver_RAM+SMPS_RAM.bitfield1).l
+.not_pal:
 
 	; load Mega PCM (Kosinski-compressed)
 	lea	(MegaPCM).l,a0	; source
@@ -20,10 +30,13 @@ SMPS_LoadDACDriver:
 	SMPS_resetZ80
 	move.w	d1,(SMPS_z80_bus_request).l	; start the Z80
 	tst.b	(SegaCD_Mode).w
-	beq.s	+
+	beq.s	.skip
 	MCDSend	#_MCD_SetVolume, #255
 	MCDSend	#_MCD_NoSeek, #1
-+	rts
+
+.skip
+	enableIntsSave
+	rts
 ; End of function SMPS_LoadDACDriver
 
 ; ---------------------------------------------------------------------------
@@ -31,12 +44,14 @@ SMPS_LoadDACDriver:
 ; ---------------------------------------------------------------------------
 ; sub_135E: PlayMusic:
 SMPS_QueueSound1:
-	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	tst.w	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 	bne.s	+
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1+1).w
 	rts
 +
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4+1).w
 	rts
 ; End of function SMPS_QueueSound1
 
@@ -44,22 +59,80 @@ SMPS_QueueSound1:
 ; Queue sound for play (queue 2)
 ; and optionally only do so if object is on-screen (Sonic engine feature)
 ; ---------------------------------------------------------------------------
-; sub_137C: PlaySoundLocal:
     if SMPS_EnablePlaySoundLocal
+; sub_137C: PlaySoundLocal:
 SMPS_QueueSound2Local:
 	tst.b	render_flags(a0)
 	bpl.s	++	; rts
     endif
 ; sub_1370: PlaySound:
 SMPS_QueueSound2:
-	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	tst.w	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
 	bne.s	+
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2+1).w
 	rts
 +
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
-+	rts
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3+1).w
++
+	rts
 ; End of function SMPS_QueueSound2
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 3)
+; ---------------------------------------------------------------------------
+; sub_1376: PlaySoundStereo:
+SMPS_QueueSound3:
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3+1).w
+	rts
+; End of function SMPS_QueueSound3
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 1)
+; ---------------------------------------------------------------------------
+
+SMPS_QueueSound1_Extended:
+	tst.w	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	bne.s	+
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	rts
++
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
+	rts
+; End of function SMPS_QueueSound1Word
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 2)
+; and optionally only do so if object is on-screen (Sonic engine feature)
+; ---------------------------------------------------------------------------
+
+    if SMPS_EnablePlaySoundLocal
+SMPS_QueueSound2Local_Extended:
+	tst.b	render_flags(a0)
+	bpl.s	++	; rts
+    endif
+
+SMPS_QueueSound2_Extended:
+	tst.w	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	bne.s	+
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	rts
++
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
++
+	rts
+; End of function SMPS_QueueSound2Word
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 3)
+; ---------------------------------------------------------------------------
+
+SMPS_QueueSound3_Extended:
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
+	rts
+; End of function SMPS_QueueSound3Word
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
@@ -77,8 +150,6 @@ SMPS_PlayDACSample:
 	rts
 ; End of function SMPS_PlayDACSample
 
-    if SMPS_EnablePWM
-
 ; ---------------------------------------------------------------------------
 ; Play a PWM sample
 ;
@@ -86,7 +157,7 @@ SMPS_PlayDACSample:
 ; d1 = Sample volume/panning
 ; d2 = PWM channel*2 (0 = channel 1, 2 = channel 2, etc.)
 ; ---------------------------------------------------------------------------
-
+    if SMPS_EnablePWM
 SMPS_PlayPWMSample:
 	; Merge ID with volume/pan to get PWM command
 	lsl.w	#8,d1

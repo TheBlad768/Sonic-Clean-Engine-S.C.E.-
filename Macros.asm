@@ -67,7 +67,7 @@ dmaFillVRAM macro byte,addr,length
 	move.w	#$8F01,VDP_control_port-VDP_control_port(a5) ; VRAM pointer increment: $0001
 	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5) ; DMA length ...
 	move.w	#$9780,VDP_control_port-VDP_control_port(a5) ; VRAM fill
-	move.l	#$40000080|(((addr)&$3FFF)<<16)|(((addr)&$C000)>>14),VDP_control_port-VDP_control_port(a5) ; Start at ...
+	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5) ; Start at ...
 	move.w	#(byte)<<8,(VDP_data_port).l ; Fill with byte
 .loop:
 	move.w	VDP_control_port-VDP_control_port(a5),d1
@@ -111,11 +111,11 @@ theld:	macro press,player
 ; input: 16-bit VRAM address, control port (default is ($C00004).l)
 ; ---------------------------------------------------------------------------
 
-locVRAM:	macro loc,controlport
+locVRAM macro loc, controlport
 	if ("controlport"=="")
-	move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),(VDP_control_port).l
+	move.l	#$40000000|vdpCommDelta(loc),(VDP_control_port).l
 	else
-	move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),controlport
+	move.l	#$40000000|vdpCommDelta(loc),controlport
 	endif
     endm
 
@@ -749,44 +749,64 @@ palscriptrun	macro header
 ; input: track, terminate routine, branch or jump, move operand size
 ; ---------------------------------------------------------------------------
 
-music:		macro track,terminate,byte
-	 	    if ("byte"="0") || ("byte"="")
-			moveq	#signextendB(track),d0
-		    else
-			move.w	#(track),d0
-		    endif
-		      if ("terminate"="0") || ("terminate"="")
-			jsr	(SMPS_QueueSound1).w
-		      else
-			jmp	(SMPS_QueueSound1).w
-		      endif
-	    endm
+music	macro track, terminate, byte
+    if ("byte"="0") || ("byte"="")
+	moveq	#signextendB(track),d0
+    else
+	move.w	#(track),d0
+    endif
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(SMPS_QueueSound1).w
+      else
+	jmp	(SMPS_QueueSound1).w
+      endif
+    endm
 
-sfx:		macro track,terminate,byte
-	 	    if ("byte"="0") || ("byte"="")
-			moveq	#signextendB(track),d0
-		    else
-			move.w	#(track),d0
-		    endif
-		      if ("terminate"="0") || ("terminate"="")
-			jsr	(SMPS_QueueSound2).w
-		      else
-			jmp	(SMPS_QueueSound2).w
-		      endif
-	    endm
+sfx	macro track, terminate, byte
+    if ("byte"="0") || ("byte"="")
+	moveq	#signextendB(track),d0
+    else
+	move.w	#(track),d0
+    endif
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(SMPS_QueueSound2).w
+      else
+	jmp	(SMPS_QueueSound2).w
+      endif
+    endm
 
-sample:		macro track,terminate,byte
-	 	    if ("byte"="0") || ("byte"="")
-			moveq	#signextendB(track),d0
-		    else
-			move.w	#(track),d0
-		    endif
-		      if ("terminate"="0") || ("terminate"="")
-			jsr	(SMPS_PlayDACSample).w
-		      else
-			jmp	(SMPS_PlayDACSample).w
-		      endif
-	    endm
+sample	macro id, terminate, byte
+    if ("byte"="0") || ("byte"="")
+	moveq	#signextendB(id),d0
+    else
+	move.w	#(id),d0
+    endif
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(SMPS_PlayDACSample).w
+      else
+	jmp	(SMPS_PlayDACSample).w
+      endif
+    endm
+
+	; extended music
+emusic	macro track, terminate
+	move.w	#(track),d0
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(SMPS_QueueSound1_Extended).w
+      else
+	jmp	(SMPS_QueueSound1_Extended).w
+      endif
+    endm
+
+	; extended sfx
+esfx	macro track, terminate
+	move.w	#(track),d0
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(SMPS_QueueSound2_Extended).w
+      else
+	jmp	(SMPS_QueueSound2_Extended).w
+      endif
+    endm
 
 ; ---------------------------------------------------------------------------
 ; macro to declare a mappings table (taken from Sonic 2 Hg disassembly)

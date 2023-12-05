@@ -1,6 +1,6 @@
 SMPS_z80_ram =		$A00000
 
-SMPS_HW_Port_1_Data =	$A10003
+SMPS_version_number =	$A10001
 
 SMPS_z80_bus_request =	$A11100
 SMPS_z80_reset =	$A11200
@@ -16,6 +16,8 @@ SMPS_pwm_comm =		$A15128
 
 SMPS_psg_input =	$C00011
 
+SMPS_TRACK_COUNT = ((SMPS_RAM.v_track_ram_end-SMPS_RAM.v_track_ram)/SMPS_Track.len)
+
 SMPS_MUSIC_TRACK_COUNT = ((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/SMPS_Track.len)
 SMPS_MUSIC_FM_DAC_TRACK_COUNT = ((SMPS_RAM.v_music_fmdac_tracks_end-SMPS_RAM.v_music_fmdac_tracks)/SMPS_Track.len)
 SMPS_MUSIC_FM_TRACK_COUNT = ((SMPS_RAM.v_music_fm_tracks_end-SMPS_RAM.v_music_fm_tracks)/SMPS_Track.len)
@@ -28,6 +30,8 @@ SMPS_SFX_TRACK_COUNT = ((SMPS_RAM.v_sfx_track_ram_end-SMPS_RAM.v_sfx_track_ram)/
 SMPS_SFX_FM_TRACK_COUNT = ((SMPS_RAM.v_sfx_fm_tracks_end-SMPS_RAM.v_sfx_fm_tracks)/SMPS_Track.len)
 SMPS_SFX_PSG_TRACK_COUNT = ((SMPS_RAM.v_sfx_psg_tracks_end-SMPS_RAM.v_sfx_psg_tracks)/SMPS_Track.len)
 
+    if SMPS_EnableSpecSFX
 SMPS_SPECIAL_SFX_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_spcsfx_track_ram)/SMPS_Track.len)
 SMPS_SPECIAL_SFX_FM_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_fm_tracks_end-SMPS_RAM.v_spcsfx_fm_tracks)/SMPS_Track.len)
 SMPS_SPECIAL_SFX_PSG_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_psg_tracks_end-SMPS_RAM.v_spcsfx_psg_tracks)/SMPS_Track.len)
+    endif

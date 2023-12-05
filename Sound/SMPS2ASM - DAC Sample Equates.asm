@@ -134,7 +134,6 @@ dLetsGo =					SMPS_id(ptr_dacDE)
 dHey =						SMPS_id(ptr_dacDF)
 	endif
 
-; Sonic 2
-dSega_S2 =					SMPS_id(ptr_dacE0)
+dSega =						SMPS_id(ptr_dacE0)
 
-dac__Last = dSega_S2
+dac__Last = dSega

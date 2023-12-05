@@ -16,7 +16,7 @@ VInt:
 		beq.s	.wait	; wait until vertical blanking is taking place
 
 		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		move.l	(V_scroll_value).w,VDP_data_port-VDP_data_port(a6) ; send screen ypos to VSRAM
+		move.l	(V_scroll_value).w,VDP_data_port-VDP_data_port(a6)	; send screen ypos to VSRAM
 		btst	#6,(Graphics_flags).w
 		beq.s	.notpal								; branch if it's not a PAL system
 		move.w	#$700,d0
@@ -272,19 +272,7 @@ VInt_Level_Cont:
 		jsr	(VInt_DrawLevel).w
 		startZ80
 		enableInts
-		tst.b	(Water_flag).w
-		beq.s	.notwater
-		cmpi.b	#92,(H_int_counter).w	; is H-int occuring on or below line 92?
-		bhs.s	.notwater				; if it is, branch
-		st	(Do_Updates_in_H_int).w
-		jsr	(Set_Kos_Bookmark).w
-		addq.w	#4,sp
-		bra.w	VInt_Done
-; ---------------------------------------------------------------------------
-
-.notwater
-		bsr.s	Do_Updates
-		jmp	(Set_Kos_Bookmark).w
+		pea	(Set_Kos_Bookmark).w
 
 ; ---------------------------------------------------------------------------
 ; Other updates
@@ -295,9 +283,9 @@ VInt_Level_Cont:
 Do_Updates:
 		jsr	(UpdateHUD).w
 		clr.w	(Lag_frame_count).w
-		tst.w	(Demo_timer).w ; is there time left on the demo?
+		tst.w	(Demo_timer).w		; is there time left on the demo?
 		beq.s	.return
-		subq.w	#1,(Demo_timer).w ; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w	; subtract 1 from time left
 
 .return
 		rts
@@ -311,7 +299,7 @@ Do_Updates:
 HInt:
 		disableInts
 		tst.b	(H_int_flag).w
-		beq.w	HInt_Done
+		beq.s	HInt_Done
 		clr.b	(H_int_flag).w
 		movem.l	a0-a1,-(sp)
 		lea	(VDP_data_port).l,a1
@@ -322,13 +310,6 @@ HInt:
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a1)
 	endr
 		movem.l	(sp)+,a0-a1
-		tst.b	(Do_Updates_in_H_int).w
-		beq.s	HInt_Done
-		clr.b	(Do_Updates_in_H_int).w
-		movem.l	d0-a6,-(sp)			; move all the registers to the stack
-		bsr.w	Do_Updates
-		SMPS_UpdateSoundDriver		; Update SMPS
-		movem.l	(sp)+,d0-a6			; load saved registers from the stack
 
 HInt_Done:
 		rte

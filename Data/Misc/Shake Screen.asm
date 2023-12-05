@@ -5,25 +5,30 @@
 ; =============== S U B R O U T I N E =======================================
 
 ShakeScreen_Setup:
-		move.w	(Screen_shaking_offset).w,(Screen_shaking_last_offset).w
 		moveq	#0,d1
+		move.w	(Screen_shaking_offset).w,(Screen_shaking_last_offset).w
 		cmpi.b	#id_SonicDeath,(Player_1+routine).w
-		bhs.s	++
+		bhs.s	.setso
 		move.w	(Screen_shaking_flag).w,d0
-		beq.s	++
-		bmi.s	+
+		beq.s	.setso
+		bmi.s	.shake
 		subq.w	#1,d0
 		move.w	d0,(Screen_shaking_flag).w
 		cmpi.w	#$14,d0
-		bhs.s	+
+		bhs.s	.shake
 		move.b	ScreenShakeArray(pc,d0.w),d1
 		ext.w	d1
-		bra.s	++
+
+.setso
+		move.w	d1,(Screen_shaking_offset).w
+		rts
 ; ---------------------------------------------------------------------------
-+		move.w	(Level_frame_counter).w,d0
+
+.shake
+		move.w	(Level_frame_counter).w,d0
 		andi.w	#$3F,d0
 		move.b	ScreenShakeArray2(pc,d0.w),d1
-+		move.w	d1,(Screen_shaking_offset).w
+		move.w	d1,(Screen_shaking_offset).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -35,3 +40,4 @@ ScreenShakeArray2:
 		dc.b 2, 0, 3, 2, 2, 3, 2, 2, 1, 3, 0, 0, 1, 0, 1, 3
 		dc.b 1, 2, 1, 3, 1, 2, 2, 1, 2, 3, 1, 2, 1, 2, 0, 0
 		dc.b 2, 0, 3, 2, 2, 3, 2, 2, 1, 3, 0, 0, 1, 0, 1, 3
+	even

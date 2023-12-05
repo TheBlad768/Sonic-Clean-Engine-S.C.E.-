@@ -11,13 +11,6 @@ Load_Sprites:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Sprites_Init:
-		move.l	#Load_Sprites_Main,(Object_load_addr_RAM).w
-		move.l	#Obj_Index,(Object_index_addr).w
-		tst.b	(Respawn_table_keep).w
-		bne.s	.skip
-		clearRAM Object_respawn_table, Object_respawn_table_end
-
-.skip
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 		lsr.w	#4,d0
@@ -25,6 +18,15 @@ Load_Sprites_Init:
 		movea.l	(a0,d0.w),a0
 		move.l	a0,(Object_load_addr_front).w
 		move.l	a0,(Object_load_addr_back).w
+
+Load_Sprites_Init2:
+		move.l	#Load_Sprites_Main,(Object_load_addr_RAM).w
+		move.l	#Obj_Index,(Object_index_addr).w
+		tst.b	(Respawn_table_keep).w
+		bne.s	.skip
+		clearRAM Object_respawn_table, Object_respawn_table_end
+
+.skip
 		lea	(Object_respawn_table).w,a3
 		move.w	(Camera_X_pos).w,d6
 		subi.w	#128,d6

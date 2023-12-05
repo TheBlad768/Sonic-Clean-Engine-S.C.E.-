@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Music macros and constants
+; Music	macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_MUSIC_METADATA macro address,fasttempo,flags
 	dc.l	((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)
@@ -19,9 +19,6 @@ SMPS_SFX_METADATA macro address,priority,flags
 ; ---------------------------------------------------------------------------
 SMPS_stopZ80 macro
 	move.w	#$100,(SMPS_z80_bus_request).l
-	nop
-	nop
-	nop
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -43,7 +40,7 @@ SMPS_resetZ80 macro
 ; start the Z80
 ; ---------------------------------------------------------------------------
 SMPS_startZ80 macro
-	move.w	#0,(SMPS_z80_bus_request).l    ; start the Z80
+	move.w	#0,(SMPS_z80_bus_request).l
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -89,29 +86,29 @@ SMPS_waitYM macro target
 	endm
 
 ; ---------------------------------------------------------------------------
-; pause music
+; Pauses the driver: music, SFX, everything
 ; ---------------------------------------------------------------------------
 SMPS_PauseMusic macro
-	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
+	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
 	endm
 
 ; ---------------------------------------------------------------------------
-; unpause music
+; Unpauses the driver
 ; ---------------------------------------------------------------------------
 SMPS_UnpauseMusic macro
-	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
+	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
 	endm
 
 ; ---------------------------------------------------------------------------
 ; update sound driver
 ; ---------------------------------------------------------------------------
 SMPS_UpdateSoundDriver macro
-	enableInts													; enable interrupts (we can accept horizontal interrupts from now on)
+	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
 	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; set "SMPS running flag"
-	bne.s	+													; if it was set already, don't call another instance of SMPS
-	jsr	(SMPS_UpdateDriver).l 									; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w		; reset "SMPS running flag"
-+
+	bne.s	.skip						; if it was set already, don't call another instance of SMPS
+	jsr	(SMPS_UpdateDriver).l 				; update Sonic 2 Clone Driver v2
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; reset "SMPS running flag"
+.skip:
 	endm
 
 ; ---------------------------------------------------------------------------
