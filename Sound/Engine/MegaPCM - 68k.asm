@@ -23,15 +23,15 @@ IncludeDAC macro Name,Extension,Path
 Name:		label *
     if ("Path"<>"")
 	if ("Extension"="WAV")
-		BINCLUDE	"Sound/DAC/Path/Name.Extension",$3A
+		binclude "Sound/DAC/Path/Name.Extension",$3A
 	else
-		BINCLUDE	"Sound/DAC/Path/Name.Extension"
+		binclude "Sound/DAC/Path/Name.Extension"
 	endif
     else
 	if ("Extension"="WAV")
-		BINCLUDE	"Sound/DAC/Name.Extension",$3A
+		binclude "Sound/DAC/Name.Extension",$3A
 	else
-		BINCLUDE	"Sound/DAC/Name.Extension"
+		binclude "Sound/DAC/Name.Extension"
 	endif
     endif
 Name_End:	label *
