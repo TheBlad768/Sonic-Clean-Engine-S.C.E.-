@@ -19,9 +19,9 @@ HScroll_Deform:
 
 .loop
 		add.l	d2,(a3)
-		move.w	(a3)+,(a1)
+		move.w	(a3),(a1)
 		addq.w	#4,a1
-		addq.w	#2,a3
+		addq.w	#4,a3
 		dbf	d5,.loop
 		dbf	d6,.loop2
 		rts
@@ -37,7 +37,8 @@ HScroll_Deform:
 
 VScroll_Deform:
 		lea	(VDP_data_port).l,a6
-		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_data_port(a6)
+		lea	VDP_control_port-VDP_data_port(a6),a5
+		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		moveq	#bytesToXcnt((320*2),16),d6
 
 .loop
@@ -45,7 +46,8 @@ VScroll_Deform:
 		ext.l	d2
 		asl.l	#8,d2
 		add.l	d2,(a1)
-		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
+		move.w	(a1),VDP_data_port-VDP_data_port(a6)
+		addq.w	#4,a1
 		dbf	d6,.loop
 		rts
 
