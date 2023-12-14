@@ -57,6 +57,7 @@ PLC2_DEZ1_After_end
 ; ===========================================================================
 
 PLC1_DEZ2_Before: plrlistheader
+		plreq $47E, ArtKosM_GrayButton					; button
 PLC1_DEZ2_Before_end
 
 ; ===========================================================================
@@ -72,6 +73,7 @@ PLC2_DEZ2_After_end
 ; ===========================================================================
 
 PLC1_DEZ3_Before: plrlistheader
+		plreq $47E, ArtKosM_GrayButton					; button
 PLC1_DEZ3_Before_end
 
 ; ===========================================================================
@@ -87,6 +89,7 @@ PLC2_DEZ3_After_end
 ; ===========================================================================
 
 PLC1_DEZ4_Before: plrlistheader
+		plreq $47E, ArtKosM_GrayButton					; button
 PLC1_DEZ4_Before_end
 
 ; ===========================================================================
