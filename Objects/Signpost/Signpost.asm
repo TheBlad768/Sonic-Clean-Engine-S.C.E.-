@@ -140,7 +140,7 @@ Obj_EndSignAfter:
 ; ---------------------------------------------------------------------------
 
 loc_83988:
-		lea	(PLC_Main2).l,a5
+		lea	(PLC2_Main).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(Remove_From_TrackingSlot).w
 		jmp	(Go_Delete_Sprite).w

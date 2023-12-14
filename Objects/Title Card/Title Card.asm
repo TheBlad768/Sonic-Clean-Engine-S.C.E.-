@@ -131,7 +131,7 @@ Obj_TitleCard:
 		st	(TitleCard_end_flag).w								; if in-level, set end of title card flag
 
 .skiplevel2
-		lea	(PLC_Main2).l,a5
+		lea	(PLC2_Main).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		jsr	(LoadPLC2_KosM).w
 		jsr	(LoadPLC_Animals).l

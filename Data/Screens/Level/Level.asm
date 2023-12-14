@@ -61,7 +61,7 @@ Level_Screen:
 		jsr	(LoadPalette).w											; load Sonic's palette
 		move.w	d1,d0
 		jsr	(LoadPalette_Immediate).w
-		lea	(PLC_Main).l,a5
+		lea	(PLC1_Main).l,a5
 		jsr	(LoadPLC_Raw_KosM).w									; load hud and ring art
 		jsr	(CheckLevelForWater).l
 		clearRAM Water_palette_line_2, Normal_palette
