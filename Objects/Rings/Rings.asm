@@ -204,7 +204,7 @@ loc_1A7E8:
 		bne.s	loc_1A83C
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A828
-		bsr.w	sub_FCA0
+		bsr.w	RingCheckFloorDist_ReverseGravity
 		tst.w	d1
 		bpl.s	loc_1A828
 		sub.w	d1,y_pos(a0)

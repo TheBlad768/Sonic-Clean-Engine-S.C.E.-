@@ -577,7 +577,7 @@ ExecuteParallaxScript_Parallax_Normal:
 		swap	d1
 		move.w	d1,(a5)+
 
-		bra.s	ExecuteParallaxScript_ProcessBlock		
+		bra.s	ExecuteParallaxScript_ProcessBlock
 ; ---------------------------------------------------------------
 ; Scrolling routine: Moving solid block
 ; ---------------------------------------------------------------
@@ -603,7 +603,7 @@ ExecuteParallaxScript_Parallax_Moving:
 		add.w	d3,d1
 		move.w	d1,(a5)+
 
-		bra.s	ExecuteParallaxScript_ProcessBlock		
+		bra.s	ExecuteParallaxScript_ProcessBlock
 ; ---------------------------------------------------------------
 ; Scrolling routine: Linear Parallax / Psedo-surface
 ; ---------------------------------------------------------------

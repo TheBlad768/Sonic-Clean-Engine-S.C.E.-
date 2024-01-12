@@ -76,7 +76,7 @@ loc_EC88:
 		moveq	#0,d6
 		bsr.w	FindFloor
 		move.w	(sp)+,d0
-		bsr.w	Player_Angle
+		bsr.s	Player_Angle
 		tst.w	d1
 		beq.s	locret_ED12
 		bpl.s	loc_ED14
@@ -393,10 +393,11 @@ GetFloorPosition:
 ; ---------------------------------------------------------------------------
 
 ChunkAddrArray:
-.a	set	0
+
+		set	.a,0
 	rept	$100
 		dc.w	 .a
-.a	set	.a+$80
+		set	.a,.a + $80
 	endr
 
 ; =============== S U B R O U T I N E =======================================
@@ -551,7 +552,7 @@ loc_F394:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_F3A4:
+Ring_FindFloor:
 		bsr.w	GetFloorPosition
 		move.w	(a1),d0
 		move.w	d0,d4
@@ -824,6 +825,7 @@ CalcRoomInFront:
 +		cmpi.b	#$40,d0
 		beq.w	CheckLeftWallDist_Part2
 		bra.w	CheckRightWallDist_Part2
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to calculate how much space is empty above Sonic's/Tails' head
 ; d0 = input angle perpendicular to the spine
@@ -1064,7 +1066,7 @@ RingCheckFloorDist:
 		movea.w	#$10,a3
 		moveq	#0,d6
 		moveq	#$C,d5
-		bra.w	loc_F3A4
+		bra.w	Ring_FindFloor
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1329,7 +1331,7 @@ ChkFloorEdge_ReverseGravity_Part2:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_FCA0:
+RingCheckFloorDist_ReverseGravity:
 		move.w	x_pos(a0),d3
 		move.w	y_pos(a0),d2
 		move.b	y_radius(a0),d0
@@ -1341,7 +1343,7 @@ sub_FCA0:
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$C,d5
-		bra.w	loc_F3A4
+		bra.w	Ring_FindFloor
 
 ; =============== S U B R O U T I N E =======================================
 
