@@ -265,8 +265,8 @@ EnemyDefeated:
 		movea.w	objoff_44(a0),a1
 		tst.w	y_vel(a1)
 		bmi.s	.bouncedown
-		move.w	x_pos(a1),d0
-		cmp.w	x_pos(a0),d0
+		move.w	y_pos(a1),d0
+		cmp.w	y_pos(a0),d0
 		bhs.s	.bounceup
 		neg.w	y_vel(a1)
 		rts
