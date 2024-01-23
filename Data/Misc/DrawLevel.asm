@@ -884,6 +884,32 @@ Reset_TileOffsetPositionEff:
 
 ; =============== S U B R O U T I N E =======================================
 
+Adjust_BGDuringLoop:
+		move.w	(a1),d1
+		move.w	d0,(a1)+
+		sub.w	d1,d0
+		bpl.s	loc_4F37C
+		neg.w	d0
+		cmp.w	d2,d0
+		blo.s		loc_4F378
+		sub.w	d3,d0
+
+loc_4F378:
+		sub.w	d0,(a1)+
+		rts
+; ---------------------------------------------------------------------------
+
+loc_4F37C:
+		cmp.w	d2,d0
+		blo.s		loc_4F382
+		sub.w	d3,d0
+
+loc_4F382:
+		add.w	d0,(a1)+
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 Clear_Switches:
 		clearRAM2 Level_trigger_array, Level_trigger_array_end
 		rts

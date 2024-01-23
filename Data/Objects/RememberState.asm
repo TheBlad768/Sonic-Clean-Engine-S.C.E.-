@@ -194,8 +194,10 @@ Go_Delete_SpriteSlotted:
 		bclr	#7,(a2)
 
 Go_Delete_SpriteSlotted2:
-		move.l	#Delete_Current_Sprite,address(a0)
 		bset	#7,status(a0)
+
+Go_Delete_SpriteSlotted3:
+		move.l	#Delete_Current_Sprite,address(a0)
 
 Remove_From_TrackingSlot:
 		move.b	objoff_3B(a0),d0	; slot bit
@@ -211,11 +213,6 @@ Sprite_CheckDeleteTouchSlotted:
 		out_of_xrange.s	Go_Delete_SpriteSlotted
 		jsr	(Add_SpriteToCollisionResponseList).w
 		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
-
-Go_Delete_SpriteSlotted3:
-		move.l	#Delete_Current_Sprite,address(a0)
-		bra.s	Remove_From_TrackingSlot
 
 ; =============== S U B R O U T I N E =======================================
 

@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 ChangeRingFrame:
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w		; has Sonic just died?
+		cmpi.b	#id_SonicDeath,(Player_1+routine).w		; has player just died?
 		bhs.s	.syncend									; if yes, branch
 
 ; Used for rings and giant rings
@@ -18,12 +18,12 @@ ChangeRingFrame:
 
 ; Dynamic graphics
 		moveq	#0,d0
-		move.l	#ArtUnc_Ring>>1,d1						; Load art source
+		move.l	#ArtUnc_Ring>>1,d1						; load art source
 		move.b	(Rings_frame).w,d0
 		lsl.w	#6,d0
-		add.l	d0,d1									; Get next frame
-		move.w	#tiles_to_bytes(ArtTile_Ring),d2			; Load art destination
-		move.w	#$80/2,d3								; Size of art (in words)	; We only need one frame
+		add.l	d0,d1									; get next frame
+		move.w	#tiles_to_bytes(ArtTile_Ring),d2			; load art destination
+		move.w	#$80/2,d3								; size of art (in words)	; we only need one frame
 		bsr.w	Add_To_DMA_Queue
 
 ; Used for bouncing rings
@@ -48,91 +48,101 @@ ChangeRingFrame:
 
 ; =============== S U B R O U T I N E =======================================
 
+Osc_Data:
+		dc.w %0000000001111101		; oscillation direction bitfield	; ($7D = set bit 0($01) + bit 2($04) + bit 3($08) + bit 4($10) + bit 5($20) + bit 6($40)
+		dc.w $80, 0					; bit F (bit is not set)	; baseline values
+		dc.w $80, 0					; bit E (bit is not set)
+		dc.w $80, 0					; bit D (bit is not set)
+		dc.w $80, 0					; bit C (bit is not set)
+		dc.w $80, 0					; bit B (bit is not set)
+		dc.w $80, 0					; bit A (bit is not set)
+		dc.w $80, 0					; bit 9 (bit is not set)
+		dc.w $80, 0					; bit 8 (bit is not set)
+		dc.w $80, 0					; bit 7 (bit is not set)
+		dc.w $3848, $EE				; bit 6 (bit is set)
+		dc.w $2080, $B4				; bit 5 (bit is set)
+		dc.w $3080,$10E				; bit 4 (bit is set)
+		dc.w $5080,$1C2				; bit 3 (bit is set)
+		dc.w $7080,$276				; bit 2 (bit is set)
+		dc.w $80, 0					; bit 1 (bit is not set)
+		dc.w $4000, $FE				; bit 0 (bit is set)
+Osc_Data_end
+; ---------------------------------------------------------------------------
+
 OscillateNumInit:
 		lea	Osc_Data(pc),a2
 		lea	(Oscillating_Numbers).w,a1
-		moveq	#bytesToWcnt(Osc_Data_End-Osc_Data),d1
 
-.copy
-		move.w	(a2)+,(a1)+
-		dbf	d1,.copy
+	rept	bytesTo2Lcnt(Osc_Data_end-Osc_Data)
+		move.l	(a2)+,(a1)+			; copy baseline values to RAM
+	endr
+	if (Osc_Data_end-Osc_Data)&2
+		move.w	(a2)+,(a1)+			; copy baseline values to RAM
+	endif
 		rts
-; ---------------------------------------------------------------------------
-
-Osc_Data:
-		dc.w %0000000001111101		; oscillation direction bitfield
-		dc.w $80, 0					; baseline values
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $80, 0
-		dc.w $3848, $EE
-		dc.w $2080, $B4
-		dc.w $3080,$10E
-		dc.w $5080,$1C2
-		dc.w $7080,$276
-		dc.w $80, 0
-		dc.w $4000, $FE
-Osc_Data_End
 
 ; =============== S U B R O U T I N E =======================================
 
 ; Oscillate values
 
 OscillateNumDo:
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w	; has Sonic just died?
-		bhs.s	OscillateNumDo_Return				; if yes, branch
+		cmpi.b	#id_SonicDeath,(Player_1+routine).w			; has player just died?
+		bhs.s	.return										; if yes, branch
 		lea	Osc_Data2(pc),a2
 		lea	(Oscillating_Numbers).w,a1
-		move.w	(a1)+,d3								; get oscillation direction bitfield
-		moveq	#bytesToLcnt(Osc_Data2_End-Osc_Data2),d1
+		move.w	(a1)+,d3										; get oscillation direction bitfield
+		moveq	#bytesToLcnt(Osc_Data2_end-Osc_Data2),d1
 
--		move.w	(a2)+,d2								; get frequency
-		move.w	(a2)+,d4								; get amplitude
-		btst	d1,d3									; check oscillation direction
-		bne.s	+									; branch if 1
-		move.w	2(a1),d0								; get current rate
-		add.w	d2,d0								; add frequency
+.loop
+		move.w	(a2)+,d2										; get frequency
+		move.w	(a2)+,d4										; get amplitude
+		btst	d1,d3											; check oscillation direction
+		bne.s	.down										; branch if 1
+
+		; up
+		move.w	2(a1),d0										; get current rate
+		add.w	d2,d0										; add frequency
 		move.w	d0,2(a1)
-		add.w	d0,(a1)								; add rate to value
+		add.w	d0,(a1)										; add rate to value
 		cmp.b	(a1),d4
-		bhi.s	++
-		bset	d1,d3
-		bra.s	++
-+		move.w	2(a1),d0
+		bhi.s	.next
+		bset	d1,d3											; set bit
+		bra.s	.next
+; ---------------------------------------------------------------------------
+
+.down
+		move.w	2(a1),d0
 		sub.w	d2,d0
 		move.w	d0,2(a1)
 		add.w	d0,(a1)
 		cmp.b	(a1),d4
-		bls.s		+
-		bclr	d1,d3
-+		addq.w	#4,a1
-		dbf	d1,-
+		bls.s		.next
+		bclr	d1,d3											; clr bit
+
+.next
+		addq.w	#4,a1
+		dbf	d1,.loop
 		move.w	d3,(Oscillation_Control).w
 
-OscillateNumDo_Return:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Osc_Data2:
-		dc.w	 2, $10
-		dc.w	 2, $18
-		dc.w	 2, $20
-		dc.w	 2, $30
-		dc.w	 4, $20
-		dc.w	 8,   8
-		dc.w	 8, $40
-		dc.w	 4, $40
-		dc.w	 2, $38
-		dc.w	 2, $38
-		dc.w	 2, $20
-		dc.w	 3, $30
-		dc.w	 5, $50
-		dc.w	 7, $70
-		dc.w	 2, $40
-		dc.w	 2, $40
-Osc_Data2_End
+Osc_Data2:				; frequency, amplitude
+		dc.w	 2, $10		; bit $F
+		dc.w	 2, $18		; bit $E
+		dc.w	 2, $20		; bit $D
+		dc.w	 2, $30		; bit $C
+		dc.w	 4, $20		; bit $B
+		dc.w	 8, 8			; bit $A
+		dc.w	 8, $40		; bit 9
+		dc.w	 4, $40		; bit 8
+		dc.w	 2, $38		; bit 7
+		dc.w	 2, $38		; bit 6
+		dc.w	 2, $20		; bit 5
+		dc.w	 3, $30		; bit 4
+		dc.w	 5, $50		; bit 3
+		dc.w	 7, $70		; bit 2
+		dc.w	 2, $40		; bit 1
+		dc.w	 2, $40		; bit 0
+Osc_Data2_end

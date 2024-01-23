@@ -267,8 +267,8 @@ locret_83B02:
 ; =============== S U B R O U T I N E =======================================
 
 EndSign_Range:			dc.w -$20, $40, -$18, $30
-ObjSlot_EndSigns:		subObjSlotData 0, $5CA, $C, 0, Map_EndSigns, $300, $18, $10, 0, 0
-ObjDat_SignpostStub:		subObjData Map_SignpostStub, $5E2, $300, 4, 8, 0, 0
+ObjSlot_EndSigns:		subObjSlotData 0, $484, $C, 0, Map_EndSigns, $300, $18, $10, 0, 0
+ObjDat_SignpostStub:		subObjData Map_SignpostStub, $49C, $300, 4, 8, 0, 0
 ObjDat_SignpostSparkle:	subObjData Map_Ring, make_art_tile(ArtTile_Ring,1,0), $280, 8, 8, 4, 0
 Child6_EndSign:
 		dc.w 1-1
@@ -308,7 +308,7 @@ AniRaw_SignpostSparkle:
 	even
 
 PLC_EndSignStuff: plrlistheader
-		plreq $5E2, ArtKosM_SignpostStub
+		plreq $49C, ArtKosM_SignpostStub
 PLC_EndSignStuff_end
 ; ---------------------------------------------------------------------------
 
