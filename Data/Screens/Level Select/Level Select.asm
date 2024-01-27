@@ -58,12 +58,18 @@ LevelSelect_Screen:
 		move.b	d0,(Last_star_post_hit).w
 		move.b	d0,(Level_started_flag).w
 		ResetDMAQueue
+
+		; load main art
 		lea	(ArtKosM_LevelSelectText).l,a1
 		move.w	#tiles_to_bytes(1),d2
 		jsr	(Queue_Kos_Module).w
+
+		; load main palette
 		lea	(Pal_LevelSelect).l,a1
 		lea	(Target_palette).w,a2
 		jsr	(PalLoad_Line32).w
+
+		; load text
 		bsr.w	LevelSelect_LoadText
 		move.w	#palette_line_1+LevelSelect_VRAM,d3
 		bsr.w	LevelSelect_LoadMainText
@@ -170,12 +176,16 @@ LevelSelect_LoadMusicNumber:
 		lea	(vLevelSelect_CtrlTimer).w,a3
 		bsr.w	LevelSelect_FindLeftRightControls
 		move.w	d3,(vLevelSelect_MusicCount).w
-		move.b	(Ctrl_1_pressed).w,d1
-		andi.b	#btnABC,d1
+
+		; check ctrl
+		moveq	#btnABC,d1
+		and.b	(Ctrl_1_pressed).w,d1
 		beq.s	LevelSelect_Controls_ZoneAndAct.return
+
+		; play music
 		move.w	d3,d0
-		addq.w	#mus__First,d0		; $00 is reserved for silence
-		jmp	(SMPS_QueueSound1).w	; play music
+		addq.w	#mus__First,d0				; $00 is reserved for silence
+		jmp	(SMPS_QueueSound1).w			; play music
 
 ; ---------------------------------------------------------------------------
 ; Load Sound
@@ -187,12 +197,16 @@ LevelSelect_LoadSoundNumber:
 		lea	(vLevelSelect_CtrlTimer).w,a3
 		bsr.s	LevelSelect_FindLeftRightControls
 		move.w	d3,(vLevelSelect_SoundCount).w
-		move.b	(Ctrl_1_pressed).w,d1
-		andi.b	#btnABC,d1
+
+		; check ctrl
+		moveq	#btnABC,d1
+		and.b	(Ctrl_1_pressed).w,d1
 		beq.s	LevelSelect_Controls_ZoneAndAct.return
+
+		; play sfx
 		move.w	d3,d0
-		addi.w	#sfx__First,d0
-		jmp	(SMPS_QueueSound2).w	; play sfx
+		addi.w	#sfx__First,d0				; skip music
+		jmp	(SMPS_QueueSound2).w			; play sfx
 
 ; ---------------------------------------------------------------------------
 ; Load Sample
@@ -204,12 +218,16 @@ LevelSelect_LoadSampleNumber:
 		lea	(vLevelSelect_CtrlTimer).w,a3
 		bsr.s	LevelSelect_FindLeftRightControls
 		move.w	d3,(vLevelSelect_SampleCount).w
-		move.b	(Ctrl_1_pressed).w,d1
-		andi.b	#btnABC,d1
+
+		; check ctrl
+		moveq	#btnABC,d1
+		and.b	(Ctrl_1_pressed).w,d1
 		beq.s	LevelSelect_Controls_ZoneAndAct.return
+
+		; play sample
 		move.w	d3,d0
-		addi.w	#dac__First,d0
-		jmp	(SMPS_PlayDACSample).w	; play sample
+		addi.w	#dac__First,d0				; $80 is reserved for pause
+		jmp	(SMPS_PlayDACSample).w			; play sample
 
 ; ---------------------------------------------------------------------------
 ; Control (Up/Down)
@@ -218,16 +236,16 @@ LevelSelect_LoadSampleNumber:
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_FindUpDownControls:
-		move.b	(Ctrl_1_pressed).w,d1
-		andi.b	#btnUD,d1
+		moveq	#btnUD,d1
+		and.b	(Ctrl_1_pressed).w,d1
 		beq.s	.notpressed
 		move.w	#16,(a3)
 		bra.s	.pressed
 ; --------------------------------------------------------------------------
 
 .notpressed
-		move.b	(Ctrl_1_held).w,d1
-		andi.b	#btnUD,d1
+		moveq	#btnUD,d1
+		and.b	(Ctrl_1_held).w,d1
 		beq.s	.returnup
 		subq.w	#1,(a3)
 		bpl.s	.returnup
@@ -260,16 +278,16 @@ LevelSelect_FindUpDownControls:
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelect_FindLeftRightControls:
-		move.b	(Ctrl_1_pressed).w,d1
-		andi.b	#btnLR,d1
+		moveq	#btnLR,d1
+		and.b	(Ctrl_1_pressed).w,d1
 		beq.s	.notpressed
 		move.w	#16,(a3)
 		bra.s	.pressed
 ; --------------------------------------------------------------------------
 
 .notpressed
-		move.b	(Ctrl_1_held).w,d1
-		andi.b	#btnLR,d1
+		moveq	#btnLR,d1
+		and.b	(Ctrl_1_held).w,d1
 		beq.s	.returnleft
 		subq.w	#1,(a3)
 		bpl.s	.returnleft

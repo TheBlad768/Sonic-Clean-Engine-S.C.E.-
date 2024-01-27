@@ -31,7 +31,11 @@ Obj_LevelResults:
 		moveq	#0,d0
 		move.b	d0,(Update_HUD_timer).w				; ensure timer isn't being updated currently
 		move.b	(Timer_minute).w,d0
-		mulu.w	#60,d0
+		add.w	d0,d0								; multiply by 60 (1 second)
+		add.w	d0,d0
+		move.w	d0,d1
+		lsl.w	#4,d0
+		sub.w	d1,d0
 		moveq	#0,d1
 		move.b	(Timer_second).w,d1
 		add.w	d1,d0

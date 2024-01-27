@@ -1123,14 +1123,15 @@ levselstr macro str
 
 ; Codepage for level select
 	save
-	codepage LEVELSCREEN
-	CHARSET ' ', $2C
+	codepage	LEVELSCREEN
+	CHARSET ' ', 43
 	CHARSET '0','9', 1
-	CHARSET 'A','Z', $12
-	CHARSET 'a','z', $12
-	CHARSET '*', $B
-	CHARSET ':', $D
-	CHARSET '-', $E
-	CHARSET '.', $F
-	CHARSET '/', $10
+	CHARSET 'A','Z', 17
+	CHARSET 'a','z', 17
+	CHARSET '*', 11
+	CHARSET '@', 12
+	CHARSET ':', 13
+	CHARSET '-', 14
+	CHARSET '/', 15
+	CHARSET '.', 16
 	restore
