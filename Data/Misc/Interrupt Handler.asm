@@ -11,8 +11,8 @@ VInt:
 		beq.s	VInt_Lag_Main
 
 .wait
-		move.w	VDP_control_port-VDP_control_port(a5),d0
-		andi.w	#8,d0
+		moveq	#8,d0
+		and.w	VDP_control_port-VDP_control_port(a5),d0
 		beq.s	.wait	; wait until vertical blanking is taking place
 
 		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
@@ -186,8 +186,8 @@ Do_ControllerPal:
 ; =============== S U B R O U T I N E =======================================
 
 VInt_Sega:
-		move.b	(V_int_run_count+3).w,d0
-		andi.w	#$F,d0
+		moveq	#$F,d0
+		and.b	(V_int_run_count+3).w,d0
 		bne.s	.skip	; run the following code once every 16 frames
 		stopZ80
 		stopZ802

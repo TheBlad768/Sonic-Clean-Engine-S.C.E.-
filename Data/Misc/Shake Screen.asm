@@ -25,8 +25,8 @@ ShakeScreen_Setup:
 ; ---------------------------------------------------------------------------
 
 .shake
-		move.w	(Level_frame_counter).w,d0
-		andi.w	#$3F,d0
+		moveq	#$3F,d0
+		and.w	(Level_frame_counter).w,d0
 		move.b	ScreenShakeArray2(pc,d0.w),d1
 		move.w	d1,(Screen_shaking_offset).w
 		rts

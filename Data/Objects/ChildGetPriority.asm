@@ -26,6 +26,17 @@ Child_GetPriorityOnce:
 
 ; =============== S U B R O U T I N E =======================================
 
+Child_GetPriority2:
+		movea.w	parent3(a0),a1
+		btst	#7,art_tile(a1)
+		beq.s	.nothighpriority
+		bset	#7,art_tile(a0)
+
+.nothighpriority
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 Child_GetVRAMPriorityOnce:
 		movea.w	parent3(a0),a1
 		move.w	art_tile(a1),d0

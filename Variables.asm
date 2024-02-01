@@ -203,9 +203,9 @@ f_restart:							= *
 Restart_level_flag:					ds.b 1
 v_spritecount:						= *
 Sprites_drawn:						ds.b 1					; Used to ensure the sprite limit isn't exceeded
-Sonic_Knux_top_speed:				ds.w 1
-Sonic_Knux_acceleration:				ds.w 1
-Sonic_Knux_deceleration:				ds.w 1
+Max_speed:							ds.w 1
+Acceleration:							ds.w 1
+Deceleration:							ds.w 1
 Object_load_addr_front:				ds.l 1					; The address inside the object placement data of the first object whose X pos is >= Camera_X_pos_coarse + $280
 Object_load_addr_back:				ds.l 1					; The address inside the object placement data of the first object whose X pos is >= Camera_X_pos_coarse - $80
 Object_respawn_index_front:			ds.w 1					; The object respawn table index for the object at Obj_load_addr_front
@@ -267,6 +267,8 @@ Water_move:							= *
 Water_full_screen_flag:				ds.b 1					; Set if water covers the entire screen (i.e. the underwater pallete should be DMAed during V-int rather than the normal palette)
 Water_flag:							ds.b 1
 
+Debug_saved_mappings:				ds.l 1					; player 1 mappings before entering debug mode
+Debug_saved_art_tile:					ds.w 1					; player 1 art_tile before entering debug mode
 Graphics_flags:						ds.b 1					; Bit 7 set = English system, bit 6 set = PAL system
 Last_star_post_hit:					= *
 Last_star_pole_hit:					ds.b 1

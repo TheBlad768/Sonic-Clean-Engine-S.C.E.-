@@ -110,9 +110,11 @@ Set_IndexedVelocity:
 		add.w	d1,d0
 		move.l	Obj_VelocityIndex(pc,d0.w),x_vel(a0)
 		btst	#0,render_flags(a0)
-		beq.s	+
+		beq.s	.return
 		neg.w	x_vel(a0)
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_VelocityIndex:
@@ -158,17 +160,16 @@ Obj_VelocityIndex:
 ; =============== S U B R O U T I N E =======================================
 
 Displace_PlayerOffObject:
-		move.b	status(a0),d0
-		andi.b	#$18,d0
-		beq.s	Displace_PlayerOffObject_Return
-		bclr	#Status_OnObj,status(a0)
-		beq.s	+
+		moveq	#$18,d0
+		and.b	status(a0),d0								; is Sonic or Tails standing on the object?
+		beq.s	.return									; if not, branch
+		bclr	#p1_standing_bit,status(a0)
+		beq.s	.return
 		lea	(Player_1).w,a1
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
-+		bclr	#Status_RollJump,status(a0)
 
-Displace_PlayerOffObject_Return:
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -177,10 +178,12 @@ Go_CheckPlayerRelease:
 		movem.l	d7-a0/a2-a3,-(sp)
 		lea	(Player_1).w,a1
 		btst	#Status_OnObj,status(a1)
-		beq.s	+
+		beq.s	.notp1
 		movea.w	interact(a1),a0
 		bsr.w	CheckPlayerReleaseFromObj
-+		movem.l	(sp)+,d7-a0/a2-a3
+
+.notp1
+		movem.l	(sp)+,d7-a0/a2-a3
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -197,7 +200,7 @@ Song_Fade_Transition_Wait:
 		tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_fadeout_counter).w
 		bne.s	Song_Fade_Transition_Return
 		move.b	subtype(a0),d0
-		move.w	d0,(Current_music).w
+		move.b	d0,(Current_music+1).w
 		jsr	(SMPS_QueueSound1).w	; play music
 		jmp	(Delete_Current_Sprite).w
 
@@ -227,9 +230,11 @@ Restore_LevelMusic:
 		move.b	(a2,d0.w),d0
 		move.w	d0,(Current_music).w
 		btst	#Status_Invincible,(Player_1+status_secondary).w
-		beq.s	+
+		beq.s	.play
 		moveq	#signextendB(mus_Invincible),d0	; if invincible, play invincibility music
-+		jmp	(SMPS_QueueSound1).w				; play music
+
+.play
+		jmp	(SMPS_QueueSound1).w				; play music
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -312,14 +317,14 @@ EnemyDefeat_Score:
 
 HurtCharacter_WithoutDamage:
 		lea	(Player_1).w,a1
-		move.b	#id_SonicHurt,routine(a1)	; Hit animation
+		move.b	#id_SonicHurt,routine(a1)			; hit animation
 		bclr	#Status_OnObj,status(a1)
-		bclr	#Status_Push,status(a1)		; Player is not standing on/pushing an object
+		bclr	#Status_Push,status(a1)				; player is not standing on/pushing an object
 		bset	#Status_InAir,status(a1)
-		move.w	#-$200,x_vel(a1)			; Set speed of player
+		move.w	#-$200,x_vel(a1)					; set speed of player
 		move.w	#-$300,y_vel(a1)
-		clr.w	ground_vel(a1)			; Zero out inertia
-		move.b	#id_Hurt,anim(a1)		; Set falling animation
+		clr.w	ground_vel(a1)					; zero out inertia
+		move.b	#id_Hurt,anim(a1)				; set falling animation
 		sfx	sfx_Death,1
 
 ; =============== S U B R O U T I N E =======================================
@@ -358,7 +363,7 @@ loc_85822:
 
 Check_PlayerCollision:
 		move.b	collision_property(a0),d0
-		beq.s	+
+		beq.s	.return
 		clr.b	collision_property(a0)
 		andi.w	#3,d0
 		add.w	d0,d0
@@ -366,7 +371,9 @@ Check_PlayerCollision:
 		movea.w	(a1,d0.w),a1
 		move.w	a1,objoff_44(a0)
 		moveq	#1,d1
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
 
 word_85890:
@@ -380,17 +387,19 @@ word_85890:
 Load_LevelResults:
 		lea	(Player_1).w,a1
 		btst	#7,status(a1)
-		bne.s	+
+		bne.s	.return
 		btst	#Status_InAir,status(a1)
-		bne.s	+
+		bne.s	.return
 		cmpi.b	#id_SonicDeath,routine(a1)
-		bcc.s	+
+		bhs.s	.return
 		bsr.s	Set_PlayerEndingPose
 		clr.b	(TitleCard_end_flag).w
 		bsr.w	Create_New_Sprite
-		bne.s	+
+		bne.s	.return
 		move.l	#Obj_LevelResults,address(a1)
-+		rts
+
+.return
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -475,6 +484,25 @@ Wait_FadeToLevelMusic:
 .notfree
 		movea.l	$34(a0),a1
 		jmp	(a1)
+
+; =============== S U B R O U T I N E =======================================
+
+Player_IntroRightMove:
+		move.w	#bytes_to_word(btnR,btnR),d0					; set right move
+		tst.w	$2E(a0)
+		beq.s	.notjump
+		subq.w	#1,$2E(a0)
+		move.w	#bytes_to_word(btnA+btnR,btnR),d0			; keep jumping
+
+.notjump
+		btst	#Status_Push,status(a1)							; player hitting a solid?
+		beq.s	.notpush										; if not, branch
+		move.w	#$1F,$2E(a0)
+		move.w	#bytes_to_word(btnA+btnR,btnA+btnR),d0		; set player jump
+
+.notpush
+		move.w	d0,(Ctrl_1_logical).w
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 

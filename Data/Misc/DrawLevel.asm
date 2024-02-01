@@ -6,6 +6,8 @@
 
 VInt_DrawLevel:
 		lea	(VDP_data_port).l,a6
+
+.main
 		lea	(Plane_buffer).w,a0
 
 VInt_DrawLevel_2:
@@ -50,12 +52,13 @@ VInt_VRAMWrite:
 		swap	d0
 		lsl.l	#2,d0
 		lsr.w	#2,d0
-		ori.w	#$4000,d0
+		ori.w	#vdpComm($0000,VRAM,WRITE)>>16,d0
 		swap	d0
 		move.l	d0,VDP_control_port-VDP_data_port(a6)
 
--		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
-		dbf	d1,-
+.copy
+		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
+		dbf	d1,.copy
 
 VInt_VRAMWrite_Return:
 		rts
@@ -63,8 +66,8 @@ VInt_VRAMWrite_Return:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn:
-		move.w	(a6),d0
-		andi.w	#$FFF0,d0
+		moveq	#-$10,d0
+		and.w	(a6),d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
 		move.w	d2,d3
@@ -89,8 +92,8 @@ Draw_TileColumn:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn2:
-		move.w	(a6),d0
-		andi.w	#$FFF0,d0
+		moveq	#-$10,d0
+		and.w	(a6),d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
 		move.w	d2,d3
@@ -650,7 +653,7 @@ DrawTilesVDeform:
 DrawTilesVDeform2:
 		movem.l	d5/a4-a5,-(sp)
 		lea	(Camera_X_pos_BG_copy).w,a6
-		bsr.w	Get_XDeformRange
+		bsr.s	Get_XDeformRange
 		lea	(Camera_X_pos_BG_rounded).w,a5
 		bsr.w	Draw_TileColumn2
 		movem.l	(sp)+,d5/a4/a6
@@ -1039,7 +1042,7 @@ LoadLevelLoadBlock2:
 		add.w	d1,d0
 		lea	(LevelLoadBlock).l,a2
 		lea	(a2,d0.w),a2
-		pea	(a2)
+		pea	(a2)										; save a2
 		addq.w	#4,a2
 		move.l	(a2)+,(Block_table_addr_ROM).w
 		movea.l	(a2)+,a0
@@ -1047,7 +1050,7 @@ LoadLevelLoadBlock2:
 		jsr	(Kos_Decomp).w
 		bsr.s	Load_Level
 		jsr	(LoadPLC_KosM).w
-		movea.l	(sp)+,a2
+		movea.l	(sp)+,a2								; restore a2
 		moveq	#0,d0
 		move.b	(a2),d0
 		jmp	(LoadPalette).w
@@ -1079,12 +1082,15 @@ LoadLevelPointer:
 		add.w	d1,d0
 		lea	(LevelLoadPointer).l,a2
 		lea	(a2,d0.w),a2
+
+LoadLevelPointer2:
 		lea	(Level_data_addr_RAM).w,a3
 
 	rept	(Level_data_addr_RAM_end-Level_data_addr_RAM)/4
 		move.l	(a2)+,(a3)+
 	endr
 		rts
+
 ; ---------------------------------------------------------------------------
 ; Collision index pointer loading subroutine
 ; Uses Sonic & Knuckles format mapping

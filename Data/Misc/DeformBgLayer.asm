@@ -22,7 +22,7 @@ DeformBgLayer:
 		lea	(V_scroll_amount).w,a4
 		move.w	(Distance_from_screen_top).w,d3
 
-	if	ExtendedCamera
+	if ExtendedCamera
 		bsr.w	MoveCameraY
 	else
 		bsr.s	MoveCameraY
@@ -38,7 +38,7 @@ DeformBgLayer:
 ; =============== S U B R O U T I N E =======================================
 
 MoveCameraX:
-	if	ExtendedCamera
+	if ExtendedCamera
 		bsr.s	Camera_Extended
 	endif
 		move.w	(a1),d4
@@ -63,7 +63,7 @@ loc_1C0D2:
 
 loc_1C0D6:
 		sub.w	(a1),d0
-	if	ExtendedCamera
+	if ExtendedCamera
 		sub.w	(Camera_X_center).w,d0
 		blt.s		loc_1C0E8
 		bge.s	loc_1C0FC
@@ -111,7 +111,7 @@ loc_1C112:
 		move.w	d1,(a4)
 		rts
 
-	if	ExtendedCamera
+	if ExtendedCamera
 
 ; ---------------------------------------------------------------------------
 ; Subroutine of the Extended camera

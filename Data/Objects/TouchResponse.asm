@@ -500,7 +500,7 @@ loc_1036E:
 		clr.w	x_vel(a0)
 		clr.w	ground_vel(a0)
 		move.b	#id_Death,anim(a0)
-		move.w	art_tile(a0),(Saved_art_tile).w
+		move.w	art_tile(a0),(Debug_saved_art_tile).w
 		bset	#7,art_tile(a0)
 		jsr	(SMPS_QueueSound2).w
 
