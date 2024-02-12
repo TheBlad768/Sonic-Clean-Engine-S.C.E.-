@@ -200,8 +200,8 @@ Go_Delete_SpriteSlotted3:
 		move.l	#Delete_Current_Sprite,address(a0)
 
 Remove_From_TrackingSlot:
-		move.b	objoff_3B(a0),d0	; slot bit
-		movea.w	objoff_3C(a0),a1	; slot address
+		move.b	ros_bit(a0),d0	; slot bit
+		movea.w	ros_addr(a0),a1	; slot address
 		bclr	d0,(a1)				; turn off this slot
 		rts
 

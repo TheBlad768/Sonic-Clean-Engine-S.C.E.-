@@ -50,8 +50,8 @@ SetUp_ObjAttributesSlotted:
 		rts
 ; ---------------------------------------------------------------------------
 +		bset	d0,(a2)						; Turn this slot on
-		move.b	d0,objoff_3B(a0)
-		move.w	a2,objoff_3C(a0)			; Keep track of slot address and bit number
+		move.b	d0,ros_bit(a0)
+		move.w	a2,ros_addr(a0)			; Keep track of slot address and bit number
 		move.w	d3,art_tile(a0)			; Use correct VRAM offset
 		move.l	(a1)+,mappings(a0)		; Mapping address
 		move.w	(a1)+,priority(a0)			; Priority

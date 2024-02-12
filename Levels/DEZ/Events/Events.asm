@@ -13,7 +13,7 @@ DEZ1_ScreenInit:
 DEZ1_ScreenEvent:
 		tst.b	(Screen_event_flag).w
 		bne.s	DEZ1_ScreenEvent_RefreshPlane
-		move.w	(Screen_shaking_flag+2).w,d0
+		move.w	(Screen_shaking_offset).w,d0
 		add.w	d0,(Camera_Y_pos_copy).w
 		jmp	(DrawTilesAsYouMove).w
 ; ---------------------------------------------------------------------------
@@ -58,12 +58,12 @@ DEZ1_BGDeformArray:
 
 DEZ1_Deform:
 
-		; Yscroll
+		; yscroll
 ;		move.w	(Camera_Y_pos_copy).w,d0
 ;		asr.w	#6,d0
 ;		move.w	d0,(Camera_Y_pos_BG_copy).w
 
-		; Xscroll
+		; xscroll
 		lea	(H_scroll_table).w,a1
 		move.l	(Camera_X_pos_copy).w,d0
 		neg.l	d0

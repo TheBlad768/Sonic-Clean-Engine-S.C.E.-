@@ -324,14 +324,12 @@ LevelSelect_LoadAct:
 		lea	(vLevelSelect_HCount).w,a0
 		move.w	(vLevelSelect_VCount).w,d0
 		move.w	d0,d1
-		beq.s	.zero
-		subq.w	#1,d0
-
-.loop
-		addi.l	#vdpCommDelta(planeLocH40(0,2)),d2
-		dbf	d0,.loop
-
-.zero
+		move.b	d0,(sp)
+		move.w	(sp),d0
+		clr.b	d0
+		swap	d0
+		clr.w	d0
+		add.l	d0,d2
 		move.l	d2,VDP_control_port-VDP_control_port(a5)
 		add.w	d1,d1
 		move.w	(a0,d1.w),d0
