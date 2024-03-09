@@ -16,8 +16,8 @@ AnimateTiles_DoAniPLC:
 		lea	(Anim_Counters).w,a3
 
 AnimateTiles_DoAniPLC_GetNumber:
-		move.w	(a2)+,d6							; Get number of scripts in list
-		bpl.s	AnimateTiles_DoAniPLC_Part2		; If there are any, continue
+		move.w	(a2)+,d6								; get number of scripts in list
+		bpl.s	AnimateTiles_DoAniPLC_Part2			; if there are any, continue
 
 AnimateTiles_NULL:
 		rts
@@ -25,54 +25,60 @@ AnimateTiles_NULL:
 
 AnimateTiles_DoAniPLC_Part2:
 
-.loop:
-		subq.b	#1,(a3)			; Tick down frame duration
-		bcc.s	.nextscript		; If frame isn't over, move on to next script
+.loop
+		subq.b	#1,(a3)								; tick down frame duration
+		bhs.s	.nextscript							; if frame isn't over, move on to next script
 
-;.nextframe:
+		; next frame
 		moveq	#0,d0
-		move.b	1(a3),d0			; Get current frame
-		cmp.b	6(a2),d0			; Have we processed the last frame in the script?
+		move.b	1(a3),d0								; get current frame
+		cmp.b	6(a2),d0								; have we processed the last frame in the script?
 		blo.s		.notlastframe
-		moveq	#0,d0			; If so, reset to first frame
+		moveq	#0,d0								; if so, reset to first frame
 		move.b	d0,1(a3)
 
-.notlastframe:
-		addq.b	#1,1(a3)			; Consider this frame processed; set counter to next frame
-		move.b	(a2),(a3)			; Set frame duration to global duration value
+.notlastframe
+		addq.b	#1,1(a3)								; consider this frame processed; set counter to next frame
+		move.b	(a2),(a3)								; set frame duration to global duration value
 		bpl.s	.globalduration
-		; If script uses per-frame durations, use those instead
-		add.w	d0,d0
-		move.b	9(a2,d0.w),(a3)	; Set frame duration to current frame's duration value
 
-.globalduration:
-; Prepare for DMA transfer
-		; Get relative address of frame's art
-		move.b	8(a2,d0.w),d0	; Get tile ID
-		lsl.w	#4,d0				; Turn it into an offset
-		; Get VRAM destination address
+		; if script uses per-frame durations, use those instead
+		add.w	d0,d0
+		move.b	9(a2,d0.w),(a3)						; set frame duration to current frame's duration value
+
+.globalduration
+
+		; prepare for DMA transfer
+		; get relative address of frame's art
+		move.b	8(a2,d0.w),d0						; get tile id
+		lsl.w	#4,d0									; turn it into an offset
+
+		; get VRAM destination address
 		move.w	4(a2),d2
-		; Get ROM source address
-		move.l	(a2),d1			; Get start address of animated tile art
+
+		; get ROM source address
+		move.l	(a2),d1								; get start address of animated tile art
 		andi.l	#$FFFFFF,d1
-		add.l	d0,d1			; Offset into art, to get the address of new frame
-		; Get size of art to be transferred
+		add.l	d0,d1								; offset into art, to get the address of new frame
+
+		; get size of art to be transferred
 		moveq	#0,d3
 		move.b	7(a2),d3
-		lsl.w	#4,d3				; Turn it into actual size (in words)
-		; Use d1, d2 and d3 to queue art for transfer
+		lsl.w	#4,d3									; turn it into actual size (in words)
+
+		; use d1, d2 and d3 to queue art for transfer
 		jsr	(Add_To_DMA_Queue).w
 
-.nextscript:
-		move.b	6(a2),d0			; Get total size of frame data
-		tst.b	(a2)					; Is per-frame duration data present?
-		bpl.s	.globalduration2	; If not, keep the current size; it's correct
-		add.b	d0,d0			; Double size to account for the additional frame duration data
+.nextscript
+		move.b	6(a2),d0								; get total size of frame data
+		tst.b	(a2)										; is per-frame duration data present?
+		bpl.s	.globalduration2						; if not, keep the current size; it's correct
+		add.b	d0,d0								; double size to account for the additional frame duration data
 
-.globalduration2:
+.globalduration2
 		addq.b	#1,d0
-		andi.w	#$FE,d0			; Round to next even address, if it isn't already
-		lea	8(a2,d0.w),a2			; Advance to next script in list
-		addq.w	#2,a3			; Advance to next script's slot in a3 (usually Anim_Counters)
+		andi.w	#$FE,d0								; round to next even address, if it isn't already
+		lea	8(a2,d0.w),a2								; advance to next script in list
+		addq.w	#2,a3								; advance to next script's slot in a3 (usually Anim_Counters)
 		dbf	d6,.loop
 		rts

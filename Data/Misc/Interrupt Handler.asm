@@ -23,10 +23,10 @@ VInt:
 		dbf	d0,*										; otherwise, waste a bit of time here
 
 .notpal
-		move.b	(V_int_routine).w,d0
+		moveq	#$7E,d0
+		and.b	(V_int_routine).w,d0
 		clr.b	(V_int_routine).w
 		st	(H_int_flag).w							; allow H Interrupt code to run
-		andi.w	#$3E,d0
 		move.w	VInt_Table(pc,d0.w),d0
 		jsr	VInt_Table(pc,d0.w)
 
@@ -101,9 +101,9 @@ VInt_Lag_Water_Cont:
 VInt_Lag_NoWater:
 		move.w	VDP_control_port-VDP_control_port(a5),d0
 		btst	#6,(Graphics_flags).w
-		beq.s	.notpal	; branch if it isn't a PAL system
+		beq.s	.notpal								; branch if it isn't a PAL system
 		move.w	#$700,d0
-		dbf	d0,*		; otherwise, waste a bit of time here
+		dbf	d0,*										; otherwise, waste a bit of time here
 
 .notpal
 		st	(H_int_flag).w
@@ -120,9 +120,9 @@ VInt_Lag_Done:
 
 VInt_Main:
 		bsr.s	Do_ControllerPal
-		tst.w	(Demo_timer).w
+		tst.w	(Demo_timer).w						; is there time left on the demo?
 		beq.s	.return
-		subq.w	#1,(Demo_timer).w
+		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
 
 .return
 		rts
@@ -135,9 +135,9 @@ VInt_Main:
 
 VInt_Menu:
 		bsr.s	Do_ControllerPal
-		tst.w	(Demo_timer).w
+		tst.w	(Demo_timer).w						; is there time left on the demo?
 		beq.s	.kosm
-		subq.w	#1,(Demo_timer).w
+		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
 
 .kosm
 		jmp	(Set_Kos_Bookmark).w
@@ -188,7 +188,7 @@ Do_ControllerPal:
 VInt_Sega:
 		moveq	#$F,d0
 		and.b	(V_int_run_count+3).w,d0
-		bne.s	.skip	; run the following code once every 16 frames
+		bne.s	.skip								; run the following code once every 16 frames
 		stopZ80
 		stopZ802
 		jsr	(Poll_Controllers).w
@@ -196,9 +196,9 @@ VInt_Sega:
 		startZ80
 
 .skip
-		tst.w	(Demo_timer).w
+		tst.w	(Demo_timer).w						; is there time left on the demo?
 		beq.s	.kosm
-		subq.w	#1,(Demo_timer).w
+		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
 
 .kosm
 		jmp	(Set_Kos_Bookmark).w
@@ -272,6 +272,15 @@ VInt_Level_Cont:
 		jsr	(VInt_DrawLevel).w
 		startZ80
 		enableInts
+		tst.b	(Water_flag).w
+		beq.s	.notwater
+		cmpi.b	#92,(H_int_counter).w				; is H-int occuring on or below line 92?
+		bhs.s	.notwater							; if it is, branch
+		st	(Do_Updates_in_H_int).w
+		jmp	(Set_Kos_Bookmark).w
+; ---------------------------------------------------------------------------
+
+.notwater
 		pea	(Set_Kos_Bookmark).w
 
 ; ---------------------------------------------------------------------------
@@ -283,9 +292,9 @@ VInt_Level_Cont:
 Do_Updates:
 		jsr	(UpdateHUD).w
 		clr.w	(Lag_frame_count).w
-		tst.w	(Demo_timer).w		; is there time left on the demo?
+		tst.w	(Demo_timer).w						; is there time left on the demo?
 		beq.s	.return
-		subq.w	#1,(Demo_timer).w	; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
 
 .return
 		rts
@@ -299,7 +308,7 @@ Do_Updates:
 HInt:
 		disableInts
 		tst.b	(H_int_flag).w
-		beq.s	HInt_Done
+		beq.w	HInt_Done
 		clr.b	(H_int_flag).w
 		movem.l	a0-a1,-(sp)
 		lea	(VDP_data_port).l,a1
@@ -310,6 +319,13 @@ HInt:
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a1)
 	endr
 		movem.l	(sp)+,a0-a1
+		tst.b	(Do_Updates_in_H_int).w
+		beq.s	HInt_Done
+		clr.b	(Do_Updates_in_H_int).w
+		movem.l	d0-a6,-(sp)							; move all the registers to the stack
+		bsr.w	Do_Updates
+		SMPS_UpdateSoundDriver						; Update SMPS
+		movem.l	(sp)+,d0-a6							; load saved registers from the stack
 
 HInt_Done:
 		rte

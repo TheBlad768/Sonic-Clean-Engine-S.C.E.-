@@ -189,7 +189,7 @@ loc_1AEE4:
 loc_1AF1C:
 		move.w	mainspr_childsprites(a0),d3
 		subq.w	#1,d3
-		bcs.w	Render_Sprites_NextObj
+		blo.w	Render_Sprites_NextObj
 		lea	sub2_x_pos(a0),a0
 
 loc_1AF2A:
@@ -225,10 +225,10 @@ loc_1AF62:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1AF6C:
-		lsr.b	#1,d6
-		bcs.s	loc_1AF9E
-		lsr.b	#1,d6
-		bcs.w	loc_1B038
+		lsr.b	d6
+		blo.s		loc_1AF9E
+		lsr.b	d6
+		blo.w	loc_1B038
 
 loc_1AF76:
 		move.b	(a1)+,d2
@@ -254,8 +254,8 @@ loc_1AF94:
 ; ---------------------------------------------------------------------------
 
 loc_1AF9E:
-		lsr.b	#1,d6
-		bcs.s	loc_1AFE8
+		lsr.b	d6
+		blo.s		loc_1AFE8
 
 loc_1AFA2:
 		move.b	(a1)+,d2
@@ -361,10 +361,10 @@ loc_1B066:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1B070:
-		lsr.b	#1,d6
-		bcs.s	loc_1B0C2
-		lsr.b	#1,d6
-		bcs.w	loc_1B19C
+		lsr.b	d6
+		blo.s		loc_1B0C2
+		lsr.b	d6
+		blo.w	loc_1B19C
 
 loc_1B07A:
 		move.b	(a1)+,d2
@@ -405,8 +405,8 @@ loc_1B0BA:
 ; ---------------------------------------------------------------------------
 
 loc_1B0C2:
-		lsr.b	#1,d6
-		bcs.s	loc_1B12C
+		lsr.b	d6
+		blo.s		loc_1B12C
 
 loc_1B0C6:
 		move.b	(a1)+,d2

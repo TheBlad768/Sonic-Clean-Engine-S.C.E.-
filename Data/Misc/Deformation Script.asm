@@ -103,8 +103,8 @@ PlainDeformation_Flipped:
 
 MakeFGDeformArray:
 		move.w	d1,d0
-		lsr.w	#1,d0
-		bcc.s	.skip
+		lsr.w	d0
+		bhs.s	.skip
 
 .loop
 		move.w	(a6)+,d5
@@ -190,7 +190,7 @@ loc_4F104:
 		neg.w	d0
 		move.w	d1,d2
 		sub.w	d0,d2
-		bcc.s	loc_4F110
+		bhs.s	loc_4F110
 		move.w	d1,d0
 		addq.w	#1,d0
 
@@ -204,8 +204,8 @@ loc_4F114:
 loc_4F116:
 		tst.b	d4
 		beq.s	loc_4F130
-		lsr.w	#1,d0
-		bcc.s	loc_4F124
+		lsr.w	d0
+		bhs.s	loc_4F124
 
 loc_4F11E:
 		move.w	(a5)+,d3
@@ -223,8 +223,8 @@ loc_4F124:
 loc_4F130:
 		move.w	(a5)+,d3
 		neg.w	d3
-		lsr.w	#1,d0
-		bcc.s	loc_4F13A
+		lsr.w	d0
+		bhs.s	loc_4F13A
 
 loc_4F138:
 		move.l	d3,(a1)+
@@ -291,7 +291,7 @@ loc_4F190:
 		neg.w	d0
 		move.w	d1,d2
 		sub.w	d0,d2
-		bcc.s	loc_4F19C
+		bhs.s	loc_4F19C
 		move.w	d1,d0
 		addq.w	#1,d0
 
@@ -304,8 +304,8 @@ loc_4F19E:
 loc_4F1A0:
 		tst.b	d4
 		beq.s	loc_4F1C2
-		lsr.w	#1,d0
-		bcc.s	loc_4F1B2
+		lsr.w	d0
+		bhs.s	loc_4F1B2
 
 loc_4F1A8:
 		swap	d3
@@ -329,8 +329,8 @@ loc_4F1C2:
 		move.w	(a5)+,d3
 		neg.w	d3
 		swap	d3
-		lsr.w	#1,d0
-		bcc.s	loc_4F1D0
+		lsr.w	d0
+		bhs.s	loc_4F1D0
 
 loc_4F1CE:
 		move.l	d3,(a1)+
@@ -394,7 +394,7 @@ loc_4F21A:
 		neg.w	d0
 		move.w	d1,d4
 		sub.w	d0,d4
-		bcc.s	loc_4F228
+		bhs.s	loc_4F228
 		move.w	d1,d0
 		addq.w	#1,d0
 
@@ -404,8 +404,8 @@ loc_4F228:
 loc_4F22A:
 		tst.b	d7
 		beq.s	loc_4F250
-		lsr.w	#1,d0
-		bcc.s	loc_4F23E
+		lsr.w	d0
+		bhs.s	loc_4F23E
 
 loc_4F232:
 		move.w	(a2)+,d6
@@ -429,8 +429,8 @@ loc_4F23E:
 loc_4F250:
 		move.w	(a5)+,d5
 		neg.w	d5
-		lsr.w	#1,d0
-		bcc.s	loc_4F262
+		lsr.w	d0
+		bhs.s	loc_4F262
 
 loc_4F258:
 		move.w	(a2)+,d6
@@ -492,7 +492,7 @@ loc_4F2A6:
 		neg.w	d0
 		moveq	#$13,d2
 		sub.w	d0,d2
-		bcc.s	loc_4F2BA
+		bhs.s	loc_4F2BA
 		moveq	#$14,d0
 
 loc_4F2BA:

@@ -7,64 +7,49 @@
 Obj_HiddenMonitor:
 		lea	ObjDat_HiddenMonitor(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#Obj_HiddenMonitorMain,address(a0)
-		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)		; set y_radius and x_radius
+		move.l	#.main,address(a0)
+		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)			; set y_radius and x_radius
 		move.b	#6|$40,collision_flags(a0)
-		move.b	subtype(a0),anim(a0)			; backup object subtype
+		move.b	subtype(a0),anim(a0)							; set monitor content id
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_HiddenMonitorMain:
-		move.w	(Signpost_addr).w,d0
-		beq.s	loc_8375A
-		movea.w	d0,a1						; get Signpost address
-		cmpi.l	#Obj_EndSign,address(a1)
-		bne.s	loc_8375A					; if no signpost is active, branch
+.main
+		move.w	(Signpost_addr).w,d0							; address is empty?
+		beq.s	.notdraw										; if it is, branch
+		movea.w	d0,a1										; get Signpost address
 		btst	#0,objoff_38(a1)
-		beq.s	loc_8375A					; if signpost hasn't landed, branch
-		lea	word_8379E(pc),a2
-		move.w	x_pos(a0),d0
-		move.w	x_pos(a1),d1
-		add.w	(a2)+,d0
-		cmp.w	d0,d1
-		blo.s		loc_8374C
-		add.w	(a2)+,d0
-		cmp.w	d0,d1
-		bhs.s	loc_8374C
-		move.w	y_pos(a0),d0
-		move.w	y_pos(a1),d1
-		add.w	(a2)+,d0
-		cmp.w	d0,d1
-		blo.s		loc_8374C
-		add.w	(a2)+,d0
-		cmp.w	d0,d1
-		blo.s		loc_83760
+		beq.s	.notdraw										; if signpost hasn't landed, branch
 
-loc_8374C:
-		sfx	sfx_Signpost							; if signpost has landed
-		move.l	#Sprite_OnScreen_Test,address(a0)
+		; check xypos
+		lea	HiddenMonitor_Range(pc),a2
+		jsr	(Check_InTheirRange).w
+		bne.s	.bounceup
 
-loc_8375A:
+		; landed
+		sfx	sfx_Signpost										; if signpost has landed
+		move.l	#Delete_Sprite_If_Not_In_Range,address(a0)		; not draw hidden monitor
+
+.notdraw
 		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
 
-loc_83760:
-		bclr	#0,objoff_38(a1)						; if signpost has landed and is in range
-		move.l	#Obj_Monitor,address(a0)			; make this object a monitor
+.bounceup
+		bclr	#0,objoff_38(a1)									; if signpost has landed and is in range
+		move.l	#Obj_Monitor,address(a0)						; make this object a monitor
 		move.b	#2,routine(a0)
 		move.b	#4,objoff_3C(a0)
 		move.w	#-$500,y_vel(a0)
-		sfx	sfx_BubbleAttack
+		sfx	sfx_BubbleAttack									; play sfx
 		bclr	#0,render_flags(a0)
-		beq.s	loc_83798
+		beq.s	.draw
 		bset	#7,art_tile(a0)
 		clr.b	status(a0)
 
-loc_83798:
+.draw
 		jmp	(Sprite_OnScreen_Test).w
-; ---------------------------------------------------------------------------
 
-word_8379E:		dc.w  -$E, $1C, -$80, $C0
+; =============== S U B R O U T I N E =======================================
 
 ObjDat_HiddenMonitor:
 		dc.l Map_Monitor
@@ -74,3 +59,6 @@ ObjDat_HiddenMonitor:
 		dc.b 32/2
 		dc.b 0
 		dc.b 0
+HiddenMonitor_Range:
+		dc.w -14, 28		; xpos
+		dc.w -128, 192	; ypos

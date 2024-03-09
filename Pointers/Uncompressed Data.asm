@@ -11,6 +11,8 @@ ArtUnc_DebugDigits:			binclude "Objects/HUD/Uncompressed Art/Debug Digits.bin"
 	even
 ArtUnc_EndSigns:			binclude "Objects/Signpost/Uncompressed Art/End Signs.bin"
 	even
+ArtUnc_SignpostStub:			binclude "Objects/Signpost/Uncompressed Art/Stub.bin"
+	even
 
 ; ===========================================================================
 ; Animated uncompressed graphics

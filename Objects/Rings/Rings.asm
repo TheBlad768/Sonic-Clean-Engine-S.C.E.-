@@ -7,8 +7,8 @@
 Obj_Ring:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	Ring_Index(pc,d0.w),d1
-		jmp	Ring_Index(pc,d1.w)
+		move.w	Ring_Index(pc,d0.w),d0
+		jmp	Ring_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 Ring_Index: offsetTable
@@ -26,7 +26,7 @@ Obj_RingInit:
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#7|$40,collision_flags(a0)
-		move.b	#16/2,width_pixels(a0)
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
 
 Obj_RingAnimate:
 		jmp	(Sprite_OnScreen_Test_Collision).w
@@ -46,6 +46,7 @@ Obj_RingSparkle:
 
 Obj_RingDelete:
 		jmp	(Delete_Current_Sprite).w
+
 ; ---------------------------------------------------------------------------
 ; Bouncing ring (Object)
 ; ---------------------------------------------------------------------------
@@ -55,31 +56,31 @@ Obj_RingDelete:
 Obj_Bouncing_Ring:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	off_1A658(pc,d0.w),d1
-		jmp	off_1A658(pc,d1.w)
+		move.w	off_1A658(pc,d0.w),d0
+		jmp	off_1A658(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 off_1A658: offsetTable
-		offsetTableEntry.w loc_1A67A
-		offsetTableEntry.w loc_1A75C
-		offsetTableEntry.w loc_1A7C2
-		offsetTableEntry.w loc_1A7D6
-		offsetTableEntry.w loc_1A7E4
+		offsetTableEntry.w loc_1A67A	; 0
+		offsetTableEntry.w loc_1A75C	; 2
+		offsetTableEntry.w loc_1A7C2	; 4
+		offsetTableEntry.w loc_1A7D6	; 6
+		offsetTableEntry.w loc_1A7E4	; 8
 ; ---------------------------------------------------------------------------
 
 Obj_Bouncing_Ring_Reverse_Gravity:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	off_1A670(pc,d0.w),d1
-		jmp	off_1A670(pc,d1.w)
+		move.w	off_1A670(pc,d0.w),d0
+		jmp	off_1A670(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 off_1A670: offsetTable
-		offsetTableEntry.w loc_1A67A
-		offsetTableEntry.w loc_1A7E8
-		offsetTableEntry.w loc_1A7C2
-		offsetTableEntry.w loc_1A7D6
-		offsetTableEntry.w loc_1A7E4
+		offsetTableEntry.w loc_1A67A	; 0
+		offsetTableEntry.w loc_1A7E8	; 2
+		offsetTableEntry.w loc_1A7C2	; 4
+		offsetTableEntry.w loc_1A7D6	; 6
+		offsetTableEntry.w loc_1A7E4	; 8
 ; ---------------------------------------------------------------------------
 
 loc_1A67A:
@@ -106,7 +107,7 @@ loc_1A6AE:
 loc_1A6B6:
 		move.l	d6,address(a1)
 		addq.b	#2,routine(a1)
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)	; set y_radius and x_radius
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)			; set y_radius and x_radius
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		move.l	#Map_Ring,mappings(a1)
@@ -114,22 +115,23 @@ loc_1A6B6:
 		move.b	#$84,render_flags(a1)
 		move.w	#$180,priority(a1)
 		move.b	#7|$40,collision_flags(a1)
-		move.b	#16/2,width_pixels(a1)
-		st	(Ring_spill_anim_counter).w
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)		; set height and width
 		tst.w	d4
 		bmi.s	loc_1A728
 		move.w	d4,d0
 		jsr	(GetSineCosine).w
 		move.w	d4,d2
-		lsr.w	#8,d2
+		move.w	d2,-(sp)
+		clr.w	d2
+		move.b	(sp)+,d2
 		asl.w	d2,d0
 		asl.w	d2,d1
 		move.w	d0,d2
 		move.w	d1,d3
 		addi.b	#$10,d4
-		bcc.s	loc_1A728
+		bhs.s	loc_1A728
 		subi.w	#$80,d4
-		bcc.s	loc_1A728
+		bhs.s	loc_1A728
 		move.w	#$288,d4
 
 loc_1A728:
@@ -138,9 +140,10 @@ loc_1A728:
 		neg.w	d2
 		neg.w	d4
 		dbf	d5,loc_1A6AE
+		st	(Ring_spill_anim_counter).w
 
 loc_1A738:
-		sfx	sfx_RingLoss		; play ring loss sound
+		sfx	sfx_RingLoss										; play ring loss sound
 		clr.w	(Ring_count).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		tst.b	(Reverse_gravity_flag).w
@@ -152,11 +155,11 @@ loc_1A75C:
 		bmi.s	loc_1A7B0
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0
-		andi.b	#3,d0
+		andi.b	#7,d0
 		bne.s	loc_1A7B0
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A79C
-		jsr	RingCheckFloorDist(pc)
+		jsr	(RingCheckFloorDist).w
 		tst.w	d1
 		bpl.s	loc_1A79C
 		add.w	d1,y_pos(a0)
@@ -200,11 +203,11 @@ loc_1A7E8:
 		bmi.s	loc_1A83C
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0
-		andi.b	#3,d0
+		andi.b	#7,d0
 		bne.s	loc_1A83C
 		tst.b	render_flags(a0)
 		bpl.s	loc_1A828
-		bsr.w	RingCheckFloorDist_ReverseGravity
+		jsr	(RingCheckFloorDist_ReverseGravity).w
 		tst.w	d1
 		bpl.s	loc_1A828
 		sub.w	d1,y_pos(a0)
@@ -224,6 +227,7 @@ loc_1A828:
 loc_1A83C:
 		jsr	(Add_SpriteToCollisionResponseList).w
 		jmp	(Draw_Sprite).w
+
 ; ---------------------------------------------------------------------------
 ; Attracted ring (Object)
 ; ---------------------------------------------------------------------------
@@ -231,6 +235,7 @@ loc_1A83C:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Attracted_Ring:
+
 		; init
 		move.l	#Map_Ring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
@@ -238,16 +243,16 @@ Obj_Attracted_Ring:
 		move.w	#$100,priority(a0)
 		move.b	#7|$40,collision_flags(a0)
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a0)	; set y_radius and x_radius
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a0)			; set y_radius and x_radius
 		move.l	#loc_1A88C,address(a0)
 
 loc_1A88C:
 		tst.b	routine(a0)
 		bne.s	AttractedRing_GiveRing
-		bsr.w	AttractedRing_Move
-		btst	#Status_LtngShield,(Player_1+status_secondary).w	; Does player still have a lightning shield?
+		bsr.s	AttractedRing_Move
+		btst	#Status_LtngShield,(Player_1+status_secondary).w	; does player still have a lightning shield?
 		bne.s	loc_1A8C6
-		move.l	#Obj_Bouncing_Ring,address(a0)				; If not, change object
+		move.l	#Obj_Bouncing_Ring,address(a0)				; if not, change object
 		move.b	#2,routine(a0)
 		st	(Ring_spill_anim_counter).w
 
@@ -294,13 +299,14 @@ loc_1A934:
 ; =============== S U B R O U T I N E =======================================
 
 AttractedRing_Move:
-		; Move on X axis
-		move.w	#$30,d1
+
+		; move on x axis
+		moveq	#48,d1
 		move.w	(Player_1+x_pos).w,d0
 		cmp.w	x_pos(a0),d0
-		bhs.s	AttractedRing_MoveRight	; If ring is to the left of the player, branch
+		bge.s	AttractedRing_MoveRight						; if ring is to the left of the player, branch
 
-;AttractedRing_MoveLeft:
+		; move left
 		neg.w	d1
 		tst.w	x_vel(a0)
 		bmi.s	AttractedRing_ApplyMovementX
@@ -317,13 +323,14 @@ AttractedRing_MoveRight:
 
 AttractedRing_ApplyMovementX:
 		add.w	d1,x_vel(a0)
-		; Move on Y axis
-		move.w	#$30,d1
+
+		; move on y axis
+		moveq	#48,d1
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	y_pos(a0),d0
-		bhs.s	AttractedRing_MoveUp	; If ring is below the player, branch
+		bge.s	AttractedRing_MoveUp						; if ring is below the player, branch
 
-;AttractedRing_MoveDown:
+		; move down
 		neg.w	d1
 		tst.w	y_vel(a0)
 		bmi.s	AttractedRing_ApplyMovementY
@@ -343,5 +350,5 @@ AttractedRing_ApplyMovementY:
 		jmp	(MoveSprite2).w
 ; ---------------------------------------------------------------------------
 
-		include	"Objects/Rings/Object Data/Anim - Rings.asm"
-		include	"Objects/Rings/Object Data/Map - Rings.asm"
+		include "Objects/Rings/Object Data/Anim - Rings.asm"
+		include "Objects/Rings/Object Data/Map - Rings.asm"

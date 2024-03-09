@@ -4,7 +4,7 @@
 
 ArtKosM_Ring_Sparks:			binclude "Objects/Rings/KosinskiM Art/Sparks.bin"
 	even
-ArtKosM_Hud:					binclude "Objects/HUD/KosinskiM Art/HUD.bin"
+ArtKosM_HUD:					binclude "Objects/HUD/KosinskiM Art/HUD.bin"
 	even
 ArtKosM_Monitors:				binclude "Objects/Monitor/KosinskiM Art/Monitors.bin"
 	even
@@ -41,8 +41,6 @@ ArtKosM_Penguin:				binclude "Objects/Animals/KosinskiM Art/Penguin.bin"
 ArtKosM_Squirrel:				binclude "Objects/Animals/KosinskiM Art/Squirrel.bin"
 	even
 ArtKosM_Rabbit:					binclude "Objects/Animals/KosinskiM Art/Rabbit.bin"
-	even
-ArtKosM_SignpostStub:			binclude "Objects/Signpost/KosinskiM Art/Stub.bin"
 	even
 ArtKosM_ResultsGeneral:			binclude "Objects/Results/KosinskiM Art/Results General.bin"
 	even

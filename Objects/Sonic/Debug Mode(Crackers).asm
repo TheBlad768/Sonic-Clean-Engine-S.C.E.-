@@ -56,10 +56,12 @@ Debug_Mode:
 		move.b	d0,spin_dash_flag(a0)
 		move.l	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
+		move.b	d0,double_jump_flag(a0)
+		move.b	d0,jumping(a0)
 		andi.b	#1,status(a0)
 		ori.b	#2,status(a0)
 		move.b	#id_SonicControl,routine(a0)
-		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)		; set y_radius and x_radius
+		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		rts
 ; ---------------------------------------------------------------------------
 

@@ -7,8 +7,8 @@
 Obj_Monitor:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	Monitor_Index(pc,d0.w),d1
-		jmp	Monitor_Index(pc,d1.w)
+		move.w	Monitor_Index(pc,d0.w),d0
+		jmp	Monitor_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 Monitor_Index: offsetTable
@@ -21,31 +21,31 @@ Monitor_Index: offsetTable
 
 Obj_MonitorInit:
 		addq.b	#2,routine(a0)
-		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)	; set y_radius and x_radius
+		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)			; set y_radius and x_radius
 		move.l	#Map_Monitor,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$180,priority(a0)
 		move.w	#bytes_to_word(32/2,28/2),height_pixels(a0)		; set height and width
-		move.w	respawn_addr(a0),d0				; Get address in respawn table
-		beq.s	.notbroken						; If it's zero, it isn't remembered
-		movea.w	d0,a2							; Load address into a2
-		btst	#0,(a2)								; Is this monitor broken?
-		beq.s	.notbroken						; If not, branch
-		move.b	#$B,mapping_frame(a0)			; Use 'broken monitor' frame
+		move.w	respawn_addr(a0),d0							; get address in respawn table
+		beq.s	.notbroken									; if it's zero, it isn't remembered
+		movea.w	d0,a2										; load address into a2
+		btst	#0,(a2)											; is this monitor broken?
+		beq.s	.notbroken									; if not, branch
+		move.b	#$B,mapping_frame(a0)						; use 'broken monitor' frame
 		move.l	#Sprite_OnScreen_Test,address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .notbroken:
 		move.b	#6|$40,collision_flags(a0)
-		move.b	subtype(a0),anim(a0)				; Subtype determines what powerup is inside
+		move.b	subtype(a0),anim(a0)							; subtype determines what powerup is inside
 
 Obj_MonitorMain:
 		bsr.s	Obj_MonitorFall
 
 ;SolidObject_Monitor:
-		moveq	#$19,d1							; Monitor's width
+		moveq	#$19,d1										; monitor's width
 		moveq	#$10,d2
 		move.w	d2,d3
 		addq.w	#1,d3
@@ -53,7 +53,7 @@ Obj_MonitorMain:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 		bsr.s	SolidObject_Monitor_SonicKnux
-		jsr	Add_SpriteToCollisionResponseList(pc)
+		jsr	(Add_SpriteToCollisionResponseList).w
 		lea	Ani_Monitor(pc),a1
 		jsr	(Animate_Sprite).w
 
@@ -83,7 +83,7 @@ Obj_MonitorFallUpsideUp:
 		jsr	(MoveSprite).w
 		tst.w	y_vel(a0)						; Is monitor moving up?
 		bmi.s	locret_1D694						; If so, return
-		jsr	ObjCheckFloorDist(pc)
+		jsr	(ObjCheckFloorDist).w
 		tst.w	d1								; Is monitor in the ground?
 		beq.s	.inground						; If so, branch
 		bpl.s	locret_1D694						; if not, return
@@ -99,7 +99,7 @@ Obj_MonitorFallUpsideDown:
 		jsr	(MoveSprite_ReverseGravity).w
 		tst.w	y_vel(a0)						; Is monitor moving down?
 		bmi.s	locret_1D694						; If so, return
-		jsr	ObjCheckCeilingDist(pc)
+		jsr	(ObjCheckCeilingDist).w
 		tst.w	d1								; Is monitor in the ground (ceiling)?
 		beq.s	.inground						; If so, branch
 		bpl.s	locret_1D694						; if not, return
@@ -119,7 +119,7 @@ SolidObject_Monitor_SonicKnux:
 		bne.s	Monitor_ChkOverEdge				; If so, branch
 		cmpi.b	#id_Roll,anim(a1)					; Is Sonic/Knux in their rolling animation?
 		beq.s	locret_1D694						; If so, return
-		jmp	SolidObject_cont(pc)
+		jmp	(SolidObject_cont).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -147,15 +147,15 @@ Monitor_ChkOverEdge:
 
 Monitor_CharStandOn:
 		move.w	d4,d2
-		jsr	MvSonicOnPtfm(pc)
+		jsr	(MvSonicOnPtfm).w
 		moveq	#0,d4
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_MonitorBreak:
-		move.b	status(a0),d0
-		andi.b	#standing_mask|pushing_mask,d0	; Is someone touching the monitor?
+		moveq	#standing_mask|pushing_mask,d0	; Is someone touching the monitor?
+		and.b	status(a0),d0
 		beq.s	Obj_MonitorSpawnIcon			; If not, branch
 		move.b	d0,d1
 		andi.b	#p1_standing|p1_pushing,d1		; Is it the main character?
@@ -193,6 +193,7 @@ Obj_MonitorSpawnIcon:
 		move.b	#$A,anim(a0)					; Display 'broken' animation
 		move.l	#Obj_MonitorAnimate,address(a0)
 		jmp	(Draw_Sprite).w
+
 ; ---------------------------------------------------------------------------
 ; Monitor contents (Object)
 ; ---------------------------------------------------------------------------
@@ -202,8 +203,8 @@ Obj_MonitorSpawnIcon:
 Obj_MonitorContents:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	off_1D7C8(pc,d0.w),d1
-		jmp	off_1D7C8(pc,d1.w)
+		move.w	off_1D7C8(pc,d0.w),d0
+		jmp	off_1D7C8(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 off_1D7C8: offsetTable
@@ -217,7 +218,7 @@ loc_1D7CE:
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
 		ori.b	#$24,render_flags(a0)
 		move.w	#$180,priority(a0)
-		move.b	#16/2,width_pixels(a0)
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
 		move.w	#-$300,y_vel(a0)
 		btst	#1,render_flags(a0)
 		beq.s	loc_1D7FC
@@ -287,25 +288,28 @@ Monitor_Give_Eggman:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Rings:
-		addi.w	#10,(Ring_count).w					; add 10 rings to the number of rings you have
-		ori.b	#1,(Update_HUD_ring_count).w		; update the ring counter
-		sfx	sfx_RingRight,1							; play ring sound
+		addi.w	#10,(Ring_count).w							; add 10 rings to the number of rings you have
+		ori.b	#1,(Update_HUD_ring_count).w				; update the ring counter
+		sfx	sfx_RingRight,1									; play ring sound
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_SpeedShoes:
 		bset	#Status_SpeedShoes,status_secondary(a1)
 		move.b	#150,speed_shoes_timer(a1)
-		move.w	#$C00,(Max_speed).w
-		move.w	#$18,(Acceleration).w
-		move.w	#$80,(Deceleration).w
-		music	mus_Speedup,1						; speed up the music
+
+		; set player speed
+		lea	(Max_speed).w,a4
+		move.w	#$C00,Max_speed-Max_speed(a4)
+		move.w	#$18,Acceleration-Max_speed(a4)
+		move.w	#$80,Deceleration-Max_speed(a4)
+		music	mus_Speedup,1								; speed up the music
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Fire_Shield:
 		andi.b	#$8E,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_FireShield,status_secondary(a1)
-		move.l	#Obj_Fire_Shield,(v_Shield+address).w
+		move.l	#Obj_FireShield,(v_Shield+address).w
 		sfx	sfx_FireShield,1
 ; ---------------------------------------------------------------------------
 
@@ -313,7 +317,7 @@ Monitor_Give_Lightning_Shield:
 		andi.b	#$8E,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_LtngShield,status_secondary(a1)
-		move.l	#Obj_Lightning_Shield,(v_Shield+address).w
+		move.l	#Obj_LightningShield,(v_Shield+address).w
 		sfx	sfx_LightningShield,1
 ; ---------------------------------------------------------------------------
 
@@ -321,7 +325,7 @@ Monitor_Give_Bubble_Shield:
 		andi.b	#$8E,status_secondary(a1)
 		bset	#Status_Shield,status_secondary(a1)
 		bset	#Status_BublShield,status_secondary(a1)
-		move.l	#Obj_Bubble_Shield,(v_Shield+address).w
+		move.l	#Obj_BubbleShield,(v_Shield+address).w
 		sfx	sfx_BubbleShield,1
 ; ---------------------------------------------------------------------------
 
@@ -336,7 +340,7 @@ Monitor_Give_Invincibility:
 		bls.s		.skipmusic
 		music	mus_Invincible					; if invincible, play invincibility music
 
-.skipmusic:
+.skipmusic
 		move.l	#Obj_Invincibility,(v_Invincibility_stars+address).w
 		rts
 ; ---------------------------------------------------------------------------

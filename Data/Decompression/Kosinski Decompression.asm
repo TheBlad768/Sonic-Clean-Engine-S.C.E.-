@@ -15,10 +15,10 @@ KosArt_To_VDP:
 		bsr.s	Kos_Decomp					; "
 		move.l	a3,d1						; move the backed-up a1 to d1
 		andi.l	#$FFFFFF,d1					; d1 will be used in the DMA transfer as the Source Address
-		lsr.l	#1,d1							; divide source address by 2
+		lsr.l	d1								; divide source address by 2
 		move.l	a1,d3						; move end address of decompressed art to d3
 		sub.l	a3,d3						; subtract 'start address of decompressed art' from 'end address of decompressed art', giving you the size of the decompressed art
-		lsr.l	#1,d3							; divide size of decompressed art by two, d3 will be used in the DMA transfer as the Transfer Length (size/2)
+		lsr.l	d3								; divide size of decompressed art by two, d3 will be used in the DMA transfer as the Transfer Length (size/2)
 		move.w	a2,d2						; move VRAM address to d2, d2 will be used in the DMA transfer as the Destination Address
 		movea.l	a1,a3						; backup a1, this allows the same address to be used by multiple calls to KosArt_To_VDP without constant redefining
 		bsr.w	Add_To_DMA_Queue			; transfer *Transfer Length* of data from *Source Address* to *Destination Address*
@@ -28,10 +28,7 @@ KosArt_To_VDP:
 ; =============== S U B R O U T I N E =======================================
 
 KosDec:
-Kos_Decomp:
-		movem.l	d0-d7/a4-a5,-(sp)
-		include "Data/Decompression/Kosinski Internal.asm"
-		movem.l	(sp)+,d0-d7/a4-a5
+Kos_Decomp:		include "Data/Decompression/Kosinski Internal.asm"
 		rts
 ; ---------------------------------------------------------------------------
 

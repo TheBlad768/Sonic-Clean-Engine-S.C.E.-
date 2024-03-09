@@ -78,7 +78,7 @@ Camera_max_Y_pos_Saved:			ds.w 1
 H_scroll_frame_offset:					ds.w 1					; If this is non-zero with value x, horizontal scrolling will be based on the player's position x / $100 + 1 frames ago
 Pos_table_index:						ds.b 1
 Pos_table_byte:						ds.b 1
-Distance_from_screen_top:				ds.w 1					; The vertical scroll manager scrolls the screen until the player's distance from the top of the screen is equal to this (or between this and this + $40 when in the air). $60 by default
+Distance_from_top:					ds.w 1					; The vertical scroll manager scrolls the screen until the player's distance from the top of the screen is equal to this (or between this and this + $40 when in the air). $60 by default
 Camera_max_Y_pos_changing:			ds.b 1					; Set when the maximum camera Y pos is undergoing a change
 									ds.b 1					; even
 Fast_V_scroll_flag:					ds.b 1					; If this is set vertical scroll when the player is on the ground and has a speed of less than $800 is capped at 24 pixels per frame instead of 6
@@ -187,9 +187,9 @@ DMA_data_thunk:					= *						; Used as a RAM holder for the final DMA command wo
 DMA_trigger_word:					ds.w 1					; Transferred from RAM to avoid crashing the Mega Drive
 f_hbla_pal:							= *
 H_int_flag:							ds.b 1					; Unless this is set H-int will return immediately
+Do_Updates_in_H_int:				ds.b 1					; If this is set Do_Updates will be called from H-int instead of V-int
 WindTunnel_mode:					ds.b 1
 WindTunnel_flag:						ds.b 1
-									ds.b 1					; even
 Disable_death_plane:					ds.b 1					; if set, going below the screen wont kill the player
 f_lockctrl:							= *
 Ctrl_1_locked:						ds.b 1
@@ -235,7 +235,7 @@ Debug_camera_speed:					ds.b 1
 Debug_object:						ds.b 1					; The current position in the debug mode object list
 Level_end_flag:						ds.b 1
 LastAct_end_flag:						ds.b 1
-Debug_mode_flag:					ds.b 1
+									ds.b 1					; even
 Slotted_object_bits:					ds.b 8					; Index of slot array to use
 Signpost_addr:						ds.w 1
 Palette_cycle_counters:				ds.b $10
@@ -276,6 +276,8 @@ Current_music:						ds.w 1
 Palette_fade_timer:					ds.w 1					; The palette gets faded in until this timer expires
 SegaCD_Mode:						ds.b 1
 Respawn_table_keep:					ds.b 1					; If set, respawn table is not reset during level load
+Debug_mode_flag:					ds.b 1
+									ds.b 1					; even
 
 Block_table_addr_ROM:				ds.l 1					; Block table pointer(Block (16x16) definitions, 8 bytes per definition)
 Level_layout_addr_ROM:				ds.l 1					; Level layout pointer
@@ -285,16 +287,39 @@ Object_index_addr:					ds.l 1					; Points to either the object index for levels
 Object_load_addr_RAM:				ds.l 1					; Jump for the object loading manager
 
 Level_data_addr_RAM:				= *
-.AnPal:								ds.l 1
-.Resize:								ds.l 1
-.WaterResize:							ds.l 1
-.AfterBoss:							ds.l 1
-.ScreenInit:							ds.l 1
-.BackgroundInit:						ds.l 1
-.ScreenEvent:							ds.l 1
-.BackgroundEvent:					ds.l 1
-.AnimateTiles:						ds.l 1
-.AniPLC:								ds.l 1
+.AnPal								ds.l 1
+.Resize								ds.l 1
+.WaterResize							ds.l 1
+.AfterBoss							ds.l 1
+.ScreenInit							ds.l 1
+.BackgroundInit						ds.l 1
+.ScreenEvent							ds.l 1
+.BackgroundEvent						ds.l 1
+.AnimateTilesInit						ds.l 1
+.AnimateTiles							ds.l 1
+.AniPLC								ds.l 1
+.Palette								= *
+.8x8data								ds.l 1
+.WaterPalette							= *
+.16x16data							ds.l 1
+.Music								= *
+.128x128data							ds.l 1
+.Solid								ds.l 1
+.Layout								ds.l 1
+.Sprites								ds.l 1
+.Rings								ds.l 1
+.PLC1								ds.l 1
+.PLC2								ds.l 1
+.PLCAnimals							ds.l 1
+.xstart								ds.w 1
+.xend								ds.w 1
+.ystart								ds.w 1
+.yend								ds.w 1
+.WaterHeight							ds.w 1
+.WaterSpal							ds.b 1
+									ds.b 1					; even
+.Location								ds.l 1
+.Debug								ds.l 1
 Level_data_addr_RAM_end			= *
 
 Kos_decomp_queue_count:				ds.w 1					; The number of pieces of data on the queue. Sign bit set indicates a decompression is in progress
@@ -399,6 +424,7 @@ Saved_camera_Y_pos:					ds.w 1
 Saved_mean_water_level:				ds.w 1
 Saved_camera_max_Y_pos:			ds.w 1
 Saved_dynamic_resize:				ds.l 1
+Saved_waterdynamic_resize:			ds.l 1
 Saved_water_full_screen_flag:			ds.b 1
 Saved_status_secondary:				ds.b 1
 Saved_last_star_post_hit:				ds.b 1

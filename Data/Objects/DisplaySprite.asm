@@ -1,6 +1,11 @@
 ; ---------------------------------------------------------------------------
-; Subroutine to display	a sprite/object, when a0 is the object RAM
+; Subroutine to display a sprite/object, when a0 is the object RAM
 ; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_And_Touch_Sprite:
+		bsr.w	Add_SpriteToCollisionResponseList
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -28,17 +33,13 @@ DisplaySprite:
 
 ; =============== S U B R O U T I N E =======================================
 
-Draw_And_Touch_Sprite:
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.s	Draw_Sprite
-; ---------------------------------------------------------------------------
-
 Child_Draw_Sprite:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.w	Go_Delete_Sprite
 		bra.s	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_DrawTouch_Sprite:
 		movea.w	parent3(a0),a1
@@ -46,21 +47,24 @@ Child_DrawTouch_Sprite:
 		bne.w	Go_Delete_Sprite
 		bsr.w	Add_SpriteToCollisionResponseList
 		bra.s	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_CheckParent:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.w	Go_Delete_Sprite
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_AddToTouchList:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.w	Go_Delete_Sprite
 		bra.w	Add_SpriteToCollisionResponseList
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_Remember_Draw_Sprite:
 		movea.w	parent3(a0),a1
@@ -72,7 +76,8 @@ Child_Remember_Draw_Sprite:
 loc_84984:
 		bsr.w	Remove_From_TrackingSlot
 		bra.w	Go_Delete_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_Draw_Sprite2:
 		movea.w	parent3(a0),a1
@@ -83,7 +88,8 @@ Child_Draw_Sprite2:
 
 loc_8499E:
 		bra.w	Go_Delete_Sprite_2
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_DrawTouch_Sprite2:
 		movea.w	parent3(a0),a1
@@ -95,7 +101,8 @@ Child_DrawTouch_Sprite2:
 
 loc_849BC:
 		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_Draw_Sprite_FlickerMove:
 		movea.w	parent3(a0),a1
@@ -110,14 +117,16 @@ loc_849D8:
 		clr.b	collision_flags(a0)
 		bsr.w	Set_IndexedVelocity
 		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_Draw_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1
 		btst	#4,objoff_38(a1)
 		bne.s	loc_849D8
 		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_DrawTouch_Sprite_FlickerMove:
 		movea.w	parent3(a0),a1
@@ -127,7 +136,8 @@ Child_DrawTouch_Sprite_FlickerMove:
 loc_84A3C:
 		bsr.w	Add_SpriteToCollisionResponseList
 		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Child_DrawTouch_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1
@@ -137,3 +147,11 @@ Child_DrawTouch_Sprite2_FlickerMove:
 		beq.s	loc_84A3C
 		bset	#7,status(a0)
 		bra.w	Draw_Sprite
+
+; =============== S U B R O U T I N E =======================================
+
+Child_DrawTouch_Sprite2_FlickerMove2:
+		movea.w	parent3(a0),a1
+		btst	#4,objoff_38(a1)
+		bne.s	loc_849D8
+		bra.s	loc_84A3C

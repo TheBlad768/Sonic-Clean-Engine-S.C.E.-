@@ -112,7 +112,7 @@ Map_Sonic:
 		dc.w SME_hNcWV_11F0-Map_Sonic, SME_hNcWV_11FE-Map_Sonic
 		dc.w SME_hNcWV_1212-Map_Sonic, SME_hNcWV_1226-Map_Sonic
 		dc.w SME_hNcWV_123A-Map_Sonic, SME_hNcWV_124E-Map_Sonic
-Map_Sonic_End
+Map_Sonic_end
 SME_hNcWV_1B4:	dc.b 0, 0
 SME_hNcWV_1B6:	dc.b 0, 3
 		dc.b $EC, $D, 0, 0, $FF, $EC

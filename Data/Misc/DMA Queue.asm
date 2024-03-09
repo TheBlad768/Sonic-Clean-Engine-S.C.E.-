@@ -266,7 +266,7 @@ Add_To_DMA_Queue:
 		; d1.w + d3.w > $10000.
 		sub.w	d3,d0										; Using sub instead of move and add allows checking edge cases
 		sub.w	d1,d0										; Does the transfer cross over to the next 128kB block?
-		bcs.s	.doubletransfer								; Branch if yes
+		blo.s		.doubletransfer								; Branch if yes
 	endif	; Use128kbSafeDMA
 	; It does not cross a 128kB boundary. So just finish writing it.
 	movep.w	d3,DMAEntry.Size(a1)							; Write DMA length, overwriting useless top byte of source address

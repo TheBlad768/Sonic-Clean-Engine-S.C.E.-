@@ -296,7 +296,7 @@ LevResults_GetDecimalScore:
 
 .loop
 		ror.w	d0
-		bcs.s	.found
+		blo.s		.found
 		subq.w	#3,a1								; back in 3 bytes
 		bra.s	.next
 ; ---------------------------------------------------------------------------
@@ -304,7 +304,9 @@ LevResults_GetDecimalScore:
 .found
 		lea	(DecimalScoreRAM2).w,a2
 
-		addi.w	#0,d0								; set carry bit for extend
+		addi.w	#0,d0								; clear carry bit for extend
+;		move	#0,ccr								; "
+
 		abcd	-(a1),-(a2)
 		abcd	-(a1),-(a2)
 		abcd	-(a1),-(a2)

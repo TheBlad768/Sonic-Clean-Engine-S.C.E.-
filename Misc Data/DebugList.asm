@@ -2,17 +2,8 @@
 ; Debug mode item lists
 ; ===========================================================================
 
-DebugList: offsetTable
-		offsetTableEntry.w .DEZ1
-		offsetTableEntry.w .DEZ1
-		offsetTableEntry.w .DEZ1
-		offsetTableEntry.w .DEZ1
-
-		zonewarning DebugList,(2*4)
-; ---------------------------------------------------------------------------
-
-				; Object Mappings Subtype Frame VRAM
-.DEZ1: dbglistheader
+				; object, mappings, subtype, frame, VRAM
+Debug_DEZ1: dbglistheader
 	dbglistobj Obj_Ring, Map_Ring, 0, 0, make_art_tile(ArtTile_Ring,1,1)
 	dbglistobj Obj_Monitor, Map_Monitor, 2, 3, make_art_tile(ArtTile_Monitors,0,0)
 	dbglistobj Obj_Monitor, Map_Monitor, 3, 4, make_art_tile(ArtTile_Monitors,0,0)
@@ -35,4 +26,5 @@ DebugList: offsetTable
 	dbglistobj Obj_Button,	Map_Button, 0, 2, make_art_tile($47E,0,0)
 	dbglistobj Obj_StarPost, Map_StarPost, 1, 0, make_art_tile(ArtTile_StarPost+8,0,0)
 	dbglistobj Obj_EggCapsule, Map_EggCapsule, 1, 0, make_art_tile($43E,0,0)
-.DEZ1_end
+	dbglistobj Obj_EggCapsule_Flying, Map_EggCapsule, 1, 0, make_art_tile($43E,0,0)
+Debug_DEZ1_end

@@ -17,8 +17,8 @@ Obj_WaterWave:
 		move.l	#.main,address(a0)
 
 .main
-		move.w	(Camera_X_pos).w,d1
-		andi.w	#$FFE0,d1
+		moveq	#-$20,d1
+		and.w	(Camera_X_pos).w,d1
 		addi.w	#96,d1
 		btst	#0,(Level_frame_counter+1).w
 		beq.s	.skip

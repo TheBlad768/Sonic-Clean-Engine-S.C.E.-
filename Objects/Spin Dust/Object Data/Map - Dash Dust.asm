@@ -74,3 +74,4 @@ word_18ED2:	dc.w 1
 		dc.b  $E8,  $E,	  0,   0, $FF, $F0
 word_18EDA:	dc.w 1
 		dc.b  $E0,  $F,	  0,   0, $FF, $F0
+	even

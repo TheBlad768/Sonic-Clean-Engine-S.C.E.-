@@ -18,7 +18,7 @@ ChangeRingFrame:
 
 ; Dynamic graphics
 		moveq	#0,d0
-		move.l	#ArtUnc_Ring>>1,d1						; load art source
+		move.l	#dmaSource(ArtUnc_Ring),d1				; load art source
 		move.b	(Rings_frame).w,d0
 		lsl.w	#6,d0
 		add.l	d0,d1									; get next frame

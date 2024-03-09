@@ -22,7 +22,7 @@
 
 .FetchNewCode:
 	_Kos_ReadBit
-		bcs.s	.FetchCodeLoop				; If code = 1, branch.
+		blo.s		.FetchCodeLoop				; If code = 1, branch.
 
 		; Codes 00 and 01.
 		moveq	#-1,d5
@@ -30,15 +30,15 @@
 	_Kos_RunBitStream
 	if _Kos_ExtremeUnrolling==1
 	_Kos_ReadBit
-		bcs.w	.Code_01
+		blo.w	.Code_01
 
 		; Code 00 (Dictionary ref. short).
 	_Kos_RunBitStream
 	_Kos_ReadBit
-		bcs.s	.Copy45
+		blo.s		.Copy45
 	_Kos_RunBitStream
 	_Kos_ReadBit
-		bcs.s	.Copy3
+		blo.s		.Copy3
 	_Kos_RunBitStream
 		move.b	(a0)+,d5						; d5 = displacement.
 		adda.w	d5,a5
@@ -60,7 +60,7 @@
 .Copy45:
 	_Kos_RunBitStream
 	_Kos_ReadBit
-		bcs.s	.Copy5
+		blo.s		.Copy5
 	_Kos_RunBitStream
 		move.b	(a0)+,d5						; d5 = displacement.
 		adda.w	d5,a5
@@ -85,7 +85,7 @@
 	else
 		moveq	#0,d4						; d4 will contain copy count.
 	_Kos_ReadBit
-		bcs.s	.Code_01
+		blo.s		.Code_01
 
 		; Code 00 (Dictionary ref. short).
 	_Kos_RunBitStream
@@ -103,7 +103,7 @@
 
 .copy:
 		move.b	(a5)+,(a1)+
-		dbra	d4,.copy
+		dbf	d4,.copy
 		bra.w	.FetchNewCode
 	endif
 ; ---------------------------------------------------------------------------
@@ -144,7 +144,7 @@
 	rept (1<<_Kos_LoopUnroll)
 		move.b	(a5)+,(a1)+
 	endr
-		dbra	d4,.largecopy
+		dbf	d4,.largecopy
 		bra.w	.FetchNewCode
 ; ---------------------------------------------------------------------------
 

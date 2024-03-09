@@ -10,7 +10,7 @@ AnPal_DEZ:
 		; wait
 		subq.w	#1,(a0)					; decrement timer
 		bpl.s	.anpal2					; if time remains, branch
-		addq.w	#5,(a0)					; reset timer to 4+1 frames
+		addq.w	#4+1,(a0)				; reset timer to 4 frames
 
 		; cycle
 		move.w	2(a0),d0
@@ -28,7 +28,7 @@ AnPal_DEZ:
 		; wait
 		subq.w	#1,4(a0)					; decrement timer
 		bpl.s	.return					; if time remains, branch
-		move.w	#$13,4(a0)				; reset timer to $13+1 frames
+		move.w	#$13,4(a0)				; reset timer to $13 frames
 
 		; cycle
 		move.w	6(a0),d0

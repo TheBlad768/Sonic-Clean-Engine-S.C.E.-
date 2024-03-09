@@ -1,0 +1,225 @@
+; ---------------------------------------------------------------------------
+; Dash Dust (Object)
+; ---------------------------------------------------------------------------
+
+; Dynamic object variables
+dashdust_prev_frame			= objoff_34	; .b
+dashdust_dust_timer			= objoff_36	; .b
+dashdust_tails				= objoff_38	; .b
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_DashDust:
+		move.l	#Map_DashDust,mappings(a0)
+		move.b	#4,render_flags(a0)
+		move.w	#$80,priority(a0)
+		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)				; set height and width
+		move.l	#.main,address(a0)
+		move.w	#ArtTile_DashDust,art_tile(a0)
+		move.w	#Player_1,parent(a0)
+		move.w	#tiles_to_bytes(ArtTile_DashDust),vram_art(a0)
+		cmpa.w	#v_Dust,a0
+		beq.s	.main
+		st	dashdust_tails(a0)
+
+.main
+		movea.w	parent(a0),a2											; a2=character
+		moveq	#0,d0
+		move.b	anim(a0),d0											; use current animation as a secondary routine counter
+		add.w	d0,d0
+		add.w	d0,d0
+		jmp	.index(pc,d0.w)
+; ---------------------------------------------------------------------------
+
+.index
+		bra.w	.return			; 0
+		bra.w	.splash			; 1
+		bra.w	.spindashdust		; 2
+		bra.w	.skiddust			; 3
+
+; =============== S U B R O U T I N E =======================================
+
+.fromground															; 4 (LBZ1 only?)
+		tst.b	prev_anim(a0)
+		bne.s	.anim
+		move.w	x_pos(a2),x_pos(a0)
+		clr.b	status(a0)
+		andi.w	#drawing_mask,art_tile(a0)
+
+.anim
+		lea	Ani_DashSplashDrown(pc),a1
+		jsr	(Animate_Sprite).w
+		move.l	#dmaSource(ArtUnc_SplashDrown),d6
+		bsr.w	SplashDrown_Load_DPLC
+		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.spindashdust
+		cmpi.b	#12,air_left(a2)
+		blo.s		.reset
+		cmpi.b	#id_SonicHurt,routine(a2)								; is player falling back from getting hurt?
+		bhs.s	.reset												; if yes, branch
+		tst.b	spin_dash_flag(a2)										; is player charging his spin dash?
+		beq.s	.reset												; if not, branch
+		move.w	x_pos(a2),x_pos(a0)
+		move.w	y_pos(a2),y_pos(a0)
+		move.b	status(a2),status(a0)
+		andi.b	#1,status(a0)
+		moveq	#4,d1
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.notgrav
+		ori.b	#2,status(a0)
+		neg.w	d1
+
+.notgrav
+		tst.b	dashdust_tails(a0)
+		beq.s	.skip
+		sub.w	d1,y_pos(a0)
+
+.skip
+		tst.b	prev_anim(a0)
+		bne.s	.draw
+		andi.w	#drawing_mask,art_tile(a0)
+		tst.w	art_tile(a2)
+		bpl.s	.draw
+		ori.w	#high_priority,art_tile(a0)
+		bra.s	.draw
+; ---------------------------------------------------------------------------
+
+.reset
+		clr.b	anim(a0)												; back to ".return"
+
+.return
+		rts
+; ---------------------------------------------------------------------------
+
+.skiddust
+		cmpi.b	#12,air_left(a2)
+		blo.s		.reset
+		btst	#6,status(a0)
+		bne.s	.reset
+
+.draw
+		lea	Ani_DashSplashDrown(pc),a1
+		jsr	(Animate_Sprite).w
+		tst.b	routine(a0)												; changed by Animate_Sprite
+		bne.s	.delete
+		bsr.w	DashDust_Load_DPLC
+		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.delete
+		jmp	(Delete_Current_Sprite).w
+; ---------------------------------------------------------------------------
+
+.splash
+		move.w	(Water_level).w,y_pos(a0)
+		tst.b	prev_anim(a0)
+		bne.s	.draw
+		move.w	x_pos(a2),x_pos(a0)
+		clr.b	status(a0)
+		andi.w	#drawing_mask,art_tile(a0)
+		bra.s	.draw
+
+; =============== S U B R O U T I N E =======================================
+
+DashDust_CheckSkid:
+		movea.w	parent(a0),a2											; a2=character
+		moveq	#16,d1
+		cmpi.b	#id_Stop,anim(a2)									; is Sonic stopped?
+		beq.s	.create												; if so, branch
+		cmpi.b	#2,character_id(a2)									; is player Knuckles?
+		bne.s	.back												; if not, branch
+		moveq	#6,d1
+		cmpi.b	#3,double_jump_flag(a2)								; is Knuckles sliding across the ground after gliding?
+		beq.s	.create												; if so, branch
+
+.back
+		move.l	#Obj_DashDust.main,address(a0)						; back
+		clr.b	dashdust_dust_timer(a0)									; clear timer
+		rts
+; ---------------------------------------------------------------------------
+
+.create
+
+		; wait
+		subq.b	#1,dashdust_dust_timer(a0)							; decrement timer
+		bpl.s	DashDust_Load_DPLC									; if time remains, branch
+		addq.b	#3+1,dashdust_dust_timer(a0)							; reset timer to 3+1 frames
+
+		; check
+		btst	#Status_Underwater,status(a2)								; is player underwater?
+		bne.s	DashDust_Load_DPLC									; if yes, branch
+
+		; create dust clouds
+		jsr	(Create_New_Sprite).w
+		bne.s	DashDust_Load_DPLC
+		move.l	#Obj_DashDust.main,address(a1)
+		move.w	x_pos(a2),x_pos(a1)
+		move.w	y_pos(a2),y_pos(a1)
+		tst.b	dashdust_tails(a0)
+		beq.s	.skip
+		subq.w	#4,d1
+
+.skip
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.notgrav
+		neg.w	d1
+
+.notgrav
+		add.w	d1,y_pos(a1)
+		clr.b	status(a1)
+		move.b	#3,anim(a1)
+		move.l	mappings(a0),mappings(a1)
+		move.b	render_flags(a0),render_flags(a1)
+		move.w	#$80,priority(a1)
+		move.w	#bytes_to_word(8/2,8/2),height_pixels(a1)				; set height and width
+		move.w	art_tile(a0),art_tile(a1)
+		move.w	parent(a0),parent(a1)
+		andi.w	#drawing_mask,art_tile(a1)
+		tst.w	art_tile(a2)
+		bpl.s	DashDust_Load_DPLC
+		ori.w	#high_priority,art_tile(a1)
+
+; =============== S U B R O U T I N E =======================================
+
+DashDust_Load_DPLC:
+		move.l	#dmaSource(ArtUnc_DashDust),d6
+
+SplashDrown_Load_DPLC:
+		moveq	#0,d0
+		move.b	mapping_frame(a0),d0
+		cmp.b	dashdust_prev_frame(a0),d0
+		beq.s	.return
+		move.b	d0,dashdust_prev_frame(a0)
+		add.w	d0,d0
+		lea	DPLC_DashSplashDrown(pc),a2
+		adda.w	(a2,d0.w),a2
+		move.w	(a2)+,d5
+		subq.w	#1,d5
+		bmi.s	.return
+		move.w	vram_art(a0),d4
+
+.loop
+		moveq	#0,d1
+		move.w	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#4,d1
+		add.l	d6,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(Add_To_DMA_Queue).w
+		dbf	d5,.loop
+
+.return
+		rts
+; ---------------------------------------------------------------------------
+
+		include "Objects/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"
+		include "Objects/Spin Dust/Object Data/Map - Dash Dust.asm"
+		include "Objects/Spin Dust/Object Data/DPLC - Dash Splash Drown.asm"

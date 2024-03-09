@@ -1,4 +1,4 @@
-Ani_Shields: offsetTable
+Ani_AirCountdown: offsetTable
 		offsetTableEntry.w byte_186E2
 		offsetTableEntry.w byte_186EB
 		offsetTableEntry.w byte_186F4

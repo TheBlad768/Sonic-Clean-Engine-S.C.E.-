@@ -23,7 +23,7 @@
 		include "Objects/StarPost/StarPost.asm"
 		include "Objects/Button/Button.asm"
 		include "Objects/Animals/Animals.asm"
-		include "Objects/Egg Capsule/EggCapsule.asm"
+		include "Objects/Egg Capsule/Egg Capsule.asm"
 		include "Objects/Smooth Palette/Smooth Palette.asm"
 
 ; ===========================================================================

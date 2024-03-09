@@ -50,10 +50,8 @@ DEZ1_Transition:
 ; ---------------------------------------------------------------------------
 
 DEZ1_BGDeformArray:
-	rept 15
-		dc.w 16
-	endr
-		dc.w $7FFF
+		dcb.w 15, 16		; stars
+		dc.w $7FFF		; last stars
 ; ---------------------------------------------------------------------------
 
 DEZ1_Deform:
@@ -65,26 +63,15 @@ DEZ1_Deform:
 
 		; xscroll
 		lea	(H_scroll_table).w,a1
-		move.l	(Camera_X_pos_copy).w,d0
-		neg.l	d0
-		move.w	(Level_frame_counter).w,d1
-		swap	d1
-		clr.w	d1								; set longword
-		asr.l	#1,d1
-		asr.l	#7,d0
-		add.l	d1,d0
-		swap	d0
-		move.l	d0,d2							; save speed star 1
-		swap	d0
-		asr.l	#3,d0
-		asr.l	#1,d1
-		add.l	d1,d0
-		swap	d0
-		move.l	d0,d3							; save speed star 2
+		move.w	(Level_frame_counter).w,d0
+		asr.w	d0								; $800
+		move.w	d0,d1							; save speed star 1
+		asr.w	d0								; $400
+		move.w	d0,d2							; save speed star 2
 
 	rept 16/2
-		move.w	d2,(a1)+							; set speed star 1
-		move.w	d3,(a1)+							; set speed star 2
+		move.w	d1,(a1)+							; set speed star 1
+		move.w	d2,(a1)+							; set speed star 2
 	endr
 
 		rts

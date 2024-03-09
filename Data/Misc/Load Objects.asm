@@ -11,11 +11,7 @@ Load_Sprites:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Sprites_Init:
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		lea	(SpriteLocPtrs).l,a0
-		movea.l	(a0,d0.w),a0
+		movea.l	(Level_data_addr_RAM.Sprites).w,a0
 		move.l	a0,(Object_load_addr_front).w
 		move.l	a0,(Object_load_addr_back).w
 
@@ -30,7 +26,7 @@ Load_Sprites_Init2:
 		lea	(Object_respawn_table).w,a3
 		move.w	(Camera_X_pos).w,d6
 		subi.w	#128,d6
-		bcc.s	+
+		bhs.s	+
 		moveq	#0,d6
 +		andi.w	#-128,d6
 		movea.l	(Object_load_addr_front).w,a0
@@ -45,7 +41,7 @@ Load_Sprites_Init2:
 		lea	(Object_respawn_table).w,a3
 		movea.l	(Object_load_addr_back).w,a0
 		subi.w	#128,d6
-		bcs.s	+
+		blo.s		+
 
 -		cmp.w	(a0),d6
 		bls.s		+
@@ -114,7 +110,7 @@ loc_1B864:
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#128,d6
-		bcs.s	loc_1B8A8
+		blo.s		loc_1B8A8
 		bsr.w	Create_New_Sprite
 		bne.s	loc_1B8A8
 
@@ -172,7 +168,7 @@ loc_1B8F2:
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$300,d6
-		bcs.s	loc_1B912
+		blo.s		loc_1B912
 
 -		cmp.w	(a0),d6
 		bls.s		loc_1B912
@@ -379,6 +375,7 @@ Create_New_Sprite4:
 		tst.l	address(a1)
 		dbeq	d0,-
 +		rts
+
 ; ---------------------------------------------------------------------------
 ; Changes the coarse back- and forward-camera edges to match new Camera_X value.
 ; Also seeks to appropriate object locations in the level's object layout, so
@@ -398,7 +395,7 @@ Seek_Object_Manager:
 		movea.l	(Object_load_addr_back).w,a1
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$80,d6
-		bcs.s	loc_1BBF2
+		blo.s		loc_1BBF2
 
 loc_1BBE6:
 		cmp.w	-6(a1),d6
@@ -426,7 +423,7 @@ loc_1BC06:
 loc_1BC12:
 		move.l	a1,(Object_load_addr_front).w
 		move.w	a3,(Object_respawn_index_front).w
-		bra.s	locret_1BC5E
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_1BC1C:
@@ -449,7 +446,7 @@ loc_1BC36:
 		movea.l	(Object_load_addr_back).w,a1
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$300,d6
-		bcs.s	loc_1BC56
+		blo.s		loc_1BC56
 
 loc_1BC4C:
 		cmp.w	(a1),d6

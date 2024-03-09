@@ -123,7 +123,7 @@ Setup_TileColumnDraw:
 		andi.w	#$F00,d3
 		asr.w	#4,d1
 		move.w	d1,d4
-		asr.w	#1,d1
+		asr.w	d1
 		and.w	(Layout_row_index_mask).w,d1
 		andi.w	#$F,d4
 		moveq	#$10,d5
@@ -574,7 +574,7 @@ Draw_BGNoVert:
 		lsr.w	#4,d6
 		moveq	#$F,d4
 		sub.w	d6,d4
-		bcc.s	+
+		bhs.s	+
 		moveq	#0,d4
 		moveq	#$F,d6
 +
@@ -663,7 +663,7 @@ DrawTilesVDeform2:
 		move.w	d6,d1
 
 -		sub.w	(a4)+,d6
-		bcs.s	+
+		blo.s		+
 		move.w	(a6)+,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(a6)+
@@ -674,7 +674,7 @@ DrawTilesVDeform2:
 		lsr.w	#4,d6
 		moveq	#$15,d4
 		sub.w	d6,d4
-		bcc.s	+
+		bhs.s	+
 		moveq	#0,d4
 		moveq	#$15,d6
 
@@ -695,7 +695,7 @@ DrawTilesVDeform2:
 		lsr.w	#4,d6
 		move.w	d4,d0
 		sub.w	d6,d4
-		bcc.s	-
+		bhs.s	-
 		move.w	d0,d6
 		moveq	#0,d4
 		bra.s	-
@@ -934,92 +934,10 @@ Restart_LevelData:
 
 ; =============== S U B R O U T I N E =======================================
 
-Reset_ObjectsPosition3:
-		bsr.s	Reset_ObjectsPosition2
-		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		move.w	(Camera_X_pos).w,(Camera_max_X_pos).w
-		move.w	(Camera_Y_pos).w,(Camera_min_Y_pos).w
-		move.w	(Camera_Y_pos).w,(Camera_max_Y_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-Reset_ObjectsPosition2:
-		sub.w	d1,(Player_1+y_pos).w
-		sub.w	d0,(Player_1+x_pos).w
-		sub.w	d0,(Camera_X_pos).w
-		sub.w	d1,(Camera_Y_pos).w
-		sub.w	d0,(Camera_X_pos_copy).w
-		sub.w	d1,(Camera_Y_pos_copy).w
-		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
-		bra.s	Offset_ObjectsDuringTransition
-; ---------------------------------------------------------------------------
-
-Reset_ObjectsPosition:
-		move.w	(Camera_X_pos).w,d0
-
-Reset_ObjectsPosition4:
-		sub.w	d1,(Player_1+y_pos).w
-		sub.w	d0,(Player_1+x_pos).w
-		sub.w	d0,(Camera_X_pos).w
-		sub.w	d1,(Camera_Y_pos).w
-		sub.w	d0,(Camera_X_pos_copy).w
-		sub.w	d1,(Camera_Y_pos_copy).w
-		sub.w	d0,(Camera_min_X_pos).w
-		sub.w	d0,(Camera_max_X_pos).w
-		sub.w	d1,(Camera_min_Y_pos).w
-		sub.w	d1,(Camera_max_Y_pos).w
-		move.w	(Camera_max_Y_pos).w,(Camera_target_max_Y_pos).w
-
-; =============== S U B R O U T I N E =======================================
-
-Offset_ObjectsDuringTransition:
-		lea	(Dynamic_object_RAM+next_object).w,a1
-		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d2
-
-.check
-		tst.l	address(a1)
-		beq.s	.nextobj
-		btst	#2,render_flags(a1)
-		beq.s	.nextobj
-		sub.w	d0,x_pos(a1)
-		sub.w	d1,y_pos(a1)
-
-.nextobj
-		lea	next_object(a1),a1
-		dbf	d2,.check
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Change_ActSizes:
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#3,d0
-		lea	LevelSizes(pc),a1
-		lea	(a1,d0.w),a1
-		move.l	(a1)+,d0
-		move.l	d0,(Camera_min_X_pos).w
-		move.l	d0,(Camera_target_min_X_pos).w
-		move.l	(a1)+,d0
-		move.l	d0,(Camera_min_Y_pos).w
-		move.l	d0,(Camera_target_min_Y_pos).w
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
 LoadLevelLoadBlock:
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		move.w	d0,d1
-		add.w	d0,d0
-		add.w	d1,d0
-		lea	(LevelLoadBlock).l,a2
-		lea	(a2,d0.w),a2
-		move.l	(a2)+,d0
-		andi.l	#$FFFFFF,d0
-		movea.l	d0,a1
-		moveq	#0,d2
+		lea	(Level_data_addr_RAM.8x8data).w,a2
+		movea.l	(a2),a1
+		moveq	#0,d2											; VRAM
 		bsr.w	Queue_Kos_Module
 
 .waitplc
@@ -1034,23 +952,19 @@ LoadLevelLoadBlock:
 ; =============== S U B R O U T I N E =======================================
 
 LoadLevelLoadBlock2:
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		move.w	d0,d1
-		add.w	d0,d0
-		add.w	d1,d0
-		lea	(LevelLoadBlock).l,a2
-		lea	(a2,d0.w),a2
-		pea	(a2)										; save a2
+		movea.l	(Level_data_addr_RAM.PLC1).w,a5
+		bsr.w	LoadPLC_Raw_KosM
+
+.skipPLC
+		lea	(Level_data_addr_RAM.8x8data).w,a2
+		pea	(a2)													; save a2
 		addq.w	#4,a2
 		move.l	(a2)+,(Block_table_addr_ROM).w
 		movea.l	(a2)+,a0
 		lea	(RAM_start).l,a1
 		jsr	(Kos_Decomp).w
 		bsr.s	Load_Level
-		jsr	(LoadPLC_KosM).w
-		movea.l	(sp)+,a2								; restore a2
+		movea.l	(sp)+,a2											; restore a2
 		moveq	#0,d0
 		move.b	(a2),d0
 		jmp	(LoadPalette).w
@@ -1058,15 +972,11 @@ LoadLevelLoadBlock2:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Level:
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		lea	(LevelPtrs).l,a0
-		movea.l	(a0,d0.w),a0
+		movea.l	(Level_data_addr_RAM.Layout).w,a0
 
 Load_Level2:
 		move.l	a0,(Level_layout_addr_ROM).w
-		addq.l	#8,a0
+		addq.w	#8,a0
 		move.l	a0,(Level_layout2_addr_ROM).w
 		rts
 
@@ -1074,11 +984,11 @@ Load_Level2:
 
 LoadLevelPointer:
 		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#3,d0
+		ror.b	#2,d0											; multiply by $68
 		move.w	d0,d1
-		add.w	d0,d0
-		add.w	d0,d0
+		lsr.w	d1
+		add.w	d1,d0
+		lsr.w	#2,d1
 		add.w	d1,d0
 		lea	(LevelLoadPointer).l,a2
 		lea	(a2,d0.w),a2
@@ -1086,9 +996,31 @@ LoadLevelPointer:
 LoadLevelPointer2:
 		lea	(Level_data_addr_RAM).w,a3
 
-	rept	(Level_data_addr_RAM_end-Level_data_addr_RAM)/4
-		move.l	(a2)+,(a3)+
+		; if you make a different buffer size, you need to change this code
+
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$68
+		fatal "Warning! The buffer size is different!"
+	endif
+
+		set	.a,0
+
+	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $68 bytes
+		movem.l	(a2)+,d0-d7
+		movem.l	d0-d7,.a(a3)										; copy $20 bytes
+		set	.a,.a + $20
 	endr
+
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&8
+		movem.l	(a2)+,d0-d1
+		movem.l	d0-d1,.a(a3)										; copy 8 bytes
+		set	.a,.a + 8
+	endif
+
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&4
+		move.l	(a2)+,.a(a3)										; copy 4 bytes
+		set	.a,.a + 4
+	endif
+
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -1099,15 +1031,11 @@ LoadLevelPointer2:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Solids:
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		lea	(SolidIndexes).l,a0
-		movea.l	(a0,d0.w),a0
+		movea.l	(Level_data_addr_RAM.Solid).w,a0
 
 Load_Solids2:
 		move.l	a0,(Primary_collision_addr).w
 		move.l	a0,(Collision_addr).w
-		addq.l	#1,a0
+		addq.w	#1,a0
 		move.l	a0,(Secondary_collision_addr).w
 		rts

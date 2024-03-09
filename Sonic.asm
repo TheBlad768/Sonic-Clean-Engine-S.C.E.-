@@ -247,19 +247,12 @@ EndOfHeader:
 
 		include "Data/Objects/FindFloor.asm"
 		include "Data/Objects/SolidObject.asm"
-		include "Data/Objects/TouchResponse.asm"
 
 ; ---------------------------------------------------------------------------
 ; Resize Events Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/DoResizeEvents.asm"
-
-; ---------------------------------------------------------------------------
-; Handle On screen Water Height Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/HandleOnscreenWaterHeight.asm"
 
 ; ---------------------------------------------------------------------------
 ; Animate Palette Subroutine
@@ -274,16 +267,22 @@ EndOfHeader:
 		include "Data/Misc/Animate Tiles.asm"
 
 ; ---------------------------------------------------------------------------
+; Level Setup Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Misc/Level Setup.asm"
+
+; ---------------------------------------------------------------------------
 ; Get Level Size Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/GetLevelSizeStart.asm"
 
 ; ---------------------------------------------------------------------------
-; Level Setup Subroutine
+; Handle On screen Water Height Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/LevelSetup.asm"
+		include "Data/Misc/HandleOnscreenWaterHeight.asm"
 
 ; ---------------------------------------------------------------------------
 ; Interrupt Handler Subroutine
@@ -292,11 +291,17 @@ EndOfHeader:
 		include "Data/Misc/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
+; Touch Response Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Objects/TouchResponse.asm"
+
+; ---------------------------------------------------------------------------
 ; Subroutine to load Sonic object
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Sonic/Sonic.asm"
-		include "Objects/Spin Dust/SpinDust.asm"
+		include "Objects/Spin Dust/Spin Dust.asm"
 		include "Objects/Shields/Shields.asm"
 
 ; ---------------------------------------------------------------------------
@@ -310,12 +315,6 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/AfterBoss Cleanup.asm"
-
-; ---------------------------------------------------------------------------
-; Load PLC Animals Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Data/Misc/Load Animals.asm"
 
 ; ---------------------------------------------------------------------------
 ; Level Select screen subroutines
@@ -341,9 +340,9 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		if GameDebugAlt
-			include "Objects/Sonic/DebugMode(Crackers).asm"
+			include "Objects/Sonic/Debug Mode(Crackers).asm"
 		else
-			include "Objects/Sonic/DebugMode.asm"
+			include "Objects/Sonic/Debug Mode.asm"
 		endif
 
 	endif
@@ -410,12 +409,6 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Pointers/Uncompressed Data.asm"
-
-; ---------------------------------------------------------------------------
-; Music playlist Subroutine
-; ---------------------------------------------------------------------------
-
-		include "Misc Data/Music playlist.asm"
 
 ; ---------------------------------------------------------------------------
 ; Clone sound driver subroutines

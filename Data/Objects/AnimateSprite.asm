@@ -14,7 +14,7 @@ Animate_Sprite:
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 +		subq.b	#1,anim_frame_timer(a0)
-		bcc.s	locret_1AC36
+		bhs.s	locret_1AC36
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
 		move.b	(a1),anim_frame_timer(a0)
@@ -25,8 +25,8 @@ Animate_Sprite:
 
 loc_1AC1C:
 		move.b	d0,mapping_frame(a0)
-		move.b	status(a0),d1
-		andi.b	#3,d1
+		moveq	#3,d1
+		and.b	status(a0),d1
 		andi.b	#-4,render_flags(a0)
 		or.b	d1,render_flags(a0)
 		addq.b	#1,anim_frame(a0)
@@ -90,7 +90,7 @@ Animate_SpriteIrregularDelay:
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 +		subq.b	#1,anim_frame_timer(a0)
-		bcc.s	locret_1ACDA
+		bhs.s	locret_1ACDA
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
 		moveq	#0,d1
@@ -102,8 +102,8 @@ Animate_SpriteIrregularDelay:
 loc_1ACBA:
 		move.b	1(a1,d1.w),anim_frame_timer(a0)
 		move.b	d0,mapping_frame(a0)
-		move.b	status(a0),d1
-		andi.b	#3,d1
+		moveq	#3,d1
+		and.b	status(a0),d1
 		andi.b	#-4,render_flags(a0)
 		or.b	d1,render_flags(a0)
 		addq.b	#1,anim_frame(a0)
@@ -164,7 +164,7 @@ AnimateSprite_Reverse:
 
 Anim_Run:
 		subq.b	#1,anim_frame_timer(a0)
-		bcc.s	Anim_Wait
+		bhs.s	Anim_Wait
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
 		move.b	(a1),anim_frame_timer(a0)

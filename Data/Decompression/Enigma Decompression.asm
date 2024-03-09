@@ -41,7 +41,7 @@ Eni_Decomp_Loop:
 		moveq	#6,d0					; if not, process 6 bits instead of 7
 		lsr.w	d2						; bitfield now becomes TTSSSS instead of TTTSSSS
 
-.got_field:
+.got_field
 		bsr.w	Eni_Decomp_ChkGetNextByte
 		andi.w	#$F,d2					; keep only lower nybble
 		lsr.w	#4,d1					; store upper nybble (max value = 7)
@@ -52,22 +52,22 @@ Eni_Decomp_Loop:
 Eni_Decomp_Sub0:
 		move.w	a2,(a1)+					; write to destination
 		addq.w	#1,a2					; increment
-		dbra	d2,Eni_Decomp_Sub0		; repeat
+		dbf	d2,Eni_Decomp_Sub0			; repeat
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_Sub4:
 		move.w	a4,(a1)+					; write to destination
-		dbra	d2,Eni_Decomp_Sub4		; repeat
+		dbf	d2,Eni_Decomp_Sub4			; repeat
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
 Eni_Decomp_Sub8:
 		bsr.s	Eni_Decomp_GetInlineCopyVal
 
-.loop:
+.loop
 		move.w	d1,(a1)+
-		dbra	d2,.loop
+		dbf	d2,.loop
 	
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
@@ -75,10 +75,10 @@ Eni_Decomp_Sub8:
 Eni_Decomp_SubA:
 		bsr.s	Eni_Decomp_GetInlineCopyVal
 
-.loop:
+.loop
 		move.w	d1,(a1)+
 		addq.w	#1,d1
-		dbra	d2,.loop
+		dbf	d2,.loop
 
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
@@ -86,10 +86,10 @@ Eni_Decomp_SubA:
 Eni_Decomp_SubC:
 		bsr.s	Eni_Decomp_GetInlineCopyVal
 
-.loop:
+.loop
 		move.w	d1,(a1)+
 		subq.w	#1,d1
-		dbra	d2,.loop
+		dbf	d2,.loop
 
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
@@ -98,10 +98,10 @@ Eni_Decomp_SubE:
 		cmpi.w	#$F,d2
 		beq.s	Eni_Decomp_End
 
-.loop:
+.loop
 		bsr.s	Eni_Decomp_GetInlineCopyVal
 		move.w	d1,(a1)+
-		dbra	d2,.loop
+		dbf	d2,.loop
 
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
@@ -130,13 +130,13 @@ Eni_Decomp_End:
 		bne.s	.got_byte	; if not, branch
 		subq.w	#1,a0
 
-.got_byte:
+.got_byte
 		move.w	a0,d0
 		lsr.w	d0			; are we on an odd byte?
 		bhs.s	.even_loc		; if not, branch
 		addq.w	#1,a0		; ensure we're on an even byte
 
-.even_loc:
+.even_loc
 		movem.l	(sp)+,d0-d7/a1-a5
 		rts
 
@@ -157,7 +157,7 @@ Eni_Decomp_GetInlineCopyVal:
 		beq.s	.skip_pri				; if not, branch
 		ori.w	#high_priority,d3		; set high priority bit
 
-.skip_pri:
+.skip_pri
 		add.b	d1,d1
 		bhs.s	.skip_pal2			; if d4 was < $40
 		subq.w	#1,d6				; get next bit number
@@ -165,7 +165,7 @@ Eni_Decomp_GetInlineCopyVal:
 		beq.s	.skip_pal2
 		addi.w	#palette_line_2,d3	; set second palette line bit
 
-.skip_pal2:
+.skip_pal2
 		add.b	d1,d1
 		bhs.s	.skip_pal1			; if d4 was < $20
 		subq.w	#1,d6				; get next bit number
@@ -173,7 +173,7 @@ Eni_Decomp_GetInlineCopyVal:
 		beq.s	.skip_pal1
 		addi.w	#palette_line_1,d3		; set first palette line bit
 
-.skip_pal1:
+.skip_pal1
 		add.b	d1,d1
 		bhs.s	.skip_flipy			; if d4 was < $10
 		subq.w	#1,d6				; get next bit number
@@ -181,7 +181,7 @@ Eni_Decomp_GetInlineCopyVal:
 		beq.s	.skip_flipy
 		ori.w	#flip_y,d3			; set Y-flip bit
 
-.skip_flipy:
+.skip_flipy
 		add.b	d1,d1
 		bhs.s	.skip_flipx			; if d4 was < 8
 		subq.w	#1,d6
@@ -189,7 +189,7 @@ Eni_Decomp_GetInlineCopyVal:
 		beq.s	.skip_flipx
 		ori.w	#flip_x,d3			; set X-flip bit
 
-.skip_flipx:
+.skip_flipx
 		move.w	d5,d1
 		move.w	d6,d7				; get remaining bits
 		sub.w	a5,d7				; subtract minimum bit number
@@ -204,7 +204,7 @@ Eni_Decomp_GetInlineCopyVal:
 		and.w	Eni_Decomp_AndVals-2(pc,d7.w),d5	; only keep X lower bits
 		add.w	d5,d1				; compensate for the bit deficit
 
-.got_field:
+.got_field
 		move.w	a5,d0
 		add.w	d0,d0
 		and.w	Eni_Decomp_AndVals-2(pc,d0.w),d1	; only keep as many bits as required
@@ -215,7 +215,7 @@ Eni_Decomp_GetInlineCopyVal:
 		rts
 ; ---------------------------------------------------------------------------
 
-.got_enough:
+.got_enough
 		beq.s	.got_exact			; if the exact number of bits are leftover, branch
 		lsr.w	d7,d1				; remove unneeded bits
 		move.w	a5,d0
@@ -226,28 +226,12 @@ Eni_Decomp_GetInlineCopyVal:
 		bra.s	Eni_Decomp_ChkGetNextByte	; move onto next byte
 ; ---------------------------------------------------------------------------
 
-.got_exact:
+.got_exact
 		moveq	#16,d6				; 16 bits = 2 bytes
 		bra.s	.got_field
 ; ---------------------------------------------------------------------------
 
-Eni_Decomp_AndVals:
-		dc.w 1
-		dc.w 3
-		dc.w 7
-		dc.w $F
-		dc.w $1F
-		dc.w $3F
-		dc.w $7F
-		dc.w $FF
-		dc.w $1FF
-		dc.w $3FF
-		dc.w $7FF
-		dc.w $FFF
-		dc.w $1FFF
-		dc.w $3FFF
-		dc.w $7FFF
-		dc.w $FFFF
+Eni_Decomp_AndVals:	dc.w 1, 3, 7, $F, $1F, $3F, $7F, $FF, $1FF, $3FF, $7FF, $FFF, $1FFF, $3FFF, $7FFF, $FFFF
 
 ; ---------------------------------------------------------------------------
 ; Part of the Enigma decompressor, fetches the next byte if needed
@@ -263,5 +247,5 @@ Eni_Decomp_ChkGetNextByte:
 		asl.w	#8,d5		; shift up by a byte
 		move.b	(a0)+,d5		; store next byte in lower register byte
 
-.done:
+.done
 		rts

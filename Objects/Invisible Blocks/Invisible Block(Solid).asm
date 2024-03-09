@@ -9,12 +9,12 @@ Obj_Invisible_SolidBlock:
 		move.w	#make_art_tile(ArtTile_Monitors,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
-		bset	#7,status(a0)
+		bset	#7,status(a0)									; player balance anim off
 		move.b	subtype(a0),d0
 		move.b	d0,d1
 		andi.w	#$F0,d0
 		addi.w	#$10,d0
-		lsr.w	#1,d0
+		lsr.w	d0
 		move.b	d0,width_pixels(a0)
 		andi.w	#$F,d1
 		addq.w	#1,d1

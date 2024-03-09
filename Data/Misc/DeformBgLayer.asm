@@ -20,7 +20,7 @@ DeformBgLayer:
 		lea	(Camera_Y_pos).w,a1
 		lea	(Camera_min_Y_pos).w,a2
 		lea	(V_scroll_amount).w,a4
-		move.w	(Distance_from_screen_top).w,d3
+		move.w	(Distance_from_top).w,d3
 
 	if ExtendedCamera
 		bsr.w	MoveCameraY
@@ -128,28 +128,28 @@ Camera_Extended:
 
 .PosInertia:
 		cmpi.w	#$600,d0								; Are we going at max regular speed?
-		bcs.s	.ResetPan								; If not, branch
+		blo.s		.ResetPan								; If not, branch
 		tst.w	ground_vel(a0)							; Are we moving right?
 		bpl.s	.MovingRight								; If so, branch
 
 .MovingLeft:
 		addq.w	#2,d1									; Pan the camera to the right
 		cmpi.w	#(320/2)+64,d1							; Has it panned far enough?
-		bcs.s	.SetPanVal								; If not, branch
+		blo.s		.SetPanVal								; If not, branch
 		move.w	#(320/2)+64,d1							; Cap the camera's position
 		bra.s	.SetPanVal
 
 .MovingRight:
 		subq.w	#2,d1									; Pan the camera to the left
 		cmpi.w	#(320/2)-64,d1							; Has it panned far enough
-		bcc.s	.SetPanVal								; If not, branch
+		bhs.s	.SetPanVal								; If not, branch
 		move.w	#(320/2)-64,d1							; Cap the camera's position
 		bra.s	.SetPanVal
 
 .ResetPan:
 		cmpi.w	#320/2,d1								; Has the camera panned back to the middle?
 		beq.s	.SetPanVal								; If so, branch
-		bcc.s	.ResetLeft								; If it's panning back left
+		bhs.s	.ResetLeft								; If it's panning back left
 		addq.w	#2,d1									; Pan back to the right
 		bra.s	.SetPanVal
 
@@ -193,9 +193,9 @@ MoveCameraY:
 		beq.s	loc_1C164
 		addi.w	#32,d0
 		sub.w	d1,d0
-		bcs.s	loc_1C1B0
+		blo.s		loc_1C1B0
 		subi.w	#64,d0
-		bcc.s	loc_1C1B0
+		bhs.s	loc_1C1B0
 		tst.b	(Camera_max_Y_pos_changing).w
 		bne.s	loc_1C1C2
 		bra.s	loc_1C16E
@@ -296,7 +296,7 @@ loc_1C202:
 		move.w	(Screen_Y_wrap_value).w,d3
 		addq.w	#1,d3
 		sub.w	d3,d1
-		bcs.s	loc_1C216
+		blo.s		loc_1C216
 		sub.w	d3,(a1)
 		bra.s	loc_1C21A
 ; ---------------------------------------------------------------------------

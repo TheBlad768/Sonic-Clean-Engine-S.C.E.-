@@ -9,14 +9,14 @@ EntryPoint:
 		bne.s	+
 		tst.w	(HW_Expansion_Control-1).l
 +
-		bne.s	Init_SkipPowerOn	; in case of a soft reset
+		bne.s	Init_SkipPowerOn								; in case of a soft reset
 		lea	SetupValues(pc),a5
 		movem.w	(a5)+,d5-d7
 		movem.l	(a5)+,a0-a4
-		move.b	HW_Version-Z80_bus_request(a1),d0	; get hardware version
-		andi.b	#$F,d0
-		beq.s	SkipSecurity ; branch if hardware is older than Genesis III
-		move.l	(Header).w,Security_addr-Z80_bus_request(a1) ; satisfy the TMSS
+		moveq	#$F,d0
+		and.b	HW_Version-Z80_bus_request(a1),d0			; get hardware version
+		beq.s	SkipSecurity									; branch if hardware is older than Genesis III
+		move.l	(Header).w,Security_addr-Z80_bus_request(a1)	; satisfy the TMSS
 
 SkipSecurity:
 		move.w	(a4),d0	; check if VDP works
@@ -205,8 +205,8 @@ Game_Program:
 		move.b	#id_LevelSelectScreen,(Game_mode).w		; set Game Mode
 
 .loop
-		move.b	(Game_mode).w,d0						; load Game Mode
-		andi.w	#$7C,d0
+		moveq	#$7C,d0
+		and.b	(Game_mode).w,d0						; load Game Mode
 		movea.l	Game_Modes(pc,d0.w),a0
 		jsr	(a0)
 		bra.s	.loop

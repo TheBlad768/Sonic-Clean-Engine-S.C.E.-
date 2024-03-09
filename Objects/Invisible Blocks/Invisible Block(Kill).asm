@@ -11,34 +11,34 @@ Obj_Invisible_KillBlock:
 		move.w	#make_art_tile(ArtTile_Monitors,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
 		move.w	#$200,priority(a0)
-		bset	#7,status(a0)
+		bset	#7,status(a0)									; player balance anim off
 		move.b	subtype(a0),d0
 		move.b	d0,d1
 		andi.w	#$F0,d0
 		addi.w	#$10,d0
-		lsr.w	#1,d0
+		lsr.w	d0
 		move.b	d0,width_pixels(a0)
 		andi.w	#$F,d1
 		addq.w	#1,d1
 		lsl.w	#3,d1
 		move.b	d1,height_pixels(a0)
-		btst	#0,status(a0)
-		beq.s	loc_1F5F0
-		move.l	#loc_1F66C,address(a0)
+		btst	#0,status(a0)									; is it flipx?
+		beq.s	loc_1F5F0								; if not, branch
+		move.l	#loc_1F66C,address(a0)					; set side kill
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F5F0:
-		btst	#1,status(a0)
-		beq.s	loc_1F600
-		move.l	#loc_1F6D0,address(a0)
+		btst	#1,status(a0)									; is it flipy?
+		beq.s	loc_1F600								; if not, branch
+		move.l	#loc_1F6D0,address(a0)					; set bottom kill
 
 locret_1F5FE:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F600:
-		move.l	#loc_1F606,address(a0)
+		move.l	#loc_1F606,address(a0)					; set top kill
 
 loc_1F606:
 		moveq	#$B,d1
@@ -49,11 +49,11 @@ loc_1F606:
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull2).w
-		move.b	status(a0),d6
-		andi.b	#$18,d6
-		beq.s	loc_1F64A
+		moveq	#standing_mask,d6
+		and.b	status(a0),d6								; is Sonic or Tails standing on the object?
+		beq.s	loc_1F64A								; if not, branch
 		move.b	d6,d0
-		andi.b	#8,d0
+		andi.b	#p1_standing,d0
 		beq.s	loc_1F64A
 		lea	(Player_1).w,a1
 		bsr.w	sub_1F734
@@ -75,10 +75,10 @@ loc_1F66C:
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull2).w
 		swap	d6
-		andi.w	#3,d6
+		andi.w	#touch_side_mask,d6
 		beq.s	loc_1F6AE
 		move.b	d6,d0
-		andi.b	#1,d0
+		andi.b	#p1_touch_side,d0
 		beq.s	loc_1F6AE
 		lea	(Player_1).w,a1
 		bsr.s	sub_1F734
@@ -100,10 +100,10 @@ loc_1F6D0:
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull2).w
 		swap	d6
-		andi.w	#$C,d6
+		andi.w	#touch_bottom_mask,d6
 		beq.s	loc_1F712
 		move.b	d6,d0
-		andi.b	#4,d0
+		andi.b	#p1_touch_bottom,d0
 		beq.s	loc_1F712
 		lea	(Player_1).w,a1
 		bsr.s	sub_1F734

@@ -36,11 +36,7 @@ Debug_Mode:
 		move.b	d0,anim(a0)
 		move.b	d0,mapping_frame(a0)
 		move.b	d0,spin_dash_flag(a0)
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#5,d0
-		lea	DebugList(pc),a2
-		adda.w	(a2,d0.w),a2
+		movea.l	(Level_data_addr_RAM.Debug).w,a2
 		move.w	(a2)+,d6
 		cmp.b	(Debug_object).w,d6						; have you gone past the last item?
 		bhi.s	.notreset									; if not, branch
@@ -52,11 +48,7 @@ Debug_Mode:
 		move.b	#1,(Debug_camera_speed).w
 
 .action
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#5,d0
-		lea	DebugList(pc),a2
-		adda.w	(a2,d0.w),a2
+		movea.l	(Level_data_addr_RAM.Debug).w,a2
 		move.w	(a2)+,d6
 		pea	(Draw_Sprite).w
 
@@ -206,10 +198,12 @@ Debug_Mode:
 		move.w	d0,object_control(a0)						; clear object control and double jump flag
 		move.l	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
+		move.b	d0,double_jump_flag(a0)
+		move.b	d0,jumping(a0)
 		andi.b	#1,status(a0)
 		ori.b	#2,status(a0)
 		move.b	#id_SonicControl,routine(a0)
-		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)		; set y_radius and x_radius
+		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		rts
 ; ---------------------------------------------------------------------------
 

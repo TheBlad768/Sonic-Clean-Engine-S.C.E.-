@@ -18,11 +18,7 @@ Load_Rings_Init:
 
 .skip
 		clearRAM Ring_consumption_table, Ring_consumption_table_end
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#4,d0
-		lea	(RingLocPtrs).l,a1
-		movea.l	(a1,d0.w),a1
+		movea.l	(Level_data_addr_RAM.Rings).w,a1
 		move.l	a1,(Ring_start_addr_ROM).w
 		lea	(Ring_status_table).w,a2
 		move.w	(Camera_X_pos).w,d4
@@ -84,7 +80,7 @@ sub_E994:
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
 		subq.w	#1,d1
-		bcs.s	.return
+		blo.s		.return
 
 .find
 		move.w	(a2)+,d0
@@ -153,9 +149,9 @@ Test_Ring_Collisions_NextRing:
 		move.w	(a1),d0
 		sub.w	d1,d0
 		sub.w	d2,d0
-		bcc.s	loc_EAA0
+		bhs.s	loc_EAA0
 		add.w	d6,d0
-		bcs.s	loc_EAA6
+		blo.s		loc_EAA6
 		bra.s	loc_EADA
 ; ---------------------------------------------------------------------------
 
@@ -167,9 +163,9 @@ loc_EAA6:
 		move.w	2(a1),d0
 		sub.w	d1,d0
 		sub.w	d3,d0
-		bcc.s	loc_EAB8
+		bhs.s	loc_EAB8
 		add.w	d6,d0
-		bcs.s	loc_EABE
+		blo.s		loc_EABE
 		bra.s	loc_EADA
 ; ---------------------------------------------------------------------------
 
@@ -247,7 +243,7 @@ loc_EBA6:
 		add.w	d6,d6				; 2 bytes
 		addi.w	#$70,d1				; add ypos
 		move.w	d1,(a6)+				; set ypos
-		move.b	#5,(a6)				; load the size of the sprite
+		move.b	#5,(a6)				; set size of the sprite
 		addq.w	#2,a6				; skip link parameter
 		move.w	(a1,d6.w),(a6)+		; VRAM
 		addi.w	#$78,d0				; add xpos
@@ -328,7 +324,7 @@ Clear_SpriteRingMem:
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
 		subq.w	#1,d1
-		bcs.s	.return
+		blo.s		.return
 
 .find
 		move.w	(a2)+,d0

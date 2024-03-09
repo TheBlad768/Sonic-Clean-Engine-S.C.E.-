@@ -58,3 +58,4 @@ word_86CE0:	dc.w 1
 word_86CE8:	dc.w 2
 		dc.b  $FB,   5,	  0, $36, $FF, $F0
 		dc.b  $FB,   5,	  8, $36,   0,	 0
+	even

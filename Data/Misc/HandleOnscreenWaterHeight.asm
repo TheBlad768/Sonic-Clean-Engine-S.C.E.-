@@ -5,12 +5,12 @@
 ; =============== S U B R O U T I N E =======================================
 
 Handle_Onscreen_Water_Height:
-		tst.b	(Water_flag).w							; does level have water?
-		beq.s	.return								; if not, branch
+		tst.b	(Water_flag).w									; does level have water?
+		beq.s	.return										; if not, branch
 		tst.b	(Deform_lock).w
 		bne.s	.skip
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w	; is player dead?
-		bhs.s	.skip								; if yes, branch
+		cmpi.b	#id_SonicDeath,(Player_1+routine).w			; is player dead?
+		bhs.s	.skip										; if yes, branch
 		bsr.s	DynamicWaterHeight
 
 .skip
@@ -67,57 +67,54 @@ No_WaterResize:
 ; =============== S U B R O U T I N E =======================================
 
 CheckLevelForWater:
+
+		; reset water
 		move.w	#$1000,d0
 		move.w	d0,(Water_level).w
 		move.w	d0,(Mean_water_level).w
 		move.w	d0,(Target_water_level).w
-		clr.b	(Water_flag).w
-
-CheckLevelForWater_Return:
+		clr.b	(Water_flag).w									; disable water
 		rts
 ; ---------------------------------------------------------------------------
 
-StartLevelWater:
-		st	(Water_flag).w
+.getwater
 
-		tst.b	(Water_flag).w
-		beq.s	LoadWaterPalette
-		moveq	#0,d0
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#5,d0
-		move.w	StartingWaterHeights(pc,d0.w),d0
+		; set water
+		move.w	(Level_data_addr_RAM.WaterHeight).w,d0		; load water height
 		move.w	d0,(Water_level).w
 		move.w	d0,(Mean_water_level).w
 		move.w	d0,(Target_water_level).w
+		st	(Water_flag).w									; enable water
 		clr.b	(Water_entered_counter).w
 		clr.b	(Water_full_screen_flag).w
 		move.b	#1,(Water_speed).w
 
-LoadWaterPalette:
-		tst.b	(Water_flag).w
-		beq.s	CheckLevelForWater_Return
+		; load player water palette
+		lea	(Level_data_addr_RAM.WaterSpal).w,a1				; load Sonic palette
 		moveq	#0,d0
-		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0
-		lsr.w	#6,d0
-		move.b	WaterPalette_Index(pc,d0.w),d0	; water palette
+		move.b	(a1),d0										; player water palette
 		move.w	d0,d1
 		jsr	(LoadPalette2).w
 		move.w	d1,d0
-		jmp	(LoadPalette2_Immediate).w
-; ---------------------------------------------------------------------------
+		jsr	(LoadPalette2_Immediate).w
 
-StartingWaterHeights:
-		dc.w $400	; DEZ 1
-		dc.w $400	; DEZ 2
-		dc.w $400	; DEZ 3
-		dc.w $400	; DEZ 4
+LoadWaterPalette:
+		tst.b	(Water_flag).w
+		beq.s	.return
 
-		zonewarning StartingWaterHeights,(2*4)
-; ---------------------------------------------------------------------------
+		; load level water palette
+		lea	(Level_data_addr_RAM.WaterPalette).w,a1			; water palette
+		moveq	#0,d0
+		move.b	(a1),d0
+		move.w	d0,d1
+		jsr	(LoadPalette2).w
+		move.w	d1,d0
+		jsr	(LoadPalette2_Immediate).w
 
-WaterPalette_Index:
-		dc.b palid_WaterDEZ, palid_WaterDEZ, palid_WaterDEZ, palid_WaterDEZ		; DEZ 1,2,3,4
+		; restore water full flag
+		tst.b	(Last_star_post_hit).w
+		beq.s	.return
+		move.b	(Saved_water_full_screen_flag).w,(Water_full_screen_flag).w
 
-		zonewarning WaterPalette_Index,(1*4)
+.return
+		rts

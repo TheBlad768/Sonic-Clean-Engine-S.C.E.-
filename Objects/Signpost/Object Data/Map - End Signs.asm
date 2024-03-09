@@ -24,3 +24,4 @@ word_83BEC:	dc.w 1
 		dc.b  $F0,   3,	  0,   0, $FF, $FC
 word_83BF4:	dc.w 1
 		dc.b  $F0,  $F,	  8,   0, $FF, $F0
+	even
