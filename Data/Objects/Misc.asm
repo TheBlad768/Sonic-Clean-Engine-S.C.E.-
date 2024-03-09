@@ -470,7 +470,7 @@ StartNewLevel:
 Play_SFX_Continuous:
 		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
-		jmp	(SMPS_QueueSound2).w	; play sfx
+		jmp	(SMPS_QueueSound2).w							; play sfx
 
 ; =============== S U B R O U T I N E =======================================
 

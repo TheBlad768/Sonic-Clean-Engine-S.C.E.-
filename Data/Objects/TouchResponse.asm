@@ -504,11 +504,7 @@ Kill_Character:
 		clr.w	x_vel(a0)
 		clr.w	ground_vel(a0)
 		move.b	#id_Death,anim(a0)
-		cmpa.w	#Player_1,a0								; is this the main character?
-		bne.s	.notp1									; if not, branch
 		move.w	art_tile(a0),(Debug_saved_art_tile).w
-
-.notp1
 		bset	#7,art_tile(a0)
 		jsr	(SMPS_QueueSound2).w
 

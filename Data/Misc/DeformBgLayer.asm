@@ -68,7 +68,7 @@ loc_1C0D6:
 		blt.s		loc_1C0E8
 		bge.s	loc_1C0FC
 	else
-		subi.w	#144,d0
+		subi.w	#(320/2)-16,d0
 		blt.s		loc_1C0E8
 		subi.w	#16,d0
 		bge.s	loc_1C0FC
@@ -121,43 +121,43 @@ loc_1C112:
 ; ---------------------------------------------------------------------------
 
 Camera_Extended:
-		move.w	Camera_X_center-Camera_X_pos(a1),d1		; Get camera X center position
-		move.w	ground_vel(a0),d0						; Get how fast we are moving
+		move.w	Camera_X_center-Camera_X_pos(a1),d1		; get camera X center position
+		move.w	ground_vel(a0),d0						; get how fast we are moving
 		bpl.s	.PosInertia
 		neg.w	d0
 
 .PosInertia:
-		cmpi.w	#$600,d0								; Are we going at max regular speed?
-		blo.s		.ResetPan								; If not, branch
-		tst.w	ground_vel(a0)							; Are we moving right?
-		bpl.s	.MovingRight								; If so, branch
+		cmpi.w	#$600,d0								; are we going at max regular speed?
+		blo.s		.ResetPan								; if not, branch
+		tst.w	ground_vel(a0)							; are we moving right?
+		bpl.s	.MovingRight								; if so, branch
 
 .MovingLeft:
-		addq.w	#2,d1									; Pan the camera to the right
-		cmpi.w	#(320/2)+64,d1							; Has it panned far enough?
-		blo.s		.SetPanVal								; If not, branch
-		move.w	#(320/2)+64,d1							; Cap the camera's position
+		addq.w	#2,d1									; pan the camera to the right
+		cmpi.w	#(320/2)+64,d1							; has it panned far enough?
+		blo.s		.SetPanVal								; if not, branch
+		move.w	#(320/2)+64,d1							; cap the camera's position
 		bra.s	.SetPanVal
 
 .MovingRight:
-		subq.w	#2,d1									; Pan the camera to the left
-		cmpi.w	#(320/2)-64,d1							; Has it panned far enough
-		bhs.s	.SetPanVal								; If not, branch
-		move.w	#(320/2)-64,d1							; Cap the camera's position
+		subq.w	#2,d1									; pan the camera to the left
+		cmpi.w	#(320/2)-64,d1							; has it panned far enough
+		bhs.s	.SetPanVal								; if not, branch
+		move.w	#(320/2)-64,d1							; cap the camera's position
 		bra.s	.SetPanVal
 
 .ResetPan:
-		cmpi.w	#320/2,d1								; Has the camera panned back to the middle?
-		beq.s	.SetPanVal								; If so, branch
-		bhs.s	.ResetLeft								; If it's panning back left
-		addq.w	#2,d1									; Pan back to the right
+		cmpi.w	#320/2,d1								; has the camera panned back to the middle?
+		beq.s	.SetPanVal								; if so, branch
+		bhs.s	.ResetLeft								; if it's panning back left
+		addq.w	#2,d1									; pan back to the right
 		bra.s	.SetPanVal
 
 .ResetLeft:
-		subq.w	#2,d1									; Pan back to the left
+		subq.w	#2,d1									; pan back to the left
 
 .SetPanVal:
-		move.w	d1,Camera_X_center-Camera_X_pos(a1)		; Update camera X center position
+		move.w	d1,Camera_X_center-Camera_X_pos(a1)		; update camera X center position
 		rts
 
 	endif
@@ -169,30 +169,32 @@ Camera_Extended:
 ; =============== S U B R O U T I N E =======================================
 
 MoveCameraY:
-		moveq	#0,d1
 		move.w	y_pos(a0),d0
 		sub.w	(a1),d0
-		cmpi.w	#-$100,(Camera_min_Y_pos).w
-		bne.s	.notwrap
+		cmpi.w	#-$100,(Camera_min_Y_pos).w				; does the level wrap vertically?
+		bne.s	.notwrap									; if not, branch
 		and.w	(Screen_Y_wrap_value).w,d0
 
 .notwrap
-		btst	#Status_Roll,status(a0)
-		beq.s	.notroll
-		moveq	#5,d1		; fix camera pos
+		btst	#Status_Roll,status(a0)						; is the player rolling?
+		beq.s	.notroll									; if not, branch
+
+		; fix player ypos
+		move.b	y_radius(a0),d1
+		sub.b	default_y_radius(a0),d1
+		ext.w	d1
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgravity
+		beq.s	.notgrav
 		neg.w	d1
 
-.notgravity
-		sub.w	d1,d0
+.notgrav
+		add.w	d1,d0
 
 .notroll
-		move.w	d3,d1
-		btst	#Status_InAir,status(a0)
-		beq.s	loc_1C164
+		btst	#Status_InAir,status(a0)						; is the player in the air?
+		beq.s	loc_1C164								; if not, branch
 		addi.w	#32,d0
-		sub.w	d1,d0
+		sub.w	d3,d0
 		blo.s		loc_1C1B0
 		subi.w	#64,d0
 		bhs.s	loc_1C1B0
@@ -202,7 +204,7 @@ MoveCameraY:
 ; ---------------------------------------------------------------------------
 
 loc_1C164:
-		sub.w	d1,d0
+		sub.w	d3,d0
 		bne.s	loc_1C172
 		tst.b	(Camera_max_Y_pos_changing).w
 		bne.s	loc_1C1C2

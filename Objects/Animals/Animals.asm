@@ -207,8 +207,9 @@ Animal_Ending_Index:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_FlickyWait:
-		bsr.w	Obj_Animal_ChkAnimalInRange
-		bhs.w	Obj_Animal_ChkDel
+		jsr	(Find_SonicObject).w
+		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel										; if not, branch
 		move.l	animal_ground_x_vel(a0),x_vel(a0)
 		move.l	#.fly,address(a0)
 
@@ -239,8 +240,9 @@ Obj_Animal_FlickyWait:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_FlickyJump:
-		bsr.w	Obj_Animal_ChkAnimalInRange
-		bpl.s	.chkdel
+		jsr	(Find_SonicObject).w
+		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel										; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal_ground_x_vel(a0)
 		moveq	#$18,d2
@@ -260,8 +262,9 @@ Obj_Animal_FlickyJump:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_RabbitWait:
-		bsr.w	Obj_Animal_ChkAnimalInRange
-		bpl.s	Obj_Animal_FlickyJump.chkdel
+		jsr	(Find_SonicObject).w
+		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel										; if not, branch
 		move.l	animal_ground_x_vel(a0),x_vel(a0)
 		move.l	#.walk,address(a0)
 
@@ -306,8 +309,9 @@ Obj_Animal_DoubleBounce:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_LandJump:
-		bsr.w	Obj_Animal_ChkAnimalInRange
-		bpl.s	.chkdel
+		jsr	(Find_SonicObject).w
+		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel										; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal_ground_x_vel(a0)
 		jsr	(MoveSprite).w
@@ -315,13 +319,14 @@ Obj_Animal_LandJump:
 		bsr.w	Obj_Animal_FaceSonic
 
 .chkdel
-		bra.s	Obj_Animal_ChkDel
+		bra.w	Obj_Animal_ChkDel
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_SingleBounce:
-		bsr.w	Obj_Animal_ChkAnimalInRange
-		bpl.s	.chkdel
+		jsr	(Find_SonicObject).w
+		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel										; if not, branch
 		jsr	(MoveSprite).w
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
@@ -341,8 +346,9 @@ Obj_Animal_SingleBounce:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_FlyBounce:
-		bsr.w	Obj_Animal_ChkAnimalInRange
-		bpl.s	Obj_Animal_ChkDel
+		jsr	(Find_SonicObject).w
+		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	Obj_Animal_ChkDel							; if not, branch
 		moveq	#$18,d2
 		jsr	(MoveSprite_CustomGravity).w
 		tst.w	y_vel(a0)
@@ -415,14 +421,6 @@ Obj_Animal_FaceSonic:
 		bclr	#0,render_flags(a0)
 
 .return
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_Animal_ChkAnimalInRange:
-		move.w	(Player_1+x_pos).w,d0
-		sub.w	x_pos(a0),d0
-		subi.w	#(320/2)+24,d0
 		rts
 ; ---------------------------------------------------------------------------
 
