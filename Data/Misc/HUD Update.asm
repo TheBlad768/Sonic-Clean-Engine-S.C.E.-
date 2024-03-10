@@ -274,11 +274,6 @@ HUD_Debug:
 		rol.w	#4,d1
 		move.w	d1,d2
 		andi.w	#$F,d2
-		cmpi.w	#10,d2
-		blo.s		.skipsymbols
-		addq.w	#7,d2
-
-.skipsymbols
 		lsl.w	#5,d2
 		lea	(a1,d2.w),a3
 	rept 8
