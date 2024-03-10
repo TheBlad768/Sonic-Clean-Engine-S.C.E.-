@@ -49,7 +49,7 @@ SetUp_ObjAttributesSlotted:
 		move.b	d0,subtype(a0)
 		move.b	d0,render_flags(a0)
 		move.w	d0,status(a0)					; if no open slots, then destroy this object period
-		addq.w	#8,sp
+		addq.w	#4*2,sp
 		rts
 ; ---------------------------------------------------------------------------
 
