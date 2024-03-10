@@ -95,6 +95,18 @@ MoveSprite_CustomGravity2:
 
 ; =============== S U B R O U T I N E =======================================
 
+MoveSprite2_Parent:
+		movem.w	x_vel(a1),d0-d1		; load xy speed
+		ext.l	d0
+		asl.l	#8,d0						; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d0,x_pos(a1)				; add to x-axis position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+		ext.l	d1
+		asl.l	#8,d1						; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d1,y_pos(a1)				; add to y-axis position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 MoveSprite_Reserve:
 		movem.w	x_vel(a0),d0-d1	; load xy speed
 		ext.l	d0

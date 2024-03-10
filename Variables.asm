@@ -410,25 +410,25 @@ HUD_RAM:							= *
 DecimalScoreRAM:					ds.l 1
 DecimalScoreRAM2:					ds.l 1
 
+; the following variables are all saved when hitting a star post
 Saved_zone_and_act:					ds.w 1
 Saved_apparent_zone_and_act:			ds.w 1
 Saved_X_pos:						ds.w 1
 Saved_Y_pos:						ds.w 1
 Saved_ring_count:					ds.w 1
 Saved_timer:							ds.l 1
-Saved_mappings:						ds.l 1
 Saved_art_tile:						ds.w 1
 Saved_solid_bits:						ds.w 1					; Copy of Player 1's top_solid_bit and lrb_solid_bit
 Saved_camera_X_pos:					ds.w 1
 Saved_camera_Y_pos:					ds.w 1
 Saved_mean_water_level:				ds.w 1
+Saved_water_full_screen_flag:			ds.b 1
+									ds.b 1					; even
 Saved_camera_max_Y_pos:			ds.w 1
 Saved_dynamic_resize:				ds.l 1
 Saved_waterdynamic_resize:			ds.l 1
-Saved_water_full_screen_flag:			ds.b 1
 Saved_status_secondary:				ds.b 1
 Saved_last_star_post_hit:				ds.b 1
-									ds.b 1					; even
 
 Oscillating_variables:					= *
 Oscillating_Numbers:					= *

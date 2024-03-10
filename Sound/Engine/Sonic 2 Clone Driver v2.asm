@@ -2995,7 +2995,7 @@ cfFadeInToPrevious:
 	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)
 
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
-	addi.w	#4*3,sp				; Tamper return value so we don't return to caller
+	adda.w	#4*3,sp				; Tamper return value so we don't return to caller
 	rts
 ; ===========================================================================
 ; loc_72B9E:

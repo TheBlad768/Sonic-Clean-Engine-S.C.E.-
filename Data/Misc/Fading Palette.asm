@@ -13,7 +13,7 @@ Pal_FillBlack:
 		move.b	(Palette_fade_count).w,d0
 
 .palettewrite
-		move.w	d1,(a0)+	; fill palette with $000 (black)
+		move.w	d1,(a0)+											; fill palette with $000 (black)
 		tst.b	(Water_flag).w
 		beq.s	.notwater
 		move.w	d1,-(Normal_palette-(Water_palette-2))(a0)			; fill water palette with $000 (black)
@@ -398,14 +398,14 @@ Pal_SmoothToPalette:
 		blo.s		.decred			; "
 
 		; add red
-		andi.w	#$FF0,d1		; clear red color in RAM
+		andi.w	#$FFF1,d1		; clear red color in RAM
 		addq.w	#2,d3			; increase red value
 		or.w	d3,d1				; set color
 		bra.s	.getgreen			; "
 ; ---------------------------------------------------------------------------
 
 .decred
-		andi.w	#$FF0,d1		; clear red color in RAM
+		andi.w	#$FFF1,d1		; clear red color in RAM
 		subq.w	#2,d3			; decrease red value
 		or.w	d3,d1				; set color
 
@@ -419,14 +419,14 @@ Pal_SmoothToPalette:
 		blo.s		.decgreen		; "
 
 		; add green
-		andi.w	#$F0F,d1		; clear green color in RAM
+		andi.w	#$FF1F,d1		; clear green color in RAM
 		addi.w	#$20,d3			; increase green value
 		or.w	d3,d1				; set color
 		bra.s	.getblue			; "
 ; ---------------------------------------------------------------------------
 
 .decgreen
-		andi.w	#$F0F,d1		; clear green color in RAM
+		andi.w	#$FF1F,d1		; clear green color in RAM
 		subi.w	#$20,d3			; decrease green value
 		or.w	d3,d1				; set color
 
@@ -440,14 +440,14 @@ Pal_SmoothToPalette:
 		blo.s		.decblue			; "
 
 		; add blue
-		andi.w	#$FF,d1			; clear blue color in RAM
+		andi.w	#$F1FF,d1		; clear blue color in RAM
 		addi.w	#$200,d3		; increase blue value
 		or.w	d3,d1				; set color
 		bra.s	.setcolor			; "
 ; ---------------------------------------------------------------------------
 
 .decblue
-		andi.w	#$FF,d1			; clear blue color in RAM
+		andi.w	#$F1FF,d1		; clear blue color in RAM
 		subi.w	#$200,d3		; decrease blue value
 		or.w	d3,d1				; set color
 

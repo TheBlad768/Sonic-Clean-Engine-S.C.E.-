@@ -222,6 +222,6 @@ CalcVRAM:
 CalcVRAM2:
 		lsl.l	#2,d0
 		lsr.w	#2,d0
-		ori.w	#$4000,d0
+		ori.w	#vdpComm($0000,VRAM,WRITE)>>16,d0
 		swap	d0
 		rts
