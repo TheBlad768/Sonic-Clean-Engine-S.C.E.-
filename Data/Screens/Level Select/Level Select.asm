@@ -21,13 +21,13 @@ LevelSelect_MaxSampleNumber:	= (dac__Last-dac__First)
 ; RAM
 	phase ramaddr(Object_load_addr_front)
 
-vLevelSelect_MusicCount:			ds.w 1
-vLevelSelect_SoundCount:			ds.w 1
-vLevelSelect_SampleCount:			ds.w 1
-vLevelSelect_CtrlTimer:			ds.w 1
-vLevelSelect_SaveAct:				ds.w 1
-vLevelSelect_VCount:				ds.w 1
-vLevelSelect_HCount:				ds.w $10
+vLevelSelect_music_count:			ds.w 1
+vLevelSelect_sound_count:			ds.w 1
+vLevelSelect_sample_count:		ds.w 1
+vLevelSelect_control_timer:			ds.w 1
+vLevelSelect_saved_act:			ds.w 1
+vLevelSelect_vertical_count:		ds.w 1
+vLevelSelect_horizontal_count:		ds.w $10
 
 	dephase
 	!org	LevelSelect_Offset
@@ -106,18 +106,18 @@ LevelSelect_Screen:
 		move.w	#palette_line_1,d3
 		bsr.w	LevelSelect_MarkFields
 		enableInts
-		cmpi.w	#LevelSelect_ZoneCount,(vLevelSelect_VCount).w
+		cmpi.w	#LevelSelect_ZoneCount,(vLevelSelect_vertical_count).w
 		bhs.s	.loop
 		tst.b	(Ctrl_1_pressed).w
 		bpl.s	.loop
 
 		; load zone and act
-		move.b	#id_LevelScreen,(Game_mode).w	; set screen mode to level
-		move.w	(vLevelSelect_VCount).w,d2
+		move.b	#id_LevelScreen,(Game_mode).w						; set screen mode to level
+		move.w	(vLevelSelect_vertical_count).w,d2
 		move.b	d2,(sp)
 		move.w	(sp),d2
 		clr.b	d2
-		add.w	(vLevelSelect_SaveAct).w,d2
+		add.w	(vLevelSelect_saved_act).w,d2
 		move.w	d2,(Current_zone_and_act).w
 		move.w	d2,(Apparent_zone_and_act).w
 		rts
@@ -132,10 +132,10 @@ LevelSelect_Controls:
 
 		; set vertical line
 		move.w	#LevelSelect_MaxCount-1,d2
-		move.w	(vLevelSelect_VCount).w,d3
-		lea	(vLevelSelect_CtrlTimer).w,a3
+		move.w	(vLevelSelect_vertical_count).w,d3
+		lea	(vLevelSelect_control_timer).w,a3
 		bsr.w	LevelSelect_FindUpDownControls
-		move.w	d3,(vLevelSelect_VCount).w
+		move.w	d3,(vLevelSelect_vertical_count).w
 
 		; check vertical line
 		cmpi.w	#LevelSelect_ZoneCount,d3
@@ -154,15 +154,15 @@ LevelSelect_Index: offsetTable
 ; ---------------------------------------------------------------------------
 
 LevelSelect_Controls_ZoneAndAct:
-		lea	(vLevelSelect_HCount).w,a0
-		move.w	(vLevelSelect_VCount).w,d4
+		lea	(vLevelSelect_horizontal_count).w,a0
+		move.w	(vLevelSelect_vertical_count).w,d4
 		add.w	d4,d4
 		move.w	(a0,d4.w),d3
 		move.w	LevelSelect_LoadMaxActs(pc,d4.w),d2
-		lea	(vLevelSelect_CtrlTimer).w,a3
+		lea	(vLevelSelect_control_timer).w,a3
 		bsr.w	LevelSelect_FindLeftRightControls
 		move.w	d3,(a0,d4.w)
-		move.w	d3,(vLevelSelect_SaveAct).w
+		move.w	d3,(vLevelSelect_saved_act).w
 
 .return
 		rts
@@ -174,36 +174,44 @@ LevelSelect_LoadMaxActs:
 		zonewarning LevelSelect_LoadMaxActs,2
 
 ; ---------------------------------------------------------------------------
-; Load Music
+; Play music
 ; ---------------------------------------------------------------------------
 
 LevelSelect_LoadMusicNumber:
 		moveq	#LevelSelect_MaxMusicNumber,d2
-		move.w	(vLevelSelect_MusicCount).w,d3
-		lea	(vLevelSelect_CtrlTimer).w,a3
+		move.w	(vLevelSelect_music_count).w,d3
+		lea	(vLevelSelect_control_timer).w,a3
 		bsr.w	LevelSelect_FindLeftRightControls
-		move.w	d3,(vLevelSelect_MusicCount).w
+		move.w	d3,(vLevelSelect_music_count).w
 
 		; check ctrl
 		moveq	#btnABC,d1
 		and.b	(Ctrl_1_pressed).w,d1
 		beq.s	LevelSelect_Controls_ZoneAndAct.return
 
+		; check stop music
+		btst	#button_B,d1
+		bne.s	.stop							; branch if B is pressed
+
 		; play music
 		move.w	d3,d0
-		addq.w	#mus__First,d0				; $00 is reserved for silence
-		jmp	(SMPS_QueueSound1).w			; play music
+		addq.w	#mus__First,d0					; $00 is reserved for silence
+		jmp	(SMPS_QueueSound1).w				; play music
+; --------------------------------------------------------------------------
+
+.stop
+		music	mus_Stop,1
 
 ; ---------------------------------------------------------------------------
-; Load Sound
+; Play sound
 ; ---------------------------------------------------------------------------
 
 LevelSelect_LoadSoundNumber:
 		moveq	#LevelSelect_MaxSoundNumber,d2
-		move.w	(vLevelSelect_SoundCount).w,d3
-		lea	(vLevelSelect_CtrlTimer).w,a3
+		move.w	(vLevelSelect_sound_count).w,d3
+		lea	(vLevelSelect_control_timer).w,a3
 		bsr.s	LevelSelect_FindLeftRightControls
-		move.w	d3,(vLevelSelect_SoundCount).w
+		move.w	d3,(vLevelSelect_sound_count).w
 
 		; check ctrl
 		moveq	#btnABC,d1
@@ -212,19 +220,19 @@ LevelSelect_LoadSoundNumber:
 
 		; play sfx
 		move.w	d3,d0
-		addi.w	#sfx__First,d0				; skip music
-		jmp	(SMPS_QueueSound2).w			; play sfx
+		addi.w	#sfx__First,d0					; skip music
+		jmp	(SMPS_QueueSound2).w				; play sfx
 
 ; ---------------------------------------------------------------------------
-; Load Sample
+; Play sample
 ; ---------------------------------------------------------------------------
 
 LevelSelect_LoadSampleNumber:
 		moveq	#LevelSelect_MaxSampleNumber,d2
-		move.w	(vLevelSelect_SampleCount).w,d3
-		lea	(vLevelSelect_CtrlTimer).w,a3
+		move.w	(vLevelSelect_sample_count).w,d3
+		lea	(vLevelSelect_control_timer).w,a3
 		bsr.s	LevelSelect_FindLeftRightControls
-		move.w	d3,(vLevelSelect_SampleCount).w
+		move.w	d3,(vLevelSelect_sample_count).w
 
 		; check ctrl
 		moveq	#btnABC,d1
@@ -233,11 +241,11 @@ LevelSelect_LoadSampleNumber:
 
 		; play sample
 		move.w	d3,d0
-		addi.w	#dac__First,d0				; $80 is reserved for pause
-		jmp	(SMPS_PlayDACSample).w			; play sample
+		addi.w	#dac__First,d0					; $80 is reserved for pause
+		jmp	(SMPS_PlayDACSample).w				; play sample
 
 ; ---------------------------------------------------------------------------
-; Control (Up/Down)
+; Control (up/down)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -279,7 +287,7 @@ LevelSelect_FindUpDownControls:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Control (Left/Right)
+; Control (left/right)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -328,13 +336,13 @@ LevelSelect_FindLeftRightControls:
 
 LevelSelect_LoadAct:
 		locVRAM	$C2B0,d2
-		lea	(vLevelSelect_HCount).w,a0
-		move.w	(vLevelSelect_VCount).w,d0
+		lea	(vLevelSelect_horizontal_count).w,a0
+		move.w	(vLevelSelect_vertical_count).w,d0
 		move.w	d0,d1
-		move.b	d0,(sp)
+		move.b	d0,(sp)								; multiply by $100
 		move.w	(sp),d0
 		clr.b	d0
-		swap	d0
+		swap	d0									; $100 to $1000000
 		clr.w	d0
 		add.l	d0,d2
 		move.l	d2,VDP_control_port-VDP_control_port(a5)
@@ -401,7 +409,7 @@ LevelSelect_MarkFields:
 		lea	VDP_control_port-VDP_data_port(a6),a5
 		lea	(RAM_start).l,a4
 		lea	LevelSelect_MarkTable(pc),a3
-		move.w	(vLevelSelect_VCount).w,d0
+		move.w	(vLevelSelect_vertical_count).w,d0
 		add.w	d0,d0
 		lea	(a3,d0.w),a3
 		moveq	#0,d0
@@ -442,7 +450,7 @@ LevelSelect_MarkFields:
 	endif
 
 		; check vertical line
-		move.w	(vLevelSelect_VCount).w,d0
+		move.w	(vLevelSelect_vertical_count).w,d0
 		cmpi.w	#LevelSelect_ZoneCount,d0
 		blo.w	LevelSelect_LoadAct
 		subq.w	#LevelSelect_MusicTestCount,d0
@@ -460,19 +468,19 @@ LevelSelect_MarkFields_Index: offsetTable
 
 .drawsample
 		locVRAM	$CD30,VDP_control_port-VDP_control_port(a5)
-		move.w	(vLevelSelect_SampleCount).w,d0
+		move.w	(vLevelSelect_sample_count).w,d0
 		bra.s	.drawnumbers
 ; ---------------------------------------------------------------------------
 
 .drawsound
 		locVRAM	$CC30,VDP_control_port-VDP_control_port(a5)
-		move.w	(vLevelSelect_SoundCount).w,d0
+		move.w	(vLevelSelect_sound_count).w,d0
 		bra.s	.drawnumbers
 ; ---------------------------------------------------------------------------
 
 .drawmusic
 		locVRAM	$CB30,VDP_control_port-VDP_control_port(a5)
-		move.w	(vLevelSelect_MusicCount).w,d0
+		move.w	(vLevelSelect_music_count).w,d0
 
 .drawnumbers
 		move.w	d0,d2

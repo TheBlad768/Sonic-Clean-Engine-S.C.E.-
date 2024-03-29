@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; Animation script - Bubbler
+; ---------------------------------------------------------------------------
+
 Ani_Bubbler: offsetTable
 		offsetTableEntry.w byte_2FC90		; 0
 		offsetTableEntry.w byte_2FC95		; 1

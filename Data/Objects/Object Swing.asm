@@ -541,8 +541,7 @@ Shot_Object_3:
 +		tst.b	d3
 		beq.s	+
 		neg.w	d1
-+		move.w	d0,x_vel(a0)
-		move.w	d1,y_vel(a0)
++		movem.w	d0-d1,x_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

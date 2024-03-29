@@ -54,7 +54,7 @@ Sprite_table_input_end				= *
 DMA_queue:							= *
 VDP_Command_Buffer:				ds.w $12*7				; Stores all the VDP commands necessary to initiate a DMA transfer
 DMA_queue_slot:						= *
-VDP_Command_Buffer_Slot:			ds.l 1					; Points to the next free slot on the queue
+VDP_Command_Buffer_Slot:			ds.w 1					; Points to the next free slot on the queue
 
 Camera_RAM:						= *						; Various camera and scroll-related variables are stored here
 H_scroll_amount:						ds.w 1					; Number of pixels camera scrolled horizontally in the last frame * $100
@@ -95,23 +95,29 @@ Camera_X_pos_BG_copy:				ds.l 1
 Camera_Y_pos_BG_copy:				ds.l 1
 Camera_X_pos_BG_rounded:			ds.w 1					; rounded down to the nearest block boundary ($10th pixel)
 Camera_Y_pos_BG_rounded:			ds.w 1					; rounded down to the nearest block boundary ($10th pixel)
-Camera_X_pos_coarse:				ds.w 1					; Rounded down to the nearest chunk boundary (128th pixel)
-Camera_Y_pos_coarse:				ds.w 1					; Rounded down to the nearest chunk boundary (128th pixel)
+Camera_X_pos_coarse:				ds.w 1					; rounded down to the nearest chunk boundary (128th pixel)
+Camera_Y_pos_coarse:				ds.w 1					; rounded down to the nearest chunk boundary (128th pixel)
 Camera_X_pos_coarse_back:			ds.w 1					; Camera_X_pos_coarse - $80
 Camera_Y_pos_coarse_back:			ds.w 1					; Camera_Y_pos_coarse - $80
-Plane_double_update_flag:				ds.w 1					; Set when two block are to be updated instead of one (i.e. the camera's scrolled by more than $10 pixels)
+Plane_double_update_flag:				ds.b 1					; set when two block are to be updated instead of one (i.e. the camera's scrolled by more than $10 pixels)
+									ds.b 1					; even
 HScroll_Shift:						= *
 Camera_Hscroll_shift:					ds.w 3
 	if ExtendedCamera
 Camera_X_center:					ds.w 1
 	endif
-Screen_X_wrap_value:				ds.w 1					; Set to $FFFF
-Screen_Y_wrap_value:					ds.w 1					; Either $7FF or $FFF
-Camera_Y_pos_mask:					ds.w 1					; Either $7F0 or $FF0
-Layout_row_index_mask:				ds.w 1					; Either $3C or $7C
+Screen_X_wrap_value:				ds.w 1					; set to $FFFF
+Screen_Y_wrap_value:					ds.w 1					; either $7FF or $FFF
+Camera_Y_pos_mask:					ds.w 1					; either $7F0 or $FF0
+Layout_row_index_mask:				ds.w 1					; either $3C or $7C
+Scroll_force_positions:					ds.b 1					; if this is set scrolling will be based on the two variables below rather than the player's actual position
+									ds.b 1					; even
+Scroll_forced_X_pos:					ds.l 1
+Scroll_forced_Y_pos:					ds.l 1
 Screen_shaking_flag:					ds.w 1					; flag for enabling screen shake. Negative values cause screen to shake infinitely, positive values make the screen shake for a short amount of time
 Screen_shaking_offset:					ds.w 1					; vertical offset when screen_shake_flag is enabled. This is added to camera position later
 Screen_shaking_last_offset:			ds.w 1					; value of Screen_shake_offset for the previous frame
+Level_repeat_offset:					ds.w 1					; the number of pixels the screen was moved this frame, used to offset level objects horizontally. Used only for level repeat sections, such as AIZ airship.
 Events_fg:							ds.b $18					; various flags used by foreground events
 Draw_delayed_position:				ds.w 1					; position to redraw screen from. Screen is reloaded 1 row at a time to avoid game lag
 Draw_delayed_rowcount:				ds.w 1					; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
@@ -119,17 +125,18 @@ Events_bg:							ds.b $18					; various flags used by background events
 Boss_events:							ds.b $10
 Camera_RAM_end					= *
 
-Ring_start_addr_ROM:				ds.l 1					; Address in the ring layout of the first ring whose X position is >= camera X position - 8
-Ring_end_addr_ROM:					ds.l 1					; Address in the ring layout of the first ring whose X position is >= camera X position + 328
-Ring_start_addr_RAM:				ds.w 1					; Address in the ring status table of the first ring whose X position is >= camera X position - 8
-Ring_consumption_table:				= *						; Stores the addresses of all rings currently being consumed
-Ring_consumption_count:				ds.w 1					; The number of rings being consumed currently
-Ring_consumption_list:				ds.w $3F					; The remaining part of the ring consumption table
+Ring_start_addr_ROM:				ds.l 1					; address in the ring layout of the first ring whose X position is >= camera X position - 8
+Ring_end_addr_ROM:					ds.l 1					; address in the ring layout of the first ring whose X position is >= camera X position + 328
+Ring_start_addr_RAM:				ds.w 1					; address in the ring status table of the first ring whose X position is >= camera X position - 8
+Ring_consumption_table:				= *						; stores the addresses of all rings currently being consumed
+Ring_consumption_count:				ds.w 1					; the number of rings being consumed currently
+Ring_consumption_list:				ds.w $3F					; the remaining part of the ring consumption table
 Ring_consumption_table_end			= *
 
-Plane_buffer:							ds.b $480				; Used by level drawing routines
+Plane_buffer:							ds.w $240				; used by level drawing routines
+Plane_buffer_end
 
-v_snddriver_ram:						ds.b $400				; Start of RAM for the sound driver data
+v_snddriver_ram:						ds.b $400				; start of RAM for the sound driver data
 
 v_gamemode:						= *
 Game_mode:							ds.b 1

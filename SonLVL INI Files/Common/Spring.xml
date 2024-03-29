@@ -18,11 +18,11 @@
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Yellow).asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="diagred">
-      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal spring.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal Spring.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Red).asm" frame="7" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="diagyel">
-      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal spring.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal Spring.bin" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Yellow).asm" frame="7" startpal="0" />
     </ImageFromMappings>
   </Images>
@@ -43,7 +43,7 @@
     <BitsProperty name="Color" type="SpringColor" startbit="1" length="1" />
     <BitsProperty name="Layer" type="SpringLayer" startbit="2" length="2" />
     <BitsProperty name="Direction" type="SpringDirection" startbit="4" length="3" />
-    <BitsProperty name="KillTransverseSpeed" displayname="Kill Transverse Speed" type="bool" startbit="7" length="1" />
+    <BitsProperty name="Solid" displayname="Disable Solid" type="bool" startbit="7" length="1" />
   </Properties>
   <Enums>
     <Enum name="SpringColor">

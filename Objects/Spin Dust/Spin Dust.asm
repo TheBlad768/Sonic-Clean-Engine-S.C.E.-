@@ -26,8 +26,8 @@ Obj_DashDust:
 		movea.w	parent(a0),a2											; a2=character
 		moveq	#0,d0
 		move.b	anim(a0),d0											; use current animation as a secondary routine counter
-		add.w	d0,d0
-		add.w	d0,d0
+		add.b	d0,d0
+		add.b	d0,d0
 		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 

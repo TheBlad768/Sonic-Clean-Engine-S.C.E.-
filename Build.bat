@@ -16,26 +16,26 @@ REM // '-A' gives us a small speedup
 REM // '-U' forces case-sensitivity
 REM // '-L' listing to file
 REM // '-i .' allows (b)include paths to be absolute
-set AS_MSGPATH=Win32/as
+set AS_MSGPATH=AS/Windows/as
 set USEANSI=n
 
 REM // allow the user to choose to print error messages out by supplying the -pe parameter
-"Win32/as/asw.exe" -xx -q -c -A -L -U -i . Sonic.asm
+"%AS_MSGPATH%/asw.exe" -xx -q -c -A -L -U -i . Sonic.asm
 IF NOT EXIST Sonic.p pause & exit
 
-"Win32/as/p2bin" -p=FF -z=0,kosinski-optimised,Size_of_Mega_PCM_guess,after Sonic.p Sonic.gen Sonic.h
+"%AS_MSGPATH%/p2bin.exe" -p=FF -z=0,kosinski-optimised,Size_of_Mega_PCM_guess,after Sonic.p Sonic.gen Sonic.h
 IF EXIST Sonic.p del Sonic.p
 IF EXIST Sonic.h del Sonic.h
 
 IF NOT EXIST Sonic.gen pause & exit
 
 REM // generate debug information
-"Win32/convsym.exe" Sonic.lst Sonic.gen -a -input as_lst
+"AS/Windows/convsym.exe" Sonic.lst Sonic.gen -a -input as_lst
 
-REM // "Win32/rompad.exe" Sonic.gen 255 0
+REM // "AS/Windows/rompad.exe" Sonic.gen 255 0
 
 REM // fix the rom header (checksum)
-"Win32/fixheader.exe" Sonic.gen
+"AS/Windows/fixheader.exe" Sonic.gen
 
 REM // Copy rom to CD folder
 copy Sonic.gen _CD

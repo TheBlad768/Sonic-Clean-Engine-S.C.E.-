@@ -39,9 +39,12 @@ TouchResponse:
 		move.b	y_radius(a0),d5							; load Sonic's height
 		subq.b	#3,d5
 		sub.w	d5,d3
+		cmpi.b	#id_Duck,anim(a0)						; is player ducking?
+		bne.s	.Touch_NoDuck							; if not, branch
+		addi.w	#$C,d3
+		moveq	#$A,d5
 
-		; note the lack of a check for if the player is ducking
-		; height is no longer reduced by ducking
+.Touch_NoDuck
 		moveq	#$10,d4									; player's collision width
 		add.w	d5,d5
 
@@ -297,7 +300,8 @@ Touch_Enemy:
 		; boss related? could be special enemies in general
 		tst.b	boss_hitcount2(a1)
 		beq.s	Touch_EnemyNormal
-		neg.l	x_vel(a0)								; bounce player directly off boss
+		neg.w	x_vel(a0)								; bounce player directly off boss
+		neg.w	y_vel(a0)
 		neg.w	ground_vel(a0)
 		move.b	collision_flags(a1),collision_restore_flags(a1)	; save current collision
 		clr.b	collision_flags(a1)
@@ -336,7 +340,6 @@ Touch_EnemyNormal:
 .notreachedlimit2
 		bsr.w	HUD_AddToScore
 		move.l	#Obj_Explosion,address(a1)				; change object to explosion
-		clr.b	routine(a1)
 		tst.w	y_vel(a0)
 		bmi.s	.bouncedown
 		move.w	y_pos(a0),d0

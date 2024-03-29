@@ -14,7 +14,7 @@ ShakeScreen_Setup:
 		bmi.s	.shake
 		subq.w	#1,d0
 		move.w	d0,(Screen_shaking_flag).w
-		cmpi.w	#$14,d0
+		cmpi.w	#(ScreenShakeArray2-ScreenShakeArray),d0
 		bhs.s	.shake
 		move.b	ScreenShakeArray(pc,d0.w),d1
 		ext.w	d1

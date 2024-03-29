@@ -62,8 +62,8 @@ loc_1D61A:
 ; ---------------------------------------------------------------------------
 
 Obj_MonitorAnimate:
-		cmpi.b	#$B,mapping_frame(a0)			; Is monitor broken?
-		bne.s	.notbroken						; If not, branch
+		cmpi.b	#$B,mapping_frame(a0)						; is monitor broken?
+		bne.s	.notbroken									; if not, branch
 		move.l	#loc_1D61A,address(a0)
 
 .notbroken:
@@ -76,38 +76,38 @@ Obj_MonitorAnimate:
 Obj_MonitorFall:
 		move.b	routine_secondary(a0),d0
 		beq.s	locret_1D694
-		btst	#1,render_flags(a0)					; Is monitor upside down?
-		bne.s	Obj_MonitorFallUpsideDown		; If so, branch
+		btst	#1,render_flags(a0)								; is monitor upside down?
+		bne.s	Obj_MonitorFallUpsideDown					; if so, branch
 
 Obj_MonitorFallUpsideUp:
 		jsr	(MoveSprite).w
-		tst.w	y_vel(a0)						; Is monitor moving up?
-		bmi.s	locret_1D694						; If so, return
+		tst.w	y_vel(a0)									; is monitor moving up?
+		bmi.s	locret_1D694									; if so, return
 		jsr	(ObjCheckFloorDist).w
-		tst.w	d1								; Is monitor in the ground?
-		beq.s	.inground						; If so, branch
-		bpl.s	locret_1D694						; if not, return
+		tst.w	d1											; is monitor in the ground?
+		beq.s	.inground									; if so, branch
+		bpl.s	locret_1D694									; if not, return
 
 .inground:
-		add.w	d1,y_pos(a0)						; Move monitor out of the ground
+		add.w	d1,y_pos(a0)									; move monitor out of the ground
 		clr.w	y_vel(a0)
-		clr.b	routine_secondary(a0)					; Stop monitor from falling
+		clr.b	routine_secondary(a0)								; stop monitor from falling
 		rts
 ; ---------------------------------------------------------------------------
 
 Obj_MonitorFallUpsideDown:
 		jsr	(MoveSprite_ReverseGravity).w
-		tst.w	y_vel(a0)						; Is monitor moving down?
-		bmi.s	locret_1D694						; If so, return
+		tst.w	y_vel(a0)									; is monitor moving down?
+		bmi.s	locret_1D694									; if so, return
 		jsr	(ObjCheckCeilingDist).w
-		tst.w	d1								; Is monitor in the ground (ceiling)?
-		beq.s	.inground						; If so, branch
-		bpl.s	locret_1D694						; if not, return
+		tst.w	d1											; is monitor in the ground (ceiling)?
+		beq.s	.inground									; if so, branch
+		bpl.s	locret_1D694									; if not, return
 
 .inground:
-		sub.w	d1,y_pos(a0)						; Move monitor out of the ground
+		sub.w	d1,y_pos(a0)									; move monitor out of the ground
 		clr.w	y_vel(a0)
-		clr.b	routine_secondary(a0)					; Stop monitor from falling
+		clr.b	routine_secondary(a0)								; stop monitor from falling
 
 locret_1D694:
 		rts
@@ -115,10 +115,10 @@ locret_1D694:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObject_Monitor_SonicKnux:
-		btst	d6,status(a0)							; Is Sonic/Knux standing on the monitor?
-		bne.s	Monitor_ChkOverEdge				; If so, branch
-		cmpi.b	#id_Roll,anim(a1)					; Is Sonic/Knux in their rolling animation?
-		beq.s	locret_1D694						; If so, return
+		btst	d6,status(a0)										; is Sonic/Knux standing on the monitor?
+		bne.s	Monitor_ChkOverEdge							; if so, branch
+		cmpi.b	#id_Roll,anim(a1)								; is sonic/Knux in their rolling animation?
+		beq.s	locret_1D694									; if so, return
 		jmp	(SolidObject_cont).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -126,21 +126,21 @@ SolidObject_Monitor_SonicKnux:
 Monitor_ChkOverEdge:
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)				; Is the character in the air?
-		bne.s	.notonmonitor					; If so, branch
+		btst	#Status_InAir,status(a1)							; is the character in the air?
+		bne.s	.notonmonitor								; if so, branch
 		; Check if character is standing on
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	.notonmonitor					; Branch, if character is behind the left edge of the monitor
+		bmi.s	.notonmonitor								; branch, if character is behind the left edge of the monitor
 		cmp.w	d2,d0
-		blo.s		Monitor_CharStandOn				; Branch, if character is not beyond the right edge of the monitor
+		blo.s		Monitor_CharStandOn							; branch, if character is not beyond the right edge of the monitor
 
 .notonmonitor:
 		; if the character isn't standing on the monitor
-		bclr	#Status_OnObj,status(a1)				; Clear 'on object' bit
-		bset	#Status_InAir,status(a1)				; Set 'in air' bit
-		bclr	d6,status(a0)							; Clear 'standing on' bit for the current character
+		bclr	#Status_OnObj,status(a1)							; clear 'on object' bit
+		bset	#Status_InAir,status(a1)							; set 'in air' bit
+		bclr	d6,status(a0)										; clear 'standing on' bit for the current character
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
@@ -154,14 +154,14 @@ Monitor_CharStandOn:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_MonitorBreak:
-		moveq	#standing_mask|pushing_mask,d0	; Is someone touching the monitor?
+		moveq	#standing_mask|pushing_mask,d0				; is someone touching the monitor?
 		and.b	status(a0),d0
-		beq.s	Obj_MonitorSpawnIcon			; If not, branch
+		beq.s	Obj_MonitorSpawnIcon						; if not, branch
 		move.b	d0,d1
-		andi.b	#p1_standing|p1_pushing,d1		; Is it the main character?
-		beq.s	Obj_MonitorSpawnIcon			; If not, branch
+		andi.b	#p1_standing|p1_pushing,d1					; is it the main character?
+		beq.s	Obj_MonitorSpawnIcon						; if not, branch
 		andi.b	#$D7,(Player_1+status).w
-		ori.b	#2,(Player_1+status).w				; Prevent main character from walking in the air
+		ori.b	#2,(Player_1+status).w							; prevent main character from walking in the air
 
 Obj_MonitorSpawnIcon:
 		andi.b	#3,status(a0)
@@ -169,7 +169,7 @@ Obj_MonitorSpawnIcon:
 		jsr	(Create_New_Sprite3).w
 		bne.s	.skipiconcreation
 		move.l	#Obj_MonitorContents,address(a1)
-		move.w	x_pos(a0),x_pos(a1)				; Set icon's position
+		move.w	x_pos(a0),x_pos(a1)							; set icon's position
 		move.w	y_pos(a0),y_pos(a1)
 		move.b	anim(a0),anim(a1)
 		move.b	render_flags(a0),render_flags(a1)
@@ -178,19 +178,18 @@ Obj_MonitorSpawnIcon:
 .skipiconcreation:
 		jsr	(Create_New_Sprite3).w
 		bne.s	.skipexplosioncreation
-		move.l	#Obj_Explosion,address(a1)
-		addq.b	#2,routine(a1)					; => loc_1E61A
-		move.w	x_pos(a0),x_pos(a1)				; Set explosion's position
+		move.l	#Obj_Explosion.skipanimal,address(a1)
+		move.w	x_pos(a0),x_pos(a1)							; set explosion's position
 		move.w	y_pos(a0),y_pos(a1)
 
 .skipexplosioncreation:
-		move.w	respawn_addr(a0),d0				; Get address in respawn table
-		beq.s	.notremembered					; If it's zero, it isn't remembered
-		movea.w	d0,a2							; Load address into a2
-		bset	#0,(a2)								; Mark monitor as destroyed
+		move.w	respawn_addr(a0),d0							; get address in respawn table
+		beq.s	.notremembered								; if it's zero, it isn't remembered
+		movea.w	d0,a2										; load address into a2
+		bset	#0,(a2)											; mark monitor as destroyed
 
 .notremembered:
-		move.b	#$A,anim(a0)					; Display 'broken' animation
+		move.b	#$A,anim(a0)								; display 'broken' animation
 		move.l	#Obj_MonitorAnimate,address(a0)
 		jmp	(Draw_Sprite).w
 
@@ -299,9 +298,9 @@ Monitor_Give_SpeedShoes:
 
 		; set player speed
 		lea	(Max_speed).w,a4
-		move.w	#$C00,Max_speed-Max_speed(a4)
-		move.w	#$18,Acceleration-Max_speed(a4)
-		move.w	#$80,Deceleration-Max_speed(a4)
+		move.w	#$C00,Max_speed-Max_speed(a4)				; set max speed
+		move.w	#$18,Acceleration-Max_speed(a4)				; set acceleration
+		move.w	#$80,Deceleration-Max_speed(a4)				; set deceleration
 		music	mus_Speedup,1								; speed up the music
 ; ---------------------------------------------------------------------------
 

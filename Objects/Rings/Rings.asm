@@ -5,46 +5,35 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Ring:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		move.w	Ring_Index(pc,d0.w),d0
-		jmp	Ring_Index(pc,d0.w)
-; ---------------------------------------------------------------------------
-
-Ring_Index: offsetTable
-		offsetTableEntry.w Obj_RingInit			; 0
-		offsetTableEntry.w Obj_RingAnimate	; 2
-		offsetTableEntry.w Obj_RingCollect		; 4
-		offsetTableEntry.w Obj_RingSparkle		; 6
-		offsetTableEntry.w Obj_RingDelete		; 8
-; ---------------------------------------------------------------------------
-
-Obj_RingInit:
-		addq.b	#2,routine(a0)
 		move.l	#Map_Ring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#7|$40,collision_flags(a0)
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
+		move.l	#.anim,address(a0)
 
-Obj_RingAnimate:
+.anim
+		tst.b	routine(a0)
+		bne.s	.collect
 		jmp	(Sprite_OnScreen_Test_Collision).w
 ; ---------------------------------------------------------------------------
 
-Obj_RingCollect:
-		addq.b	#2,routine(a0)
-		clr.b	collision_flags(a0)
+.collect
+		clr.b	routine(a0)
+		move.l	#.sparkle,address(a0)
 		move.w	#$80,priority(a0)
 		jsr	(GiveRing).w
 
-Obj_RingSparkle:
+.sparkle
 		lea	Ani_RingSparkle(pc),a1
 		jsr	(Animate_Sprite).w
+		tst.b	routine(a0)
+		bne.s	.delete
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-Obj_RingDelete:
+.delete
 		jmp	(Delete_Current_Sprite).w
 
 ; ---------------------------------------------------------------------------
@@ -56,31 +45,31 @@ Obj_RingDelete:
 Obj_Bouncing_Ring:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	off_1A658(pc,d0.w),d0
+		add.b	d0,d0
 		jmp	off_1A658(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-off_1A658: offsetTable
-		offsetTableEntry.w loc_1A67A	; 0
-		offsetTableEntry.w loc_1A75C	; 2
-		offsetTableEntry.w loc_1A7C2	; 4
-		offsetTableEntry.w loc_1A7D6	; 6
-		offsetTableEntry.w loc_1A7E4	; 8
+off_1A658:
+		bra.w	loc_1A67A	; 0
+		bra.w	loc_1A75C	; 2
+		bra.w	loc_1A7C2	; 4
+		bra.w	loc_1A7D6	; 6
+		bra.w	loc_1A7E4	; 8
 ; ---------------------------------------------------------------------------
 
 Obj_Bouncing_Ring_Reverse_Gravity:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	off_1A670(pc,d0.w),d0
+		add.b	d0,d0
 		jmp	off_1A670(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-off_1A670: offsetTable
-		offsetTableEntry.w loc_1A67A	; 0
-		offsetTableEntry.w loc_1A7E8	; 2
-		offsetTableEntry.w loc_1A7C2	; 4
-		offsetTableEntry.w loc_1A7D6	; 6
-		offsetTableEntry.w loc_1A7E4	; 8
+off_1A670:
+		bra.w	loc_1A67A	; 0
+		bra.w	loc_1A7E8	; 2
+		bra.w	loc_1A7C2	; 4
+		bra.w	loc_1A7D6	; 6
+		bra.w	loc_1A7E4	; 8
 ; ---------------------------------------------------------------------------
 
 loc_1A67A:
@@ -107,15 +96,15 @@ loc_1A6AE:
 loc_1A6B6:
 		move.l	d6,address(a1)
 		addq.b	#2,routine(a1)
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)			; set y_radius and x_radius
-		move.w	x_pos(a0),x_pos(a1)
-		move.w	y_pos(a0),y_pos(a1)
 		move.l	#Map_Ring,mappings(a1)
 		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
 		move.b	#$84,render_flags(a1)
 		move.w	#$180,priority(a1)
+		move.w	x_pos(a0),x_pos(a1)
+		move.w	y_pos(a0),y_pos(a1)
 		move.b	#7|$40,collision_flags(a1)
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)		; set height and width
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)			; set y_radius and x_radius
 		tst.w	d4
 		bmi.s	loc_1A728
 		move.w	d4,d0
@@ -135,8 +124,7 @@ loc_1A6B6:
 		move.w	#$288,d4
 
 loc_1A728:
-		move.w	d2,x_vel(a1)
-		move.w	d3,y_vel(a1)
+		movem.w	d2-d3,x_vel(a1)
 		neg.w	d2
 		neg.w	d4
 		dbf	d5,loc_1A6AE
@@ -177,8 +165,9 @@ loc_1A79C:
 		blo.s		loc_1A7E4
 
 loc_1A7B0:
-		jsr	(Add_SpriteToCollisionResponseList).w
-		jmp	(Draw_Sprite).w
+		move.w	(Level_repeat_offset).w,d0
+		sub.w	d0,x_pos(a0)
+		jmp	(Draw_And_Touch_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A7C2:
@@ -225,8 +214,9 @@ loc_1A828:
 		blo.s		loc_1A7E4
 
 loc_1A83C:
-		jsr	(Add_SpriteToCollisionResponseList).w
-		jmp	(Draw_Sprite).w
+		move.w	(Level_repeat_offset).w,d0
+		sub.w	d0,x_pos(a0)
+		jmp	(Draw_And_Touch_Sprite).w
 
 ; ---------------------------------------------------------------------------
 ; Attracted ring (Object)
@@ -258,8 +248,7 @@ loc_1A88C:
 
 loc_1A8C6:
 		out_of_xrange.s	loc_1A8E4
-		jsr	(Add_SpriteToCollisionResponseList).w
-		jmp	(Draw_Sprite).w
+		jmp	(Draw_And_Touch_Sprite).w
 ; ---------------------------------------------------------------------------
 
 loc_1A8E4:

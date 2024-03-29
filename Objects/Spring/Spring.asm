@@ -70,6 +70,9 @@ Spring_Up:
 
 loc_22E96:
 		move.l	#Obj_Spring_Up,address(a0)
+		tst.b	subtype(a0)
+		bpl.s	Spring_Common
+		move.l	#Obj_Spring_Up_NoSolid,address(a0)
 
 Spring_Common:
 		moveq	#2,d0
@@ -96,10 +99,28 @@ Obj_Spring_Up:
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2_1P).w
 		btst	#p1_standing_bit,status(a0)
-		beq.s	loc_22F1C
+		beq.s	.anim
 		bsr.s	sub_22F98
 
-loc_22F1C:
+.anim
+		lea	Ani_Spring(pc),a1
+		jsr	(Animate_Sprite).w
+		jmp	(Sprite_OnScreen_Test).w
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_Spring_Up_NoSolid:
+		moveq	#$1B,d1
+		moveq	#8,d3
+		move.w	x_pos(a0),d4
+		lea	(Player_1).w,a1
+		moveq	#p1_standing_bit,d6
+		jsr	(SolidObjectTop_1P).w
+		btst	#p1_standing_bit,status(a0)
+		beq.s	.anim
+		bsr.s	sub_22F98
+
+.anim
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
 		jmp	(Sprite_OnScreen_Test).w
@@ -122,10 +143,6 @@ sub_22F98:
 		move.b	#id_Spring,anim(a1)
 		move.b	#id_SonicControl,routine(a1)
 		move.b	subtype(a0),d0
-		bpl.s	loc_22FE0
-		clr.w	x_vel(a1)
-
-loc_22FE0:
 		btst	#0,d0
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
@@ -212,10 +229,6 @@ loc_231BE:
 
 loc_231D8:
 		move.b	subtype(a0),d0
-		bpl.s	loc_231E4
-		clr.w	y_vel(a1)
-
-loc_231E4:
 		btst	#0,d0
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
@@ -335,10 +348,6 @@ sub_233CA:
 
 loc_233F8:
 		move.b	subtype(a0),d0
-		bpl.s	loc_23404
-		clr.w	x_vel(a1)
-
-loc_23404:
 		btst	#0,d0
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
@@ -419,8 +428,9 @@ loc_234FC:
 
 loc_2350A:
 		move.w	#bytes_to_word(5,0),anim(a0)			; set anim and clear next_anim/prev_anim
-		move.w	objoff_30(a0),y_vel(a1)
-		move.w	objoff_30(a0),x_vel(a1)
+		move.w	objoff_30(a0),d0
+		move.w	d0,x_vel(a1)
+		move.w	d0,y_vel(a1)
 		addq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -494,9 +504,10 @@ loc_235F8:
 
 sub_23624:
 		move.w	#bytes_to_word(5,0),anim(a0)			; set anim and clear next_anim/prev_anim
-		move.w	objoff_30(a0),y_vel(a1)
+		move.w	objoff_30(a0),d0
+		move.w	d0,x_vel(a1)
+		move.w	d0,y_vel(a1)
 		neg.w	y_vel(a1)
-		move.w	objoff_30(a0),x_vel(a1)
 		subq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
 		bset	#Status_Facing,status(a1)

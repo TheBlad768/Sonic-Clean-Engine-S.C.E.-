@@ -1,19 +1,24 @@
+; ---------------------------------------------------------------------------
+; Animation script - Air countdown
+; ---------------------------------------------------------------------------
+
 Ani_AirCountdown: offsetTable
-		offsetTableEntry.w byte_186E2
-		offsetTableEntry.w byte_186EB
-		offsetTableEntry.w byte_186F4
-		offsetTableEntry.w byte_186FD
-		offsetTableEntry.w byte_18706
-		offsetTableEntry.w byte_1870F
-		offsetTableEntry.w byte_18718
-		offsetTableEntry.w byte_1871D
-		offsetTableEntry.w byte_18725
-		offsetTableEntry.w byte_1872D
-		offsetTableEntry.w byte_18735
-		offsetTableEntry.w byte_1873D
-		offsetTableEntry.w byte_18745
-		offsetTableEntry.w byte_1874D
-		offsetTableEntry.w byte_1874F
+		offsetTableEntry.w byte_186E2		; 0
+		offsetTableEntry.w byte_186EB		; 1
+		offsetTableEntry.w byte_186F4		; 2
+		offsetTableEntry.w byte_186FD		; 3
+		offsetTableEntry.w byte_18706		; 4
+		offsetTableEntry.w byte_1870F		; 5
+		offsetTableEntry.w byte_18718		; 6
+		offsetTableEntry.w byte_1871D		; 7
+		offsetTableEntry.w byte_18725		; 8
+		offsetTableEntry.w byte_1872D		; 9
+		offsetTableEntry.w byte_18735		; A
+		offsetTableEntry.w byte_1873D		; B
+		offsetTableEntry.w byte_18745		; C
+		offsetTableEntry.w byte_1874D		; D
+		offsetTableEntry.w byte_1874F		; E
+
 byte_186E2:	dc.b	5,   0,	  1,   2,   3,	 4,   9,  $D, afRoutine
 byte_186EB:	dc.b	5,   0,	  1,   2,   3,	 4,  $C, $12, afRoutine
 byte_186F4:	dc.b	5,   0,	  1,   2,   3,	 4,  $C, $11, afRoutine

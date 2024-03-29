@@ -284,12 +284,12 @@ EnemyDefeated:
 		rts
 ; ---------------------------------------------------------------------------
 
-.bouncedown:
+.bouncedown
 		addi.w	#$100,y_vel(a1)									; bounce down
 		rts
 ; ---------------------------------------------------------------------------
 
-.bounceup:
+.bounceup
 		subi.w	#$100,y_vel(a1)									; bounce up
 		rts
 
@@ -305,7 +305,7 @@ EnemyDefeat_Score:
 		blo.s		.notreachedlimit
 		moveq	#6,d0
 
-.notreachedlimit:
+.notreachedlimit
 		move.w	d0,objoff_3E(a0)
 		lea	Enemy_Points(pc),a2
 		move.w	(a2,d0.w),d0
@@ -314,11 +314,9 @@ EnemyDefeat_Score:
 		move.w	#1000,d0										; fix bonus to 10000
 		move.w	#10,objoff_3E(a0)
 
-.notreachedlimit2:
-		bsr.w	HUD_AddToScore
-		move.l	#Obj_Explosion,address(a0)
-		clr.b	routine(a0)
-		rts
+.notreachedlimit2
+		move.l	#Obj_Explosion,address(a0)						; change object to explosion
+		bra.w	HUD_AddToScore
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -417,11 +415,11 @@ Set_PlayerEndingPose:
 		bclr	#p2_pushing_bit,status(a0)
 		bclr	#Status_Push,status(a1)
 		bclr	#Status_Roll,status(a1)
-		beq.s	.return										; if the player doesn't roll, branch
+		beq.s	.return											; if the player doesn't roll, branch
 
 		; fix player ypos
 		move.b	y_radius(a1),d0
-		move.w	default_y_radius(a1),y_radius(a1)
+		move.w	default_y_radius(a1),y_radius(a1)					; set y_radius and x_radius
 		sub.b	default_y_radius(a1),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -470,7 +468,7 @@ StartNewLevel:
 Play_SFX_Continuous:
 		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
-		jmp	(SMPS_QueueSound2).w							; play sfx
+		jmp	(SMPS_QueueSound2).w								; play sfx
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -483,7 +481,7 @@ Wait_NewDelay:
 .end
 		bclr	#7,render_flags(a0)
 		move.w	#(2*60)-1,$2E(a0)
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -502,23 +500,23 @@ Wait_FadeToLevelMusic:
 		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
 
 .notfree
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
 Player_IntroRightMove:
-		move.w	#bytes_to_word(btnR,btnR),d0					; set right move
+		move.w	#bytes_to_word(btnR,btnR),d0						; set right move
 		tst.w	$2E(a0)
 		beq.s	.notjump
 		subq.w	#1,$2E(a0)
-		move.w	#bytes_to_word(btnA+btnR,btnR),d0			; keep jumping
+		move.w	#bytes_to_word(btnA+btnR,btnR),d0				; keep jumping
 
 .notjump
-		btst	#Status_Push,status(a1)							; player hitting a solid?
-		beq.s	.notpush										; if not, branch
+		btst	#Status_Push,status(a1)								; player hitting a solid?
+		beq.s	.notpush											; if not, branch
 		move.w	#$1F,$2E(a0)
-		move.w	#bytes_to_word(btnA+btnR,btnA+btnR),d0		; set player jump
+		move.w	#bytes_to_word(btnA+btnR,btnA+btnR),d0			; set player jump
 
 .notpush
 		move.w	d0,(Ctrl_1_logical).w
@@ -550,7 +548,7 @@ BossFlash:
 		dc.w Normal_palette_line_1+$1C
 		dc.w Normal_palette_line_1+$1E
 .palcycle
-		dc.w 8, $866, $222
+		dc.w 8, $866, 0
 		dc.w $888, $CCC, $EEE
 
 ; =============== S U B R O U T I N E =======================================
@@ -595,14 +593,14 @@ Check_CameraXBoundary:
 		beq.s	+
 		bmi.s	++
 		move.w	(Camera_X_pos).w,d0
-		addi.w	#$130,d0
+		addi.w	#320-16,d0
 		cmp.w	x_pos(a0),d0
 		bhi.s	+
 		clr.w	x_vel(a0)
 +		rts
 ; ---------------------------------------------------------------------------
 +		move.w	(Camera_X_pos).w,d0
-		addi.w	#$10,d0
+		addi.w	#16,d0
 		cmp.w	x_pos(a0),d0
 		blo.s		+
 		clr.w	x_vel(a0)
@@ -613,15 +611,37 @@ Check_CameraXBoundary:
 Resize_MaxYFromX:
 		move.w	(Camera_X_pos).w,d0
 
--		move.l	(a1)+,d1
+.find
+		move.l	(a1)+,d1
 		cmp.w	d1,d0
-		bhi.s	-
+		bhi.s	.find
 		swap	d1
 		tst.w	d1
-		bpl.s	+
+		bpl.s	.skip
 		andi.w	#$7FFF,d1
 		move.w	d1,(Camera_max_Y_pos).w
-+		move.w	d1,(Camera_target_max_Y_pos).w
+
+.skip
+		move.w	d1,(Camera_target_max_Y_pos).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+WaterResize_MaxYFromX:
+		move.w	(Camera_X_pos).w,d0
+
+.find
+		move.l	(a1)+,d1
+		cmp.w	d1,d0
+		bhi.s	.find
+		swap	d1
+		tst.w	d1
+		bpl.s	.skip
+		andi.w	#$7FFF,d1
+		move.w	d1,(Mean_water_level).w
+
+.skip
+		move.w	d1,(Target_water_level).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -740,6 +760,12 @@ Child6_IncLevY:
 Child6_DecLevY:
 		dc.w 1-1
 		dc.l Obj_DecLevStartYGradual
+Child6_DecIncLevX:
+		dc.w 2-1
+		dc.l Obj_DecLevStartXGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndXGradual
+		dc.b 0, 0
 Child1_ActLevelSize:
 		dc.w 3-1
 		dc.l Obj_IncLevEndXGradual

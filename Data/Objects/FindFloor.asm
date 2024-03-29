@@ -130,6 +130,8 @@ Player_Angle:
 loc_ED5E:
 		btst	#0,d2
 		bne.s	loc_ED7A
+		tst.b	stick_to_convex(a0)
+		bne.s	loc_ED74
 		move.b	d2,d0
 		sub.b	angle(a0),d0
 		bpl.s	loc_ED6E
@@ -138,6 +140,8 @@ loc_ED5E:
 loc_ED6E:
 		cmpi.b	#$20,d0
 		bhs.s	loc_ED7A
+
+loc_ED74:
 		move.b	d2,angle(a0)
 		rts
 ; ---------------------------------------------------------------------------

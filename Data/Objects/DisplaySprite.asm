@@ -45,8 +45,7 @@ Child_DrawTouch_Sprite:
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
 		bne.w	Go_Delete_Sprite
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.s	Draw_Sprite
+		bra.s	Draw_And_Touch_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -134,8 +133,7 @@ Child_DrawTouch_Sprite_FlickerMove:
 		bne.s	loc_849D8
 
 loc_84A3C:
-		bsr.w	Add_SpriteToCollisionResponseList
-		bra.w	Draw_Sprite
+		bra.w	Draw_And_Touch_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 

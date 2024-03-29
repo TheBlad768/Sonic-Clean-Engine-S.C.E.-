@@ -27,9 +27,9 @@ Debug_Mode:
 		jsr	Player_ResetAirTimer(pc)
 
 		; set player speed (a4 warning!)
-		move.w	#$600,Max_speed-Max_speed(a4)			; set Max_speed
-		move.w	#$C,Acceleration-Max_speed(a4)			; set Acceleration
-		move.w	#$80,Deceleration-Max_speed(a4)			; set Deceleration
+		move.w	#$600,Max_speed-Max_speed(a4)			; set max speed
+		move.w	#$C,Acceleration-Max_speed(a4)			; set acceleration
+		move.w	#$80,Deceleration-Max_speed(a4)			; set deceleration
 
 .select
 		moveq	#0,d0

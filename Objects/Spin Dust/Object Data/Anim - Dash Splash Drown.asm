@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; Animation script - Spin Dust
+; ---------------------------------------------------------------------------
+
 Ani_DashSplashDrown: offsetTable
 		offsetTableEntry.w byte_18DCA		; 0 (null)
 		offsetTableEntry.w byte_18DCD		; 1 (splash)

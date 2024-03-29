@@ -169,7 +169,7 @@ Obj_Bubbler_Bubbles:
 		cmp.w	y_pos(a0),d0
 		blo.s		loc_2F9E2
 
-		; next
+.sanim
 		addq.b	#4,anim(a0)
 		move.l	#Bubbler_Bubbles_Display,address(a0)
 
@@ -205,7 +205,11 @@ loc_2FA14:
 ; =============== S U B R O U T I N E =======================================
 
 sub_2FBA8:
+		tst.w	(Debug_placement_mode).w					; is debug mode on?
+		bne.s	.return										; if yes, branch
 		lea	(Player_1).w,a1
+
+		; main
 		tst.b	object_control(a1)
 		bmi.s	.return
 		btst	#Status_BublShield,shield_reaction(a1)
@@ -225,28 +229,35 @@ sub_2FBA8:
 		move.w	#35,move_lock(a1)
 		clr.b	jumping(a1)
 		clr.b	double_jump_flag(a1)
-		move.w	default_y_radius(a1),y_radius(a1)				; set y_radius and x_radius
+		clr.b	spin_dash_flag(a1)
 		bclr	#Status_Push,status(a1)
 		bclr	#Status_RollJump,status(a1)
 		bclr	#Status_Roll,status(a1)
-		beq.s	.rcheck
-		subq.w	#5,y_pos(a1)
-		bra.s	.rcheck
+		beq.s	.back
+
+		; fix player ypos
+		move.b	y_radius(a1),d0
+		sub.b	default_y_radius(a1),d0
+		ext.w	d0
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.notgrav
+		neg.w	d0
+
+.notgrav
+		add.w	d0,y_pos(a1)
+
+.back
+		move.w	default_y_radius(a1),y_radius(a1)				; set y_radius and x_radius
+		bra.w	Obj_Bubbler_Bubbles.sanim
+; ---------------------------------------------------------------------------
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
 
 .xydata
 		dc.w -16, 32	; xpos
 		dc.w 0, 16	; ypos
-; ---------------------------------------------------------------------------
-
-.rcheck
-		addq.b	#4,anim(a0)
-		move.l	#Bubbler_Bubbles_Display,address(a0)
-		bra.w	Bubbler_Bubbles_Display
-; ---------------------------------------------------------------------------
-
-.return
-		rts
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Bubbler/Object Data/Anim - Bubbler.asm"
