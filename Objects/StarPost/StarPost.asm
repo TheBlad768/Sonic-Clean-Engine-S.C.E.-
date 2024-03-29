@@ -270,9 +270,8 @@ loc_2D506:
 		clr.b	collision_property(a0)
 
 loc_2D50A:
-		addi.w	#10,objoff_34(a0)
 		move.w	objoff_34(a0),d0
-		andi.w	#$FF,d0
+		addi.w	#10,objoff_34(a0)
 		jsr	(GetSineCosine).w
 		asr.w	#5,d0
 		asr.w	#3,d1
