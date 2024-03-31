@@ -107,10 +107,10 @@ Touch_Height:
 
 ; ---------------------------------------------------------------------------
 ; collision sizes $00-$3F (width,height)
-; $00-$3F	- Touch
-; $40-$7F	- Ring/Monitor
-; $80-$BF	- Enemy(Hurt)
-; $C0-$FF	- Special
+; $00-$3F	- touch collision
+; $40-$7F	- ring/monitor collision
+; $80-$BF	- enemy(hurt) collision
+; $C0-$FF	- special collision
 ; ---------------------------------------------------------------------------
 
 Touch_Sizes:
@@ -187,8 +187,10 @@ Touch_ChkValue:
 		and.b	collision_flags(a1),d0						; get collision_flags
 		cmpi.b	#6,d0									; is touch response $46 ?
 		beq.s	Touch_Monitor							; if yes, branch
+
+		; touch ring
 		move.b	(Player_1+invulnerability_timer).w,d0		; get the main character's invulnerability_timer
-		cmpi.b	#90,d0									; is there more than 90 frames on the timer remaining?
+		cmpi.b	#(1*60)+30,d0							; is there more than 90 frames on the timer remaining?
 		bhs.s	.locret									; if so, branch
 		move.b	#4,routine(a1)							; set target object's routine to 4 (must be reserved for collision response)
 
@@ -259,7 +261,7 @@ Touch_Monitor:
 
 		; okaytodestroy
 		neg.w	y_vel(a0)
-		move.b	#4,routine(a1)
+		move.l	#Obj_MonitorBreak,address(a1)
 		rts
 ; ---------------------------------------------------------------------------
 

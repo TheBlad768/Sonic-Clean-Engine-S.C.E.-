@@ -176,7 +176,7 @@ Game_Program:
 .wait
 		move.w	(VDP_control_port).l,d1
 		btst	#1,d1
-		bne.s	.wait	; wait till a DMA is completed
+		bne.s	.wait											; wait till a DMA is completed
 		lea	((RAM_start&$FFFFFF)).l,a6
 		moveq	#0,d7
 		move.w	#bytesToLcnt(System_stack&$FFFF),d6

@@ -152,7 +152,8 @@ loc_ED7A:
 		andi.b	#$C0,d2
 		move.b	d2,angle(a0)
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Player_WalkVertR:
 		move.w	y_pos(a0),d2
@@ -223,7 +224,8 @@ loc_EE46:
 		bclr	#Status_Push,status(a0)
 		move.b	#id_Run,prev_anim(a0)
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Player_WalkCeiling:
 		move.w	y_pos(a0),d2
@@ -295,7 +297,8 @@ loc_EEF4:
 		bclr	#Status_Push,status(a0)
 		move.b	#id_Run,prev_anim(a0)
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Player_WalkVertL:
 		move.w	y_pos(a0),d2
@@ -367,7 +370,8 @@ loc_EFA2:
 		bclr	#Status_Push,status(a0)
 		move.b	#id_Run,prev_anim(a0)
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 GetFloorPosition:
 		movea.l	(Level_layout_addr_ROM).w,a1
@@ -399,7 +403,7 @@ GetFloorPosition:
 ChunkAddrArray:
 
 		set	.a,0
-	rept	$100
+	rept 256
 		dc.w	 .a
 		set	.a,.a + $80
 	endr
@@ -478,7 +482,7 @@ loc_F2F2:
 
 loc_F2FE:
 		sub.w	a3,d2
-		bsr.w	FindFloor2
+		bsr.s	FindFloor2
 		add.w	a3,d2
 		subi.w	#$10,d1
 		rts
@@ -554,7 +558,8 @@ loc_F394:
 		bpl.w	loc_F31C
 		not.w	d1
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Ring_FindFloor:
 		bsr.w	GetFloorPosition
@@ -621,7 +626,7 @@ loc_F464:
 		move.w	d2,d1
 		andi.w	#$F,d1
 		add.w	d1,d0
-		bpl.w	loc_F3EE
+		bpl.s	loc_F3EE
 
 loc_F470:
 		sub.w	a3,d2
@@ -704,7 +709,7 @@ loc_F56A:
 
 loc_F576:
 		sub.w	a3,d3
-		bsr.w	FindWall2
+		bsr.s	FindWall2
 		add.w	a3,d3
 		subi.w	#$10,d1
 		rts

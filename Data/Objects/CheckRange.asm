@@ -25,9 +25,8 @@ Check_CameraInRange:
 ; ---------------------------------------------------------------------------
 
 Check_CameraInRange_Fail:
-		bsr.w	Delete_Sprite_If_Not_In_Range
-		addq.w	#4,sp
-		rts
+		addq.w	#4,sp															; exit from current object
+		bra.w	Delete_Sprite_If_Not_In_Range
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -35,15 +34,16 @@ sub_85C7E:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
 		move.w	(Camera_target_max_Y_pos).w,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
-		blo.s		locret_85CA2
+		blo.s		.return
 		move.w	d0,(Camera_min_Y_pos).w
-		move.w	$3A(a0),d0
+		move.w	objoff_3A(a0),d0
 		cmp.w	(Camera_X_pos).w,d0
-		bhi.s	locret_85CA2
-		movea.l	$34(a0),a1
-		jsr	(a1)
+		bhi.s	.return
+		movea.l	objoff_34(a0),a1
+		jmp	(a1)
+; ---------------------------------------------------------------------------
 
-locret_85CA2:
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -52,7 +52,7 @@ Init_BossArena:
 		st	(Boss_flag).w
 
 Init_BossArena2:
-		music	mus_Fade	; fade out music
+		music	mus_Fade														; fade out music
 		move.w	#2*60,$2E(a0)
 
 Init_BossArena3:
@@ -127,8 +127,8 @@ loc_85D36:
 		move.w	(Camera_max_X_pos_Saved).w,(Camera_max_X_pos).w
 
 loc_85D48:
-		move.b	objoff_27(a0),d0
-		andi.b	#7,d0
+		moveq	#7,d0
+		and.b	objoff_27(a0),d0
 		cmpi.b	#7,d0
 		bne.s	Check_InTheirRange_Return
 		clr.b	objoff_27(a0)
