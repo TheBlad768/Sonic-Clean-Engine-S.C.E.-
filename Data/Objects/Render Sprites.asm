@@ -107,6 +107,29 @@ Render_Sprites_NextLevel:
 +		subi.w	#80-1,d6
 		neg.w	d6
 		move.b	d6,(Sprites_drawn).w
+
+		; sprite mask
+		tst.b	(Spritemask_flag).w
+		beq.s	locret_1AE56
+		cmpi.b	#id_SonicDeath,(Player_1+routine).w	; has Sonic just died?
+		bhs.s	loc_1AE34							; if yes, branch
+		clr.b	(Spritemask_flag).w
+
+loc_1AE34:
+		lea	(Sprite_table_buffer-4).w,a0
+		move.w	#$7C0,d0
+		moveq	#(Sprite_table_buffer_end-Sprite_table_buffer)/8-2,d1
+
+loc_1AE3E:
+		addq.w	#8,a0
+		cmp.w	(a0),d0
+		dbeq	d1,loc_1AE3E
+		bne.s	locret_1AE56
+		move.w	#1,2(a0)
+		clr.w	$A(a0)
+		dbf	d1,loc_1AE3E
+
+locret_1AE56:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -132,11 +155,11 @@ Render_Sprites_MultiDraw:
 		subi.w	#128,d1
 		move.w	d1,d3
 		add.w	d2,d3
-		bmi.s	Render_Sprites_NextObj
+		bmi.w	Render_Sprites_NextObj
 		move.w	d1,d3
 		sub.w	d2,d3
 		cmpi.w	#224,d3
-		bge.s	Render_Sprites_NextObj
+		bge.w	Render_Sprites_NextObj
 		addi.w	#128,d1
 		bra.s	loc_1AEE4
 ; ---------------------------------------------------------------------------
@@ -147,7 +170,7 @@ loc_1AEA2:
 		sub.w	(a3),d0
 		move.w	d0,d3
 		add.w	d2,d3
-		bmi.s	Render_Sprites_NextObj
+		bmi.w	Render_Sprites_NextObj
 		move.w	d0,d3
 		sub.w	d2,d3
 		cmpi.w	#320,d3

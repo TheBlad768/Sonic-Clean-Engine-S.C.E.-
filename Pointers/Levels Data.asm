@@ -47,6 +47,12 @@ DEZ1_Solid:			binclude "Levels/DEZ/Collision/1.bin"
 
 DEZ1_Layout:		binclude "Levels/DEZ/Layout/1.bin"
 	even
+DEZ2_Layout:		binclude "Levels/DEZ/Layout/2.bin"
+	even
+DEZ3_Layout:		binclude "Levels/DEZ/Layout/3.bin"
+	even
+DEZ4_Layout:		binclude "Levels/DEZ/Layout/4.bin"
+	even
 
 ; ===========================================================================
 ; Level object data
@@ -54,6 +60,12 @@ DEZ1_Layout:		binclude "Levels/DEZ/Layout/1.bin"
 
 	ObjectLayoutBoundary
 DEZ1_Sprites:		binclude "Levels/DEZ/Object Pos/1.bin"
+	ObjectLayoutBoundary
+DEZ2_Sprites:		binclude "Levels/DEZ/Object Pos/2.bin"
+	ObjectLayoutBoundary
+DEZ3_Sprites:		binclude "Levels/DEZ/Object Pos/3.bin"
+	ObjectLayoutBoundary
+DEZ4_Sprites:		binclude "Levels/DEZ/Object Pos/4.bin"
 	ObjectLayoutBoundary
 	even
 
@@ -63,5 +75,11 @@ DEZ1_Sprites:		binclude "Levels/DEZ/Object Pos/1.bin"
 
 	RingLayoutBoundary
 DEZ1_Rings:			binclude "Levels/DEZ/Ring Pos/1.bin"
+	RingLayoutBoundary
+DEZ2_Rings:			binclude "Levels/DEZ/Ring Pos/2.bin"
+	RingLayoutBoundary
+DEZ3_Rings:			binclude "Levels/DEZ/Ring Pos/3.bin"
+	RingLayoutBoundary
+DEZ4_Rings:			binclude "Levels/DEZ/Ring Pos/4.bin"
 	RingLayoutBoundary
 	even

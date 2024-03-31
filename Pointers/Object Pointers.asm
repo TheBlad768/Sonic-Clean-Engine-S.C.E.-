@@ -142,7 +142,7 @@ Obj_Index:
 		dc.l DeleteObject						; $88
 		dc.l DeleteObject						; $89
 		dc.l DeleteObject						; $8A
-		dc.l DeleteObject						; $8B
+		dc.l Obj_SpriteMask					; $8B
 		dc.l DeleteObject						; $8C
 		dc.l DeleteObject						; $8D
 		dc.l DeleteObject						; $8E
@@ -167,7 +167,7 @@ Obj_Index:
 		dc.l DeleteObject						; $A1
 		dc.l DeleteObject						; $A2
 		dc.l DeleteObject						; $A3
-		dc.l DeleteObject						; $A4
+		dc.l Obj_Spikebonker					; $A4
 		dc.l DeleteObject						; $A5
 		dc.l DeleteObject						; $A6
 		dc.l DeleteObject						; $A7

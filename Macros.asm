@@ -64,16 +64,16 @@ dma68kToVDP macro source,dest,length,type
 
 ; tells the VDP to fill a region of VRAM with a certain byte
 dmaFillVRAM macro byte,addr,length
-	move.w	#$8F01,VDP_control_port-VDP_control_port(a5) ; VRAM pointer increment: $0001
-	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5) ; DMA length ...
-	move.w	#$9780,VDP_control_port-VDP_control_port(a5) ; VRAM fill
-	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5) ; Start at ...
-	move.w	#(byte)<<8,(VDP_data_port).l ; Fill with byte
+	move.w	#$8F01,VDP_control_port-VDP_control_port(a5)	; VRAM pointer increment: $0001
+	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5)	; DMA length ...
+	move.w	#$9780,VDP_control_port-VDP_control_port(a5)	; VRAM fill
+	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5)	; Start at ...
+	move.w	#(byte)<<8,(VDP_data_port).l	; Fill with byte
 .loop:
 	move.w	VDP_control_port-VDP_control_port(a5),d1
 	btst	#1,d1
 	bne.s	.loop	; busy loop until the VDP is finished filling...
-	move.w	#$8F02,VDP_control_port-VDP_control_port(a5) ; VRAM pointer increment: $0002
+	move.w	#$8F02,VDP_control_port-VDP_control_port(a5)	; VRAM pointer increment: $0002
     endm
 
 ; -------------------------------------------------------------
@@ -107,8 +107,8 @@ theld:	macro press,player
     endm
 
 ; ---------------------------------------------------------------------------
-; Set a VRAM address via the VDP control port.
-; input: 16-bit VRAM address, control port (default is ($C00004).l)
+; set a VRAM address via the VDP control port.
+; input: 16-bit VRAM address, control port (default is (VDP_control_port).l)
 ; ---------------------------------------------------------------------------
 
 locVRAM macro loc, controlport
@@ -127,7 +127,7 @@ __LABEL__ label *
     endm
 
 ; macro to define debug list object data
-dbglistobj macro   obj, mapaddr, subtype, frame, vram
+dbglistobj macro obj, mapaddr, subtype, frame, vram
 	dc.l frame<<24|obj
 	dc.l subtype<<24|mapaddr
 	dc.w vram
@@ -177,6 +177,30 @@ subObjSlotData macro slots,vram,offset,index,mappings,priority,width,height,fram
 	dc.b width,height,frame,collision
     endm
 
+; macro to declare sub-object data
+subObjMainData	macro address,render,routine,height,width,priority,art,mappings,frame,collision
+	dc.l address						; address
+	dc.b render, routine, height, width	; render, routine, height, width
+	dc.w priority, art					; priority, art tile
+	dc.l mappings						; mappings
+	dc.b frame, collision				; mapping frame, collision flags
+    endm
+
+; macro to declare sub-object data
+subObjMainData2	macro address,render,routine,height,width,priority,art,mappings
+	dc.l address						; address
+	dc.b render, routine, height, width	; render, routine, height, width
+	dc.w priority, art					; priority, art tile
+	dc.l mappings						; mappings
+    endm
+
+; macro to declare sub-object data
+subObjMainData3	macro render,routine,height,width,priority,art,mappings
+	dc.b render, routine, height, width	; render, routine, height, width
+	dc.w priority, art					; priority, art tile
+	dc.l mappings						; mappings
+    endm
+
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 4 bytes per iteration
 bytesTo4Lcnt function n,n>>4
@@ -209,8 +233,9 @@ clearRAM macro startaddr,endaddr
 	move.b	d0,(a1)+
     endif
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
--	move.l	d0,(a1)+
-	dbf	d1,-
+.clear:
+	move.l	d0,(a1)+
+	dbf	d1,.clear
     if (((endaddr-startaddr) - ((startaddr)&1))&2)
 	move.w	d0,(a1)+
     endif
@@ -250,11 +275,13 @@ clearRAM3 macro addr,length
     endif
 	moveq	#0,d0
 	move.w	#bytesTo4Lcnt(length-addr),d1
--	move.l	d0,(a1)+
+
+.clear:
 	move.l	d0,(a1)+
 	move.l	d0,(a1)+
 	move.l	d0,(a1)+
-	dbf	d1,-
+	move.l	d0,(a1)+
+	dbf	d1,.clear
     endm
 
 ; ---------------------------------------------------------------------------
@@ -325,7 +352,73 @@ out_of_yrange4	macro exit
     endm
 
 ; ---------------------------------------------------------------------------
-; Macro for marking the boundaries of an object layout file
+; macros for frequently used subroutines
+; ---------------------------------------------------------------------------
+
+getobjectRAMslot macro address
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	movea.w	a0,a1												; load current object to a1
+	move.w	#Dynamic_object_RAM_end,d0
+	sub.w	a0,d0
+	lsr.w	#6,d0												; divide by $40... even though SSTs are $4A bytes long in this game
+	lea	(AllocateObjectAfterCurrent.find_first_sprite_table).w,address
+	move.b	(address,d0.w),d0										; use a look-up table to get the right loop counter
+    endm
+
+MoveSprite macro address, terminate
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	movem.w	x_vel(address),d0-d1		; load xy speed
+	ext.l	d0
+	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)				; add x speed to x position	; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
+	ext.l	d1
+	asl.l	#8,d1							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d1,y_pos(address)				; add old y speed to y position	; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+      if ("terminate"<>"")
+	rts
+      endif
+    endm
+
+MoveSprite2 macro address, terminate
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	movem.w	x_vel(address),d0-d1		; load xy speed
+	ext.l	d0
+	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)				; add to x-axis position	; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	ext.l	d1
+	asl.l	#8,d1							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d1,y_pos(address)				; add to y-axis position	; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+      if ("terminate"<>"")
+	rts
+      endif
+    endm
+
+Add_SpriteToCollisionResponseList macro address, terminate
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	lea	(Collision_response_list).w,address
+	cmpi.w	#$80-2,(address)				; is list full?
+	bhs.s	.skip						; if so, return
+	addq.w	#2,(address)					; count this new entry
+	adda.w	(address),address				; offset into right area of list
+	move.w	a0,(address)					; store RAM address in list
+
+.skip
+      if ("terminate"<>"")
+	rts
+      endif
+    endm
+
+; ---------------------------------------------------------------------------
+; macro for marking the boundaries of an object layout file
 ; ---------------------------------------------------------------------------
 
 ObjectLayoutBoundary macro
@@ -333,7 +426,7 @@ ObjectLayoutBoundary macro
     endm
 
 ; ---------------------------------------------------------------------------
-; Macro for marking the boundaries of an ring layout file
+; macro for marking the boundaries of an ring layout file
 ; ---------------------------------------------------------------------------
 
 RingLayoutBoundary macro
@@ -362,16 +455,18 @@ clearZ80RAM macro
 	lea	(Z80_RAM).l,a0
 	move.w	#$1FFF,d0
 
--	clr.b (a0)+
-	dbf	d0,-
+.clear:
+	clr.b (a0)+
+	dbf	d0,.clear
     endm
 
 paddingZ80RAM macro
 	moveq	#0,d0
 
--	move.b	d0,(a1)+
+.clear:
+	move.b	d0,(a1)+
 	cmpa.l	#(Z80_RAM_end),a1
-	bne.s	-
+	bne.s	.clear
     endm
 
 ; ---------------------------------------------------------------------------
@@ -382,13 +477,11 @@ paddingZ80RAM macro
 stopZ80 macro
 
 	if OptimiseStopZ80=0
-	move.w	#$100,(Z80_bus_request).l ; stop the Z80
-	nop
-	nop
-	nop
+	move.w	#$100,(Z80_bus_request).l		; stop the Z80
 
--	btst	#0,(Z80_bus_request).l
-	bne.s	- 	; loop until it says it's stopped
+.wait:
+	btst	#0,(Z80_bus_request).l
+	bne.s	.wait 	; loop until it says it's stopped
 	endif
 
     endm
@@ -397,7 +490,7 @@ stopZ80 macro
 stopZ80a macro
 
 	if OptimiseStopZ80=0
-	move.w	#$100,(Z80_bus_request).l ; stop the Z80
+	move.w	#$100,(Z80_bus_request).l		; stop the Z80
 	endif
 
     endm
@@ -410,8 +503,9 @@ stopZ80a macro
 waitZ80 macro
 
 	if OptimiseStopZ80=0
--	btst	#0,(Z80_bus_request).l
-	bne.s	- 	; loop until
+.wait:
+	btst	#0,(Z80_bus_request).l
+	bne.s	.wait 	; loop until
 	endif
 
     endm
@@ -446,7 +540,7 @@ resetZ80a macro
 startZ80 macro
 
 	if OptimiseStopZ80=0
-	move.w	#0,(Z80_bus_request).l    ; start the Z80
+	move.w	#0,(Z80_bus_request).l	; start the Z80
 	endif
 
     endm
@@ -459,13 +553,11 @@ startZ80 macro
 stopZ802 macro
 
 	if OptimiseStopZ80=2
-	move.w	#$100,(Z80_bus_request).l ; stop the Z80
-	nop
-	nop
-	nop
+	move.w	#$100,(Z80_bus_request).l		; stop the Z80
 
--	btst	#0,(Z80_bus_request).l
-	bne.s	- 	; loop until it says it's stopped
+.wait:
+	btst	#0,(Z80_bus_request).l
+	bne.s	.wait 	; loop until it says it's stopped
 	endif
 
     endm
@@ -478,7 +570,7 @@ stopZ802 macro
 startZ802 macro
 
 	if OptimiseStopZ80=2
-	move.w	#0,(Z80_bus_request).l    ; start the Z80
+	move.w	#0,(Z80_bus_request).l	; start the Z80
 	endif
 
     endm
@@ -490,11 +582,12 @@ startZ802 macro
 waitZ80time macro time
 	move.w	#(time),d0
 
--	nop
+.wait
 	nop
 	nop
 	nop
-	dbf	d0,-
+	nop
+	dbf	d0,.wait
     endm
 
 ; ---------------------------------------------------------------------------
@@ -535,9 +628,9 @@ enableIntsSave macro
 ; ---------------------------------------------------------------------------
 
 disableScreen macro
-		move.w	(VDP_reg_1_command).w,d0
-		andi.b	#%10111111,d0
-		move.w	d0,(VDP_control_port).l
+	move.w	(VDP_reg_1_command).w,d0
+	andi.b	#%10111111,d0
+	move.w	d0,(VDP_control_port).l
     endm
 
 ; ---------------------------------------------------------------------------
@@ -545,9 +638,9 @@ disableScreen macro
 ; ---------------------------------------------------------------------------
 
 enableScreen macro
-		moveq	#%1000000,d0
-		or.w	(VDP_reg_1_command).w,d0
-		move.w	d0,(VDP_control_port).l
+	moveq	#%1000000,d0
+	or.w	(VDP_reg_1_command).w,d0
+	move.w	d0,(VDP_control_port).l
     endm
 
 ; ---------------------------------------------------------------------------
@@ -921,6 +1014,7 @@ __LABEL__ label *
 s3kPlayerDplcEntry macro tiles,offset
 	dc.w	(((tiles-1)&$F)<<12)|(offset&$FFF)
     endm
+
 ; ---------------------------------------------------------------------------
 ; bankswitch between SRAM and ROM
 ; (remember to enable SRAM in the header first!)

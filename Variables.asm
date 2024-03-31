@@ -117,6 +117,8 @@ Scroll_forced_Y_pos:					ds.l 1
 Screen_shaking_flag:					ds.w 1					; flag for enabling screen shake. Negative values cause screen to shake infinitely, positive values make the screen shake for a short amount of time
 Screen_shaking_offset:					ds.w 1					; vertical offset when screen_shake_flag is enabled. This is added to camera position later
 Screen_shaking_last_offset:			ds.w 1					; value of Screen_shake_offset for the previous frame
+Spritemask_flag:						ds.b 1					; when set, indicates that special sprites are used for sprite masking
+									ds.b 1					; even
 Level_repeat_offset:					ds.w 1					; the number of pixels the screen was moved this frame, used to offset level objects horizontally. Used only for level repeat sections, such as AIZ airship.
 Events_fg:							ds.b $18					; various flags used by foreground events
 Draw_delayed_position:				ds.w 1					; position to redraw screen from. Screen is reloaded 1 row at a time to avoid game lag

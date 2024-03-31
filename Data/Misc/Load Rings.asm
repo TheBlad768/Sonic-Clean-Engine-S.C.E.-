@@ -200,19 +200,19 @@ locret_EAE4:
 ; =============== S U B R O U T I N E =======================================
 
 Test_Ring_Collisions_AttractRing:
-		movea.l	a1,a3				; save ROM address
+		movea.l	a1,a3								; save ROM address
 		bsr.w	Create_New_Sprite
 		bne.s	loc_EB16
 		move.l	#Obj_Attracted_Ring,address(a1)
-		move.w	(a3),x_pos(a1)
-		move.w	2(a3),y_pos(a1)
-		move.w	a4,objoff_30(a1)
-		move.w	#-1,(a4)
+		move.w	(a3),x_pos(a1)						; copy xpos
+		move.w	2(a3),y_pos(a1)						; copy ypos
+		move.w	a4,objoff_30(a1)						; save ring RAM address
+		move.w	#-1,(a4)								; set not draw flag
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_EB16:
-		movea.l	a3,a1				; return ROM address
+		movea.l	a3,a1								; return ROM address
 		bra.s	loc_EAC6
 
 ; =============== S U B R O U T I N E =======================================

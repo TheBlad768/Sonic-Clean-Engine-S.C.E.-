@@ -10,7 +10,7 @@ Obj_Ring:
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#7|$40,collision_flags(a0)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)			; set height and width
 		move.l	#.anim,address(a0)
 
 .anim
@@ -103,8 +103,8 @@ loc_1A6B6:
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		move.b	#7|$40,collision_flags(a1)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)		; set height and width
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)			; set y_radius and x_radius
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)			; set height and width
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)				; set y_radius and x_radius
 		tst.w	d4
 		bmi.s	loc_1A728
 		move.w	d4,d0
@@ -131,7 +131,7 @@ loc_1A728:
 		st	(Ring_spill_anim_counter).w
 
 loc_1A738:
-		sfx	sfx_RingLoss										; play ring loss sound
+		sfx	sfx_RingLoss											; play ring loss sound
 		clr.w	(Ring_count).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		tst.b	(Reverse_gravity_flag).w
@@ -232,17 +232,17 @@ Obj_Attracted_Ring:
 		move.b	#4,render_flags(a0)
 		move.w	#$100,priority(a0)
 		move.b	#7|$40,collision_flags(a0)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)		; set height and width
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a0)			; set y_radius and x_radius
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)			; set height and width
+		move.w	#bytes_to_word(16/2,16/2),y_radius(a0)				; set y_radius and x_radius
 		move.l	#loc_1A88C,address(a0)
 
 loc_1A88C:
 		tst.b	routine(a0)
 		bne.s	AttractedRing_GiveRing
 		bsr.s	AttractedRing_Move
-		btst	#Status_LtngShield,(Player_1+status_secondary).w	; does player still have a lightning shield?
+		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
 		bne.s	loc_1A8C6
-		move.l	#Obj_Bouncing_Ring,address(a0)				; if not, change object
+		move.l	#Obj_Bouncing_Ring,address(a0)					; if not, change object
 		move.b	#2,routine(a0)
 		st	(Ring_spill_anim_counter).w
 
@@ -258,7 +258,7 @@ loc_1A8E4:
 		bclr	#7,(a2)
 
 loc_1A8F0:
-		move.w	objoff_30(a0),d0
+		move.w	objoff_30(a0),d0									; load ring RAM address
 		beq.s	loc_1A8FC
 		movea.w	d0,a2
 		clr.w	(a2)
@@ -293,7 +293,7 @@ AttractedRing_Move:
 		moveq	#48,d1
 		move.w	(Player_1+x_pos).w,d0
 		cmp.w	x_pos(a0),d0
-		bge.s	AttractedRing_MoveRight						; if ring is to the left of the player, branch
+		bge.s	AttractedRing_MoveRight							; if ring is to the left of the player, branch
 
 		; move left
 		neg.w	d1
@@ -317,7 +317,7 @@ AttractedRing_ApplyMovementX:
 		moveq	#48,d1
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	y_pos(a0),d0
-		bge.s	AttractedRing_MoveUp						; if ring is below the player, branch
+		bge.s	AttractedRing_MoveUp							; if ring is below the player, branch
 
 		; move down
 		neg.w	d1
