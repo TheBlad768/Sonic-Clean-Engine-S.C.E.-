@@ -958,6 +958,8 @@ loc_1E4D6:
 		bmi.s	locret_1E4D4
 		cmpi.b	#id_SonicDeath,routine(a1)
 		bhs.s	locret_1E4D4
+		tst.w	(Debug_placement_mode).w
+		bne.s	locret_1E4D4
 		sub.w	d1,d2
 		subq.w	#4,d2
 		move.w	d2,y_pos(a1)

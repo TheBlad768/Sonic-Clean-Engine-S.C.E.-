@@ -8,7 +8,7 @@ Obj_Spring:
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	; set red
 		ori.b	#4,render_flags(a0)
-		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)		; set height and width
+		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)					; set height and width
 		move.w	#$200,priority(a0)
 		move.w	x_pos(a0),objoff_32(a0)
 		move.w	y_pos(a0),objoff_34(a0)
@@ -285,6 +285,12 @@ loc_2328E:
 		subi.w	#$18,d2
 		addi.w	#$18,d3
 		lea	(Player_1).w,a1
+		tst.b	object_control(a1)
+		bmi.s	locret_23324
+		cmpi.b	#id_SonicDeath,routine(a1)
+		bhs.s	locret_23324
+		tst.w	(Debug_placement_mode).w
+		bne.s	locret_23324
 		btst	#Status_InAir,status(a1)
 		bne.s	locret_23324
 		move.w	ground_vel(a1),d4
