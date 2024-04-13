@@ -1,0 +1,3 @@
+Now the layout has a slightly different format. SonED2 can still open the levels, but it will save the files to the old format and the game will crash...
+
+Use a converter to fix the S3K format: Levels/_tools/Layout/Layout.exe

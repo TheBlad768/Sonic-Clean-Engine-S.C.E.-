@@ -205,10 +205,10 @@ Obj_LightningShield_Create_Spark:
 .part2															; skip anim
 		lea	SparkVelocities(pc),a2
 		moveq	#4-1,d1
-
-.loop
 		jsr	(Create_New_Sprite).w								; find free object slot
 		bne.s	.return											; if one can't be found, return
+
+.loop
 		move.l	#Obj_LightningShield_Spark,address(a1)				; make new object a Spark
 		move.w	x_pos(a0),x_pos(a1)								; (Spark) inherit x_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	y_pos(a0),y_pos(a1)								; (Spark) inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
@@ -219,7 +219,8 @@ Obj_LightningShield_Create_Spark:
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)			; set height and width
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)									; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
-		dbf	d1,.loop
+		jsr	(Create_New_Sprite4).w								; find next free object slot
+		dbne	d1,.loop
 
 .return
 		rts

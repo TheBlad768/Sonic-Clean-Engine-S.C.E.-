@@ -12,7 +12,7 @@ ChangeRingFrame:
 .syncrings
 		subq.b	#1,(Rings_frame_timer).w
 		bpl.s	.syncrings2
-		move.b	#4,(Rings_frame_timer).w
+		addq.b	#4+1,(Rings_frame_timer).w
 		addq.b	#1,(Rings_frame).w
 		andi.b	#7,(Rings_frame).w
 

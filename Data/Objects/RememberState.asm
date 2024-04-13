@@ -242,11 +242,11 @@ Sprite_CheckDeleteTouchSlotted:
 
 Add_SpriteToCollisionResponseList:
 		lea	(Collision_response_list).w,a1
-		cmpi.w	#$80-2,(a1)										; is list full?
-		bhs.s	.return											; if so, return
-		addq.w	#2,(a1)											; count this new entry
-		adda.w	(a1),a1											; offset into right area of list
-		move.w	a0,(a1)											; store RAM address in list
+		move.w	(a1),d0											; get list to d0
+		addq.b	#2,d0											; is list full? ($80)
+		bmi.s	.return											; if so, return
+		move.w	d0,(a1)											; save list  ($7E)
+		move.w	a0,(a1,d0.w)										; store RAM address in list
 
 .return
 		rts

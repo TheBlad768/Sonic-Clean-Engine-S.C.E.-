@@ -14,8 +14,8 @@ Handle_Onscreen_Water_Height:
 		bsr.s	DynamicWaterHeight
 
 .skip
-		clr.b	(Water_full_screen_flag).w
 		moveq	#0,d0
+		move.b	d0,(Water_full_screen_flag).w
 		move.b	(Oscillating_Data).w,d0
 		lsr.w	d0
 		add.w	(Mean_water_level).w,d0
@@ -30,14 +30,14 @@ Handle_Onscreen_Water_Height:
 
 .set
 		st	(Water_full_screen_flag).w
-		st	(H_int_counter).w	; set 256-1
+		st	(H_int_counter).w								; set 256-1
 		rts
 ; ---------------------------------------------------------------------------
 
 .check
 		cmpi.w	#224-1,d0
 		blo.s		.counter
-		move.w	#256-1,d0
+		moveq	#-1,d0										; set 256-1
 
 .counter
 		move.b	d0,(H_int_counter).w

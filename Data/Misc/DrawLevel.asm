@@ -16,13 +16,13 @@ VInt_DrawLevel_2:
 		clr.w	(a0)+
 		move.w	(a0)+,d1
 		bmi.s	VInt_DrawLevel_Col
-		move.w	#$8F02,d2		; VRAM increment at 2 bytes (horizontal level write)
+		move.w	#$8F02,d2				; VRAM increment at 2 bytes (horizontal level write)
 		move.w	#$80,d3
 		bra.s	VInt_DrawLevel_Draw
 ; ---------------------------------------------------------------------------
 
 VInt_DrawLevel_Col:
-		move.w	#$8F80,d2		; VRAM increment at $80 bytes (vertical level write)
+		move.w	#$8F80,d2				; VRAM increment at $80 bytes (vertical level write)
 		moveq	#2,d3
 		andi.w	#$7FFF,d1
 
@@ -220,9 +220,7 @@ Setup_TileColumnDraw:
 
 Get_LevelChunkColumn:
 		movea.l	(Level_layout_addr_ROM).w,a4
-		move.w	(a3,d1.w),d3
-		andi.w	#$7FFF,d3
-		adda.w	d3,a4
+		adda.w	(a3,d1.w),a4
 		move.w	d0,d3
 		asr.w	#7,d3
 		adda.w	d3,a4
@@ -392,9 +390,7 @@ Get_LevelAddrChunkRow:
 		move.w	d0,d3
 		asr.w	#5,d3
 		and.w	(Layout_row_index_mask).w,d3
-		move.w	(a3,d3.w),d3
-		andi.w	#$7FFF,d3
-		adda.w	d3,a4
+		adda.w	(a3,d3.w),a4
 
 Get_ChunkRow:
 		moveq	#-1,d3
@@ -612,7 +608,7 @@ Draw_BGNoVert:
 Draw_BG2:
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
-		moveq	#0,d1		; Camera_X_pos_copy
+		moveq	#0,d1		; Camera_X_pos_BG_copy
 		moveq	#$20,d6
 		bra.w	Draw_TileRow
 
@@ -911,6 +907,23 @@ loc_4F382:
 		add.w	d0,(a1)+
 		rts
 
+; ---------------------------------------------------------------------------
+; Collision index pointer loading subroutine
+; Uses Sonic & Knuckles format mapping
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Load_Solids:
+		movea.l	(Level_data_addr_RAM.Solid).w,a1
+
+Load_Solids2:
+		move.l	a1,(Primary_collision_addr).w
+		move.l	a1,(Collision_addr).w
+		addq.w	#1,a1
+		move.l	a1,(Secondary_collision_addr).w
+		rts
+
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Switches:
@@ -926,10 +939,10 @@ Restart_LevelData:
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		clr.b	(Boss_flag).w
 		clr.b	(Respawn_table_keep).w
-		bsr.w	LoadLevelPointer
+		bsr.s	LoadLevelPointer
 		bsr.s	Clear_Switches
-		bsr.w	Load_Level
-		bsr.w	Load_Solids
+		bsr.s	Load_Level
+		bsr.s	Load_Solids
 		bra.w	CheckLevelForWater
 
 ; =============== S U B R O U T I N E =======================================
@@ -972,12 +985,12 @@ LoadLevelLoadBlock2:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Level:
-		movea.l	(Level_data_addr_RAM.Layout).w,a0
+		movea.l	(Level_data_addr_RAM.Layout).w,a1
 
 Load_Level2:
-		move.l	a0,(Level_layout_addr_ROM).w
-		addq.w	#8,a0
-		move.l	a0,(Level_layout2_addr_ROM).w
+		move.l	a1,(Level_layout_addr_ROM).w						; save to addr
+		addq.w	#8,a1											; skip layout header
+		move.l	a1,(Level_layout2_addr_ROM).w					; save to addr2
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -1021,21 +1034,4 @@ LoadLevelPointer2:
 		set	.a,.a + 4
 	endif
 
-		rts
-
-; ---------------------------------------------------------------------------
-; Collision index pointer loading subroutine
-; Uses Sonic & Knuckles format mapping
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Load_Solids:
-		movea.l	(Level_data_addr_RAM.Solid).w,a0
-
-Load_Solids2:
-		move.l	a0,(Primary_collision_addr).w
-		move.l	a0,(Collision_addr).w
-		addq.w	#1,a0
-		move.l	a0,(Secondary_collision_addr).w
 		rts

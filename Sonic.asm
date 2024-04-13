@@ -1,5 +1,5 @@
 ; ===========================================================================
-; Sonic: TEST GAME
+; Sonic Clean Engine (SCE)
 ; ===========================================================================
 
 ; Assembly options
@@ -305,16 +305,16 @@ EndOfHeader:
 		include "Objects/Shields/Shields.asm"
 
 ; ---------------------------------------------------------------------------
-; Subroutine to load a objects
-; ---------------------------------------------------------------------------
-
-		include "Pointers/Objects Data.asm"
-
-; ---------------------------------------------------------------------------
 ; AfterBoss Cleanup Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Data/Misc/AfterBoss Cleanup.asm"
+
+; ---------------------------------------------------------------------------
+; Subroutine to load a objects
+; ---------------------------------------------------------------------------
+
+		include "Pointers/Objects Data.asm"
 
 ; ---------------------------------------------------------------------------
 ; Level Select screen subroutines
@@ -327,12 +327,6 @@ EndOfHeader:
 ; ---------------------------------------------------------------------------
 
 		include "Data/Screens/Level/Level.asm"
-
-; ---------------------------------------------------------------------------
-; Pattern Load Cues pointers
-; ---------------------------------------------------------------------------
-
-		include "Pointers/Pattern Load Cues.asm"
 
 	if GameDebug
 ; ---------------------------------------------------------------------------
@@ -348,15 +342,10 @@ EndOfHeader:
 	endif
 
 ; ---------------------------------------------------------------------------
-; Object Pointers
+; Subroutine to load player object data
 ; ---------------------------------------------------------------------------
 
-		include "Pointers/Object Pointers.asm"
-
-; ---------------------------------------------------------------------------
-; Subroutine to load Sonic object data
-; ---------------------------------------------------------------------------
-
+		; Sonic
 		include "Objects/Sonic/Object Data/Anim - Sonic.asm"
 		include "Objects/Sonic/Object Data/Map - Sonic.asm"
 		include "Objects/Sonic/Object Data/Sonic pattern load cues.asm"
@@ -379,6 +368,18 @@ EndOfHeader:
 
 		include "Pointers/Palette Pointers.asm"
 		include "Pointers/Palette Data.asm"
+
+; ---------------------------------------------------------------------------
+; Object Pointers
+; ---------------------------------------------------------------------------
+
+		include "Pointers/Object Pointers.asm"
+
+; ---------------------------------------------------------------------------
+; Pattern Load Cues pointers
+; ---------------------------------------------------------------------------
+
+		include "Pointers/Pattern Load Cues.asm"
 
 ; ---------------------------------------------------------------------------
 ; Kosinski Module compressed graphics pointers

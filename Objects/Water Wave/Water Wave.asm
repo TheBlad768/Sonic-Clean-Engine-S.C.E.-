@@ -7,7 +7,7 @@
 Obj_WaterWave:
 		move.l	#Map_WaterWave,mappings(a0)
 		move.w	#$87C0,art_tile(a0)
-		move.b	#rfCoord+rfMulti,render_flags(a0)		; set screen coordinates and multi-draw flag
+		move.b	#rfCoord+rfMulti,render_flags(a0)				; set screen coordinates and multi-draw flag
 		move.w	#bytes_to_word(24/2,256/2),height_pixels(a0)	; set height and width
 		move.w	#1,mainspr_childsprites(a0)
 		lea	sub2_x_pos(a0),a2
@@ -33,25 +33,29 @@ Obj_WaterWave:
 		addi.w	#$C0,(a2)+
 		move.w	y_pos(a0),(a2)+
 
-		tst.b	objoff_32(a0)					; is pause flag set?
-		bne.s	.checkpause				; if yes, branch
-		tst.b	(Ctrl_1_pressed_logical).w		; is Start pressed?
-		bpl.s	.anim					; if not, branch
+		tst.b	objoff_32(a0)										; is pause flag set?
+		bne.s	.checkpause									; if yes, branch
+		tst.b	(Ctrl_1_pressed_logical).w							; is Start pressed?
+		bpl.s	.anim										; if not, branch
 		addq.b	#3,mapping_frame(a0)
-		st	objoff_32(a0)					; set pause flag
+		st	objoff_32(a0)										; set pause flag
 		bra.s	.setframe
 ; ---------------------------------------------------------------------------
 
 .checkpause
-		tst.b	(Game_paused).w				; still pause?
-		bne.s	.setframe					; if yes, branch
-		clr.b	objoff_32(a0)					; clear pause flag
+		tst.b	(Game_paused).w									; still pause?
+		bne.s	.setframe										; if yes, branch
+		clr.b	objoff_32(a0)										; clear pause flag
 		subq.b	#3,mapping_frame(a0)
 
 .anim
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.setframe
-		move.b	#9,anim_frame_timer(a0)
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; decrement timer
+		bpl.s	.setframe										; if time remains, branch
+		move.b	#9,anim_frame_timer(a0)						; reset timer to 9 frames
+
+		; next frame
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#4,mapping_frame(a0)
 		blo.s		.setframe

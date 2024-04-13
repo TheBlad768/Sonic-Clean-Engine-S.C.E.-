@@ -55,7 +55,7 @@ TouchResponse:
 
 Touch_Loop:
 		movea.w	(a4)+,a1									; get address of first object's RAM
-		move.b	collision_flags(a1),d0						; get its collision_flags
+		move.b	collision_flags(a1),d0						; get its collision flags
 		bne.s	Touch_Width								; if it actually has collision, branch
 
 Touch_NextObj:
@@ -76,10 +76,10 @@ Touch_Width:
 		move.w	x_pos(a1),d0								; get object's x_pos
 		sub.w	d1,d0									; subtract object's width
 		sub.w	d2,d0									; subtract player's left collision boundary
-		bcc.s	.checkrightside							; if player's left side is to the left of the object, branch
+		bhs.s	.checkrightside							; if player's left side is to the left of the object, branch
 		add.w	d1,d1									; double object's width value
 		add.w	d1,d0									; add object's width*2 (now at right of object)
-		bcs.s	Touch_Height							; if carry, branch (player is within the object's boundaries)
+		blo.s		Touch_Height							; if carry, branch (player is within the object's boundaries)
 		bra.s	Touch_NextObj							; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 
@@ -93,10 +93,10 @@ Touch_Height:
 		move.w	y_pos(a1),d0								; get object's y_pos
 		sub.w	d1,d0									; subtract object's height
 		sub.w	d3,d0									; subtract player's bottom collision boundary
-		bcc.s	.checktop								; if bottom of player is under the object, branch
+		bhs.s	.checktop								; if bottom of player is under the object, branch
 		add.w	d1,d1									; double object's height value
 		add.w	d1,d0									; add object's height*2 (now at top of object)
-		bcs.s	Touch_ChkValue							; if carry, branch (player is within the object's boundaries)
+		blo.s		Touch_ChkValue							; if carry, branch (player is within the object's boundaries)
 		bra.s	Touch_NextObj							; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 
@@ -174,8 +174,8 @@ Touch_Sizes:
 ; ---------------------------------------------------------------------------
 
 Touch_ChkValue:
-		move.b	collision_flags(a1),d1						; get its collision_flags
-		andi.b	#$C0,d1									; get only collision type bits
+		moveq	#signextendB($C0),d1						; get its collision flags
+		and.b	collision_flags(a1),d1						; get only collision type bits
 		beq.w	Touch_Enemy							; if 00, enemy, branch
 		cmpi.b	#$C0,d1
 		beq.w	Touch_Special							; if 11, "special thing for starpole", branch
@@ -184,8 +184,8 @@ Touch_ChkValue:
 
 		; if 01...
 		moveq	#$3F,d0									; get only collision size
-		and.b	collision_flags(a1),d0						; get collision_flags
-		cmpi.b	#6,d0									; is touch response $46 ?
+		and.b	collision_flags(a1),d0						; get collision flags
+		cmpi.b	#6,d0									; is touch response $46?
 		beq.s	Touch_Monitor							; if yes, branch
 
 		; touch ring
@@ -446,14 +446,14 @@ HurtCharacter:
 		move.l	#Obj_Bouncing_Ring,address(a1)			; load bouncing multi rings object
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		move.w	a0,$3E(a1)
+		move.w	a0,objoff_3E(a1)
 
 .hasshield
 		andi.b	#$8E,status_secondary(a0)
 
 .bounce
 		move.b	#id_SonicHurt,routine(a0)
-		bsr.w	Sonic_ResetOnFloor
+		bsr.w	Sonic_TouchFloor
 		bset	#Status_InAir,status(a0)
 		move.l	#words_to_long(-$200,-$400),x_vel(a0)		; make Sonic bounce away from the object
 		btst	#Status_Underwater,status(a0)					; is Sonic underwater?
@@ -502,7 +502,7 @@ Kill_Character:
 		clr.b	status_tertiary(a0)
 		move.b	#id_SonicDeath,routine(a0)
 		move.w	d0,-(sp)
-		bsr.w	Sonic_ResetOnFloor
+		bsr.w	Sonic_TouchFloor
 		move.w	(sp)+,d0
 		bset	#Status_InAir,status(a0)
 		move.w	#-$700,y_vel(a0)
@@ -520,7 +520,7 @@ Kill_Character:
 
 Touch_Special:
 		moveq	#$3F,d1									; get only collision size (but that doesn't seems to be its use here)
-		and.b	collision_flags(a1),d1						; get collision_flags
+		and.b	collision_flags(a1),d1						; get collision flags
 		cmpi.b	#7,d1
 		beq.s	loc_103FA
 		cmpi.b	#6,d1
@@ -564,8 +564,8 @@ ShieldTouchResponse:
 
 ShieldTouch_Loop:
 		movea.w	(a4)+,a1									; get address of first object's RAM
-		move.b	collision_flags(a1),d0						; get its collision_flags
-		andi.b	#$C0,d0									; get only collision type bits
+		moveq	#signextendB($C0),d0						; get its collision flags
+		and.b	collision_flags(a1),d0						; get only collision type bits
 		cmpi.b	#$80,d0									; is only the high bit set ("harmful")?
 		beq.s	ShieldTouch_Width						; if so, branch
 
@@ -579,7 +579,7 @@ ShieldTouch_Return:
 
 ShieldTouch_Width:
 		moveq	#$3F,d0									; get only collision size
-		and.b	collision_flags(a1),d0						; get collision_flags
+		and.b	collision_flags(a1),d0						; get collision flags
 		beq.s	ShieldTouch_NextObj						; if it doesn't have a size, branch
 		add.w	d0,d0									; turn into index
 		lea	Touch_Sizes(pc),a2
@@ -606,10 +606,10 @@ ShieldTouch_Height:
 		move.w	y_pos(a1),d0								; get object's y_pos
 		sub.w	d1,d0									; subtract object's height
 		sub.w	d3,d0									; subtract player's bottom collision boundary
-		bcc.s	.checktop								; if bottom of player is under the object, branch
+		bhs.s	.checktop								; if bottom of player is under the object, branch
 		add.w	d1,d1									; double object's height value
 		add.w	d1,d0									; add object's height*2 (now at top of object)
-		bcs.s	.checkdeflect								; if carry, branch (player is within the object's boundaries)
+		blo.s		.checkdeflect								; if carry, branch (player is within the object's boundaries)
 		bra.s	ShieldTouch_NextObj						; if not, loop and check next object
 ; ---------------------------------------------------------------------------
 

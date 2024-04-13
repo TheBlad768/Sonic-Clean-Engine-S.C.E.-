@@ -13,8 +13,7 @@
 KosArt_To_VDP:
 		movea.l	a1,a3						; a1 will be changed by Kos_Decomp, so we're backing it up to a3
 		bsr.s	Kos_Decomp					; "
-		move.l	a3,d1						; move the backed-up a1 to d1
-		andi.l	#$FFFFFF,d1					; d1 will be used in the DMA transfer as the Source Address
+		move.l	a3,d1						; move the backed-up a1 to d1. d1 will be used in the DMA transfer as the Source Address
 		lsr.l	d1								; divide source address by 2
 		move.l	a1,d3						; move end address of decompressed art to d3
 		sub.l	a3,d3						; subtract 'start address of decompressed art' from 'end address of decompressed art', giving you the size of the decompressed art

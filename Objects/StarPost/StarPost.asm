@@ -218,29 +218,30 @@ Load_StarPost_Settings:
 Load_StarPost_Stars:
 		moveq	#4-1,d1
 		moveq	#0,d2
-
-.create
 		jsr	(Create_New_Sprite3).w
 		bne.s	.return
+
+.create
 		move.l	#Obj_StarPost_Stars,address(a1)
 		move.l	#Map_StarPostStars,mappings(a1)
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a1)
 		move.b	#4,render_flags(a1)
-		move.w	x_pos(a0),d0
-		move.w	d0,x_pos(a1)
-		move.w	d0,objoff_30(a1)
-		move.w	y_pos(a0),d0
-		subi.w	#48,d0
-		move.w	d0,y_pos(a1)
-		move.w	d0,objoff_32(a1)
-		move.w	a0,parent3(a1)								; save parent (StarPost)
 		move.w	priority(a0),priority(a1)
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)		; set height and width
 		move.b	#1,mapping_frame(a1)
+		move.w	a0,parent3(a1)								; save parent (StarPost)
+		move.w	x_pos(a0),d3
+		move.w	d3,x_pos(a1)
+		move.w	d3,objoff_30(a1)
+		move.w	y_pos(a0),d3
+		subi.w	#48,d3
+		move.w	d3,y_pos(a1)
+		move.w	d3,objoff_32(a1)
 		move.l	#words_to_long(-$400,0),x_vel(a1)
 		move.w	d2,objoff_34(a1)
 		addi.w	#256/4,d2
-		dbf	d1,.create
+		jsr	(Create_New_Sprite4).w							; find next free object slot
+		dbne	d1,.create
 
 .return
 		rts

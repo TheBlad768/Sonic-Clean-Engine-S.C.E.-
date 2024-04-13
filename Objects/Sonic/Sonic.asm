@@ -2,9 +2,11 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Sonic:
-		; Load some addresses into registers
-		; This is done to allow some subroutines to be
+
+		; load some addresses into registers
+		; this is done to allow some subroutines to be
 		; shared with Tails/Knuckles.
+
 		lea	(Max_speed).w,a4
 		lea	(Distance_from_top).w,a5
 		lea	(v_Dust).w,a6
@@ -14,16 +16,17 @@ Obj_Sonic:
 		beq.s	Sonic_Normal
 
 		; debug only code
-		cmpi.b	#1,(Debug_placement_type).w	; Are Sonic in debug object placement mode?
-		beq.s	JmpTo_DebugMode			; If so, skip to debug mode routine
-		; By this point, we're assuming you're in frame cycling mode
+		cmpi.b	#1,(Debug_placement_type).w					; are Sonic in debug object placement mode?
+		beq.s	JmpTo_DebugMode							; if so, skip to debug mode routine
+
+		; by this point, we're assuming you're in frame cycling mode
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	+
-		clr.w	(Debug_placement_mode).w	; Leave debug mode
-+		addq.b	#1,mapping_frame(a0)		; Next frame
-		cmpi.b	#((Map_Sonic_end-Map_Sonic)/2)-1,mapping_frame(a0)	; Have we reached the end of Sonic's frames?
+		clr.w	(Debug_placement_mode).w					; leave debug mode
++		addq.b	#1,mapping_frame(a0)							; next frame
+		cmpi.b	#((Map_Sonic_end-Map_Sonic)/2)-1,mapping_frame(a0)	; have we reached the end of Sonic's frames?
 		blo.s		+
-		clr.b	mapping_frame(a0)	; If so, reset to Sonic's first frame
+		clr.b	mapping_frame(a0)								; if so, reset to Sonic's first frame
 +		bsr.w	Sonic_Load_PLC
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -162,8 +165,8 @@ loc_10C26:
 		bsr.w	Sonic_Load_PLC
 
 .touch
-		move.b	object_control(a0),d0
-		andi.b	#$A0,d0
+		moveq	#signextendB($A0),d0
+		and.b	object_control(a0),d0
 		bne.s	.return
 		jmp	TouchResponse(pc)
 ; ---------------------------------------------------------------------------
@@ -185,12 +188,12 @@ Sonic_Modes: offsetTable
 
 Sonic_Display:
 		move.b	invulnerability_timer(a0),d0
-		beq.s	loc_10CA6
+		beq.s	.draw
 		subq.b	#1,invulnerability_timer(a0)
 		lsr.b	#3,d0
 		bhs.s	Sonic_ChkInvin
 
-loc_10CA6:
+.draw
 		jsr	(Draw_Sprite).w
 
 Sonic_ChkInvin:										; checks if invincibility has expired and disables it if it has.
@@ -1135,6 +1138,8 @@ locret_116DC:
 ; =============== S U B R O U T I N E =======================================
 
 Player_LevelBound:
+
+		; check xpos
 		move.l	x_pos(a0),d1
 		move.w	x_vel(a0),d0
 		ext.l	d0
@@ -1172,6 +1177,7 @@ loc_11722:
 		blt.s		locret_11720
 
 Player_Boundary_Bottom:
+		movea.w	a0,a2
 		jmp	Kill_Character(pc)
 ; ---------------------------------------------------------------------------
 
@@ -1831,8 +1837,8 @@ sub_11FD6:
 
 sub_11FEE:
 		tst.b	(Reverse_gravity_flag).w
-		beq.w	Sonic_CheckCeiling
-		bsr.w	Sonic_CheckFloor
+		beq.w	Sonic_CheckCeiling2
+		bsr.w	Sonic_CheckFloor2
 		addi.b	#$40,d3
 		neg.b	d3
 		subi.b	#$40,d3
@@ -2003,15 +2009,15 @@ loc_12158:
 Player_TouchFloor_Check_Spindash:
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_121D8
-		clr.b	anim(a0)	; id_Walk
+		clr.b	anim(a0)									; id_Walk
 
-Sonic_ResetOnFloor:
+Sonic_TouchFloor:
 		move.b	y_radius(a0),d0
-		move.w	default_y_radius(a0),y_radius(a0)	; set y_radius and x_radius
+		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		btst	#Status_Roll,status(a0)
 		beq.s	loc_121D8
 		bclr	#Status_Roll,status(a0)
-		clr.b	anim(a0)	; id_Walk
+		clr.b	anim(a0)									; id_Walk
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -2042,8 +2048,6 @@ loc_121D8:
 		move.b	d0,scroll_delay_counter(a0)
 		tst.b	double_jump_flag(a0)
 		beq.s	locret_12230
-		tst.b	character_id(a0)
-		bne.s	loc_1222A
 		btst	#Status_Invincible,status_secondary(a0)			; don't bounce when invincible
 		bne.s	loc_1222A
 		btst	#Status_BublShield,status_secondary(a0)
@@ -2166,6 +2170,7 @@ locret_12388:
 ; ---------------------------------------------------------------------------
 
 loc_1238A:
+		movea.w	a0,a2
 		jmp	Kill_Character(pc)
 
 ; =============== S U B R O U T I N E =======================================

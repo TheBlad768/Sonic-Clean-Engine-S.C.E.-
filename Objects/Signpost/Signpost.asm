@@ -6,7 +6,7 @@
 
 Obj_EndSignControl:
 		move.l	#Obj_Wait,address(a0)
-		st	(Level_end_flag).w								; end of level is in effect
+		st	(Level_end_flag).w										; end of level is in effect
 		clr.b	(TitleCard_end_flag).w
 		clr.b	(LevResults_end_flag).w
 		bset	#4,objoff_38(a0)
@@ -38,9 +38,9 @@ Obj_EndSignControlAwaitStart:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlDoStart:
-		tst.b	(TitleCard_end_flag).w								; wait for title card to finish
+		tst.b	(TitleCard_end_flag).w										; wait for title card to finish
 		beq.s	Obj_EndSignControl.return
-		jsr	(Change_ActSizes).w								; set level size
+		jsr	(Change_ActSizes).w										; set level size
 		jmp	(Delete_Current_Sprite).w
 
 ; ---------------------------------------------------------------------------
@@ -55,38 +55,38 @@ Obj_EndSign:
 		move.l	#.signfall,address(a0)
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)									; signs have same priority as Sonic
+		bset	#7,art_tile(a0)											; signs have same priority as Sonic
 
 .nothighpriority
-		move.w	a0,(Signpost_addr).w							; put RAM address here for use by hidden monitor object
-		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)		; set y_radius and x_radius
+		move.w	a0,(Signpost_addr).w									; put RAM address here for use by hidden monitor object
+		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)				; set y_radius and x_radius
 		move.l	#AniRaw_EndSigns1,$30(a0)
 		move.w	(Camera_Y_pos).w,d0
 		subi.w	#32,d0
-		move.w	d0,y_pos(a0)									; place vertical position at top of screen
+		move.w	d0,y_pos(a0)											; place vertical position at top of screen
 		sfx	sfx_Signpost
-		lea	Child1_EndSignStub(pc),a2							; make the little stub at the bottom of the signpost
+		lea	Child1_EndSignStub(pc),a2									; make the little stub at the bottom of the signpost
 		jsr	(CreateChild1_Normal).w
 
 .signfall
 		moveq	#3,d0
 		and.b	(V_int_run_count+3).w,d0
 		bne.s	.skip
-		lea	Child6_EndSignSparkle(pc),a2						; create a signpost sparkle every 4 frames
+		lea	Child6_EndSignSparkle(pc),a2								; create a signpost sparkle every 4 frames
 		jsr	(CreateChild6_Simple).w
 
 .skip
 		bsr.w	EndSign_CheckPlayerHit
 		addi.w	#12,y_vel(a0)
-		jsr	(MoveSprite2).w									; move downward
+		jsr	(MoveSprite2).w											; move downward
 		bsr.w	EndSign_CheckWall
 		jsr	(Animate_Raw).w
 		move.w	(Camera_Y_pos).w,d0
 		addi.w	#80,d0
 		cmp.w	y_pos(a0),d0
-		bhi.s	.draw										; ensure that signpost can't land if too far up the screen itself
+		bhi.s	.draw												; ensure that signpost can't land if too far up the screen itself
 		tst.w	y_vel(a0)
-		bmi.s	.draw										; and also when the signpost is still moving up
+		bmi.s	.draw												; and also when the signpost is still moving up
 		jsr	(ObjCheckFloorDist).w
 		tst.w	d1
 		bpl.s	.draw
@@ -105,21 +105,21 @@ Obj_EndSign:
 		btst	#0,objoff_38(a0)
 		beq.s	.hmon
 		jsr	(Animate_Raw).w
-		subq.w	#1,$2E(a0)									; keep animating while landing for X amount of frames
+		subq.w	#1,$2E(a0)											; keep animating while landing for X amount of frames
 		bmi.s	.endtime
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
 .endtime
 		move.l	#.signresults,address(a0)
-		clr.l	x_vel(a0)										; clear velocity
+		clr.l	x_vel(a0)												; clear velocity
 		clr.b	mapping_frame(a0)
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
 .hmon
-		move.l	#.signfall,address(a0)							; if a hidden monitor was hit, bounce ths signpost again
-		move.b	#32,objoff_20(a0)								; set delay for when it checks for the next hit
+		move.l	#.signfall,address(a0)									; if a hidden monitor was hit, bounce ths signpost again
+		move.b	#32,objoff_20(a0)										; set delay for when it checks for the next hit
 		move.w	#-$200,y_vel(a0)
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ Obj_EndSign:
 .signresults
 		lea	(Player_1).w,a1
 		btst	#Status_InAir,obStatus(a1)
-		bne.s	.draw2										; if player is not standing on the ground, wait until he is
+		bne.s	.draw2												; if player is not standing on the ground, wait until he is
 		move.l	#.signafter,address(a0)
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Sprite).w
@@ -137,8 +137,8 @@ Obj_EndSign:
 ; ---------------------------------------------------------------------------
 
 .signafter
-		clr.w	y_vel(a0)									; clear vertical velocity
-		out_of_xrange.s	.offscreen							; check for whether signpost goes out of range
+		clr.w	y_vel(a0)											; clear vertical velocity
+		out_of_xrange.s	.offscreen									; check for whether signpost goes out of range
 		out_of_yrange.s	.offscreen
 
 .draw2
@@ -157,7 +157,7 @@ Obj_EndSign:
 		jsr	(Remove_From_TrackingSlot).w
 
 		; delete
-		clr.w	(Signpost_addr).w								; clear RAM address
+		clr.w	(Signpost_addr).w										; clear RAM address
 		jmp	(Go_Delete_Sprite).w
 
 ; ---------------------------------------------------------------------------
@@ -171,34 +171,34 @@ Obj_SignpostSparkle:
 		jsr	(SetUp_ObjAttributes).w
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)									; sparkles have same priority as Sonic
+		bset	#7,art_tile(a0)											; sparkles have same priority as Sonic
 
 .nothighpriority
 		move.l	#.main,address(a0)
 		jsr	(Random_Number).w
 		andi.w	#$1F,d0
 		subi.w	#$10,d0
-		add.w	d0,y_pos(a0)									; random vertical position
+		add.w	d0,y_pos(a0)											; random vertical position
 		move.w	x_pos(a0),objoff_3A(a0)
 		move.w	#$1000,x_vel(a0)
 		move.w	#32,$2E(a0)
 		move.l	#Go_Delete_Sprite,$34(a0)
 
 .main
-		move.w	#$400,d0									; right
+		move.w	#$400,d0											; right
 		move.w	x_pos(a0),d1
 		cmp.w	objoff_3A(a0),d1
 		blo.s		.skip
-		neg.w	d0											; left
+		neg.w	d0													; left
 
 .skip
-		move.w	#$280,d1									; high priority
-		add.w	d0,x_vel(a0)									; do rotation around sign
+		move.w	#$280,d1											; high priority
+		add.w	d0,x_vel(a0)											; do rotation around sign
 		bpl.s	.priority
-		move.w	#$380,d1									; low priority
+		move.w	#$380,d1											; low priority
 
 .priority
-		move.w	d1,priority(a0)								; set priority
+		move.w	d1,priority(a0)										; set priority
 		jsr	(MoveSprite2).w
 		lea	AniRaw_SignpostSparkle(pc),a1
 		jsr	(Animate_RawNoSST).w
@@ -214,11 +214,11 @@ Obj_SignpostSparkle:
 Obj_SignpostStub:
 		lea	ObjDat_SignpostStub(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		bset	#rbStatic,render_flags(a0)
+		bset	#rbStatic,render_flags(a0)									; set flag to "static mappings flag"
 		move.l	#.main,address(a0)
 		btst	#7,(Player_1+art_tile).w
 		beq.s	.main
-		bset	#7,art_tile(a0)									; stub have same priority as Sonic
+		bset	#7,art_tile(a0)											; stub have same priority as Sonic
 
 .main
 		jsr	(Refresh_ChildPosition).w
@@ -232,40 +232,40 @@ EndSign_CheckPlayerHit:
 		bne.s	.subtime
 		lea	EndSign_Range(pc),a1
 		jsr	(Check_PlayerInRange).w
-		tst.l	d0												; check Tails and Sonic address
-		beq.s	.return										; if neither player is in range, don't do anything
-		tst.w	d0											; is Sonic?
-		beq.s	.notp1										; if it's not Sonic, branch
-		move.l	d0,-(sp)										; save players address
+		tst.l	d0														; check Tails and Sonic address
+		beq.s	.return												; if neither player is in range, don't do anything
+		tst.w	d0													; is Sonic?
+		beq.s	.notp1												; if it's not Sonic, branch
+		move.l	d0,-(sp)												; save players address
 		bsr.s	.checkhit
-		move.l	(sp)+,d0										; restore players address
+		move.l	(sp)+,d0												; restore players address
 
 .notp1
-		swap	d0											; get Tails address
-		tst.w	d0											; is Tails?
-		beq.s	.return										; if not, branch
+		swap	d0													; get Tails address
+		tst.w	d0													; is Tails?
+		beq.s	.return												; if not, branch
 
 .checkhit
-		movea.w	d0,a1										; this can be done up to twice depending on who hit the signpost
+		movea.w	d0,a1												; this can be done up to twice depending on who hit the signpost
 		cmpi.b	#id_Roll,anim(a1)
-		bne.s	.return										; only go on if player is currently jumping
+		bne.s	.return												; only go on if player is currently jumping
 		tst.w	y_vel(a1)
-		bpl.s	.return										; and if he's actually moving upwards
-		move.b	#32,objoff_20(a0)								; set delay for when it checks for the next hit
+		bpl.s	.return												; and if he's actually moving upwards
+		move.b	#32,objoff_20(a0)										; set delay for when it checks for the next hit
 		move.w	x_pos(a0),d0
-		sub.w	x_pos(a1),d0									; get velocity
+		sub.w	x_pos(a1),d0											; get velocity
 		bne.s	.notzero
-		moveq	#8,d0										; set velocity
+		moveq	#8,d0												; set velocity
 
 .notzero
-		asl.w	#4,d0										; calc velocity
-		move.w	d0,x_vel(a0)									; modify strength of X velocity based on how far to the left/right player is
-		move.w	#-$200,y_vel(a0)								; new vertical velocity is always the same
+		asl.w	#4,d0												; calc velocity
+		move.w	d0,x_vel(a0)											; modify strength of X velocity based on how far to the left/right player is
+		move.w	#-$200,y_vel(a0)										; new vertical velocity is always the same
 		sfx	sfx_Signpost
 		lea	Child6_EndSignScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		moveq	#10,d0
-		jmp	(HUD_AddToScore).w								; add 100 points whenever hit
+		jmp	(HUD_AddToScore).w										; add 100 points whenever hit
 ; ---------------------------------------------------------------------------
 
 .subtime
@@ -339,8 +339,8 @@ Child6_EndSignScore:
 		dc.w 1-1
 		dc.l Obj_EnemyScore
 
-AniRaw_EndSigns1:		dc.b	1, 0, 4, 5, 6, 1, 4, 5, 6, 3, 4, 5, 6, arfEnd
-AniRaw_EndSigns2:		dc.b	1, 1, 4, 5, 6, 2, 4, 5, 6, 3, 4, 5, 6, arfEnd
+AniRaw_EndSigns1:		dc.b	1, 0, 4, 5, 6, 1, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Sonic
+AniRaw_EndSigns2:		dc.b	1, 1, 4, 5, 6, 2, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Knuckles
 AniRaw_SignpostSparkle:	dc.b	1, 1, 2, 3, 4, arfEnd
 	even
 ; ---------------------------------------------------------------------------

@@ -14,22 +14,22 @@ DisplaySprite:
 		lea	(Sprite_table_input).w,a1
 		adda.w	priority(a0),a1
 
-.main
-		cmpi.w	#$80-2,(a1)
-		bhs.s	.end
-		addq.w	#2,(a1)
-		adda.w	(a1),a1
-		move.w	a0,(a1)
+.find
+		move.w	(a1),d0										; get list to d0
+		addq.b	#2,d0										; is list full? ($80)
+		bmi.s	.full											; if so, return
+		move.w	d0,(a1)										; save list  ($7E)
+		move.w	a0,(a1,d0.w)									; store RAM address in list
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
-.end
-		cmpa.w	#(Sprite_table_input_end-$80),a1
-		beq.s	.return
-		lea	$80(a1),a1
-		bra.s	.main
+.full
+		cmpa.w	#(Sprite_table_input_end-$80),a1				; is last sprite table?
+		beq.s	.return										; if so, return
+		lea	$80(a1),a1										; next sprite table
+		bra.s	.find
 
 ; =============== S U B R O U T I N E =======================================
 

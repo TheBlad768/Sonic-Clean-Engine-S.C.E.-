@@ -8,7 +8,7 @@
 ; a2 = Block address (.l)
 ; a3 = Layout address (.l)
 
-; Don't overwrite these registers!
+; don't overwrite these registers!
 
 ; =============== S U B R O U T I N E =======================================
 

@@ -58,7 +58,6 @@ AnimateTiles_DoAniPLC_Part2:
 
 		; get ROM source address
 		move.l	(a2),d1								; get start address of animated tile art
-		andi.l	#$FFFFFF,d1
 		add.l	d0,d1								; offset into art, to get the address of new frame
 
 		; get size of art to be transferred

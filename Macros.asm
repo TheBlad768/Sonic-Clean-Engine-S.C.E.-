@@ -29,6 +29,7 @@ bytes_to_word function byte1,byte2,(((byte1)<<8)&$FF00)|((byte2)&$FF)
 
 ; function to convert two separate word into a long
 words_to_long function word1,word2,(((word1)<<16)&$FFFF0000)|((word2)&$FFFF)
+; ---------------------------------------------------------------------------
 
 ; values for the type argument
 VRAM = %100001
@@ -39,6 +40,7 @@ VSRAM = %100101
 READ = %001100
 WRITE = %000111
 DMA = %100111
+; ---------------------------------------------------------------------------
 
 ; tells the VDP to copy a region of 68k memory to VRAM or CRAM or VSRAM
 dma68kToVDP macro source,dest,length,type
@@ -68,7 +70,8 @@ dmaFillVRAM macro byte,addr,length
 	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5)	; DMA length ...
 	move.w	#$9780,VDP_control_port-VDP_control_port(a5)	; VRAM fill
 	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5)	; Start at ...
-	move.w	#(byte)<<8,(VDP_data_port).l	; Fill with byte
+	move.w	#(byte)<<8,(VDP_data_port).l	; fill with byte
+
 .loop:
 	move.w	VDP_control_port-VDP_control_port(a5),d1
 	btst	#1,d1
@@ -83,11 +86,11 @@ dmaFillVRAM macro byte,addr,length
 ; -------------------------------------------------------------
 
 tpress:	macro press,player
-		if player=2
-	move.b	(Ctrl_2_pressed).w,d0
-		else
-	move.b	(Ctrl_1_pressed).w,d0
-		endif
+	if player=2
+		move.b	(Ctrl_2_pressed).w,d0
+	else
+		move.b	(Ctrl_1_pressed).w,d0
+	endif
 	andi.b	#(press),d0
     endm
 
@@ -98,11 +101,11 @@ tpress:	macro press,player
 ; -------------------------------------------------------------
 
 theld:	macro press,player
-		if player=2
-	move.b	(Ctrl_2_held).w,d0
-		else
-	move.b	(Ctrl_1_held).w,d0
-		endif
+	if player=2
+		move.b	(Ctrl_2_held).w,d0
+	else
+		move.b	(Ctrl_1_held).w,d0
+	endif
 	andi.b	#(press),d0
     endm
 
@@ -113,14 +116,17 @@ theld:	macro press,player
 
 locVRAM macro loc, controlport
 	if ("controlport"=="")
-	move.l	#$40000000|vdpCommDelta(loc),(VDP_control_port).l
+		move.l	#$40000000|vdpCommDelta(loc),(VDP_control_port).l
 	else
-	move.l	#$40000000|vdpCommDelta(loc),controlport
+		move.l	#$40000000|vdpCommDelta(loc),controlport
 	endif
     endm
 
+; ---------------------------------------------------------------------------
 ; macro for a debug object list header
 ; must be on the same line as a label that has a corresponding _end label later
+; ---------------------------------------------------------------------------
+
 dbglistheader macro {INTLABEL}
 __LABEL__ label *
 	dc.w ((__LABEL___end - __LABEL__ - 2) / $A)
@@ -133,22 +139,27 @@ dbglistobj macro obj, mapaddr, subtype, frame, vram
 	dc.w vram
     endm
 
-palp macro paladdress,ramaddress,colours
-	dc.l paladdress
-	dc.w ramaddress, (colours>>1)-1
-	endm
-
+; ---------------------------------------------------------------------------
 ; macro for declaring a "main level load block" (MLLB)
+; ---------------------------------------------------------------------------
+
 levartptrs macro art,map16x16,map128x128,palette,wpalette,music
 	dc.l (palette)<<24|art
 	dc.l (wpalette)<<24|map16x16
 	dc.l (music)<<24|map128x128
     endm
+; ---------------------------------------------------------------------------
+
+palp macro paladdress,ramaddress,colours
+	dc.l paladdress
+	dc.w ramaddress, (colours>>1)-1
+    endm
 
 watpalptrs macro height,spal,kpal
 	dc.w height
 	dc.b spal, kpal
-	endm
+    endm
+; ---------------------------------------------------------------------------
 
 ; macro to declare sub-object data
 subObjData	macro mappings,vram,priority,width,height,frame,collision
@@ -200,6 +211,7 @@ subObjMainData3	macro render,routine,height,width,priority,art,mappings
 	dc.w priority, art					; priority, art tile
 	dc.l mappings						; mappings
     endm
+; ---------------------------------------------------------------------------
 
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 4 bytes per iteration
@@ -220,6 +232,7 @@ bytesToWcnt function n,n>>1-1
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at x bytes per iteration
 bytesToXcnt function n,x,n/x-1
+; ---------------------------------------------------------------------------
 
 ; fills a region of 68k RAM with 0
 clearRAM macro startaddr,endaddr
@@ -233,6 +246,7 @@ clearRAM macro startaddr,endaddr
 	move.b	d0,(a1)+
     endif
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
+
 .clear:
 	move.l	d0,(a1)+
 	dbf	d1,.clear
@@ -405,13 +419,13 @@ Add_SpriteToCollisionResponseList macro address, terminate
 	fatal "Error! Empty value!"
       endif
 	lea	(Collision_response_list).w,address
-	cmpi.w	#$80-2,(address)				; is list full?
-	bhs.s	.skip						; if so, return
-	addq.w	#2,(address)					; count this new entry
-	adda.w	(address),address				; offset into right area of list
-	move.w	a0,(address)					; store RAM address in list
+	move.w	(address),d0					; get list to d0
+	addq.b	#2,d0						; is list full? ($80)
+	bmi.s	.full							; if so, return
+	move.w	d0,(address)					; save list  ($7E)
+	move.w	a0,(address,d0.w)				; store RAM address in list
 
-.skip
+.full
       if ("terminate"<>"")
 	rts
       endif
@@ -481,7 +495,7 @@ stopZ80 macro
 
 .wait:
 	btst	#0,(Z80_bus_request).l
-	bne.s	.wait 	; loop until it says it's stopped
+	bne.s	.wait 						; loop until it says it's stopped
 	endif
 
     endm
@@ -505,7 +519,7 @@ waitZ80 macro
 	if OptimiseStopZ80=0
 .wait:
 	btst	#0,(Z80_bus_request).l
-	bne.s	.wait 	; loop until
+	bne.s	.wait 						; loop until
 	endif
 
     endm
@@ -518,7 +532,7 @@ waitZ80 macro
 resetZ80 macro
 
 	if OptimiseStopZ80=0
-	move.w	#$100,(Z80_reset).l
+		move.w	#$100,(Z80_reset).l
 	endif
 
     endm
@@ -527,7 +541,7 @@ resetZ80 macro
 resetZ80a macro
 
 	if OptimiseStopZ80=0
-	move.w	#0,(Z80_reset).l
+		move.w	#0,(Z80_reset).l
 	endif
 
     endm
@@ -540,7 +554,7 @@ resetZ80a macro
 startZ80 macro
 
 	if OptimiseStopZ80=0
-	move.w	#0,(Z80_bus_request).l	; start the Z80
+		move.w	#0,(Z80_bus_request).l	; start the Z80
 	endif
 
     endm
@@ -553,11 +567,11 @@ startZ80 macro
 stopZ802 macro
 
 	if OptimiseStopZ80=2
-	move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		move.w	#$100,(Z80_bus_request).l		; stop the Z80
 
 .wait:
-	btst	#0,(Z80_bus_request).l
-	bne.s	.wait 	; loop until it says it's stopped
+		btst	#0,(Z80_bus_request).l
+		bne.s	.wait 						; loop until it says it's stopped
 	endif
 
     endm
@@ -570,7 +584,7 @@ stopZ802 macro
 startZ802 macro
 
 	if OptimiseStopZ80=2
-	move.w	#0,(Z80_bus_request).l	; start the Z80
+		move.w	#0,(Z80_bus_request).l		; start the Z80
 	endif
 
     endm
@@ -582,7 +596,7 @@ startZ802 macro
 waitZ80time macro time
 	move.w	#(time),d0
 
-.wait
+.wait:
 	nop
 	nop
 	nop
@@ -611,8 +625,8 @@ enableInts macro
 ; ---------------------------------------------------------------------------
 
 disableIntsSave macro
-	move.w	sr,-(sp)		; Save current interrupt mask
-	disableInts			; Mask off interrupts
+	move.w	sr,-(sp)		; save current interrupt mask
+	disableInts			; mask off interrupts
     endm
 
 ; ---------------------------------------------------------------------------
@@ -620,7 +634,7 @@ disableIntsSave macro
 ; ---------------------------------------------------------------------------
 
 enableIntsSave macro
-	move.w	(sp)+,sr		; Restore interrupts to previous state
+	move.w	(sp)+,sr		; restore interrupts to previous state
     endm
 
 ; ---------------------------------------------------------------------------
@@ -628,8 +642,8 @@ enableIntsSave macro
 ; ---------------------------------------------------------------------------
 
 disableScreen macro
-	move.w	(VDP_reg_1_command).w,d0
-	andi.b	#%10111111,d0
+	moveq	#signextendB(%10111111),d0
+	and.w	(VDP_reg_1_command).w,d0
 	move.w	d0,(VDP_control_port).l
     endm
 
@@ -726,6 +740,7 @@ jmi:		macro loc
 		jmp	loc
 .nojump:
 	    endm
+; ---------------------------------------------------------------------------
 
 ; macros to convert from tile index to art tiles, block mapping or VRAM address.
 make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
@@ -784,7 +799,7 @@ watertransheader macro {INTLABEL}
 __LABEL__ label *
 ; Number of entries in list minus one
 	dc.w (((__LABEL___end - __LABEL__ - 2) / 2) - 1)
-	endm
+    endm
 
 zoneanimend macro
 zoneanimcount_{"\{zoneanimcur}"} = zoneanimcount-1
@@ -939,68 +954,68 @@ mappingsTableEntry macro ptr
 spriteHeader macro {INTLABEL}
 __LABEL__ label *
 	if SonicMappingsVer==1
-	dc.b ((__LABEL___end - __LABEL__ - 1) / 5)
+		dc.b ((__LABEL___end - __LABEL__ - 1) / 5)
 	elseif SonicMappingsVer==2
-	dc.w ((__LABEL___end - __LABEL__ - 2) / 8)
+		dc.w ((__LABEL___end - __LABEL__ - 2) / 8)
 	else
-	dc.w ((__LABEL___end - __LABEL__ - 2) / 6)
+		dc.w ((__LABEL___end - __LABEL__ - 2) / 6)
 	endif
     endm
 
 spritePiece macro xpos,ypos,width,height,tile,xflip,yflip,pal,pri
 	if SonicMappingsVer==1
-	dc.b	ypos
-	dc.b	(((width-1)&3)<<2)|((height-1)&3)
-	dc.b	((pri&1)<<7)|((pal&3)<<5)|((yflip&1)<<4)|((xflip&1)<<3)|((tile&$700)>>8)
-	dc.b	tile&$FF
-	dc.b	xpos
+		dc.b	ypos
+		dc.b	(((width-1)&3)<<2)|((height-1)&3)
+		dc.b	((pri&1)<<7)|((pal&3)<<5)|((yflip&1)<<4)|((xflip&1)<<3)|((tile&$700)>>8)
+		dc.b	tile&$FF
+		dc.b	xpos
 	elseif SonicMappingsVer==2
-	dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-	dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
-	dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|((tile>>1)&$7FF)
-	dc.w	xpos
+		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
+		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
+		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|((tile>>1)&$7FF)
+		dc.w	xpos
 	else
-	dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-	dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
-	dc.w	xpos
+		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
+		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
+		dc.w	xpos
 	endif
     endm
 
 spritePiece2P macro xpos,ypos,width,height,tile,xflip,yflip,pal,pri,tile2,xflip2,yflip2,pal2,pri2
 	if SonicMappingsVer==1
-	dc.b	ypos
-	dc.b	(((width-1)&3)<<2)|((height-1)&3)
-	dc.b	((pri&1)<<7)|((pal&3)<<5)|((yflip&1)<<4)|((xflip&1)<<3)|((tile&$700)>>8)
-	dc.b	tile&$FF
-	dc.b	xpos
+		dc.b	ypos
+		dc.b	(((width-1)&3)<<2)|((height-1)&3)
+		dc.b	((pri&1)<<7)|((pal&3)<<5)|((yflip&1)<<4)|((xflip&1)<<3)|((tile&$700)>>8)
+		dc.b	tile&$FF
+		dc.b	xpos
 	elseif SonicMappingsVer==2
-	dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-	dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
-	dc.w	((pri2&1)<<15)|((pal2&3)<<13)|((yflip2&1)<<12)|((xflip2&1)<<11)|(tile2&$7FF)
-	dc.w	xpos
+		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
+		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
+		dc.w	((pri2&1)<<15)|((pal2&3)<<13)|((yflip2&1)<<12)|((xflip2&1)<<11)|(tile2&$7FF)
+		dc.w	xpos
 	else
-	dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-	dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
-	dc.w	xpos
+		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
+		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
+		dc.w	xpos
 	endif
     endm
 
 dplcHeader macro {INTLABEL}
 __LABEL__ label *
 	if SonicMappingsVer==1
-	dc.b ((__LABEL___end - __LABEL__ - 1) / 2)
+		dc.b ((__LABEL___end - __LABEL__ - 1) / 2)
 	elseif SonicMappingsVer==2
-	dc.w ((__LABEL___end - __LABEL__ - 2) / 2)
+		dc.w ((__LABEL___end - __LABEL__ - 2) / 2)
 	else
-	dc.w ((__LABEL___end - __LABEL__ - 4) / 2)
+		dc.w ((__LABEL___end - __LABEL__ - 4) / 2)
 	endif
     endm
 
 dplcEntry macro tiles,offset
 	if SonicMappingsVer==3
-	dc.w	((offset&$FFF)<<4)|((tiles-1)&$F)
+		dc.w	((offset&$FFF)<<4)|((tiles-1)&$F)
 	else
-	dc.w	(((tiles-1)&$F)<<12)|(offset&$FFF)
+		dc.w	(((tiles-1)&$F)<<12)|(offset&$FFF)
 	endif
     endm
 
@@ -1029,7 +1044,7 @@ gotoROM macro
     endm
 
 ; ---------------------------------------------------------------------------
-; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
@@ -1045,7 +1060,7 @@ copyTilemap	macro loc,width,height,terminate
     endm
 
 ; ---------------------------------------------------------------------------
-; Copy a tilemap2 from 68K (ROM/RAM) to the VRAM without using DMA
+; copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
 ; input: destination, VRAM shift, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
@@ -1062,7 +1077,7 @@ copyTilemap2	macro loc,address,width,height,terminate
     endm
 
 ; ---------------------------------------------------------------------------
-; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
@@ -1078,7 +1093,7 @@ copyTilemap3		macro loc,width,height,terminate
     endm
 
 ; ---------------------------------------------------------------------------
-; Clear a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
+; clear a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
 ; input: source, destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
@@ -1104,7 +1119,7 @@ LoadArtUnc macro offset,size,vram
 	rept 8
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
 	endr
-		dbf	d0,.load
+	dbf	d0,.load
     endm
 ; ---------------------------------------------------------------------------
 
@@ -1125,10 +1140,12 @@ LoadMapUnc	macro offset,size,arg,loc,width,height
 	moveq	#(height/8-1),d2
 	jsr	(Plane_Map_To_VRAM).w
     endm
-; ---------------------------------------------------------------------------
 
+; ---------------------------------------------------------------------------
 ; macro for a pattern load request list header
 ; must be on the same line as a label that has a corresponding _end label later
+; ---------------------------------------------------------------------------
+
 plrlistheader macro {INTLABEL}
 __LABEL__ label *
 	dc.w (((__LABEL___end - __LABEL__Plc) / 6) - 1)
@@ -1140,6 +1157,7 @@ plreq macro toVRAMaddr,fromROMaddr
 	dc.l fromROMaddr
 	dc.w tiles_to_bytes(toVRAMaddr)
     endm
+
 ; ---------------------------------------------------------------------------
 ; compare the size of an index with ZoneCount constant
 ; (should be used immediately after the index)
@@ -1195,6 +1213,7 @@ __LABEL__ label *
 offsetTableEntry macro ptr
 	dc.ATTRIBUTE ptr-current_offset_table
     endm
+
 offsetEntry macro ptr
 	dc.ATTRIBUTE ptr-*
     endm
@@ -1207,13 +1226,13 @@ __LABEL__Plc:
     endm
 
 dScroll_Data macro plane,pixel,speed,size
-		if plane=0
-	dc.w H_scroll_buffer+(pixel<<2)
-		elseif plane=1
-	dc.w H_scroll_buffer+((pixel<<2)+2)
-		else
-			fatal "Error! Non-existent plan."
-		endif
+	if plane=0
+		dc.w H_scroll_buffer+(pixel<<2)
+	elseif plane=1
+		dc.w H_scroll_buffer+((pixel<<2)+2)
+	else
+		fatal "Error! Non-existent plan."
+	endif
 	dc.w speed, size
     endm
 ; ---------------------------------------------------------------------------

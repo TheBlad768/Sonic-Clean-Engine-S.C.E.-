@@ -32,9 +32,13 @@ Obj_Explosion:
 		clr.b	mapping_frame(a0)
 
 .main
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.draw
-		move.b	#7,anim_frame_timer(a0)
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; decrement timer
+		bpl.s	.draw										; if time remains, branch
+		addq.b	#7+1,anim_frame_timer(a0)					; reset timer to 7 frames
+
+		; next frame
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
 		beq.w	sub_1E6EC.delete
@@ -60,9 +64,13 @@ Obj_FireShield_Dissipate:
 
 .main
 		jsr	(MoveSprite2).w
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.draw
-		move.b	#3,anim_frame_timer(a0)
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; decrement timer
+		bpl.s	.draw										; if time remains, branch
+		addq.b	#3+1,anim_frame_timer(a0)					; reset timer to 3 frames
+
+		; next frame
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
 		beq.s	sub_1E6EC.delete
@@ -97,9 +105,13 @@ sub_1E6EC:
 
 .main
 		jsr	(MoveSprite2).w
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.draw
-		move.b	#7,anim_frame_timer(a0)
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; decrement timer
+		bpl.s	.draw										; if time remains, branch
+		addq.b	#7+1,anim_frame_timer(a0)					; reset timer to 7 frames
+
+		; next frame
 		addq.b	#1,mapping_frame(a0)
 		cmpi.b	#5,mapping_frame(a0)
 		beq.s	.delete

@@ -40,7 +40,7 @@ H_scroll_buffer_end					= *
 V_scroll_buffer:						ds.l 320/16				; vertical scroll buffer used in various levels(320 pixels for MD1, 512 pixels for MD2)
 V_scroll_buffer_end					= *
 
-Collision_response_list:				ds.b 128					; only objects in this list are processed by the collision response routines
+Collision_response_list:				ds.w $80/2				; only objects in this list are processed by the collision response routines
 Pos_table:							ds.l 64					; recorded player XY position buffer
 Ring_status_table:					ds.w RingTable_Count		; ring status table(1 word)
 Ring_status_table_end				= *
@@ -48,7 +48,7 @@ Object_respawn_table:					ds.b ObjectTable_Count	; object respawn table(1 byte)
 Object_respawn_table_end				= *
 Sprite_table_buffer:					ds.b 80*8
 Sprite_table_buffer_end				= *
-Sprite_table_input:					ds.b $80*8				; sprite table input buffer
+Sprite_table_input:					ds.w ($80/2)*8			; sprite table input buffer
 Sprite_table_input_end				= *
 
 DMA_queue:							= *

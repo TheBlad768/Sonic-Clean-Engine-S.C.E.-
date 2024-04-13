@@ -495,7 +495,7 @@ Wait_FadeToLevelMusic:
 .end
 		bclr	#7,render_flags(a0)
 		move.w	#(2*60)-1,$2E(a0)
-		jsr	(Create_New_Sprite).w
+		bsr.w	Create_New_Sprite
 		bne.s	.notfree
 		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
 
