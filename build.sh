@@ -7,7 +7,7 @@ AS/Linux/as/asl -xx -q -c -A -L -i . Sonic.asm
 test -f Sonic.log && cat Sonic.log
 test -f Sonic.p || exit
 
-AS/Linux/as/p2bin -p=FF -z=0,kosinski-optimised,Size_of_Mega_PCM_guess,after Sonic.p Sonic.gen Sonic.h
+AS/Linux/as/p2bin -p=FF Sonic.p Sonic.gen Sonic.h
 
 rm -f Sonic.p
 rm -f Sonic.h
