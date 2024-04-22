@@ -19,6 +19,7 @@ SMPS_SFX_METADATA macro address,priority,flags
 ; ---------------------------------------------------------------------------
 SMPS_stopZ80 macro
 	move.w	#$100,(SMPS_z80_bus_request).l
+	SMPS_delayYM
 	endm
 
 ; ---------------------------------------------------------------------------

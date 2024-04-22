@@ -990,7 +990,7 @@ Load_Level:
 Load_Level2:
 		move.l	a1,(Level_layout_addr_ROM).w						; save to addr
 		addq.w	#8,a1											; skip layout header
-		move.l	a1,(Level_layout2_addr_ROM).w					; save to addr2
+		move.l	a1,(Level_layout_addr2_ROM).w					; save to addr2
 		rts
 
 ; =============== S U B R O U T I N E =======================================

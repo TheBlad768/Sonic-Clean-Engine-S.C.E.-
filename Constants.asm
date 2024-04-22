@@ -93,6 +93,7 @@ VintID_Sega =					id(ptr_VInt_Sega)			; 4
 VintID_Menu =					id(ptr_VInt_Menu)		; 6
 VintID_Level =					id(ptr_VInt_Level)		; 8
 VintID_Fade =					id(ptr_VInt_Fade)		; A
+VintID_LevelSelect =				id(ptr_VInt_LevelSelect)	; C
 
 ; ---------------------------------------------------------------------------
 ; Sonic routines

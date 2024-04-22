@@ -12,32 +12,35 @@ Load_PlaneText:
 		disableIntsSave
 		lea	(VDP_data_port).l,a6
 		lea	VDP_control_port-VDP_data_port(a6),a5
+
+.skipvdp
 		move.l	#vdpCommDelta(planeLocH40(0,1)),d2
 
-Load_PlaneText_SetPos:
+.setpos
 		move.l	d1,VDP_control_port-VDP_control_port(a5)
 
-Load_PlaneText_Loop:
+.loop
 		moveq	#0,d0
 		move.b	(a1)+,d0
-		bmi.s	Load_PlaneText_Options
-		add.w	d3,d0						; VRAM shift
+		bmi.s	.options
+		add.w	d3,d0									; VRAM shift
 		move.w	d0,VDP_data_port-VDP_data_port(a6)
-		bra.s	Load_PlaneText_Loop
+		bra.s	.loop
 ; ---------------------------------------------------------------------------
 
-Load_PlaneText_Options:
-		cmpi.b	#-1,d0						; If $FF flag, stop loading letters
-		beq.s	Load_PlaneText_Return
+.options
+		cmpi.b	#-1,d0									; if $FF flag, stop loading letters
+		beq.s	.exit
 
-Load_PlaneText_NextLine:
-		andi.w	#$1F,d0						; If $80-$9F flag, load letters to the next line
+.nextline
+		andi.w	#$1F,d0									; if $80-$9F flag, load letters to the next line
 
--		add.l	d2,d1
-		dbf	d0,-
-		bra.s	Load_PlaneText_SetPos
+.donextline
+		add.l	d2,d1
+		dbf	d0,.donextline
+		bra.s	.setpos
 ; ---------------------------------------------------------------------------
 
-Load_PlaneText_Return:
+.exit
 		enableIntsSave
 		rts

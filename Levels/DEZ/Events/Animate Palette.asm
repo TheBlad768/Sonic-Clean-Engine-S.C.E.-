@@ -8,9 +8,9 @@ AnPal_DEZ:
 		lea	(Palette_cycle_counters).w,a0
 
 		; wait
-		subq.w	#1,(a0)					; decrement timer
-		bpl.s	.anpal2					; if time remains, branch
-		addq.w	#4+1,(a0)				; reset timer to 4 frames
+		subq.w	#1,(a0)								; decrement timer
+		bpl.s	.anpal2								; if time remains, branch
+		addq.w	#4+1,(a0)							; reset timer to 4 frames
 
 		; cycle
 		move.w	2(a0),d0
@@ -26,9 +26,9 @@ AnPal_DEZ:
 .anpal2
 
 		; wait
-		subq.w	#1,4(a0)					; decrement timer
-		bpl.s	.return					; if time remains, branch
-		move.w	#$13,4(a0)				; reset timer to $13 frames
+		subq.w	#1,4(a0)								; decrement timer
+		bpl.s	.return								; if time remains, branch
+		move.w	#$13,4(a0)							; reset timer to $13 frames
 
 		; cycle
 		move.w	6(a0),d0
@@ -39,9 +39,10 @@ AnPal_DEZ:
 
 .skip2
 		lea	(AnPal_PalDEZ12_2).l,a1
+		adda.w	d0,a1
 		lea	(Normal_palette_line_3+$10).w,a2
-		move.l	(a1,d0.w),(a2)+
-		move.l	4(a1,d0.w),(a2)+
+		move.l	(a1)+,(a2)+
+		move.l	(a1)+,(a2)+							; copy palette data to RAM
 
 .return
 		rts

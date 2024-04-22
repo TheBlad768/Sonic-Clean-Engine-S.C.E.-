@@ -3,39 +3,22 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_LoadDACDriver:
+	jsr	(MegaPCM_LoadDriver).l
+	lea	(MegaPCM_DAC_Table).l,a0
+	jsr	(MegaPCM_LoadSampleTable).l
+	tst.w	d0										; was sample table loaded successfully?
+	beq.s	.SampleTableOk							; if yes, branch
+	RaiseError	"Bad sample table (code %<.b d0>)"
 
-	; mask off interrupts so that an interrupt cannot occur and mess with
-	; the Z80 bus request or DAC driver before they are finished with
-	disableIntsSave
-	SMPS_stopZ80
-	SMPS_resetZ80
-
-	; detect PAL consoles and set the PAL flag if needed
-	btst	#6,(Graphics_flags).w
-	beq.s	.not_pal
-	bset	#f_pal,(Clone_Driver_RAM+SMPS_RAM.bitfield1).l
-.not_pal:
-
-	; load Mega PCM (Kosinski-compressed)
-	lea	(MegaPCM).l,a0	; source
-	lea	(SMPS_z80_ram).l,a1	; destination
-	bsr.w	KosDec
-
-	moveq	#0,d1
-	move.w	d1,(SMPS_z80_reset).l
-	nop
-	nop
-	nop
-	nop
-	SMPS_resetZ80
-	move.w	d1,(SMPS_z80_bus_request).l	; start the Z80
+.SampleTableOk
 	tst.b	(SegaCD_Mode).w
 	beq.s	.skip
+	disableIntsSave
 	MCDSend	#_MCD_SetVolume, #255
 	MCDSend	#_MCD_NoSeek, #1
+	enableIntsSave
 
 .skip
-	enableIntsSave
 	rts
 ; End of function SMPS_LoadDACDriver
 
@@ -141,11 +124,9 @@ SMPS_QueueSound3_Extended:
 ; ---------------------------------------------------------------------------
 SMPS_PlayDACSample:
 	SMPS_stopZ80_safe
-	move.b  d0,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	move.b  d0,(SMPS_z80_ram+Z_MPCM_CommandInput).l
 	; This is a DAC SFX: set to full volume
-	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l	; 100% volume
 	SMPS_startZ80_safe
 	rts
 ; End of function SMPS_PlayDACSample

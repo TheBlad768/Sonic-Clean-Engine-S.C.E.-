@@ -50,6 +50,7 @@ ptr_VInt_Sega:		offsetTableEntry.w VInt_Sega		; 4
 ptr_VInt_Menu:		offsetTableEntry.w VInt_Menu		; 6
 ptr_VInt_Level:		offsetTableEntry.w VInt_Level		; 8
 ptr_VInt_Fade:		offsetTableEntry.w VInt_Fade		; A
+ptr_VInt_LevelSelect:	offsetTableEntry.w VInt_LevelSelect	; 12
 
 ; ---------------------------------------------------------------------------
 ; Lag
@@ -177,6 +178,30 @@ Do_ControllerPal:
 		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
+		rts
+
+; ---------------------------------------------------------------------------
+; Level Select
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_LevelSelect:
+		stopZ80
+		stopZ802
+		jsr	(Poll_Controllers).w
+		startZ802
+		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
+		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
+		dma68kToVDP (vLevelSelect_buffer2),vram_fg,(256<<4),VRAM		; foreground buffer to VRAM
+		jsr	(Process_DMA_Queue).w
+		startZ80
+		tst.w	(Demo_timer).w						; is there time left on the demo?
+		beq.s	.return
+		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
+
+.return
 		rts
 
 ; ---------------------------------------------------------------------------

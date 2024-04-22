@@ -290,7 +290,7 @@ Debug_mode_flag:					ds.b 1
 
 Block_table_addr_ROM:				ds.l 1					; block table pointer(Block (16x16) definitions, 8 bytes per definition)
 Level_layout_addr_ROM:				ds.l 1					; level layout pointer
-Level_layout2_addr_ROM:				ds.l 1					; level layout 2 pointer (+8)
+Level_layout_addr2_ROM:				ds.l 1					; level layout pointer 2 (+8)
 Rings_manager_addr_RAM:			ds.l 1					; jump for the ring loading manager
 Object_index_addr:					ds.l 1					; points to either the object index for levels
 Object_load_addr_RAM:				ds.l 1					; jump for the object loading manager

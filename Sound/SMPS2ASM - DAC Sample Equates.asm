@@ -1,6 +1,6 @@
 ; DAC Equates
 offset :=	MegaPCM_DAC_Table
-ptrsize :=	8
+ptrsize :=	$C
 idstart :=	$81
 
 dac__First = idstart

@@ -5,125 +5,127 @@
 MegaPCM_DAC_Table:
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 		; Sonic 1 & 2
-ptr_dac81:	DAC_Entry	 8201, Kick,				MegaPCM_pcm	; $81	- Kick
-ptr_dac82:	DAC_Entry	23784, Snare,				MegaPCM_pcm	; $82	- Snare
-ptr_dac85:	DAC_Entry	 7328, Timpani,			MegaPCM_pcm	; $85	- Timpani
-ptr_dac88:	DAC_Entry	 9635, Timpani,			MegaPCM_pcm	; $88	- Hi-Timpani
-ptr_dac89:	DAC_Entry	 8720, Timpani,			MegaPCM_pcm	; $89	- Mid-Timpani
-ptr_dac8A:	DAC_Entry	 7138, Timpani,			MegaPCM_pcm	; $8A	- Low-Timpani
-ptr_dac8B:	DAC_Entry	 6957, Timpani,			MegaPCM_pcm	; $8B	- Very Low-Timpani
+						; type	pointer	Hz
+ptr_dac81:	dcSample	TYPE_PCM, Kick, 8201					; $81	- Kick
+ptr_dac82:	dcSample	TYPE_PCM, Snare, 23784					; $82	- Snare
+ptr_dac85:	dcSample	TYPE_PCM, Timpani, 7328					; $85	- Timpani
+ptr_dac88:	dcSample	TYPE_PCM, Timpani, 9635					; $88	- Hi-Timpani
+ptr_dac89:	dcSample	TYPE_PCM, Timpani, 8720					; $89	- Mid-Timpani
+ptr_dac8A:	dcSample	TYPE_PCM, Timpani, 7138					; $8A	- Low-Timpani
+ptr_dac8B:	dcSample	TYPE_PCM, Timpani, 6957					; $8B	- Very Low-Timpani
 	endif
 
 	if SMPS_S2DACSamples
 		; Sonic 2
-ptr_dac83:	DAC_Entry	17127, Clap,				MegaPCM_pcm	; $83	- Clap
-ptr_dac84:	DAC_Entry	15232, Scratch,			MegaPCM_pcm	; $84	- Scratch
-ptr_dac86:	DAC_Entry	13714, Tom,				MegaPCM_pcm	; $86	- Hi-Tom
-ptr_dac87:	DAC_Entry	 7426, Bongo,				MegaPCM_pcm	; $87	- Very Low-Bongo
-ptr_dac8C:	DAC_Entry	22799, Tom,				MegaPCM_pcm	; $8C	- Mid-Tom
-ptr_dac8D:	DAC_Entry	18262, Tom,				MegaPCM_pcm	; $8D	- Low-Tom
-ptr_dac8E:	DAC_Entry	15232, Tom,				MegaPCM_pcm	; $8E	- Floor-Tom
-ptr_dac8F:	DAC_Entry	15232, Bongo,				MegaPCM_pcm	; $8F	- Hi-Bongo
-ptr_dac90:	DAC_Entry	13064, Bongo,			MegaPCM_pcm	; $90	- Mid-Bongo
-ptr_dac91:	DAC_Entry	 9806, Bongo,				MegaPCM_pcm	; $91	- Low-Bongo
+ptr_dac83:	dcSample	TYPE_PCM, Clap, 17127					; $83	- Clap
+ptr_dac84:	dcSample	TYPE_PCM, Scratch, 15232					; $84	- Scratch
+ptr_dac86:	dcSample	TYPE_PCM, Tom, 13714					; $86	- Hi-Tom
+ptr_dac87:	dcSample	TYPE_PCM, Bongo, 7426					; $87	- Very Low-Bongo
+ptr_dac8C:	dcSample	TYPE_PCM, Tom, 22799					; $8C	- Mid-Tom
+ptr_dac8D:	dcSample	TYPE_PCM, Tom, 18262					; $8D	- Low-Tom
+ptr_dac8E:	dcSample	TYPE_PCM, Tom, 15232					; $8E	- Floor-Tom
+ptr_dac8F:	dcSample	TYPE_PCM, Bongo, 15232					; $8F	- Hi-Bongo
+ptr_dac90:	dcSample	TYPE_PCM, Bongo, 13064					; $90	- Mid-Bongo
+ptr_dac91:	dcSample	TYPE_PCM, Bongo, 9806					; $91	- Low-Bongo
 	endif
 
 	if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
 		; Sonic 3 & K & 3D
-ptr_dac92:	DAC_Entry	19090, SnareS3,			MegaPCM_pcm	; $92	- Snare (S3)
-ptr_dac93:	DAC_Entry	11274, TomS3,			MegaPCM_pcm	; $93	- Hi-Tom (S3)
-ptr_dac94:	DAC_Entry	 9050, TomS3,			MegaPCM_pcm	; $94	- Mid-Tom (S3)
-ptr_dac95:	DAC_Entry	 7599, TomS3,			MegaPCM_pcm	; $95	- Low Tom (S3)
-ptr_dac96:	DAC_Entry	 6490, TomS3,			MegaPCM_pcm	; $96	- Floor-Tom (S3)
-ptr_dac97:	DAC_Entry	19090, KickS3,			MegaPCM_pcm	; $97	- Kick (S3)
-ptr_dac98:	DAC_Entry	19090, MuffledSnare,		MegaPCM_pcm	; $98	- Muffled Snare
-ptr_dac99:	DAC_Entry	16766, CrashCymbal,		MegaPCM_pcm	; $99	- Crash Cymbal 
-ptr_dac9A:	DAC_Entry	13482, RideCymbal,		MegaPCM_pcm	; $9A	- Ride Cymbal
-ptr_dac9B:	DAC_Entry	 9050, MetalHit,			MegaPCM_pcm	; $9B	- Low-Metal Hit
-ptr_dac9C:	DAC_Entry	 7357, MetalHit,			MegaPCM_pcm	; $9C	- Metal Hit
-ptr_dac9D:	DAC_Entry	14945, MetalHit2,			MegaPCM_pcm	; $9D	- High-Metal Hit
-ptr_dac9E:	DAC_Entry	12852, MetalHit3,			MegaPCM_pcm	; $9E	- Higher-Metal Hit
-ptr_dac9F:	DAC_Entry	10040, MetalHit3,			MegaPCM_pcm	; $9F	- Mid-Metal Hit
-ptr_dacA0:	DAC_Entry	14945, ClapS3,			MegaPCM_pcm	; $A0	- Clap (S3)
-ptr_dacA1:	DAC_Entry	20513, ElectricTom,		MegaPCM_pcm	; $A1	- Electric High-Tom
-ptr_dacA2:	DAC_Entry	15803, ElectricTom,		MegaPCM_pcm	; $A2	- Electric Mid-Tom
-ptr_dacA3:	DAC_Entry	13482, ElectricTom,		MegaPCM_pcm	; $A3	- Electric Low-Tom
-ptr_dacA4:	DAC_Entry	11274, ElectricTom,		MegaPCM_pcm	; $A4	- Electric Floor-Tom
-ptr_dacA5:	DAC_Entry	16766, SnareS32,			MegaPCM_pcm	; $A5	- Mid-Pitch Snare
-ptr_dacA6:	DAC_Entry	13482, SnareS32,			MegaPCM_pcm	; $A6	- Tight Snare
-ptr_dacA7:	DAC_Entry	11755, SnareS32,			MegaPCM_pcm	; $A7	- Loose Snare
-ptr_dacA8:	DAC_Entry	 9687, SnareS32,			MegaPCM_pcm	; $A8	- Looser Snare
-ptr_dacA9:	DAC_Entry	12852, TimpaniS3,		MegaPCM_pcm	; $A9	- Hi-Timpani (S3)
-ptr_dacAA:	DAC_Entry	 9358, TimpaniS3,			MegaPCM_pcm	; $AA	- Low-Timpani (S3)
-ptr_dacAB:	DAC_Entry	 8492, TimpaniS3,			MegaPCM_pcm	; $AB	- Mid-Timpani (S3)
-ptr_dacAC:	DAC_Entry	12279, SnareS33,			MegaPCM_pcm	; $AC	- Quick Loose Snare
-ptr_dacAD:	DAC_Entry	13482, Click,				MegaPCM_pcm	; $AD	- Click
-ptr_dacAE:	DAC_Entry	 7998, PowerKick,			MegaPCM_pcm	; $AE	- Power Kick
-ptr_dacAF:	DAC_Entry	 7998, QuickGlassCrash,	MegaPCM_pcm	; $AF	- Quick Glass Crash
+ptr_dac92:	dcSample	TYPE_PCM, SnareS3, 19090				; $92	- Snare (S3)
+ptr_dac93:	dcSample	TYPE_PCM, TomS3, 11274					; $93	- Hi-Tom (S3)
+ptr_dac94:	dcSample	TYPE_PCM, TomS3, 9050					; $94	- Mid-Tom (S3)
+ptr_dac95:	dcSample	TYPE_PCM, TomS3, 7599					; $95	- Low Tom (S3)
+ptr_dac96:	dcSample	TYPE_PCM, TomS3, 6490					; $96	- Floor-Tom (S3)
+ptr_dac97:	dcSample	TYPE_PCM, KickS3, 19090					; $97	- Kick (S3)
+ptr_dac98:	dcSample	TYPE_PCM, MuffledSnare, 19090			; $98	- Muffled Snare
+ptr_dac99:	dcSample	TYPE_PCM, CrashCymbal, 16766			; $99	- Crash Cymbal
+ptr_dac9A:	dcSample	TYPE_PCM, RideCymbal, 13482				; $9A	- Ride Cymbal
+ptr_dac9B:	dcSample	TYPE_PCM, MetalHit, 9050				; $9B	- Low-Metal Hit
+ptr_dac9C:	dcSample	TYPE_PCM, MetalHit, 7357					; $9C	- Metal Hit
+ptr_dac9D:	dcSample	TYPE_PCM, MetalHit2, 14945				; $9D	- High-Metal Hit
+ptr_dac9E:	dcSample	TYPE_PCM, MetalHit3, 12852				; $9E	- Higher-Metal Hit
+ptr_dac9F:	dcSample	TYPE_PCM, MetalHit3, 10040				; $9F	- Mid-Metal Hit
+ptr_dacA0:	dcSample	TYPE_PCM, ClapS3, 14945					; $A0	- Clap (S3)
+ptr_dacA1:	dcSample	TYPE_PCM, ElectricTom, 20513				; $A1	- Electric High-Tom
+ptr_dacA2:	dcSample	TYPE_PCM, ElectricTom, 15803				; $A2	- Electric Mid-Tom
+ptr_dacA3:	dcSample	TYPE_PCM, ElectricTom, 13482				; $A3	- Electric Low-Tom
+ptr_dacA4:	dcSample	TYPE_PCM, ElectricTom, 11274				; $A4	- Electric Floor-Tom
+ptr_dacA5:	dcSample	TYPE_PCM, SnareS32, 16766				; $A5	- Mid-Pitch Snare
+ptr_dacA6:	dcSample	TYPE_PCM, SnareS32, 13482				; $A6	- Tight Snare
+ptr_dacA7:	dcSample	TYPE_PCM, SnareS32, 11755				; $A7	- Loose Snare
+ptr_dacA8:	dcSample	TYPE_PCM, SnareS32, 9687				; $A8	- Looser Snare
+ptr_dacA9:	dcSample	TYPE_PCM, TimpaniS3, 12852				; $A9	- Hi-Timpani (S3)
+ptr_dacAA:	dcSample	TYPE_PCM, TimpaniS3, 9358				; $AA	- Low-Timpani (S3)
+ptr_dacAB:	dcSample	TYPE_PCM, TimpaniS3, 8492				; $AB	- Mid-Timpani (S3)
+ptr_dacAC:	dcSample	TYPE_PCM, SnareS33, 12279				; $AC	- Quick Loose Snare
+ptr_dacAD:	dcSample	TYPE_PCM, Click, 13482					; $AD	- Click
+ptr_dacAE:	dcSample	TYPE_PCM, PowerKick, 7998				; $AE	- Power Kick
+ptr_dacAF:	dcSample	TYPE_PCM, QuickGlassCrash, 7998			; $AF	- Quick Glass Crash
 	endif
 
 	if SMPS_S3DACSamples||SMPS_SKDACSamples
 		; Sonic 3 & K
-ptr_dacB0:	DAC_Entry	12279, GlassCrashSnare,	MegaPCM_pcm	; $B0	- Glass Crash Snare
-ptr_dacB1:	DAC_Entry	12279, GlassCrash,		MegaPCM_pcm	; $B1	- Glass Crash
-ptr_dacB2:	DAC_Entry	13482, GlassCrashKick,		MegaPCM_pcm	; $B2	- Glass Crash Kick
-ptr_dacB3:	DAC_Entry	13482, QuietGlassCrash,	MegaPCM_pcm	; $B3	- Quiet Glass Crash
-ptr_dacB4:	DAC_Entry	 7998, SnareKick,			MegaPCM_pcm	; $B4	- Snare + Kick
-ptr_dacB5:	DAC_Entry	 7998, KickBass,			MegaPCM_pcm	; $B5	- Bassy Kick
-ptr_dacB6:	DAC_Entry	12279, ComeOn,			MegaPCM_pcm	; $B6	- "Come On!"
-ptr_dacB7:	DAC_Entry	14176, DanceSnare,		MegaPCM_pcm	; $B7	- Dance Snare
-ptr_dacB8:	DAC_Entry	 7998, LooseKick,			MegaPCM_pcm	; $B8	- Loose Kick
-ptr_dacB9:	DAC_Entry	 7998, LooseKick2,		MegaPCM_pcm	; $B9	- Mod Loose Kick
-ptr_dacBA:	DAC_Entry	12279, Woo,				MegaPCM_pcm	; $BA	- "Woo!"
-ptr_dacBB:	DAC_Entry	13482, Go,				MegaPCM_pcm	; $BB	- "Go!"
-ptr_dacBC:	DAC_Entry	11755, SnareGo,			MegaPCM_pcm	; $BC	- Snare (S3) + "Go!"
-ptr_dacBD:	DAC_Entry	16766, PowerTom,			MegaPCM_pcm	; $BD	- Power Tom
-ptr_dacBE:	DAC_Entry	10420, WoodBlock,		MegaPCM_pcm	; $BE	- Hi-Wood Block
-ptr_dacBF:	DAC_Entry	 7998, WoodBlock,			MegaPCM_pcm	; $BF	- Low-Wood Block
-ptr_dacC0:	DAC_Entry	14176, HitDrum,			MegaPCM_pcm	; $C0	- Hi-Hit Drum
-ptr_dacC1:	DAC_Entry	 9687, HitDrum,			MegaPCM_pcm	; $C1	- Low-Hit Drum
-ptr_dacC2:	DAC_Entry	 7998, MetalCrashHit,		MegaPCM_pcm	; $C2	- Metal Crash Hit
-ptr_dacC3:	DAC_Entry	 8492, EchoedClapHit,		MegaPCM_pcm	; $C3	- Echoed Clap Hit
-ptr_dacC4:	DAC_Entry	 6520, EchoedClapHit,		MegaPCM_pcm	; $C4	- Lower Echoed Clap Hit
-ptr_dacC5:	DAC_Entry	12279, HipHopHitKick,	MegaPCM_pcm	; $C5	- HipHop Hit Kick
-ptr_dacC6:	DAC_Entry	12279, HipHopPowerKick,	MegaPCM_pcm	; $C6	- HipHop Hit Power Kick
-ptr_dacC7:	DAC_Entry	12279, BassHey,			MegaPCM_pcm	; $C7	- Bass + "Hey!"
-ptr_dacC8:	DAC_Entry	 7998, DanceStyleKick,		MegaPCM_pcm	; $C8	- Dance-Style Kick
-ptr_dacC9:	DAC_Entry	12279, HipHopHitKick2,	MegaPCM_pcm	; $C9	- HipHop Hit Kick 2
-ptr_dacCA:	DAC_Entry	 7998, RevFadingWind,	MegaPCM_pcm	; $CA	- Reverse Fading Wind
-ptr_dacCB:	DAC_Entry	 7998, ScratchS3,			MegaPCM_pcm	; $CB	- Scratch (S3)
-ptr_dacCC:	DAC_Entry	 7998, LooseSnareNoise,	MegaPCM_pcm	; $CC	- Loose-Snare Noise
-ptr_dacCD:	DAC_Entry	12279, PowerKick2,		MegaPCM_pcm	; $CD	- Power Kick 2
-ptr_dacCE:	DAC_Entry	12279, CrashNoiseWoo,	MegaPCM_pcm	; $CE	- Crash Noise + "Woo!"
-ptr_dacCF:	DAC_Entry	 7166, QuickHit,			MegaPCM_pcm	; $CF	- Quick Hit
-ptr_dacD0:	DAC_Entry	12852, KickHey,			MegaPCM_pcm	; $D0	- Kick (S3) + "Hey!"
-ptr_dacD1:	DAC_Entry	10830, HipHopHitKick,	MegaPCM_pcm	; $D1	- Power Kick Hit
-ptr_dacD2:	DAC_Entry	10040, HipHopHitKick,	MegaPCM_pcm	; $D2	- Low Power Kick Hit
-ptr_dacD3:	DAC_Entry	 9687, HipHopHitKick,		MegaPCM_pcm	; $D3	- Lower Power Kick Hit
-ptr_dacD4:	DAC_Entry	12852, HipHopHitKick,	MegaPCM_pcm	; $D4	- Lowest Power Kick Hit
+ptr_dacB0:	dcSample	TYPE_PCM, GlassCrashSnare, 12279			; $B0	- Glass Crash Snare
+ptr_dacB1:	dcSample	TYPE_PCM, GlassCrash, 12279				; $B1	- Glass Crash
+ptr_dacB2:	dcSample	TYPE_PCM, GlassCrashKick, 13482			; $B2	- Glass Crash Kick
+ptr_dacB3:	dcSample	TYPE_PCM, QuietGlassCrash, 13482			; $B3	- Quiet Glass Crash
+ptr_dacB4:	dcSample	TYPE_PCM, SnareKick, 7998				; $B4	- Snare + Kick
+ptr_dacB5:	dcSample	TYPE_PCM, KickBass, 7998				; $B5	- Bassy Kick
+ptr_dacB6:	dcSample	TYPE_PCM, ComeOn, 12279				; $B6	- "Come On!"
+ptr_dacB7:	dcSample	TYPE_PCM, DanceSnare, 14176				; $B7	- Dance Snare
+ptr_dacB8:	dcSample	TYPE_PCM, LooseKick, 7998				; $B8	- Loose Kick
+ptr_dacB9:	dcSample	TYPE_PCM, LooseKick2, 7998				; $B9	- Mod Loose Kick
+ptr_dacBA:	dcSample	TYPE_PCM, Woo, 12279					; $BA	- "Woo!"
+ptr_dacBB:	dcSample	TYPE_PCM, Go, 13482						; $BB	- "Go!"
+ptr_dacBC:	dcSample	TYPE_PCM, SnareGo, 11755				; $BC	- Snare (S3) + "Go!"
+ptr_dacBD:	dcSample	TYPE_PCM, PowerTom, 16766				; $BD	- Power Tom
+ptr_dacBE:	dcSample	TYPE_PCM, WoodBlock, 10420				; $BE	- Hi-Wood Block
+ptr_dacBF:	dcSample	TYPE_PCM, WoodBlock, 7998				; $BF	- Low-Wood Block
+ptr_dacC0:	dcSample	TYPE_PCM, HitDrum, 14176				; $C0	- Hi-Hit Drum
+ptr_dacC1:	dcSample	TYPE_PCM, HitDrum, 9687				; $C1	- Low-Hit Drum
+ptr_dacC2:	dcSample	TYPE_PCM, MetalCrashHit, 7998			; $C2	- Metal Crash Hit
+ptr_dacC3:	dcSample	TYPE_PCM, EchoedClapHit, 8492			; $C3	- Echoed Clap Hit
+ptr_dacC4:	dcSample	TYPE_PCM, EchoedClapHit, 6520			; $C4	- Lower Echoed Clap Hit
+ptr_dacC5:	dcSample	TYPE_PCM, HipHopHitKick, 12279			; $C5	- HipHop Hit Kick
+ptr_dacC6:	dcSample	TYPE_PCM, HipHopPowerKick, 12279		; $C6	- HipHop Hit Power Kick
+ptr_dacC7:	dcSample	TYPE_PCM, BassHey, 12279				; $C7	- Bass + "Hey!"
+ptr_dacC8:	dcSample	TYPE_PCM, DanceStyleKick, 7998			; $C8	- Dance-Style Kick
+ptr_dacC9:	dcSample	TYPE_PCM, HipHopHitKick2, 12279			; $C9	- HipHop Hit Kick 2
+ptr_dacCA:	dcSample	TYPE_PCM, RevFadingWind, 7998			; $CA	- Reverse Fading Wind
+ptr_dacCB:	dcSample	TYPE_PCM, ScratchS3, 7998				; $CB	- Scratch (S3)
+ptr_dacCC:	dcSample	TYPE_PCM, LooseSnareNoise, 7998			; $CC	- Loose-Snare Noise
+ptr_dacCD:	dcSample	TYPE_PCM, PowerKick2, 12279				; $CD	- Power Kick 2
+ptr_dacCE:	dcSample	TYPE_PCM, CrashNoiseWoo, 12279			; $CE	- Crash Noise + "Woo!"
+ptr_dacCF:	dcSample	TYPE_PCM, QuickHit, 7166				; $CF	- Quick Hit
+ptr_dacD0:	dcSample	TYPE_PCM, KickHey, 12852				; $D0	- Kick (S3) + "Hey!"
+ptr_dacD1:	dcSample	TYPE_PCM, HipHopHitKick, 10830			; $D1	- Power Kick Hit
+ptr_dacD2:	dcSample	TYPE_PCM, HipHopHitKick, 10040			; $D2	- Low Power Kick Hit
+ptr_dacD3:	dcSample	TYPE_PCM, HipHopHitKick, 9687			; $D3	- Lower Power Kick Hit
+ptr_dacD4:	dcSample	TYPE_PCM, HipHopHitKick, 12852			; $D4	- Lowest Power Kick Hit
 	endif
 
 	if SMPS_S3DDACSamples
 		; Sonic 3D
-ptr_dacD5:	DAC_Entry	24104, MetalCrashS3D,	MegaPCM_pcm	; $D5	- Final Fight Metal Crash
-ptr_dacD6:	DAC_Entry	 9687, IntroKickS3D,		MegaPCM_pcm	; $D6	- Intro Kick
+ptr_dacD5:	dcSample	TYPE_PCM, MetalCrashS3D, 24104			; $D5	- Final Fight Metal Crash
+ptr_dacD6:	dcSample	TYPE_PCM, MetalCrashS3D, 9687			; $D6	- Intro Kick
 	endif
 
 	if SMPS_S3DACSamples
 		; Sonic 3
-ptr_dacD7:	DAC_Entry	 8492, EchoedClapHitS3,	MegaPCM_pcm	; $D7	- Echoed Clap Hit (S3)
-ptr_dacD8:	DAC_Entry	 6490, EchoedClapHitS3,	MegaPCM_pcm	; $D8	- Lower Echoed Clap Hit(S3)	; Clownacy | Good golly, we're close to reaching Mega PCM's limit...
+ptr_dacD7:	dcSample	TYPE_PCM, EchoedClapHitS3, 8492			; $D7	- Echoed Clap Hit (S3)
+ptr_dacD8:	dcSample	TYPE_PCM, EchoedClapHitS3, 6490			; $D8	- Lower Echoed Clap Hit(S3)	; Clownacy | Good golly, we're close to reaching Mega PCM's limit...
 	endif
 
 	if SMPS_SCDACSamples
 		; Sonic Crackers
-ptr_dacD9:	DAC_Entry	 4728, Beat,				MegaPCM_pcm	; $D9	- Beat
-ptr_dacDA:	DAC_Entry	13610, SnareSC,			MegaPCM_pcm	; $DA	- Snare (SC)
-ptr_dacDB:	DAC_Entry	13610, TimTom,			MegaPCM_pcm	; $DB	- Hi Timpani/Tom (SC)
-ptr_dacDC:	DAC_Entry	11363, TimTom,			MegaPCM_pcm	; $DC	- Mid Timpani/Tom (SC)
-ptr_dacDD:	DAC_Entry	10497, TimTom,			MegaPCM_pcm	; $DD	- Low Timpani/Tom (SC)
-ptr_dacDE:	DAC_Entry	13610, LetsGo,			MegaPCM_pcm	; $DE	- "Let's Go!"
-ptr_dacDF:	DAC_Entry	13610, Hey,				MegaPCM_pcm	; $DF	- "Hey!"	; Clownacy | X_X Extending the DAC range is going to take some creativity...
+ptr_dacD9:	dcSample	TYPE_PCM, Beat, 4728					; $D9	- Beat
+ptr_dacDA:	dcSample	TYPE_PCM, SnareSC, 13610				; $DA	- Snare (SC)
+ptr_dacDB:	dcSample	TYPE_PCM, TimTom, 13610				; $DB	- Hi Timpani/Tom (SC)
+ptr_dacDC:	dcSample	TYPE_PCM, TimTom, 11363				; $DC	- Mid Timpani/Tom (SC)
+ptr_dacDD:	dcSample	TYPE_PCM, TimTom, 10497				; $DD	- Low Timpani/Tom (SC)
+ptr_dacDE:	dcSample	TYPE_PCM, LetsGo, 13610					; $DE	- "Let's Go!"
+ptr_dacDF:	dcSample	TYPE_PCM, Hey, 13610					; $DF	- "Hey!"	; Clownacy | X_X Extending the DAC range is going to take some creativity...
 	endif
 
-ptr_dacE0:	DAC_Entry2	0Bh, SegaPCM,			MegaPCM_pcm|MegaPCM_panLR	; $E0	- Sega!
+ptr_dacE0:	dcSample	TYPE_PCM, SegaPCM, 16000				; $E0	- Sega!
+			dc.w -1												; end marker

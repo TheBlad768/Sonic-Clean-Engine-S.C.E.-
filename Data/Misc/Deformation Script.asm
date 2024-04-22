@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Simple horizontal deformation
 ; Inputs:
-; a2 = config: initial pixel+buffer, speed, deformation size
+; a2 = config: buffer, initial pixel, speed, deformation size
 ; a3 = deformation buffer
 ; ---------------------------------------------------------------------------
 

@@ -298,6 +298,62 @@ clearRAM3 macro addr,length
 	dbf	d1,.clear
     endm
 
+; copy 68k RAM
+copyRAM macro startaddr,endaddr,startaddr2
+    if ((startaddr)&$8000)==0
+	lea	(startaddr).l,a1
+    else
+	lea	(startaddr).w,a1
+    endif
+    if ((startaddr2)&$8000)==0
+	lea	(startaddr2).l,a2
+    else
+	lea	(startaddr2).w,a2
+    endif
+	moveq	#0,d0
+    if ((startaddr)&1)
+	move.b	(a1)+,(a2)+
+    endif
+	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
+
+.clear:
+	move.l	(a1)+,(a2)+
+	dbf	d1,.clear
+    if (((endaddr-startaddr) - ((startaddr)&1))&2)
+	move.w	(a1)+,(a2)+
+    endif
+    if (((endaddr-startaddr) - ((startaddr)&1))&1)
+	move.b	(a1)+,(a2)+
+    endif
+    endm
+
+; copy 68k RAM
+copyRAM2 macro startaddr,endaddr,startaddr2
+    if ((startaddr)&$8000)==0
+	lea	(startaddr).l,a1
+    else
+	lea	(startaddr).w,a1
+    endif
+    if ((startaddr2)&$8000)==0
+	lea	(startaddr2).l,a2
+    else
+	lea	(startaddr2).w,a2
+    endif
+	moveq	#0,d0
+    if ((startaddr)&1)
+	move.b	(a1)+,(a2)+
+    endif
+    rept bytesTo2Lcnt((endaddr-startaddr) - ((startaddr)&1))
+	move.l	(a1)+,(a2)+
+    endr
+    if (((endaddr-startaddr) - ((startaddr)&1))&2)
+	move.w	(a1)+,(a2)+
+    endif
+    if (((endaddr-startaddr) - ((startaddr)&1))&1)
+	move.b	(a1)+,(a2)+
+    endif
+    endm
+
 ; ---------------------------------------------------------------------------
 ; check if object moves out of range
 ; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
@@ -492,6 +548,9 @@ stopZ80 macro
 
 	if OptimiseStopZ80=0
 	move.w	#$100,(Z80_bus_request).l		; stop the Z80
+	nop
+	nop
+	nop
 
 .wait:
 	btst	#0,(Z80_bus_request).l
@@ -505,6 +564,9 @@ stopZ80a macro
 
 	if OptimiseStopZ80=0
 	move.w	#$100,(Z80_bus_request).l		; stop the Z80
+	nop
+	nop
+	nop
 	endif
 
     endm
@@ -568,6 +630,9 @@ stopZ802 macro
 
 	if OptimiseStopZ80=2
 		move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		nop
+		nop
+		nop
 
 .wait:
 		btst	#0,(Z80_bus_request).l

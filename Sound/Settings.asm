@@ -1,7 +1,5 @@
 ; ========SONIC 1 GIT EQUATES========
 
-Size_of_Mega_PCM_guess = $3F0
-
 ; ---FLAGS---
 SMPS_RingSFXBehaviour	= 1
 ;	| If 1, SndID_Ring alternates between the left and right speakers.

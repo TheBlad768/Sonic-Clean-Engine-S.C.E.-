@@ -23,7 +23,7 @@ REM // allow the user to choose to print error messages out by supplying the -pe
 "%AS_MSGPATH%/asw.exe" -xx -q -c -A -L -U -i . Sonic.asm
 IF NOT EXIST Sonic.p pause & exit
 
-"%AS_MSGPATH%/p2bin.exe" -p=FF -z=0,kosinski-optimised,Size_of_Mega_PCM_guess,after Sonic.p Sonic.gen Sonic.h
+"%AS_MSGPATH%/p2bin.exe" -p=FF Sonic.p Sonic.gen Sonic.h
 IF EXIST Sonic.p del Sonic.p
 IF EXIST Sonic.h del Sonic.h
 

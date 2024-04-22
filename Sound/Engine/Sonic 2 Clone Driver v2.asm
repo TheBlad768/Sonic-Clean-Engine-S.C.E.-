@@ -1,5 +1,5 @@
 ; ===========================================================================
-; Sonic 2 Clone Driver v2 (MegaPCM version)
+; Sonic 2 Clone Driver v2 (Mega PCM 2.0 version)
 ; See https://github.com/Clownacy/Sonic-2-Clone-Driver-v2
 ; ===========================================================================
 
@@ -236,7 +236,7 @@ DACUpdateSample:
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
-	move.b	d2,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	move.b	d2,(SMPS_z80_ram+Z_MPCM_CommandInput).l
 	SMPS_startZ80_safe
 
     if SMPS_SoundTest
@@ -252,16 +252,18 @@ locret_71CAA:
 
 SetDACVolume:
 	move.b	SMPS_Track.Volume(a5),d0
-	bpl.s	+		; $7F is the last valid volume
-	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
-+
-	lsr.b	#3,d0
-	ori.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-
-WriteDACVolume:
+	bpl.s	.setvol			; $7F is the last valid volume
+	moveq	#$F,d0			; cap at maximum value (minimum volume)
 	SMPS_stopZ80_safe
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+	move.b	d0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l
+	SMPS_startZ80_safe
+	rts
+; ===========================================================================
+
+.setvol
+	lsr.b	#3,d0
+	SMPS_stopZ80_safe
+	move.b	d0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l
 	SMPS_startZ80_safe
 	rts
 ; End of function SetDACVolume
@@ -706,7 +708,7 @@ HandlePause:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
-	move.b  #$7F,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; pause DAC
+	move.b	#Z_MPCM_COMMAND_PAUSE,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; pause DAC
 	SMPS_startZ80_safe
 
 .locret:
@@ -758,7 +760,7 @@ HandleUnpause:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
-	clr.b  (SMPS_z80_ram+MegaPCM_DAC_Number).l	; unpause DAC
+	clr.b	(SMPS_z80_ram+Z_MPCM_CommandInput).l	; unpause DAC
 	SMPS_startZ80_safe
 
 	rts
@@ -998,14 +1000,12 @@ PlaySegaSound:
 
 	; Prepare to send DAC request
 
-	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80_safe
 
 	; This is a DAC SFX: set to full volume
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l					; 100% volume
 
-	move.b	#dSega,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Queue Sega PCM
+	move.b	#dSega,(SMPS_z80_ram+Z_MPCM_CommandInput).l		; Queue Sega PCM
 
 	SMPS_startZ80_safe
 
@@ -2010,7 +2010,7 @@ StopAllSound:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
-	move.b  #$80,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; stop DAC playback
+	move.b	#Z_MPCM_COMMAND_STOP,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; stop DAC playback
 	SMPS_startZ80_safe
 
     if SMPS_EnablePWM
@@ -2074,8 +2074,9 @@ InitMusicPlayback:
 	move.l	d6,SMPS_RAM.variables.queue+4(a6)
 
 	; Reset DAC volume
-	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
-	bsr.w	WriteDACVolume
+	SMPS_stopZ80_safe
+	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l		; 100% volume
+	SMPS_startZ80_safe
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
 	; don't do a very good job of setting up the music tracks.
@@ -3479,12 +3480,10 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play. (TODO - Wait, these are meant to be 1-based?)
 ;
 cfPlayDACSample:
-	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80_safe
-	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	move.b	(a4)+,(SMPS_z80_ram+Z_MPCM_CommandInput).l
 	; This is a DAC SFX: set to full volume
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l	; 100% volume
 	SMPS_startZ80_safe
 	rts
 ; ===========================================================================
@@ -3610,12 +3609,10 @@ cfChanFMCommand:
 	include "Sound/PSG Volume Envelopes.asm"
 
 ; ---------------------------------------------------------------------------
-; Vladikcomper's Mega PCM DAC driver
+; Vladikcomper's Mega PCM 2.0 - DAC Sound Driver
 ; ---------------------------------------------------------------------------
 
-	align $8000
-
-	include	"Sound/Engine/MegaPCM - 68k.asm"
+	include "Sound/Engine/MegaPCM.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79
 	even
