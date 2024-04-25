@@ -547,14 +547,14 @@ paddingZ80RAM macro
 stopZ80 macro
 
 	if OptimiseStopZ80=0
-	move.w	#$100,(Z80_bus_request).l		; stop the Z80
-	nop
-	nop
-	nop
+		move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		nop
+		nop
+		nop
 
 .wait:
-	btst	#0,(Z80_bus_request).l
-	bne.s	.wait 						; loop until it says it's stopped
+		btst	#0,(Z80_bus_request).l
+		bne.s	.wait 						; loop until it says it's stopped
 	endif
 
     endm
@@ -563,10 +563,10 @@ stopZ80 macro
 stopZ80a macro
 
 	if OptimiseStopZ80=0
-	move.w	#$100,(Z80_bus_request).l		; stop the Z80
-	nop
-	nop
-	nop
+		move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		nop
+		nop
+		nop
 	endif
 
     endm
@@ -580,8 +580,8 @@ waitZ80 macro
 
 	if OptimiseStopZ80=0
 .wait:
-	btst	#0,(Z80_bus_request).l
-	bne.s	.wait 						; loop until
+		btst	#0,(Z80_bus_request).l
+		bne.s	.wait 						; loop until
 	endif
 
     endm

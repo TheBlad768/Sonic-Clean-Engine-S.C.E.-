@@ -148,13 +148,6 @@ button_start_mask:				equ	1<<button_start	; $80
 ; Joypad input
 ; ---------------------------------------------------------------------------
 
-btnR:		equ %00001000		; Right ($08)
-btnL:		equ %00000100		; Left ($04)
-btnUD:		equ %00000011		; Up or Down ($03)
-btnDn:		equ %00000010		; Down ($02)
-btnUp:		equ %00000001		; Up	($01)
-btnLR:		equ %00001100		; Left or Right ($0C)
-btnDir:		equ %00001111		; Any direction ($0F)
 btnABCS:	equ %11110000		; A, B, C or Start ($F0)
 btnStart:		equ %10000000		; Start button	($80)
 btnABC:		equ %01110000		; A, B or C ($70)
@@ -164,6 +157,21 @@ btnA:		equ %01000000		; A ($40)
 btnBC:		equ %00110000		; B or C ($30)
 btnC:		equ %00100000		; C ($20)
 btnB:		equ %00010000		; B ($10)
+btnDir:		equ %00001111		; Any direction ($0F)
+btnDLR:		equ %00001110		; Down, Left or Right ($0E)
+btnULR:		equ %00001101		; Up, Left or Right ($0D)
+btnLR:		equ %00001100		; Left or Right ($0C)
+btnUDR:		equ %00001011		; Up, Down or Right ($0B)
+btnDR:		equ %00001010		; Down or Right ($0A)
+btnUR:		equ %00001001		; Down or Right ($09)
+btnR:		equ %00001000		; Right ($08)
+btnUDL:		equ %00000111		; Up, Down or Left ($07)
+btnDL:		equ %00000110		; Down or Left ($06)
+btnUL:		equ %00000101		; Up or Left ($05)
+btnL:		equ %00000100		; Left ($04)
+btnUD:		equ %00000011		; Up or Down ($03)
+btnDn:		equ %00000010		; Down ($02)
+btnUp:		equ %00000001		; Up	($01)
 
 ; ---------------------------------------------------------------------------
 ; Joypad bits

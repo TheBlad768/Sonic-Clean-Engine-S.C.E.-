@@ -96,7 +96,7 @@ loc_DD9E:
 		bsr.w	DrawTwoDigitNumber
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$32),d0
 		moveq	#0,d1
-		move.b	(Timer_frame).w,d1 							; load centisecond
+		move.b	(Timer_frame).w,d1 							; load centiseconds
 		mulu.w	#100,d1
 		divu.w	#60,d1
 		swap	d1

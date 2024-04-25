@@ -20,26 +20,24 @@ Obj_DashDust:
 		move.w	#tiles_to_bytes(ArtTile_DashDust),vram_art(a0)
 		cmpa.w	#v_Dust,a0
 		beq.s	.main
-		st	dashdust_tails(a0)
+		st	dashdust_tails(a0)										; Tails flag
 
 .main
 		movea.w	parent(a0),a2											; a2=character
 		moveq	#0,d0
 		move.b	anim(a0),d0											; use current animation as a secondary routine counter
 		add.b	d0,d0
-		add.b	d0,d0
 		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.w	.return			; 0
-		bra.w	.splash			; 1
-		bra.w	.spindashdust		; 2
-		bra.w	.skiddust			; 3
+		rts						; 0 (null)
+		bra.s	.splash			; 1
+		bra.s	.spindashdust		; 2
 
 ; =============== S U B R O U T I N E =======================================
 
-.fromground															; 4 (LBZ1 only?)
+.fromground															; 3 (LBZ1 only?)
 		tst.b	prev_anim(a0)
 		bne.s	.anim
 		move.w	x_pos(a2),x_pos(a0)
@@ -54,13 +52,27 @@ Obj_DashDust:
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
+.splash
+		move.w	(Water_level).w,y_pos(a0)
+		tst.b	prev_anim(a0)
+		bne.s	.draw
+		move.w	x_pos(a2),x_pos(a0)
+		clr.b	status(a0)
+		andi.w	#drawing_mask,art_tile(a0)
+		bra.s	.draw
+; ---------------------------------------------------------------------------
+
 .spindashdust
-		cmpi.b	#12,air_left(a2)
-		blo.s		.reset
+
+		; check
+		cmpi.b	#12,air_left(a2)										; check air remaining
+		blo.s		.reset												; if less than 12, branch
 		cmpi.b	#id_SonicHurt,routine(a2)								; is player falling back from getting hurt?
 		bhs.s	.reset												; if yes, branch
 		tst.b	spin_dash_flag(a2)										; is player charging his spin dash?
 		beq.s	.reset												; if not, branch
+
+		; start dust
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)
@@ -83,43 +95,27 @@ Obj_DashDust:
 		tst.w	art_tile(a2)
 		bpl.s	.draw
 		ori.w	#high_priority,art_tile(a0)
-		bra.s	.draw
-; ---------------------------------------------------------------------------
-
-.reset
-		clr.b	anim(a0)												; back to ".return"
-
-.return
-		rts
-; ---------------------------------------------------------------------------
-
-.skiddust
-		cmpi.b	#12,air_left(a2)
-		blo.s		.reset
-		btst	#6,status(a0)
-		bne.s	.reset
 
 .draw
 		lea	Ani_DashSplashDrown(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)												; changed by Animate_Sprite
-		bne.s	.delete
+
+		; check reset frame
+		tst.b	anim(a0)												; changed by Animate_Sprite
+		beq.s	.reset
 		bsr.w	DashDust_Load_DPLC
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-.delete
-		jmp	(Delete_Current_Sprite).w
-; ---------------------------------------------------------------------------
+.reset
+		clr.b	anim(a0)												; set null
+		clr.w	mapping_frame(a0)									; clear mapping frame and anim frame
+		clr.b	anim_frame_timer(a0)
+		rts
 
-.splash
-		move.w	(Water_level).w,y_pos(a0)
-		tst.b	prev_anim(a0)
-		bne.s	.draw
-		move.w	x_pos(a2),x_pos(a0)
-		clr.b	status(a0)
-		andi.w	#drawing_mask,art_tile(a0)
-		bra.s	.draw
+; ---------------------------------------------------------------------------
+; Dash Dust (Check skid)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -154,7 +150,7 @@ DashDust_CheckSkid:
 		; create dust clouds
 		jsr	(Create_New_Sprite).w
 		bne.s	DashDust_Load_DPLC
-		move.l	#Obj_DashDust.main,address(a1)
+		move.l	#Obj_DashDust_SkidDust,address(a1)
 		move.w	x_pos(a2),x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
 		tst.b	dashdust_tails(a0)
@@ -169,7 +165,7 @@ DashDust_CheckSkid:
 .notgrav
 		add.w	d1,y_pos(a1)
 		clr.b	status(a1)
-		move.b	#3,anim(a1)
+		move.b	#4,anim(a1)											; skid dust anim
 		move.l	mappings(a0),mappings(a1)
 		move.b	render_flags(a0),render_flags(a1)
 		move.w	#$80,priority(a1)
@@ -180,6 +176,10 @@ DashDust_CheckSkid:
 		tst.w	art_tile(a2)
 		bpl.s	DashDust_Load_DPLC
 		ori.w	#high_priority,art_tile(a1)
+
+; ---------------------------------------------------------------------------
+; Dash Dust (DPLC)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -218,6 +218,33 @@ SplashDrown_Load_DPLC:
 
 .return
 		rts
+
+; ---------------------------------------------------------------------------
+; Dash Dust (Skid dust)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_DashDust_SkidDust:
+		movea.w	parent(a0),a2											; a2=character
+
+		; check
+		cmpi.b	#12,air_left(a2)										; check air remaining
+		blo.s		.delete												; if less than 12, branch
+		btst	#Status_Underwater,status(a2)								; is player underwater?
+		bne.s	.delete												; if yes, branch
+
+		; draw
+		lea	Ani_DashSplashDrown(pc),a1
+		jsr	(Animate_Sprite).w
+		tst.b	routine(a0)												; changed by Animate_Sprite
+		bne.s	.delete
+		bsr.s	DashDust_Load_DPLC
+		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.delete
+		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"

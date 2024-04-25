@@ -50,7 +50,7 @@ ptr_VInt_Sega:		offsetTableEntry.w VInt_Sega		; 4
 ptr_VInt_Menu:		offsetTableEntry.w VInt_Menu		; 6
 ptr_VInt_Level:		offsetTableEntry.w VInt_Level		; 8
 ptr_VInt_Fade:		offsetTableEntry.w VInt_Fade		; A
-ptr_VInt_LevelSelect:	offsetTableEntry.w VInt_LevelSelect	; 12
+ptr_VInt_LevelSelect:	offsetTableEntry.w VInt_LevelSelect	; C
 
 ; ---------------------------------------------------------------------------
 ; Lag

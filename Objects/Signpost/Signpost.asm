@@ -26,8 +26,9 @@ Obj_EndSignControlDoSign:
 		; load stub art
 		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($49C)
 
-		; next
-		jmp	AfterBoss_Cleanup(pc)
+AfterBoss_Cleanup:
+		movea.l	(Level_data_addr_RAM.AfterBoss).w,a1
+		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlAwaitStart:
