@@ -228,7 +228,7 @@ Song_Fade_ToLevelMusic_Wait:
 ; =============== S U B R O U T I N E =======================================
 
 Restore_LevelMusic:
-		lea	(Level_data_addr_RAM.Music).w,a2						; load music playlist
+		lea	(Level_data_addr_RAM.Music).w,a2						; load music
 		moveq	#0,d0
 		move.b	(a2),d0
 		move.w	d0,(Current_music).w

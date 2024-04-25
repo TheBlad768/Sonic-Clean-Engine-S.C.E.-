@@ -74,7 +74,7 @@ VInt_Lag_Main:
 
 VInt_Lag_Level:
 		tst.b	(Water_flag).w
-		beq.w	VInt_Lag_NoWater
+		beq.s	VInt_Lag_NoWater
 		move.w	VDP_control_port-VDP_control_port(a5),d0
 		btst	#6,(Graphics_flags).w
 		beq.s	.notpal								; branch if it isn't a PAL system
@@ -253,7 +253,7 @@ VInt_Level:
 .copy
 		move.l	d0,VDP_data_port-VDP_data_port(a6)
 		dbf	d1,.copy	; fill entire palette with white
-		bra.w	VInt_Level_Cont
+		bra.s	VInt_Level_Cont
 ; ---------------------------------------------------------------------------
 
 VInt_Level_NoFlash:

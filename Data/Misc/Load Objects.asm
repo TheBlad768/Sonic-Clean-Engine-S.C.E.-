@@ -227,7 +227,7 @@ loc_1B968:
 loc_1B978:
 		addi.w	#$180,d3
 		cmp.w	(Screen_Y_wrap_value).w,d3
-		bhi.s	loc_1B9FA
+		bhi.w	loc_1B9FA
 
 loc_1B982:
 		bsr.w	Create_New_Sprite
@@ -267,7 +267,15 @@ loc_1B9A4:
 		move.l	(a4,d2.w),address(a1)
 		move.b	3(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
-		bsr.w	Create_New_Sprite4
+
+		; Create_New_Sprite4
+		subq.w	#1,d0
+		bmi.s	loc_1B9FA
+
+.find
+		lea	next_object(a1),a1										; goto next object RAM slot
+		tst.l	address(a1)											; is object RAM slot empty?
+		dbeq	d0,.find											; if not, branch
 		bne.s	loc_1B9FA
 
 loc_1B9F2:
@@ -321,7 +329,18 @@ loc_1BA64:
 		move.l	(a4,d2.w),address(a1)
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
-		bra.s	Create_New_Sprite4
+
+		; Create_New_Sprite4
+		subq.w	#1,d0
+		bmi.s	.return
+
+.find
+		lea	next_object(a1),a1										; goto next object RAM slot
+		tst.l	address(a1)											; is object RAM slot empty?
+		dbeq	d0,.find											; if not, branch
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_1BA92:
@@ -369,12 +388,15 @@ loc_1BAB6:
 
 Create_New_Sprite4:
 		subq.w	#1,d0
-		bmi.s	+
+		bmi.s	.notfree
 
--		lea	next_object(a1),a1
-		tst.l	address(a1)
-		dbeq	d0,-
-+		rts
+.find
+		lea	next_object(a1),a1										; goto next object RAM slot
+		tst.l	address(a1)											; is object RAM slot empty?
+		dbeq	d0,.find											; if not, branch
+
+.notfree
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Changes the coarse back- and forward-camera edges to match new Camera_X value.

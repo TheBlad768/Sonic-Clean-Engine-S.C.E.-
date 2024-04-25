@@ -39,7 +39,7 @@ Level_Screen:
 		clearRAM Camera_RAM, Camera_RAM_end
 		clearRAM Oscillating_variables, Oscillating_variables_end
 		lea	Level_VDP(pc),a1
-		jsr	(Load_VDP).w
+		jsr	(Load_VDP).w														; a6 now has a VDP control address do not overwrite this register
 		jsr	(LoadLevelPointer).w													; load level data
 
 	if GameDebug
@@ -56,7 +56,7 @@ Level_Screen:
 	endif
 
 		move.w	#$8A00+255,(H_int_counter_command).w							; set palette change position (for water)
-		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a6)
+		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a6)	; warning: don't overwrite a6
 
 		; load player palette
 		moveq	#palid_Sonic,d0
@@ -72,10 +72,10 @@ Level_Screen:
 		clearRAM Water_palette_line_2, Normal_palette
 		tst.b	(Water_flag).w
 		beq.s	.notwater
-		move.w	#$8014,VDP_control_port-VDP_control_port(a6)						; H-int enabled
+		move.w	#$8014,VDP_control_port-VDP_control_port(a6)						; H-int enabled	; last use a6 here
 
 .notwater
-		lea	(Level_data_addr_RAM.Music).w,a1										; load music playlist
+		lea	(Level_data_addr_RAM.Music).w,a1										; load music
 		moveq	#0,d0
 		move.b	(a1),d0
 		move.w	d0,(Current_music).w
@@ -94,23 +94,24 @@ Level_Screen:
 		tst.w	(Kos_modules_left).w												; are there any items in the pattern load cue?
 		bne.s	.wait															; if yes, branch
 		disableInts
-		jsr	(HUD_DrawInitial).w
+		jsr	(HUD_DrawInitial).w													; init HUD
 		enableInts
 		jsr	(Get_LevelSizeStart).w
 		jsr	(DeformBgLayer).w
 		jsr	(LoadLevelLoadBlock).w
 		jsr	(LoadLevelLoadBlock2).w
 		disableInts
-		jsr	(Level_Setup).w
+		jsr	(Level_Setup).w														; draw level
 		enableInts
-		movea.l	(Level_data_addr_RAM.AnimateTilesInit).w,a0						; animate init
+		movea.l	(Level_data_addr_RAM.AnimateTilesInit).w,a0						; animate art init
 		jsr	(a0)
 		jsr	(Load_Solids).w
 		jsr	(Handle_Onscreen_Water_Height).w
 		moveq	#0,d0
 		move.w	d0,(Ctrl_1_logical).w
 		move.w	d0,(Ctrl_1).w
-		move.b	d0,(HUD_RAM.status).w
+		move.b	d0,(HUD_RAM.status).w											; clear HUD flag
+		move.b	d0,(Update_HUD_timer).w											; clear time counter update flag
 		tst.b	(Last_star_post_hit).w													; are you starting from a starpost?
 		bne.s	.starpost															; if yes, branch
 		move.w	d0,(Ring_count).w												; clear rings

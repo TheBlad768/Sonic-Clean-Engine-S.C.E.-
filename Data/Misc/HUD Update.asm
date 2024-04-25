@@ -34,7 +34,7 @@ UpdateHUD:
 
 	if GameDebug
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
-		bne.w	HudDebug									; if yes, branch
+		bne.w	HUDDebug									; if yes, branch
 	endif
 
 		tst.b	(Update_HUD_score).w							; does the score need updating?
@@ -59,12 +59,12 @@ UpdateHUD:
 
 .chktime
 		tst.b	(Update_HUD_timer).w							; does the time need updating?
-		bpl.s	loc_DD64									; if not, branch
+		bpl.s	.skiptimer									; if not, branch
 		move.b	#1,(Update_HUD_timer).w
-		bra.s	loc_DD9E
+		bra.s	.drawtimer
 ; ---------------------------------------------------------------------------
 
-loc_DD64:
+.skiptimer
 		beq.s	HUD_AddToScore.return
 		tst.b	(Game_paused).w									; is the game paused?
 		bne.s	HUD_AddToScore.return						; if yes, branch
@@ -74,18 +74,18 @@ loc_DD64:
 
 		addq.b	#1,-(a1)										; increment 1/60s counter
 		cmpi.b	#60,(a1)										; check if passed 60
-		blo.s		loc_DD9E
+		blo.s		.drawtimer
 		clr.b	(a1)
 		addq.b	#1,-(a1)										; increment second counter
 		cmpi.b	#60,(a1)										; check if passed 60
-		blo.s		loc_DD9E
+		blo.s		.drawtimer
 		clr.b	(a1)
 		addq.b	#1,-(a1)										; increment minute counter
 		cmpi.b	#9,(a1)										; check if passed 9
-		blo.s		loc_DD9E
+		blo.s		.drawtimer
 		move.b	#9,(a1)										; keep as 9
 
-loc_DD9E:
+.drawtimer
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$28),d0
 		moveq	#0,d1
 		move.b	(Timer_minute).w,d1 							; load minutes
@@ -97,15 +97,14 @@ loc_DD9E:
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$32),d0
 		moveq	#0,d1
 		move.b	(Timer_frame).w,d1 							; load centiseconds
-		mulu.w	#100,d1
-		divu.w	#60,d1
-		swap	d1
-		clr.w	d1
-		swap	d1
+		lea	LUT_HUDCentiseconds(pc),a1						; 60
+		move.b	(a1,d1.w),d1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(Timer).w
-		bne.s	+
+		bne.s	.skipt
 		moveq	#99,d1
-+		bra.w	DrawTwoDigitNumber
+
+.skipt
+		bra.w	DrawTwoDigitNumber
 ; ---------------------------------------------------------------------------
 
 UpdateHUD_TimeOver:
@@ -125,7 +124,7 @@ UpdateHUD_TimeOver:
 
 	if GameDebug
 
-HudDebug:
+HUDDebug:
 		bsr.w	HUD_Debug
 		tst.b	(Update_HUD_ring_count).w						; does the ring counter need updating?
 		beq.s	.objcounter									; if not, branch
@@ -246,7 +245,7 @@ HUD_Zero_Rings:
 HUD_Initial_Parts_end
 		even
 
-		CHARSET ; reset character set
+		CHARSET	; reset character set
 
 	if GameDebug
 
@@ -292,7 +291,7 @@ HUD_Debug:
 ; =============== S U B R O U T I N E =======================================
 
 DrawThreeDigitNumber:
-		lea	Hud_100(pc),a2
+		lea	HUD_100(pc),a2
 		moveq	#3-1,d6
 		bra.s	DrawSixDigitNumber.loadart
 
@@ -304,7 +303,7 @@ DrawThreeDigitNumber:
 
 DrawSixDigitNumber:
 		moveq	#6-1,d6
-		lea	Hud_100000(pc),a2
+		lea	HUD_100000(pc),a2
 
 .loadart
 		moveq	#0,d4					; set clr flag
@@ -341,12 +340,12 @@ DrawSixDigitNumber:
 ; HUD counter sizes
 ; ---------------------------------------------------------------------------
 
-Hud_100000:	dc.l 100000
-Hud_10000:		dc.l 10000
-Hud_1000:		dc.l 1000
-Hud_100:		dc.l 100
-Hud_10:			dc.l 10
-Hud_1:			dc.l 1
+HUD_100000:	dc.l 100000
+HUD_10000:		dc.l 10000
+HUD_1000:		dc.l 1000
+HUD_100:		dc.l 100
+HUD_10:		dc.l 10
+HUD_1:			dc.l 1
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load time numbers patterns
@@ -355,14 +354,14 @@ Hud_1:			dc.l 1
 ; =============== S U B R O U T I N E =======================================
 
 DrawSingleDigitNumber:
-		lea	Hud_1(pc),a2
+		lea	HUD_1(pc),a2
 		moveq	#1-1,d6
 		bra.s	DrawTwoDigitNumber.loadart
 
 ; =============== S U B R O U T I N E =======================================
 
 DrawTwoDigitNumber:
-		lea	Hud_10(pc),a2
+		lea	HUD_10(pc),a2
 		moveq	#2-1,d6
 
 .loadart

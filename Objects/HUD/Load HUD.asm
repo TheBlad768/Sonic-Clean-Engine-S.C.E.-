@@ -65,4 +65,8 @@ Render_HUD:
 		rts
 ; ---------------------------------------------------------------------------
 
+LUT_HUDCentiseconds:	binclude "Objects/HUD/Object Data/LUT - Centiseconds(60).bin"
+	even
+; ---------------------------------------------------------------------------
+
 		include	"Objects/HUD/Object Data/Map - HUD.asm"

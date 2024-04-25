@@ -8,9 +8,11 @@ RandomNumber:
 Random_Number:
 		move.l	(RNG_seed).w,d1
 		tst.w	d1
-		bne.s	+
+		bne.s	.notreset
 		move.l	#$2A6D365B,d1	; reset seed if needed
-+
+
+.notreset
+
 		; set the high word of d0 to be the high word of the RNG
 		; and multiply the RNG by 41
 		move.l	d1,d0

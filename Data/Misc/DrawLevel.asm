@@ -220,14 +220,14 @@ Setup_TileColumnDraw:
 
 Get_LevelChunkColumn:
 		movea.l	(Level_layout_addr_ROM).w,a4
-		adda.w	(a3,d1.w),a4
 		move.w	d0,d3
 		asr.w	#7,d3
+		add.w	(a3,d1.w),d3
 		adda.w	d3,a4
-		moveq	#-1,d3
-		clr.w	d3
+		moveq	#-1,d3				; RAM_start (Chunk_table)
+		clr.w	d3					; d3 = $FFFF0000
 		move.b	(a4),d3
-		lsl.w	#7,d3
+		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		asr.w	#3,d4
 		andi.w	#$E,d4
@@ -236,6 +236,22 @@ Get_LevelChunkColumn:
 
 Get_LevelChunkColumn_Return:
 		rts
+
+; ---------------------------------------------------------------------------
+; Draw BG 2
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_BG2:
+		lea	(Camera_Y_pos_BG_copy).w,a6
+		lea	(Camera_Y_pos_BG_rounded).w,a5
+		moveq	#0,d1		; Camera_X_pos_BG_copy
+		moveq	#$20,d6
+
+; ---------------------------------------------------------------------------
+; Draw tile row
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -264,6 +280,10 @@ Draw_TileRow:
 		addi.w	#$10,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		bra.s	Setup_TileRowDraw
+
+; ---------------------------------------------------------------------------
+; Draw tile row 2
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -310,7 +330,7 @@ Setup_TileRowDraw:
 		sub.w	d6,d5
 		bmi.s	+
 		move.w	d0,d5
-		andi.w	#$F0,d5		; If the length of the write can fit without wrapping the nametable
+		andi.w	#$F0,d5			; if the length of the write can fit without wrapping the nametable
 		lsl.w	#4,d5
 		add.w	d7,d5
 		add.w	d3,d5
@@ -324,7 +344,7 @@ Setup_TileRowDraw:
 		adda.w	d5,a0
 		bsr.w	Get_LevelAddrChunkRow
 		bra.s	++
-+		neg.w	d5			; If the length of the write wraps over the length of the nametable
++		neg.w	d5				; if the length of the write wraps over the length of the nametable
 		move.w	d5,-(sp)
 		move.w	d0,d5
 		andi.w	#$F0,d5
@@ -341,7 +361,7 @@ Setup_TileRowDraw:
 		adda.w	d4,a0
 		bsr.s	Get_LevelAddrChunkRow
 		bsr.s	+
-		move.w	(sp)+,d6		; Must place one more write command to account for rollover
+		move.w	(sp)+,d6			; must place one more write command to account for rollover
 		move.w	d0,d5
 		andi.w	#$F0,d5
 		lsl.w	#4,d5
@@ -393,10 +413,10 @@ Get_LevelAddrChunkRow:
 		adda.w	(a3,d3.w),a4
 
 Get_ChunkRow:
-		moveq	#-1,d3
-		clr.w	d3
+		moveq	#-1,d3				; RAM_start (Chunk_table)
+		clr.w	d3					; d3 = $FFFF0000
 		move.b	(a4,d1.w),d3
-		lsl.w	#7,d3
+		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		andi.w	#$70,d4
 		add.w	d4,d3
@@ -406,22 +426,23 @@ Get_ChunkRow:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFull:
-		moveq	#$F,d2
+		moveq	#$10-1,d2
 
--		movem.l	d0-d2/a0,-(sp)
+.refresh
+		movem.l	d0-d2/a0,-(sp)
 		moveq	#$20,d6
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/a0
 		addi.w	#$10,d0
-		dbf	d2,-
+		dbf	d2,.refresh
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneTileDeform:
 		move.w	(a4)+,d2
-		moveq	#$F,d3
+		moveq	#$10-1,d3
 
 -		cmp.w	d2,d0
 		bmi.s	+
@@ -436,6 +457,31 @@ Refresh_PlaneTileDeform:
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
 		addi.w	#$10,d0
 		dbf	d3,-
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_PlaneDirectVScroll:
+		move.w	(a4)+,d2
+		moveq	#$20-1,d3
+
+loc_4ED1C:
+		cmp.w	d2,d0
+		bmi.s	loc_4ED26
+		add.w	(a4)+,d2
+		addq.w	#4,a5
+		bra.s	loc_4ED1C
+; ---------------------------------------------------------------------------
+
+loc_4ED26:
+		move.w	(a5),d1
+		moveq	#$10,d6
+		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
+		bsr.w	Setup_TileColumnDraw
+		bsr.w	VInt_DrawLevel
+		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
+		addi.w	#$10,d0
+		dbf	d3,loc_4ED1C
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -458,14 +504,15 @@ Refresh_PlaneDirect2:
 
 Refresh_PlaneDirect:
 		disableInts
-		moveq	#$E,d2
+		moveq	#$F-1,d2
 
--		movem.l	d0-d2/d6/a0,-(sp)		; Redraws the entire plane in one go during 68k execution
+.refresh
+		movem.l	d0-d2/d6/a0,-(sp)			; redraws the entire plane in one go during 68k execution
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
 		addi.w	#$10,d0
-		dbf	d2,-
+		dbf	d2,.refresh
 		enableInts
 		rts
 
@@ -491,12 +538,13 @@ Refresh_PlaneDirect_BG:
 		disableInts
 		moveq	#$F,d2
 
--		movem.l	d0-d2/d6/a0,-(sp)		; Redraws the entire plane in one go during 68k execution
+.refresh
+		movem.l	d0-d2/d6/a0,-(sp)			; redraws the entire plane in one go during 68k execution
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
 		addi.w	#$10,d0
-		dbf	d2,-
+		dbf	d2,.refresh
 		enableInts
 		rts
 
@@ -602,15 +650,6 @@ Draw_BGNoVert:
 		andi.w	#$FFF0,d0
 		move.w	d0,(a6)+
 		bra.s	-
-
-; =============== S U B R O U T I N E =======================================
-
-Draw_BG2:
-		lea	(Camera_Y_pos_BG_copy).w,a6
-		lea	(Camera_Y_pos_BG_rounded).w,a5
-		moveq	#0,d1		; Camera_X_pos_BG_copy
-		moveq	#$20,d6
-		bra.w	Draw_TileRow
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -924,15 +963,23 @@ Load_Solids2:
 		move.l	a1,(Secondary_collision_addr).w
 		rts
 
+; ---------------------------------------------------------------------------
+; Clear switches RAM
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Switches:
 		clearRAM2 Level_trigger_array, Level_trigger_array_end
 		rts
 
+; ---------------------------------------------------------------------------
+; Reset level data
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
-Restart_LevelData:
+Reset_LevelData:
 		clr.b	(Screen_event_routine).w
 		clr.b	(Background_event_routine).w
 		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
@@ -944,6 +991,10 @@ Restart_LevelData:
 		bsr.s	Load_Level
 		bsr.s	Load_Solids
 		bra.w	CheckLevelForWater
+
+; ---------------------------------------------------------------------------
+; Load level data
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -961,6 +1012,10 @@ LoadLevelLoadBlock:
 		tst.w	(Kos_modules_left).w
 		bne.s	.waitplc
 		rts
+
+; ---------------------------------------------------------------------------
+; Load level data 2
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -982,6 +1037,10 @@ LoadLevelLoadBlock2:
 		move.b	(a2),d0
 		jmp	(LoadPalette).w
 
+; ---------------------------------------------------------------------------
+; Load level layout
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Load_Level:
@@ -992,6 +1051,10 @@ Load_Level2:
 		addq.w	#8,a1											; skip layout header
 		move.l	a1,(Level_layout_addr2_ROM).w					; save to addr2
 		rts
+
+; ---------------------------------------------------------------------------
+; Load level pointer (resize, events, etc...)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 

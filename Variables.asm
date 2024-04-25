@@ -456,6 +456,9 @@ Oscillating_variables_end				= *
 
 System_stack_size					ds.b $100				; ~$100 bytes ; this is the top of the stack, it grows downwards
 System_stack:						= *
+
+RAM_end:							= *
+
 Checksum_string:						ds.l 1					; set to 'INIT' once the checksum routine has run
 V_int_jump:							ds.w 1					; contains an instruction to jump to the V-int handler
 V_int_addr:							ds.l 1

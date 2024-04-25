@@ -363,18 +363,18 @@ ObjArray_LevResults:
 
 		; 5
 		dc.l Obj_LevResultsGeneral
-		dc.w $C0									; bonus (time) hud sprite x position
+		dc.w $C0									; bonus (time) HUD sprite x position
 		dc.w $4C0
-		dc.w $F0										; bonus (time) hud sprite y position
+		dc.w $F0										; bonus (time) HUD sprite y position
 		dc.b $E
 		dc.b $20
 		dc.w 5
 
 		; 6
 		dc.l Obj_LevResultsGeneral
-		dc.w $E8										; time hud sprite x position
+		dc.w $E8										; time HUD sprite x position
 		dc.w $4E8
-		dc.w $F0										; time hud sprite y position
+		dc.w $F0										; time HUD sprite y position
 		dc.b $C
 		dc.b $30
 		dc.w 5
@@ -390,18 +390,18 @@ ObjArray_LevResults:
 
 		; 8
 		dc.l Obj_LevResultsGeneral
-		dc.w $C0									; bonus (ring) hud sprite x position
+		dc.w $C0									; bonus (ring) HUD sprite x position
 		dc.w $500
-		dc.w $100									; bonus (ring) hud sprite y position
+		dc.w $100									; bonus (ring) HUD sprite y position
 		dc.b $D
 		dc.b $20
 		dc.w 7
 
 		; 9
 		dc.l Obj_LevResultsGeneral
-		dc.w $E8										; ring hud sprite x position
+		dc.w $E8										; ring HUD sprite x position
 		dc.w $528
-		dc.w $100									; ring hud sprite y position
+		dc.w $100									; ring HUD sprite y position
 		dc.b $C
 		dc.b $30
 		dc.w 7
@@ -417,9 +417,9 @@ ObjArray_LevResults:
 
 		; 11
 		dc.l Obj_LevResultsGeneral
-		dc.w $D4									; total hud sprite x position
+		dc.w $D4									; total HUD sprite x position
 		dc.w $554
-		dc.w $11C									; total hud sprite y position
+		dc.w $11C									; total HUD sprite y position
 		dc.b $B
 		dc.b $30
 		dc.w 9

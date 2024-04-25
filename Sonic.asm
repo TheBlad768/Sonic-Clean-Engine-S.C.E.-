@@ -80,7 +80,8 @@ EndOfHeader:
 ; Security Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Security Startup.asm"
+		include "Data/Misc/Security Startup 1.asm"
+		include "Data/Misc/Security Startup 2.asm"
 
 ; ---------------------------------------------------------------------------
 ; VDP Subroutine
@@ -185,7 +186,7 @@ EndOfHeader:
 ; Load HUD Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Load HUD.asm"
+		include "Objects/HUD/Load HUD.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load Rings Subroutine

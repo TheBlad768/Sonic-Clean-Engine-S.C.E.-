@@ -378,17 +378,16 @@ GetFloorPosition:
 		move.w	d2,d0
 		lsr.w	#5,d0
 		and.w	(Layout_row_index_mask).w,d0
-		adda.w	8(a1,d0.w),a1
 		move.w	d3,d1
 		lsr.w	#3,d1
 		move.w	d1,d4
 		lsr.w	#4,d1
+		add.w	8(a1,d0.w),d1
 		adda.w	d1,a1
-		moveq	#-1,d1
-		clr.w	d1
+		moveq	#-1,d1				; RAM_start (Chunk_table)
+		clr.w	d1					; d1 = $FFFF0000
 		move.b	(a1),d1
-		add.w	d1,d1
-		move.w	ChunkAddrArray(pc,d1.w),d1
+		lsl.w	#7,d1					; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
 		add.w	d0,d1
@@ -396,20 +395,11 @@ GetFloorPosition:
 		add.w	d4,d1
 		movea.l	d1,a1
 		rts
-; ---------------------------------------------------------------------------
-
-ChunkAddrArray:
-
-		set	.a,0
-	rept 256
-		dc.w	 .a
-		set	.a,.a + $80
-	endr
 
 ; =============== S U B R O U T I N E =======================================
 
 FindFloor:
-		bsr.w	GetFloorPosition
+		bsr.s	GetFloorPosition
 		move.w	(a1),d0
 		move.w	d0,d4
 		andi.w	#$3FF,d0
