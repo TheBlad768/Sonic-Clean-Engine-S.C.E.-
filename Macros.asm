@@ -359,8 +359,8 @@ copyRAM2 macro startaddr,endaddr,startaddr2
 ; ---------------------------------------------------------------------------
 
 ; load Kos data to RAM
-QueueKos macro art,ram,terminate
-	lea	(art).l,a1
+QueueKos macro data,ram,terminate
+	lea	(data).l,a1
     if ((ram)&$8000)==0
 	lea	(ram).l,a2
     else
