@@ -355,6 +355,36 @@ copyRAM2 macro startaddr,endaddr,startaddr2
     endm
 
 ; ---------------------------------------------------------------------------
+; load Kos and KosM
+; ---------------------------------------------------------------------------
+
+; load Kos data to RAM
+QueueKos macro art,ram,terminate
+	lea	(art).l,a1
+    if ((ram)&$8000)==0
+	lea	(ram).l,a2
+    else
+	lea	(ram).w,a2
+    endif
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(Queue_Kos).w
+      else
+	jmp	(Queue_Kos).w
+      endif
+    endm
+
+; load KosM art to VRAM
+QueueKosModule macro art,vram,terminate
+	lea	(art).l,a1
+	move.w	#tiles_to_bytes(vram),d2
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(Queue_Kos_Module).w
+      else
+	jmp	(Queue_Kos_Module).w
+      endif
+    endm
+
+; ---------------------------------------------------------------------------
 ; check if object moves out of range
 ; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
 ; ---------------------------------------------------------------------------
@@ -1007,78 +1037,81 @@ esfx	macro track, terminate
 SonicMappingsVer := 3
 
 mappingsTable macro {INTLABEL}
-current_mappings_table := __LABEL__
 __LABEL__ label *
+.current_mappings_table := __LABEL__
     endm
 
-; macro to declare an entry in a mappings table (taken from Sonic 2 Hg disassembly)
 mappingsTableEntry macro ptr
-	dc.ATTRIBUTE ptr-current_mappings_table
+	dc.ATTRIBUTE ptr-.current_mappings_table
     endm
 
 spriteHeader macro {INTLABEL}
 __LABEL__ label *
-	if SonicMappingsVer==1
-		dc.b ((__LABEL___end - __LABEL__ - 1) / 5)
-	elseif SonicMappingsVer==2
-		dc.w ((__LABEL___end - __LABEL__ - 2) / 8)
+	if SonicMappingsVer=1
+		dc.b ((__LABEL___End - __LABEL___Begin) / 5)
+	elseif SonicMappingsVer=2
+		dc.w ((__LABEL___End - __LABEL___Begin) / 8)
 	else
-		dc.w ((__LABEL___end - __LABEL__ - 2) / 6)
+		dc.w ((__LABEL___End - __LABEL___Begin) / 6)
 	endif
+__LABEL___Begin label *
     endm
 
 spritePiece macro xpos,ypos,width,height,tile,xflip,yflip,pal,pri
-	if SonicMappingsVer==1
+	if SonicMappingsVer=1
 		dc.b	ypos
 		dc.b	(((width-1)&3)<<2)|((height-1)&3)
-		dc.b	((pri&1)<<7)|((pal&3)<<5)|((yflip&1)<<4)|((xflip&1)<<3)|((tile&$700)>>8)
+		dc.b	((((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(tile))>>8
 		dc.b	tile&$FF
 		dc.b	xpos
-	elseif SonicMappingsVer==2
+	elseif SonicMappingsVer=2
 		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
-		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|((tile>>1)&$7FF)
+		dc.w	(((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(tile)
+		dc.w	(((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(((tile)>>1)|((tile)&$8000))
 		dc.w	xpos
 	else
 		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
+		dc.w	(((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(tile)
 		dc.w	xpos
 	endif
     endm
 
 spritePiece2P macro xpos,ypos,width,height,tile,xflip,yflip,pal,pri,tile2,xflip2,yflip2,pal2,pri2
-	if SonicMappingsVer==1
+	if SonicMappingsVer=1
 		dc.b	ypos
 		dc.b	(((width-1)&3)<<2)|((height-1)&3)
-		dc.b	((pri&1)<<7)|((pal&3)<<5)|((yflip&1)<<4)|((xflip&1)<<3)|((tile&$700)>>8)
+		dc.b	((((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(tile))>>8
 		dc.b	tile&$FF
 		dc.b	xpos
-	elseif SonicMappingsVer==2
+	elseif SonicMappingsVer=2
 		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
-		dc.w	((pri2&1)<<15)|((pal2&3)<<13)|((yflip2&1)<<12)|((xflip2&1)<<11)|(tile2&$7FF)
+		dc.w	(((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(tile)
+		dc.w	(((pri2&1)<<15)|((pal2&3)<<13)|((yflip2&1)<<12)|((xflip2&1)<<11))+(tile2)
 		dc.w	xpos
 	else
 		dc.w	((ypos&$FF)<<8)|(((width-1)&3)<<2)|((height-1)&3)
-		dc.w	((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11)|(tile&$7FF)
+		dc.w	(((pri&1)<<15)|((pal&3)<<13)|((yflip&1)<<12)|((xflip&1)<<11))+(tile)
 		dc.w	xpos
 	endif
     endm
 
 dplcHeader macro {INTLABEL}
 __LABEL__ label *
-	if SonicMappingsVer==1
-		dc.b ((__LABEL___end - __LABEL__ - 1) / 2)
-	elseif SonicMappingsVer==2
-		dc.w ((__LABEL___end - __LABEL__ - 2) / 2)
+	if SonicDplcVer=1
+		dc.b ((__LABEL___End - __LABEL___Begin) / 2)
+	elseif SonicDplcVer=3
+		dc.w (((__LABEL___End - __LABEL___Begin) / 2)-1)
 	else
-		dc.w ((__LABEL___end - __LABEL__ - 4) / 2)
+		dc.w ((__LABEL___End - __LABEL___Begin) / 2)
 	endif
+__LABEL___Begin label *
     endm
 
 dplcEntry macro tiles,offset
-	if SonicMappingsVer==3
+	if SonicDplcVer=3
 		dc.w	((offset&$FFF)<<4)|((tiles-1)&$F)
+	elseif SonicDplcVer=4
+		dc.w	(((tiles-1)&$F)<<12)|((offset&$FFF)<<4)
 	else
 		dc.w	(((tiles-1)&$F)<<12)|(offset&$FFF)
 	endif

@@ -4,6 +4,7 @@
 *.cs text
 *.cpp text
 *.ini text
+*.py text
 *.eni binary
 *.kos binary
 *.kosm binary
