@@ -1319,19 +1319,21 @@ offsetEntry macro ptr
 
 dScroll_Header macro {INTLABEL}
 __LABEL__ label *
-	dc.w (((__LABEL___end - __LABEL__Plc) / 6) - 1)
-__LABEL__Plc:
+	dc.w (((__LABEL___end - __LABEL__Scroll) / 6) - 1)
+__LABEL__Scroll:
     endm
 
-dScroll_Data macro plane,pixel,speed,size
-	if plane=0
+dScroll_Data macro pixel,size,velocity,plane
+	dc.w velocity, size
+
+	switch lowstring("plane")
+	case "fg"
 		dc.w H_scroll_buffer+(pixel<<2)
-	elseif plane=1
-		dc.w H_scroll_buffer+((pixel<<2)+2)
-	else
+	case "bg"
+		dc.w (H_scroll_buffer+2)+(pixel<<2)
+	elsecase
 		fatal "Error! Non-existent plan."
-	endif
-	dc.w speed, size
+	endcase
     endm
 ; ---------------------------------------------------------------------------
 

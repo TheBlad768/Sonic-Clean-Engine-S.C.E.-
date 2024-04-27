@@ -1,36 +1,37 @@
 ; ---------------------------------------------------------------------------
 ; Simple horizontal deformation
 ; Inputs:
-; a2 = config: buffer, initial pixel, speed, deformation size
-; a3 = deformation buffer
+; a2 = config: buffer, initial pixel, velocity, deformation size
+; a3 = deformation table
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 HScroll_Deform:
-		move.w	(a2)+,d6
+		lea	(H_scroll_table).w,a3								; load scroll table
 
-.loop2
-		movea.w	(a2)+,a1
-		move.w	(a2)+,d2
-		move.w	(a2)+,d5
+.main
+		move.w	(a2)+,d6										; get list of deformation
+
+.next
+		movem.w	(a2)+,d2/d5/a1							; get velocity parameter, deformation size, deformation buffer
 		ext.l	d2
-		asl.l	#8,d2
+		asl.l	#8,d2											; shift velocity to line up with the middle 16 bits of the 32-bit position
 
 .loop
-		add.l	d2,(a3)
-		move.w	(a3),(a1)
-		addq.w	#4,a1
-		addq.w	#4,a3
+		add.l	d2,(a3)										; add velocity to deformation table
+		move.w	(a3),(a1)										; set velocity from deformation table to deformation buffer
+		addq.w	#4,a1										; next deformation line
+		addq.w	#4,a3										; next deformation table
 		dbf	d5,.loop
-		dbf	d6,.loop2
+		dbf	d6,.next
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Simple vertical deformation
 ; Inputs:
-; a1 = deformation buffer
-; a2 = config: speed
+; a1 = deformation table
+; a2 = config: velocity
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -42,11 +43,11 @@ VScroll_Deform:
 		moveq	#bytesToXcnt((320*2),16),d6
 
 .loop
-		move.w	(a2)+,d2
+		move.w	(a2)+,d2										; get velocity parameter
 		ext.l	d2
-		asl.l	#8,d2
-		add.l	d2,(a1)
-		move.w	(a1),VDP_data_port-VDP_data_port(a6)
+		asl.l	#8,d2											; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d2,(a1)										; add velocity to deformation table
+		move.w	(a1),VDP_data_port-VDP_data_port(a6)			; set velocity from deformation table to deformation buffer
 		addq.w	#4,a1
 		dbf	d6,.loop
 		rts
