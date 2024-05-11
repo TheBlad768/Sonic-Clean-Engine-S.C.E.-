@@ -52,7 +52,7 @@ Init_BossArena:
 		st	(Boss_flag).w
 
 Init_BossArena2:
-		music	mus_Fade														; fade out music
+		music	mus_FadeOut													; fade out music
 		move.w	#2*60,$2E(a0)
 
 Init_BossArena3:
@@ -75,7 +75,7 @@ Load_BossArena:
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
 		move.b	d0,(Current_music+1).w
-		jsr	(SMPS_QueueSound1).w
+		jsr	(Play_Music).w
 		bset	#0,objoff_27(a0)
 
 loc_85CC6:

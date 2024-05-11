@@ -646,7 +646,7 @@ EggCapsule_Animals_Load:
 ; =============== S U B R O U T I N E =======================================
 
 Load_EggCapsule:
-		st	(LastAct_end_flag).w
+		st	(Last_act_end_flag).w
 		st	(Level_end_flag).w
 		lea	Child6_EggCapsule(pc),a2
 		jmp	(CreateChild6_Simple).w

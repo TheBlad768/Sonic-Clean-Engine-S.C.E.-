@@ -26,7 +26,7 @@ SMPS_First_ContSFX	= $BC
 SMPS_IdlingSegaSound	= 0
 ;	| If 1, the Sega sound makes the 68k idle. Needed for stock Sonic 1
 ;
-SMPS_EnableUniversalVoiceBank	= 0
+SMPS_EnableUniversalVoiceBank	= 1
 ;	| If 1, include the Universal Voice Bank, used by S3 and S&K
 ;
 SMPS_EnablePlaySoundLocal	= 0
@@ -73,6 +73,9 @@ Play_SFX			= SMPS_QueueSound2
 PlaySound_Special	= SMPS_QueueSound2
 Play_Sound_2		= SMPS_QueueSound2
 PlaySound_Unused	= SMPS_QueueSound3
+Play_Sample			= SMPS_PlayDACSample
+
+mus_FadeOut		= mus_Fade
 
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 

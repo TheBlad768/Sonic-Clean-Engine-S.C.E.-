@@ -213,7 +213,7 @@ Go_CheckPlayerRelease:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_Transition:
-		music	mus_Fade										; fade out music
+		music	mus_FadeOut									; fade out music
 		move.l	#Song_Fade_Transition_Wait,address(a0)
 
 Song_Fade_Transition_Return:
@@ -225,13 +225,13 @@ Song_Fade_Transition_Wait:
 		bne.s	Song_Fade_Transition_Return
 		move.b	subtype(a0),d0
 		move.b	d0,(Current_music+1).w
-		jsr	(SMPS_QueueSound1).w								; play music
+		jsr	(Play_Music).w										; play music
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_ToLevelMusic:
-		music	mus_Fade										; fade out music
+		music	mus_FadeOut									; fade out music
 		move.l	#Song_Fade_ToLevelMusic_Wait,address(a0)
 
 Song_Fade_ToLevelMusic_Return:
@@ -256,7 +256,7 @@ Restore_LevelMusic:
 		moveq	#signextendB(mus_Invincible),d0					; if invincible, play invincibility music
 
 .play
-		jmp	(SMPS_QueueSound1).w								; play music
+		jmp	(Play_Music).w										; play music
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -487,7 +487,7 @@ StartNewLevel:
 Play_SFX_Continuous:
 		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
-		jmp	(SMPS_QueueSound2).w								; play sfx
+		jmp	(Play_SFX).w											; play sfx
 
 ; =============== S U B R O U T I N E =======================================
 

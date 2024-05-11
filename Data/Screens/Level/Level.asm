@@ -19,7 +19,7 @@ Level_VDP:
 
 Level_Screen:
 		bset	#GameModeFlag_TitleCard,(Game_mode).w								; set bit 7 is indicate that we're loading the level
-		music	mus_Fade														; fade out music
+		music	mus_FadeOut													; fade out music
 		jsr	(Clear_Kos_Module_Queue).w											; clear KosM PLCs
 		ResetDMAQueue															; clear DMA queue
 		jsr	(Pal_FadeToBlack).w
@@ -79,7 +79,7 @@ Level_Screen:
 		moveq	#0,d0
 		move.b	(a1),d0
 		move.w	d0,(Current_music).w
-		jsr	(SMPS_QueueSound1).w												; play music
+		jsr	(Play_Music).w														; play music
 		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)+address).w		; load title card object
 
 .wait

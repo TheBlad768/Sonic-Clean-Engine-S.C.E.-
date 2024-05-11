@@ -240,7 +240,7 @@ Debug_camera_delay:					ds.b 1
 Debug_camera_speed:					ds.b 1
 Debug_object:						ds.b 1					; the current position in the debug mode object list
 Level_end_flag:						ds.b 1
-LastAct_end_flag:						ds.b 1
+Last_act_end_flag:					ds.b 1
 									ds.b 1					; even
 Slotted_object_bits:					ds.b 8					; index of slot array to use
 Signpost_addr:						ds.w 1

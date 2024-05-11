@@ -173,7 +173,7 @@ LevelSelect_Controls:
 		; play sample
 		move.w	d3,d0
 		addi.w	#dac__First,d0										; $80 is reserved for pause
-		jmp	(SMPS_PlayDACSample).w									; play sample
+		jmp	(Play_Sample).w											; play sample
 
 ; ---------------------------------------------------------------------------
 ; Get act
@@ -217,12 +217,12 @@ LevelSelect_Controls:
 
 		; check stop music
 		btst	#button_B,d1
-		bne.s	.stop							; branch if B is pressed
+		bne.s	.stop												; branch if B is pressed
 
 		; play music
 		move.w	d3,d0
-		addq.w	#mus__First,d0					; $00 is reserved for silence
-		jmp	(SMPS_QueueSound1).w				; play music
+		addq.w	#mus__First,d0										; $00 is reserved for silence
+		jmp	(Play_Music).w											; play music
 ; --------------------------------------------------------------------------
 
 .stop
@@ -246,8 +246,8 @@ LevelSelect_Controls:
 
 		; play sfx
 		move.w	d3,d0
-		addi.w	#sfx__First,d0					; skip music
-		jmp	(SMPS_QueueSound2).w				; play sfx
+		addi.w	#sfx__First,d0										; skip music
+		jmp	(Play_SFX).w												; play sfx
 
 ; ---------------------------------------------------------------------------
 ; Control (up/down)

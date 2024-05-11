@@ -973,9 +973,9 @@ music	macro track, terminate, byte
 	move.w	#(track),d0
     endif
       if ("terminate"="0") || ("terminate"="")
-	jsr	(SMPS_QueueSound1).w
+	jsr	(Play_Music).w
       else
-	jmp	(SMPS_QueueSound1).w
+	jmp	(Play_Music).w
       endif
     endm
 
@@ -986,9 +986,9 @@ sfx	macro track, terminate, byte
 	move.w	#(track),d0
     endif
       if ("terminate"="0") || ("terminate"="")
-	jsr	(SMPS_QueueSound2).w
+	jsr	(Play_SFX).w
       else
-	jmp	(SMPS_QueueSound2).w
+	jmp	(Play_SFX).w
       endif
     endm
 

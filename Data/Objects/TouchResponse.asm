@@ -476,7 +476,7 @@ HurtCharacter:
 		moveq	#signextendB(sfx_Death),d0				; load normal damage sound
 
 .sound
-		jsr	(SMPS_QueueSound2).w
+		jsr	(Play_SFX).w
 		moveq	#-1,d0
 		rts
 ; ---------------------------------------------------------------------------
@@ -511,7 +511,7 @@ Kill_Character:
 		move.b	#id_Death,anim(a0)
 		move.w	art_tile(a0),(Debug_saved_art_tile).w
 		bset	#7,art_tile(a0)
-		jsr	(SMPS_QueueSound2).w
+		jsr	(Play_SFX).w
 
 .dontdie
 		moveq	#-1,d0

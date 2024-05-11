@@ -23,14 +23,14 @@ Obj_Spikes:
 		lea	byte_23F74(pc,d0.w),a1
 		move.b	(a1)+,width_pixels(a0)
 		move.b	(a1)+,height_pixels(a0)
-		move.l	#loc_24090,address(a0)
+		move.l	#loc_24090,address(a0)							;  face up or down
 		move.l	#Map_Spikes,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings+8,0,0),art_tile(a0)
 		lsr.w	d0
 		move.b	d0,mapping_frame(a0)
 		cmpi.b	#4,d0
 		blo.s		loc_23FE8
-		move.l	#loc_240E2,address(a0)
+		move.l	#loc_240E2,address(a0)							; sideways
 		move.w	#make_art_tile(ArtTile_SpikesSprings,0,0),art_tile(a0)
 
 loc_23FE8:
@@ -64,7 +64,7 @@ loc_24090:														;  face up or down
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		jsr	SolidObjectFull(pc)
+		jsr	(SolidObjectFull).w
 		moveq	#standing_mask,d6
 		and.b	status(a0),d6										; is Sonic or Tails standing on the object?
 		beq.s	loc_240D8										; if not, branch
@@ -89,7 +89,7 @@ loc_240E2:														; sideways
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		jsr	SolidObjectFull(pc)
+		jsr	(SolidObjectFull).w
 		swap	d6
 		andi.w	#touch_side_mask,d6
 		beq.s	loc_24134
@@ -115,7 +115,7 @@ loc_2413E:
 		move.w	d2,d3
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
-		jsr	SolidObjectFull(pc)
+		jsr	(SolidObjectFull).w
 		swap	d6
 		andi.w	#touch_bottom_mask,d6
 		beq.s	loc_24184
@@ -209,7 +209,7 @@ loc_24312:
 		tst.w	objoff_36(a0)
 		beq.s	loc_24334
 		subi.w	#$800,objoff_34(a0)
-		bcc.s	locret_24354
+		bhs.s	locret_24354
 		clr.l	objoff_34(a0)
 		move.w	#60,objoff_38(a0)
 		rts
