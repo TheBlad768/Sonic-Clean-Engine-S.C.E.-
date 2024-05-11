@@ -164,7 +164,26 @@ Obj_VelocityIndex:
 
 ; =============== S U B R O U T I N E =======================================
 
+Release_PlayerFromObject:
+
+		; clear push
+		moveq	#pushing_mask,d0
+		and.b	status(a0),d0										; is Sonic or Tails pushing the object?
+		beq.s	.return											; if not, branch
+		bclr	#p1_pushing_bit,status(a0)
+		beq.s	.return
+		lea	(Player_1).w,a1
+		bclr	#Status_Push,status(a1)
+		move.w	#bytes_to_word(id_Walk,id_Run),anim(a1)			; reset player anim
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 Displace_PlayerOffObject:
+
+		; clear standing
 		moveq	#standing_mask,d0
 		and.b	status(a0),d0										; is Sonic or Tails standing on the object?
 		beq.s	.return											; if not, branch

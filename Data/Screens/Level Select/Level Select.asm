@@ -55,10 +55,10 @@ LevelSelect_Screen:
 		jsr	(Load_VDP).w
 		jsr	(Clear_Palette).w
 		clearRAM RAM_start, (RAM_start+$2000)						; clear foreground buffers
-		clearRAM Object_RAM, Object_RAM_end
-		clearRAM Lag_frame_count, Lag_frame_count_end
-		clearRAM Camera_RAM, Camera_RAM_end
-		clearRAM Oscillating_variables, Oscillating_variables_end
+		clearRAM Object_RAM, Object_RAM_end						; clear the object RAM
+		clearRAM Lag_frame_count, Lag_frame_count_end				; clear variables
+		clearRAM Camera_RAM, Camera_RAM_end						; clear the camera RAM
+		clearRAM Oscillating_variables, Oscillating_variables_end			; clear variables
 		moveq	#0,d0
 		move.b	d0,(Water_full_screen_flag).w
 		move.b	d0,(Water_flag).w
@@ -118,9 +118,9 @@ LevelSelect_Screen:
 		; load zone and act
 		move.b	#id_LevelScreen,(Game_mode).w						; set screen mode to level
 		move.w	(vLevelSelect_vertical_count).w,d2
-		move.b	d2,(sp)												; multiply by $100
-		move.w	(sp),d2
-		clr.b	d2
+		move.b	d2,-(sp)												; multiply by $100
+		move.w	(sp)+,d2
+		clr.b	d2														; clear garbage data
 		add.w	(vLevelSelect_saved_act).w,d2
 		move.w	d2,(Current_zone_and_act).w
 		move.w	d2,(Apparent_zone_and_act).w
@@ -456,9 +456,9 @@ LevelSelect_LoadAct:
 		lea	(vLevelSelect_horizontal_count).w,a0
 		move.w	(vLevelSelect_vertical_count).w,d0
 		move.w	d0,d1
-		move.b	d0,(sp)												; multiply by $100
-		move.w	(sp),d0
-		clr.b	d0
+		move.b	d0,-(sp)												; multiply by $100
+		move.w	(sp)+,d0
+		clr.b	d0														; clear garbage data
 		adda.w	d0,a5
 		add.w	d1,d1
 		move.w	(a0,d1.w),d0

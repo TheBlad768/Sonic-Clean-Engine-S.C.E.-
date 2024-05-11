@@ -4,12 +4,12 @@
 Check_CameraInRange:
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(a1)+,d0
-		bcs.s	Check_CameraInRange_Fail
+		blo.s		Check_CameraInRange_Fail
 		cmp.w	(a1)+,d0
 		bhi.s	Check_CameraInRange_Fail
 		move.w	(Camera_X_pos).w,d1
 		cmp.w	(a1)+,d1
-		bcs.s	Check_CameraInRange_Fail
+		blo.s		Check_CameraInRange_Fail
 		cmp.w	(a1)+,d1
 		bhi.s	Check_CameraInRange_Fail
 		bclr	#7,objoff_27(a0)
@@ -208,16 +208,20 @@ Check_PlayerInRange:
 		add.w	(a1)+,d4
 		move.w	d4,d6
 		add.w	(a1)+,d6
+
+		; check
 		cmp.w	d3,d1
-		blo.s		+
+		blo.s		.return
 		cmp.w	d5,d1
-		bhs.s	+
+		bhs.s	.return
 		cmp.w	d4,d2
-		blo.s		+
+		blo.s		.return
 		cmp.w	d6,d2
-		bhs.s	+
+		bhs.s	.return
 		move.w	a2,d0
-+		rts
+
+.return
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -234,10 +238,61 @@ Check_PlayerInRange2:
 		bhi.s	.fail
 
 .done
-		moveq	#0,d0
+		moveq	#1,d0
 		rts
 ; ---------------------------------------------------------------------------
 
 .fail
-		moveq	#-1,d0
+		moveq	#0,d0
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Chk_OffScreen:
+		move.w	x_pos(a0),d0														; get object x-position
+		sub.w	(Camera_X_pos).w,d0												; subtract screen x-position
+		bmi.s	.offscreen
+		cmpi.w	#320,d0															; is object on the screen?
+		bge.s	.offscreen														; if not, branch
+		move.w	y_pos(a0),d0														; get object y-position
+		sub.w	(Camera_Y_pos).w,d0												; subtract screen y-position
+		bmi.s	.offscreen
+		cmpi.w	#224,d0															; is object on the screen?
+		bge.s	.offscreen														; if not, branch
+
+		; onscreen
+		moveq	#0,d0															; set flag to 0
+		rts
+; ---------------------------------------------------------------------------
+
+.offscreen
+		moveq	#1,d0															; set flag to 1
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Chk_WidthOffScreen:
+		moveq	#0,d1
+		move.b	width_pixels(a0),d1
+		move.w	x_pos(a0),d0														; get object x-position
+		sub.w	(Camera_X_pos).w,d0												; subtract screen x-position
+		add.w	d1,d0															; add object width
+		bmi.s	.offscreen
+		add.w	d1,d1
+		sub.w	d1,d0
+		cmpi.w	#320,d0															; is object on the screen?
+		bge.s	.offscreen														; if not, branch
+		move.w	y_pos(a0),d0														; get object y-position
+		sub.w	(Camera_Y_pos).w,d0												; subtract screen y-position
+		bmi.s	.offscreen
+		cmpi.w	#224,d0															; is object on the screen?
+		bge.s	.offscreen														; if not, branch
+
+		; onscreen
+		moveq	#0,d0															; set flag to 0
+		rts
+; ---------------------------------------------------------------------------
+
+.offscreen
+		moveq	#1,d0															; set flag to 1
 		rts

@@ -15,7 +15,7 @@ DeformBgLayer:
 		beq.s	.notsforce
 		clr.b	(Scroll_force_positions).w
 		clr.w	(H_scroll_frame_offset).w
-		lea	(Scroll_forced_X_pos-x_pos).w,a0
+		lea	(Scroll_forced_X_pos-x_pos).w,a0				; is now a player address
 
 .notsforce
 		lea	(Camera_X_pos).w,a1
