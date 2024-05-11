@@ -182,7 +182,7 @@ Obj_Index:
 		dc.l DeleteObject						; $B0
 		dc.l DeleteObject						; $B1
 		dc.l DeleteObject						; $B2
-		dc.l DeleteObject						; $B3
+		dc.l Obj_StartNewLevel				; $B3
 		dc.l DeleteObject						; $B4
 		dc.l DeleteObject						; $B5
 		dc.l DeleteObject						; $B6

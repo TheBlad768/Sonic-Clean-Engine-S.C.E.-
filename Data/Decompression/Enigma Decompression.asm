@@ -12,7 +12,7 @@
 
 EniDec:
 Eni_Decomp:
-		movem.l	d0-d7/a1-a5,-(sp)
+		move.l	a1,-(sp)					; save current RAM buffer (we save RAM buffer so that we don't duplicate it after decompressing is done)
 		movea.w	d0,a3					; store starting art tile
 		move.b	(a0)+,d0
 		ext.w	d0
@@ -68,7 +68,7 @@ Eni_Decomp_Sub8:
 .loop
 		move.w	d1,(a1)+
 		dbf	d2,.loop
-	
+
 		bra.s	Eni_Decomp_Loop
 ; ---------------------------------------------------------------------------
 
@@ -126,18 +126,18 @@ Eni_Decomp_JmpTable:
 
 Eni_Decomp_End:
 		subq.w	#1,a0
-		cmpi.w	#16,d6		; were we going to start on a completely new byte?
-		bne.s	.got_byte	; if not, branch
+		cmpi.w	#16,d6					; were we going to start on a completely new byte?
+		bne.s	.got_byte				; if not, branch
 		subq.w	#1,a0
 
 .got_byte
 		move.w	a0,d0
-		lsr.w	d0			; are we on an odd byte?
-		bhs.s	.even_loc		; if not, branch
-		addq.w	#1,a0		; ensure we're on an even byte
+		lsr.w	d0						; are we on an odd byte?
+		bhs.s	.even_loc					; if not, branch
+		addq.w	#1,a0					; ensure we're on an even byte
 
 .even_loc
-		movem.l	(sp)+,d0-d7/a1-a5
+		movea.l	(sp)+,a1					; return saved RAM buffer
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -209,8 +209,8 @@ Eni_Decomp_GetInlineCopyVal:
 		add.w	d0,d0
 		and.w	Eni_Decomp_AndVals-2(pc,d0.w),d1	; only keep as many bits as required
 		add.w	d3,d1				; add starting art tile
-		move.b	(a0)+,(sp)			; get current byte, move onto next byte
-		move.w	(sp),d5				; shift up by a byte
+		move.b	(a0)+,-(sp)			; get current byte, move onto next byte
+		move.w	(sp)+,d5				; shift up by a byte
 		move.b	(a0)+,d5				; store next byte in lower register byte
 		rts
 ; ---------------------------------------------------------------------------

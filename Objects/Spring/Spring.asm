@@ -50,7 +50,7 @@ loc_22DFC:
 Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
-		move.w	#$468,art_tile(a0)					; set diagonal
+		move.w	#$468,art_tile(a0)										; set diagonal
 		move.l	#Obj_Spring_UpDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ Spring_UpDiag:
 Spring_DownDiag:
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
-		move.w	#$468,art_tile(a0)					; set diagonal
+		move.w	#$468,art_tile(a0)										; set diagonal
 		bset	#1,status(a0)
 		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
@@ -80,7 +80,7 @@ Spring_Common:
 		move.w	word_22EF0(pc,d0.w),objoff_30(a0)
 		btst	#1,d0
 		beq.s	locret_22EEE
-		move.l	#Map_Spring2,mappings(a0)			; set yellow
+		move.l	#Map_Spring2,mappings(a0)								; set yellow
 
 locret_22EEE:
 		rts
@@ -128,7 +128,7 @@ Obj_Spring_Up_NoSolid:
 ; =============== S U B R O U T I N E =======================================
 
 sub_22F98:
-		move.w	#bytes_to_word(1,0),anim(a0)			; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(1,0),anim(a0)								; set anim and clear next_anim/prev_anim
 		addq.w	#8,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
@@ -147,7 +147,7 @@ sub_22F98:
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)									; id_Walk
+		clr.b	anim(a1)														; id_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -204,13 +204,16 @@ loc_23092:
 		bsr.w	sub_2326C
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	objoff_32(a0),d0
+
+		; draw
+		moveq	#-$80,d0												; round down to nearest $80
+		and.w	objoff_32(a0),d0											; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_23190:
-		move.w	#bytes_to_word(3,0),anim(a0)			; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(3,0),anim(a0)								; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -225,7 +228,7 @@ loc_231BE:
 		move.w	x_vel(a1),ground_vel(a1)
 		btst	#Status_Roll,status(a1)
 		bne.s	loc_231D8
-		clr.b	anim(a1)									; id_Walk
+		clr.b	anim(a1)														; id_Walk
 
 loc_231D8:
 		move.b	subtype(a0),d0
@@ -233,7 +236,7 @@ loc_231D8:
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)									; id_Walk
+		clr.b	anim(a1)														; id_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -345,7 +348,7 @@ sub_233CA:
 		addi.w	#8*2,y_pos(a1)
 
 .notgrav
-		move.w	#bytes_to_word(1,0),anim(a0)			; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(1,0),anim(a0)								; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		cmpi.w	#$1000,y_vel(a1)
@@ -358,7 +361,7 @@ loc_233F8:
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)									; id_Walk
+		clr.b	anim(a1)														; id_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -409,7 +412,10 @@ Obj_Spring_UpDiag:
 loc_234B8:
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	objoff_32(a0),d0
+
+		; draw
+		moveq	#-$80,d0												; round down to nearest $80
+		and.w	objoff_32(a0),d0											; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -433,7 +439,7 @@ loc_234FC:
 ; ---------------------------------------------------------------------------
 
 loc_2350A:
-		move.w	#bytes_to_word(5,0),anim(a0)			; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(5,0),anim(a0)								; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),d0
 		move.w	d0,x_vel(a1)
 		move.w	d0,y_vel(a1)
@@ -457,7 +463,7 @@ loc_23542:
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)									; id_Walk
+		clr.b	anim(a1)														; id_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -503,13 +509,16 @@ Obj_Spring_DownDiag:
 loc_235F8:
 		lea	Ani_Spring(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	objoff_32(a0),d0
+
+		; draw
+		moveq	#-$80,d0												; round down to nearest $80
+		and.w	objoff_32(a0),d0											; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_23624:
-		move.w	#bytes_to_word(5,0),anim(a0)			; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(5,0),anim(a0)								; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),d0
 		move.w	d0,x_vel(a1)
 		move.w	d0,y_vel(a1)
@@ -533,7 +542,7 @@ loc_23660:
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)									; id_Walk
+		clr.b	anim(a1)														; id_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0

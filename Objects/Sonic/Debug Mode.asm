@@ -205,6 +205,3 @@ Debug_Mode:
 		move.b	#id_SonicControl,routine(a0)
 		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		rts
-; ---------------------------------------------------------------------------
-
-		include "Misc Data/DebugList.asm"

@@ -589,22 +589,55 @@ CopyWordData_1:
 ; =============== S U B R O U T I N E =======================================
 
 Check_CameraXBoundary:
-		tst.w	x_vel(a0)
-		beq.s	+
-		bmi.s	++
 		move.w	(Camera_X_pos).w,d0
+
+.skipcam
+		tst.w	x_vel(a0)
+		beq.s	.return
+		bmi.s	.left
 		addi.w	#320-16,d0
 		cmp.w	x_pos(a0),d0
-		bhi.s	+
+		bhi.s	.return
 		clr.w	x_vel(a0)
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
-+		move.w	(Camera_X_pos).w,d0
+
+.left
 		addi.w	#16,d0
 		cmp.w	x_pos(a0),d0
-		blo.s		+
+		blo.s		.return2
 		clr.w	x_vel(a0)
-+		rts
+
+.return2
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Check_CameraXBoundary2:
+		move.w	(Camera_X_pos).w,d0
+
+.skipcam
+		tst.w	x_vel(a0)
+		bmi.s	.left
+		add.w	d2,d0
+		cmp.w	x_pos(a0),d0
+		bls.s		.setflipx
+		rts
+; ---------------------------------------------------------------------------
+
+.left
+		add.w	d1,d0
+		cmp.w	x_pos(a0),d0
+		blo.s		.return
+
+.setflipx
+		bchg	#0,render_flags(a0)
+		neg.w	x_vel(a0)
+
+.return
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 

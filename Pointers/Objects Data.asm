@@ -26,6 +26,7 @@
 		include "Objects/Egg Capsule/Egg Capsule.asm"
 		include "Objects/Smooth Palette/Smooth Palette.asm"
 		include "Objects/Sprite Mask/Sprite Mask.asm"
+		include "Objects/Start New Level/Start New Level.asm"
 
 ; ===========================================================================
 ; Levels objects data

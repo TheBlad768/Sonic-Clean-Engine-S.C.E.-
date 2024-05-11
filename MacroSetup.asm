@@ -202,12 +202,28 @@ _tst	macro
 
     endif
 
+; nop rept
+nops	macro fill
+      if ("fill"="0") || ("fill"="")
+		nop
+      else
+	rept fill
+		nop
+	endr
+      endif
+    endm
+
+; alias ds as rs from asm68k compiler
+rs	macro
+	ds.ATTRIBUTE ALLARGS
+    endm
+
 ; alias binclude as incbin from asm68k compiler
 incbin	macro
-		binclude	ALLARGS
-	endm
+	binclude ALLARGS
+    endm
 
 ; dcb from asm68k compiler
 dcb	macro fill, byte
-		dc.ATTRIBUTE [fill]byte
+	dc.ATTRIBUTE [fill]byte
     endm

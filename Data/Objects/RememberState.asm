@@ -5,7 +5,8 @@
 MarkObjGone:
 RememberState:
 Sprite_OnScreen_Test:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 Sprite_OnScreen_Test2:
 		out_of_xrange2.s	Sprite_OnScreen_Test_Collision.offscreen
@@ -17,7 +18,8 @@ MarkObjGone_Collision:
 RememberState_Collision:
 Sprite_CheckDeleteTouch3:
 Sprite_OnScreen_Test_Collision:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 .skipxpos
 		out_of_xrange2.s	.offscreen
@@ -36,19 +38,28 @@ Sprite_OnScreen_Test_Collision:
 ; =============== S U B R O U T I N E =======================================
 
 Delete_Sprite_If_Not_In_Range:
-		out_of_xrange.s	Sprite_OnScreen_Test_Collision.offscreen
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
+
+Delete_Sprite_If_Not_In_Range2:
+		out_of_xrange2.s	Sprite_OnScreen_Test_Collision.offscreen
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Delete_Sprite_If_Not_In_RangeCheck:
-		out_of_xrange.s	Sprite_CheckDelete.offscreen
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
+
+Delete_Sprite_If_Not_In_RangeCheck2:
+		out_of_xrange2.s	Sprite_CheckDelete.offscreen
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDelete:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 .skipxpos
 		out_of_xrange2.s	.offscreen
@@ -69,7 +80,8 @@ Sprite_CheckDelete:
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDeleteTouch:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 .skipxpos
 		out_of_xrange2.s	Sprite_CheckDelete.offscreen
@@ -78,7 +90,8 @@ Sprite_CheckDeleteTouch:
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDelete2:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 .skipxpos
 		out_of_xrange2.s	.offscreen
@@ -101,7 +114,8 @@ Sprite_CheckDelete2:
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDeleteTouch2:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 .skipxpos
 		out_of_xrange2.s	Sprite_CheckDelete2.offscreen
@@ -110,7 +124,8 @@ Sprite_CheckDeleteTouch2:
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDelete3:
-		move.w	x_pos(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	x_pos(a0),d0										; get object position
 
 .skipxpos
 		out_of_xrange2.s	.offscreen
@@ -255,9 +270,9 @@ Add_SpriteToCollisionResponseList:
 
 Obj_WaitOffscreen:
 		move.l	#Map_Offscreen,mappings(a0)
-		bset	#2,render_flags(a0)
+		bset	#2,render_flags(a0)									; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
-		move.l	(sp)+,objoff_34(a0)
+		move.l	(sp)+,objoff_34(a0)								; save address after bsr/jsr
 		move.l	#.main,address(a0)
 
 .main

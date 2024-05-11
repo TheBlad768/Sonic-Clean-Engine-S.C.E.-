@@ -40,11 +40,11 @@ TouchResponse:
 		subq.b	#3,d5
 		sub.w	d5,d3
 		cmpi.b	#id_Duck,anim(a0)						; is player ducking?
-		bne.s	.Touch_NoDuck							; if not, branch
+		bne.s	.Touch_NotDuck							; if not, branch
 		addi.w	#$C,d3
 		moveq	#$A,d5
 
-.Touch_NoDuck
+.Touch_NotDuck
 		moveq	#$10,d4									; player's collision width
 		add.w	d5,d5
 

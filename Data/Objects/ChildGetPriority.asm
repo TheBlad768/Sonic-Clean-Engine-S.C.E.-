@@ -67,3 +67,18 @@ Child_SyncDraw:
 .setflag
 		bset	#6,$38(a0)
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Child_GetCollisionPriorityOnce:
+		movea.w	parent3(a0),a1
+
+.skipp
+		btst	#7,art_tile(a1)
+		beq.s	.nothighpriority
+		bset	#7,art_tile(a0)
+		move.l	(sp),address(a0)
+		move.b	d0,collision_flags(a0)
+
+.nothighpriority
+		rts

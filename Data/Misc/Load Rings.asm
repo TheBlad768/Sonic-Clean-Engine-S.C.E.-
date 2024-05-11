@@ -94,7 +94,7 @@ sub_E994:
 
 		; frame
 		addq.b	#1,1(a1)
-		cmpi.b	#(CMap_Ring_End-CMap_Ring)/2,1(a1)	; 5 frames
+		cmpi.b	#(CMap_Ring_End-CMap_Ring)/2,1(a1)		; 5 frames
 		bne.s	.next
 		move.w	#-1,(a1)
 
@@ -138,6 +138,12 @@ Test_Ring_Collisions_NoAttraction:
 		move.b	y_radius(a0),d5
 		subq.b	#3,d5
 		sub.w	d5,d3
+		cmpi.b	#id_Duck,anim(a0)						; is player ducking?
+		bne.s	.notduck									; if not, branch
+		addi.w	#$C,d3
+		moveq	#$A,d5
+
+.notduck
 		moveq	#6,d1
 		moveq	#$C,d6
 		moveq	#$10,d4

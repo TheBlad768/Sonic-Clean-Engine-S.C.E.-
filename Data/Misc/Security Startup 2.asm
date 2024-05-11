@@ -5,6 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Game_Program:
+		tst.w	(VDP_control_port).l
 		move.w	#$4EF9,(V_int_jump).w							; machine code for jmp
 		move.l	#VInt,(V_int_addr).w
 		move.w	#$4EF9,(H_int_jump).w
@@ -35,10 +36,10 @@ Game_Program:
 .init
 		jsr	(Init_MSU_Driver).l
 		seq	(SegaCD_Mode).w
-		bsr.w	Init_DMA_Queue
-		bsr.s	Init_VDP
-		bsr.w	SoundDriverLoad
-		bsr.w	Init_Controllers
+		jsr	(Init_DMA_Queue).w
+		jsr	(Init_VDP).w
+		jsr	(SoundDriverLoad).w
+		jsr	(Init_Controllers).w
 		move.b	#id_LevelSelectScreen,(Game_mode).w				; set Game Mode
 
 .loop

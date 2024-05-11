@@ -68,9 +68,7 @@ LevelSelect_Screen:
 		move.b	d0,(Debug_mode_flag).w
 
 		; load main art
-		lea	(ArtKosM_LevelSelectText).l,a1
-		move.w	#tiles_to_bytes(1),d2
-		jsr	(Queue_Kos_Module).w
+		QueueKosModule	ArtKosM_LevelSelectText, 1
 
 		; load main palette
 		lea	(Pal_LevelSelect).l,a1
@@ -120,7 +118,7 @@ LevelSelect_Screen:
 		; load zone and act
 		move.b	#id_LevelScreen,(Game_mode).w						; set screen mode to level
 		move.w	(vLevelSelect_vertical_count).w,d2
-		move.b	d2,(sp)
+		move.b	d2,(sp)												; multiply by $100
 		move.w	(sp),d2
 		clr.b	d2
 		add.w	(vLevelSelect_saved_act).w,d2

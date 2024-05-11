@@ -127,7 +127,7 @@ Obj_EndSign:
 
 .signresults
 		lea	(Player_1).w,a1
-		btst	#Status_InAir,obStatus(a1)
+		btst	#Status_InAir,status(a1)
 		bne.s	.draw2												; if player is not standing on the ground, wait until he is
 		move.l	#.signafter,address(a0)
 		jsr	(Set_PlayerEndingPose).w

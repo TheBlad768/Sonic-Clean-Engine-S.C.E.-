@@ -65,10 +65,10 @@ VInt_Lag_Main:
 		addq.b	#1,(Lag_frame_count).w
 
 		; branch if a level is running
-		cmpi.b	#GameModeID_TitleCard|id_LevelScreen,(Game_mode).w
-		beq.s	VInt_Lag_Level
-		cmpi.b	#id_LevelScreen,(Game_mode).w		; is game on a level?
-		beq.s	VInt_Lag_Level
+		moveq	#$7C,d0								; limit Game Mode value to $7C max
+		and.b	(Game_mode).w,d0					; load Game Mode
+		cmpi.b	#id_LevelScreen,d0					; is game on a level?
+		beq.s	VInt_Lag_Level						; if yes, branch
 		bra.s	VInt_Music							; otherwise, return from V-int
 ; ---------------------------------------------------------------------------
 
@@ -294,7 +294,8 @@ VInt_Level_Cont:
 		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
 		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
 		jsr	(Process_DMA_Queue).w
-		jsr	(VInt_DrawLevel).w
+		bsr.s	VInt_SpecialFunction
+		jsr	(VInt_DrawLevel.main).w
 		startZ80
 		enableInts
 		tst.b	(Water_flag).w
@@ -325,7 +326,43 @@ Do_Updates:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Horizontal interrupt
+; Special function
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_SpecialFunction:
+		moveq	#0,d0
+		move.b	(Special_V_int_routine).w,d0
+		beq.s	.return												; if zero, branch
+		jmp	.index-2(pc,d0.w)
+; ---------------------------------------------------------------------------
+
+.index
+		bra.s	.vscrollon											; 2 (vertical scrolling on)
+		bra.s	.vscrollcopy											; 4 (vertical scrolling copy)
+; ---------------------------------------------------------------------------
+
+.vscrolloff															; 6 (vertical scrolling off)
+		move.w	#$8B03,VDP_control_port-VDP_control_port(a5)			; command $8B03 - VScroll full, HScroll line-based
+		clr.b	(Special_V_int_routine).w
+
+.return
+		rts
+; ---------------------------------------------------------------------------
+
+.vscrollon
+		move.w	#$8B07,VDP_control_port-VDP_control_port(a5)			; command $8B07 - VScroll cell-based, HScroll line-based
+		addq.b	#2,(Special_V_int_routine).w
+
+.vscrollcopy
+		stopZ80
+		dma68kToVDP V_scroll_buffer,$0000,(320/4),VSRAM
+		startZ80
+		rts
+
+; ---------------------------------------------------------------------------
+; Horizontal interrupt (Water)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================

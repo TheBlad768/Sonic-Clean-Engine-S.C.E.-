@@ -50,20 +50,20 @@ Init_SoundRAM:
 		move.w	d7,(a2)											; reset the Z80
 
 Init_ClearRAM:
-		move.l	d0,-(a6)											; Clear normal RAM
+		move.l	d0,-(a6)											; clear normal RAM
 		dbf	d6,Init_ClearRAM
 		move.l	(a5)+,(a4)										; set VDP display mode and increment
 		move.l	(a5)+,(a4)										; set VDP to CRAM write
 		moveq	#bytesToLcnt($80),d3
 
 Init_ClearCRAM:
-		move.l	d0,(a3)											; Clear CRAM
+		move.l	d0,(a3)											; clear CRAM
 		dbf	d3,Init_ClearCRAM
 		move.l	(a5)+,(a4)
 		moveq	#bytesToLcnt($50),d4
 
 Init_ClearVSRAM:
-		move.l	d0,(a3)											; Clear VSRAM
+		move.l	d0,(a3)											; clear VSRAM
 		dbf	d4,Init_ClearVSRAM
 		moveq	#PSGInitValues_End-PSGInitValues-1,d5
 
@@ -79,13 +79,13 @@ Init_SkipPowerOn:
 ; ---------------------------------------------------------------------------
 ; InitArray:
 SetupValues:
-		dc.w $8000,bytesToLcnt($10000),$100
+		dc.w $8000, bytesToLcnt($10000), $100						; VDP init, clear RAM, VDP init and Z80
 
-.ram	dc.l Z80_RAM
-.bus		dc.l Z80_bus_request
-.reset	dc.l Z80_reset
-.data	dc.l VDP_data_port
-.control	dc.l VDP_control_port
+.zram	dc.l Z80_RAM
+.zbus	dc.l Z80_bus_request
+.zreset	dc.l Z80_reset
+.vdata	dc.l VDP_data_port
+.vcontrol	dc.l VDP_control_port
 
 VDPInitValues:													; values for VDP registers
 		dc.b 4													; command $8004 - HInt off, Enable HV counter read
@@ -118,11 +118,10 @@ VDPInitValues_End
 
 		; Z80 instructions (not the sound driver; that gets loaded later)
 Z80StartupCodeBegin:
-	if (*)+$26 < $10000
 	save
-	CPU Z80 ; start assembling Z80 code
+	CPU Z80														; start assembling Z80 code
 	phase 0														; pretend we're at address 0
-		xor	a	; clear a to 0
+		xor	a													; clear a to 0
 		ld	bc,((Z80_RAM_end-Z80_RAM)-zStartupCodeEndLoc)-1	; prepare to loop this many times
 		ld	de,zStartupCodeEndLoc+1								; initial destination address
 		ld	hl,zStartupCodeEndLoc								; initial source address
@@ -151,10 +150,6 @@ zStartupCodeEndLoc:
 	dephase														; stop pretending
 		restore
 	padding off													; unfortunately our flags got reset so we have to set them again...
-	else															; due to an address range limitation I could work around but don't think is worth doing so:
-		message "Warning: using pre-assembled Z80 startup code."
-		dc.w $AF01,$D91F,$1127,$0021,$2600,$F977,$EDB0,$DDE1,$FDE1,$ED47,$ED4F,$D1E1,$F108,$D9C1,$D1E1,$F1F9,$F3ED,$5636,$E9E9
-	endif
 Z80StartupCodeEnd:
 
 		dc.w	$8104												; value for VDP display mode

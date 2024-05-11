@@ -55,7 +55,7 @@ loc_24002:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_24090:									;  face up or down
+loc_24090:														;  face up or down
 		bsr.w	sub_242B6
 		moveq	#$B,d1
 		add.b	width_pixels(a0),d1
@@ -66,8 +66,8 @@ loc_24090:									;  face up or down
 		move.w	x_pos(a0),d4
 		jsr	SolidObjectFull(pc)
 		moveq	#standing_mask,d6
-		and.b	status(a0),d6					; is Sonic or Tails standing on the object?
-		beq.s	loc_240D8					; if not, branch
+		and.b	status(a0),d6										; is Sonic or Tails standing on the object?
+		beq.s	loc_240D8										; if not, branch
 		move.b	d6,d0
 		andi.b	#p1_standing,d0
 		beq.s	loc_240D8
@@ -75,11 +75,12 @@ loc_24090:									;  face up or down
 		bsr.w	sub_24280
 
 loc_240D8:
-		move.w	objoff_30(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	objoff_30(a0),d0									; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 ; ---------------------------------------------------------------------------
 
-loc_240E2:									; sideways
+loc_240E2:														; sideways
 		bsr.w	sub_242B6
 		moveq	#$B,d1
 		add.b	width_pixels(a0),d1
@@ -100,7 +101,8 @@ loc_240E2:									; sideways
 		bclr	#p1_pushing_bit,status(a0)
 
 loc_24134:
-		move.w	objoff_30(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	objoff_30(a0),d0									; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 ; ---------------------------------------------------------------------------
 
@@ -124,7 +126,8 @@ loc_2413E:
 		bsr.s	sub_24280
 
 loc_24184:
-		move.w	objoff_30(a0),d0
+		moveq	#-$80,d0										; round down to nearest $80
+		and.w	objoff_30(a0),d0									; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 ; ---------------------------------------------------------------------------
 
@@ -168,7 +171,7 @@ off_242C4: offsetTable
 		offsetTableEntry.w locret_242CC	; 0
 		offsetTableEntry.w loc_242CE		; 2
 		offsetTableEntry.w loc_242E2		; 4
-		offsetTableEntry.w loc_24356		; 6
+		offsetTableEntry.w loc_24356		; 6 (FBZ)
 ; ---------------------------------------------------------------------------
 
 loc_242CE:

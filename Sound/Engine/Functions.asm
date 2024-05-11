@@ -11,6 +11,15 @@ SMPS_LoadDACDriver:
 	RaiseError	"Bad sample table (code %<.b d0>)"
 
 .SampleTableOk
+
+	; detect PAL consoles and set the PAL flag if needed
+	btst	#6,(Graphics_flags).w
+	beq.s	.not_pal
+	bset	#f_pal,(Clone_Driver_RAM+SMPS_RAM.bitfield1).w
+
+.not_pal
+
+	; check CD mode
 	tst.b	(SegaCD_Mode).w
 	beq.s	.skip
 	disableIntsSave

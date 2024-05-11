@@ -558,6 +558,7 @@ afReset						= $FB	; move offscreen for remove(Using the Sprite_OnScreen_Test, e
 ; Animation Raw flags
 ; ---------------------------------------------------------------------------
 
+arfIndex						= $FF	; go to animate raw index
 arfEnd						= $FC	; return to beginning of animation
 arfBack						= $F8	; go back (specified number) bytes
 arfJump						= $F4	; jump from $34(a0) address

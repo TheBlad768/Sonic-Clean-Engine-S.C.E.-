@@ -25,20 +25,9 @@ Obj_SpriteMask2:
 		move.b	d0,height_pixels(a0)
 		lsr.w	#2,d0
 		move.b	d0,mapping_frame(a0)
-		add.w	d1,d1
-		move.w	.priority(pc,d1.w),priority(a0)
+		lsl.w	#7,d1								; multiply by $80
+		move.w	d1,priority(a0)
 		rts
-; ---------------------------------------------------------------------------
-
-.priority
-		dc.w 0			; 0
-		dc.w $80			; 1
-		dc.w $100		; 2
-		dc.w $180		; 3
-		dc.w $200		; 4
-		dc.w $280		; 5
-		dc.w $300		; 6
-		dc.w $380		; 7
 ; ---------------------------------------------------------------------------
 
 .level

@@ -48,8 +48,8 @@ dma68kToVDP macro source,dest,length,type
 	move.l	#(($9600|((((source)>>1)&$FF00)>>8))<<16)|($9500|(((source)>>1)&$FF)),VDP_control_port-VDP_control_port(a5)
 	move.w	#$9700|(((((source)>>1)&$FF0000)>>16)&$7F),VDP_control_port-VDP_control_port(a5)
 	move.w	#((vdpComm(dest,type,DMA)>>16)&$FFFF),VDP_control_port-VDP_control_port(a5)
-	move.w	#(vdpComm(dest,type,DMA)&$FFFF),(DMA_trigger_word).w
-	move.w	(DMA_trigger_word).w,VDP_control_port-VDP_control_port(a5)
+	move.w	#(vdpComm(dest,type,DMA)&$FFFF),-(sp)
+	move.w	(sp)+,VDP_control_port-VDP_control_port(a5)
 	; From '  § 7  DMA TRANSFER' of https://emu-docs.org/Genesis/sega2f.htm:
 	;
 	; "In the case of ROM to VRAM transfers,
@@ -355,10 +355,10 @@ copyRAM2 macro startaddr,endaddr,startaddr2
     endm
 
 ; ---------------------------------------------------------------------------
-; load Kos and KosM
+; load Kosinski and Kosinski Moduled
 ; ---------------------------------------------------------------------------
 
-; load Kos data to RAM
+; load Kosinski data to RAM
 QueueKos macro data,ram,terminate
 	lea	(data).l,a1
     if ((ram)&$8000)==0
@@ -373,7 +373,7 @@ QueueKos macro data,ram,terminate
       endif
     endm
 
-; load KosM art to VRAM
+; load Kosinski Moduled art to VRAM
 QueueKosModule macro art,vram,terminate
 	lea	(art).l,a1
 	move.w	#tiles_to_bytes(vram),d2
@@ -385,24 +385,41 @@ QueueKosModule macro art,vram,terminate
     endm
 
 ; ---------------------------------------------------------------------------
+; load Enigma
+; ---------------------------------------------------------------------------
+
+; load Enigma data to RAM
+EniDecomp macro data,ram,vram,terminate
+	lea	(data).l,a0
+    if ((ram)&$8000)==0
+	lea	(ram).l,a1
+    else
+	lea	(ram).w,a1
+    endif
+	move.w	#make_art_tile vram,d0
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(Eni_Decomp).w
+      else
+	jmp	(Eni_Decomp).w
+      endif
+    endm
+
+; ---------------------------------------------------------------------------
 ; check if object moves out of range
 ; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
 ; ---------------------------------------------------------------------------
 
 out_of_xrange	macro exit, xpos
-	if ("xpos"<>"")
-		move.w	xpos,d0							; get object position (if specified as not x_pos)
-	else
-		move.w	x_pos(a0),d0						; get object position
-	endif
-	andi.w	#$FF80,d0							; round down to nearest $80
-	sub.w	(Camera_X_pos_coarse_back).w,d0		; get screen position
-	cmpi.w	#$80+320+$40+$80,d0				; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
-	bhi.ATTRIBUTE	exit
+	moveq	#-$80,d0							; round down to nearest $80
+      if ("xpos"<>"")
+		and.w	xpos,d0							; get object position (if specified as not x_pos)
+      else
+		and.w	x_pos(a0),d0						; get object position
+      endif
+	out_of_xrange2.ATTRIBUTE	exit
     endm
 
 out_of_xrange2	macro exit
-	andi.w	#$FF80,d0							; round down to nearest $80
 	sub.w	(Camera_X_pos_coarse_back).w,d0		; get screen position
 	cmpi.w	#$80+320+$40+$80,d0				; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
 	bhi.ATTRIBUTE	exit
@@ -414,38 +431,16 @@ out_of_xrange2	macro exit
 ; ---------------------------------------------------------------------------
 
 out_of_yrange	macro exit, ypos
-	if ("ypos"<>"")
-		move.w	ypos,d0							; get object position (if specified as not y_pos)
-	else
-		move.w	y_pos(a0),d0						; get object position
-	endif
-	sub.w	(Camera_Y_pos).w,d0
-	addi.w	#$80,d0
-	cmpi.w	#$80+256+$80,d0
-	bhi.ATTRIBUTE	exit
+	moveq	#-$80,d0							; round down to nearest $80
+      if ("ypos"<>"")
+		and.w	ypos,d0							; get object position (if specified as not y_pos)
+      else
+		and.w	y_pos(a0),d0						; get object position
+      endif
+	out_of_yrange2.ATTRIBUTE	exit
     endm
 
 out_of_yrange2	macro exit
-	sub.w	(Camera_Y_pos).w,d0
-	addi.w	#$80,d0
-	cmpi.w	#$80+256+$80,d0
-	bhi.ATTRIBUTE	exit
-    endm
-
-out_of_yrange3	macro exit, ypos
-	if ("ypos"<>"")
-		move.w	ypos,d0							; get object position (if specified as not y_pos)
-	else
-		move.w	y_pos(a0),d0						; get object position
-	endif
-	andi.w	#$FF80,d0
-	sub.w	(Camera_Y_pos_coarse_back).w,d0
-	cmpi.w	#$80+256+$80,d0
-	bhi.ATTRIBUTE	exit
-    endm
-
-out_of_yrange4	macro exit
-	andi.w	#$FF80,d0
 	sub.w	(Camera_Y_pos_coarse_back).w,d0
 	cmpi.w	#$80+256+$80,d0
 	bhi.ATTRIBUTE	exit
