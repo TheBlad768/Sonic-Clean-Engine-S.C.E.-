@@ -17,7 +17,7 @@ DEZ1_ScreenInit:
 		lea	(RAM_start+$7000).l,a1								; your layout buffer address
 		move.l	a1,(Level_layout_addr_ROM).w						; save to addr
 		addq.w	#8,a1											; skip layout header
-		move.l	a1,(Level_layout2_addr_ROM).w					; save to addr2
+		move.l	a1,(Level_layout_addr2_ROM).w					; save to addr2
 
 		; test
 		move.l	#$0D0D0D0D,(RAM_start+$7120).l					; replace 4 chunks

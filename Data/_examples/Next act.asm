@@ -39,7 +39,7 @@ DEZ1_Resize:
 ; ---------------------------------------------------------------------------
 
 .checksign
-		tst.b	(LevResults_end_flag).w
+		tst.b	(Results_end_flag).w
 		beq.s	.return
 
 		; next act
