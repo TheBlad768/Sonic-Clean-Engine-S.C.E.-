@@ -176,7 +176,7 @@ Obj_Spikebonker_SpikeBall:
 
 .highpriority
 		move.w	d1,priority(a0)
-		lea	(AngleLookup_1).w,a1
+		lea	(AngleLookup_1).l,a1
 		jsr	(MoveSprite_AngleXLookupOffset).w
 		jmp	(Child_DrawTouch_Sprite).w
 ; ---------------------------------------------------------------------------

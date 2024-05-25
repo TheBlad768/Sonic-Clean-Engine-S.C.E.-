@@ -10,10 +10,10 @@ Clear_DisplayData:
 		lea	(VDP_control_port).l,a5
 		dmaFillVRAM 0,$0000,($1000<<4)						; clear VRAM
 		startZ80
-		clr.l	(V_scroll_value).w
-		clr.l	(H_scroll_value).w
-		clearRAM Sprite_table_buffer, Sprite_table_buffer_end
-		clearRAM H_scroll_buffer, H_scroll_buffer_end
+		clearRAM Sprite_table_buffer, Sprite_table_buffer_end	; clear sprite table buffer
+		clearRAM H_scroll_buffer, V_scroll_buffer_end			; clear hvscroll buffer
+		move.l	d0,(V_scroll_value).w							; clear vscroll value
+		move.l	d0,(H_scroll_value).w							; clear hscroll value
 		bra.w	Init_SpriteTable
 
 ; ---------------------------------------------------------------------------

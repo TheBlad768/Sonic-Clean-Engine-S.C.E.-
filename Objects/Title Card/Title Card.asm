@@ -29,7 +29,7 @@ Obj_TitleCard:
 
 		; load zone name art
 		moveq	#0,d0
-		move.b	(Current_zone).w,d0							; otherwise, just use current zone
+		move.b	(Current_zone).w,d0									; otherwise, just use current zone
 		add.w	d0,d0
 		add.w	d0,d0
 		movea.l	.levelgfx(pc,d0.w),a1
@@ -37,7 +37,7 @@ Obj_TitleCard:
 		jsr	(Queue_Kos_Module).w
 
 		; next
-		move.w	#1*60+30,objoff_2E(a0)						; set wait value
+		move.w	#1*60+30,objoff_2E(a0)								; set wait value
 		clr.w	objoff_32(a0)
 		st	objoff_48(a0)
 		move.l	#.create,address(a0)
@@ -56,11 +56,11 @@ Obj_TitleCard:
 
 .create
 		tst.w	(Kos_modules_left).w
-		bne.s	.return										; don't load the objects until the art has been loaded
+		bne.s	.return												; don't load the objects until the art has been loaded
 		jsr	(Create_New_Sprite3).w
 		bne.s	.return
 		lea	ObjArray_TtlCard(pc),a2
-		moveq	#4-1,d1										; make 4 objects
+		move.w	(a2)+,d1												; make objects
 
 .loop
 		addq.w	#1,objoff_30(a0)
@@ -98,12 +98,12 @@ Obj_TitleCard:
 		beq.s	.skiplevel
 
 		; reset level flags
-		clr.l	(Timer).w										; if using in-level title card
-		clr.w	(Ring_count).w								; reset HUD rings and timer
+		clr.l	(Timer).w												; if using in-level title card
+		clr.w	(Ring_count).w										; reset HUD rings and timer
 		st	(Update_HUD_timer).w
-		st	(Update_HUD_ring_count).w						; start updating timer and rings again
-		move.b	#30,(Player_1+air_left).w						; reset air
-		jsr	(Restore_LevelMusic).w							; play music
+		st	(Update_HUD_ring_count).w								; start updating timer and rings again
+		move.b	#30,(Player_1+air_left).w								; reset air
+		jsr	(Restore_LevelMusic).w									; play music
 
 .skiplevel
 		clr.w	objoff_48(a0)
@@ -128,17 +128,17 @@ Obj_TitleCard:
 .branch2
 		tst.w	objoff_3E(a0)
 		beq.s	.skiplevel2
-		st	(TitleCard_end_flag).w								; if in-level, set end of title card flag
+		st	(TitleCard_end_flag).w										; if in-level, set end of title card flag
 
 .skiplevel2
 		lea	(PLC2_Sonic).l,a5
 		jsr	(LoadPLC_Raw_KosM).w
 		movea.l	(Level_data_addr_RAM.PLC2).w,a5
-		jsr	(LoadPLC_Raw_KosM).w							; load main art
+		jsr	(LoadPLC_Raw_KosM).w									; load main art
 		movea.l	(Level_data_addr_RAM.PLCAnimals).w,a5
-		jsr	(LoadPLC_Raw_KosM).w							; load animals art
-		move.b	#1,(HUD_RAM.status).w						; load HUD
-		clr.b	(Ctrl_1_locked).w
+		jsr	(LoadPLC_Raw_KosM).w									; load animals art
+		move.b	#1,(HUD_RAM.status).w								; load HUD
+		clr.b	(Ctrl_1_locked).w											; unlock control 1
 
 		; delete
 		jmp	(Delete_Current_Sprite).w
@@ -218,21 +218,22 @@ Obj_TitleCardAct:
 		bra.s	Obj_TitleCardElement
 
 		; delete
-;		movea.w	parent2(a0),a1								; remove a number of the act, if not needed
+;		movea.w	parent2(a0),a1										; remove a number of the act, if not needed
 ;		subq.w	#1,objoff_30(a1)
 ;		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
 ObjArray_TtlCard:
+		dc.w ((ObjArray_TtlCard_end-ObjArray_TtlCard)/$E)-1			; count
 
 		; 1
-		dc.l Obj_TitleCardName								; object address
-		dc.w $120
-		dc.w $260
-		dc.w $E0
-		dc.b 4
-		dc.b $80
-		dc.w 3
+		dc.l Obj_TitleCardName										; object address
+		dc.w $120													; x destination
+		dc.w $260													; xpos
+		dc.w $E0													; ypos
+		dc.b 4														; mapping frame
+		dc.b $80														; width
+		dc.w 3														; place in exit queue
 
 		; 2
 		dc.l Obj_TitleCardElement
@@ -261,7 +262,10 @@ ObjArray_TtlCard:
 		dc.b 0
 		dc.w 1
 
+ObjArray_TtlCard_end
+
 ObjArray_TtlCardBonus:
+		dc.w ((ObjArray_TtlCardBonus_end-ObjArray_TtlCardBonus)/$E)-1
 
 		; 1
 		dc.l Obj_TitleCardElement
@@ -280,6 +284,8 @@ ObjArray_TtlCardBonus:
 		dc.b $14
 		dc.b $80
 		dc.w 1
+
+ObjArray_TtlCardBonus_end
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Title Card/Object Data/Map - Title Card.asm"

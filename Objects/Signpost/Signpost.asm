@@ -8,8 +8,7 @@ Obj_EndSignControl:
 		move.l	#Obj_Wait,address(a0)
 		st	(Level_end_flag).w										; end of level is in effect
 		clr.b	(TitleCard_end_flag).w
-		clr.b	(LevResults_end_flag).w
-		bset	#4,objoff_38(a0)
+		clr.b	(Results_end_flag).w
 		move.w	#(2*60)-1,$2E(a0)
 		move.l	#Obj_EndSignControlDoSign,$34(a0)
 
@@ -23,9 +22,6 @@ Obj_EndSignControlDoSign:
 		lea	Child6_EndSign(pc),a2
 		jsr	(CreateChild6_Simple).w
 
-		; load stub art
-		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($49C)
-
 AfterBoss_Cleanup:
 		movea.l	(Level_data_addr_RAM.AfterBoss).w,a1
 		jmp	(a1)
@@ -35,6 +31,9 @@ Obj_EndSignControlAwaitStart:
 		tst.b	(Level_end_flag).w
 		bne.s	Obj_EndSignControl.return
 		move.l	#Obj_EndSignControlDoStart,address(a0)
+
+		; restore control
+		clr.b	(Ctrl_1_locked).w											; unlock control 1
 		jmp	(Restore_PlayerControl).w
 ; ---------------------------------------------------------------------------
 
@@ -48,15 +47,28 @@ Obj_EndSignControlDoStart:
 ; Signpost (Object)
 ; ---------------------------------------------------------------------------
 
+; Dynamic object variables
+sign_timer			= objoff_2E	; .w
+sign_aniraw			= objoff_30	; .l
+
+sign_dplcframe		= objoff_3A	; .b
+sign_rosbit			= objoff_3B	; .b
+sign_rosaddr			= objoff_3C	; .w
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EndSign:
+
+		; load stub art
+		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($482)
+
+		; mapping
 		lea	ObjSlot_EndSigns(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).w
 		move.l	#.signfall,address(a0)
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)											; signs have same priority as Sonic
+		bset	#high_priority_bit,art_tile(a0)								; signs have same priority as Sonic
 
 .nothighpriority
 		move.w	a0,(Signpost_addr).w									; put RAM address here for use by hidden monitor object
@@ -70,6 +82,9 @@ Obj_EndSign:
 		jsr	(CreateChild1_Normal).w
 
 .signfall
+		bsr.w	EndSign_CheckPlayerHit
+
+		; sparkle
 		moveq	#3,d0
 		and.b	(V_int_run_count+3).w,d0
 		bne.s	.skip
@@ -77,13 +92,12 @@ Obj_EndSign:
 		jsr	(CreateChild6_Simple).w
 
 .skip
-		bsr.w	EndSign_CheckPlayerHit
 		addi.w	#12,y_vel(a0)
 		jsr	(MoveSprite2).w											; move downward
 		bsr.w	EndSign_CheckWall
 		jsr	(Animate_Raw).w
-		move.w	(Camera_Y_pos).w,d0
-		addi.w	#80,d0
+		moveq	#80,d0
+		add.w	(Camera_Y_pos).w,d0
 		cmp.w	y_pos(a0),d0
 		bhi.s	.draw												; ensure that signpost can't land if too far up the screen itself
 		tst.w	y_vel(a0)
@@ -130,6 +144,7 @@ Obj_EndSign:
 		btst	#Status_InAir,status(a1)
 		bne.s	.draw2												; if player is not standing on the ground, wait until he is
 		move.l	#.signafter,address(a0)
+		st	(Ctrl_1_locked).w											; null sonic's input
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Sprite).w
 		bne.s	.draw2
@@ -170,9 +185,9 @@ Obj_EndSign:
 Obj_SignpostSparkle:
 		lea	ObjDat_SignpostSparkle(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)											; sparkles have same priority as Sonic
+		bset	#high_priority_bit,art_tile(a0)								; sparkles have same priority as Sonic
 
 .nothighpriority
 		move.l	#.main,address(a0)
@@ -217,9 +232,9 @@ Obj_SignpostStub:
 		jsr	(SetUp_ObjAttributes).w
 		bset	#rbStatic,render_flags(a0)									; set flag to "static mappings flag"
 		move.l	#.main,address(a0)
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.main
-		bset	#7,art_tile(a0)											; stub have same priority as Sonic
+		bset	#high_priority_bit,art_tile(a0)								; stub have same priority as Sonic
 
 .main
 		jsr	(Refresh_ChildPosition).w
@@ -321,8 +336,8 @@ EndSign_CheckWall:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjSlot_EndSigns:		subObjSlotData 0, $484, $C, 0, Map_EndSigns, $300, 48/2, 32/2, 0, 0
-ObjDat_SignpostStub:		subObjData Map_SignpostStub, $49C, $300, 8/2, 16/2, 0, 0
+ObjSlot_EndSigns:		subObjSlotData 0, $494, $18, 0, Map_EndSigns, $300, 48/2, 32/2, 0, 0
+ObjDat_SignpostStub:		subObjData Map_SignpostStub, $482, $300, 8/2, 16/2, 0, 0
 ObjDat_SignpostSparkle:	subObjData Map_Ring, make_art_tile(ArtTile_Ring,1,0), $280, 16/2, 16/2, 4, 0
 PLCPtr_EndSigns:		dc.l dmaSource(ArtUnc_EndSigns), DPLC_EndSigns
 

@@ -8,15 +8,16 @@ ChangeRingFrame:
 		cmpi.b	#id_SonicDeath,(Player_1+routine).w		; has player just died?
 		bhs.s	.syncend									; if yes, branch
 
-; Used for rings and giant rings
 .syncrings
+
+		; used for rings and giant rings
 		subq.b	#1,(Rings_frame_timer).w
 		bpl.s	.syncrings2
 		addq.b	#4+1,(Rings_frame_timer).w
 		addq.b	#1,(Rings_frame).w
 		andi.b	#7,(Rings_frame).w
 
-; Dynamic graphics
+		; dynamic ring graphics
 		moveq	#0,d0
 		move.l	#dmaSource(ArtUnc_Ring),d1				; load art source
 		move.b	(Rings_frame).w,d0
@@ -26,8 +27,9 @@ ChangeRingFrame:
 		move.w	#$80/2,d3								; size of art (in words)	; we only need one frame
 		bsr.w	Add_To_DMA_Queue
 
-; Used for bouncing rings
 .syncrings2
+
+		; used for bouncing rings
 		tst.b	(Ring_spill_anim_counter).w
 		beq.s	.syncend
 		moveq	#0,d0

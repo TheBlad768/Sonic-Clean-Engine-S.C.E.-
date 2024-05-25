@@ -11,10 +11,10 @@ Debug_Mode:
 		tst.b	(Debug_placement_routine).w
 		bne.s	.control
 		addq.b	#2,(Debug_placement_routine).w
-		move.l	mappings(a0),(Debug_saved_mappings).w
+		move.l	mappings(a0),(Debug_saved_mappings).w	; save mappings
 		cmpi.b	#id_SonicDeath,routine(a0)
 		bhs.s	.death
-		move.w	art_tile(a0),(Debug_saved_art_tile).w
+		move.l	priority(a0),(Debug_saved_priority).w		; save priority and art_tile
 
 .death
 		bset	#7,art_tile(a0)
@@ -22,8 +22,10 @@ Debug_Mode:
 		move.w	(Screen_Y_wrap_value).w,d0
 		and.w	d0,y_pos(a0)
 		and.w	d0,(Camera_Y_pos).w
-		clr.b	(Scroll_lock).w
-		clr.b	(WindTunnel_flag).w
+		moveq	#0,d0
+		move.w	d0,priority(a0)
+		move.b	d0,(Scroll_lock).w
+		move.b	d0,(WindTunnel_flag).w
 		bclr	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
 		bclr	#Status_Underwater,status(a0)
@@ -46,8 +48,8 @@ Debug_Mode:
 		move.b	#1,(Update_HUD_score).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		enableInts
-		move.l	(Debug_saved_mappings).w,mappings(a0)
-		move.w	(Debug_saved_art_tile).w,art_tile(a0)
+		move.l	(Debug_saved_mappings).w,mappings(a0)	; restore mappings
+		move.l	(Debug_saved_priority).w,priority(a0)		; restore priority and art_tile
 		moveq	#0,d0
 		move.b	d0,anim(a0)
 		move.w	d0,x_sub(a0)

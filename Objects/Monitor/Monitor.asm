@@ -286,7 +286,7 @@ MonitorContents_Index: offsetTable
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Eggman:
-		jmp	sub_24280(pc)
+		jmp	Touch_ChkHurt3(pc)
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Rings:

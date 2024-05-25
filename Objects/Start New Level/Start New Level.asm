@@ -3,7 +3,7 @@
 ; set flipx to horizontal range
 ; ---------------------------------------------------------------------------
 
-; levels list
+; levels list (subtype)
 ; $00	= $000 (DEZ1)
 ; $01	= $001 (DEZ2)
 ; $02	= $002 (DEZ3)

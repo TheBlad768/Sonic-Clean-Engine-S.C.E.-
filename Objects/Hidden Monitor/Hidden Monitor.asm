@@ -17,7 +17,7 @@ Obj_HiddenMonitor:
 .main
 		move.w	(Signpost_addr).w,d0							; address is empty?
 		beq.s	.notdraw										; if it is, branch
-		movea.w	d0,a1										; get Signpost address
+		movea.w	d0,a1										; get signpost address
 		btst	#0,objoff_38(a1)
 		beq.s	.notdraw										; if signpost hasn't landed, branch
 

@@ -48,7 +48,7 @@ AnimateRaw_Restart:
 
 AnimateRaw_CustomCode:
 		clr.b	anim_frame_timer(a0)
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -154,7 +154,7 @@ loc_8456A:
 
 loc_84576:
 		clr.b	anim_frame_timer(a0)
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -213,7 +213,7 @@ loc_845F2:
 
 loc_84600:
 		clr.b	anim_frame_timer(a0)
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		jsr	(a1)
 		moveq	#-1,d2
 		rts
@@ -327,7 +327,7 @@ loc_846E4:
 
 loc_846F2:
 		clr.b	anim_frame_timer(a0)
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		jsr	(a1)
 		moveq	#-1,d2
 		rts
@@ -338,13 +338,13 @@ Animate_RawGetFaster:
 		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTGetFaster:
-		bset	#5,$38(a0)
+		bset	#5,objoff_38(a0)
 		bne.s	+
-		move.b	(a1),$2E(a0)
-		clr.b	$2F(a0)
+		move.b	(a1),objoff_2E(a0)
+		clr.b	objoff_2F(a0)
 +		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	++
-		move.b	$2E(a0),d2
+		move.b	objoff_2E(a0),d2
 		moveq	#0,d0
 		move.b	anim_frame(a0),d0
 		addq.b	#1,d0
@@ -355,7 +355,7 @@ Animate_RawNoSSTGetFaster:
 		tst.b	d2
 		beq.s	+++
 		subq.b	#1,d2
-		move.b	d2,$2E(a0)
+		move.b	d2,objoff_2E(a0)
 +		move.b	d0,anim_frame(a0)
 		move.b	d1,mapping_frame(a0)
 		move.b	d2,anim_frame_timer(a0)
@@ -368,14 +368,14 @@ Animate_RawNoSSTGetFaster:
 +		move.b	d0,anim_frame(a0)
 		move.b	d1,mapping_frame(a0)
 		move.b	d2,anim_frame_timer(a0)
-		move.b	$2F(a0),d0
+		move.b	objoff_2F(a0),d0
 		addq.b	#1,d0
-		move.b	d0,$2F(a0)
+		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
 		blo.s		+
-		bclr	#5,$38(a0)
-		clr.b	$2F(a0)
-		movea.l	$34(a0),a2
+		bclr	#5,objoff_38(a0)
+		clr.b	objoff_2F(a0)
+		movea.l	objoff_34(a0),a2
 		jsr	(a2)
 +		moveq	#-1,d2
 		rts
@@ -386,12 +386,12 @@ Animate_RawGetSlower:
 		movea.l	objoff_30(a0),a1
 
 Animate_RawNoSSTGetSlower:
-		bset	#5,$38(a0)
+		bset	#5,objoff_38(a0)
 		bne.s	+
-		clr.w	$2E(a0)
+		clr.w	objoff_2E(a0)
 +		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	++
-		move.b	$2E(a0),d2
+		move.b	objoff_2E(a0),d2
 		moveq	#0,d0
 		move.b	anim_frame(a0),d0
 		addq.b	#1,d0
@@ -405,18 +405,18 @@ Animate_RawNoSSTGetSlower:
 		move.b	d2,anim_frame_timer(a0)
 		cmp.b	(a1),d2
 		bhs.s	++
-		move.b	d2,$2E(a0)
+		move.b	d2,objoff_2E(a0)
 -
 +		rts
 ; ---------------------------------------------------------------------------
-+		move.b	$2F(a0),d0
++		move.b	objoff_2F(a0),d0
 		addq.b	#1,d0
-		move.b	d0,$2F(a0)
+		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
 		blo.s		-
-		bclr	#5,$38(a0)
-		clr.b	$2F(a0)
-		movea.l	$34(a0),a2
+		bclr	#5,objoff_38(a0)
+		clr.b	objoff_2F(a0)
+		movea.l	objoff_34(a0),a2
 		jmp	(a2)
 
 ; =============== S U B R O U T I N E =======================================

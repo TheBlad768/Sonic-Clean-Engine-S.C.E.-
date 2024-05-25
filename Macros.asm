@@ -69,12 +69,12 @@ dmaFillVRAM macro byte,addr,length
 	move.w	#$8F01,VDP_control_port-VDP_control_port(a5)	; VRAM pointer increment: $0001
 	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5)	; DMA length ...
 	move.w	#$9780,VDP_control_port-VDP_control_port(a5)	; VRAM fill
-	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5)	; Start at ...
+	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5)	; start at ...
 	move.w	#(byte)<<8,(VDP_data_port).l	; fill with byte
 
 .loop:
-	move.w	VDP_control_port-VDP_control_port(a5),d1
-	btst	#1,d1
+	moveq	#2,d1
+	and.w	VDP_control_port-VDP_control_port(a5),d1
 	bne.s	.loop	; busy loop until the VDP is finished filling...
 	move.w	#$8F02,VDP_control_port-VDP_control_port(a5)	; VRAM pointer increment: $0002
     endm
@@ -376,7 +376,11 @@ QueueKos macro data,ram,terminate
 ; load Kosinski Moduled art to VRAM
 QueueKosModule macro art,vram,terminate
 	lea	(art).l,a1
+    if ((vram)<=3)
+	moveq	#tiles_to_bytes(vram),d2
+      else
 	move.w	#tiles_to_bytes(vram),d2
+      endif
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Queue_Kos_Module).w
       else
@@ -454,7 +458,6 @@ getobjectRAMslot macro address
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	movea.w	a0,a1												; load current object to a1
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
 	lsr.w	#6,d0												; divide by $40... even though SSTs are $4A bytes long in this game

@@ -5,6 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Pause_Game:
+		tst.b	(Time_over_flag).w							; is time over?
+		bne.w	Pause_Unpause							; if yes, branch
 		tst.b	(Game_paused).w
 		bne.s	.paused
 		tst.b	(Ctrl_1_pressed).w							; is Start pressed?
@@ -17,6 +19,7 @@ Pause_Game:
 Pause_Loop:
 		move.b	#VintID_Level,(V_int_routine).w
 		bsr.s	Wait_VSync
+
 	if GameDebug
 		btst	#button_A,(Ctrl_1_pressed).w					; is button A pressed?
 		beq.s	Pause_ChkFrameAdvance					; if not, branch
@@ -32,6 +35,7 @@ Pause_ChkFrameAdvance:
 		bne.s	Pause_FrameAdvance						; if yes, branch
 Pause_ChkStart:
 	endif
+
 		tst.b	(Ctrl_1_pressed).w							; is Start pressed?
 		bpl.s	Pause_Loop								; if not, branch
 

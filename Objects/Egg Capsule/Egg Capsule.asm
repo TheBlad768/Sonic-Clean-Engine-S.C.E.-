@@ -48,10 +48,9 @@ Obj_EggCapsule:
 		move.w	(Camera_X_pos).w,d0
 		addi.w	#320/2,d0
 		move.w	d0,x_pos(a0)
-		move.w	(Camera_Y_pos).w,d0
-		subi.w	#128/2,d0
+		moveq	#128/2,d0
+		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
-
 		move.l	#.flipped,objoff_34(a0)
 		move.w	#1,objoff_3A(a0)
 		jsr	(Swing_Setup1).w
@@ -92,7 +91,7 @@ Obj_EggCapsule:
 
 .open
 		move.b	#1,mapping_frame(a0)				; set empty egg capsule frame
-		move.w	#$40,$2E(a0)					; wait
+		move.w	#$40,objoff_2E(a0)				; wait
 
 		; create pieces objects
 		lea	Child1_EggCapsule_Pieces(pc),a2
@@ -158,8 +157,8 @@ Obj_EggCapsule:
 		add.w	d1,x_pos(a0)
 
 		; ypos
-		move.w	(Camera_Y_pos).w,d0
-		addi.w	#64,d0
+		moveq	#64,d0
+		add.w	(Camera_Y_pos).w,d0
 		move.l	#$4000,d1
 		cmp.w	y_pos(a0),d0
 		bhi.s	.sety
@@ -248,7 +247,7 @@ sub_866EC:											; Routine $10 (LBZ)
 Check_SonicEndPose:
 
 		; wait
-		subq.w	#1,$2E(a0)
+		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
 
 		lea	(Player_1).w,a1
@@ -272,7 +271,7 @@ Check_SonicEndPose:
 Check_SonicEndPose_MGZ:
 
 		; wait
-		subq.w	#1,$2E(a0)
+		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
 
 		lea	(Player_1).w,a1
@@ -386,8 +385,8 @@ Obj_EggCapsule_FlippedButton:
 ; ---------------------------------------------------------------------------
 
 .range
-		dc.w -26, 52		; xpos, xpos (52 pixels width)
-		dc.w -28, 56		; ypos, ypos (56 pixels height)
+		dc.w -26, 52		; xpos, xpos (26 pixels width)
+		dc.w -28, 56		; ypos, ypos (28 pixels height)
 
 ; ---------------------------------------------------------------------------
 ; Egg Capsule flicker pieces (Object)
@@ -400,7 +399,7 @@ Obj_EggCapsule_Pieces:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_FlickerMove,address(a0)
 		bsr.s	.getframe
-		moveq	#1<<2,d0
+		moveq	#1<<2,d0								; set index velocity
 		jsr	(Set_IndexedVelocity).w
 		jmp	(Draw_Sprite).w
 
@@ -409,7 +408,7 @@ Obj_EggCapsule_Pieces:
 .getframe
 		moveq	#0,d0
 		move.b	subtype(a0),d0
-		lsr.w	d0
+		lsr.w	d0										; division by 2
 		move.b	.frame(pc,d0.w),mapping_frame(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -461,7 +460,7 @@ Obj_EggCapsule_Animals:
 .normal
 
 		; wait
-		subq.w	#1,$2E(a0)
+		subq.w	#1,objoff_2E(a0)
 		bpl.s	.draw
 		move.l	#.jump,address(a0)
 		move.w	#$80,priority(a0)
@@ -507,7 +506,7 @@ Obj_EggCapsule_Animals_Flipped:
 		jsr	(Refresh_ChildPosition).w
 
 		; wait
-		subq.w	#1,$2E(a0)
+		subq.w	#1,objoff_2E(a0)
 		bpl.s	.draw
 		move.l	#.move,address(a0)
 		move.w	#$80,priority(a0)
@@ -615,21 +614,18 @@ EggCapsule_Animals_Load:
 		andi.w	#2,d0
 		move.w	d0,d2
 		move.w	EggCapsule_Animals_VRAM(pc,d2.w),art_tile(a0)
-
 		moveq	#0,d2
 		move.b	(Current_zone).w,d2
 		add.w	d2,d2
 		lea	Obj_Animal_ZoneAnimals(pc),a1
 		adda.w	d2,a1
-
 		lsr.w	d0
 		move.b	(a1,d0.w),d0
 		lea	Obj_Animal_Properties(pc),a2
-
 		move.l	(a2,d0.w),mappings(a0)
 		add.w	d1,d1
 		add.w	d1,d1
-		move.w	d1,$2E(a0)								; set wait
+		move.w	d1,objoff_2E(a0)							; set wait
 
 		; set xvel
 		movea.w	parent3(a0),a1							; load egg capsule address

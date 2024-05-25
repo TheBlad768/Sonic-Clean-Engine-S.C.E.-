@@ -156,7 +156,6 @@ Level_Screen:
 		jsr	(Process_Kos_Queue).w
 		jsr	(Wait_VSync).w
 		addq.w	#1,(Level_frame_counter).w
-		jsr	(Animate_Palette).w
 		jsr	(Load_Sprites).w
 		jsr	(Process_Sprites).w
 		tst.b	(Restart_level_flag).w
@@ -165,6 +164,7 @@ Level_Screen:
 		jsr	(Screen_Events).w
 		jsr	(Handle_Onscreen_Water_Height).w
 		jsr	(Load_Rings).w
+		jsr	(Animate_Palette).w
 		jsr	(Animate_Tiles).w
 		jsr	(Process_Kos_Module_Queue).w
 		jsr	(OscillateNumDo).w

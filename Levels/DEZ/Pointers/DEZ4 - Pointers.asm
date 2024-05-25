@@ -13,7 +13,7 @@
 		watpalptrs $1000, palid_WaterSonic, palid_WaterSonic													; Starting water height, Water Sonic palette, unused
 		binclude "Levels/DEZ/Start Location/4.bin"																; Players start location
 
-	if GameDebug
+	if (GameDebug<>0)&&(GameDebugAlt==0)
 		dc.l Debug_DEZ1																						; Debug Mode
 	else
 		dc.l 0																								; Unused

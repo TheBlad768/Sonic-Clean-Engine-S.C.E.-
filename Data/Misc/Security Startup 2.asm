@@ -12,12 +12,12 @@ Game_Program:
 		move.l	#HInt,(H_int_addr).w
 
 .wait
-		move.w	(VDP_control_port).l,d1
-		btst	#1,d1
+		moveq	#2,d0
+		and.w	(VDP_control_port).l,d0
 		bne.s	.wait											; wait till a DMA is completed
 
-		; clear RAM
-		clearRAM RAM_start, RAM_end							; clear RAM
+		; clear some RAM on every boot and reset
+		clearRAM RAM_start, CrossResetRAM						; clear RAM
 
 		; check
 		btst	#6,(HW_Expansion_Control).l
@@ -27,10 +27,10 @@ Game_Program:
 
 .skip
 
-		; get region
-		moveq	#signextendB($C0),d0
-		and.b	(HW_Version).l,d0
-		move.b	d0,(Graphics_flags).w								; save region setting
+		; clear some RAM only on a coldboot
+		clearRAM CrossResetRAM, CrossResetRAM_end				; clear RAM
+
+		; set checksum string
 		move.l	#Ref_Checksum_String,(Checksum_string).w			; set flag so checksum won't run again
 
 .init

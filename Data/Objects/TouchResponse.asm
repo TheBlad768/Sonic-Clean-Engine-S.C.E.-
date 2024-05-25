@@ -232,8 +232,8 @@ Touch_Monitor:
 ; ---------------------------------------------------------------------------
 
 .monitorupsidedown
-		move.w	y_pos(a0),d0								; get player's y_pos
-		addi.w	#16,d0									; add height of monitor from it
+		moveq	#16,d0									; add height of monitor from it
+		add.w	y_pos(a0),d0								; get player's y_pos
 		cmp.w	y_pos(a1),d0
 		bhs.s	.locret									; if new value is higher than monitor's y_pos, return
 
@@ -509,7 +509,8 @@ Kill_Character:
 		clr.w	x_vel(a0)
 		clr.w	ground_vel(a0)
 		move.b	#id_Death,anim(a0)
-		move.w	art_tile(a0),(Debug_saved_art_tile).w
+		move.l	priority(a0),(Debug_saved_priority).w		; save priority and art_tile
+		clr.w	priority(a0)
 		bset	#7,art_tile(a0)
 		jsr	(Play_SFX).w
 

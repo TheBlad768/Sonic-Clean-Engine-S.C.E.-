@@ -354,14 +354,14 @@ Sonic_MdNormal:
 Call_Player_AnglePos:
 		tst.b	(Reverse_gravity_flag).w
 		beq.w	Player_AnglePos
-		move.b	angle(a0),d0
-		addi.b	#$40,d0
+		moveq	#$40,d0
+		add.b	angle(a0),d0
 		neg.b	d0
 		subi.b	#$40,d0
 		move.b	d0,angle(a0)
 		bsr.w	Player_AnglePos
-		move.b	angle(a0),d0
-		addi.b	#$40,d0
+		moveq	#$40,d0
+		add.b	angle(a0),d0
 		neg.b	d0
 		subi.b	#$40,d0
 		move.b	d0,angle(a0)
@@ -506,8 +506,8 @@ Sonic_NotRight:
 		tst.w	d1
 		bpl.s	+
 		bset	#Status_Facing,status(a0)
-+		move.b	angle(a0),d0
-		addi.b	#$20,d0
++		moveq	#$20,d0
+		add.b	angle(a0),d0
 		andi.b	#$C0,d0						; is Sonic on a slope?
 		bne.w	loc_112EA					; if yes, branch
 		tst.w	ground_vel(a0)				; is Sonic moving?
@@ -740,8 +740,8 @@ loc_11350:
 		moveq	#$3F,d0
 		and.b	angle(a0),d0
 		beq.s	loc_11370
-		move.b	angle(a0),d0
-		addi.b	#$40,d0
+		moveq	#$40,d0
+		add.b	angle(a0),d0
 		bmi.s	locret_113CE
 
 loc_11370:
@@ -834,8 +834,8 @@ loc_11430:
 
 loc_11438:
 		move.w	d0,ground_vel(a0)
-		move.b	angle(a0),d1
-		addi.b	#$20,d1
+		moveq	#$20,d1
+		add.b	angle(a0),d1
 		andi.b	#$C0,d1
 		bne.s	locret_11480
 		cmpi.w	#$400,d0
@@ -845,10 +845,10 @@ loc_11438:
 		sfx	sfx_Skid
 		move.b	#id_Stop,anim(a0)
 		bclr	#Status_Facing,status(a0)
-		cmpi.b	#12,air_left(a0)
-		blo.s		locret_11480
-		move.l	#DashDust_CheckSkid,address(a6)	; v_Dust
-		move.b	#$15,mapping_frame(a6)			; v_Dust
+		cmpi.b	#12,air_left(a0)						; check air remaining
+		blo.s		locret_11480							; if less than 12, branch
+		move.l	#DashDust_CheckSkid,address(a6)		; v_Dust
+		move.b	#$15,mapping_frame(a6)				; v_Dust
 
 locret_11480:
 		rts
@@ -885,8 +885,8 @@ loc_114B6:
 
 loc_114BE:
 		move.w	d0,ground_vel(a0)
-		move.b	angle(a0),d1
-		addi.b	#$20,d1
+		moveq	#$20,d1
+		add.b	angle(a0),d1
 		andi.b	#$C0,d1
 		bne.s	locret_11506
 		cmpi.w	#-$400,d0
@@ -896,10 +896,10 @@ loc_114BE:
 		sfx	sfx_Skid
 		move.b	#id_Stop,anim(a0)
 		bset	#Status_Facing,status(a0)
-		cmpi.b	#12,air_left(a0)
-		blo.s		locret_11506
-		move.l	#DashDust_CheckSkid,address(a6)	; v_Dust
-		move.b	#$15,mapping_frame(a6)			; v_Dust
+		cmpi.b	#12,air_left(a0)						; check air remaining
+		blo.s		locret_11506							; if less than 12, branch
+		move.l	#DashDust_CheckSkid,address(a6)		; v_Dust
+		move.b	#$15,mapping_frame(a6)				; v_Dust
 
 locret_11506:
 		rts
@@ -1146,8 +1146,8 @@ Player_LevelBound:
 		asl.l	#8,d0
 		add.l	d0,d1
 		swap	d1
-		move.w	(Camera_min_X_pos).w,d0
-		addi.w	#16,d0
+		moveq	#16,d0
+		add.w	(Camera_min_X_pos).w,d0
 		cmp.w	d1,d0									; has Sonic/Knux touched the left boundary?
 		bhi.s	Player_Boundary_Sides					; if yes, branch
 		move.w	(Camera_max_X_pos).w,d0
@@ -1539,8 +1539,8 @@ loc_11D6C:
 ; =============== S U B R O U T I N E =======================================
 
 Player_SlopeResist:
-		move.b	angle(a0),d0
-		addi.b	#$60,d0
+		moveq	#$60,d0
+		add.b	angle(a0),d0
 		cmpi.b	#$C0,d0
 		bhs.s	locret_11DDA
 		move.b	angle(a0),d0
@@ -1583,8 +1583,8 @@ loc_11DE2:
 ; =============== S U B R O U T I N E =======================================
 
 Player_RollRepel:
-		move.b	angle(a0),d0
-		addi.b	#$60,d0
+		moveq	#$60,d0
+		add.b	angle(a0),d0
 		cmpi.b	#$C0,d0
 		bhs.s	locret_11E28
 		move.b	angle(a0),d0
@@ -1624,8 +1624,8 @@ Player_SlopeRepel:
 		bne.s	locret_11E6E
 		tst.w	move_lock(a0)
 		bne.s	loc_11E86
-		move.b	angle(a0),d0
-		addi.b	#$18,d0
+		moveq	#$18,d0
+		add.b	angle(a0),d0
 		cmpi.b	#$30,d0
 		blo.s		locret_11E6E
 		move.w	ground_vel(a0),d0
@@ -1636,8 +1636,8 @@ loc_11E4E:
 		cmpi.w	#$280,d0
 		bhs.s	locret_11E6E
 		move.w	#30,move_lock(a0)
-		move.b	angle(a0),d0
-		addi.b	#$30,d0
+		moveq	#$30,d0
+		add.b	angle(a0),d0
 		cmpi.b	#$60,d0
 		blo.s		loc_11E70
 		bset	#Status_InAir,status(a0)
@@ -2026,8 +2026,8 @@ Sonic_TouchFloor:
 
 loc_121C4:
 		move.w	d0,-(sp)
-		move.b	angle(a0),d0
-		addi.b	#$40,d0
+		moveq	#$40,d0
+		add.b	angle(a0),d0
 		bpl.s	loc_121D2
 		neg.w	(sp)
 
@@ -2104,7 +2104,7 @@ Sonic_Hurt:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	+
 		move.w	#1,(Debug_placement_mode).w
-		clr.b	(Ctrl_1_locked).w
+		clr.b	(Ctrl_1_locked).w								; unlock control
 		rts
 ; ---------------------------------------------------------------------------
 +
@@ -2182,7 +2182,7 @@ Sonic_Death:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	+
 		move.w	#1,(Debug_placement_mode).w
-		clr.b	(Ctrl_1_locked).w
+		clr.b	(Ctrl_1_locked).w								; unlock control
 		rts
 ; ---------------------------------------------------------------------------
 +
@@ -2254,7 +2254,7 @@ Sonic_Drown:
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	+
 		move.w	#1,(Debug_placement_mode).w
-		clr.b	(Ctrl_1_locked).w
+		clr.b	(Ctrl_1_locked).w								; unlock control
 		rts
 ; ---------------------------------------------------------------------------
 +

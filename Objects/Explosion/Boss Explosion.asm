@@ -167,8 +167,8 @@ Obj_BossExplosionSpecial:
 		move.w	(Camera_X_pos).w,d0
 		addi.w	#320/2,d0
 		move.w	d0,x_pos(a0)
-		move.w	(Camera_Y_pos).w,d0
-		addi.w	#224/2,d0
+		moveq	#224/2,d0
+		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
 		move.b	#2,subtype(a0)
 		bra.w	Obj_CreateBossExplosion

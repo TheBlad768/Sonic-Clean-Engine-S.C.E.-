@@ -13,5 +13,5 @@ DelayProgram:
 
 .wait
 		tst.b	(V_int_routine).w
-		bne.s	.wait	; wait until V-int's run
+		bne.s	.wait						; wait until V-int's run
 		rts

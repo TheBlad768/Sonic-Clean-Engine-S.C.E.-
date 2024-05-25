@@ -569,3 +569,38 @@ sub_8619A:
 		move.w	d2,x_pos(a0)
 		move.w	d3,y_pos(a0)
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Gradual_SwingOffset:
+		move.l	objoff_2E(a0),d2
+		tst.b	objoff_36(a0)
+		beq.s	loc_465F6
+		neg.l	d1
+		add.l	d2,objoff_32(a0)			; moving up and then down. Reset speed/direction when center point is reached going down
+		bmi.s	loc_4660E
+		move.l	d0,objoff_2E(a0)			; reset initial speed (positive) to move downwards
+		clr.l	objoff_32(a0)
+		clr.b	objoff_36(a0)
+		move.w	objoff_32(a0),d0			; get final offset for us by calling object
+		rts
+; ---------------------------------------------------------------------------
+
+loc_465F6:
+		add.l	d2,objoff_32(a0)			; moving down and then up. Reset speed/direction when center point is reached going up
+		bmi.s	loc_465FE
+		bne.s	loc_4660E
+
+loc_465FE:
+		neg.l	d0						; reverse direction to move upwards when speed has reached
+		move.l	d0,objoff_2E(a0)			; reset initial speed (negative)
+		clr.l	objoff_32(a0)
+		st	objoff_36(a0)
+		move.w	objoff_32(a0),d0			; get final offset for us by calling object
+		rts
+; ---------------------------------------------------------------------------
+
+loc_4660E:
+		sub.l	d1,objoff_2E(a0)			; apply speed
+		move.w	objoff_32(a0),d0			; get final offset for us by calling object
+		rts

@@ -62,8 +62,6 @@ ArtKosM_StarPostStars2:			binclude "Objects/StarPost/KosinskiM Art/StarPost Star
 	even
 ArtKosM_StarPostStars3:			binclude "Objects/StarPost/KosinskiM Art/StarPost Stars 3.bin"
 	even
-ArtKosM_LevelSelectText:			binclude "Data/Screens/Level Select/KosinskiM Art/Text.bin"
-	even
 
 ; ===========================================================================
 ; Kosinski Module compressed title card graphics
@@ -73,7 +71,14 @@ ArtKosM_DEZTitleCard:			binclude "Objects/Title Card/KosinskiM Art/Levels/DEZ - 
 	even
 
 ; ===========================================================================
-; Kosinski Module compressed DEZ graphics
+; Kosinski Module compressed Level Select screen graphics
+; ===========================================================================
+
+ArtKosM_LevelSelectText:			binclude "Data/Screens/Level Select/KosinskiM Art/Text.bin"
+	even
+
+; ===========================================================================
+; Kosinski Module compressed levels graphics
 ; ===========================================================================
 
 ArtKosM_Spikebonker:			binclude "Objects/Spikebonker/KosinskiM Art/Spikebonker.bin"

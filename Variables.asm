@@ -8,40 +8,44 @@ RAM_start:							= *
 Chunk_table:							ds.b $8000				; chunk (128x128) definitions, $80 bytes per definition
 Chunk_table_end						= *
 
+; object variables
 Player_1:								= *						; main character in 1 player mode
 v_player:								= *
 Object_RAM:							ds.b object_size
-									ds.b object_size
+									ds.b object_size			; unused
 Reserved_object_3:					ds.b object_size			; during a level, an object whose sole purpose is to clear the collision response list is stored here
 Dynamic_object_RAM:				ds.b object_size*90		; 90 objects
 Dynamic_object_RAM_end				= *
-									ds.b object_size
+									ds.b object_size			; unused
 v_Dust:								ds.b object_size
 v_Shield:							ds.b object_size
-									ds.b object_size
+									ds.b object_size			; unused
 v_Breathing_bubbles:					ds.b object_size
-									ds.b object_size
-									ds.b object_size
-									ds.b object_size
-									ds.b object_size
-									ds.b object_size
-									ds.b object_size
-									ds.b object_size
+									ds.b object_size			; unused
+									ds.b object_size			; unused
+									ds.b object_size			; unused
+									ds.b object_size			; unused
+									ds.b object_size			; unused
+									ds.b object_size			; unused
+									ds.b object_size			; unused
 v_WaterWave:						ds.b object_size
 v_Invincibility_stars:					ds.b object_size*4			; 4 objects
-									ds.b $34					; null
+									ds.b $34					; unused
 Object_RAM_end						= *
 
+; kosinski moduled buffer variables
 Kos_decomp_buffer:					ds.b $1000				; each module in a KosM archive is decompressed here and then DMAed to VRAM
 
+; scroll variables
 H_scroll_buffer:						ds.l 224					; horizontal scroll table is built up here and then DMAed to VRAM
 H_scroll_table:						ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
 H_scroll_buffer_end					= *
 V_scroll_buffer:						ds.l 320/16				; vertical scroll buffer used in various levels(320 pixels for MD1, 512 pixels for MD2)
 V_scroll_buffer_end					= *
 
+; table variables
 Collision_response_list:				ds.w $80/2				; only objects in this list are processed by the collision response routines
-Pos_table:							ds.l 64					; recorded player XY position buffer
+Pos_table:							ds.l 64					; recorded player xy position buffer
 Ring_status_table:					ds.w RingTable_Count		; ring status table(1 word)
 Ring_status_table_end				= *
 Object_respawn_table:					ds.b ObjectTable_Count	; object respawn table(1 byte)
@@ -51,11 +55,13 @@ Sprite_table_buffer_end				= *
 Sprite_table_input:					ds.w ($80/2)*8			; sprite table input buffer
 Sprite_table_input_end				= *
 
+; DMA variables
 DMA_queue:							= *
 VDP_Command_Buffer:				ds.w $12*7				; stores all the VDP commands necessary to initiate a DMA transfer
 DMA_queue_slot:						= *
 VDP_Command_Buffer_Slot:			ds.w 1					; points to the next free slot on the queue
 
+; camera variables
 Camera_RAM:						= *						; various camera and scroll-related variables are stored here
 H_scroll_amount:						ds.w 1					; number of pixels camera scrolled horizontally in the last frame * $100
 V_scroll_amount:						ds.w 1					; number of pixels camera scrolled vertically in the last frame * $100
@@ -71,10 +77,10 @@ Camera_stored_max_X_pos:			ds.w 1
 Camera_stored_min_X_pos:			ds.w 1
 Camera_stored_min_Y_pos:			ds.w 1
 Camera_stored_max_Y_pos:			ds.w 1
-Camera_min_X_pos_Saved:			ds.w 1
-Camera_max_X_pos_Saved:			ds.w 1
-Camera_min_Y_pos_Saved:			ds.w 1
-Camera_max_Y_pos_Saved:			ds.w 1
+Camera_saved_min_X_pos:			ds.w 1
+Camera_saved_max_X_pos:			ds.w 1
+Camera_saved_min_Y_pos:			ds.w 1
+Camera_saved_max_Y_pos:			ds.w 1
 H_scroll_frame_offset:					ds.w 1					; if this is non-zero with value x, horizontal scrolling will be based on the player's position x / $100 + 1 frames ago
 Pos_table_index:						ds.b 1
 Pos_table_byte:						ds.b 1
@@ -112,8 +118,8 @@ Camera_Y_pos_mask:					ds.w 1					; either $7F0 or $FF0
 Layout_row_index_mask:				ds.w 1					; either $3C or $7C
 Scroll_force_positions:					ds.b 1					; if this is set scrolling will be based on the two variables below rather than the player's actual position
 									ds.b 1					; even
-Scroll_forced_X_pos:					ds.l 1
-Scroll_forced_Y_pos:					ds.l 1
+Scroll_forced_X_pos:					ds.l 1					; replace player xpos
+Scroll_forced_Y_pos:					ds.l 1					; replace player ypos
 Screen_shaking_flag:					ds.w 1					; flag for enabling screen shake. Negative values cause screen to shake infinitely, positive values make the screen shake for a short amount of time
 Screen_shaking_offset:					ds.w 1					; vertical offset when screen_shake_flag is enabled. This is added to camera position later
 Screen_shaking_last_offset:			ds.w 1					; value of Screen_shake_offset for the previous frame
@@ -125,8 +131,6 @@ Draw_delayed_position:				ds.w 1					; position to redraw screen from. Screen is
 Draw_delayed_rowcount:				ds.w 1					; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
 Events_bg:							ds.b $18					; various flags used by background events
 Boss_events:							ds.b $10
-Camera_RAM_end					= *
-
 Ring_start_addr_ROM:				ds.l 1					; address in the ring layout of the first ring whose X position is >= camera X position - 8
 Ring_end_addr_ROM:					ds.l 1					; address in the ring layout of the first ring whose X position is >= camera X position + 328
 Ring_start_addr_RAM:				ds.w 1					; address in the ring status table of the first ring whose X position is >= camera X position - 8
@@ -134,17 +138,20 @@ Ring_consumption_table:				= *						; stores the addresses of all rings currentl
 Ring_consumption_count:				ds.w 1					; the number of rings being consumed currently
 Ring_consumption_list:				ds.w $3F					; the remaining part of the ring consumption table
 Ring_consumption_table_end			= *
+Camera_RAM_end					= *
 
+; plane variables
 Plane_buffer:							ds.w $240				; used by level drawing routines
 Plane_buffer_end
 
+; sound variables
 v_snddriver_ram:						ds.b $400				; start of RAM for the sound driver data
 
+; misc variables
 v_gamemode:						= *
 Game_mode:							ds.b 1
 V_int_routine:						= *
 v_vbla_routine:						ds.b 1
-
 SonicControl:							= *
 Ctrl_1_logical:						= *
 v_jpadhold2:							= *
@@ -190,6 +197,7 @@ Palette_fade_index:					ds.b 1					; colour to start fading from
 v_pfade_size:							= *
 Palette_fade_count:					ds.b 1					; the number of colours to fade
 
+; lag variables
 Lag_frame_count:						ds.w 1					; more specifically, the number of times V-int routine 0 has run. Reset at the end of a normal frame
 f_hbla_pal:							= *
 H_int_flag:							ds.b 1					; unless this is set H-int will return immediately
@@ -226,7 +234,7 @@ Secondary_Angle:						ds.b 1
 Deform_lock:							ds.b 1
 Boss_flag:							ds.b 1					; set if a boss fight is going on
 TitleCard_end_flag:					ds.b 1
-LevResults_end_flag:					ds.b 1
+Results_end_flag:						ds.b 1
 NoBackground_event_flag:				ds.b 1
 Screen_event_routine:					ds.b 1
 Screen_event_flag:					ds.b 1
@@ -259,6 +267,7 @@ Ring_bonus_countdown:				ds.w 1					; used on the results screen
 Total_bonus_countup:					ds.w 1
 Lag_frame_count_end					= *
 
+; water variables
 Water_level:							= *						; keeps fluctuating
 Water_Level_1:						ds.w 1
 Water_Level_2:						= *
@@ -273,18 +282,7 @@ Water_move:							= *
 Water_full_screen_flag:				ds.b 1					; set if water covers the entire screen (i.e. the underwater pallete should be DMAed during V-int rather than the normal palette)
 Water_flag:							ds.b 1
 
-Debug_saved_mappings:				ds.l 1					; player 1 mappings before entering debug mode
-Debug_saved_art_tile:					ds.w 1					; player 1 art_tile before entering debug mode
-Graphics_flags:						ds.b 1					; bit 7 set = English system, bit 6 set = PAL system
-Last_star_post_hit:					= *
-Last_star_pole_hit:					ds.b 1
-Current_music:						ds.w 1
-Palette_fade_timer:					ds.w 1					; the palette gets faded in until this timer expires
-SegaCD_Mode:						ds.b 1
-Respawn_table_keep:					ds.b 1					; if set, respawn table is not reset during level load
-Debug_mode_flag:					ds.b 1
-									ds.b 1					; even
-
+; program pointers variables
 Block_table_addr_ROM:				ds.l 1					; block table pointer(Block (16x16) definitions, 8 bytes per definition)
 Level_layout_addr_ROM:				ds.l 1					; level layout pointer
 Level_layout_addr2_ROM:				ds.l 1					; level layout pointer 2 (+8)
@@ -292,6 +290,7 @@ Rings_manager_addr_RAM:			ds.l 1					; jump for the ring loading manager
 Object_index_addr:					ds.l 1					; points to either the object index for levels
 Object_load_addr_RAM:				ds.l 1					; jump for the object loading manager
 
+; level pointers variables
 Level_data_addr_RAM:				= *
 .AnPal								ds.l 1
 .Resize								ds.l 1
@@ -328,6 +327,7 @@ Level_data_addr_RAM:				= *
 .Debug								ds.l 1
 Level_data_addr_RAM_end			= *
 
+; kosinski variables
 Kos_decomp_queue_count:				ds.w 1					; the number of pieces of data on the queue. Sign bit set indicates a decompression is in progress
 Kos_decomp_stored_registers:			ds.w 20					; allows decompression to be spread over multiple frames
 Kos_decomp_stored_SR:				ds.w 1
@@ -344,6 +344,7 @@ Kos_module_source:					= Kos_module_queue		; the compressed data location for th
 Kos_module_destination:				= Kos_module_queue+4	; the VRAM destination for the first module in the queue
 Kos_module_queue_end				= *
 
+; palette variables
 v_pal_water_dup:						= *
 Target_water_palette:					= *						; used by palette fading routines
 Target_water_palette_line_1:			ds.w 16
@@ -369,6 +370,30 @@ Target_palette_line_2:					ds.w 16
 Target_palette_line_3:					ds.w 16
 Target_palette_line_4:					ds.w 16
 
+; oscillating variables
+Oscillating_variables:					= *
+Oscillating_Numbers:					= *
+Oscillation_Control:					ds.w 1
+Oscillating_Data:						ds.b $40
+Anim_Counters:						ds.b $10					; each word stores data on animated level art, including duration and current frame
+Level_trigger_array:					ds.b $10					; used by buttons, etc
+Level_trigger_array_end				= *
+Rings_frame_timer:					ds.b 1
+Rings_frame:							ds.b 1
+Ring_spill_anim_counter:				ds.b 1
+Ring_spill_anim_frame:				ds.b 1
+Ring_spill_anim_accum:				ds.b 1
+									ds.b 1					; even
+Oscillating_variables_end				= *
+
+; stack variables
+Stack_contents						ds.b $100				; ~$100 bytes ; this is the top of the stack, it grows downwards
+System_stack:						= *
+
+; start
+CrossResetRAM:						= *						; RAM in this region will not be cleared after a soft reset
+
+; main variables
 v_vbla_count:						= *
 V_int_run_count:						ds.w 1					; the number of times V-int has run
 v_vbla_word:							ds.b 1
@@ -383,7 +408,20 @@ Apparent_zone:						= *
 Apparent_zone_and_act:				ds.b 1
 a_act:								= *
 Apparent_act:						ds.b 1
+Debug_saved_mappings:				ds.l 1					; player 1 mappings before entering debug mode
+Debug_saved_priority:					ds.w 1					; player 1 priority before entering debug mode
+Debug_saved_art_tile:					ds.w 1					; player 1 art_tile before entering debug mode
+									ds.b 1					; even
+Last_star_post_hit:					= *
+Last_star_pole_hit:					ds.b 1
+Current_music:						ds.w 1
+Palette_fade_timer:					ds.w 1					; the palette gets faded in until this timer expires
+SegaCD_Mode:						ds.b 1
+Respawn_table_keep:					ds.b 1					; if set, respawn table is not reset during level load
+Debug_mode_flag:					ds.b 1
+									ds.b 1					; even
 
+; HUD data variables
 f_timeover:							= *
 Time_over_flag:						ds.b 1
 f_ringcount:							= *
@@ -407,12 +445,14 @@ Timer_centisecond:					ds.b 1					; the second gets incremented when this reache
 v_score:								= *
 Score:								ds.l 1
 
+; HUD draw variables
 HUD_RAM:							= *
 .Xpos:								ds.w 1
 .Ypos:								ds.w 1
 .status:								ds.b 1
 									ds.b 1					; even
 
+; level results variables
 DecimalScoreRAM:					ds.l 1
 DecimalScoreRAM2:					ds.l 1
 
@@ -436,34 +476,21 @@ Saved_waterdynamic_resize:			ds.l 1
 Saved_status_secondary:				ds.b 1
 Saved_last_star_post_hit:				ds.b 1
 
-Oscillating_variables:					= *
-Oscillating_Numbers:					= *
-Oscillation_Control:					ds.w 1
-Oscillating_Data:						ds.b $40
-Anim_Counters:						ds.b $10					; each word stores data on animated level art, including duration and current frame
-Level_trigger_array:					ds.b $10					; used by buttons, etc
-Level_trigger_array_end				= *
-Rings_frame_timer:					ds.b 1
-Rings_frame:							ds.b 1
-Ring_spill_anim_counter:				ds.b 1
-Ring_spill_anim_frame:				ds.b 1
-Ring_spill_anim_accum:				ds.b 1
-									ds.b 1					; even
-Oscillating_variables_end				= *
-
-System_stack_size					ds.b $100				; ~$100 bytes ; this is the top of the stack, it grows downwards
-System_stack:						= *
-
+; end
+CrossResetRAM_end:					= *
 RAM_end:							= *
 
+; system variables
 Checksum_string:						ds.l 1					; set to 'INIT' once the checksum routine has run
 V_int_jump:							ds.w 1					; contains an instruction to jump to the V-int handler
 V_int_addr:							ds.l 1
 H_int_jump:							ds.w 1					; contains an instruction to jump to the H-int handler
 H_int_addr:							ds.l 1
+
 	if * > 0	; don't declare more space than the RAM can contain!
 		fatal "The RAM variable declarations are too large by $\{*} bytes."
 	endif
+
 	if MOMPASS=1
 		message "The current RAM available $\{0-*} bytes."
 	endif

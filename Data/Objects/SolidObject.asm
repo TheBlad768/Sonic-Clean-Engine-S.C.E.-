@@ -445,8 +445,8 @@ SolidObject_InsideRight:
 		bpl.s	SolidObject_AtEdge
 
 SolidObject_StopCharacter:
-		clr.w	ground_vel(a1)
 		clr.w	x_vel(a1)
+		clr.w	ground_vel(a1)
 		tst.b	status_tertiary(a1)
 		bpl.s	SolidObject_AtEdge
 		bset	#6,status_tertiary(a1)

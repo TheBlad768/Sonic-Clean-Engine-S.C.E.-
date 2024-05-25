@@ -206,6 +206,7 @@ Pal_DecColor:
 
 Pal_FillWhite:
 		moveq	#0,d0
+		move.w	d0,(Pal_fade_delay2).w
 		lea	(Normal_palette).w,a0
 		move.b	(Palette_fade_info).w,d0
 		adda.w	d0,a0
@@ -215,7 +216,6 @@ Pal_FillWhite:
 .palettewrite
 		move.w	d1,(a0)+
 		dbf	d0,.palettewrite
-		clr.w	(Pal_fade_delay2).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================

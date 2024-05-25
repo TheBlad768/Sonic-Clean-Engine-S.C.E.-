@@ -30,14 +30,12 @@ Poll_Controllers:
 
 Poll_Controller:
 		move.b	#0,(a1)					; poll controller data port
-		nop
-		nop
+		nops 2							; wait 8 cycles
 		move.b	(a1),d0					; get controller port data (Start/A)
 		lsl.b	#2,d0
 		andi.b	#$C0,d0
 		move.b	#$40,(a1)				; poll controller data port again
-		nop
-		nop
+		nops 2							; wait 8 cycles
 		move.b	(a1),d1					; get controller port data (B/C/Dpad)
 		andi.b	#$3F,d1
 		or.b	d1,d0						; fuse together into one controller bit array

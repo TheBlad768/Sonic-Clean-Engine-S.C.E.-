@@ -434,7 +434,7 @@ Refresh_PlaneFull:
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/a0
-		addi.w	#$10,d0
+		addi.w	#16,d0
 		dbf	d2,.refresh
 		rts
 
@@ -455,7 +455,7 @@ Refresh_PlaneTileDeform:
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
-		addi.w	#$10,d0
+		addi.w	#16,d0
 		dbf	d3,-
 		rts
 
@@ -480,7 +480,7 @@ loc_4ED26:
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
-		addi.w	#$10,d0
+		addi.w	#16,d0
 		dbf	d3,loc_4ED1C
 		rts
 
@@ -511,7 +511,7 @@ Refresh_PlaneDirect:
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
-		addi.w	#$10,d0
+		addi.w	#16,d0
 		dbf	d2,.refresh
 		enableInts
 		rts
@@ -543,7 +543,7 @@ Refresh_PlaneDirect_BG:
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
-		addi.w	#$10,d0
+		addi.w	#16,d0
 		dbf	d2,.refresh
 		enableInts
 		rts
@@ -749,7 +749,7 @@ Get_XDeformRange:
 		move.w	(a4)+,d2
 		move.w	(a6),d0
 		bsr.s	+
-		addi.w	#$140,d0
+		addi.w	#320,d0
 
 +
 -		cmp.w	d2,d0
@@ -947,6 +947,38 @@ loc_4F382:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Clear switches RAM
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Clear_Switches:
+		clearRAM2 Level_trigger_array, Level_trigger_array_end
+		rts
+
+; ---------------------------------------------------------------------------
+; Reset level data
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_LevelData:
+		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
+		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
+		bsr.s	Clear_Switches
+
+		; clear
+		move.b	d0,(Screen_event_routine).w
+		move.b	d0,(Background_event_routine).w
+		move.b	d0,(Boss_flag).w
+		move.b	d0,(Respawn_table_keep).w
+
+		; load
+		bsr.s	LoadLevelPointer
+		bsr.s	Load_Level
+		bsr.w	CheckLevelForWater
+
+; ---------------------------------------------------------------------------
 ; Collision index pointer loading subroutine
 ; Uses Sonic & Knuckles format mapping
 ; ---------------------------------------------------------------------------
@@ -964,44 +996,16 @@ Load_Solids2:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Clear switches RAM
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Clear_Switches:
-		clearRAM2 Level_trigger_array, Level_trigger_array_end
-		rts
-
-; ---------------------------------------------------------------------------
-; Reset level data
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Reset_LevelData:
-		clr.b	(Screen_event_routine).w
-		clr.b	(Background_event_routine).w
-		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
-		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
-		clr.b	(Boss_flag).w
-		clr.b	(Respawn_table_keep).w
-		bsr.s	LoadLevelPointer
-		bsr.s	Clear_Switches
-		bsr.s	Load_Level
-		bsr.s	Load_Solids
-		bra.w	CheckLevelForWater
-
-; ---------------------------------------------------------------------------
 ; Load level data
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 LoadLevelLoadBlock:
-		lea	(Level_data_addr_RAM.8x8data).w,a2
-		movea.l	(a2),a1
-		moveq	#0,d2											; VRAM
+
+		; load level art
+		movea.l	(Level_data_addr_RAM.8x8data).w,a1
+		moveq	#tiles_to_bytes(0),d2								; VRAM
 		bsr.w	Queue_Kos_Module
 
 .waitplc

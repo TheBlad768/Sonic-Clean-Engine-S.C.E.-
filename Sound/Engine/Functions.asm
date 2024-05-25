@@ -12,9 +12,9 @@ SMPS_LoadDACDriver:
 
 .SampleTableOk
 
-	; detect PAL consoles and set the PAL flag if needed
-	btst	#6,(Graphics_flags).w
-	beq.s	.not_pal
+	; detect PAL region consoles
+	btst	#0,(VDP_control_port+1).l
+	beq.s	.not_pal									; branch if it's not a PAL system
 	bset	#f_pal,(Clone_Driver_RAM+SMPS_RAM.bitfield1).w
 
 .not_pal

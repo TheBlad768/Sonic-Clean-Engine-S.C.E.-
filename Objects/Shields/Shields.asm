@@ -24,9 +24,9 @@ Obj_FireShield:
 		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
@@ -107,9 +107,9 @@ Obj_LightningShield:
 		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
@@ -278,9 +278,9 @@ Obj_BubbleShield:
 		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
@@ -342,9 +342,9 @@ Obj_InstaShield:
 		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#7,(Player_1+art_tile).w
+		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1

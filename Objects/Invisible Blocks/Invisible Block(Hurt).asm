@@ -140,7 +140,7 @@ sub_1F58C:
 		and.b	shield_reaction(a0),d0
 		and.b	status_secondary(a1),d0
 		bne.s	locret_1F59E								; if so, branch
-		bra.w	sub_24280
+		bra.w	Touch_ChkHurt3
 ; ---------------------------------------------------------------------------
 
 locret_1F59E:

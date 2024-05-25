@@ -81,19 +81,15 @@ loc_84984:
 Child_Draw_Sprite2:
 		movea.w	parent3(a0),a1
 		btst	#4,objoff_38(a1)
-		bne.s	loc_8499E
+		bne.w	Go_Delete_Sprite_2
 		bra.w	Draw_Sprite
-; ---------------------------------------------------------------------------
-
-loc_8499E:
-		bra.w	Go_Delete_Sprite_2
 
 ; =============== S U B R O U T I N E =======================================
 
 Child_DrawTouch_Sprite2:
 		movea.w	parent3(a0),a1
 		btst	#4,objoff_38(a1)
-		bne.s	loc_8499E
+		bne.w	Go_Delete_Sprite_2
 		btst	#7,status(a1)
 		bne.s	loc_849BC
 		bsr.w	Add_SpriteToCollisionResponseList

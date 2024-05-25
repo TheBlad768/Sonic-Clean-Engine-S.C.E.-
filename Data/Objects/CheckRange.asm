@@ -53,17 +53,15 @@ Init_BossArena:
 
 Init_BossArena2:
 		music	mus_FadeOut													; fade out music
-		move.w	#2*60,$2E(a0)
+		move.w	#2*60,objoff_2E(a0)
 
 Init_BossArena3:
 		move.w	(Camera_min_Y_pos).w,(Camera_stored_min_Y_pos).w
 		move.w	(Camera_target_max_Y_pos).w,(Camera_stored_max_Y_pos).w
 		move.w	(Camera_min_X_pos).w,(Camera_stored_min_X_pos).w
 		move.w	(Camera_max_X_pos).w,(Camera_stored_max_X_pos).w
-		move.w	(a1)+,(Camera_min_Y_pos_Saved).w
-		move.w	(a1)+,(Camera_max_Y_pos_Saved).w
-		move.w	(a1)+,(Camera_min_X_pos_Saved).w
-		move.w	(a1)+,(Camera_max_X_pos_Saved).w
+		move.l	(a1)+,(Camera_saved_min_Y_pos).w
+		move.l	(a1)+,(Camera_saved_min_X_pos).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -71,7 +69,7 @@ Init_BossArena3:
 Load_BossArena:
 		btst	#0,objoff_27(a0)
 		bne.s	loc_85CC6
-		subq.w	#1,$2E(a0)
+		subq.w	#1,objoff_2E(a0)
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
 		move.b	d0,(Current_music+1).w
@@ -84,22 +82,22 @@ loc_85CC6:
 		move.w	(Camera_Y_pos).w,d0
 		tst.b	objoff_27(a0)
 		bmi.s	loc_85CE6
-		cmp.w	(Camera_min_Y_pos_Saved).w,d0
+		cmp.w	(Camera_saved_min_Y_pos).w,d0
 		bhs.s	loc_85CF2
 		move.w	d0,(Camera_min_Y_pos).w
 		bra.s	loc_85D06
 ; ---------------------------------------------------------------------------
 
 loc_85CE6:
-		move.w	(Camera_max_Y_pos_Saved).w,d1
-		addi.w	#$60,d1
+		moveq	#$60,d1
+		add.w	(Camera_saved_max_Y_pos).w,d1
 		cmp.w	d1,d0
 		bhi.s	loc_85D06
 
 loc_85CF2:
 		bset	#1,objoff_27(a0)
-		move.w	(Camera_min_Y_pos_Saved).w,(Camera_min_Y_pos).w
-		move.w	(Camera_max_Y_pos_Saved).w,d0
+		move.w	(Camera_saved_min_Y_pos).w,(Camera_min_Y_pos).w
+		move.w	(Camera_saved_max_Y_pos).w,d0
 		move.w	d0,(Camera_target_max_Y_pos).w
 
 loc_85D06:
@@ -108,14 +106,14 @@ loc_85D06:
 		move.w	(Camera_X_pos).w,d0
 		btst	#6,objoff_27(a0)
 		bne.s	loc_85D28
-		cmp.w	(Camera_min_X_pos_Saved).w,d0
+		cmp.w	(Camera_saved_min_X_pos).w,d0
 		bhs.s	loc_85D36
 		move.w	d0,(Camera_min_X_pos).w
 		bra.s	loc_85D48
 ; ---------------------------------------------------------------------------
 
 loc_85D28:
-		cmp.w	(Camera_max_X_pos_Saved).w,d0
+		cmp.w	(Camera_saved_max_X_pos).w,d0
 		bls.s		loc_85D36
 		move.w	d0,(Camera_max_X_pos).w
 		bra.s	loc_85D48
@@ -123,18 +121,17 @@ loc_85D28:
 
 loc_85D36:
 		bset	#2,objoff_27(a0)
-		move.w	(Camera_min_X_pos_Saved).w,(Camera_min_X_pos).w
-		move.w	(Camera_max_X_pos_Saved).w,(Camera_max_X_pos).w
+		move.w	(Camera_saved_min_X_pos).w,(Camera_min_X_pos).w
+		move.w	(Camera_saved_max_X_pos).w,(Camera_max_X_pos).w
 
 loc_85D48:
 		moveq	#7,d0
 		and.b	objoff_27(a0),d0
 		cmpi.b	#7,d0
 		bne.s	Check_InTheirRange_Return
-		clr.b	objoff_27(a0)
 		clr.w	objoff_1C(a0)
-		clr.b	objoff_26(a0)
-		movea.l	$34(a0),a1
+		clr.w	objoff_26(a0)
+		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================

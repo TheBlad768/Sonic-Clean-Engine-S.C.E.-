@@ -26,14 +26,18 @@ Obj_DashDust:
 		movea.w	parent(a0),a2											; a2=character
 		moveq	#0,d0
 		move.b	anim(a0),d0											; use current animation as a secondary routine counter
+		beq.s	.return												; 0 (null)
 		add.b	d0,d0
-		jmp	.index(pc,d0.w)
+		jmp	.index-2(pc,d0.w)
+; ---------------------------------------------------------------------------
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
 
 .index
-		rts						; 0 (null)
-		bra.s	.splash			; 1
-		bra.s	.spindashdust		; 2
+		bra.s	.splash												; 1
+		bra.s	.spindashdust											; 2
 
 ; =============== S U B R O U T I N E =======================================
 

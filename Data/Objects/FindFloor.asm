@@ -19,8 +19,8 @@ loc_EC5A:
 		moveq	#3,d0
 		move.b	d0,(Primary_Angle).w
 		move.b	d0,(Secondary_Angle).w
-		move.b	angle(a0),d0
-		addi.b	#$20,d0
+		moveq	#$20,d0
+		add.b	angle(a0),d0
 		bpl.s	loc_EC7C
 		move.b	angle(a0),d0
 		bpl.s	loc_EC76
@@ -147,8 +147,8 @@ loc_ED74:
 ; ---------------------------------------------------------------------------
 
 loc_ED7A:
-		move.b	angle(a0),d2
-		addi.b	#$20,d2
+		moveq	#$20,d2
+		add.b	angle(a0),d2
 		andi.b	#$C0,d2
 		move.b	d2,angle(a0)
 		rts
