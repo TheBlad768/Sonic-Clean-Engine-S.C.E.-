@@ -10,23 +10,23 @@
                     "name": "Sonic",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "format": "Sonic 3&K Sonic.js",
                     "art": {
-                        "path": "Objects\\Sonic\\Uncompressed Art\\Sonic.bin",
+                        "path": "Objects/Sonic/Uncompressed Art/Sonic.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Sonic\\Object Data\\Map - Sonic.asm",
+                        "path": "Objects/Sonic/Object Data/Map - Sonic.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "Objects\\Sonic\\Object Data\\Sonic pattern load cues.asm",
+                        "path": "Objects/Sonic/Object Data/Sonic pattern load cues.asm",
                         "label": ""
                     },
                     "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c"
@@ -44,22 +44,22 @@
                     "name": "Fire Shield",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Shields\\Uncompressed Art\\Fire Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Fire Shield.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Shields\\Object Data\\Map - Fire Shield.asm",
+                        "path": "Objects/Shields/Object Data/Map - Fire Shield.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "Objects\\Shields\\Object Data\\DPLC - Fire Shield.asm",
+                        "path": "Objects/Shields/Object Data/DPLC - Fire Shield.asm",
                         "label": ""
                     },
                     "uuid": "4b0ca86f-7aa1-4e9d-a6fe-53662e690e3c"
@@ -69,22 +69,22 @@
                     "name": "Lightning Shield",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Shields\\Uncompressed Art\\Lightning Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Lightning Shield.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Shields\\Object Data\\Map - Lightning Shield.asm",
+                        "path": "Objects/Shields/Object Data/Map - Lightning Shield.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "Objects\\Shields\\Object Data\\DPLC - Lightning Shield.asm",
+                        "path": "Objects/Shields/Object Data/DPLC - Lightning Shield.asm",
                         "label": ""
                     },
                     "uuid": "0ca86f7a-a1ce-4de6-be53-662e690e3c9e"
@@ -94,22 +94,22 @@
                     "name": "Bubble Shield",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Shields\\Uncompressed Art\\Bubble Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Bubble Shield.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Shields\\Object Data\\Map - Bubble Shield.asm",
+                        "path": "Objects/Shields/Object Data/Map - Bubble Shield.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "Objects\\Shields\\Object Data\\DPLC - Bubble Shield.asm",
+                        "path": "Objects/Shields/Object Data/DPLC - Bubble Shield.asm",
                         "label": ""
                     },
                     "uuid": "a86f7aa1-ce9d-46fe-9366-2e690e3c9e23"
@@ -119,22 +119,22 @@
                     "name": "Insta-Shield",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Shields\\Uncompressed Art\\Insta-Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Insta-Shield.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Shields\\Object Data\\Map - Insta-Shield.asm",
+                        "path": "Objects/Shields/Object Data/Map - Insta-Shield.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "Objects\\Shields\\Object Data\\DPLC - Insta-Shield.asm",
+                        "path": "Objects/Shields/Object Data/DPLC - Insta-Shield.asm",
                         "label": ""
                     },
                     "uuid": "7aa1ce9d-e6fe-4366-ae69-0e3c9e238fec"
@@ -144,17 +144,17 @@
                     "name": "Invincibility",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Shields\\Uncompressed Art\\Invincibility.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Invincibility.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Shields\\Object Data\\Map - Invincibility.asm",
+                        "path": "Objects/Shields/Object Data/Map - Invincibility.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -177,17 +177,17 @@
                     "name": "Boss Explosion",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Explosion\\KosinskiM Art\\Boss Explosion.bin",
+                        "path": "Objects/Explosion/KosinskiM Art/Boss Explosion.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Explosion\\Object Data\\Map - Boss Explosion.asm",
+                        "path": "Objects/Explosion/Object Data/Map - Boss Explosion.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -202,17 +202,17 @@
                     "name": "Robotnik Ship",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Robotnik\\KosinskiM Art\\Robotnik Ship.bin",
+                        "path": "Objects/Robotnik/KosinskiM Art/Robotnik Ship.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Robotnik\\Object Data\\Map - Robotnik Ship.asm",
+                        "path": "Objects/Robotnik/Object Data/Map - Robotnik Ship.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -235,17 +235,17 @@
                     "name": "Explosion",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Explosion\\KosinskiM Art\\Explosion.bin",
+                        "path": "Objects/Explosion/KosinskiM Art/Explosion.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Explosion\\Object Data\\Map - Explosion.asm",
+                        "path": "Objects/Explosion/Object Data/Map - Explosion.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -259,23 +259,23 @@
                     "name": "Signpost",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "format": "Sonic 3&K Object.js",
                     "art": {
-                        "path": "Objects\\Signpost\\Uncompressed Art\\End Signs.bin",
+                        "path": "Objects/Signpost/Uncompressed Art/End Signs.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Signpost\\Object Data\\Map - End Signs.asm",
+                        "path": "Objects/Signpost/Object Data/Map - End Signs.asm",
                         "label": ""
                     },
                     "dplcs": {
                         "enabled": true,
-                        "path": "Objects\\Signpost\\Object Data\\DPLC - End Signs.asm",
+                        "path": "Objects/Signpost/Object Data/DPLC - End Signs.asm",
                         "label": ""
                     },
                     "uuid": "472ab9f3-6355-46ce-a3a8-3fd70d6d9cd8"
@@ -285,17 +285,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Levels\\DEZ\\Palettes\\Death Egg Zone.bin",
+                            "path": "Levels/DEZ/Palettes/Death Egg Zone.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Rings\\Uncompressed Art\\Rings.bin",
+                        "path": "Objects/Rings/Uncompressed Art/Rings.bin",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Rings\\Object Data\\Map - Rings.asm",
+                        "path": "Objects/Rings/Object Data/Map - Rings.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -310,17 +310,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Monitor\\KosinskiM Art\\Monitors.bin",
+                        "path": "Objects/Monitor/KosinskiM Art/Monitors.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Monitor\\Object Data\\Map - Monitor.asm",
+                        "path": "Objects/Monitor/Object Data/Map - Monitor.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -335,17 +335,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Spikes\\KosinskiM Art\\SpikesSprings.bin",
+                        "path": "Objects/Spikes/KosinskiM Art/SpikesSprings.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Spikes\\Object Data\\Map - Spikes.asm",
+                        "path": "Objects/Spikes/Object Data/Map - Spikes.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -360,17 +360,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Egg Capsule\\KosinskiM Art\\Egg Capsule.bin",
+                        "path": "Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Egg Capsule\\Object Data\\Map - Egg Capsule.asm",
+                        "path": "Objects/Egg Capsule/Object Data/Map - Egg Capsule.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -385,17 +385,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Spikes\\KosinskiM Art\\SpikesSprings.bin",
+                        "path": "Objects/Spikes/KosinskiM Art/SpikesSprings.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Spring\\Object Data\\Map - Spring(Red).asm",
+                        "path": "Objects/Spring/Object Data/Map - Spring(Red).asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -410,17 +410,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Monitor\\KosinskiM Art\\Monitors.bin",
+                        "path": "Objects/Monitor/KosinskiM Art/Monitors.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Invisible Blocks\\Object Data\\Map - Invisible Block.asm",
+                        "path": "Objects/Invisible Blocks/Object Data/Map - Invisible Block.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -435,17 +435,17 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\StarPost\\KosinskiM Art\\Enemy points.bin",
+                        "path": "Objects/StarPost/KosinskiM Art/Enemy points.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\StarPost\\Object Data\\Map - StarPost.asm",
+                        "path": "Objects/StarPost/Object Data/Map - StarPost.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -468,17 +468,17 @@
                     "name": "Spikebonker",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Spikebonker\\KosinskiM Art\\Spikebonker.bin",
+                        "path": "Objects/Spikebonker/KosinskiM Art/Spikebonker.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Spikebonker\\Object Data\\Map - Spikebonker.asm",
+                        "path": "Objects/Spikebonker/Object Data/Map - Spikebonker.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -500,17 +500,17 @@
                     "name": "Blue Flicky",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Blue Flicky.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Blue Flicky.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 1.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 1.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -525,17 +525,17 @@
                     "name": "Chicken",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Chicken.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Chicken.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 1.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 1.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -550,17 +550,17 @@
                     "name": "Penguin",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Penguin.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Penguin.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 5.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 5.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -575,17 +575,17 @@
                     "name": "Pig",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Pig.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Pig.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 3.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 3.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -600,17 +600,17 @@
                     "name": "Rabbit",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Rabbit.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Rabbit.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 5.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 5.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -625,17 +625,17 @@
                     "name": "Seal",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Seal.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Seal.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 4.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 4.asm",
                         "label": ""
                     },
                     "dplcs": {
@@ -650,17 +650,17 @@
                     "name": "Squirrel",
                     "palettes": [
                         {
-                            "path": "Objects\\Sonic\\Palettes\\Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.bin",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects\\Animals\\KosinskiM Art\\Squirrel.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Squirrel.bin",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
                     "mappings": {
-                        "path": "Objects\\Animals\\Object Data\\Map - Animals 2.asm",
+                        "path": "Objects/Animals/Object Data/Map - Animals 2.asm",
                         "label": ""
                     },
                     "dplcs": {
