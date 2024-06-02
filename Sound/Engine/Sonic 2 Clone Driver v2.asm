@@ -235,9 +235,9 @@ DACUpdateSample:
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	move.b	d2,(SMPS_z80_ram+Z_MPCM_CommandInput).l
-	SMPS_startZ80_safe
+	MPCM_startZ80
 
     if SMPS_SoundTest
 	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'new note playing' flag (used by my homebrew Sound Test)
@@ -254,17 +254,17 @@ SetDACVolume:
 	move.b	SMPS_Track.Volume(a5),d0
 	bpl.s	.setvol			; $7F is the last valid volume
 	moveq	#$F,d0			; cap at maximum value (minimum volume)
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	move.b	d0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l
-	SMPS_startZ80_safe
+	MPCM_startZ80
 	rts
 ; ===========================================================================
 
 .setvol
 	lsr.b	#3,d0
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	move.b	d0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l
-	SMPS_startZ80_safe
+	MPCM_startZ80
 	rts
 ; End of function SetDACVolume
 
@@ -707,9 +707,9 @@ HandlePause:
 	; From Vladikcomper:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	move.b	#Z_MPCM_COMMAND_PAUSE,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; pause DAC
-	SMPS_startZ80_safe
+	MPCM_startZ80
 
 .locret:
 	rts
@@ -759,10 +759,9 @@ HandleUnpause:
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	clr.b	(SMPS_z80_ram+Z_MPCM_CommandInput).l	; unpause DAC
-	SMPS_startZ80_safe
-
+	MPCM_startZ80
 	rts
 
 
@@ -999,15 +998,12 @@ PlaySegaSound:
 	bsr.w	WriteFMII
 
 	; Prepare to send DAC request
-
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 
 	; This is a DAC SFX: set to full volume
 	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l					; 100% volume
-
 	move.b	#dSega,(SMPS_z80_ram+Z_MPCM_CommandInput).l		; Queue Sega PCM
-
-	SMPS_startZ80_safe
+	MPCM_startZ80
 
     if SMPS_IdlingSegaSound
 	; Waste cycles until the Sega sound finishes playing
@@ -2009,9 +2005,9 @@ StopAllSound:
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	move.b	#Z_MPCM_COMMAND_STOP,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; stop DAC playback
-	SMPS_startZ80_safe
+	MPCM_startZ80
 
     if SMPS_EnablePWM
 	bsr.w	PWMSilenceAll
@@ -2074,9 +2070,9 @@ InitMusicPlayback:
 	move.l	d6,SMPS_RAM.variables.queue+4(a6)
 
 	; Reset DAC volume
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l		; 100% volume
-	SMPS_startZ80_safe
+	MPCM_startZ80
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
 	; don't do a very good job of setting up the music tracks.
@@ -2335,7 +2331,8 @@ WriteFMIorII:
 
 ; sub_7272E:
 WriteFMI:
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
+	MPCM_ensureYMWriteReady
 	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
 	SMPS_waitYM
 	move.b	d0,(a0)					; 8(1/1)
@@ -2343,7 +2340,7 @@ WriteFMI:
 	SMPS_delayYM
 	SMPS_waitYM
 	move.b	#$2A,(a0)				; 12(2/1)
-	SMPS_startZ80_safe
+	MPCM_startZ80
 	rts
 ; End of function WriteFMI
 
@@ -2358,7 +2355,8 @@ WriteFMIIPart:
 
 ; sub_72764:
 WriteFMII:
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
+	MPCM_ensureYMWriteReady
 	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
 	SMPS_waitYM
 	move.b	d0,SMPS_ym2612_a1-SMPS_ym2612_a0(a0)	; 12(2/1)
@@ -2366,7 +2364,7 @@ WriteFMII:
 	SMPS_delayYM
 	SMPS_waitYM
 	move.b	#$2A,(a0)				; 12(2/1)
-	SMPS_startZ80_safe
+	MPCM_startZ80
 	rts
 ; End of function WriteFMII
 
@@ -3480,11 +3478,12 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play. (TODO - Wait, these are meant to be 1-based?)
 ;
 cfPlayDACSample:
-	SMPS_stopZ80_safe
+	MPCM_stopZ80
 	move.b	(a4)+,(SMPS_z80_ram+Z_MPCM_CommandInput).l
+
 	; This is a DAC SFX: set to full volume
 	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l	; 100% volume
-	SMPS_startZ80_safe
+	MPCM_startZ80
 	rts
 ; ===========================================================================
 ; Plays another song or SFX.
@@ -3607,12 +3606,6 @@ cfChanFMCommand:
 ; PSG volume envelopes 'include's and pointers
 ; ---------------------------------------------------------------------------
 	include "Sound/PSG Volume Envelopes.asm"
-
-; ---------------------------------------------------------------------------
-; Vladikcomper's Mega PCM 2.0 - DAC Sound Driver
-; ---------------------------------------------------------------------------
-
-	include "Sound/Engine/MegaPCM.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79
 	even

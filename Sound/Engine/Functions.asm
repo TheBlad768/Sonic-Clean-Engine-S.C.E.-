@@ -8,7 +8,13 @@ SMPS_LoadDACDriver:
 	jsr	(MegaPCM_LoadSampleTable).l
 	tst.w	d0										; was sample table loaded successfully?
 	beq.s	.SampleTableOk							; if yes, branch
-	RaiseError	"Bad sample table (code %<.b d0>)"
+
+	ifdef __DEBUG__
+		; for MD Debugger v.2.5 or above
+		RaiseError	"Bad sample table (code %<.b d0>)"
+	else
+		illegal
+	endif
 
 .SampleTableOk
 
