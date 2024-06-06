@@ -65,7 +65,15 @@ Render_HUD:
 		rts
 ; ---------------------------------------------------------------------------
 
-LUT_HUDCentiseconds:	binclude "Objects/HUD/Object Data/LUT - Centiseconds(60).bin"
+LUT_HUDCentiseconds:
+
+		set	.a,0
+
+	rept 60
+		dc.b .a * 100 / 60
+		set	.a,.a + 1
+	endr
+
 	even
 ; ---------------------------------------------------------------------------
 
