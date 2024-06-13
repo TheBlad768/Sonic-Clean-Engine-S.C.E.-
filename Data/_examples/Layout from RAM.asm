@@ -7,11 +7,22 @@ DEZ1_ScreenInit:
 		; copy layout to RAM
 		lea	(RAM_start+$7000).l,a1								; your free layout buffer address
 		lea	(DEZ1_Layout).l,a4									; layout address
-		move.w	#((DEZ1_Layout_end-DEZ1_Layout)/2)-1,d0			; layout size
+		move.w	#((DEZ1_Layout_end-DEZ1_Layout)/4)-1,d0			; layout size
 
 .copy
-		move.w	(a4)+,(a1)+
+		move.l	(a4)+,(a1)+
 		dbf	d0,.copy
+
+
+.layout			= DEZ1_Layout									; AS...
+.layout_end		= DEZ1_Layout_end
+
+	if MOMPASS>1
+		if (.layout_end-.layout)&2
+			move.w	(a4)+,(a1)+
+		endif
+	endif
+
 
 		; load layout from RAM
 		lea	(RAM_start+$7000).l,a1								; your layout buffer address
