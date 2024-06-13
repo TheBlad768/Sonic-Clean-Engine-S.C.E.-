@@ -5,9 +5,14 @@
 *.cpp text
 *.ini text
 *.py text
+*.pal binary
 *.eni binary
+*.nem binary
 *.kos binary
 *.kosm binary
+*.unc binary
+*.pcm binary
+*.dpcm binary
 *.snd binary
 *.bin binary
 *.gen binary
