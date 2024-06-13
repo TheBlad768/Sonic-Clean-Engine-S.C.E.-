@@ -10,13 +10,13 @@
                     "name": "Sonic",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "format": "Sonic 3&K Sonic.js",
                     "art": {
-                        "path": "Objects/Sonic/Uncompressed Art/Sonic.bin",
+                        "path": "Objects/Sonic/Uncompressed Art/Sonic.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -44,12 +44,12 @@
                     "name": "Fire Shield",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Shields/Uncompressed Art/Fire Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Fire Shield.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -69,12 +69,12 @@
                     "name": "Lightning Shield",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Shields/Uncompressed Art/Lightning Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Lightning Shield.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -94,12 +94,12 @@
                     "name": "Bubble Shield",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Shields/Uncompressed Art/Bubble Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Bubble Shield.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -119,12 +119,12 @@
                     "name": "Insta-Shield",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Shields/Uncompressed Art/Insta-Shield.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Insta-Shield.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -144,12 +144,12 @@
                     "name": "Invincibility",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Shields/Uncompressed Art/Invincibility.bin",
+                        "path": "Objects/Shields/Uncompressed Art/Invincibility.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -177,12 +177,12 @@
                     "name": "Boss Explosion",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Explosion/KosinskiM Art/Boss Explosion.bin",
+                        "path": "Objects/Explosion/KosinskiM Art/Boss Explosion.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -202,12 +202,12 @@
                     "name": "Robotnik Ship",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Robotnik/KosinskiM Art/Robotnik Ship.bin",
+                        "path": "Objects/Robotnik/KosinskiM Art/Robotnik Ship.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -235,12 +235,12 @@
                     "name": "Explosion",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Explosion/KosinskiM Art/Explosion.bin",
+                        "path": "Objects/Explosion/KosinskiM Art/Explosion.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -259,13 +259,13 @@
                     "name": "Signpost",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "format": "Sonic 3&K Object.js",
                     "art": {
-                        "path": "Objects/Signpost/Uncompressed Art/End Signs.bin",
+                        "path": "Objects/Signpost/Uncompressed Art/End Signs.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -285,12 +285,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Levels/DEZ/Palettes/Death Egg Zone.bin",
+                            "path": "Levels/DEZ/Palettes/Death Egg Zone.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Rings/Uncompressed Art/Rings.bin",
+                        "path": "Objects/Rings/Uncompressed Art/Rings.unc",
                         "compression": "Uncompressed",
                         "offset": 0
                     },
@@ -310,12 +310,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Monitor/KosinskiM Art/Monitors.bin",
+                        "path": "Objects/Monitor/KosinskiM Art/Monitors.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -335,12 +335,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Spikes/KosinskiM Art/SpikesSprings.bin",
+                        "path": "Objects/Spikes/KosinskiM Art/SpikesSprings.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -360,12 +360,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Egg Capsule/KosinskiM Art/Egg Capsule.bin",
+                        "path": "Objects/Egg Capsule/KosinskiM Art/Egg Capsule.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -385,12 +385,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Spikes/KosinskiM Art/SpikesSprings.bin",
+                        "path": "Objects/Spikes/KosinskiM Art/SpikesSprings.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -410,12 +410,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Monitor/KosinskiM Art/Monitors.bin",
+                        "path": "Objects/Monitor/KosinskiM Art/Monitors.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -435,12 +435,12 @@
                     "format": "Sonic 3&K Object.js",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/StarPost/KosinskiM Art/Enemy points.bin",
+                        "path": "Objects/StarPost/KosinskiM Art/Enemy points.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -468,12 +468,12 @@
                     "name": "Spikebonker",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Spikebonker/KosinskiM Art/Spikebonker.bin",
+                        "path": "Objects/Spikebonker/KosinskiM Art/Spikebonker.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -500,12 +500,12 @@
                     "name": "Blue Flicky",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Blue Flicky.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Blue Flicky.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -525,12 +525,12 @@
                     "name": "Chicken",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Chicken.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Chicken.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -550,12 +550,12 @@
                     "name": "Penguin",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Penguin.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Penguin.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -575,12 +575,12 @@
                     "name": "Pig",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Pig.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Pig.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -600,12 +600,12 @@
                     "name": "Rabbit",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Rabbit.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Rabbit.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -625,12 +625,12 @@
                     "name": "Seal",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Seal.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Seal.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
@@ -650,12 +650,12 @@
                     "name": "Squirrel",
                     "palettes": [
                         {
-                            "path": "Objects/Sonic/Palettes/Sonic.bin",
+                            "path": "Objects/Sonic/Palettes/Sonic.pal",
                             "length": 1
                         }
                     ],
                     "art": {
-                        "path": "Objects/Animals/KosinskiM Art/Squirrel.bin",
+                        "path": "Objects/Animals/KosinskiM Art/Squirrel.kosm",
                         "compression": "Kosinski-M",
                         "offset": 0
                     },
