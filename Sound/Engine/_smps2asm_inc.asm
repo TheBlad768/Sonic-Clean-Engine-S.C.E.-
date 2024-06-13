@@ -117,8 +117,10 @@ smpsHeaderVoice macro loc
 	if songStart<>*
 		fatal "Missing smpsHeaderStartSong"
 	endif
-	if (MOMPASS=1)&&(DEFINED(((loc-songStart >= $8000) || (loc-songStart < -$8000))))
-		fatal "Voice bank too far away from song"
+	if (MOMPASS=1)&&(DEFINED(loc))
+		if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
+			fatal "Voice bank too far away from song"
+		endif
 	endif
 	dc.w	loc-songStart
 	endm
@@ -156,8 +158,10 @@ smpsHeaderTempo macro div,mod
 
 ; Header - Set up DAC Channel
 smpsHeaderDAC macro loc,pitch,vol
-	if (MOMPASS=1)&&(DEFINED(((loc-songStart >= $8000) || (loc-songStart < -$8000))))
-		fatal "Track is too far away from its header"
+	if (MOMPASS=1)&&(DEFINED(loc))
+		if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
+			fatal "Track is too far away from its header"
+		endif
 	endif
 	dc.w	loc-songStart
 	if ("pitch"<>"")
@@ -174,8 +178,10 @@ smpsHeaderDAC macro loc,pitch,vol
 
 ; Header - Set up FM Channel
 smpsHeaderFM macro loc,pitch,vol
-	if (MOMPASS=1)&&(DEFINED(((loc-songStart >= $8000) || (loc-songStart < -$8000))))
-		fatal "Track is too far away from its header"
+	if (MOMPASS=1)&&(DEFINED(loc))
+		if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
+			fatal "Track is too far away from its header"
+		endif
 	endif
 	dc.w	loc-songStart
 	dc.b	pitch,vol
@@ -183,8 +189,10 @@ smpsHeaderFM macro loc,pitch,vol
 
 ; Header - Set up PSG Channel
 smpsHeaderPSG macro loc,pitch,vol,mod,voice
-	if (MOMPASS=1)&&(DEFINED(((loc-songStart >= $8000) || (loc-songStart < -$8000))))
-		fatal "Track is too far away from its header"
+	if (MOMPASS=1)&&(DEFINED(loc))
+		if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
+			fatal "Track is too far away from its header"
+		endif
 	endif
 	dc.w	loc-songStart
 	PSGPitchConvert pitch
@@ -227,8 +235,10 @@ smpsHeaderSFXChannel macro chanid,loc,pitch,vol
 		fatal "Using channel ID of FM6 ($06) in Sonic 1 or Sonic 2 drivers is unsupported. Change it to another channel."
 	endif
 	dc.b	$80,chanid
-	if (MOMPASS=1)&&(DEFINED(((loc-songStart >= $8000) || (loc-songStart < -$8000))))
-		fatal "Track is too far away from its header"
+	if (MOMPASS=1)&&(DEFINED(loc))
+		if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
+			fatal "Track is too far away from its header"
+		endif
 	endif
 	dc.w	loc-songStart
 	if (chanid&$80)<>0
