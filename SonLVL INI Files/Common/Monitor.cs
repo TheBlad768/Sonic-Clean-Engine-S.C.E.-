@@ -66,7 +66,7 @@ namespace S3KObjectDefinitions.Common
 		{
 			var indexer = new MultiFileIndexer<byte>();
 			indexer.AddFile(new List<byte>(LevelData.ReadFile(
-				"../Objects/Monitor/KosinskiM Art/Monitors.bin", CompressionType.KosinskiM)), 0);
+				"../Objects/Monitor/KosinskiM Art/Monitors.kosm", CompressionType.KosinskiM)), 0);
 
 			var art = indexer.ToArray();
 			var map = LevelData.ASMToBin(

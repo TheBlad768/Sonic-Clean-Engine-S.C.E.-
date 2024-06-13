@@ -44,7 +44,7 @@ namespace S3KObjectDefinitions.Common
 
 		public override void Init(ObjectData data)
 		{
-			var artfile = ObjectHelper.OpenArtFile("Common/RingHUDText.bin", CompressionType.KosinskiM);
+			var artfile = ObjectHelper.OpenArtFile("Common/RingHUDText.kosm", CompressionType.KosinskiM);
 			var sprite = ObjectHelper.MapASMToBmp(artfile, "../Objects/Invisible Blocks/Object Data/Map - Invisible Block.asm", 0, 0);
 			sprite.InvertPriority();
 

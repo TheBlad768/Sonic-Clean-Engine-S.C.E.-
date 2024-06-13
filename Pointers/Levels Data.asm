@@ -16,11 +16,11 @@ LevelLoadPointer:
 ; Compressed level graphics - tile, primary patterns and block mappings
 ; ===========================================================================
 
-DEZ_8x8_KosM:		binclude "Levels/DEZ/Tiles/Primary.bin"
+DEZ_8x8_KosM:		binclude "Levels/DEZ/Tiles/Primary.kosm"
 	even
 DEZ_16x16_Unc:		binclude "Levels/DEZ/Blocks/Primary.bin"
 	even
-DEZ_128x128_Kos:	binclude "Levels/DEZ/Chunks/Primary.bin"
+DEZ_128x128_Kos:	binclude "Levels/DEZ/Chunks/Primary.kos"
 	even
 
 ; ===========================================================================

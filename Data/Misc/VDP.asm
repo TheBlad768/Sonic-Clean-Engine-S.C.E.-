@@ -36,7 +36,7 @@ Init_VDP:
 
 		; clear data
 		movea.l	a6,a5									; load VDP control address to a5
-		lea	VDP_data_port-VDP_control_port(a5),a6		; loadVDP data address to a6
+		lea	VDP_data_port-VDP_control_port(a5),a6		; load VDP data address to a6
 		moveq	#0,d0
 
 		; clear vertical scrolling

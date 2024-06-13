@@ -2,27 +2,27 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Spring" Image="vertred">
   <Images>
     <ImageFromMappings id="vertred">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-512" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-512" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Red).asm" frame="0" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="vertyel">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-512" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-512" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Yellow).asm" frame="0" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="horzred">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-896" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-896" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Red).asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="horzyel">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-896" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-896" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Yellow).asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="diagred">
-      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal Spring.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal Spring.kosm" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Red).asm" frame="7" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="diagyel">
-      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal Spring.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spring/KosinskiM Art/Diagonal Spring.kosm" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spring/Object Data/Map - Spring(Yellow).asm" frame="7" startpal="0" />
     </ImageFromMappings>
   </Images>

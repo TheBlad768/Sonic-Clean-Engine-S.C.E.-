@@ -8,7 +8,7 @@ Object Palette: objdef\s3obj1.pcx
 
 8x8 Compression:       5
 Num 8x8 Pages:         1
-8x8 Tiles Page 0:      ..\Levels\DEZ\Tiles\Primary.bin
+8x8 Tiles Page 0:      ..\Levels\DEZ\Tiles\Primary.kosm
 
 16x16 Compression:     0
 Num 16x16 Pages:       1
@@ -19,7 +19,7 @@ Metatile Size:         128
 Metatile Compression:  1
 Num Metatile Pages:    1
 Page0 16x16 Page:      0
-Metatile Tiles Page 0: ..\Levels\DEZ\Chunks\Primary.bin
+Metatile Tiles Page 0: ..\Levels\DEZ\Chunks\Primary.kos
 
 Layout Format:         2
 Layout Compression:    0
@@ -42,25 +42,25 @@ Palettes-
 
    Start index:        0
    Number of entries: 16
-   File:              ..\Objects\Sonic\Palettes\Sonic.bin
+   File:              ..\Objects\Sonic\Palettes\Sonic.pal
 
   Palette 1-
 
    Start index:       16
    Number of entries: 48
-   File:              ..\Levels\DEZ\Palettes\Death Egg Zone.bin
+   File:              ..\Levels\DEZ\Palettes\Death Egg Zone.pal
 
   Palette 2-
 
    Start index:        64
    Number of entries: 16
-   File:              ..\Objects\Sonic\Palettes\Water Sonic.bin
+   File:              ..\Objects\Sonic\Palettes\Water Sonic.pal
 
   Palette 3-
 
    Start index:       80
    Number of entries: 48
-   File:              ..\Levels\DEZ\Palettes\Water Death Egg Zone.bin
+   File:              ..\Levels\DEZ\Palettes\Water Death Egg Zone.pal
 
 Collision Map Format:    0
 Collision Array:         ..\Misc Data\Height Maps.bin

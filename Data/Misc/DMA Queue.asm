@@ -187,7 +187,7 @@ is68kRegister function expr,symtype(expr)==8
 ; at assembly time. Gives errors if DMA starts at an odd address, transfers
 ; crosses a 128kB boundary, or has size 0.
 QueueStaticDMA macro src,length,dest
-	if MOMPASS>1
+	if MOMPASS>2
 		if ((src)&1)<>0
 			fatal "DMA queued from odd source $\{src}!"
 		endif

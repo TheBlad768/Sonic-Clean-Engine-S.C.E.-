@@ -2,35 +2,35 @@
 <ObjDef xmlns="http://www.sonicretro.org" Namespace="S3KObjectDefinitions.Common" TypeName="Spikes" Language="cs" Name="Spikes" Image="horiz1">
   <Images>
     <ImageFromMappings id="horiz1">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-256" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-256" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="0" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz2">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-256" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-256" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="1" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz3">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-256" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-256" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="2" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz4">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" offset="-256" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" offset="-256" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="vert1">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="4" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="vert2">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="5" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="vert3">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="6" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="vert4">
-      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.bin" compression="KosinskiM" />
+      <ArtFile filename="../Objects/Spikes/KosinskiM Art/SpikesSprings.kosm" compression="KosinskiM" />
       <MapFile type="ASM" filename="../Objects/Spikes/Object Data/Map - Spikes.asm" frame="7" startpal="0" />
     </ImageFromMappings>
   </Images>
