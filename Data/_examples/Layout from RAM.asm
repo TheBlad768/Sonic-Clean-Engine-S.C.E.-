@@ -14,8 +14,8 @@ DEZ1_ScreenInit:
 		dbf	d0,.copy
 
 
-.layout			= DEZ1_Layout									; AS...
-.layout_end		= DEZ1_Layout_end
+.layout			set DEZ1_Layout									; AS...
+.layout_end		set DEZ1_Layout_end
 
 	if MOMPASS>1
 		if (.layout_end-.layout)&2
