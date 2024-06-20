@@ -511,6 +511,7 @@ Kill_Character:
 		move.b	#id_Death,anim(a0)
 		move.l	priority(a0),(Debug_saved_priority).w		; save priority and art_tile
 		clr.w	priority(a0)
+		st	(Deform_lock).w
 		bset	#7,art_tile(a0)
 		jsr	(Play_SFX).w
 
