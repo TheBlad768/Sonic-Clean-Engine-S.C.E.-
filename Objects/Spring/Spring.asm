@@ -15,16 +15,31 @@ Obj_Spring:
 		move.b	subtype(a0),d0
 		lsr.w	#3,d0
 		andi.w	#$E,d0
-		move.w	Spring_Index(pc,d0.w),d0
-		jmp	Spring_Index(pc,d0.w)
+		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-Spring_Index: offsetTable
-		offsetTableEntry.w Spring_Up			; 0
-		offsetTableEntry.w Spring_Horizontal	; 2
-		offsetTableEntry.w Spring_Down		; 4
-		offsetTableEntry.w Spring_UpDiag		; 6
-		offsetTableEntry.w Spring_DownDiag	; 8
+.index
+		bra.s	Spring_Up												; 0
+		bra.s	Spring_Horizontal											; 2
+		bra.s	Spring_Down												; 4
+		bra.s	Spring_UpDiag											; 6
+; ---------------------------------------------------------------------------
+
+Spring_DownDiag:														; 8
+		move.b	#4,anim(a0)
+		move.b	#$A,mapping_frame(a0)
+		move.w	#$468,art_tile(a0)										; set diagonal
+		bset	#1,status(a0)
+		move.l	#Obj_Spring_DownDiag,address(a0)
+		bra.s	Spring_Common
+; ---------------------------------------------------------------------------
+
+Spring_UpDiag:
+		move.b	#4,anim(a0)
+		move.b	#7,mapping_frame(a0)
+		move.w	#$468,art_tile(a0)										; set diagonal
+		move.l	#Obj_Spring_UpDiag,address(a0)
+		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
 Spring_Horizontal:
@@ -44,23 +59,6 @@ Spring_Down:
 loc_22DFC:
 		move.b	#6,mapping_frame(a0)
 		move.l	#Obj_Spring_Down,address(a0)
-		bra.s	Spring_Common
-; ---------------------------------------------------------------------------
-
-Spring_UpDiag:
-		move.b	#4,anim(a0)
-		move.b	#7,mapping_frame(a0)
-		move.w	#$468,art_tile(a0)										; set diagonal
-		move.l	#Obj_Spring_UpDiag,address(a0)
-		bra.s	Spring_Common
-; ---------------------------------------------------------------------------
-
-Spring_DownDiag:
-		move.b	#4,anim(a0)
-		move.b	#$A,mapping_frame(a0)
-		move.w	#$468,art_tile(a0)										; set diagonal
-		bset	#1,status(a0)
-		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
@@ -141,7 +139,7 @@ sub_22F98:
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
 		move.b	#id_Spring,anim(a1)
-		move.b	#id_SonicControl,routine(a1)
+		move.b	#id_PlayerControl,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_23020
@@ -290,8 +288,8 @@ loc_2328E:
 		lea	(Player_1).w,a1
 		tst.b	object_control(a1)
 		bmi.s	locret_23324
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	locret_23324
+		cmpi.b	#id_PlayerDeath,routine(a1)								; has player just died?
+		bhs.s	locret_23324												; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_23324
 		btst	#Status_InAir,status(a1)
@@ -391,7 +389,7 @@ loc_2346C:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#id_SonicControl,routine(a1)
+		move.b	#id_PlayerControl,routine(a1)
 		clr.b	double_jump_flag(a1)
 		sfx	sfx_Spring,1
 
@@ -457,7 +455,7 @@ loc_23542:
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		move.b	#id_Spring,anim(a1)
-		move.b	#id_SonicControl,routine(a1)
+		move.b	#id_PlayerControl,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_235A2
@@ -536,7 +534,7 @@ loc_23660:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#id_SonicControl,routine(a1)
+		move.b	#id_PlayerControl,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_236BA

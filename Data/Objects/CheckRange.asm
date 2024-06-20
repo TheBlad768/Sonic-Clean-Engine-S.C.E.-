@@ -14,13 +14,17 @@ Check_CameraInRange:
 		bhi.s	Check_CameraInRange_Fail
 		bclr	#7,objoff_27(a0)
 		cmp.w	(a1),d0
-		bls.s		+
+		bls.s		.skip
 		bset	#7,objoff_27(a0)
-+		bclr	#6,objoff_27(a0)
+
+.skip
+		bclr	#6,objoff_27(a0)
 		cmp.w	4(a1),d1
-		bls.s		+
+		bls.s		.skip2
 		bset	#6,objoff_27(a0)
-+		move.l	(sp),address(a0)
+
+.skip2
+		move.l	(sp),address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -73,7 +77,7 @@ Load_BossArena:
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
 		move.b	d0,(Current_music+1).w
-		jsr	(Play_Music).w
+		bsr.w	Play_Music
 		bset	#0,objoff_27(a0)
 
 loc_85CC6:

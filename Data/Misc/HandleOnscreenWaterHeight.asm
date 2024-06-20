@@ -9,7 +9,7 @@ Handle_Onscreen_Water_Height:
 		beq.s	.return										; if not, branch
 		tst.b	(Deform_lock).w
 		bne.s	.skip
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w			; is player dead?
+		cmpi.b	#id_PlayerDeath,(Player_1+routine).w			; is player dead?
 		bhs.s	.skip										; if yes, branch
 		bsr.s	DynamicWaterHeight
 

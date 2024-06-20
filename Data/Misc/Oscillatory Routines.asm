@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 ChangeRingFrame:
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w		; has player just died?
+		cmpi.b	#id_PlayerDeath,(Player_1+routine).w		; has player just died?
 		bhs.s	.syncend									; if yes, branch
 
 .syncrings
@@ -18,13 +18,12 @@ ChangeRingFrame:
 		andi.b	#7,(Rings_frame).w
 
 		; dynamic ring graphics
-		moveq	#0,d0
-		move.l	#dmaSource(ArtUnc_Ring),d1				; load art source
-		move.b	(Rings_frame).w,d0
-		lsl.w	#6,d0
-		add.l	d0,d1									; get next frame
+		moveq	#0,d1
+		move.b	(Rings_frame).w,d1
+		lsl.w	#6,d1
+		addi.l	#dmaSource(ArtUnc_Ring),d1				; get next frame
 		move.w	#tiles_to_bytes(ArtTile_Ring),d2			; load art destination
-		move.w	#$80/2,d3								; size of art (in words)	; we only need one frame
+		moveq	#$80/2,d3								; size of art (in words)	; we only need one frame
 		bsr.w	Add_To_DMA_Queue
 
 .syncrings2
@@ -88,7 +87,7 @@ OscillateNumInit:
 ; Oscillate values
 
 OscillateNumDo:
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w			; has player just died?
+		cmpi.b	#id_PlayerDeath,(Player_1+routine).w			; has player just died?
 		bhs.s	.return										; if yes, branch
 		lea	Osc_Data2(pc),a2
 		lea	(Oscillating_Numbers).w,a1

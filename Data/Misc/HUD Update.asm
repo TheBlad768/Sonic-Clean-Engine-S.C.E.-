@@ -110,8 +110,8 @@ UpdateHUD:
 UpdateHUD_TimeOver:
 		clr.b	(Update_HUD_timer).w
 		lea	(Player_1).w,a0
-		cmpi.b	#id_SonicDeath,routine(a0)
-		bhs.s	.finish
+		cmpi.b	#id_PlayerDeath,routine(a0)					; has player just died?
+		bhs.s	.finish										; if yes, branch
 		movea.w	a0,a2
 		bsr.w	Kill_Character
 

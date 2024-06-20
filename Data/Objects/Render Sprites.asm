@@ -111,7 +111,7 @@ Render_Sprites_NextLevel:
 		; sprite mask
 		tst.b	(Spritemask_flag).w
 		beq.s	locret_1AE56
-		cmpi.b	#id_SonicDeath,(Player_1+routine).w	; has Sonic just died?
+		cmpi.b	#id_PlayerDeath,(Player_1+routine).w	; has Sonic just died?
 		bhs.s	loc_1AE34							; if yes, branch
 		clr.b	(Spritemask_flag).w
 

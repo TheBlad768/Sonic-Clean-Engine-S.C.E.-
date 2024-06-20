@@ -402,8 +402,8 @@ SolidObject_cont:
 SolidObject_ChkBounds:
 		tst.b	object_control(a1)
 		bmi.w	SolidObject_TestClearPush
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.w	SolidObject_NoCollision
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.w	SolidObject_NoCollision					; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.w	SolidObject_NoCollision
 		move.w	d0,d5
@@ -480,9 +480,13 @@ SolidObject_TestClearPush:
 		addq.b	#pushing_bit_delta,d4
 		btst	d4,status(a0)
 		beq.s	SolidObject_NoCollision
+
+		; check player anim
 		cmpi.b	#id_Roll,anim(a1)
 		beq.s	Solid_NotPushing
 		cmpi.b	#id_SpinDash,anim(a1)
+		beq.s	Solid_NotPushing
+		cmpi.b	#id_Hurt2,anim(a1)
 		beq.s	Solid_NotPushing
 		cmpi.b	#id_Death,anim(a1)
 		beq.s	Solid_NotPushing
@@ -620,8 +624,8 @@ loc_1E1AA:
 loc_1E1CA:
 		tst.b	object_control(a1)
 		bmi.s	locret_1E1F2
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	locret_1E1F2
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.s	locret_1E1F2								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E1F2
 		moveq	#0,d1
@@ -638,8 +642,8 @@ locret_1E1F2:
 loc_1E1F4:
 		tst.b	object_control(a1)
 		bmi.s	locret_1E21C
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	locret_1E21C
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.s	locret_1E21C								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E21C
 		moveq	#0,d1
@@ -907,8 +911,8 @@ loc_1E45A:
 		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
 		bmi.s	locret_1E4D4
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	locret_1E4D4
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.s	locret_1E4D4								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E4D4
 		add.w	d0,d2
@@ -956,8 +960,8 @@ loc_1E4D6:
 		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
 		bmi.s	locret_1E4D4
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	locret_1E4D4
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.s	locret_1E4D4								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E4D4
 		sub.w	d1,d2

@@ -72,7 +72,7 @@ loc_1AC68:
 loc_1AC7A:
 		addq.b	#1,d0								; code FB - move offscreen
 		bne.s	locret_1AC86
-		move.w	#$7F00,x_pos(a0)
+		move.w	#$7F00,x_pos(a0)					; delete object
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -258,7 +258,7 @@ Anim_Wait:
 ; ---------------------------------------------------------------------------
 
 Anim_End_FF:
-		addq.b	#1,d0								; code FF - Repeat animation from beginning
+		addq.b	#1,d0								; code FF - repeat animation from beginning
 		bne.s	Anim_End_FE
 		clr.b	anim_frame(a0)
 		move.b	1(a1),d0
@@ -266,7 +266,7 @@ Anim_End_FF:
 ; ---------------------------------------------------------------------------
 
 Anim_End_FE:
-		addq.b	#1,d0								; code FE - Repeat animation from earlier point
+		addq.b	#1,d0								; code FE - repeat animation from earlier point
 		bne.s	Anim_End_FD
 		move.b	2(a1,d1.w),d0
 		sub.b	d0,anim_frame(a0)
@@ -276,7 +276,7 @@ Anim_End_FE:
 ; ---------------------------------------------------------------------------
 
 Anim_End_FD:
-		addq.b	#1,d0								; code FD - Start new animation
+		addq.b	#1,d0								; code FD - start new animation
 		bne.s	Anim_End_FC
 		move.b	2(a1,d1.w),anim(a0)
 		rts
@@ -292,9 +292,9 @@ Anim_End_FC:
 ; ---------------------------------------------------------------------------
 
 Anim_End_FB:
-		addq.b	#1,d0								; code FB - Move offscreen
+		addq.b	#1,d0								; code FB - move offscreen
 		bne.s	Anim_End
-		move.w	#$7F00,x_pos(a0)
+		move.w	#$7F00,x_pos(a0)					; delete object
 		rts
 ; ---------------------------------------------------------------------------
 

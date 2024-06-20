@@ -248,7 +248,7 @@ Sonic_ExitChk:
 Sonic_RecordPos:
 		move.w	(Pos_table_index).w,d0
 		lea	(Pos_table).w,a1
-		lea	(a1,d0.w),a1
+		adda.w	d0,a1
 		move.w	x_pos(a0),(a1)+			; write location to pos_table
 		move.w	y_pos(a0),(a1)+
 		addq.b	#4,(Pos_table_byte).w		; increment index as the post-increments did a1
@@ -314,7 +314,7 @@ Sonic_OutWater:
 		move.w	#$600,Max_speed-Max_speed(a4)
 		move.w	#$C,Acceleration-Max_speed(a4)
 		move.w	#$80,Deceleration-Max_speed(a4)
-		cmpi.b	#id_SonicHurt,routine(a0)		; is Sonic falling back from getting hurt?
+		cmpi.b	#id_PlayerHurt,routine(a0)		; is Sonic falling back from getting hurt?
 		beq.s	loc_10EFC					; if yes, branch
 		tst.b	object_control(a0)
 		bne.s	loc_10EFC
@@ -2162,7 +2162,7 @@ loc_12344:
 		move.b	d0,anim(a0)				; id_Walk
 		move.b	d0,spin_dash_flag(a0)
 		move.w	#$100,priority(a0)
-		move.b	#id_SonicControl,routine(a0)
+		move.b	#id_PlayerControl,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
 
 locret_12388:
@@ -2215,7 +2215,7 @@ loc_123FA:
 		bge.s	locret_123F8
 
 loc_12410:
-		move.b	#id_SonicRestart,routine(a0)
+		move.b	#id_PlayerRestart,routine(a0)
 		move.w	#1*60,restart_timer(a0)
 		clr.b	(Respawn_table_keep).w
 
@@ -2241,7 +2241,7 @@ loc_12590:
 		bne.s	+
 		tst.w	(V_scroll_amount).w
 		bne.s	+
-		move.b	#id_SonicControl,routine(a0)
+		move.b	#id_PlayerControl,routine(a0)
 +		bsr.s	sub_125E0
 		jmp	(Draw_Sprite).w
 

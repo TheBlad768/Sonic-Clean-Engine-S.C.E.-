@@ -1010,9 +1010,9 @@ LoadLevelLoadBlock:
 
 .waitplc
 		move.b	#VintID_Fade,(V_int_routine).w
-		jsr	(Process_Kos_Queue).w
-		jsr	(Wait_VSync).w
-		jsr	(Process_Kos_Module_Queue).w
+		bsr.w	Process_Kos_Queue
+		bsr.w	Wait_VSync
+		bsr.w	Process_Kos_Module_Queue
 		tst.w	(Kos_modules_left).w
 		bne.s	.waitplc
 		rts
@@ -1034,12 +1034,12 @@ LoadLevelLoadBlock2:
 		move.l	(a2)+,(Block_table_addr_ROM).w
 		movea.l	(a2)+,a0
 		lea	(RAM_start).l,a1
-		jsr	(Kos_Decomp).w
+		bsr.w	Kos_Decomp
 		bsr.s	Load_Level
 		movea.l	(sp)+,a2											; restore a2
 		moveq	#0,d0
 		move.b	(a2),d0
-		jmp	(LoadPalette).w
+		bra.w	LoadPalette
 
 ; ---------------------------------------------------------------------------
 ; Load level layout
@@ -1070,10 +1070,12 @@ LoadLevelPointer:
 		add.w	d1,d0
 		lsr.w	#2,d1
 		add.w	d1,d0
-		lea	(LevelLoadPointer).l,a2
-		lea	(a2,d0.w),a2
 
-LoadLevelPointer2:
+.skip
+		lea	(LevelLoadPointer).l,a2
+		adda.w	d0,a2
+
+.load
 		lea	(Level_data_addr_RAM).w,a3
 
 		; if you make a different buffer size, you need to change this code

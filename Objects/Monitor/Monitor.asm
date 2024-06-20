@@ -215,14 +215,13 @@ Obj_MonitorContents:
 		neg.w	y_vel(a0)
 
 .notflipy
-		moveq	#0,d0
-		move.b	anim(a0),d0
-		addq.b	#1,d0
+		moveq	#1,d0
+		add.b	anim(a0),d0
 		move.b	d0,mapping_frame(a0)
 		add.b	d0,d0
 		lea	Map_Monitor(pc),a1
 		adda.w	(a1,d0.w),a1
-		addq.w	#2,a1
+		addq.w	#2,a1											; skip the number of sprite tiles
 		move.l	a1,mappings(a0)
 
 .main
@@ -268,24 +267,30 @@ loc_1D850:
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		add.w	d0,d0
-		move.w	MonitorContents_Index(pc,d0.w),d0
-		jmp	MonitorContents_Index(pc,d0.w)
+		add.w	d0,d0
+		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-MonitorContents_Index: offsetTable
-		offsetTableEntry.w Monitor_Give_Eggman			; 0
-		offsetTableEntry.w Monitor_Give_Eggman			; 2
-		offsetTableEntry.w Monitor_Give_Eggman			; 4
-		offsetTableEntry.w Monitor_Give_Rings				; 6
-		offsetTableEntry.w Monitor_Give_SpeedShoes			; 8
-		offsetTableEntry.w Monitor_Give_Fire_Shield			; A
-		offsetTableEntry.w Monitor_Give_Lightning_Shield	; C
-		offsetTableEntry.w Monitor_Give_Bubble_Shield		; E
-		offsetTableEntry.w Monitor_Give_Invincibility			; 10
-		offsetTableEntry.w Monitor_Give_Eggman			; 12
+.index
+		bra.s	Monitor_Give_Eggman			; 0
+		rts		; nop
+		bra.s	Monitor_Give_Eggman			; 2
+		rts		; nop
+		bra.s	Monitor_Give_Eggman			; 4
+		rts		; nop
+		bra.s	Monitor_Give_Rings				; 6
+		rts		; nop
+		bra.s	Monitor_Give_SpeedShoes			; 8
+		rts		; nop
+		bra.s	Monitor_Give_Fire_Shield			; A
+		rts		; nop
+		bra.s	Monitor_Give_Lightning_Shield	; C
+		rts		; nop
+		bra.w	Monitor_Give_Bubble_Shield		; E
+		bra.w	Monitor_Give_Invincibility			; 10
 ; ---------------------------------------------------------------------------
 
-Monitor_Give_Eggman:
+Monitor_Give_Eggman:							; 12
 		jmp	Touch_ChkHurt3(pc)
 ; ---------------------------------------------------------------------------
 

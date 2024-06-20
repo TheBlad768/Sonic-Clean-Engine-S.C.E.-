@@ -151,11 +151,13 @@ Obj_Spikes_end
 Touch_ChkHurt3:
 		tst.w	(Debug_placement_mode).w								; is debug mode on?
 		bne.s	.return													; if yes, branch
+		tst.b	object_control(a1)
+		bmi.s	.return
 		btst	#Status_Invincible,status_secondary(a1)							; is character invincible?
 		bne.s	.return													; if yes, branch
 		tst.b	invulnerability_timer(a1)										; is character invulnerable?
 		bne.s	.return													; if yes, branch
-		cmpi.b	#id_SonicHurt,routine(a1)									; is the character hurt, dying, etc. ?
+		cmpi.b	#id_PlayerHurt,routine(a1)									; is the character hurt, dying, etc. ?
 		bhs.s	.return													; if yes, branch
 
 		; hurt player

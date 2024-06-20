@@ -100,7 +100,7 @@ Perform_DPLC:
 		lsl.w	#4,d3							; d3 is the total number of words to transfer (maximum 16 tiles per transaction)
 		add.w	d3,d4
 		add.w	d3,d4
-		jsr	(Add_To_DMA_Queue).w			; add to queue
+		bsr.w	Add_To_DMA_Queue			; add to queue
 		dbf	d5,.loop							; keep going
 
 .return
@@ -225,8 +225,8 @@ Song_Fade_Transition_Wait:
 		bne.s	Song_Fade_Transition_Return
 		move.b	subtype(a0),d0
 		move.b	d0,(Current_music+1).w
-		jsr	(Play_Music).w										; play music
-		jmp	(Delete_Current_Sprite).w
+		bsr.w	Play_Music										; play music
+		bra.w	Delete_Current_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -242,7 +242,7 @@ Song_Fade_ToLevelMusic_Wait:
 		tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_fadeout_counter).w
 		bne.s	Song_Fade_ToLevelMusic_Return
 		bsr.s	Restore_LevelMusic
-		jmp	(Delete_Current_Sprite).w
+		bra.w	Delete_Current_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -256,25 +256,19 @@ Restore_LevelMusic:
 		moveq	#signextendB(mus_Invincible),d0					; if invincible, play invincibility music
 
 .play
-		jmp	(Play_Music).w										; play music
-
-; =============== S U B R O U T I N E =======================================
-
-StackLoad_Routine:
-		movea.l	(sp)+,a1
-
-Load_Routine:
-		andi.w	#$FE,d0
-		adda.w	(a1,d0.w),a1
-		jmp	(a1)
+		bra.w	Play_Music										; play music
 
 ; =============== S U B R O U T I N E =======================================
 
 HurtCharacter_Directly2:
-		tst.b	invulnerability_timer(a1)
-		bne.s	HurtCharacter_Directly.return
-		btst	#Status_Invincible,status_secondary(a1)
-		bne.s	HurtCharacter_Directly.return
+		tst.b	object_control(a1)
+		bmi.s	HurtCharacter_Directly.return
+		btst	#Status_Invincible,status_secondary(a1)					; is character invincible?
+		bne.s	HurtCharacter_Directly.return						; if yes, branch
+		tst.b	invulnerability_timer(a1)								; is character invulnerable?
+		bne.s	HurtCharacter_Directly.return						; if yes, branch
+		cmpi.b	#id_PlayerHurt,routine(a1)							; is the character hurt, dying, etc. ?
+		bhs.s	HurtCharacter_Directly.return						; if yes, branch
 
 HurtCharacter_Directly:
 		tst.w	(Debug_placement_mode).w
@@ -341,7 +335,7 @@ EnemyDefeat_Score:
 
 HurtCharacter_WithoutDamage:
 		lea	(Player_1).w,a1
-		move.b	#id_SonicHurt,routine(a1)							; hit animation
+		move.b	#id_PlayerHurt,routine(a1)							; hit animation
 		bclr	#Status_OnObj,status(a1)
 		bclr	#Status_Push,status(a1)								; player is not standing on/pushing an object
 		bset	#Status_InAir,status(a1)
@@ -408,8 +402,8 @@ Load_LevelResults:
 		bne.s	.return
 		btst	#Status_InAir,status(a1)
 		bne.s	.return
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	.return
+		cmpi.b	#id_PlayerDeath,routine(a1)						; is player dead?
+		bhs.s	.return											; if yes, branch
 		bsr.s	Set_PlayerEndingPose
 		clr.b	(TitleCard_end_flag).w
 		bsr.w	Create_New_Sprite
@@ -484,14 +478,14 @@ StartNewLevel:
 Play_SFX_Continuous:
 		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
-		jmp	(Play_SFX).w											; play sfx
+		bra.w	Play_SFX										; play sfx
 
 ; =============== S U B R O U T I N E =======================================
 
 Wait_NewDelay:
 		subq.w	#1,objoff_2E(a0)
 		bmi.s	.end
-		jmp	(Draw_Sprite).w
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 .end
@@ -505,7 +499,7 @@ Wait_NewDelay:
 Wait_FadeToLevelMusic:
 		subq.w	#1,objoff_2E(a0)
 		bmi.s	.end
-		jmp	(Draw_Sprite).w
+		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 .end
@@ -549,7 +543,7 @@ BossDefeated:
 BossDefeated_NoTime:
 		bclr	#7,render_flags(a0)
 		moveq	#100,d0
-		jmp	(HUD_AddToScore).w
+		bra.w	HUD_AddToScore									; add 1000 to score
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -718,7 +712,7 @@ Change_ActSizes2:
 
 		; create change level size object
 		lea	Child7_ChangeLevSize(pc),a2
-		jmp	(CreateChild7_Normal2).w
+		bra.w	CreateChild7_Normal2
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -737,7 +731,7 @@ Obj_IncLevEndXGradual:
 
 .end
 		move.w	(Camera_stored_max_X_pos).w,(Camera_max_X_pos).w
-		jmp	(Delete_Current_Sprite).w
+		bra.w	Delete_Current_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -756,7 +750,7 @@ Obj_DecLevStartXGradual:
 
 .end
 		move.w	(Camera_stored_min_X_pos).w,(Camera_min_X_pos).w
-		jmp	(Delete_Current_Sprite).w
+		bra.w	Delete_Current_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -775,7 +769,7 @@ Obj_IncLevEndYGradual:
 
 .end
 		move.w	(Camera_stored_max_Y_pos).w,(Camera_max_Y_pos).w
-		jmp	(Delete_Current_Sprite).w
+		bra.w	Delete_Current_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -794,7 +788,7 @@ Obj_DecLevStartYGradual:
 
 .end
 		move.w	(Camera_stored_min_Y_pos).w,(Camera_min_Y_pos).w
-		jmp	(Delete_Current_Sprite).w
+		bra.w	Delete_Current_Sprite
 ; ---------------------------------------------------------------------------
 
 Child6_IncLevX:

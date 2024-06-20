@@ -71,7 +71,7 @@ Obj_DashDust:
 		; check
 		cmpi.b	#12,air_left(a2)										; check air remaining
 		blo.s		.reset												; if less than 12, branch
-		cmpi.b	#id_SonicHurt,routine(a2)								; is player falling back from getting hurt?
+		cmpi.b	#id_PlayerHurt,routine(a2)								; is player falling back from getting hurt?
 		bhs.s	.reset												; if yes, branch
 		tst.b	spin_dash_flag(a2)										; is player charging his spin dash?
 		beq.s	.reset												; if not, branch

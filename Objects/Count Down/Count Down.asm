@@ -17,8 +17,8 @@ Obj_AirCountdown:
 		lea	(Player_1).w,a2									; a2=character
 		tst.w	objoff_30(a0)
 		bne.w	loc_1857C
-		cmpi.b	#id_SonicDeath,routine(a2)
-		bhs.w	locret_1857A
+		cmpi.b	#id_PlayerDeath,routine(a2)					; has player just died?
+		bhs.w	locret_1857A									; if yes, branch
 		btst	#Status_BublShield,status_secondary(a2)
 		bne.w	locret_1857A
 		btst	#Status_Underwater,status(a2)
@@ -59,7 +59,7 @@ AirCountdown_WarnSound:
 
 AirCountdown_ReduceAir:
 		subq.b	#1,air_left(a2)
-		bhs.s	AirCountdown_MakeItem
+		bhs.w	AirCountdown_MakeItem
 		move.b	#$81,object_control(a2)
 		sfx	sfx_Drown										; play drown sound
 		move.b	#10,objoff_38(a0)
@@ -70,16 +70,22 @@ AirCountdown_ReduceAir:
 		move.w	a0,-(sp)
 		movea.w	a2,a0
 		jsr	(Sonic_TouchFloor).l
-		move.b	#id_Drown,anim(a0)
-		bset	#Status_InAir,status(a0)
-		bset	#7,art_tile(a0)
-		clr.l	x_vel(a0)
-		clr.w	ground_vel(a0)
-		move.b	#id_SonicDrown,routine(a0)
 		movea.w	(sp)+,a0
+
+		; drown character
+		bset	#Status_InAir,status(a2)
+		clr.l	x_vel(a2)
+		clr.w	ground_vel(a2)
+		move.b	#id_Drown,anim(a2)
+		move.b	#id_PlayerDrown,routine(a2)
 		cmpa.w	#Player_1,a2
-		bne.s	locret_1857A
+		bne.s	.notp1
+		move.l	priority(a2),(Debug_saved_priority).w			; save priority and art_tile
+		clr.w	priority(a2)
 		st	(Deform_lock).w
+
+.notp1
+		bset	#7,art_tile(a2)
 
 locret_1857A:
 		rts
@@ -89,7 +95,7 @@ loc_1857C:
 		move.b	#id_Drown,anim(a2)
 		subq.w	#1,objoff_30(a0)
 		bne.s	loc_18594
-		move.b	#id_SonicDeath,routine(a2)
+		move.b	#id_PlayerDeath,routine(a2)
 
 locret_1858E:
 		rts
@@ -240,8 +246,8 @@ loc_18218:
 
 AirCountdown_Display:
 		lea	(Player_1).w,a2									; a2=character
-		cmpi.b	#12,air_left(a2)
-		bhi.s	AirCountdown_Delete
+		cmpi.b	#12,air_left(a2)								; check air remaining
+		bhi.s	AirCountdown_Delete							; if higher than 12, branch
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
@@ -280,8 +286,8 @@ AirCountdown_Display2:
 
 AirCountdown_DisplayNumber:
 		lea	(Player_1).w,a2									; a2=character
-		cmpi.b	#12,air_left(a2)
-		bhi.s	AirCountdown_Delete
+		cmpi.b	#12,air_left(a2)								; check air remaining
+		bhi.s	AirCountdown_Delete							; if higher than 12, branch
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
@@ -300,14 +306,15 @@ AirCountdown_ShowNumber:
 		bhs.s	.return
 		move.w	#15,objoff_3C(a0)
 		clr.w	y_vel(a0)
-		move.b	#$80,render_flags(a0)
+		move.w	#$80,d1
+		move.b	d1,render_flags(a0)
 		move.w	x_pos(a0),d0
 		sub.w	(Camera_X_pos).w,d0
-		addi.w	#$80,d0
+		add.w	d1,d0
 		move.w	d0,x_pos(a0)
 		move.w	y_pos(a0),d0
 		sub.w	(Camera_Y_pos).w,d0
-		addi.w	#$80,d0
+		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		move.l	#AirCountdown_AirLeft,address(a0)
 
@@ -333,7 +340,7 @@ AirCountdown_Load_Art:
 		lsl.w	#5,d1
 		addi.l	#dmaSource(ArtUnc_AirCountDown),d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2			; 1P
-		move.w	#$C0/2,d3
+		moveq	#$C0/2,d3
 		jmp	(Add_To_DMA_Queue).w
 
 ; ----------------------------------------------------------------------------

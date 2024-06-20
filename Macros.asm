@@ -245,7 +245,11 @@ clearRAM macro startaddr,endaddr
     if ((startaddr)&1)
 	move.b	d0,(a1)+
     endif
+    if ((bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)))<=$7F)
+	moveq	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
+    else
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
+    endif
 
 .clear:
 	move.l	d0,(a1)+
@@ -314,7 +318,11 @@ copyRAM macro startaddr,endaddr,startaddr2
     if ((startaddr)&1)
 	move.b	(a1)+,(a2)+
     endif
+    if ((bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)))<=$7F)
+	moveq	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
+    else
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
+    endif
 
 .clear:
 	move.l	(a1)+,(a2)+
@@ -451,6 +459,22 @@ out_of_yrange2	macro exit
     endm
 
 ; ---------------------------------------------------------------------------
+; object respawn delete
+; ---------------------------------------------------------------------------
+
+respawn_delete	macro terminate
+	move.w	respawn_addr(a0),d0					; get address in respawn table
+	beq.s	.delete								; if it's zero, it isn't remembered
+	movea.w	d0,a2								; load address into a2
+	bclr	#7,(a2)
+
+.delete
+      if ("terminate"="0") <> ("terminate"="")
+	jmp	(Delete_Current_Sprite).w
+      endif
+    endm
+
+; ---------------------------------------------------------------------------
 ; macros for frequently used subroutines
 ; ---------------------------------------------------------------------------
 
@@ -469,14 +493,14 @@ MoveSprite macro address, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	movem.w	x_vel(address),d0-d1		; load xy speed
+	movem.w	x_vel(address),d0/d2		; load xy speed
 	ext.l	d0
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add x speed to x position	; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	add.l	d0,x_pos(address)				; add x speed to x position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
 	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
-	ext.l	d1
-	asl.l	#8,d1							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d1,y_pos(address)				; add old y speed to y position	; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	ext.l	d2
+	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d2,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -486,13 +510,13 @@ MoveSprite2 macro address, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	movem.w	x_vel(address),d0-d1		; load xy speed
+	movem.w	x_vel(address),d0/d2		; load xy speed
 	ext.l	d0
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add to x-axis position	; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-	ext.l	d1
-	asl.l	#8,d1							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d1,y_pos(address)				; add to y-axis position	; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	ext.l	d2
+	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -839,6 +863,9 @@ jmi:		macro loc
 make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
 tiles_to_bytes function addr,((addr&$7FF)<<5)
 
+; function to calculate the location of a tile in plane mappings
+planeLoc function width,col,line,(((width * line) + col) * 2)
+
 ; function to calculate the location of a tile in plane mappings with a width of 40 cells
 planeLocH32 function col,line,(($40 * line) + (2 * col))
 
@@ -950,18 +977,18 @@ palscriptfile	macro frames, data
 
 ; macro to repeat script from start
 palscriptrept	macro header
-	dc.w -4
+	dc.w -2
     endm
 
 ; macro to define loop from start for x number of times, then initialize with new header
 palscriptloop	macro header
-	dc.w -8, header-._headpos
+	dc.w -4, header-._headpos
 ._headpos :=	header
     endm
 
 ; macro to run the custom script routine
 palscriptrun	macro header
-	dc.w -$C
+	dc.w -6
     endm
 
 ; ---------------------------------------------------------------------------

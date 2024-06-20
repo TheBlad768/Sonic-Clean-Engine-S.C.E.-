@@ -171,7 +171,7 @@ Copy_Map_Line_To_VRAM:
 		add.w	d1,d1
 		add.w	d1,d1
 		add.w	d3,d1
-		lea	(a1,d1.w),a1
+		adda.w	d1,a1
 		lsl.w	#4,d2
 		swap	d0
 		add.w	d2,d0

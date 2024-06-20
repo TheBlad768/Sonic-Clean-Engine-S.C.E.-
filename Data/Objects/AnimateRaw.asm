@@ -1,55 +1,6 @@
-
-; =============== S U B R O U T I N E =======================================
-
-Animate_Raw:
-		movea.l	objoff_30(a0),a1
-
-Animate_RawNoSST:
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	+
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#1,d0
-		move.b	d0,anim_frame(a0)
-		moveq	#0,d1
-		move.b	1(a1,d0.w),d1
-		bmi.s	loc_84428
-		move.b	(a1),anim_frame_timer(a0)
-		move.b	d1,mapping_frame(a0)
-+		rts
 ; ---------------------------------------------------------------------------
-
-loc_84428:
-		neg.b	d1
-		jsr	AnimateRaw_Index-4(pc,d1.w)
-		clr.b	anim_frame(a0)
-		rts
+; Animate raw subroutine
 ; ---------------------------------------------------------------------------
-
-AnimateRaw_Index:
-		bra.w	AnimateRaw_Restart		; FC
-; ---------------------------------------------------------------------------
-		bra.w	AnimateRaw_Jump		; F8
-; ---------------------------------------------------------------------------
-		bra.w	AnimateRaw_CustomCode	; F4
-; ---------------------------------------------------------------------------
-
-AnimateRaw_Jump:
-		move.b	2(a1,d0.w),d1
-		ext.w	d1
-		lea	(a1,d1.w),a1
-		move.l	a1,objoff_30(a0)
-
-AnimateRaw_Restart:
-		move.b	1(a1),mapping_frame(a0)
-		move.b	(a1),anim_frame_timer(a0)
-		rts
-; ---------------------------------------------------------------------------
-
-AnimateRaw_CustomCode:
-		clr.b	anim_frame_timer(a0)
-		movea.l	objoff_34(a0),a1
-		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -58,20 +9,23 @@ Animate_RawAdjustFlipX:
 
 Animate_RawNoSSTAdjustFlipX:
 		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	++
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#1,d0
+		bpl.s	.return
+		moveq	#1,d0
+		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1
-		bmi.s	loc_84428
+		bmi.s	Animate_RawNoSST.main
 		bclr	#6,d1
-		beq.s	+
+		beq.s	.skip
 		bchg	#0,render_flags(a0)
-+		move.b	(a1),anim_frame_timer(a0)
+
+.skip
+		move.b	(a1),anim_frame_timer(a0)
 		move.b	d1,mapping_frame(a0)
-+		rts
+
+.return
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -80,20 +34,73 @@ Animate_RawAdjustFlipY:
 
 Animate_RawNoSSTAdjustFlipY:
 		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	++
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#1,d0
+		bpl.s	.return
+		moveq	#1,d0
+		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1
-		bmi.w	loc_84428
+		bmi.s	Animate_RawNoSST.main
 		bclr	#6,d1
-		beq.s	+
+		beq.s	.skip
 		bchg	#1,render_flags(a0)
-+		move.b	(a1),anim_frame_timer(a0)
+
+.skip
+		move.b	(a1),anim_frame_timer(a0)
 		move.b	d1,mapping_frame(a0)
-+		rts
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Animate_Raw:
+		movea.l	objoff_30(a0),a1
+
+Animate_RawNoSST:
+		subq.b	#1,anim_frame_timer(a0)
+		bpl.s	.return
+		moveq	#1,d0
+		add.b	anim_frame(a0),d0
+		move.b	d0,anim_frame(a0)
+		moveq	#0,d1
+		move.b	1(a1,d0.w),d1
+		bmi.s	.main
+		move.b	(a1),anim_frame_timer(a0)
+		move.b	d1,mapping_frame(a0)
+
+.return
+		rts
+; ---------------------------------------------------------------------------
+
+.main
+		neg.b	d1
+		jmp	.index-2(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+.index
+		bra.s	.restart								; FE
+		bra.s	.jump								; FC
+; ---------------------------------------------------------------------------
+
+		; custom code									; FA
+		clr.b	anim_frame(a0)
+		clr.b	anim_frame_timer(a0)
+		movea.l	objoff_34(a0),a1
+		jmp	(a1)
+; ---------------------------------------------------------------------------
+
+.jump
+		move.b	2(a1,d0.w),d1
+		ext.w	d1
+		adda.w	d1,a1
+		move.l	a1,objoff_30(a0)
+
+.restart
+		move.b	1(a1),mapping_frame(a0)
+		move.b	(a1),anim_frame_timer(a0)
+		clr.b	anim_frame(a0)
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -102,120 +109,57 @@ Animate_RawCheckResult:
 
 Animate_RawNoSSTCheckResult:
 		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	loc_8453E
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#1,d0
+		bpl.s	.exit
+		moveq	#1,d0
+		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)
 		lea	1(a1,d0.w),a2
 		moveq	#0,d1
 		move.b	(a2)+,d1
-		cmpi.b	#-1,d1
-		beq.s	loc_84542
+		cmpi.b	#-1,d1								; is raw index flag?
+		beq.s	.main								; if yes, branch
 		move.b	(a1),anim_frame_timer(a0)
 		move.b	d1,mapping_frame(a0)
-		moveq	#1,d2
+		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_8453E:
-		moveq	#0,d2
+.exit
+		moveq	#0,d2								; wait flag
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_84542:
+.main
 		move.b	(a2)+,d1
 		neg.b	d1
-		jsr	Animate_RawCheckResult_Index-4(pc,d1.w)
+		jmp	.index-2(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+.index
+		bra.s	.restart								; FE
+		bra.s	.jump								; FC
+; ---------------------------------------------------------------------------
+
+		; custom code									; FA
 		clr.b	anim_frame(a0)
-		moveq	#-1,d2
-		rts
-; ---------------------------------------------------------------------------
-
-Animate_RawCheckResult_Index:
-		bra.w	loc_8456A
-; ---------------------------------------------------------------------------
-		bra.w	loc_8455E
-; ---------------------------------------------------------------------------
-		bra.w	loc_84576
-; ---------------------------------------------------------------------------
-
-loc_8455E:
-		move.b	(a2)+,d1
-		ext.w	d1
-		lea	(a1,d1.w),a1
-		move.l	a1,objoff_30(a0)
-
-loc_8456A:
-		move.b	1(a1),mapping_frame(a0)
-		move.b	(a1),anim_frame_timer(a0)
-		rts
-; ---------------------------------------------------------------------------
-
-loc_84576:
-		clr.b	anim_frame_timer(a0)
-		movea.l	objoff_34(a0),a1
-		jmp	(a1)
-
-; =============== S U B R O U T I N E =======================================
-
-Animate_RawMultiDelay:
-		movea.l	objoff_30(a0),a1
-
-Animate_RawNoSSTMultiDelay:
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	loc_845C8
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#2,d0
-		move.b	d0,anim_frame(a0)
-		moveq	#0,d1
-		move.b	(a1,d0.w),d1
-		bmi.s	loc_845CC
-		move.b	d1,mapping_frame(a0)
-		move.b	1(a1,d0.w),anim_frame_timer(a0)
-		moveq	#1,d2
-		rts
-; ---------------------------------------------------------------------------
-
-loc_845C8:
-		moveq	#0,d2
-		rts
-; ---------------------------------------------------------------------------
-
-loc_845CC:
-		neg.b	d1
-		jsr	Animate_RawMultiDelay_Index-4(pc,d1.w)
-		clr.b	anim_frame(a0)
-		rts
-; ---------------------------------------------------------------------------
-
-Animate_RawMultiDelay_Index:
-		bra.w	loc_845F2
-; ---------------------------------------------------------------------------
-		bra.w	loc_845E4
-; ---------------------------------------------------------------------------
-		bra.w	loc_84600
-; ---------------------------------------------------------------------------
-
-loc_845E4:
-		move.b	1(a1,d0.w),d1
-		ext.w	d1
-		lea	(a1,d1.w),a1
-		move.l	a1,objoff_30(a0)
-
-loc_845F2:
-		move.b	(a1),mapping_frame(a0)
-		move.b	1(a1),anim_frame_timer(a0)
-		moveq	#1,d2
-		rts
-; ---------------------------------------------------------------------------
-
-loc_84600:
 		clr.b	anim_frame_timer(a0)
 		movea.l	objoff_34(a0),a1
 		jsr	(a1)
-		moveq	#-1,d2
+		moveq	#-1,d2								; end flag
+		rts
+; ---------------------------------------------------------------------------
+
+.jump
+		move.b	(a2)+,d1
+		ext.w	d1
+		adda.w	d1,a1
+		move.l	a1,objoff_30(a0)
+
+.restart
+		move.b	1(a1),mapping_frame(a0)
+		move.b	(a1),anim_frame_timer(a0)
+		clr.b	anim_frame(a0)
+		moveq	#-1,d2								; end flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -225,47 +169,112 @@ Animate_RawMultiDelayFlipX:
 
 Animate_RawNoSSTMultiDelayFlipX:
 		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	++
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#2,d0
+		bpl.s	.exit
+		moveq	#2,d0
+		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1
-		bmi.s	loc_845CC
+		bmi.s	Animate_RawNoSSTMultiDelay.main
 		bclr	#6,d1
-		beq.s	+
+		beq.s	.skip
 		bchg	#0,render_flags(a0)
-+		move.b	d1,mapping_frame(a0)
+
+.skip
+		move.b	d1,mapping_frame(a0)
 		move.b	1(a1,d0.w),anim_frame_timer(a0)
-		moveq	#1,d2
+		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
-+		moveq	#0,d2
+
+.exit
+		moveq	#0,d2								; wait flag
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Animate_RawMultiDelay:
+		movea.l	objoff_30(a0),a1
+
+Animate_RawNoSSTMultiDelay:
+		subq.b	#1,anim_frame_timer(a0)
+		bpl.s	.exit
+		moveq	#2,d0
+		add.b	anim_frame(a0),d0
+		move.b	d0,anim_frame(a0)
+		moveq	#0,d1
+		move.b	(a1,d0.w),d1
+		bmi.s	.main
+		move.b	d1,mapping_frame(a0)
+		move.b	1(a1,d0.w),anim_frame_timer(a0)
+		moveq	#1,d2								; next frame flag
+		rts
+; ---------------------------------------------------------------------------
+
+.exit
+		moveq	#0,d2								; wait flag
+		rts
+; ---------------------------------------------------------------------------
+
+.main
+		neg.b	d1
+		jmp	.index-2(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+.index
+		bra.s	.restart								; FE
+		bra.s	.jump								; FC
+; ---------------------------------------------------------------------------
+
+		; custom code									; FA
+		clr.b	anim_frame(a0)
+		clr.b	anim_frame_timer(a0)
+		movea.l	objoff_34(a0),a1
+		jsr	(a1)
+		moveq	#-1,d2								; end flag
+		rts
+; ---------------------------------------------------------------------------
+
+.jump
+		move.b	1(a1,d0.w),d1
+		ext.w	d1
+		adda.w	d1,a1
+		move.l	a1,objoff_30(a0)
+
+.restart
+		move.b	(a1),mapping_frame(a0)
+		move.b	1(a1),anim_frame_timer(a0)
+		clr.b	anim_frame(a0)
+		moveq	#1,d2								; next frame flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipY:
 		movea.l	objoff_30(a0),a1
+
+Animate_RawNoSSTMultiDelayFlipY:
 		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	++
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#2,d0
+		bpl.s	.exit
+		moveq	#2,d0
+		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1
-		bmi.w	loc_845CC
+		bmi.s	Animate_RawNoSSTMultiDelay.main
 		bclr	#6,d1
-		beq.s	+
+		beq.s	.skip
 		bchg	#1,render_flags(a0)
-+		move.b	d1,mapping_frame(a0)
+
+.skip
+		move.b	d1,mapping_frame(a0)
 		move.b	1(a1,d0.w),anim_frame_timer(a0)
-		moveq	#1,d2
+		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
-+		moveq	#0,d2
+
+.exit
+		moveq	#0,d2								; wait flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -275,61 +284,57 @@ Animate_Raw2MultiDelay:
 
 Animate_Raw2NoSSTMultiDelay:
 		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	loc_846BA
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.w	#2,d0
+		bpl.s	.exit
+		moveq	#2,d0
+		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)
 		lea	(a1,d0.w),a2
 		moveq	#0,d1
 		move.b	(a2)+,d1
-		cmpi.b	#-1,d1
-		beq.s	loc_846BE
+		cmpi.b	#-1,d1								; is raw index flag?
+		beq.s	.main								; if yes, branch
 		move.b	d1,mapping_frame(a0)
 		move.b	1(a1,d0.w),anim_frame_timer(a0)
-		moveq	#1,d2
+		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_846BA:
-		moveq	#0,d2
+.exit
+		moveq	#0,d2								; wait flag
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_846BE:
+.main
 		move.b	(a2)+,d1
 		neg.b	d1
-		jsr	Animate_Raw2MultiDelay_Index-4(pc,d1.w)
+		jmp	.index-2(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+.index
+		bra.s	.restart								; FE
+		bra.s	.jump								; FC
+; ---------------------------------------------------------------------------
+
+		; custom code									; FA
 		clr.b	anim_frame(a0)
-		rts
-; ---------------------------------------------------------------------------
-
-Animate_Raw2MultiDelay_Index:
-		bra.w	loc_846E4
-; ---------------------------------------------------------------------------
-		bra.w	loc_846D8
-; ---------------------------------------------------------------------------
-		bra.w	loc_846F2
-; ---------------------------------------------------------------------------
-
-loc_846D8:
-		move.b	(a2)+,d1
-		ext.w	d1
-		lea	(a1,d1.w),a1
-		move.l	a1,objoff_30(a0)
-
-loc_846E4:
-		move.b	(a1),mapping_frame(a0)
-		move.b	1(a1),anim_frame_timer(a0)
-		moveq	#-1,d2
-		rts
-; ---------------------------------------------------------------------------
-
-loc_846F2:
 		clr.b	anim_frame_timer(a0)
 		movea.l	objoff_34(a0),a1
 		jsr	(a1)
-		moveq	#-1,d2
+		moveq	#-1,d2								; end flag
+		rts
+; ---------------------------------------------------------------------------
+
+.jump
+		move.b	(a2)+,d1
+		ext.w	d1
+		adda.w	d1,a1
+		move.l	a1,objoff_30(a0)
+
+.restart
+		move.b	(a1),mapping_frame(a0)
+		move.b	1(a1),anim_frame_timer(a0)
+		clr.b	anim_frame(a0)
+		moveq	#-1,d2								; end flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -339,45 +344,58 @@ Animate_RawGetFaster:
 
 Animate_RawNoSSTGetFaster:
 		bset	#5,objoff_38(a0)
-		bne.s	+
+		bne.s	.main
 		move.b	(a1),objoff_2E(a0)
 		clr.b	objoff_2F(a0)
-+		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	++
+
+.main
+		subq.b	#1,anim_frame_timer(a0)
+		bpl.s	.exit
 		move.b	objoff_2E(a0),d2
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.b	#1,d0
+		moveq	#1,d0
+		add.b	anim_frame(a0),d0
 		move.b	2(a1,d0.w),d1
-		bpl.s	+
+		bpl.s	.next
+
+		; check flags
 		moveq	#0,d0
 		move.b	2(a1),d1
 		tst.b	d2
-		beq.s	+++
+		beq.s	.run
 		subq.b	#1,d2
 		move.b	d2,objoff_2E(a0)
-+		move.b	d0,anim_frame(a0)
+
+.next
+		move.b	d0,anim_frame(a0)
 		move.b	d1,mapping_frame(a0)
 		move.b	d2,anim_frame_timer(a0)
-		moveq	#1,d2
+		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
-+		moveq	#0,d2
+
+.exit
+		moveq	#0,d2								; wait flag
 		rts
 ; ---------------------------------------------------------------------------
-+		move.b	d0,anim_frame(a0)
+
+.run
+		move.b	d0,anim_frame(a0)
 		move.b	d1,mapping_frame(a0)
 		move.b	d2,anim_frame_timer(a0)
 		move.b	objoff_2F(a0),d0
 		addq.b	#1,d0
 		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
-		blo.s		+
+		blo.s		.end
+
+		; custom code
 		bclr	#5,objoff_38(a0)
 		clr.b	objoff_2F(a0)
 		movea.l	objoff_34(a0),a2
 		jsr	(a2)
-+		moveq	#-1,d2
+
+.end
+		moveq	#-1,d2								; end flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -387,33 +405,41 @@ Animate_RawGetSlower:
 
 Animate_RawNoSSTGetSlower:
 		bset	#5,objoff_38(a0)
-		bne.s	+
+		bne.s	.main
 		clr.w	objoff_2E(a0)
-+		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	++
+
+.main
+		subq.b	#1,anim_frame_timer(a0)
+		bpl.s	.return
 		move.b	objoff_2E(a0),d2
-		moveq	#0,d0
-		move.b	anim_frame(a0),d0
-		addq.b	#1,d0
+		moveq	#1,d0
+		add.b	anim_frame(a0),d0
 		move.b	1(a1,d0.w),d1
-		bpl.s	+
+		bpl.s	.next
 		moveq	#0,d0
 		move.b	1(a1),d1
 		addq.b	#1,d2
-+		move.b	d0,anim_frame(a0)
+
+.next
+		move.b	d0,anim_frame(a0)
 		move.b	d1,mapping_frame(a0)
 		move.b	d2,anim_frame_timer(a0)
 		cmp.b	(a1),d2
-		bhs.s	++
+		bhs.s	.run
 		move.b	d2,objoff_2E(a0)
--
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
-+		move.b	objoff_2F(a0),d0
+
+.run
+		move.b	objoff_2F(a0),d0
 		addq.b	#1,d0
 		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
-		blo.s		-
+		blo.s		.return
+
+		; custom code
 		bclr	#5,objoff_38(a0)
 		clr.b	objoff_2F(a0)
 		movea.l	objoff_34(a0),a2
@@ -423,26 +449,27 @@ Animate_RawNoSSTGetSlower:
 
 Animate_ExternalPlayerSprite:
 		subq.b	#1,anim_frame_timer(a1)
-		bpl.s	loc_84500
+		bpl.s	.plc
 		move.b	(a2),anim_frame_timer(a1)
-		moveq	#0,d0
-		move.b	anim_frame(a1),d0
-		addq.b	#2,d0
+		moveq	#2,d0
+		add.b	anim_frame(a1),d0
 		move.b	d0,anim_frame(a1)
 		move.b	1(a2,d0.w),d1
-		beq.s	loc_84504
+		beq.s	.custom
 		move.b	d1,mapping_frame(a1)
 		bclr	#0,render_flags(a1)
 		tst.b	2(a2,d0.w)
-		beq.s	loc_84500
+		beq.s	.plc
 		bset	#0,render_flags(a1)
 
-loc_84500:
-		jmp	Sonic_Load_PLC2(pc)
+.plc
+		bra.w	Sonic_Load_PLC
 ; ---------------------------------------------------------------------------
 
-loc_84504:
-		jsr	Sonic_Load_PLC2(pc)
+.custom
+		bsr.w	Sonic_Load_PLC
+
+		; custom code
 		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 

@@ -134,7 +134,7 @@ Obj_Animal_Walk:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_Fly:
-		moveq	#$18,d2
+		moveq	#$18,d1
 		jsr	(MoveSprite_CustomGravity).w
 		tst.w	y_vel(a0)
 		bmi.s	.anim
@@ -214,7 +214,7 @@ Obj_Animal_FlickyWait:
 		move.l	#.fly,address(a0)
 
 .fly
-		moveq	#$18,d2
+		moveq	#$18,d1
 		jsr	(MoveSprite_CustomGravity).w
 		tst.w	y_vel(a0)
 		bmi.s	.anim
@@ -245,7 +245,7 @@ Obj_Animal_FlickyJump:
 		bhs.s	.chkdel										; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal_ground_x_vel(a0)
-		moveq	#$18,d2
+		moveq	#$18,d1
 		jsr	(MoveSprite_CustomGravity).w
 		bsr.w	Obj_Animal_Jump
 		bsr.w	Obj_Animal_FaceSonic
@@ -349,7 +349,7 @@ Obj_Animal_FlyBounce:
 		jsr	(Find_SonicObject).w
 		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	Obj_Animal_ChkDel							; if not, branch
-		moveq	#$18,d2
+		moveq	#$18,d1
 		jsr	(MoveSprite_CustomGravity).w
 		tst.w	y_vel(a0)
 		bmi.s	.anim

@@ -89,7 +89,7 @@ locret_1C0E6:
 loc_1C0E8:
 		cmpi.w	#-24,d0
 		bgt.s	.skip
-		move.w	#-24,d0
+		moveq	#-24,d0
 
 .skip
 		add.w	(a1),d0
@@ -102,7 +102,7 @@ loc_1C0E8:
 loc_1C0FC:
 		cmpi.w	#24,d0
 		blo.s		.skip2
-		move.w	#24,d0
+		moveq	#24,d0
 
 .skip2
 		add.w	(a1),d0

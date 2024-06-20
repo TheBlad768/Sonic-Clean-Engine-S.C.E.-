@@ -255,8 +255,8 @@ Check_SonicEndPose:
 		bne.s	.return
 		btst	#Status_InAir,status(a1)
 		bne.s	.return
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	.return
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.s	.return									; if yes, branch
 		move.l	d0,objoff_34(a0)							; set routine
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Sprite).w
@@ -275,8 +275,8 @@ Check_SonicEndPose_MGZ:
 		bpl.s	.return
 
 		lea	(Player_1).w,a1
-		cmpi.b	#id_SonicDeath,routine(a1)
-		bhs.s	.return
+		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		bhs.s	.return									; if yes, branch
 		tst.b	render_flags(a1)								; player visible on the screen?
 		bpl.s	.return									; if not, branch
 		move.w	#-$100,x_vel(a0)							; left move

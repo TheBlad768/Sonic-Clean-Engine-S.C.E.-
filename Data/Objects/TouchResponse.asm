@@ -452,7 +452,7 @@ HurtCharacter:
 		andi.b	#$8E,status_secondary(a0)
 
 .bounce
-		move.b	#id_SonicHurt,routine(a0)
+		move.b	#id_PlayerHurt,routine(a0)
 		bsr.w	Sonic_TouchFloor
 		bset	#Status_InAir,status(a0)
 		move.l	#words_to_long(-$200,-$400),x_vel(a0)		; make Sonic bounce away from the object
@@ -500,7 +500,7 @@ Kill_Character:
 .main
 		clr.b	status_secondary(a0)
 		clr.b	status_tertiary(a0)
-		move.b	#id_SonicDeath,routine(a0)
+		move.b	#id_PlayerDeath,routine(a0)
 		move.w	d0,-(sp)
 		bsr.w	Sonic_TouchFloor
 		move.w	(sp)+,d0
@@ -584,7 +584,7 @@ ShieldTouch_Width:
 		beq.s	ShieldTouch_NextObj						; if it doesn't have a size, branch
 		add.w	d0,d0									; turn into index
 		lea	Touch_Sizes(pc),a2
-		lea	(a2,d0.w),a2									; go to correct entry
+		adda.w	d0,a2									; go to correct entry
 		moveq	#0,d1
 		move.b	(a2)+,d1									; get width value from Touch_Sizes
 		move.w	x_pos(a1),d0								; get object's x_pos

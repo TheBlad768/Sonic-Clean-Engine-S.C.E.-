@@ -559,9 +559,8 @@ loc_8621A:
 sub_8619A:
 		move.w	objoff_30(a0),d2
 		move.w	objoff_34(a0),d3
-		moveq	#0,d0
-		move.b	objoff_40(a0),d0
-		addq.w	#4,d0
+		moveq	#4,d0
+		add.b	objoff_40(a0),d0
 		move.l	#$100,d4
 		divu.w	d0,d4
 		sub.w	d4,d2

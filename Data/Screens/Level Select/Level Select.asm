@@ -21,8 +21,8 @@ LevelSelect_MaxSampleNumber:	= (dac__Last-dac__First)
 ; RAM
 	phase ramaddr(RAM_start)
 
-vLevelSelect_buffer:				ds.b $1000	; foreground buffer (copy)
-vLevelSelect_buffer2:				ds.b $1000	; foreground buffer (main)
+vLevelSelect_buffer:				ds.b $1000							; foreground buffer (copy)
+vLevelSelect_buffer2:				ds.b $1000							; foreground buffer (main)
 
 	dephase
 
@@ -70,11 +70,6 @@ LevelSelect_Screen:
 		; load main art
 		QueueKosModule	ArtKosM_LevelSelectText, 1
 
-		; load main palette
-		lea	(Pal_LevelSelect).l,a1
-		lea	(Target_palette).w,a2
-		jsr	(PalLoad_Line32).w
-
 		; load text
 		bsr.w	LevelSelect_LoadText
 		move.w	#palette_line_1+LevelSelect_VRAM,d3
@@ -87,6 +82,11 @@ LevelSelect_Screen:
 		bsr.w	LevelSelect_MarkFields.drawsample
 		move.w	#palette_line_1,d3
 		bsr.w	LevelSelect_MarkFields
+
+		; load main palette
+		lea	(Pal_LevelSelect).l,a1
+		lea	(Target_palette).w,a2
+		jsr	(PalLoad_Line32).w
 
 .waitplc
 		move.b	#VintID_Fade,(V_int_routine).w
@@ -366,7 +366,7 @@ LevelSelect_MarkFields:
 		adda.w	d0,a2
 
 		; load line
-		moveq	#(64/8)-1,d2
+		moveq	#bytesToXcnt(64,8),d2
 
 .copy
 	rept 8
@@ -466,8 +466,8 @@ LevelSelect_LoadAct:
 		add.w	d1,d1
 		add.w	d0,d0
 		add.w	d1,d0
-		move.w	LevelSelect_ActTextIndex(pc,d0.w),d0
-		lea	LevelSelect_ActTextIndex(pc,d0.w),a0
+		lea	LevelSelect_ActTextIndex(pc),a0
+		adda.w	(a0,d0.w),a0
 		bra.s	LevelSelect_LoadMainText.loadtext
 
 ; =============== S U B R O U T I N E =======================================
@@ -487,23 +487,6 @@ LevelSelect_LoadMainText:
 		move.w	d0,(a5)+
 		dbf	d6,.copy
 		rts
-; --------------------------------------------------------------------------
-
-LevelSelect_ActTextIndex: offsetTable
-		offsetTableEntry.w LevelSelect_LoadAct1		; DEZ1
-		offsetTableEntry.w LevelSelect_LoadAct2		; DEZ2
-		offsetTableEntry.w LevelSelect_LoadAct3		; DEZ3
-		offsetTableEntry.w LevelSelect_LoadAct4		; DEZ4
-
-		zonewarning LevelSelect_ActTextIndex,(2*4)
-; --------------------------------------------------------------------------
-
-LevelSelect_LoadAct1:		levselstr "ACT 1"
-LevelSelect_LoadAct2:		levselstr "ACT 2"
-LevelSelect_LoadAct3:		levselstr "ACT 3"
-LevelSelect_LoadAct4:		levselstr "ACT 4"
-LevelSelect_MainText:		levselstr "SONIC TEST GAME - *** DEBUG MODE ***                            "
-	even
 
 ; ---------------------------------------------------------------------------
 ; Load text
@@ -559,7 +542,7 @@ LevelSelect_LoadText:
 		; copy buffer
 		lea	(vLevelSelect_buffer).l,a1
 		lea	vLevelSelect_buffer2-vLevelSelect_buffer(a1),a2
-		moveq	#($1000/(8*4))-1,d1
+		moveq	#bytesToXcnt(($1000),8*4),d1
 
 .bcopy
 	rept 8
@@ -569,9 +552,25 @@ LevelSelect_LoadText:
 		rts
 
 		restore
-
 ; ---------------------------------------------------------------------------
 
+LevelSelect_ActTextIndex: offsetTable
+		offsetTableEntry.w LevelSelect_LoadAct1		; DEZ1
+		offsetTableEntry.w LevelSelect_LoadAct2		; DEZ2
+		offsetTableEntry.w LevelSelect_LoadAct3		; DEZ3
+		offsetTableEntry.w LevelSelect_LoadAct4		; DEZ4
+
+		zonewarning LevelSelect_ActTextIndex,(2*4)
+; --------------------------------------------------------------------------
+
+; level act
+LevelSelect_LoadAct1:		levselstr "ACT 1"
+LevelSelect_LoadAct2:		levselstr "ACT 2"
+LevelSelect_LoadAct3:		levselstr "ACT 3"
+LevelSelect_LoadAct4:		levselstr "ACT 4"
+LevelSelect_MainText:		levselstr "SONIC TEST GAME - *** DEBUG MODE ***                            "
+
+; main text
 LevelSelect_Text:
 		levselstr "   DEATH EGG          - ACT 1"
 		levselstr "   UNKNOWN LEVEL      - UNKNOWN"

@@ -347,28 +347,28 @@ Kos_module_queue_end				= *
 ; palette variables
 v_pal_water_dup:						= *
 Target_water_palette:					= *						; used by palette fading routines
-Target_water_palette_line_1:			ds.w 16
-Target_water_palette_line_2:			ds.w 16
-Target_water_palette_line_3:			ds.w 16
-Target_water_palette_line_4:			ds.w 16
+Target_water_palette_line_1:			ds.b palette_line_size
+Target_water_palette_line_2:			ds.b palette_line_size
+Target_water_palette_line_3:			ds.b palette_line_size
+Target_water_palette_line_4:			ds.b palette_line_size
 v_pal_water:							= *
 Water_palette:						= *						; this is what actually gets displayed
-Water_palette_line_1:					ds.w 16
-Water_palette_line_2:					ds.w 16
-Water_palette_line_3:					ds.w 16
-Water_palette_line_4:					ds.w 16
+Water_palette_line_1:					ds.b palette_line_size
+Water_palette_line_2:					ds.b palette_line_size
+Water_palette_line_3:					ds.b palette_line_size
+Water_palette_line_4:					ds.b palette_line_size
 v_pal_dry:							= *
 Normal_palette:						= *						; this is what actually gets displayed
-Normal_palette_line_1:				ds.w 16
-Normal_palette_line_2:				ds.w 16
-Normal_palette_line_3:				ds.w 16
-Normal_palette_line_4:				ds.w 16
+Normal_palette_line_1:				ds.b palette_line_size
+Normal_palette_line_2:				ds.b palette_line_size
+Normal_palette_line_3:				ds.b palette_line_size
+Normal_palette_line_4:				ds.b palette_line_size
 v_pal_dry_dup:						= *
 Target_palette:						= *						; used by palette fading routines
-Target_palette_line_1:					ds.w 16
-Target_palette_line_2:					ds.w 16
-Target_palette_line_3:					ds.w 16
-Target_palette_line_4:					ds.w 16
+Target_palette_line_1:					ds.b palette_line_size
+Target_palette_line_2:					ds.b palette_line_size
+Target_palette_line_3:					ds.b palette_line_size
+Target_palette_line_4:					ds.b palette_line_size
 
 ; oscillating variables
 Oscillating_variables:					= *

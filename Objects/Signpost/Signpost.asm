@@ -9,8 +9,8 @@ Obj_EndSignControl:
 		st	(Level_end_flag).w										; end of level is in effect
 		clr.b	(TitleCard_end_flag).w
 		clr.b	(Results_end_flag).w
-		move.w	#(2*60)-1,$2E(a0)
-		move.l	#Obj_EndSignControlDoSign,$34(a0)
+		move.w	#(2*60)-1,objoff_2E(a0)
+		move.l	#Obj_EndSignControlDoSign,objoff_34(a0)
 
 .return
 		rts
@@ -73,7 +73,7 @@ Obj_EndSign:
 .nothighpriority
 		move.w	a0,(Signpost_addr).w									; put RAM address here for use by hidden monitor object
 		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)				; set y_radius and x_radius
-		move.l	#AniRaw_EndSigns1,$30(a0)
+		move.l	#AniRaw_EndSigns1,objoff_30(a0)
 		move.w	(Camera_Y_pos).w,d0
 		subi.w	#32,d0
 		move.w	d0,y_pos(a0)											; place vertical position at top of screen
@@ -108,7 +108,7 @@ Obj_EndSign:
 		add.w	d1,y_pos(a0)
 		move.l	#.signlanded,address(a0)
 		bset	#0,objoff_38(a0)
-		move.w	#(1*60)+4,$2E(a0)
+		move.w	#(1*60)+4,objoff_2E(a0)
 
 .draw
 		lea	PLCPtr_EndSigns(pc),a2
@@ -120,7 +120,7 @@ Obj_EndSign:
 		btst	#0,objoff_38(a0)
 		beq.s	.hmon
 		jsr	(Animate_Raw).w
-		subq.w	#1,$2E(a0)											; keep animating while landing for X amount of frames
+		subq.w	#1,objoff_2E(a0)										; keep animating while landing for X amount of frames
 		bmi.s	.endtime
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
@@ -197,8 +197,8 @@ Obj_SignpostSparkle:
 		add.w	d0,y_pos(a0)											; random vertical position
 		move.w	x_pos(a0),objoff_3A(a0)
 		move.w	#$1000,x_vel(a0)
-		move.w	#32,$2E(a0)
-		move.l	#Go_Delete_Sprite,$34(a0)
+		move.w	#32,objoff_2E(a0)
+		move.l	#Go_Delete_Sprite,objoff_34(a0)
 
 .main
 		move.w	#$400,d0											; right

@@ -22,7 +22,7 @@ RobotnikHead3_Index: offsetTable
 Obj_RobotnikHead3Init:
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#AniRaw_RobotnikHead,$30(a0)
+		move.l	#AniRaw_RobotnikHead,objoff_30(a0)
 		movea.w	parent3(a0),a1
 		btst	#7,art_tile(a1)
 		beq.s	+
@@ -31,7 +31,7 @@ Obj_RobotnikHead3Init:
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Main:
-		cmpi.b	#id_SonicHurt,(Player_1+routine).w
+		cmpi.b	#id_PlayerHurt,(Player_1+routine).w
 		bhs.s	Obj_RobotnikHead3_Laugh
 		jsr	(Animate_Raw).w
 		movea.w	parent3(a0),a1
@@ -75,7 +75,7 @@ Obj_RobotnikHead4:
 		move.w	RobotnikHead4_Index(pc,d0.w),d1
 		jsr	RobotnikHead4_Index(pc,d1.w)
 		movea.w	parent3(a0),a1
-		btst	#5,$38(a1)
+		btst	#5,objoff_38(a1)
 		bne.s	loc_67CFE
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -102,13 +102,15 @@ Obj_RobotnikShipFlame:
 
 RobotnikShipFlame_Main:
 		movea.w	parent3(a0),a1
-		btst	#4,$38(a1)
+		btst	#4,objoff_38(a1)
 		bne.s	loc_67CFE
 		jsr	(Refresh_ChildPositionAdjusted).w
 		btst	#0,(V_int_run_count+3).w
 		bne.s	Obj_RobotnikHeadEnd
 		tst.w	x_vel(a1)
 		beq.s	Obj_RobotnikHeadEnd
+
+		; draw
 		jmp	(Draw_Sprite).w
 
 ; ---------------------------------------------------------------------------

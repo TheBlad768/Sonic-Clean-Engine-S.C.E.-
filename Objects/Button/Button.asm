@@ -32,7 +32,7 @@ loc_2C5BE:
 		moveq	#$F,d0
 		and.b	subtype(a0),d0
 		lea	(Level_trigger_array).w,a3
-		lea	(a3,d0.w),a3
+		adda.w	d0,a3
 		moveq	#0,d3
 		btst	#6,subtype(a0)									; $40?
 		beq.s	+
@@ -69,7 +69,7 @@ sub_2C62C:
 		moveq	#$F,d0
 		and.b	subtype(a0),d0
 		lea	(Level_trigger_array).w,a3
-		lea	(a3,d0.w),a3
+		adda.w	d0,a3
 		moveq	#0,d3
 		btst	#6,subtype(a0)									; $40?
 		beq.s	+

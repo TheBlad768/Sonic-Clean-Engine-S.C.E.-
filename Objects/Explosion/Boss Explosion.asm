@@ -92,7 +92,7 @@ Obj_BossExpControl1:
 		beq.s	loc_83EC2
 
 loc_83E7E:
-		move.w	#2,$2E(a0)
+		move.w	#2,objoff_2E(a0)
 
 sub_83E84:
 		lea	Child6_MakeBossExplosion1(pc),a2
@@ -131,7 +131,7 @@ loc_83EC2:
 Obj_NormalExpControl:
 		subq.b	#1,objoff_39(a0)						; same as above, but uses regular explosions (no animals of course)
 		beq.s	loc_83EC2
-		move.w	#2,$2E(a0)
+		move.w	#2,objoff_2E(a0)
 		lea	Child6_MakeNormalExplosion(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
@@ -143,7 +143,7 @@ Obj_NormalExpControl:
 Obj_BossExpControl2:
 		subq.b	#1,objoff_39(a0)
 		beq.s	loc_83EC2
-		move.w	#2,$2E(a0)
+		move.w	#2,objoff_2E(a0)
 		lea	Child6_MakeBossExplosion2(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
@@ -154,7 +154,7 @@ Obj_BossExpControl2:
 Obj_BossExpControlOff:
 		subq.b	#1,objoff_39(a0)
 		beq.s	loc_83EC2
-		move.w	#2,$2E(a0)
+		move.w	#2,objoff_2E(a0)
 		lea	Child6_MakeBossExplosionOff(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
@@ -163,7 +163,7 @@ Obj_BossExpControlOff:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosionSpecial:
-		move.w	#2,$2E(a0)
+		move.w	#2,objoff_2E(a0)
 		move.w	(Camera_X_pos).w,d0
 		addi.w	#320/2,d0
 		move.w	d0,x_pos(a0)

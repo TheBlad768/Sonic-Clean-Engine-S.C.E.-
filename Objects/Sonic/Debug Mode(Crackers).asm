@@ -12,8 +12,8 @@ Debug_Mode:
 		bne.s	.control
 		addq.b	#2,(Debug_placement_routine).w
 		move.l	mappings(a0),(Debug_saved_mappings).w	; save mappings
-		cmpi.b	#id_SonicDeath,routine(a0)
-		bhs.s	.death
+		cmpi.b	#id_PlayerDeath,routine(a0)				; is player dead?
+		bhs.s	.death									; if yes, branch
 		move.l	priority(a0),(Debug_saved_priority).w		; save priority and art_tile
 
 .death
@@ -26,6 +26,7 @@ Debug_Mode:
 		move.w	d0,priority(a0)
 		move.b	d0,(Scroll_lock).w
 		move.b	d0,(WindTunnel_flag).w
+		move.w	d0,(v_Breathing_bubbles+objoff_30).w		; clear drowning timer
 		bclr	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
 		bclr	#Status_Underwater,status(a0)
@@ -62,7 +63,7 @@ Debug_Mode:
 		move.b	d0,jumping(a0)
 		andi.b	#1,status(a0)
 		ori.b	#2,status(a0)
-		move.b	#id_SonicControl,routine(a0)
+		move.b	#id_PlayerControl,routine(a0)
 		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		rts
 ; ---------------------------------------------------------------------------
