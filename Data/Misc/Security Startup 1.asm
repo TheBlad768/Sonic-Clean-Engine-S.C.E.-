@@ -10,25 +10,25 @@ EntryPoint:
 		tst.w	(HW_Expansion_Control-1).l
 +
 		bne.s	Init_SkipPowerOn									; in case of a soft reset
-		lea	SetupValues(pc),a5
+		lea	SetupValues(pc),a5									; load setup values array address
 		movem.w	(a5)+,d5-d7
 		movem.l	(a5)+,a0-a4
-		moveq	#$F,d0
+		moveq	#$F,d0											; compare
 		and.b	HW_Version-Z80_bus_request(a1),d0				; get hardware version
-		beq.s	SkipSecurity										; branch if hardware is older than Genesis III
+		beq.s	SkipSecurity										; if the console has no tmss, skip the security stuff
 		move.l	(Header).w,Security_addr-Z80_bus_request(a1)		; satisfy the TMSS
 
 SkipSecurity:
 		move.w	(a4),d0											; check if VDP works
-		moveq	#0,d0
-		movea.l	d0,a6
+		moveq	#0,d0											; clear d0
+		movea.l	d0,a6											; clear a6
 		move.l	a6,usp											; set usp to $0
-		moveq	#VDPInitValues_End-VDPInitValues-1,d1
+		moveq	#VDPInitValues_end-VDPInitValues-1,d1				; run the following loop 24 times
 
 Init_VDPRegs:
-		move.b	(a5)+,d5
-		move.w	d5,(a4)
-		add.w	d7,d5
+		move.b	(a5)+,d5											; add $8000 to value
+		move.w	d5,(a4)											; move value to VDP register
+		add.w	d7,d5											; next register
 		dbf	d1,Init_VDPRegs										; set all 24 registers
 
 		move.l	(a5)+,(a4)										; set VRAM write mode
@@ -39,7 +39,7 @@ Init_VDPRegs:
 WaitForZ80:
 		btst	d0,(a1)												; has the Z80 stopped?
 		bne.s	WaitForZ80										; if not, branch
-		moveq	#Z80StartupCodeEnd-Z80StartupCodeBegin-1,d2
+		moveq	#Z80StartupCode_end-Z80StartupCodeBegin-1,d2
 
 Init_SoundRAM:
 		move.b	(a5)+,(a0)+
@@ -51,31 +51,31 @@ Init_SoundRAM:
 
 Init_ClearRAM:
 		move.l	d0,-(a6)											; clear normal RAM
-		dbf	d6,Init_ClearRAM
+		dbf	d6,Init_ClearRAM										; repeat until the entire RAM is clear
 		move.l	(a5)+,(a4)										; set VDP display mode and increment
 		move.l	(a5)+,(a4)										; set VDP to CRAM write
-		moveq	#bytesToLcnt($80),d3
+		moveq	#bytesToLcnt($80),d3								; set repeat times
 
 Init_ClearCRAM:
 		move.l	d0,(a3)											; clear CRAM
-		dbf	d3,Init_ClearCRAM
-		move.l	(a5)+,(a4)
-		moveq	#bytesToLcnt($50),d4
+		dbf	d3,Init_ClearCRAM									; repeat until the entire CRAM is clear
+		move.l	(a5)+,(a4)										; set VDP to VSRAM write
+		moveq	#bytesToLcnt($50),d4								; set repeat times
 
 Init_ClearVSRAM:
 		move.l	d0,(a3)											; clear VSRAM
-		dbf	d4,Init_ClearVSRAM
-		moveq	#PSGInitValues_End-PSGInitValues-1,d5
+		dbf	d4,Init_ClearVSRAM									; repeat until the entire VSRAM is clear
+		moveq	#PSGInitValues_end-PSGInitValues-1,d5				; set repeat times
 
 Init_InputPSG:
 		move.b	(a5)+,PSG_input-VDP_data_port(a3)				; reset the PSG
-		dbf	d5,Init_InputPSG
+		dbf	d5,Init_InputPSG										; repeat for other channels
 		move.w	d0,(a2)
 		movem.l	(a6),d0-a6										; clear all registers
 		disableInts												; set the sr
 
 Init_SkipPowerOn:
-		bra.s	Game_Program									; begin game
+		bra.s	Game_Program									; branch to game program
 ; ---------------------------------------------------------------------------
 ; InitArray:
 SetupValues:
@@ -88,31 +88,31 @@ SetupValues:
 .vcontrol	dc.l VDP_control_port
 
 VDPInitValues:													; values for VDP registers
-		dc.b 4													; command $8004 - HInt off, Enable HV counter read
-		dc.b $14													; command $8114 - Display off, VInt off, DMA on, PAL off
-		dc.b $30													; command $8230 - Scroll A Address $C000
-		dc.b $3C													; command $833C - Window Address $F000
-		dc.b 7													; command $8407 - Scroll B Address $E000
-		dc.b $6C													; command $856C - Sprite Table Addres $D800
-		dc.b 0													; command $8600 - Null
-		dc.b 0													; command $8700 - Background color Pal 0 Color 0
-		dc.b 0													; command $8800 - Null
-		dc.b 0													; command $8900 - Null
-		dc.b $FF													; command $8AFF - Hint timing $FF scanlines
+		dc.b 4													; command $8004 - HInt off, enable HV counter read
+		dc.b $14													; command $8114 - display off, VInt off, DMA on, PAL off
+		dc.b $30													; command $8230 - scroll A address $C000
+		dc.b $3C													; command $833C - window address $F000
+		dc.b 7													; command $8407 - scroll B address $E000
+		dc.b $6C													; command $856C - sprite table addres $D800
+		dc.b 0													; command $8600 - null
+		dc.b 0													; command $8700 - background color Pal 0 Color 0
+		dc.b 0													; command $8800 - null
+		dc.b 0													; command $8900 - null
+		dc.b $FF													; command $8AFF - Hint timing 256-1 scanlines
 		dc.b 0													; command $8B00 - Ext Int off, VScroll full, HScroll full
 		dc.b $81													; command $8C81 - 40 cell mode, shadow/highlight off, no interlace
-		dc.b $37													; command $8D37 - HScroll Table Address $DC00
-		dc.b 0													; command $8E00 - Null
+		dc.b $37													; command $8D37 - HScroll table address $DC00
+		dc.b 0													; command $8E00 - null
 		dc.b 1													; command $8F01 - VDP auto increment 1 byte
 		dc.b 1													; command $9001 - 64x32 cell scroll size
-		dc.b 0													; command $9100 - Window H left side, Base Point 0
-		dc.b 0													; command $9200 - Window V upside, Base Point 0
-		dc.b $FF													; command $93FF - DMA Length Counter $FFFF
-		dc.b $FF													; command $94FF - See above
-		dc.b 0													; command $9500 - DMA Source Address $0
-		dc.b 0													; command $9600 - See above
-		dc.b $80													; command $9700 - See above + VRAM fill mode
-VDPInitValues_End
+		dc.b 0													; command $9100 - window H left side, base point 0
+		dc.b 0													; command $9200 - window V upside, base point 0
+		dc.b $FF													; command $93FF - DMA length counter $FFFF
+		dc.b $FF													; command $94FF - see above
+		dc.b 0													; command $9500 - DMA source address $0
+		dc.b 0													; command $9600 - see above
+		dc.b $80													; command $9700 - see above + VRAM fill mode
+VDPInitValues_end
 
 		dc.l vdpComm($0000,VRAM,DMA)							; value for VRAM write mode
 
@@ -150,7 +150,7 @@ zStartupCodeEndLoc:
 	dephase														; stop pretending
 		restore
 	padding off													; unfortunately our flags got reset so we have to set them again...
-Z80StartupCodeEnd:
+Z80StartupCode_end
 
 		dc.w	$8104												; value for VDP display mode
 		dc.w	$8F02												; value for VDP increment
@@ -159,4 +159,4 @@ Z80StartupCodeEnd:
 
 PSGInitValues:
 		dc.b	$9F,$BF,$DF,$FF										; values for PSG channel volumes
-PSGInitValues_End
+PSGInitValues_end

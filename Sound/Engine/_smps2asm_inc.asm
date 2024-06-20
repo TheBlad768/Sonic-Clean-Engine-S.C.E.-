@@ -96,7 +96,7 @@ SourceSMPS2ASM set 0
 
 songStart set *
 
-	if MOMPASS=1
+	if MOMPASS==1
 		if SMPS2ASMVer < SourceSMPS2ASM
 			message "Song at 0x\{songStart} was made for a newer version of SMPS2ASM (this is version \{SMPS2ASMVer}, but song wants at least version \{SourceSMPS2ASM})."
 		endif

@@ -2,52 +2,89 @@
 ; Sonic Clean Engine (SCE)
 ; ===========================================================================
 
-; Assembly options
-ZoneCount:				= 1	; discrete zones are: DEZ
-GameDebug:				= 1	; if 1, enable debug mode for Sonic
-GameDebugAlt:			= 0	; if 1, enable alt debug mode for Sonic
-Lagometer:				= 1	; if 1, enable debug lagometer
-ExtendedCamera:			= 0	; if 1, enable extended camera
-RollInAir:				= 1	; if 1, enable roll in air for Sonic
-OptimiseStopZ80:			= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for controllers(ignores sound driver)
-ZeroOffsetOptimization:	= 1	; if 1, makes a handful of zero-offset instructions smaller
-AllOptimizations:			= 1	; if 1, enables all optimizations
-EnableSRAM:				= 0	; change to 1 to enable SRAM
-BackupSRAM:			= 0
-AddressSRAM:			= 0	; 0 = odd+even; 2 = even only; 3 = odd only
-; ---------------------------------------------------------------------------
-
-; Assembler code
-		cpu 68000
-		include "MacroSetup.asm"			; include a few basic macros
-		include "Macros.asm"				; include some simplifying macros and functions
-		include "Constants.asm"			; include constants
-		include "Variables.asm"			; include RAM variables
-		include "Sound/Definitions.asm"	; include sound driver macros and functions
-		include "Misc Data/Debugger/ErrorHandler/Debugger.asm"	; include debugger macros and functions
+		; assembler code
+		CPU 68000
+		include "Settings.asm"										; include assembly options
+		include "MacroSetup.asm"									; include a few basic macros
+		include "Macros.asm"										; include some simplifying macros and functions
+		include "Constants.asm"									; include constants
+		include "Variables.asm"									; include RAM variables
+		include "Sound/Definitions.asm"							; include sound driver macros and functions
+		include "Misc Data/Debugger/ErrorHandler/Debugger.asm"		; include debugger macros and functions
 ; ---------------------------------------------------------------------------
 
 StartOfROM:
+
 	if * <> 0
 		fatal "StartOfROM was $\{*} but it should be 0"
 	endif
+
 Vectors:
-		dc.l System_stack, EntryPoint, BusError, AddressError		; 0
-		dc.l IllegalInstr, ZeroDivide, ChkInstr, TrapvInstr			; 4
-		dc.l PrivilegeViol, Trace, Line1010Emu, Line1111Emu		; 8
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept	; 12
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept	; 16
-		dc.l ErrorExcept, ErrorExcept, ErrorExcept, ErrorExcept	; 20
-		dc.l ErrorExcept, ErrorTrap, ErrorTrap, ErrorTrap			; 24
-		dc.l H_int_jump, ErrorTrap, V_int_jump, ErrorTrap		; 28
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 32
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 36
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 40
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 44
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 48
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 52
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 56
-		dc.l ErrorTrap, ErrorTrap, ErrorTrap, ErrorTrap			; 60
+		dc.l System_stack			; initial stack pointer value
+		dc.l EntryPoint			; start of program
+		dc.l BusError				; bus error
+		dc.l AddressError			; address error (4)
+		dc.l IllegalInstr			; illegal instruction
+		dc.l ZeroDivide			; division by zero
+		dc.l ChkInstr				; chk exception
+		dc.l TrapvInstr			; trapv exception (8)
+		dc.l PrivilegeViol			; privilege violation
+		dc.l Trace				; trace exception
+		dc.l Line1010Emu			; line-a emulator
+		dc.l Line1111Emu			; line-f emulator (12)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved) (16)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved) (20)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved)
+		dc.l ErrorExcept			; unused (reserved) (24)
+		dc.l ErrorExcept			; spurious exception
+		dc.l ErrorTrap			; irq level 1
+		dc.l ErrorTrap			; irq level 2
+		dc.l ErrorTrap			; irq level 3 (28)
+		dc.l H_int_jump			; irq level 4 (horizontal retrace interrupt)
+		dc.l ErrorTrap			; irq level 5
+		dc.l V_int_jump			; irq level 6 (vertical retrace interrupt)
+		dc.l ErrorTrap			; irq level 7 (32)
+		dc.l ErrorTrap			; trap #00 exception
+		dc.l ErrorTrap			; trap #01 exception
+		dc.l ErrorTrap			; trap #02 exception
+		dc.l ErrorTrap			; trap #03 exception (36)
+		dc.l ErrorTrap			; trap #04 exception
+		dc.l ErrorTrap			; trap #05 exception
+		dc.l ErrorTrap			; trap #06 exception
+		dc.l ErrorTrap			; trap #07 exception (40)
+		dc.l ErrorTrap			; trap #08 exception
+		dc.l ErrorTrap			; trap #09 exception
+		dc.l ErrorTrap			; trap #10 exception
+		dc.l ErrorTrap			; trap #11 exception (44)
+		dc.l ErrorTrap			; trap #12 exception
+		dc.l ErrorTrap			; trap #13 exception
+		dc.l ErrorTrap			; trap #14 exception
+		dc.l ErrorTrap			; trap #15 exception (48)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved) (52)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved) (56)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved) (60)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved)
+		dc.l ErrorTrap			; unused (reserved) (64)
+
 Header:			dc.b "SEGA GENESIS    "
 Copyright:		dc.b "(C)SEGA XXXX.XXX"
 Domestic_Name:	dc.b "SONIC THE               HEDGEHOG                "
@@ -73,7 +110,7 @@ CartRAMEndLoc:	dc.l $20202020	; SRAM end ($20xxxx)
 	endif
 Modem_Info:		dc.b "                                                    "
 Country_Code:	dc.b "JUE             "
-EndOfHeader:
+EndOfHeader
 
 ; ---------------------------------------------------------------------------
 ; VDP Subroutine

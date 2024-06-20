@@ -14,7 +14,7 @@
                             "length": 1
                         }
                     ],
-                    "format": "Sonic 3&K Sonic.js",
+                    "format": "Sonic 3&K Player.js",
                     "art": {
                         "path": "Objects/Sonic/Uncompressed Art/Sonic.unc",
                         "compression": "Uncompressed",
@@ -40,7 +40,7 @@
             "name": "Shields",
             "children": [
                 {
-                    "format": "Sonic 3&K Sonic.js",
+                    "format": "Sonic 3&K Player.js",
                     "name": "Fire Shield",
                     "palettes": [
                         {
@@ -65,7 +65,7 @@
                     "uuid": "4b0ca86f-7aa1-4e9d-a6fe-53662e690e3c"
                 },
                 {
-                    "format": "Sonic 3&K Sonic.js",
+                    "format": "Sonic 3&K Player.js",
                     "name": "Lightning Shield",
                     "palettes": [
                         {
@@ -90,7 +90,7 @@
                     "uuid": "0ca86f7a-a1ce-4de6-be53-662e690e3c9e"
                 },
                 {
-                    "format": "Sonic 3&K Sonic.js",
+                    "format": "Sonic 3&K Player.js",
                     "name": "Bubble Shield",
                     "palettes": [
                         {
@@ -115,7 +115,7 @@
                     "uuid": "a86f7aa1-ce9d-46fe-9366-2e690e3c9e23"
                 },
                 {
-                    "format": "Sonic 3&K Sonic.js",
+                    "format": "Sonic 3&K Player.js",
                     "name": "Insta-Shield",
                     "palettes": [
                         {
@@ -140,7 +140,7 @@
                     "uuid": "7aa1ce9d-e6fe-4366-ae69-0e3c9e238fec"
                 },
                 {
-                    "format": "Sonic 3&K Sonic.js",
+                    "format": "Sonic 3&K Player.js",
                     "name": "Invincibility",
                     "palettes": [
                         {
