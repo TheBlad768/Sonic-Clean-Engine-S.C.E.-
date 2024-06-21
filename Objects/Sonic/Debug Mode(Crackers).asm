@@ -25,6 +25,7 @@ Debug_Mode:
 		moveq	#0,d0
 		move.w	d0,priority(a0)
 		move.b	d0,(Scroll_lock).w
+		move.b	d0,(Deform_lock).w
 		move.b	d0,(WindTunnel_flag).w
 		move.w	d0,(v_Breathing_bubbles+objoff_30).w		; clear drowning timer
 		bclr	#Status_InAir,status(a0)
