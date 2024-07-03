@@ -15,7 +15,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-SolidObject:
 SolidObjectFull:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
@@ -99,15 +98,13 @@ loc_1DD04:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_1DD0E:
 SolidObjectFullSloped_Spring:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 
-sub_1DD24:
 SolidObjectFullSloped_Spring_1P:
 		btst	d6,status(a0)
-		beq.w	loc_1DECE
+		beq.w	SlopedSolid_cont
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)
@@ -138,13 +135,13 @@ loc_1DD5C:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_1DD6E:
+SolidObjectDoubleSloped:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 
-sub_1DD84:
+SolidObjectDoubleSloped_1P:
 		btst	d6,status(a0)
-		beq.w	loc_1DF28
+		beq.w	DoubleSlopedSolid_cont
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)
@@ -172,15 +169,13 @@ loc_1DDBC:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_1DDC6:
 SolidObjectFullSloped:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 
-sub_1DDDC:
 SolidObjectFullSloped_1P:
 		btst	d6,status(a0)
-		beq.w	loc_1DECE
+		beq.w	SlopedSolid_cont
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)
@@ -214,10 +209,9 @@ SolidObjectFull_Offset:
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
 
-sub_1DE36:
 SolidObjectFull_Offset_1P:
 		btst	d6,status(a0)
-		beq.s	loc_1DE8C
+		beq.s	OffsetSolid_cont
 		btst	#Status_InAir,status(a1)
 		bne.s	loc_1DE58
 		move.w	x_pos(a1),d0
@@ -250,7 +244,7 @@ loc_1DE6C:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1DE8C:
+OffsetSolid_cont:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -276,7 +270,7 @@ loc_1DE8C:
 		bra.w	SolidObject_ChkBounds
 ; ---------------------------------------------------------------------------
 
-loc_1DECE:
+SlopedSolid_cont:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -313,7 +307,7 @@ loc_1DECE:
 		bra.w	SolidObject_ChkBounds
 ; ---------------------------------------------------------------------------
 
-loc_1DF28:
+DoubleSlopedSolid_cont:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -324,11 +318,11 @@ loc_1DF28:
 		bhi.w	SolidObject_TestClearPush
 		move.w	d0,d5
 		btst	#0,render_flags(a0)
-		beq.s	loc_1DF4E
+		beq.s	.notflipx
 		not.w	d5
 		add.w	d3,d5
 
-loc_1DF4E:
+.notflipx
 		andi.w	#$FFFE,d5
 		move.b	(a2,d5.w),d3
 		move.b	1(a2,d5.w),d2
@@ -402,7 +396,7 @@ SolidObject_cont:
 SolidObject_ChkBounds:
 		tst.b	object_control(a1)
 		bmi.w	SolidObject_TestClearPush
-		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.w	SolidObject_NoCollision					; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.w	SolidObject_NoCollision
@@ -624,7 +618,7 @@ loc_1E1AA:
 loc_1E1CA:
 		tst.b	object_control(a1)
 		bmi.s	locret_1E1F2
-		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.s	locret_1E1F2								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E1F2
@@ -642,7 +636,7 @@ locret_1E1F2:
 loc_1E1F4:
 		tst.b	object_control(a1)
 		bmi.s	locret_1E21C
-		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.s	locret_1E21C								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E21C
@@ -911,7 +905,7 @@ loc_1E45A:
 		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
 		bmi.s	locret_1E4D4
-		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.s	locret_1E4D4								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E4D4
@@ -960,7 +954,7 @@ loc_1E4D6:
 		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
 		bmi.s	locret_1E4D4
-		cmpi.b	#id_PlayerDeath,routine(a1)				; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.s	locret_1E4D4								; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_1E4D4

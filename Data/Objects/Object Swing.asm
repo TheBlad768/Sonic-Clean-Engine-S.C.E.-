@@ -337,22 +337,18 @@ Refresh_ChildPositionAdjusted_Animate2:
 		move.w	d0,y_pos(a0)
 		rts
 
-; ---------------------------------------------------------------------------
-; Set velx track Sonic subroutine
-; ---------------------------------------------------------------------------
-
 ; =============== S U B R O U T I N E =======================================
 
-Set_VelocityXTrackSonic:
-		bsr.w	Find_SonicObject
+sub_7675C:
+		movea.w	parent3(a0),a1
+		move.w	x_pos(a1),x_pos(a0)
+		move.w	y_pos(a1),y_pos(a0)
 		bclr	#0,render_flags(a0)
-		tst.w	d0
-		beq.s	.setxv
-		neg.w	d4
+		btst	#0,render_flags(a1)
+		beq.s	.return
 		bset	#0,render_flags(a0)
 
-.setxv
-		move.w	d4,x_vel(a0)
+.return
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -502,7 +498,6 @@ Chase_Object2:
 ; =============== S U B R O U T I N E =======================================
 
 Shot_Object:
-Shot_ObjectInSonic:
 		lea	(Player_1).w,a1
 
 Shot_Object_2:

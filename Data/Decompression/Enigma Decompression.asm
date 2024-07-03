@@ -10,7 +10,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-EniDec:
 Eni_Decomp:
 		move.l	a1,-(sp)					; save current RAM buffer (we save RAM buffer so that we don't duplicate it after decompressing is done)
 		movea.w	d0,a3					; store starting art tile

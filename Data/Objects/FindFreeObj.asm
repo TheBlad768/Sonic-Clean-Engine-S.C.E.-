@@ -6,9 +6,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-FindFreeObj:
-AllocateObject:
-SingleObjLoad:
 Create_New_Sprite:
 		lea	(Dynamic_object_RAM).w,a1				; start address for object RAM
 		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d0
@@ -21,10 +18,7 @@ Create_New_Sprite:
 
 ; =============== S U B R O U T I N E =======================================
 
-SingleObjLoad2:
-FindNextFreeObj:
 Create_New_Sprite3:
-AllocateObjectAfterCurrent:
 		movea.w	a0,a1								; load current object to a1
 		move.w	#Dynamic_object_RAM_end,d0
 		sub.w	a0,d0
@@ -42,11 +36,13 @@ AllocateObjectAfterCurrent:
 ; ---------------------------------------------------------------------------
 
 .find_first_sprite_table
-.a	set	Dynamic_object_RAM
-.b	set	Dynamic_object_RAM_end
-.c	set	.b											; begin from bottom of array and decrease backwards
+
+		set	.a,Dynamic_object_RAM
+		set	.b,Dynamic_object_RAM_end
+		set	.c,.b										; begin from bottom of array and decrease backwards
+
 		rept	(.b-.a)/$40								; repeat for all slots, minus exception
-.c	set		.c-$40									; address for previous $40 (also skip last part)
-		dc.b	(.b-.c-1)/object_size-1						; write possible slots according to object_size division + hack + dbf hack
+			set	.c,.c-$40								; address for previous $40 (also skip last part)
+			dc.b	(.b-.c-1)/object_size-1					; write possible slots according to object_size division + hack + dbf hack
 		endr
 	even

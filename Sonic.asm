@@ -92,10 +92,10 @@ Overseas_Name:	dc.b "SONIC THE               HEDGEHOG                "
 Serial_Number:	dc.b "GM MK-0000 -00"
 Checksum:		dc.w 0
 Input:			dc.b "J               "
-RomStartLoc:		dc.l StartOfROM
-RomEndLoc:		dc.l EndOfROM-1
-RamStartLoc:		dc.l (RAM_start&$FFFFFF)
-RamEndLoc:		dc.l (RAM_start&$FFFFFF)+$FFFF
+ROMStartLoc:	dc.l StartOfROM
+ROMEndLoc:		dc.l EndOfROM-1
+RAMStartLoc:	dc.l (RAM_start&$FFFFFF)
+RAMEndLoc:		dc.l (RAM_start&$FFFFFF)+$FFFF
 SRAMSupport:
 	if EnableSRAM=1
 CartRAM_Info:	dc.b "RA"
@@ -116,25 +116,25 @@ EndOfHeader
 ; VDP Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/VDP.asm"
+		include "Data/Main/VDP.asm"
 
 ; ---------------------------------------------------------------------------
 ; Controllers Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Controllers.asm"
+		include "Data/Main/Controllers.asm"
 
 ; ---------------------------------------------------------------------------
 ; DMA Queue Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/DMA Queue.asm"
+		include "Data/Main/DMA Queue.asm"
 
 ; ---------------------------------------------------------------------------
 ; Plane Map To VRAM Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Plane Map To VRAM.asm"
+		include "Data/Main/Plane Map To VRAM.asm"
 
 ; ---------------------------------------------------------------------------
 ; Decompression Subroutine
@@ -154,49 +154,49 @@ EndOfHeader
 ; Fading Palettes Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Fading Palette.asm"
+		include "Data/Main/Fading Palette.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load Palettes Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Load Palette.asm"
+		include "Data/Main/Load Palette.asm"
 
 ; ---------------------------------------------------------------------------
 ; Wait VSync Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Wait VSync.asm"
+		include "Data/Main/Wait VSync.asm"
 
 ; ---------------------------------------------------------------------------
 ; Pause Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Pause Game.asm"
+		include "Data/Main/Pause Game.asm"
 
 ; ---------------------------------------------------------------------------
 ; Random Number Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Random Number.asm"
+		include "Data/Main/Random Number.asm"
 
 ; ---------------------------------------------------------------------------
 ; Oscillatory Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Oscillatory Routines.asm"
+		include "Data/Main/Oscillatory Routines.asm"
 
 ; ---------------------------------------------------------------------------
 ; HUD Update Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/HUD Update.asm"
+		include "Data/Main/HUD Update.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load Text Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Load Text.asm"
+		include "Data/Main/Load Text.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects Process Subroutines
@@ -209,7 +209,7 @@ EndOfHeader
 ; Load Objects Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Load Objects.asm"
+		include "Data/Main/Load Objects.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load HUD Subroutine
@@ -221,31 +221,31 @@ EndOfHeader
 ; Load Rings Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Load Rings.asm"
+		include "Data/Main/Load Rings.asm"
 
 ; ---------------------------------------------------------------------------
 ; Draw Level Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/DrawLevel.asm"
+		include "Data/Main/DrawLevel.asm"
 
 ; ---------------------------------------------------------------------------
 ; Deform Layer Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/DeformBgLayer.asm"
+		include "Data/Main/DeformBgLayer.asm"
 
 ; ---------------------------------------------------------------------------
 ; Parallax Engine Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Deformation Script.asm"
+		include "Data/Main/Deformation Script.asm"
 
 ; ---------------------------------------------------------------------------
 ; Shake Screen Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Shake Screen.asm"
+		include "Data/Main/Shake Screen.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects Subroutines
@@ -282,43 +282,43 @@ EndOfHeader
 ; Animate Palette Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Animate Palette.asm"
+		include "Data/Main/Animate Palette.asm"
 
 ; ---------------------------------------------------------------------------
 ; Animate Level Graphics Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Animate Tiles.asm"
+		include "Data/Main/Animate Tiles.asm"
 
 ; ---------------------------------------------------------------------------
 ; Level Setup Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Level Setup.asm"
+		include "Data/Main/Level Setup.asm"
 
 ; ---------------------------------------------------------------------------
 ; Get Level Size Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/GetLevelSizeStart.asm"
+		include "Data/Main/GetLevelSizeStart.asm"
 
 ; ---------------------------------------------------------------------------
 ; Resize Events Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/DoResizeEvents.asm"
+		include "Data/Main/DoResizeEvents.asm"
 
 ; ---------------------------------------------------------------------------
 ; Handle On screen Water Height Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/HandleOnscreenWaterHeight.asm"
+		include "Data/Main/HandleOnscreenWaterHeight.asm"
 
 ; ---------------------------------------------------------------------------
 ; Interrupt Handler Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Interrupt Handler.asm"
+		include "Data/Main/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
 ; Touch Response Subroutine
@@ -371,8 +371,18 @@ EndOfHeader
 ; Security Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Misc/Security Startup 1.asm"
-		include "Data/Misc/Security Startup 2.asm"
+		include "Data/Main/Security Startup 1.asm"
+		include "Data/Main/Security Startup 2.asm"
+
+	if ChecksumCheck
+
+; ---------------------------------------------------------------------------
+; Checksum Subroutine
+; ---------------------------------------------------------------------------
+
+		include "Data/Main/Checksum.asm"
+
+	endif
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load player object data

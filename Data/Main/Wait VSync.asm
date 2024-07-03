@@ -5,10 +5,11 @@
 ; =============== S U B R O U T I N E =======================================
 
 Wait_VSync:
-DelayProgram:
+
 	if Lagometer
 		move.w	#$9100,(VDP_control_port).l	; window H position at default
 	endif
+
 		enableInts
 
 .wait

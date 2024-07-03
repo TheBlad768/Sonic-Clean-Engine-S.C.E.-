@@ -1,7 +1,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjectFall:
 MoveSprite:
 		movem.w	x_vel(a0),d0/d2			; load xy speed
 		ext.l	d0
@@ -15,7 +14,6 @@ MoveSprite:
 
 ; =============== S U B R O U T I N E =======================================
 
-SpeedToPos:
 MoveSprite2:
 		movem.w	x_vel(a0),d0/d2			; load xy speed
 		ext.l	d0

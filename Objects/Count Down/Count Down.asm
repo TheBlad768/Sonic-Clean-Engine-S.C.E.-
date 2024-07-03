@@ -17,7 +17,7 @@ Obj_AirCountdown:
 		lea	(Player_1).w,a2									; a2=character
 		tst.w	objoff_30(a0)
 		bne.w	loc_1857C
-		cmpi.b	#id_PlayerDeath,routine(a2)					; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a2)					; has player just died?
 		bhs.w	locret_1857A									; if yes, branch
 		btst	#Status_BublShield,status_secondary(a2)
 		bne.w	locret_1857A
@@ -77,7 +77,7 @@ AirCountdown_ReduceAir:
 		clr.l	x_vel(a2)
 		clr.w	ground_vel(a2)
 		move.b	#id_Drown,anim(a2)
-		move.b	#id_PlayerDrown,routine(a2)
+		move.b	#PlayerID_Drown,routine(a2)
 		cmpa.w	#Player_1,a2
 		bne.s	.notp1
 		move.l	priority(a2),(Debug_saved_priority).w			; save priority and art_tile
@@ -95,7 +95,7 @@ loc_1857C:
 		move.b	#id_Drown,anim(a2)
 		subq.w	#1,objoff_30(a0)
 		bne.s	loc_18594
-		move.b	#id_PlayerDeath,routine(a2)
+		move.b	#PlayerID_Death,routine(a2)
 
 locret_1858E:
 		rts

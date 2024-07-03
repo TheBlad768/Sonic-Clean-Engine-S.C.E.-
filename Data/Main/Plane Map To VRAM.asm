@@ -4,7 +4,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-ClearScreen:
 Clear_DisplayData:
 		stopZ80
 		lea	(VDP_control_port).l,a5
@@ -28,7 +27,7 @@ Clear_DisplayData:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM_3:
-		move.l	#vdpCommDelta(planeLocH32(0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(32,0,1)),d4			; row increment value
 		bra.s	Plane_Map_To_VRAM.main
 
 ; ---------------------------------------------------------------------------
@@ -43,7 +42,7 @@ Plane_Map_To_VRAM_3:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM_2:
-		move.l	#vdpCommDelta(planeLocH80(0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(128,0,1)),d4			; row increment value
 		bra.s	Plane_Map_To_VRAM.main
 
 ; ---------------------------------------------------------------------------
@@ -57,11 +56,8 @@ Plane_Map_To_VRAM_2:
 
 ; =============== S U B R O U T I N E =======================================
 
-TilemapToVRAM:
-ShowVDPGraphics:
-PlaneMapToVRAM:
 Plane_Map_To_VRAM:
-		move.l	#vdpCommDelta(planeLocH40(0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4			; row increment value
 
 .main
 		lea	(VDP_data_port).l,a6
@@ -109,7 +105,7 @@ Copy_Listed_Data_To_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_Add_VRAM:
-		move.l	#vdpCommDelta(planeLocH40(0,1)),d4
+		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4
 
 .main
 		lea	(VDP_data_port).l,a6
@@ -139,7 +135,7 @@ Plane_Map_To_Add_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Plane_Map:
-		move.l	#vdpCommDelta(planeLocH40(0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4			; row increment value
 
 .main
 		lea	(VDP_data_port).l,a6
@@ -211,7 +207,7 @@ RAM_Map_Data_To_VDP:
 		move.w	d1,d3
 		bsr.s	RAM_Map_Data_Copy
 		movea.l	a2,a1
-		addi.l	#vdpCommDelta(planeLocH40(0,1)),d0
+		addi.l	#vdpCommDelta(planeLoc(64,0,1)),d0
 		dbf	d2,.loop
 		rts
 

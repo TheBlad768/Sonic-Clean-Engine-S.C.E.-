@@ -15,13 +15,13 @@ Render_HUD:
 		bne.s	.right									; if 2, branch
 
 .init
-		move.w	#16,HUD_RAM.Xpos-HUD_RAM(a1)
-		move.w	#$80+$80+8,HUD_RAM.Ypos-HUD_RAM(a1)
+		move.w	#16,HUD_RAM.xpos-HUD_RAM(a1)
+		move.w	#$80+$80+8,HUD_RAM.ypos-HUD_RAM(a1)
 		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)			; set 2
 
 .right
-		addq.w	#2,HUD_RAM.Xpos-HUD_RAM(a1)
-		cmpi.w	#$80+16,HUD_RAM.Xpos-HUD_RAM(a1)
+		addq.w	#2,HUD_RAM.xpos-HUD_RAM(a1)
+		cmpi.w	#$80+16,HUD_RAM.xpos-HUD_RAM(a1)
 		bne.s	.check
 		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)			; set 3
 
@@ -31,8 +31,8 @@ Render_HUD:
 		st	HUD_RAM.status-HUD_RAM(a1)
 
 .left
-		subq.w	#2,HUD_RAM.Xpos-HUD_RAM(a1)
-		cmpi.w	#16,HUD_RAM.Xpos-HUD_RAM(a1)
+		subq.w	#2,HUD_RAM.xpos-HUD_RAM(a1)
+		cmpi.w	#16,HUD_RAM.xpos-HUD_RAM(a1)
 		bhs.s	.process
 		clr.b	HUD_RAM.status-HUD_RAM(a1)
 
@@ -50,8 +50,8 @@ Render_HUD:
 		addq.b	#2*2,d4									; hide time counter
 
 .draw
-		move.w	HUD_RAM.Xpos-HUD_RAM(a1),d0			; xpos
-		move.w	HUD_RAM.Ypos-HUD_RAM(a1),d1			; ypos
+		move.w	HUD_RAM.xpos-HUD_RAM(a1),d0			; xpos
+		move.w	HUD_RAM.ypos-HUD_RAM(a1),d1			; ypos
 		move.w	#make_art_tile(ArtTile_HUD,0,1),d5			; VRAM
 		lea	Map_HUD(pc),a1
 		adda.w	(a1,d4.w),a1
@@ -63,18 +63,6 @@ Render_HUD:
 
 .return
 		rts
-; ---------------------------------------------------------------------------
-
-LUT_HUDCentiseconds:
-
-		set	.a,0
-
-	rept 60
-		dc.b .a * 100 / 60
-		set	.a,.a + 1
-	endr
-
-	even
 ; ---------------------------------------------------------------------------
 
 		include	"Objects/HUD/Object Data/Map - HUD.asm"

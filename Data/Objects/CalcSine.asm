@@ -5,7 +5,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-CalcSine:
 GetSineCosine:
 		andi.w	#$FF,d0
 		add.w	d0,d0

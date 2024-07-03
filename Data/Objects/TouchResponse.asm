@@ -305,7 +305,7 @@ Touch_Enemy:
 		neg.w	x_vel(a0)								; bounce player directly off boss
 		neg.w	y_vel(a0)
 		neg.w	ground_vel(a0)
-		move.b	collision_flags(a1),collision_restore_flags(a1)	; save current collision
+		move.b	collision_flags(a1),collision_saved_flags(a1)	; save current collision
 		clr.b	collision_flags(a1)
 		subq.b	#1,boss_hitcount2(a1)
 		bne.s	.bossnotdefeated
@@ -432,7 +432,6 @@ Touch_Hurt:
 
 ; =============== S U B R O U T I N E =======================================
 
-HurtSonic:
 HurtCharacter:
 		move.w	(Ring_count).w,d0
 		btst	#Status_Shield,status_secondary(a0)			; does Sonic have shield?
@@ -452,7 +451,7 @@ HurtCharacter:
 		andi.b	#$8E,status_secondary(a0)
 
 .bounce
-		move.b	#id_PlayerHurt,routine(a0)
+		move.b	#PlayerID_Hurt,routine(a0)
 		bsr.w	Sonic_TouchFloor
 		bset	#Status_InAir,status(a0)
 		move.l	#words_to_long(-$200,-$400),x_vel(a0)		; make Sonic bounce away from the object
@@ -489,9 +488,13 @@ HurtCharacter:
 
 		; next
 		bra.s	Kill_Character.main
+
+; ---------------------------------------------------------------------------
+; Killing Sonic/Tails/Knuckles subroutine
 ; ---------------------------------------------------------------------------
 
-KillSonic:
+; =============== S U B R O U T I N E =======================================
+
 Kill_Character:
 		tst.w	(Debug_placement_mode).w				; is debug mode active?
 		bne.s	.dontdie									; if yes, branch
@@ -500,7 +503,7 @@ Kill_Character:
 .main
 		clr.b	status_secondary(a0)
 		clr.b	status_tertiary(a0)
-		move.b	#id_PlayerDeath,routine(a0)
+		move.b	#PlayerID_Death,routine(a0)
 		move.w	d0,-(sp)
 		bsr.w	Sonic_TouchFloor
 		move.w	(sp)+,d0

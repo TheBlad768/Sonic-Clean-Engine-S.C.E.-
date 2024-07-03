@@ -384,8 +384,7 @@ GetFloorPosition:
 		lsr.w	#4,d1
 		add.w	8(a1,d0.w),d1
 		adda.w	d1,a1
-		moveq	#-1,d1				; RAM_start (Chunk_table)
-		clr.w	d1					; d1 = $FFFF0000
+		moveq	#0,d1
 		move.b	(a1),d1
 		lsl.w	#7,d1					; multiply by $80
 		move.w	d2,d0
@@ -393,7 +392,8 @@ GetFloorPosition:
 		add.w	d0,d1
 		andi.w	#$E,d4
 		add.w	d4,d1
-		movea.l	d1,a1
+		movea.l	(Level_chunk_addr_ROM).w,a1
+		adda.w	d1,a1
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -1091,13 +1091,9 @@ SonicOnObjHitFloor2:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjHitFloor:
-ObjFloorDist:
 ObjCheckFloorDist:
 		move.w	x_pos(a0),d3
 
-ObjHitFloor2:
-ObjFloorDist2:
 ObjCheckFloorDist2:
 		move.w	y_pos(a0),d2			; get object position
 		move.b	y_radius(a0),d0		; get object height
@@ -1228,8 +1224,6 @@ sub_FAA4:
 
 ; =============== S U B R O U T I N E =======================================
 
-; ObjHitWall:
-ObjHitWallRight:
 ObjCheckRightWallDist:
 		add.w	x_pos(a0),d3
 
@@ -1362,7 +1356,6 @@ CheckCeilingDist_WithRadius:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjHitCeiling:
 ObjCheckCeilingDist:
 		moveq	#$D,d5
 
@@ -1562,8 +1555,6 @@ sub_FDEC:
 
 ; =============== S U B R O U T I N E =======================================
 
-; ObjHitWall2:
-ObjHitWallLeft:
 ObjCheckLeftWallDist:
 		add.w	x_pos(a0),d3
 		eori.w	#$F,d3	; this was not here in S1/S2, resulting in a bug

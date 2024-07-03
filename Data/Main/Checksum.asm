@@ -1,0 +1,39 @@
+; ---------------------------------------------------------------------------
+; Checksum check
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Test_Checksum:
+		movea.w	#EndOfHeader,a0										; start checking bytes after the header ($200)
+		move.l	(ROMEndLoc).w,d1									; stop at end of ROM
+		sub.l	a0,d1
+		lsr.l	#6,d1
+		moveq	#0,d0
+
+.loop
+
+	rept 32
+		add.w	(a0)+,d0
+	endr
+
+		dbf	d1,.loop
+
+		; check
+		cmp.w	(Checksum).w,d0										; compare correct checksum to the one in ROM
+		beq.s	.exit													; if they match, branch
+
+		; failed
+		move.l	#vdpComm($0000,CRAM,WRITE),(VDP_control_port).l	; set VDP to CRAM write
+		moveq	#64-1,d7
+
+.fill
+		move.w	#$E,(VDP_data_port).l								; fill palette with red
+		dbf	d7,.fill													; repeat 64 more times
+
+		; freeze
+		bra.s	*
+; ---------------------------------------------------------------------------
+
+.exit
+		rts

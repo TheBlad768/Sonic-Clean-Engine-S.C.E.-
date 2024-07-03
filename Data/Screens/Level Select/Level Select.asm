@@ -41,7 +41,7 @@ vLevelSelect_horizontal_count:		ds.w $10
 
 ; =============== S U B R O U T I N E =======================================
 
-LevelSelect_Screen:
+LevelSelectScreen:
 		music	mus_Stop											; stop music
 		jsr	(Clear_Kos_Module_Queue).w								; clear KosM PLCs
 		ResetDMAQueue												; clear DMA queue
@@ -59,7 +59,8 @@ LevelSelect_Screen:
 		clearRAM Lag_frame_count, Lag_frame_count_end				; clear variables
 		clearRAM Camera_RAM, Camera_RAM_end						; clear the camera RAM
 		clearRAM Oscillating_variables, Oscillating_variables_end			; clear variables
-		moveq	#0,d0
+
+		; clear
 		move.b	d0,(Water_full_screen_flag).w
 		move.b	d0,(Water_flag).w
 		move.w	d0,(Current_zone_and_act).w
@@ -116,7 +117,7 @@ LevelSelect_Screen:
 		bpl.s	.loop
 
 		; load zone and act
-		move.b	#id_LevelScreen,(Game_mode).w						; set screen mode to level
+		move.b	#GameModeID_LevelScreen,(Game_mode).w				; set screen mode to Level
 		move.w	(vLevelSelect_vertical_count).w,d2
 		move.b	d2,-(sp)												; multiply by $100
 		move.w	(sp)+,d2

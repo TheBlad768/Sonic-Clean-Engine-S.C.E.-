@@ -224,15 +224,15 @@ Get_LevelChunkColumn:
 		asr.w	#7,d3
 		add.w	(a3,d1.w),d3
 		adda.w	d3,a4
-		moveq	#-1,d3				; RAM_start (Chunk_table)
-		clr.w	d3					; d3 = $FFFF0000
+		moveq	#0,d3
 		move.b	(a4),d3
 		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		asr.w	#3,d4
 		andi.w	#$E,d4
 		add.w	d4,d3
-		movea.l	d3,a5
+		movea.l	(Level_chunk_addr_ROM).w,a5
+		adda.w	d3,a5
 
 Get_LevelChunkColumn_Return:
 		rts
@@ -413,14 +413,14 @@ Get_LevelAddrChunkRow:
 		adda.w	(a3,d3.w),a4
 
 Get_ChunkRow:
-		moveq	#-1,d3				; RAM_start (Chunk_table)
-		clr.w	d3					; d3 = $FFFF0000
+		moveq	#0,d3
 		move.b	(a4,d1.w),d3
 		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		andi.w	#$70,d4
 		add.w	d4,d3
-		movea.l	d3,a5
+		movea.l	(Level_chunk_addr_ROM).w,a5
+		adda.w	d3,a5
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -536,7 +536,7 @@ Refresh_PlaneDirect2_BG:
 
 Refresh_PlaneDirect_BG:
 		disableInts
-		moveq	#$F,d2
+		moveq	#$F-1,d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)			; redraws the entire plane in one go during 68k execution
@@ -947,6 +947,37 @@ loc_4F382:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Load level data
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+LoadLevelLoadBlock:
+
+		; load primary level art
+		movea.l	(Level_data_addr_RAM.8x8data1).w,a1
+		move.w	(a1),d4											; save size
+		moveq	#tiles_to_bytes(0),d2								; VRAM
+		bsr.w	Queue_Kos_Module
+
+		; load secondary level art
+		move.l	(Level_data_addr_RAM.8x8data2).w,d0
+;		andi.l	#$FFFFFF,d0										; temporary unused
+		beq.s	.waitplc
+		movea.l	d0,a1
+		move.w	d4,d2											; return size for the starting position
+		bsr.w	Queue_Kos_Module
+
+.waitplc
+		move.b	#VintID_Fade,(V_int_routine).w
+		bsr.w	Process_Kos_Queue
+		bsr.w	Wait_VSync
+		bsr.w	Process_Kos_Module_Queue
+		tst.w	(Kos_modules_left).w
+		bne.s	.waitplc
+		rts
+
+; ---------------------------------------------------------------------------
 ; Clear switches RAM
 ; ---------------------------------------------------------------------------
 
@@ -996,28 +1027,6 @@ Load_Solids2:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Load level data
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-LoadLevelLoadBlock:
-
-		; load level art
-		movea.l	(Level_data_addr_RAM.8x8data).w,a1
-		moveq	#tiles_to_bytes(0),d2								; VRAM
-		bsr.w	Queue_Kos_Module
-
-.waitplc
-		move.b	#VintID_Fade,(V_int_routine).w
-		bsr.w	Process_Kos_Queue
-		bsr.w	Wait_VSync
-		bsr.w	Process_Kos_Module_Queue
-		tst.w	(Kos_modules_left).w
-		bne.s	.waitplc
-		rts
-
-; ---------------------------------------------------------------------------
 ; Load level data 2
 ; ---------------------------------------------------------------------------
 
@@ -1028,18 +1037,28 @@ LoadLevelLoadBlock2:
 		bsr.w	LoadPLC_Raw_KosM
 
 .skipPLC
-		lea	(Level_data_addr_RAM.8x8data).w,a2
+		lea	(Level_data_addr_RAM.8x8data1).w,a2
 		pea	(a2)													; save a2
-		addq.w	#4,a2
+		addq.w	#4*2,a2											; skip level art
 		move.l	(a2)+,(Block_table_addr_ROM).w
-		movea.l	(a2)+,a0
+		move.l	(a2)+,(Level_chunk_addr_ROM).w
+
+		; load primary level chunks
+		move.l	(a2)+,d0
+		beq.s	.notsec
+		movea.l	d0,a0
 		lea	(RAM_start).l,a1
 		bsr.w	Kos_Decomp
-		bsr.s	Load_Level
+
+		; load secondary level chunks
+		movea.l	(a2)+,a0
+		bsr.w	Kos_Decomp
+
+.notsec
 		movea.l	(sp)+,a2											; restore a2
 		moveq	#0,d0
 		move.b	(a2),d0
-		bra.w	LoadPalette
+		bsr.w	LoadPalette
 
 ; ---------------------------------------------------------------------------
 ; Load level layout
@@ -1064,9 +1083,11 @@ Load_Level2:
 
 LoadLevelPointer:
 		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0											; multiply by $68
+		ror.b	#2,d0											; multiply by $74
 		move.w	d0,d1
-		lsr.w	d1
+		lsr.w	#2,d1
+		add.w	d1,d0
+		add.w	d1,d0
 		add.w	d1,d0
 		lsr.w	#2,d1
 		add.w	d1,d0
@@ -1080,17 +1101,23 @@ LoadLevelPointer:
 
 		; if you make a different buffer size, you need to change this code
 
-	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$68
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$74
 		fatal "Warning! The buffer size is different!"
 	endif
 
 		set	.a,0
 
-	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $68 bytes
+	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $74 bytes
 		movem.l	(a2)+,d0-d7
 		movem.l	d0-d7,.a(a3)										; copy $20 bytes
 		set	.a,.a + $20
 	endr
+
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&$10
+		movem.l	(a2)+,d0-d3
+		movem.l	d0-d3,.a(a3)										; copy $10 bytes
+		set	.a,.a + $10
+	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&8
 		movem.l	(a2)+,d0-d1

@@ -1,7 +1,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-LoadObjects_Data:
 SetUp_ObjAttributes:
 		move.l	(a1)+,mappings(a0)			; mapping offset
 
@@ -9,7 +8,6 @@ SetUp_ObjAttributes2:
 		move.w	(a1)+,art_tile(a0)				; VRAM offset
 
 SetUp_ObjAttributes3:
-LoadObjects_ExtraData:
 		move.w	(a1)+,priority(a0)				; priority
 		move.b	(a1)+,width_pixels(a0)			; width
 		move.b	(a1)+,height_pixels(a0)		; height
@@ -267,7 +265,7 @@ HurtCharacter_Directly2:
 		bne.s	HurtCharacter_Directly.return						; if yes, branch
 		tst.b	invulnerability_timer(a1)								; is character invulnerable?
 		bne.s	HurtCharacter_Directly.return						; if yes, branch
-		cmpi.b	#id_PlayerHurt,routine(a1)							; is the character hurt, dying, etc. ?
+		cmpi.b	#PlayerID_Hurt,routine(a1)							; is the character hurt, dying, etc. ?
 		bhs.s	HurtCharacter_Directly.return						; if yes, branch
 
 HurtCharacter_Directly:
@@ -335,7 +333,7 @@ EnemyDefeat_Score:
 
 HurtCharacter_WithoutDamage:
 		lea	(Player_1).w,a1
-		move.b	#id_PlayerHurt,routine(a1)							; hit animation
+		move.b	#PlayerID_Hurt,routine(a1)							; hit animation
 		bclr	#Status_OnObj,status(a1)
 		bclr	#Status_Push,status(a1)								; player is not standing on/pushing an object
 		bset	#Status_InAir,status(a1)
@@ -343,6 +341,18 @@ HurtCharacter_WithoutDamage:
 		clr.w	ground_vel(a1)									; zero out inertia
 		move.b	#id_Hurt,anim(a1)								; set falling animation
 		sfx	sfx_Death,1
+
+; =============== S U B R O U T I N E =======================================
+
+LaunchCharacter:
+		move.w	d0,y_vel(a1)										; set y velocity
+		bset	#Status_InAir,status(a1)								; set character airborne flag
+		bclr	#Status_OnObj,status(a1)								; clear character on object flag
+		clr.b	jumping(a1)											; clear character jumping flag
+		clr.b	spin_dash_flag(a1)									; clear spin dash flag
+		move.b	#id_Spring,anim(a1)								; change Sonic's animation to "spring" ($10)
+		move.b	#PlayerID_Control,routine(a1)						; set character to airborne state
+		sfx	sfx_Spring,1											; play spring sound
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -402,7 +412,7 @@ Load_LevelResults:
 		bne.s	.return
 		btst	#Status_InAir,status(a1)
 		bne.s	.return
-		cmpi.b	#id_PlayerDeath,routine(a1)						; is player dead?
+		cmpi.b	#PlayerID_Death,routine(a1)						; is player dead?
 		bhs.s	.return											; if yes, branch
 		bsr.s	Set_PlayerEndingPose
 		clr.b	(TitleCard_end_flag).w

@@ -172,7 +172,7 @@ Command:	ds.l	1
 DMAEntry	ENDSTRUCT
 	endif
 ; ---------------------------------------------------------------------------
-QueueSlotCount = (VDP_Command_Buffer_Slot-VDP_Command_Buffer)/DMAEntry.len
+QueueSlotCount = (DMA_queue_slot-DMA_queue)/DMAEntry.len
 ; ---------------------------------------------------------------------------
 	ifndef DMAfunctions_defined
 		equ	DMAfunctions_defined,1
@@ -188,7 +188,7 @@ is68kRegister function expr,symtype(expr)==8
 ; crosses a 128kB boundary, or has size 0.
 QueueStaticDMA macro src,length,dest
 
-.src	set src	; AS... :(
+.src	:= src
 
 	if MOMPASS>1
 		if ((.src)&1)<>0
@@ -208,8 +208,8 @@ QueueStaticDMA macro src,length,dest
 		move.w	sr,-(sp)										; Save current interrupt mask
 		disableInts												; Mask off interrupts
 	endif ; UseVIntSafeDMA==1
-	movea.w	(VDP_Command_Buffer_Slot).w,a1
-	cmpa.w	#VDP_Command_Buffer_Slot,a1
+	movea.w	(DMA_queue_slot).w,a1
+	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done												; Return if there's no more room in the buffer
 	move.b	#(dmaLength(length)>>8)&$FF,DMAEntry.SizeH(a1)		; Write top byte of size/2
 	move.l	#((dmaLength(length)&$FF)<<24)|dmaSource(src),d0	; Set d0 to bottom byte of size/2 and the low 3 bytes of source/2
@@ -220,7 +220,7 @@ QueueStaticDMA macro src,length,dest
 	else
 		move.l	#vdpComm(dest,VRAM,DMA),(a1)+					; Write VDP DMA command for destination address
 	endif
-	move.w	a1,(VDP_Command_Buffer_Slot).w						; Write next queue slot
+	move.w	a1,(DMA_queue_slot).w						; Write next queue slot
 .done:
 	if UseVIntSafeDMA==1
 		move.w	(sp)+,sr										; Restore interrupts to previous state
@@ -229,19 +229,18 @@ QueueStaticDMA macro src,length,dest
 	endif
 ; ---------------------------------------------------------------------------
 ResetDMAQueue macro
-	move.w	#VDP_Command_Buffer,(VDP_Command_Buffer_Slot).w
+	move.w	#DMA_queue,(DMA_queue_slot).w
 	endm
 
 ; =============== S U B R O U T I N E =======================================
 
-QueueDMATransfer:
 Add_To_DMA_Queue:
 	if UseVIntSafeDMA==1
 		move.w	sr,-(sp)									; Save current interrupt mask
 		disableInts											; Mask off interrupts
 	endif ; UseVIntSafeDMA==1
-	movea.w	(VDP_Command_Buffer_Slot).w,a1
-	cmpa.w	#VDP_Command_Buffer_Slot,a1
+	movea.w	(DMA_queue_slot).w,a1
+	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer
 
 	if AssumeSourceAddressInBytes<>0
@@ -280,7 +279,7 @@ Add_To_DMA_Queue:
 	vdpCommReg d0,VRAM,DMA,0								; Convert destination address to VDP DMA command
 	lea	DMAEntry.Command(a1),a1								; Seek to correct RAM address to store VDP DMA command
 	move.l	d0,(a1)+										; Write VDP DMA command for destination address
-	move.w	a1,(VDP_Command_Buffer_Slot).w					; Write next queue slot
+	move.w	a1,(DMA_queue_slot).w					; Write next queue slot
 
 .done:
 	if UseVIntSafeDMA==1
@@ -294,7 +293,7 @@ Add_To_DMA_Queue:
 		add.w	d3,d0										; Set d0 to the number of words until end of current 128kB block
 		movep.w	d0,DMAEntry.Size(a1)						; Write DMA length of first part, overwriting useless top byte of source addres
 
-		cmpa.w	#VDP_Command_Buffer_Slot-DMAEntry.len,a1	; Does the queue have enough space for both parts?
+		cmpa.w	#DMA_queue_slot-DMAEntry.len,a1	; Does the queue have enough space for both parts?
 		beq.s	.finishxfer									; Branch if not
 
 		; Get second transfer's source, destination, and length
@@ -317,7 +316,7 @@ Add_To_DMA_Queue:
 		lea	DMAEntry.len+DMAEntry.Command(a1),a1			; Seek to correct RAM address to store VDP DMA command of second part
 		move.l	d0,(a1)+									; Write VDP DMA command for destination address of second part
 
-		move.w	a1,(VDP_Command_Buffer_Slot).w				; Write next queue slot
+		move.w	a1,(DMA_queue_slot).w				; Write next queue slot
 		if UseVIntSafeDMA==1
 			move.w	(sp)+,sr								; Restore interrupts to previous state
 		endif ;UseVIntSafeDMA==1
@@ -332,10 +331,9 @@ Add_To_DMA_Queue:
 
 ; =============== S U B R O U T I N E =======================================
 
-ProcessDMAQueue:
 Process_DMA_Queue:
-	movea.w	(VDP_Command_Buffer_Slot).w,a1
-	jmp	.jump_table-VDP_Command_Buffer(a1)
+	movea.w	(DMA_queue_slot).w,a1
+	jmp	.jump_table-DMA_queue(a1)
 ; ---------------------------------------------------------------------------
 .jump_table:
 	rts
@@ -346,7 +344,7 @@ Process_DMA_Queue:
 	set	.c,1
 	rept QueueSlotCount
 		lea	(VDP_control_port).l,a5
-		lea	(VDP_Command_Buffer).w,a1
+		lea	(DMA_queue).w,a1
 		if .c<>QueueSlotCount
 			bra.w	.jump0 - .c*8
 		endif
@@ -369,9 +367,8 @@ Process_DMA_Queue:
 
 ; =============== S U B R O U T I N E =======================================
 
-InitDMAQueue:
 Init_DMA_Queue:
-	lea	(VDP_Command_Buffer).w,a0
+	lea	(DMA_queue).w,a0
 	moveq	#-$6C,d0				; fast-store $94 (sign-extended) in d0
 	move.l	#$93979695,d1
 	set	.c,0

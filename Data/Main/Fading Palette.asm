@@ -26,8 +26,6 @@ Pal_FillBlack:
 
 ; =============== S U B R O U T I N E =======================================
 
-Pal_FadeTo:
-PaletteFadeIn:
 Pal_FadeFromBlack:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
 		bsr.s	Pal_FillBlack
@@ -46,9 +44,7 @@ Pal_FadeFromBlack:
 
 ; =============== S U B R O U T I N E =======================================
 
-Pal_FadeIn:
 Pal_FromBlack:
-FadeIn_FromBlack:
 		moveq	#0,d0
 		lea	(Normal_palette).w,a0
 		lea	(Target_palette).w,a1
@@ -118,8 +114,6 @@ Pal_AddColor:
 
 ; =============== S U B R O U T I N E =======================================
 
-Pal_FadeFrom:
-PaletteFadeOut:
 Pal_FadeToBlack:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
 		moveq	#$15,d4
@@ -138,8 +132,6 @@ Pal_FadeToBlack:
 ; =============== S U B R O U T I N E =======================================
 
 Pal_ToBlack:
-Pal_FadeOut:
-FadeOut_ToBlack:
 		moveq	#0,d0
 		lea	(Normal_palette).w,a0
 		move.b	(Palette_fade_info).w,d0
@@ -221,7 +213,6 @@ Pal_FillWhite:
 ; =============== S U B R O U T I N E =======================================
 
 Pal_FadeFromWhite:
-Pal_FromBlackWhite:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
 		bsr.s	Pal_FillWhite
 		moveq	#$15,d4
@@ -536,7 +527,7 @@ IncColor_Obj:
 ; =============== S U B R O U T I N E =======================================
 
 IncColor_Obj2:
-		moveq	#$E,d2
+		moveq	#$E,d2														; cWhite
 		move.b	(a1),d3
 		and.b	d2,d3
 		cmp.b	d2,d3

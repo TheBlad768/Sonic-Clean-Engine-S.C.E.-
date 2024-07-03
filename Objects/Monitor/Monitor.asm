@@ -245,17 +245,15 @@ sub_1D820:
 		bne.s	loc_1D83C
 		tst.w	y_vel(a0)
 		bpl.s	loc_1D850
-		jsr	(MoveSprite2).w
-		addi.w	#$18,y_vel(a0)
-		rts
+		moveq	#$18,d1
+		jmp	(MoveSprite_CustomGravity).w
 ; ---------------------------------------------------------------------------
 
 loc_1D83C:
 		tst.w	y_vel(a0)
 		bmi.s	loc_1D850
-		jsr	(MoveSprite2).w
-		subi.w	#$18,y_vel(a0)
-		rts
+		moveq	#-$18,d1
+		jmp	(MoveSprite_CustomGravity).w
 ; ---------------------------------------------------------------------------
 
 loc_1D850:

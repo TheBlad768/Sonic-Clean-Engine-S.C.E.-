@@ -9,7 +9,7 @@ Debug_Mode:
 		bne.w	.action
 		addq.b	#2,(Debug_placement_routine).w
 		move.l	mappings(a0),(Debug_saved_mappings).w	; save mappings
-		cmpi.b	#id_PlayerDeath,routine(a0)				; is player dead?
+		cmpi.b	#PlayerID_Death,routine(a0)				; is player dead?
 		bhs.s	.death									; if yes, branch
 		move.l	priority(a0),(Debug_saved_priority).w		; save priority and art_tile
 
@@ -205,6 +205,6 @@ Debug_Mode:
 		move.b	d0,jumping(a0)
 		andi.b	#1,status(a0)
 		ori.b	#2,status(a0)
-		move.b	#id_PlayerControl,routine(a0)
+		move.b	#PlayerID_Control,routine(a0)
 		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		rts

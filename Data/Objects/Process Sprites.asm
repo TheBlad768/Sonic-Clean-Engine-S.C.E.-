@@ -6,7 +6,7 @@
 
 Process_Sprites:
 		lea	(Object_RAM).w,a0
-		cmpi.b	#id_PlayerDeath,routine(a0)								; has Sonic just died?
+		cmpi.b	#PlayerID_Death,routine(a0)								; has Sonic just died?
 		bhs.s	Process_Sprites_FreezeObject								; if yes, branch
 
 Process_Sprites_Skip:
@@ -26,7 +26,7 @@ Process_Sprites_Loop:
 ; =============== S U B R O U T I N E =======================================
 
 Process_Sprites_FreezeObject:
-		cmpi.b	#id_PlayerDrown,routine(a0)								; has Sonic just drown?
+		cmpi.b	#PlayerID_Drown,routine(a0)								; has Sonic just drown?
 		beq.s	Process_Sprites_Skip										; if yes, branch
 
 		; run the first objects normally

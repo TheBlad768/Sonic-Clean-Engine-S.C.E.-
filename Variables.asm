@@ -9,9 +9,8 @@ Chunk_table:							ds.b $100*$80			; chunk (128x128) definitions, $80 bytes per 
 Chunk_table_end						= *
 
 ; object variables
-Player_1:								= *						; main character in 1 player mode
-v_player:								= *
-Object_RAM:							ds.b object_size
+Object_RAM:							= *
+Player_1:								ds.b object_size			; main character in 1 player mode
 									ds.b object_size			; unused
 Reserved_object_3:					ds.b object_size			; during a level, an object whose sole purpose is to clear the collision response list is stored here
 Dynamic_object_RAM:				ds.b object_size*90		; 90 objects
@@ -56,10 +55,8 @@ Sprite_table_input:					ds.w ($80/2)*8			; sprite table input buffer
 Sprite_table_input_end				= *
 
 ; DMA variables
-DMA_queue:							= *
-VDP_Command_Buffer:				ds.w $12*7				; stores all the VDP commands necessary to initiate a DMA transfer
-DMA_queue_slot:						= *
-VDP_Command_Buffer_Slot:			ds.w 1					; points to the next free slot on the queue
+DMA_queue:							ds.w $12*7				; stores all the VDP commands necessary to initiate a DMA transfer
+DMA_queue_slot:						ds.w 1					; points to the next free slot on the queue
 
 ; camera variables
 Camera_RAM:						= *						; various camera and scroll-related variables are stored here
@@ -89,9 +86,7 @@ Camera_max_Y_pos_changing:			ds.b 1					; set when the maximum camera Y pos is u
 									ds.b 1					; even
 Fast_V_scroll_flag:					ds.b 1					; if this is set vertical scroll when the player is on the ground and has a speed of less than $800 is capped at 24 pixels per frame instead of 6
 Scroll_lock:							ds.b 1					; if this is set scrolling routines aren't called
-v_screenposx:						= *
 Camera_X_pos:						ds.l 1
-v_screenposy:							= *
 Camera_Y_pos:						ds.l 1
 Camera_X_pos_copy:					ds.l 1
 Camera_Y_pos_copy:					ds.l 1
@@ -107,11 +102,12 @@ Camera_X_pos_coarse_back:			ds.w 1					; Camera_X_pos_coarse - $80
 Camera_Y_pos_coarse_back:			ds.w 1					; Camera_Y_pos_coarse - $80
 Plane_double_update_flag:				ds.b 1					; set when two block are to be updated instead of one (i.e. the camera's scrolled by more than $10 pixels)
 Special_V_int_routine:				ds.b 1
-HScroll_Shift:						= *
-Camera_Hscroll_shift:					ds.w 3
+Camera_H_scroll_shift:				ds.w 3
+
 	if ExtendedCamera
 Camera_X_center:					ds.w 1
 	endif
+
 Screen_X_wrap_value:				ds.w 1					; set to $FFFF
 Screen_Y_wrap_value:					ds.w 1					; either $7FF or $FFF
 Camera_Y_pos_mask:					ds.w 1					; either $7F0 or $FF0
@@ -148,74 +144,47 @@ Plane_buffer_end
 v_snddriver_ram:						ds.b $400				; start of RAM for the sound driver data
 
 ; misc variables
-v_gamemode:						= *
 Game_mode:							ds.b 1
-V_int_routine:						= *
-v_vbla_routine:						ds.b 1
-SonicControl:							= *
+V_int_routine:						ds.b 1
 Ctrl_1_logical:						= *
-v_jpadhold2:							= *
 Ctrl_1_held_logical:					ds.b 1
-v_jpadpress2:						= *
 Ctrl_1_pressed_logical:				ds.b 1
-Joypad:								= *
 Ctrl_1:								= *
-Ctrl_1_held:							= *
-Ctrl_1_hold:							= *
-v_jpadhold1:							ds.b 1
-v_jpadpress1:							= *
-Ctrl_1_press:							= *
+Ctrl_1_held:							ds.b 1
 Ctrl_1_pressed:						ds.b 1
 Ctrl_2:								= *
-Ctrl_2_held:							= *
-Ctrl_2_hold:							= *
-v_jpad2hold1:						ds.b 1
-v_jpad2press1:						= *
-Ctrl_2_press:							= *
+Ctrl_2_held:							ds.b 1
 Ctrl_2_pressed:						ds.b 1
-v_vdp_buffer1:						= *
+Ctrl_2_logical:						 = *						; both held and pressed
+Ctrl_2_held_logical:					ds.b 1
+Ctrl_2_pressed_logical:				ds.b 1
 VDP_reg_1_command:				ds.w 1					; AND the lower byte by $BF and write to VDP control port to disable display, OR by $40 to enable
-Demo_timer:							= *
-v_demolength:						ds.w 1					; the time left for a demo to start/run
+Demo_timer:							ds.w 1					; the time left for a demo to start/run
 V_scroll_value:						= *						; both foreground and background
-v_scrposy_dup:						= *
 V_scroll_value_FG:					ds.w 1
 V_scroll_value_BG:					ds.w 1
 H_scroll_value:						= *
-v_scrposx_dup:						= *
 H_scroll_value_FG:					ds.w 1
 H_scroll_value_BG:					ds.w 1
-v_hbla_hreg:							= *
 H_int_counter_command:				ds.b 1					; contains a command to write to VDP register $0A (line interrupt counter)
-v_hbla_line:							= *
 H_int_counter:						ds.b 1					; just the counter part of the command
-v_random:							= *
 RNG_seed:							ds.l 1					; used by the random number generator
-v_pfade_start:						= *
 Palette_fade_info:						= *						; both index and count (word)
 Palette_fade_index:					ds.b 1					; colour to start fading from
-v_pfade_size:							= *
 Palette_fade_count:					ds.b 1					; the number of colours to fade
 
 ; lag variables
 Lag_frame_count:						ds.w 1					; more specifically, the number of times V-int routine 0 has run. Reset at the end of a normal frame
-f_hbla_pal:							= *
 H_int_flag:							ds.b 1					; unless this is set H-int will return immediately
 Do_Updates_in_H_int:				ds.b 1					; if this is set Do_Updates will be called from H-int instead of V-int
-WindTunnel_mode:					ds.b 1
+WindTunnel_holding_flag:				ds.b 1
 WindTunnel_flag:						ds.b 1
 Disable_death_plane:					ds.b 1					; if set, going below the screen wont kill the player
-f_lockctrl:							= *
 Ctrl_1_locked:						ds.b 1
-v_framecount:						= *
-Level_frame_counter:					ds.b 1					; the number of frames which have elapsed since the level started
-v_framebyte							ds.b 1
+Level_frame_counter:					ds.w 1					; the number of frames which have elapsed since the level started
 Level_started_flag:					ds.b 1
-f_pause:								= *
 Game_paused:						ds.b 1
-f_restart:							= *
 Restart_level_flag:					ds.b 1
-v_spritecount:						= *
 Sprites_drawn:						ds.b 1					; used to ensure the sprite limit isn't exceeded
 Max_speed:							ds.w 1
 Acceleration:							ds.w 1
@@ -268,22 +237,17 @@ Total_bonus_countup:					ds.w 1
 Lag_frame_count_end					= *
 
 ; water variables
-Water_level:							= *						; keeps fluctuating
-Water_Level_1:						ds.w 1
-Water_Level_2:						= *
+Water_level:							ds.w 1					; keeps fluctuating
 Mean_water_level:					ds.w 1					; the steady central value of the water level
-Water_Level_3:						= *
 Target_water_level:					ds.w 1
-Water_on:							= *						; is set based on Water_flag
 Water_speed:							ds.b 1					; this is added to or subtracted from Mean_water_level every frame till it reaches Target_water_level
-Water_routine:						= *
 Water_entered_counter:				ds.b 1					; incremented when entering and exiting water, read by the the floating AIZ spike log, cleared on level initialisation and dynamic events of certain levels
-Water_move:							= *
 Water_full_screen_flag:				ds.b 1					; set if water covers the entire screen (i.e. the underwater pallete should be DMAed during V-int rather than the normal palette)
 Water_flag:							ds.b 1
 
 ; program pointers variables
 Block_table_addr_ROM:				ds.l 1					; block table pointer(Block (16x16) definitions, 8 bytes per definition)
+Level_chunk_addr_ROM:				ds.l 1					; chunk pointer
 Level_layout_addr_ROM:				ds.l 1					; level layout pointer
 Level_layout_addr2_ROM:				ds.l 1					; level layout pointer 2 (+8)
 Rings_manager_addr_RAM:			ds.l 1					; jump for the ring loading manager
@@ -304,11 +268,14 @@ Level_data_addr_RAM:				= *
 .AnimateTiles							ds.l 1
 .AniPLC								ds.l 1
 .Palette								= *
-.8x8data								ds.l 1
+.8x8data1							ds.l 1
+.8x8data2							ds.l 1
 .WaterPalette							= *
 .16x16data							ds.l 1
 .Music								= *
-.128x128data							ds.l 1
+.128x128ram							ds.l 1
+.128x128data1						ds.l 1
+.128x128data2						ds.l 1
 .Solid								ds.l 1
 .Layout								ds.l 1
 .Sprites								ds.l 1
@@ -322,7 +289,7 @@ Level_data_addr_RAM:				= *
 .yend								ds.w 1
 .WaterHeight							ds.w 1
 .WaterSpal							ds.b 1
-									ds.b 1					; even
+.WaterKpal							ds.b 1
 .Location								ds.l 1
 .Debug								ds.l 1
 Level_data_addr_RAM_end			= *
@@ -345,25 +312,21 @@ Kos_module_destination:				= Kos_module_queue+4	; the VRAM destination for the f
 Kos_module_queue_end				= *
 
 ; palette variables
-v_pal_water_dup:						= *
 Target_water_palette:					= *						; used by palette fading routines
 Target_water_palette_line_1:			ds.b palette_line_size
 Target_water_palette_line_2:			ds.b palette_line_size
 Target_water_palette_line_3:			ds.b palette_line_size
 Target_water_palette_line_4:			ds.b palette_line_size
-v_pal_water:							= *
 Water_palette:						= *						; this is what actually gets displayed
 Water_palette_line_1:					ds.b palette_line_size
 Water_palette_line_2:					ds.b palette_line_size
 Water_palette_line_3:					ds.b palette_line_size
 Water_palette_line_4:					ds.b palette_line_size
-v_pal_dry:							= *
 Normal_palette:						= *						; this is what actually gets displayed
 Normal_palette_line_1:				ds.b palette_line_size
 Normal_palette_line_2:				ds.b palette_line_size
 Normal_palette_line_3:				ds.b palette_line_size
 Normal_palette_line_4:				ds.b palette_line_size
-v_pal_dry_dup:						= *
 Target_palette:						= *						; used by palette fading routines
 Target_palette_line_1:					ds.b palette_line_size
 Target_palette_line_2:					ds.b palette_line_size
@@ -394,26 +357,18 @@ System_stack:						= *
 CrossResetRAM:						= *						; RAM in this region will not be cleared after a soft reset
 
 ; main variables
-v_vbla_count:						= *
-V_int_run_count:						ds.w 1					; the number of times V-int has run
-v_vbla_word:							ds.b 1
-v_vbla_byte:							ds.b 1
-v_zone:								= *
-Current_zone:						= *
-Current_zone_and_act:				ds.b 1
-v_act:								= *
+V_int_run_count:						ds.l 1					; the number of times V-int has run
+Current_zone_and_act:				= *
+Current_zone:						ds.b 1
 Current_act:							ds.b 1
-a_zone:								= *
-Apparent_zone:						= *
-Apparent_zone_and_act:				ds.b 1
-a_act:								= *
+Apparent_zone_and_act:				= *
+Apparent_zone:						ds.b 1
 Apparent_act:						ds.b 1
 Debug_saved_mappings:				ds.l 1					; player 1 mappings before entering debug mode
 Debug_saved_priority:					ds.w 1					; player 1 priority before entering debug mode
 Debug_saved_art_tile:					ds.w 1					; player 1 art_tile before entering debug mode
 									ds.b 1					; even
-Last_star_post_hit:					= *
-Last_star_pole_hit:					ds.b 1
+Last_star_post_hit:					ds.b 1
 Current_music:						ds.w 1
 Palette_fade_timer:					ds.w 1					; the palette gets faded in until this timer expires
 SegaCD_Mode:						ds.b 1
@@ -422,33 +377,22 @@ Debug_mode_flag:					ds.b 1
 									ds.b 1					; even
 
 ; HUD data variables
-f_timeover:							= *
 Time_over_flag:						ds.b 1
-f_ringcount:							= *
 Update_HUD_ring_count:				ds.b 1
-f_timecount:							= *
 Update_HUD_timer:					ds.b 1
-f_scorecount:							= *
 Update_HUD_score:					ds.b 1
-v_rings:								= *
-Ring_count:							ds.b 1
-v_ringbyte:							ds.b 1
-v_time:								= *
+Ring_count:							ds.w 1
 Timer:								ds.b 1
-v_timemin:							= *
 Timer_minute:						ds.b 1
-v_timesec:							= *
 Timer_second:						ds.b 1
-v_timecent:							= *
-Timer_frame:						= *
-Timer_centisecond:					ds.b 1					; the second gets incremented when this reaches 60
-v_score:								= *
+Timer_centisecond:					= *
+Timer_frame:						ds.b 1					; the second gets incremented when this reaches 60
 Score:								ds.l 1
 
 ; HUD draw variables
 HUD_RAM:							= *
-.Xpos:								ds.w 1
-.Ypos:								ds.w 1
+.xpos:								ds.w 1
+.ypos:								ds.w 1
 .status:								ds.b 1
 									ds.b 1					; even
 

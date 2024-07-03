@@ -2,22 +2,22 @@
 ; Normal palette
 ; ===========================================================================
 
-Pal_Sonic:			binclude "Objects/Sonic/Palettes/Sonic.pal"
+Pal_Sonic:			bincludeEntry "Objects/Sonic/Palettes/Sonic.pal"
 	even
-Pal_WaterSonic:		binclude "Objects/Sonic/Palettes/Water Sonic.pal"
+Pal_WaterSonic:		bincludeEntry "Objects/Sonic/Palettes/Water Sonic.pal"
 	even
-Pal_LevelSelect:		binclude "Data/Screens/Level Select/Palettes/1.pal"
+Pal_LevelSelect:		bincludeEntry "Data/Screens/Level Select/Palettes/1.pal"
 	even
-Pal_DEZ:			binclude "Levels/DEZ/Palettes/Death Egg Zone.pal"
+Pal_DEZ:			bincludeEntry "Levels/DEZ/Palettes/Death Egg Zone.pal"
 	even
-Pal_WaterDEZ:		binclude "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
+Pal_WaterDEZ:		bincludeEntry "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
 	even
 
 ; ===========================================================================
 ; Dynamic palette
 ; ===========================================================================
 
-AnPal_PalDEZ12_1:	binclude "Levels/DEZ/Palettes/Animate/1.pal"
+AnPal_PalDEZ12_1:	bincludeEntry "Levels/DEZ/Palettes/Animate/1.pal"
 	even
-AnPal_PalDEZ12_2:	binclude "Levels/DEZ/Palettes/Animate/2.pal"
+AnPal_PalDEZ12_2:	bincludeEntry "Levels/DEZ/Palettes/Animate/2.pal"
 	even

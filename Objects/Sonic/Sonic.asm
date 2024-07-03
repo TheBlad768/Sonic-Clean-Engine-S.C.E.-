@@ -44,13 +44,13 @@ Sonic_Normal:
 ; ---------------------------------------------------------------------------
 
 Sonic_Index: offsetTable
-ptr_Sonic_Init:		offsetTableEntry.w Sonic_Init		; 0
-ptr_Sonic_Control:	offsetTableEntry.w Sonic_Control	; 2
-ptr_Sonic_Hurt:		offsetTableEntry.w Sonic_Hurt		; 4
-ptr_Sonic_Death:		offsetTableEntry.w Sonic_Death		; 6
-ptr_Sonic_Restart:	offsetTableEntry.w Sonic_Restart	; 8
-					offsetTableEntry.w loc_12590		; A
-ptr_Sonic_Drown:	offsetTableEntry.w Sonic_Drown	; C
+		ptrTableEntry.w Sonic_Init			; 0
+		ptrTableEntry.w Sonic_Control		; 2
+		ptrTableEntry.w Sonic_Hurt		; 4
+		ptrTableEntry.w Sonic_Death		; 6
+		ptrTableEntry.w Sonic_Restart		; 8
+		ptrTableEntry.w loc_12590			; A
+		ptrTableEntry.w Sonic_Drown		; C
 ; ---------------------------------------------------------------------------
 
 Sonic_Init:													; Routine 0
@@ -314,7 +314,7 @@ Sonic_OutWater:
 		move.w	#$600,Max_speed-Max_speed(a4)
 		move.w	#$C,Acceleration-Max_speed(a4)
 		move.w	#$80,Deceleration-Max_speed(a4)
-		cmpi.b	#id_PlayerHurt,routine(a0)		; is Sonic falling back from getting hurt?
+		cmpi.b	#PlayerID_Hurt,routine(a0)	; is Sonic falling back from getting hurt?
 		beq.s	loc_10EFC					; if yes, branch
 		tst.b	object_control(a0)
 		bne.s	loc_10EFC
@@ -500,7 +500,7 @@ Sonic_NotLeft:
 		bsr.w	sub_11482
 
 Sonic_NotRight:
-		move.w	(HScroll_Shift).w,d1
+		move.w	(Camera_H_scroll_shift).w,d1
 		beq.s	+
 		bclr	#Status_Facing,status(a0)
 		tst.w	d1
@@ -641,7 +641,7 @@ loc_11228:
 ; ---------------------------------------------------------------------------
 
 loc_11276:
-		tst.w	(HScroll_Shift).w
+		tst.w	(Camera_H_scroll_shift).w
 		bne.s	loc_112B0
 		btst	#button_down,(Ctrl_1_logical).w
 		beq.s	loc_112B0
@@ -803,7 +803,7 @@ sub_113F6:
 		bpl.s	loc_11430
 
 loc_113FE:
-		tst.w	(HScroll_Shift).w
+		tst.w	(Camera_H_scroll_shift).w
 		bne.s	loc_11412
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_11412
@@ -918,7 +918,7 @@ Sonic_RollSpeed:
 		bmi.w	loc_115C6
 		tst.w	move_lock(a0)
 		bne.s	loc_1154E
-		tst.w	(HScroll_Shift).w
+		tst.w	(Camera_H_scroll_shift).w
 		bne.s	loc_1154E
 		btst	#button_left,(Ctrl_1_logical).w
 		beq.s	loc_11542
@@ -1193,7 +1193,7 @@ Player_Boundary_Sides:
 SonicKnux_Roll:
 		tst.b	status_secondary(a0)
 		bmi.s	locret_1177E
-		tst.w	(HScroll_Shift).w
+		tst.w	(Camera_H_scroll_shift).w
 		bne.s	locret_1177E
 		moveq	#btnLR,d0								; is left/right being pressed?
 		and.b	(Ctrl_1_logical).w,d0
@@ -2162,7 +2162,7 @@ loc_12344:
 		move.b	d0,anim(a0)				; id_Walk
 		move.b	d0,spin_dash_flag(a0)
 		move.w	#$100,priority(a0)
-		move.b	#id_PlayerControl,routine(a0)
+		move.b	#PlayerID_Control,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
 
 locret_12388:
@@ -2215,7 +2215,7 @@ loc_123FA:
 		bge.s	locret_123F8
 
 loc_12410:
-		move.b	#id_PlayerRestart,routine(a0)
+		move.b	#PlayerID_Restart,routine(a0)
 		move.w	#1*60,restart_timer(a0)
 		clr.b	(Respawn_table_keep).w
 
@@ -2241,7 +2241,7 @@ loc_12590:
 		bne.s	+
 		tst.w	(V_scroll_amount).w
 		bne.s	+
-		move.b	#id_PlayerControl,routine(a0)
+		move.b	#PlayerID_Control,routine(a0)
 +		bsr.s	sub_125E0
 		jmp	(Draw_Sprite).w
 
@@ -2380,7 +2380,7 @@ loc_126DC:
 		neg.w	d2
 
 loc_12700:
-		add.w	(HScroll_Shift).w,d2
+		add.w	(Camera_H_scroll_shift).w,d2
 		tst.b	status_secondary(a0)
 		bpl.s	loc_1270A
 		add.w	d2,d2
@@ -2634,7 +2634,7 @@ loc_12A2A:
 		neg.w	d2
 
 loc_12A4C:
-		add.w	(HScroll_Shift).w,d2
+		add.w	(Camera_H_scroll_shift).w,d2
 		lea	SonAni_Roll2(pc),a1
 		cmpi.w	#$600,d2
 		bhs.s	loc_12A5E

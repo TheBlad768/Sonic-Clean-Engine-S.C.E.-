@@ -10,7 +10,6 @@ Draw_And_Touch_Sprite:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_Sprite:
-DisplaySprite:
 		lea	(Sprite_table_input).w,a1
 		adda.w	priority(a0),a1
 

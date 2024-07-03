@@ -46,13 +46,13 @@ VInt_Done:
 ; ---------------------------------------------------------------------------
 
 VInt_Table: offsetTable
-ptr_VInt_Lag:		offsetTableEntry.w VInt_Lag		; 0
-ptr_VInt_Main:		offsetTableEntry.w VInt_Main		; 2
-ptr_VInt_Sega:		offsetTableEntry.w VInt_Sega		; 4
-ptr_VInt_Menu:		offsetTableEntry.w VInt_Menu		; 6
-ptr_VInt_Level:		offsetTableEntry.w VInt_Level		; 8
-ptr_VInt_Fade:		offsetTableEntry.w VInt_Fade		; A
-ptr_VInt_LevelSelect:	offsetTableEntry.w VInt_LevelSelect	; C
+		ptrTableEntry.w VInt_Lag			; 0
+		ptrTableEntry.w VInt_Main			; 2
+		ptrTableEntry.w VInt_Sega			; 4
+		ptrTableEntry.w VInt_Menu		; 6
+		ptrTableEntry.w VInt_Level			; 8
+		ptrTableEntry.w VInt_Fade			; A
+		ptrTableEntry.w VInt_LevelSelect	; C
 
 ; ---------------------------------------------------------------------------
 ; Lag
@@ -69,7 +69,7 @@ VInt_Lag_Main:
 		; branch if a level is running
 		moveq	#$7C,d0								; limit Game Mode value to $7C max
 		and.b	(Game_mode).w,d0					; load Game Mode
-		cmpi.b	#id_LevelScreen,d0					; is game on a level?
+		cmpi.b	#GameModeID_LevelScreen,d0			; is game on a level?
 		bne.s	VInt_Done							; if not, return from V-int
 
 VInt_Lag_Level:

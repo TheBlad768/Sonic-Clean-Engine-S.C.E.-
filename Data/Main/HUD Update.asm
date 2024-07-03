@@ -4,7 +4,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-AddPoints:
 HUD_AddToScore:
 		move.b	#1,(Update_HUD_score).w						; set score counter to update
 
@@ -97,8 +96,7 @@ UpdateHUD:
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$32),d0
 		moveq	#0,d1
 		move.b	(Timer_frame).w,d1 							; load centiseconds
-		lea	LUT_HUDCentiseconds(pc),a1						; 60
-		move.b	(a1,d1.w),d1
+		move.b	LUT_HUDCentiseconds(pc,d1.w),d1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(Timer).w
 		bne.s	.skipt
 		moveq	#99,d1
@@ -110,7 +108,7 @@ UpdateHUD:
 UpdateHUD_TimeOver:
 		clr.b	(Update_HUD_timer).w
 		lea	(Player_1).w,a0
-		cmpi.b	#id_PlayerDeath,routine(a0)					; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a0)					; has player just died?
 		bhs.s	.finish										; if yes, branch
 		movea.w	a0,a2
 		bsr.w	Kill_Character
@@ -122,7 +120,24 @@ UpdateHUD_TimeOver:
 		rts
 ; ---------------------------------------------------------------------------
 
+LUT_HUDCentiseconds:
+
+		set	.a,0
+
+	rept 60
+		dc.b .a * 100 / 60
+		set	.a,.a + 1
+	endr
+
+	even
+
 	if GameDebug
+
+; ---------------------------------------------------------------------------
+; Subroutine to update the HUD Debug
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 HUDDebug:
 		bsr.w	HUD_Debug
@@ -202,8 +217,9 @@ HUD_DrawInitial:
 		move.b	(a2)+,d0
 		bmi.s	.clear
 		ext.w	d0
-		lsl.w	#5,d0
+		lsl.w	#5,d0											; multiply by $20
 		lea	(a1,d0.w),a3
+
 	rept 16
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
@@ -215,9 +231,11 @@ HUD_DrawInitial:
 
 .clear
 		moveq	#0,d5
+
 	rept 16
 		move.l	d5,VDP_data_port-VDP_data_port(a6)
 	endr
+
 		bra.s	.next
 ; ---------------------------------------------------------------------------
 
@@ -273,13 +291,15 @@ HUD_Debug:
 		rol.w	#4,d1
 		move.w	d1,d2
 		andi.w	#$F,d2
-		lsl.w	#5,d2
+		lsl.w	#5,d2											; multiply by $20
 		lea	(a1,d2.w),a3
+
 	rept 8
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
+
 		swap	d1
-		dbf	d6,.loop	; repeat 7 more times
+		dbf	d6,.loop											; repeat 7 more times
 		rts
 
 	endif
@@ -306,7 +326,7 @@ DrawSixDigitNumber:
 		lea	HUD_100000(pc),a2
 
 .loadart
-		moveq	#0,d4					; set clr flag
+		moveq	#0,d4										; set clr flag
 		lea	(ArtUnc_HUDDigits).l,a1
 
 .loop
@@ -317,16 +337,17 @@ DrawSixDigitNumber:
 		sub.l	(a2),d1
 		bhs.s	.finddigit
 		add.l	(a2)+,d1
-		tst.w	d2						; is zero?
-		beq.s	.zero					; if yes, branch
-		moveq	#1,d4					; set draw flag
+		tst.w	d2											; is zero?
+		beq.s	.zero										; if yes, branch
+		moveq	#1,d4										; set draw flag
 
 .zero
 		tst.b	d4
 		beq.s	.next
-		lsl.w	#6,d2
+		lsl.w	#6,d2											; multiply by $40
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		lea	(a1,d2.w),a3
+
 	rept 16
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
@@ -375,12 +396,14 @@ DrawTwoDigitNumber:
 		sub.l	(a2),d1
 		bhs.s	.finddigit
 		add.l	(a2)+,d1
-		lsl.w	#6,d2
+		lsl.w	#6,d2											; multiply by $40
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		lea	(a1,d2.w),a3
+
 	rept 16
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
+
 		addi.l	#vdpCommDelta(tiles_to_bytes(2)),d0
 		dbf	d6,.loop
 		rts

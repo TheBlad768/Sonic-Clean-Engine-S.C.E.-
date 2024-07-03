@@ -64,10 +64,10 @@ Obj_SmoothPalette2:
 		rts
 ; ---------------------------------------------------------------------------
 
-ChildObjDat6_SmoothPalette:
+Child6_SmoothPalette:
 		dc.w 1-1
 		dc.l Obj_SmoothPalette
-ChildObjDat6_SmoothPalette2:
+Child6_SmoothPalette2:
 		dc.w 1-1
 		dc.l Obj_SmoothPalette2
 
@@ -120,7 +120,7 @@ Obj_FadeSelectedFromBlack:
 
 		; wait
 		subq.w	#1,objoff_2E(a0)
-		bpl.s	Obj_85E64.return
+		bpl.s	Obj_FadeToWhite.return
 		move.w	objoff_3A(a0),objoff_2E(a0)
 
 		; start
@@ -136,13 +136,13 @@ Obj_FadeSelectedFromBlack:
 
 		; check delete
 		subq.b	#1,objoff_39(a0)
-		bpl.s	Obj_85E64.return
+		bpl.s	Obj_FadeToWhite.return
 		clr.b	(Palette_rotation_disable).w
 		jmp	(Go_Delete_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_85E64:
+Obj_FadeToWhite:
 		move.l	#.main,address(a0)
 		move.b	#7,objoff_39(a0)				; set 7 for normal fade
 		st	(Palette_rotation_disable).w
@@ -167,7 +167,7 @@ Obj_85E64:
 		bpl.s	.return
 		tst.b	objoff_2C(a0)
 		beq.s	.delete
-		move.l	#Obj_85EE6,address(a0)
+		move.l	#Obj_FadeFromWhite,address(a0)
 		bset	#5,objoff_38(a0)
 
 .return
@@ -180,7 +180,7 @@ Obj_85E64:
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_85EE6:
+Obj_FadeFromWhite:
 		move.l	#.main,address(a0)
 		move.b	#7,objoff_39(a0)				; set 7 for normal fade
 		move.w	#3,objoff_2E(a0)
@@ -189,7 +189,7 @@ Obj_85EE6:
 
 		; wait
 		subq.w	#1,objoff_2E(a0)
-		bpl.s	Obj_85E64.return
+		bpl.s	Obj_FadeToWhite.return
 		addq.w	#3+1,objoff_2E(a0)
 
 		; start
@@ -203,6 +203,6 @@ Obj_85EE6:
 
 		; check delete
 		subq.b	#1,objoff_39(a0)
-		bpl.s	Obj_85E64.return
+		bpl.s	Obj_FadeToWhite.return
 		clr.b	(Palette_rotation_disable).w
 		jmp	(Go_Delete_Sprite).w

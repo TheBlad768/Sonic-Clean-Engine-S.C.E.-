@@ -26,7 +26,6 @@ KosArt_To_VDP:
 
 ; =============== S U B R O U T I N E =======================================
 
-KosDec:
 Kos_Decomp:		include "Data/Decompression/Kosinski Internal.asm"
 		rts
 ; ---------------------------------------------------------------------------

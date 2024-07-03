@@ -1,8 +1,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-Find_Sonic:
-Find_SonicTails:
 Find_SonicObject:
 		lea	(Player_1).w,a1
 
@@ -28,7 +26,6 @@ Find_OtherObject:
 ; =============== S U B R O U T I N E =======================================
 
 Find_Sonic8Way:
-Find_SonicTails8Way:
 		bsr.s	Find_SonicObject		; this routine seems bugged slightly. Shouldn't the first two cmpi instructions look at d3 and not d2?
 		cmp.w	d2,d3
 		beq.s	loc_853E2

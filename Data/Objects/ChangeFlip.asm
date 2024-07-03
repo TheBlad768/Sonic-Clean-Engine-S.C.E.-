@@ -114,3 +114,21 @@ Change_VelocityWithFlipXUseParent:
 .notflipx
 		move.w	d0,x_vel(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; Set velx track Sonic subroutine
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Set_VelocityXTrackSonic:
+		bsr.w	Find_SonicObject
+		bclr	#0,render_flags(a0)
+		tst.w	d0
+		beq.s	.setxv
+		neg.w	d4
+		bset	#0,render_flags(a0)
+
+.setxv
+		move.w	d4,x_vel(a0)
+		rts

@@ -27,6 +27,10 @@ Game_Program:
 
 .skip
 
+	if ChecksumCheck
+		bsr.s	Test_Checksum
+	endif
+
 		; clear some RAM only on a coldboot
 		clearRAM CrossResetRAM, CrossResetRAM_end				; clear RAM
 
@@ -40,7 +44,7 @@ Game_Program:
 		jsr	(Init_VDP).w
 		jsr	(SoundDriverLoad).w
 		jsr	(Init_Controllers).w
-		move.b	#id_LevelSelectScreen,(Game_mode).w				; set Game Mode
+		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w	; set screen mode to Level Select (SCE)
 
 .loop
 		moveq	#$7C,d0											; limit Game Mode value to $7C max
@@ -54,5 +58,5 @@ Game_Program:
 ; ---------------------------------------------------------------------------
 
 Game_Modes:
-ptr_LevelSelect:	dc.l LevelSelect_Screen		; Level Select ($00)
-ptr_Level:		dc.l Level_Screen			; Level ($04)
+		GameModeEntry LevelSelectScreen							; Level select mode (SCE)
+		GameModeEntry LevelScreen								; Zone play mode

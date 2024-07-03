@@ -139,7 +139,7 @@ sub_22F98:
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
 		move.b	#id_Spring,anim(a1)
-		move.b	#id_PlayerControl,routine(a1)
+		move.b	#PlayerID_Control,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_23020
@@ -288,7 +288,7 @@ loc_2328E:
 		lea	(Player_1).w,a1
 		tst.b	object_control(a1)
 		bmi.s	locret_23324
-		cmpi.b	#id_PlayerDeath,routine(a1)								; has player just died?
+		cmpi.b	#PlayerID_Death,routine(a1)								; has player just died?
 		bhs.s	locret_23324												; if yes, branch
 		tst.w	(Debug_placement_mode).w
 		bne.s	locret_23324
@@ -389,7 +389,7 @@ loc_2346C:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#id_PlayerControl,routine(a1)
+		move.b	#PlayerID_Control,routine(a1)
 		clr.b	double_jump_flag(a1)
 		sfx	sfx_Spring,1
 
@@ -402,7 +402,7 @@ Obj_Spring_UpDiag:
 		lea	ObjSpring_SlopeData_DiagUp(pc),a2
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
-		jsr	sub_1DD24(pc)
+		jsr	(SolidObjectFullSloped_Spring_1P).w
 		btst	#p1_standing_bit,status(a0)
 		beq.s	loc_234B8
 		bsr.s	sub_234E6
@@ -455,7 +455,7 @@ loc_23542:
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		move.b	#id_Spring,anim(a1)
-		move.b	#id_PlayerControl,routine(a1)
+		move.b	#PlayerID_Control,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_235A2
@@ -499,7 +499,7 @@ Obj_Spring_DownDiag:
 		lea	ObjSpring_SlopeData_DiagDown(pc),a2
 		lea	(Player_1).w,a1
 		moveq	#p1_standing_bit,d6
-		jsr	(sub_1DD24).w
+		jsr	(SolidObjectFullSloped_Spring_1P).w
 		cmpi.w	#-2,d4
 		bne.s	loc_235F8
 		bsr.s	sub_23624
@@ -534,7 +534,7 @@ loc_23660:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#id_PlayerControl,routine(a1)
+		move.b	#PlayerID_Control,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_236BA

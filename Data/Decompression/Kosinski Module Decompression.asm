@@ -22,6 +22,25 @@ Queue_Kos:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Adds pattern load requests to the Kosinski decompression queue
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+LoadPLC_Raw_Kos:
+		move.w	(a5)+,d6
+		bmi.s	.Done
+
+.queuePieces:
+		movea.l	(a5)+,a1											; store source address
+		movea.l	(a5)+,a2											; store destination RAM address
+		bsr.s	Queue_Kos
+		dbf	d6,.queuePieces
+
+.Done:
+		rts
+
+; ---------------------------------------------------------------------------
 ; Processes the first module on the queue
 ; ---------------------------------------------------------------------------
 
@@ -73,10 +92,12 @@ Process_Kos_Module_Queue:
 		bne.s	.Done											; return if this wasn't the last module
 		lea	(Kos_module_queue).w,a0
 		lea	(Kos_module_queue+6).w,a1
+
 	rept bytesToXcnt(Kos_module_queue_end-Kos_module_queue,8)
 		move.l	(a1)+,(a0)+										; otherwise, shift all entries up
 		move.l	(a1)+,(a0)+
 	endr
+
 	if bytesToXcnt(Kos_module_queue_end-Kos_module_queue,8)&2
 		move.w	(a1)+,(a0)+
 	endif
@@ -93,7 +114,6 @@ Process_Kos_Module_Queue:
 
 ; ---------------------------------------------------------------------------
 ; Adds pattern load requests to the Kosinski Module decompression queue
-; Input: d0 = ID of the PLC to load
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -202,9 +222,11 @@ Process_Kos_Queue:
 		move.l	(Kos_decomp_bookmark).w,-(sp)
 		move.w	(Kos_decomp_stored_SR).w,-(sp)
 		moveq	#(1<<_Kos_LoopUnroll)-1,d7
+
 	if _Kos_UseLUT==1
 		lea	KosDec_ByteMap(pc),a4								; load LUT pointer
 	endif
+
 		rte
 ; ---------------------------------------------------------------------------
 
@@ -220,6 +242,7 @@ Process_Kos_Queue:
 		beq.s	.Done											; branch if there aren't any entries remaining in the queue
 		lea	(Kos_decomp_queue).w,a0
 		lea	(Kos_decomp_queue+8).w,a1
+
 	rept bytesToXcnt(Kos_decomp_queue_end-Kos_decomp_queue,8)
 		move.l	(a1)+,(a0)+										; otherwise, shift all entries up
 		move.l	(a1)+,(a0)+

@@ -12,7 +12,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-CalcAngle:
 GetArcTan:
 		moveq	#0,d0						; Default to bottom right quadrant
 		tst.w	d1							; Is the X value negative?

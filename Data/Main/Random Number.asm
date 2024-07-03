@@ -4,7 +4,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-RandomNumber:
 Random_Number:
 		move.l	(RNG_seed).w,d1
 		tst.w	d1

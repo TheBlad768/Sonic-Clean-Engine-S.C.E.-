@@ -4,7 +4,6 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-AnimateSprite:
 Animate_Sprite:
 		moveq	#0,d0
 		move.b	anim(a0),d0

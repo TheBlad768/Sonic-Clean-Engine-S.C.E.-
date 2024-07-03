@@ -227,9 +227,9 @@ Load_StarPost_Stars:
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a1)
 		move.b	#4,render_flags(a1)
 		move.w	priority(a0),priority(a1)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)		; set height and width
+		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)				; set height and width
 		move.b	#1,mapping_frame(a1)
-		move.w	a0,parent3(a1)								; save parent (StarPost)
+		move.w	a0,parent3(a1)										; save parent (StarPost)
 		move.w	x_pos(a0),d3
 		move.w	d3,x_pos(a1)
 		move.w	d3,objoff_30(a1)
@@ -240,7 +240,7 @@ Load_StarPost_Stars:
 		move.l	#words_to_long(-$400,0),x_vel(a1)
 		move.w	d2,objoff_34(a1)
 		addi.w	#256/4,d2
-		jsr	(Create_New_Sprite4).w							; find next free object slot
+		jsr	(Create_New_Sprite4).w									; find next free object slot
 		dbne	d1,.create
 
 .return
@@ -259,8 +259,8 @@ Obj_StarPost_Stars:
 		beq.s	loc_2D506
 
 		; load special stage
-		addq.w	#4*2,sp										; exit from object and current screen
-		move.b	#id_LevelSelectScreen,(Game_mode).w			; set screen mode to special stage
+		addq.w	#4*2,sp												; exit from object and current screen
+		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w		; set screen mode to Level Select (SCE)
 		moveq	#$71,d0
 		and.b	(Player_1+status_secondary).w,d0
 		move.b	d0,(Saved_status_secondary).w
@@ -318,7 +318,7 @@ loc_2D56A:
 ; ---------------------------------------------------------------------------
 
 loc_2D574:
-		move.b	#$18|$C0,collision_flags(a0)			; set collision size 8x8
+		move.b	#$18|$C0,collision_flags(a0)							; set collision size 8x8
 
 loc_2D57A:
 		cmpi.w	#$180,d1

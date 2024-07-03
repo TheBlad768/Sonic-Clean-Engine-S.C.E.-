@@ -143,16 +143,18 @@ dbglistobj macro obj, mapaddr, subtype, frame, vram
 ; macro for declaring a "main level load block" (MLLB)
 ; ---------------------------------------------------------------------------
 
-levartptrs macro art,map16x16,map128x128,palette,wpalette,music
-	dc.l (palette)<<24|art
-	dc.l (wpalette)<<24|map16x16
-	dc.l (music)<<24|map128x128
+levartptrs macro art1,art2,map16x16,mapram,map128x1281,map128x1282,palette,wpalette,music
+	dc.l (palette)<<24|(art1&$FFFFFF), art2
+	dc.l (wpalette)<<24|((map16x16)&$FFFFFF)
+	dc.l (music)<<24|((mapram)&$FFFFFF)
+	dc.l map128x1281, map128x1282
     endm
 ; ---------------------------------------------------------------------------
 
-palp macro paladdress,ramaddress,colours
-	dc.l paladdress
-	dc.w ramaddress, (colours>>1)-1
+palptr macro ptr,lineno
+	dc.l ptr
+	dc.w (Normal_palette+lineno*palette_line_size)&$FFFF
+	dc.w bytesToLcnt(ptr_end-ptr)
     endm
 
 watpalptrs macro height,spal,kpal
@@ -1337,8 +1339,21 @@ offsetTableEntry macro ptr
 	dc.ATTRIBUTE ptr-current_offset_table
     endm
 
+ptrTableEntry macro loc,{GLOBALSYMBOLS}
+ptr_loc:	dc.ATTRIBUTE loc-current_offset_table
+    endm
+
 offsetEntry macro ptr
 	dc.ATTRIBUTE ptr-*
+    endm
+
+GameModeEntry macro ptr,{GLOBALSYMBOLS}
+GameMode_ptr:	dc.l ptr
+    endm
+
+bincludeEntry macro {INTLABEL},{GLOBALSYMBOLS}
+__LABEL__:	binclude ALLARGS
+__LABEL___end
     endm
 ; ---------------------------------------------------------------------------
 

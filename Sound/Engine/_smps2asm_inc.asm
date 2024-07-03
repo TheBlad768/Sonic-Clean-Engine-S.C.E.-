@@ -118,7 +118,7 @@ smpsHeaderVoice macro loc
 		fatal "Missing smpsHeaderStartSong"
 	endif
 
-.loc	set loc	; AS... :(
+.loc	:= loc
 
 	if MOMPASS>1
 		if ((.loc-songStart >= $8000) || (.loc-songStart < -$8000))
@@ -162,7 +162,7 @@ smpsHeaderTempo macro div,mod
 ; Header - Set up DAC Channel
 smpsHeaderDAC macro loc,pitch,vol
 
-.loc	set loc	; AS... :(
+.loc	:= loc
 
 	if MOMPASS>1
 		if ((.loc-songStart >= $8000) || (.loc-songStart < -$8000))
@@ -185,7 +185,7 @@ smpsHeaderDAC macro loc,pitch,vol
 ; Header - Set up FM Channel
 smpsHeaderFM macro loc,pitch,vol
 
-.loc	set loc	; AS... :(
+.loc	:= loc
 
 	if MOMPASS>1
 		if ((.loc-songStart >= $8000) || (.loc-songStart < -$8000))
@@ -199,7 +199,7 @@ smpsHeaderFM macro loc,pitch,vol
 ; Header - Set up PSG Channel
 smpsHeaderPSG macro loc,pitch,vol,mod,voice
 
-.loc	set loc	; AS... :(
+.loc	:= loc
 
 	if MOMPASS>1
 		if ((.loc-songStart >= $8000) || (.loc-songStart < -$8000))
@@ -248,7 +248,7 @@ smpsHeaderSFXChannel macro chanid,loc,pitch,vol
 	endif
 	dc.b	$80,chanid
 
-.loc	set loc	; AS... :(
+.loc	:= loc
 
 	if MOMPASS>1
 		if ((.loc-songStart >= $8000) || (.loc-songStart < -$8000))

@@ -17,7 +17,7 @@ Level_VDP:
 
 ; =============== S U B R O U T I N E =======================================
 
-Level_Screen:
+LevelScreen:
 		bset	#GameModeFlag_TitleCard,(Game_mode).w								; set bit 7 is indicate that we're loading the level
 		music	mus_FadeOut													; fade out music
 		jsr	(Clear_Kos_Module_Queue).w											; clear KosM PLCs
@@ -59,7 +59,7 @@ Level_Screen:
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a6)	; warning: don't overwrite a6
 
 		; load player palette
-		moveq	#palid_Sonic,d0
+		moveq	#PalID_Sonic,d0
 		move.w	d0,d1
 		jsr	(LoadPalette).w														; load Sonic's palette
 		move.w	d1,d0
@@ -159,7 +159,7 @@ Level_Screen:
 		jsr	(Load_Sprites).w
 		jsr	(Process_Sprites).w
 		tst.b	(Restart_level_flag).w
-		bne.w	Level_Screen
+		bne.w	LevelScreen
 		jsr	(DeformBgLayer).w
 		jsr	(Screen_Events).w
 		jsr	(Handle_Onscreen_Water_Height).w
