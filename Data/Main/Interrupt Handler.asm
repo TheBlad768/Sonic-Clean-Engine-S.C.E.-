@@ -198,7 +198,7 @@ VInt_LevelSelect:
 		dma68kToVDP Normal_palette,$0000,$80,CRAM
 		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
 		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
-		dma68kToVDP (vLevelSelect_buffer2),vram_fg,(256<<4),VRAM		; foreground buffer to VRAM
+		dma68kToVDP (LevelSelect_buffer2),vram_fg,(256<<4),VRAM		; foreground buffer to VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
 		tst.w	(Demo_timer).w						; is there time left on the demo?
