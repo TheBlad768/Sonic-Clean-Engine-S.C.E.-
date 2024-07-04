@@ -307,6 +307,7 @@ VInt_Level_Cont:
 		cmpi.b	#92,(H_int_counter).w				; is H-int occuring on or below line 92?
 		bhs.s	.notwater							; if it is, branch
 		st	(Do_Updates_in_H_int).w
+		move.l	#VInt_Done,(sp)						; skip update SMPS
 		jmp	(Set_Kos_Bookmark).w
 ; ---------------------------------------------------------------------------
 
