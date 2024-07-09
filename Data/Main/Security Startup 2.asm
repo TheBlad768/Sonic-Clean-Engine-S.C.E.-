@@ -34,6 +34,11 @@ Game_Program:
 		; clear some RAM only on a coldboot
 		clearRAM CrossResetRAM, CrossResetRAM_end				; clear RAM
 
+		; get region setting
+		moveq	#signextendB($C0),d0
+		and.b	(HW_Version).l,d0
+		move.b	d0,(Graphics_flags).w
+
 		; set checksum string
 		move.l	#Ref_Checksum_String,(Checksum_string).w			; set flag so checksum won't run again
 

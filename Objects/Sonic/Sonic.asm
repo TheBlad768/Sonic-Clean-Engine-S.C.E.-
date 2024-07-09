@@ -9,7 +9,7 @@ Obj_Sonic:
 
 		lea	(Max_speed).w,a4
 		lea	(Distance_from_top).w,a5
-		lea	(v_Dust).w,a6
+		lea	(Dust).w,a6
 
 	if GameDebug
 		tst.w	(Debug_placement_mode).w
@@ -290,7 +290,7 @@ Sonic_InWater:
 		addq.b	#1,(Water_entered_counter).w
 		movea.w	a0,a1
 		bsr.w	Player_ResetAirTimer
-		move.l	#Obj_AirCountdown,(v_Breathing_bubbles+address).w		; load Sonic's breathing bubbles
+		move.l	#Obj_AirCountdown,(Breathing_bubbles+address).w	; load Sonic's breathing bubbles
 		move.w	#$300,Max_speed-Max_speed(a4)
 		move.w	#6,Acceleration-Max_speed(a4)
 		move.w	#$40,Deceleration-Max_speed(a4)
@@ -847,8 +847,8 @@ loc_11438:
 		bclr	#Status_Facing,status(a0)
 		cmpi.b	#12,air_left(a0)						; check air remaining
 		blo.s		locret_11480							; if less than 12, branch
-		move.l	#DashDust_CheckSkid,address(a6)		; v_Dust
-		move.b	#$15,mapping_frame(a6)				; v_Dust
+		move.l	#DashDust_CheckSkid,address(a6)		; Dust
+		move.b	#$15,mapping_frame(a6)				; Dust
 
 locret_11480:
 		rts
@@ -898,8 +898,8 @@ loc_114BE:
 		bset	#Status_Facing,status(a0)
 		cmpi.b	#12,air_left(a0)						; check air remaining
 		blo.s		locret_11506							; if less than 12, branch
-		move.l	#DashDust_CheckSkid,address(a6)		; v_Dust
-		move.b	#$15,mapping_frame(a6)				; v_Dust
+		move.l	#DashDust_CheckSkid,address(a6)		; Dust
+		move.b	#$15,mapping_frame(a6)				; Dust
 
 locret_11506:
 		rts
@@ -1359,7 +1359,7 @@ Sonic_FireShield:
 		bne.s	locret_118FE								; if yes, branch
 		btst	#Status_FireShield,status_secondary(a0)			; does Sonic have a Fire Shield?
 		beq.s	Sonic_LightningShield						; if not, branch
-		move.b	#1,(v_Shield+anim).w
+		move.b	#1,(Shield+anim).w
 		move.b	#1,double_jump_flag(a0)
 		move.w	#$800,d0
 		btst	#Status_Facing,status(a0)						; is Sonic facing left?
@@ -1378,7 +1378,7 @@ loc_11958:
 Sonic_LightningShield:
 		btst	#Status_LtngShield,status_secondary(a0)			; does Sonic have a Lightning Shield?
 		beq.s	Sonic_BubbleShield						; if not, branch
-		move.b	#1,(v_Shield+anim).w
+		move.b	#1,(Shield+anim).w
 		move.b	#1,double_jump_flag(a0)
 		move.w	#-$580,y_vel(a0)							; bounce Sonic up, creating the double jump effect
 		clr.b	jumping(a0)
@@ -1388,7 +1388,7 @@ Sonic_LightningShield:
 Sonic_BubbleShield:
 		btst	#Status_BublShield,status_secondary(a0)			; does Sonic have a Bubble Shield
 		beq.s	Sonic_InstaShield							; if not, branch
-		move.b	#1,(v_Shield+anim).w
+		move.b	#1,(Shield+anim).w
 		move.b	#1,double_jump_flag(a0)
 		clr.w	x_vel(a0)								; halt horizontal speed...
 		clr.w	ground_vel(a0)							; ...both ground and air
@@ -1399,7 +1399,7 @@ Sonic_BubbleShield:
 Sonic_InstaShield:
 		btst	#Status_Shield,status_secondary(a0)			; does Sonic have an S2 shield (The Elementals were already filtered out at this point)?
 		bne.s	locret_11A14								; if yes, branch
-		move.b	#1,(v_Shield+anim).w
+		move.b	#1,(Shield+anim).w
 		move.b	#1,double_jump_flag(a0)
 		sfx	sfx_InstaAttack,1								; play Insta-Shield sound
 ; ---------------------------------------------------------------------------
@@ -1424,7 +1424,7 @@ SonicKnux_Spindash:
 		clr.w	spin_dash_counter(a0)
 		cmpi.b	#12,air_left(a0)
 		blo.s		loc_11C24
-		move.b	#2,anim(a6)		; v_Dust
+		move.b	#2,anim(a6)		; Dust
 
 loc_11C24:
 		bsr.w	Player_LevelBound
@@ -1461,7 +1461,7 @@ loc_11C8C:
 
 loc_11CDC:
 		bset	#Status_Roll,status(a0)
-		clr.b	anim(a6)		; v_Dust
+		clr.b	anim(a6)		; Dust
 		sfx	sfx_Dash
 		bra.s	loc_11D5E
 ; ---------------------------------------------------------------------------
@@ -2093,7 +2093,7 @@ BubbleShield_Bounce:
 		beq.s	+
 		neg.w	d0
 +		sub.w	d0,y_pos(a0)
-		move.b	#2,(v_Shield+anim).w
+		move.b	#2,(Shield+anim).w
 		sfx	sfx_BubbleAttack,1
 ; ---------------------------------------------------------------------------
 

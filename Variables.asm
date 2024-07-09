@@ -16,19 +16,19 @@ Reserved_object_3:					ds.b object_size			; during a level, an object whose sole
 Dynamic_object_RAM:				ds.b object_size*90		; 90 objects
 Dynamic_object_RAM_end				= *
 									ds.b object_size			; unused
-v_Dust:								ds.b object_size
-v_Shield:							ds.b object_size
+Dust:								ds.b object_size
+Shield:								ds.b object_size
 									ds.b object_size			; unused
-v_Breathing_bubbles:					ds.b object_size
-									ds.b object_size			; unused
-									ds.b object_size			; unused
+Breathing_bubbles:					ds.b object_size
 									ds.b object_size			; unused
 									ds.b object_size			; unused
 									ds.b object_size			; unused
 									ds.b object_size			; unused
 									ds.b object_size			; unused
-v_WaterWave:						ds.b object_size
-v_Invincibility_stars:					ds.b object_size*4			; 4 objects
+									ds.b object_size			; unused
+									ds.b object_size			; unused
+WaterWave:							ds.b object_size
+Invincibility_stars:					ds.b object_size*4			; 4 objects
 									ds.b $34					; unused
 Object_RAM_end						= *
 
@@ -373,8 +373,8 @@ Current_music:						ds.w 1
 Palette_fade_timer:					ds.w 1					; the palette gets faded in until this timer expires
 SegaCD_Mode:						ds.b 1
 Respawn_table_keep:					ds.b 1					; if set, respawn table is not reset during level load
+Graphics_flags:						ds.b 1					; bit 7 set = English system, bit 6 set = PAL system
 Debug_mode_flag:					ds.b 1
-									ds.b 1					; even
 
 ; HUD data variables
 Time_over_flag:						ds.b 1

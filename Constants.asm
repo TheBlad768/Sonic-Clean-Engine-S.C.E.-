@@ -124,8 +124,8 @@ PalID_Sonic =						id(PalPtr_Sonic)					; 0
 PalID_WaterSonic =					id(PalPtr_WaterSonic)				; 1
 
 ; Levels
-PalID_DEZ =							id(PalPtr_DEZ)					; 8
-PalID_WaterDEZ =					id(PalPtr_WaterDEZ)				; 9
+PalID_DEZ =							id(PalPtr_DEZ)					; 2
+PalID_WaterDEZ =					id(PalPtr_WaterDEZ)				; 3
 
 ; ---------------------------------------------------------------------------
 ; Levels

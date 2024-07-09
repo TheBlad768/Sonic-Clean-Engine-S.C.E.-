@@ -132,7 +132,7 @@ LevelScreen:
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		tst.b	(Water_flag).w
 		beq.s	.notwater2
-		move.l	#Obj_WaterWave,(v_WaterWave+address).w
+		move.l	#Obj_WaterWave,(WaterWave+address).w
 
 .notwater2
 		bsr.w	SpawnLevelMainSprites
@@ -177,8 +177,8 @@ LevelScreen:
 SpawnLevelMainSprites:
 		move.l	#Obj_ResetCollisionResponseList,(Reserved_object_3+address).w
 		move.l	#Obj_Sonic,(Player_1+address).w
-		move.l	#Obj_DashDust,(v_Dust+address).w
-		move.l	#Obj_InstaShield,(v_Shield+address).w
+		move.l	#Obj_DashDust,(Dust+address).w
+		move.l	#Obj_InstaShield,(Shield+address).w
 		rts
 
 ; =============== S U B R O U T I N E =======================================

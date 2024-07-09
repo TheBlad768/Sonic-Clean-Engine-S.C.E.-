@@ -18,7 +18,7 @@ Obj_DashDust:
 		move.w	#ArtTile_DashDust,art_tile(a0)
 		move.w	#Player_1,parent(a0)
 		move.w	#tiles_to_bytes(ArtTile_DashDust),vram_art(a0)
-		cmpa.w	#v_Dust,a0
+		cmpa.w	#Dust,a0
 		beq.s	.main
 		st	dashdust_tails(a0)										; Tails flag
 

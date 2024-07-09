@@ -38,7 +38,7 @@ Debug_Mode:
 		move.b	d0,(Scroll_lock).w
 		move.b	d0,(Deform_lock).w
 		move.b	d0,(WindTunnel_flag).w
-		move.w	d0,(v_Breathing_bubbles+objoff_30).w		; clear drowning timer
+		move.w	d0,(Breathing_bubbles+objoff_30).w			; clear drowning timer
 		movea.l	(Level_data_addr_RAM.Debug).w,a2
 		move.w	(a2)+,d6
 		cmp.b	(Debug_object).w,d6						; have you gone past the last item?
