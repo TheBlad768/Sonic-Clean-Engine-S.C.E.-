@@ -365,11 +365,11 @@ copyRAM2 macro startaddr,endaddr,startaddr2
     endm
 
 ; ---------------------------------------------------------------------------
-; load Kosinski and Kosinski Moduled
+; load Kosinski Plus and Kosinski Plus Moduled
 ; ---------------------------------------------------------------------------
 
-; load Kosinski data to RAM
-QueueKos macro data,ram,terminate
+; load Kosinski Plus data to RAM
+QueueKosPlus macro data,ram,terminate
 	lea	(data).l,a1
     if ((ram)&$8000)==0
 	lea	(ram).l,a2
@@ -377,14 +377,14 @@ QueueKos macro data,ram,terminate
 	lea	(ram).w,a2
     endif
       if ("terminate"="0") || ("terminate"="")
-	jsr	(Queue_Kos).w
+	jsr	(Queue_KosPlus).w
       else
-	jmp	(Queue_Kos).w
+	jmp	(Queue_KosPlus).w
       endif
     endm
 
-; load Kosinski Moduled art to VRAM
-QueueKosModule macro art,vram,terminate
+; load Kosinski Plus Moduled art to VRAM
+QueueKosPlusModule macro art,vram,terminate
 	lea	(art).l,a1
     if ((vram)<=3)
 	moveq	#tiles_to_bytes(vram),d2
@@ -392,9 +392,9 @@ QueueKosModule macro art,vram,terminate
 	move.w	#tiles_to_bytes(vram),d2
       endif
       if ("terminate"="0") || ("terminate"="")
-	jsr	(Queue_Kos_Module).w
+	jsr	(Queue_KosPlus_Module).w
       else
-	jmp	(Queue_Kos_Module).w
+	jmp	(Queue_KosPlus_Module).w
       endif
     endm
 
@@ -881,31 +881,14 @@ planeLocH40 function col,line,(($80 * line) + (2 * col))
 planeLocH80 function col,line,(($100 * line) + (2 * col))
 ; ---------------------------------------------------------------------------
 
-_Kos_UseLUT := 1
-_Kos_LoopUnroll := 3
-_Kos_ExtremeUnrolling := 1
+_KosPlus_LoopUnroll := 3
 
-_Kos_RunBitStream macro
+_KosPlus_ReadBit macro
 	dbf	d2,.skip
-	moveq	#7,d2				; Set repeat count to 8.
-	move.b	d1,d0				; Use the remaining 8 bits.
-	not.w	d3					; Have all 16 bits been used up?
-	bne.s	.skip				; Branch if not.
-	move.b	(a0)+,d0				; Get desc field low-byte.
-	move.b	(a0)+,d1				; Get desc field hi-byte.
-	if _Kos_UseLUT==1
-		move.b	(a4,d0.w),d0		; Invert bit order...
-		move.b	(a4,d1.w),d1		; ... for both bytes.
-	endif
-.skip
-    endm
-
-_Kos_ReadBit macro
-	if _Kos_UseLUT==1
-		add.b	d0,d0			; Get a bit from the bitstream.
-	else
-		lsr.b	d0					; Get a bit from the bitstream.
-	endif
+	moveq	#7,d2						; We have 8 new bits, but will use one up below.
+	move.b	(a0)+,d0						; Get desc field low-byte.
+.skip:
+	add.b	d0,d0						; Get a bit from the bitstream.
     endm
 ; ---------------------------------------------------------------------------
 

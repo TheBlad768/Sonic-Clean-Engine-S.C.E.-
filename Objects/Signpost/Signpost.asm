@@ -167,7 +167,7 @@ Obj_EndSign:
 
 		; load second main plc
 		lea	(PLC2_Sonic).l,a5
-		jsr	(LoadPLC_Raw_KosM).w
+		jsr	(LoadPLC_Raw_KosPlusM).w
 
 		; exit from dplc slot
 		jsr	(Remove_From_TrackingSlot).w

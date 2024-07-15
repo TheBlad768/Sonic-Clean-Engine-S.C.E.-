@@ -22,7 +22,7 @@ Obj_EggCapsule:
 
 		; load art
 		lea	PLC_EggCapsule(pc),a5
-		jsr	(LoadPLC_Raw_KosM).w
+		jsr	(LoadPLC_Raw_KosPlusM).w
 
 		; mapping
 		lea	ObjDat_EggCapsule(pc),a1
@@ -754,8 +754,8 @@ Child1_EggCapsule_Animals:
 
 
 PLC_EggCapsule: plrlistheader
-		plreq $43E, ArtKosM_EggCapsule
-		plreq $5A0, ArtKosM_Explosion
+		plreq $43E, ArtKosPM_EggCapsule
+		plreq $5A0, ArtKosPM_Explosion
 PLC_EggCapsule_end
 ; ---------------------------------------------------------------------------
 

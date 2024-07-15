@@ -68,7 +68,7 @@ namespace S3KObjectDefinitions.DEZ
 		{
 			var version = LevelData.Game.MappingsVersion;
 			var art = LevelData.ReadFile(
-				"../Objects/Spikebonker/KosinskiM Art/Spikebonker.kosm", CompressionType.KosinskiM);
+				"../Objects/Spikebonker/KosinskiPM Art/Spikebonker.kospm", CompressionType.KosinskiPlusM);
 			var map = LevelData.ASMToBin(
 				"../Objects/Spikebonker/Object Data/Map - Spikebonker.asm", version);
 

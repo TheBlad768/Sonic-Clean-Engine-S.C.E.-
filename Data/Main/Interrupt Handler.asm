@@ -141,11 +141,11 @@ VInt_Main:
 VInt_Menu:
 		bsr.s	Do_ControllerPal
 		tst.w	(Demo_timer).w						; is there time left on the demo?
-		beq.s	.kosm
+		beq.s	.kospm
 		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
 
-.kosm
-		jmp	(Set_Kos_Bookmark).w
+.kospm
+		jmp	(Set_KosPlus_Bookmark).w
 
 ; ---------------------------------------------------------------------------
 ; Fade
@@ -156,7 +156,7 @@ VInt_Menu:
 VInt_Fade:
 		bsr.s	Do_ControllerPal
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
-		jmp	(Set_Kos_Bookmark).w
+		jmp	(Set_KosPlus_Bookmark).w
 
 ; ---------------------------------------------------------------------------
 ; Main updates
@@ -226,11 +226,11 @@ VInt_Sega:
 
 .skip
 		tst.w	(Demo_timer).w						; is there time left on the demo?
-		beq.s	.kosm
+		beq.s	.kospm
 		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
 
-.kosm
-		jmp	(Set_Kos_Bookmark).w
+.kospm
+		jmp	(Set_KosPlus_Bookmark).w
 
 ; ---------------------------------------------------------------------------
 ; Level
@@ -308,11 +308,11 @@ VInt_Level_Cont:
 		bhs.s	.notwater							; if it is, branch
 		st	(Do_Updates_in_H_int).w
 		move.l	#VInt_Done,(sp)						; skip update SMPS
-		jmp	(Set_Kos_Bookmark).w
+		jmp	(Set_KosPlus_Bookmark).w
 ; ---------------------------------------------------------------------------
 
 .notwater
-		pea	(Set_Kos_Bookmark).w
+		pea	(Set_KosPlus_Bookmark).w
 
 ; ---------------------------------------------------------------------------
 ; Other updates

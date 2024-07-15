@@ -119,7 +119,7 @@ Use128kbSafeDMA = 1
 ; Option to mask interrupts while updating the DMA queue. This fixes many race
 ; conditions in the DMA funcion, but it costs 46(6/1) cycles. The better way to
 ; handle these race conditions would be to make unsafe callers (such as S3&K's
-; KosM decoder) prevent these by masking off interrupts before calling and then
+; KosPlusM decoder) prevent these by masking off interrupts before calling and then
 ; restore interrupts after.
 UseVIntSafeDMA = 0
 ; ===========================================================================

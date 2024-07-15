@@ -141,8 +141,8 @@ EndOfHeader
 ; ---------------------------------------------------------------------------
 
 		include "Data/Decompression/Enigma Decompression.asm"
-		include "Data/Decompression/Kosinski Decompression.asm"
-		include "Data/Decompression/Kosinski Module Decompression.asm"
+		include "Data/Decompression/Kosinski Plus Decompression.asm"
+		include "Data/Decompression/Kosinski Plus Module Decompression.asm"
 
 ; ---------------------------------------------------------------------------
 ; Clone Driver - Functions Subroutine
@@ -425,16 +425,16 @@ EndOfHeader
 		include "Pointers/Pattern Load Cues.asm"
 
 ; ---------------------------------------------------------------------------
-; Kosinski Module compressed graphics pointers
+; Kosinski Plus Module compressed graphics pointers
 ; ---------------------------------------------------------------------------
 
-		include "Pointers/Kosinski Module Data.asm"
+		include "Pointers/Kosinski Plus Module Data.asm"
 
 ; ---------------------------------------------------------------------------
-; Kosinski compressed graphics pointers
+; Kosinski Plus compressed graphics pointers
 ; ---------------------------------------------------------------------------
 
-		include "Pointers/Kosinski Data.asm"
+		include "Pointers/Kosinski Plus Data.asm"
 
 ; ---------------------------------------------------------------------------
 ; Enigma compressed graphics pointers

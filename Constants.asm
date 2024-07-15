@@ -2,68 +2,68 @@
 ; Constants
 ; ===========================================================================
 
-Ref_Checksum_String				= 'S3CE'
+Ref_Checksum_String					= 'S3CE'
 
 ; ---------------------------------------------------------------------------
 ; VDP addresses
 ; ---------------------------------------------------------------------------
 
-VDP_data_port =					$C00000
-VDP_control_port =				$C00004
-VDP_counter =					$C00008
+VDP_data_port =						$C00000
+VDP_control_port =					$C00004
+VDP_counter =						$C00008
 
-PSG_input =						$C00011
+PSG_input =							$C00011
 
 ; ---------------------------------------------------------------------------
 ; Address equates
 ; ---------------------------------------------------------------------------
 
 ; Z80 addresses
-Z80_RAM =						$A00000	; start of Z80 RAM
-Z80_RAM_end =					$A02000	; end of non-reserved Z80 RAM
-Z80_bus_request =				$A11100
-Z80_reset =						$A11200
+Z80_RAM =							$A00000	; start of Z80 RAM
+Z80_RAM_end =						$A02000	; end of non-reserved Z80 RAM
+Z80_bus_request =					$A11100
+Z80_reset =							$A11200
 
 ; ---------------------------------------------------------------------------
 ; I/O Area
 ; ---------------------------------------------------------------------------
 
-HW_Version =					$A10001
-HW_Port_1_Data =				$A10003
-HW_Port_2_Data =				$A10005
-HW_Expansion_Data =			$A10007
-HW_Port_1_Control =				$A10009
-HW_Port_2_Control =				$A1000B
-HW_Expansion_Control =			$A1000D
-HW_Port_1_TxData =				$A1000F
-HW_Port_1_RxData =				$A10011
-HW_Port_1_SCtrl =				$A10013
-HW_Port_2_TxData =				$A10015
-HW_Port_2_RxData =				$A10017
-HW_Port_2_SCtrl =				$A10019
-HW_Expansion_TxData =			$A1001B
-HW_Expansion_RxData =			$A1001D
-HW_Expansion_SCtrl =			$A1001F
+HW_Version =						$A10001
+HW_Port_1_Data =					$A10003
+HW_Port_2_Data =					$A10005
+HW_Expansion_Data =				$A10007
+HW_Port_1_Control =					$A10009
+HW_Port_2_Control =					$A1000B
+HW_Expansion_Control =				$A1000D
+HW_Port_1_TxData =					$A1000F
+HW_Port_1_RxData =					$A10011
+HW_Port_1_SCtrl =					$A10013
+HW_Port_2_TxData =					$A10015
+HW_Port_2_RxData =					$A10017
+HW_Port_2_SCtrl =					$A10019
+HW_Expansion_TxData =				$A1001B
+HW_Expansion_RxData =				$A1001D
+HW_Expansion_SCtrl =				$A1001F
 
 ; ---------------------------------------------------------------------------
 ; SRAM addresses
 ; ---------------------------------------------------------------------------
 
-SRAM_access_flag =				$A130F1
-Security_addr =					$A14000
+SRAM_access_flag =					$A130F1
+Security_addr =						$A14000
 
 ; ---------------------------------------------------------------------------
 ; Level Misc
 ; ---------------------------------------------------------------------------
 
-RingTable_Count:					= 512	; the maximum rings on the level. Even numbers only
-ObjectTable_Count:				= 768	; the maximum objects on the level. Even numbers only
+RingTable_Count:						= 512	; the maximum rings on the level. Even numbers only
+ObjectTable_Count:					= 768	; the maximum objects on the level. Even numbers only
 
 ; ---------------------------------------------------------------------------
 ; PLC queues
 ; ---------------------------------------------------------------------------
 
-PLCKosM_Count:					= 32		; the greater the queues, the more RAM is used for the buffer. Even numbers only
+PLCKosPlusM_Count:					= 32		; the greater the queues, the more RAM is used for the buffer. Even numbers only
 
 ; ---------------------------------------------------------------------------
 ; V-Int routines
@@ -600,7 +600,7 @@ TilemapToVRAM					= Plane_Map_To_VRAM			; alias from Sonic 1 (GitHub)
 PlaneMapToVRAM2				= Plane_Map_To_VRAM_2		; alias from Sonic 2 (GitHub)
 PlaneMapToVRAM3				= Plane_Map_To_VRAM_3		; alias from Sonic 2 (GitHub)
 EniDec							= Eni_Decomp					; alias from Sonic 1/2 (Hivebrain/GitHub)
-KosDec							= Kos_Decomp					; alias from Sonic 1/2 (Hivebrain/GitHub)
+KosPlusDec						= KosPlus_Decomp				; alias from Sonic 1/2 (Hivebrain/GitHub)
 Pal_FadeTo						= Pal_FadeFromBlack				; alias from Sonic 1 (Hivebrain)
 PaletteFadeIn						= Pal_FadeFromBlack				; alias from Sonic 1 (GitHub)
 Pal_FadeIn						= Pal_FromBlack					; alias from Sonic 1 (Hivebrain)

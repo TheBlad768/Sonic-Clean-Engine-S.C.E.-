@@ -5,6 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_HiddenMonitor:
+
+		; mapping
 		lea	ObjDat_HiddenMonitor(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)

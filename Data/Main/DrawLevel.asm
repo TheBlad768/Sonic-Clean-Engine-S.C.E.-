@@ -958,23 +958,22 @@ LoadLevelLoadBlock:
 		movea.l	(Level_data_addr_RAM.8x8data1).w,a1
 		move.w	(a1),d4											; save size
 		moveq	#tiles_to_bytes(0),d2								; VRAM
-		bsr.w	Queue_Kos_Module
+		bsr.w	Queue_KosPlus_Module
 
 		; load secondary level art
 		move.l	(Level_data_addr_RAM.8x8data2).w,d0
-;		andi.l	#$FFFFFF,d0										; temporary unused
 		beq.s	.waitplc
 		movea.l	d0,a1
 		move.w	d4,d2											; return size for the starting position
-		bsr.w	Queue_Kos_Module
+		bsr.w	Queue_KosPlus_Module
 
 .waitplc
 		move.b	#VintID_Fade,(V_int_routine).w
-		bsr.w	Process_Kos_Queue
+		bsr.w	Process_KosPlus_Queue
 		bsr.w	Wait_VSync
-		bsr.w	Process_Kos_Module_Queue
-		tst.w	(Kos_modules_left).w
-		bne.s	.waitplc
+		bsr.w	Process_KosPlus_Module_Queue
+		tst.w	(KosPlus_modules_left).w
+		bne.s	.waitplc											; wait for KosPlusM queue to clear
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -1034,7 +1033,7 @@ Load_Solids2:
 
 LoadLevelLoadBlock2:
 		movea.l	(Level_data_addr_RAM.PLC1).w,a5
-		bsr.w	LoadPLC_Raw_KosM
+		bsr.w	LoadPLC_Raw_KosPlusM
 
 .skipPLC
 		lea	(Level_data_addr_RAM.8x8data1).w,a2
@@ -1048,13 +1047,13 @@ LoadLevelLoadBlock2:
 		beq.s	.notsec
 		movea.l	d0,a0
 		lea	(RAM_start).l,a1
-		bsr.w	Kos_Decomp
+		bsr.w	KosPlus_Decomp
 
 		; load secondary level chunks
 		move.l	(a2)+,d0
 		beq.s	.notsec
 		movea.l	d0,a0
-		bsr.w	Kos_Decomp
+		bsr.w	KosPlus_Decomp
 
 .notsec
 		movea.l	(sp)+,a2											; restore a2

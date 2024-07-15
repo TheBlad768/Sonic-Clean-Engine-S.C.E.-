@@ -43,7 +43,7 @@ LevelSelect_horizontal_count:		ds.w $10
 
 LevelSelectScreen:
 		music	mus_Stop											; stop music
-		jsr	(Clear_Kos_Module_Queue).w								; clear KosM PLCs
+		jsr	(Clear_KosPlus_Module_Queue).w							; clear KosPlusM PLCs
 		ResetDMAQueue												; clear DMA queue
 		jsr	(Pal_FadeToBlack).w
 		disableInts
@@ -69,7 +69,7 @@ LevelSelectScreen:
 		move.b	d0,(Debug_mode_flag).w
 
 		; load main art
-		QueueKosModule	ArtKosM_LevelSelectText, 1
+		QueueKosPlusModule	ArtKosPM_LevelSelectText, 1
 
 		; load text
 		bsr.w	LevelSelect_LoadText
@@ -91,10 +91,10 @@ LevelSelectScreen:
 
 .waitplc
 		move.b	#VintID_Fade,(V_int_routine).w
-		jsr	(Process_Kos_Queue).w
+		jsr	(Process_KosPlus_Queue).w
 		jsr	(Wait_VSync).w
-		jsr	(Process_Kos_Module_Queue).w
-		tst.w	(Kos_modules_left).w
+		jsr	(Process_KosPlus_Module_Queue).w
+		tst.w	(KosPlus_modules_left).w
 		bne.s	.waitplc
 		move.b	#VintID_LevelSelect,(V_int_routine).w
 		jsr	(Wait_VSync).w

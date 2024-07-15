@@ -8,7 +8,7 @@ Obj_LevelResults:
 		music	mus_FadeOut										; fade out music
 
 		; load general art
-		QueueKosModule	ArtKosM_ResultsGeneral, $500
+		QueueKosPlusModule	ArtKosPM_ResultsGeneral, $500
 
 		; load act number art
 		moveq	#0,d0
@@ -18,10 +18,10 @@ Obj_LevelResults:
 		add.w	d0,d0
 		movea.l	(a1,d0.w),a1
 		move.w	#tiles_to_bytes($566),d2
-		jsr	(Queue_Kos_Module).w
+		jsr	(Queue_KosPlus_Module).w
 
 		; load character name art
-		QueueKosModule	ArtKosM_ResultsSONIC, $548					; select character name to use based on character of course
+		QueueKosPlusModule	ArtKosPM_ResultsSONIC, $548				; select character name to use based on character of course
 
 		; calc time
 		moveq	#0,d0
@@ -69,7 +69,7 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .create
-		tst.w	(Kos_modules_left).w
+		tst.w	(KosPlus_modules_left).w
 		bne.s	.return												; don't load the objects until the art has been loaded
 		jsr	(Create_New_Sprite3).w
 		bne.s	.return

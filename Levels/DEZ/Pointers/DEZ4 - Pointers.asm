@@ -3,18 +3,18 @@
 ; ---------------------------------------------------------------------------
 
 		; DEZ4
-		dc.l AnPal_DEZ, LevelPointer_Null, LevelPointer_Null, LevelPointer_Null													; Animate Palette, Resize, WaterResize, AfterBoss
-		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent									; ScreenInit, BackgroundInit, ScreenEvent, BackgroundEvent
-		dc.l LevelPointer_Null, AnimateTiles_DoAniPLC, AniPLC_DEZ															; Animate art init, Animate tiles main code, Animate tiles PLC scripts
-		levartptrs DEZ_8x8_KosM, 0, DEZ_16x16_Unc, Chunk_table, DEZ_128x128_Kos, 0, PalID_DEZ, PalID_WaterDEZ, mus_DEZ1	; Level 1st 8x8 data, 2nd 8x8 data, 1st 16x16 data, chunk pointer, 1st 128x128 data, 2nd 128x128 data, palette, music
-		dc.l DEZ1_Solid, DEZ4_Layout, DEZ4_Sprites, DEZ4_Rings																; Level solid, Level layout, Level sprites, Level rings
-		dc.l PLC1_DEZ4_Before, PLC2_DEZ4_After, PLCAnimals_DEZ1															; PLC1, PLC2, Animals
-		dc.w 0, $A20, 0, $4A0																								; Level xstart, Level xend, Level ystart, Level yend
-		watpalptrs $1000, PalID_WaterSonic, PalID_WaterSonic																; Starting water height, Water Sonic palette, unused
-		binclude "Levels/DEZ/Start Location/4.bin"																			; Players start location
+		dc.l AnPal_DEZ, LevelPointer_Null, LevelPointer_Null, LevelPointer_Null														; Animate Palette, Resize, WaterResize, AfterBoss
+		dc.l DEZ1_ScreenInit, DEZ1_BackgroundInit, DEZ1_ScreenEvent, DEZ1_BackgroundEvent										; ScreenInit, BackgroundInit, ScreenEvent, BackgroundEvent
+		dc.l LevelPointer_Null, AnimateTiles_DoAniPLC, AniPLC_DEZ																; Animate art init, Animate tiles main code, Animate tiles PLC scripts
+		levartptrs DEZ_8x8_KosPM, 0, DEZ_16x16_Unc, Chunk_table, DEZ_128x128_KosP, 0, PalID_DEZ, PalID_WaterDEZ, mus_DEZ1		; Level 1st 8x8 data, 2nd 8x8 data, 1st 16x16 data, chunk pointer, 1st 128x128 data, 2nd 128x128 data, palette, music
+		dc.l DEZ1_Solid, DEZ4_Layout, DEZ4_Sprites, DEZ4_Rings																	; Level solid, Level layout, Level sprites, Level rings
+		dc.l PLC1_DEZ4_Before, PLC2_DEZ4_After, PLCAnimals_DEZ1																; PLC1, PLC2, Animals
+		dc.w 0, $A20, 0, $4A0																									; Level xstart, Level xend, Level ystart, Level yend
+		watpalptrs $1000, PalID_WaterSonic, PalID_WaterSonic																	; Starting water height, Water Sonic palette, unused
+		binclude "Levels/DEZ/Start Location/4.bin"																				; Players start location
 
 	if (GameDebug<>0)&&(GameDebugAlt==0)
-		dc.l Debug_DEZ1																									; Debug Mode
+		dc.l Debug_DEZ1																										; Debug Mode
 	else
-		dc.l 0																											; Unused
+		dc.l 0																												; Unused
 	endif
