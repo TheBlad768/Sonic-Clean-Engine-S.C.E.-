@@ -1051,7 +1051,9 @@ LoadLevelLoadBlock2:
 		bsr.w	Kos_Decomp
 
 		; load secondary level chunks
-		movea.l	(a2)+,a0
+		move.l	(a2)+,d0
+		beq.s	.notsec
+		movea.l	d0,a0
 		bsr.w	Kos_Decomp
 
 .notsec
