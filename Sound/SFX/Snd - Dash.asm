@@ -4,7 +4,7 @@ Sound_B6_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $02
 
-	smpsHeaderSFXChannel cFM5, Sound_B6_FM5,	$00, $02
+	smpsHeaderSFXChannel cFM5, Sound_B6_FM5,	$00, $06
 	smpsHeaderSFXChannel cPSG3, Sound_B6_PSG3,	$00, $00
 
 ; FM5 Data

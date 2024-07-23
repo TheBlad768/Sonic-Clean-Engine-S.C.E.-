@@ -1,12 +1,12 @@
-SONIC-CLEAN-ENGINE-S.C.E.-
+SONIC-CLEAN-ENGINE-S.C.E.-FLAMEDRIVER-
+
+Main source code:
+
+https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-
 
 Extended source code:
 
 https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-
-
-If you are interested in the source code with the Z80 Sound Driver:
-
-https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Flamedriver-
 
 SPECIAL CREDITS:
 

@@ -43,11 +43,9 @@ Game_Program:
 		move.l	#Ref_Checksum_String,(Checksum_string).w			; set flag so checksum won't run again
 
 .init
-		jsr	(Init_MSU_Driver).l
-		seq	(SegaCD_Mode).w
 		jsr	(Init_DMA_Queue).w
 		jsr	(Init_VDP).w
-		jsr	(SoundDriverLoad).w
+		jsr	(SndDrvInit).w
 		jsr	(Init_Controllers).w
 		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w	; set screen mode to Level Select (SCE)
 

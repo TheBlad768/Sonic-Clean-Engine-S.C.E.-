@@ -1,31 +1,31 @@
-Sound3E_Roll_Header:
-	smpsHeaderStartSong 2
-	smpsHeaderVoice     Sound3E_Roll_Voices
+Sound_3C_Header:
+	smpsHeaderStartSong 3
+	smpsHeaderVoice     Sound_3C_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
 
-	smpsHeaderSFXChannel cFM4, Sound3E_Roll_FM4,	$0C, $05
+	smpsHeaderSFXChannel cFM4, Sound_3C_FM4,	$0C, $05
 
 ; FM4 Data
-Sound3E_Roll_FM4:
+Sound_3C_FM4:
 	smpsSetvoice        $00
 	dc.b	nRst, $01
 	smpsModSet          $03, $01, $09, $FF
 	dc.b	nCs6, $25
-	smpsModOff
+	smpsModSet          $00, $01, $00, $00
 
-Sound3E_Roll_Loop00:
+Sound_3C_Loop00:
 	dc.b	smpsNoAttack
-	smpsAlterVol        $01
-	dc.b	nG6, $02
-	smpsLoop            $00, $2A, Sound3E_Roll_Loop00
+	smpsFMAlterVol      $01
+	dc.b	nCs6, $02
+	smpsLoop            $00, $2A, Sound_3C_Loop00
 	smpsStop
 
-Sound3E_Roll_Voices:
+Sound_3C_Voices:
 ;	Voice $00
 ;	$3C
 ;	$00, $44, $02, $02, 	$1F, $1F, $1F, $15, 	$00, $1F, $00, $00
-;	$00, $00, $00, $00, 	$0F, $0F, $0F, $0F, 	$0D, $00, $28, $00
+;	$00, $00, $00, $00, 	$0F, $0F, $0F, $0F, 	$0D, $80, $28, $80
 	smpsVcAlgorithm     $04
 	smpsVcFeedback      $07
 	smpsVcUnusedBits    $00

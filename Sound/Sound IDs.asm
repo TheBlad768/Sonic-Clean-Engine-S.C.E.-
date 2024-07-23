@@ -1,76 +1,89 @@
 ; ---------------------------------------------------------------------------
-; Sound IDs
+; Sound commands list.
 ; ---------------------------------------------------------------------------
-; Background music
-offset :=	MusicIndex
-ptrsize :=	4
-idstart :=	1
-; $00 is reserved for silence
 
-mus__First = idstart
+	phase $E1
+mus__FirstCmd =			*			; ID of the first sound command
+mus_Fade =				*			; $E1 - fade out music
+mus_FadeOut			ds.b 1		; $E1 - fade out music
+mus_Stop				ds.b 1		; $E2 - stop music and sound effects
+mus_MutePSG			ds.b 1		; $E3 - mute all PSG channels
+mus_StopSFX			ds.b 1		; $E4 - stop all sound effects
+mus_FadeOut2			ds.b 1		; $E5 - fade out music (duplicate)
+mus__EndCmd =			*			; next ID after last sound command
+
+mus_FA =				$FA			; $FA - ???
+mus_StopSEGA =			$FE			; $FE - Stop SEGA sound
+mus_SEGA =				$FF			; $FF - Play SEGA sound
+
+	dephase
+
+; ---------------------------------------------------------------------------
+; Music ID's list. These do not affect the sound driver, be careful.
+
+	phase $01
+mus__First =				*			; ID of the first music
+
 ; Levels
-mus_DEZ1 =			SMPS_id(ptr_mus_dez1)
+mus_DEZ1				ds.b 1		; $01
 
 ; Bosses
-mus_MidBoss =		SMPS_id(ptr_mus_boss)
-mus_ZoneBoss =		SMPS_id(ptr_mus_boss2)
+mus_MidBoss			ds.b 1		; $02
+mus_ZoneBoss			ds.b 1		; $03
 
 ; Misc
-mus_Invincible =		SMPS_id(ptr_mus_invin)
-mus_GotThrough =	SMPS_id(ptr_mus_through)
-mus_Drowning =		SMPS_id(ptr_mus_drowning)
+mus_Invincible			ds.b 1		; $04
+mus_GotThrough			ds.b 1		; $05
+mus_Drowning			ds.b 1		; $06
 
-mus__Last =			SMPS_id(ptr_musend)-1
+mus_ExtraLife			= $00		; not used
 
-; Sound effects
-offset :=	SoundIndex
-ptrsize :=	4
-idstart :=	$40
+mus__End =				*			; next ID after last music
 
-sfx__First = idstart
-sfx_RingRight =		SMPS_id(ptr_snd40)
-sfx_RingLeft =		SMPS_id(ptr_snd41)
-sfx_RingLoss =		SMPS_id(ptr_snd42)
-sfx_Jump =			SMPS_id(ptr_snd43)
-sfx_Roll =			SMPS_id(ptr_snd44)
-sfx_Skid =			SMPS_id(ptr_snd45)
-sfx_Death =			SMPS_id(ptr_snd46)
-sfx_SpinDash =		SMPS_id(ptr_snd47)
-sfx_Splash =			SMPS_id(ptr_snd48)
-sfx_InstaAttack =		SMPS_id(ptr_snd49)
-sfx_FireShield =		SMPS_id(ptr_snd4A)
-sfx_BubbleShield =	SMPS_id(ptr_snd4B)
-sfx_LightningShield =	SMPS_id(ptr_snd4C)
-sfx_FireAttack =		SMPS_id(ptr_snd4D)
-sfx_BubbleAttack =	SMPS_id(ptr_snd4E)
-sfx_ElectricAttack =	SMPS_id(ptr_snd4F)
-sfx_SpikeHit =		SMPS_id(ptr_snd50)
-sfx_SpikeMove =		SMPS_id(ptr_snd51)
-sfx_Drown =			SMPS_id(ptr_snd52)
-sfx_StarPost =		SMPS_id(ptr_snd53)
-sfx_Spring =			SMPS_id(ptr_snd54)
-sfx_Dash =			SMPS_id(ptr_snd55)
-sfx_Break =			SMPS_id(ptr_snd56)
-sfx_BossHit =			SMPS_id(ptr_snd57)
-sfx_AirDing =		SMPS_id(ptr_snd58)
-sfx_Bubble =			SMPS_id(ptr_snd59)
-sfx_Explode =		SMPS_id(ptr_snd5A)
-sfx_Signpost =		SMPS_id(ptr_snd5B)
-sfx_Switch =			SMPS_id(ptr_snd5C)
-sfx_Register =		SMPS_id(ptr_snd5D)
+	dephase
 
-sfx__Last =			SMPS_id(ptr_sndend)-1
+; ---------------------------------------------------------------------------
+; Sound effect ID's list. These do not affect the sound driver, be careful.
 
-; Sound commands
-offset :=	Sound_ExIndex
-ptrsize :=	2
-idstart :=	$FA
+	phase $01
+sfx__First =				*			; ID of the first sound effect
 
-flg__First = idstart
-sfx_Fade =			SMPS_id(ptr_flgFA)
-mus_Fade =			SMPS_id(ptr_flgFB)
-sfx_Sega =			SMPS_id(ptr_flgFC)
-mus_Speedup =		SMPS_id(ptr_flgFD)
-mus_Slowdown =		SMPS_id(ptr_flgFE)
-mus_Stop =			SMPS_id(ptr_flgFF)
-flg__Last =			SMPS_id(ptr_flgend)-1
+sfx_RingRight			ds.b 1		; $01
+sfx_RingLeft				ds.b 1		; $02
+sfx_RingLoss				ds.b 1		; $03
+sfx_Jump				ds.b 1		; $04
+sfx_Roll					ds.b 1		; $05
+sfx_Skid					ds.b 1		; $06
+sfx_Death				ds.b 1		; $07
+sfx_SpinDash				ds.b 1		; $08
+sfx_Splash				ds.b 1		; $09
+sfx_InstaAttack			ds.b 1		; $0A
+sfx_FireShield			ds.b 1		; $0B
+sfx_BubbleShield			ds.b 1		; $0C
+sfx_LightningShield		ds.b 1		; $0D
+sfx_FireAttack			ds.b 1		; $0E
+sfx_BubbleAttack			ds.b 1		; $0F
+sfx_ElectricAttack			ds.b 1		; $10
+sfx_SpikeHit				ds.b 1		; $11
+sfx_SpikeMove			ds.b 1		; $12
+sfx_Drown				ds.b 1		; $13
+sfx_StarPost				ds.b 1		; $14
+sfx_Spring				ds.b 1		; $15
+sfx_Dash					ds.b 1		; $16
+sfx_Break				ds.b 1		; $17
+sfx_BossHit				ds.b 1		; $18
+sfx_AirDing				ds.b 1		; $19
+sfx_Bubble				ds.b 1		; $1A
+sfx_Explode				ds.b 1		; $1B
+sfx_Signpost				ds.b 1		; $1C
+sfx_Switch				ds.b 1		; $1D
+sfx_Register				ds.b 1		; $1E
+
+; Continuous
+sfx__FirstContinuous =	*			; ID of the first continuous sound effect
+
+
+sfx__End =				*			; next ID after the last sound effect
+
+	dephase
+	!org 0							; make sure we reset the ROM position to 0

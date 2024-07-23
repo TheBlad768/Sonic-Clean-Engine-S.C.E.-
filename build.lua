@@ -11,15 +11,12 @@ local debug = false
 -- End of settings --
 ---------------------
 
--- Delete old files.
-os.remove("Sonic.h", "Sonic.p")
-
 local common = require "AS.lua.common"
 
 local compression = "kosinskiplus"
 
 -- Assemble the ROM.
-local message, abort = common.build_rom("Sonic", "Sonic", "", "-p=FF -z=0," .. compression .. ",Size_of_DAC_driver_guess,after", false, "https://github.com/sonicretro/skdisasm")
+local message, abort = common.build_rom("Sonic", "Sonic", "", "-p=FF -z=0," .. compression .. ",Size_of_Snd_driver_guess,after", false, "https://github.com/sonicretro/skdisasm")
 
 if message then
 	exit_code = false
@@ -32,7 +29,7 @@ end
 -- Buld DEBUG ROM
 
 if debug then
-	local message, abort = common.build_rom("Sonic", "Sonic.Debug", "-D __DEBUG__ -OLIST Sonic.Debug.lst", "-p=FF -z=0," .. compression .. ",Size_of_DAC_driver_guess,after", false, "https://github.com/sonicretro/skdisasm")
+	local message, abort = common.build_rom("Sonic", "Sonic.Debug", "-D __DEBUG__ -OLIST Sonic.Debug.lst", "-p=FF -z=0," .. compression .. ",Size_of_Snd_driver_guess,after", false, "https://github.com/sonicretro/skdisasm")
 
 	if message then
 		exit_code = false
@@ -61,40 +58,6 @@ common.fix_header("Sonic.gen")
 
 if debug then
 	common.fix_header("Sonic.Debug.gen")
-end
-
--- Delete old files.
-os.remove("Sonic.h", "Sonic.p")
-
--- copy ROM.
-local os_name, arch_name = require "AS.lua.get_os_name".get_os_name()
-local source = "Sonic.gen"
-local destination = "_CD"
-
-local command
-
-if os_name == "Windows" then
-    command = "copy " .. source .. " " .. destination
-else
-    command = "cp " .. source .. " " .. destination
-end
-
-os.execute(command)
-
-if debug then
-	local os_name, arch_name = require "AS.lua.get_os_name".get_os_name()
-	local source = "Sonic.Debug.gen"
-	local destination = "_CD"
-
-	local command
-
-	if os_name == "Windows" then
-	    command = "copy " .. source .. " " .. destination
-	else
-	    command = "cp " .. source .. " " .. destination
-	end
-
-	os.execute(command)
 end
 
 os.exit(exit_code, false)

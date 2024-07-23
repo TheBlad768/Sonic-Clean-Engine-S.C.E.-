@@ -140,9 +140,6 @@ Camera_RAM_end					= *
 Plane_buffer:							ds.w $240					; used by level drawing routines
 Plane_buffer_end
 
-; sound variables
-v_snddriver_ram:						ds.b $400					; start of RAM for the sound driver data
-
 ; misc variables
 Game_mode:							ds.b 1
 V_int_routine:						ds.b 1

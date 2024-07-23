@@ -232,7 +232,8 @@ Sonic_ChkShoes:										; checks if Speed Shoes have expired and disables them 
 		move.w	#$C,Acceleration-Max_speed(a4)		; set Acceleration
 		move.w	#$80,Deceleration-Max_speed(a4)		; set Deceleration
 		bclr	#Status_SpeedShoes,status_secondary(a0)
-		music	mus_Slowdown,1						; slow down tempo
+		moveq	#0,d0
+		jmp	(Change_Music_Tempo).w					; slow down tempo
 ; ---------------------------------------------------------------------------
 
 Sonic_ExitChk:

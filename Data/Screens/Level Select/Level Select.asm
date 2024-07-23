@@ -14,9 +14,9 @@ LevelSelect_MusicTestCount:		= 8
 LevelSelect_SoundTestCount:		= LevelSelect_MusicTestCount+1
 LevelSelect_SampleTestCount:		= LevelSelect_SoundTestCount+1
 LevelSelect_MaxCount:			= 11
-LevelSelect_MaxMusicNumber:		= (mus__Last-mus__First)
-LevelSelect_MaxSoundNumber:		= (sfx__Last-sfx__First)
-LevelSelect_MaxSampleNumber:	= (dac__Last-dac__First)
+LevelSelect_MaxMusicNumber:		= (mus__End-mus__First)-1
+LevelSelect_MaxSoundNumber:		= (sfx__End-sfx__First)-1
+LevelSelect_MaxSampleNumber:	= $10
 
 ; RAM
 	phase ramaddr(RAM_start)
@@ -173,7 +173,7 @@ LevelSelect_Controls:
 
 		; play sample
 		move.w	d3,d0
-		addi.w	#dac__First,d0										; $80 is reserved for pause
+		addq.w	#1,d0												; $80 is reserved for pause
 		jmp	(Play_Sample).w											; play sample
 
 ; ---------------------------------------------------------------------------

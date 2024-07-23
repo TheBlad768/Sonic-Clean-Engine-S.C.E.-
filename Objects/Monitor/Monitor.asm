@@ -307,7 +307,8 @@ Monitor_Give_SpeedShoes:
 		move.w	#$C00,Max_speed-Max_speed(a4)					; set max speed
 		move.w	#$18,Acceleration-Max_speed(a4)					; set acceleration
 		move.w	#$80,Deceleration-Max_speed(a4)					; set deceleration
-		music	mus_Speedup,1									; speed up the music
+		moveq	#8,d0
+		jmp	(Change_Music_Tempo).w								; speed up the music
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Fire_Shield:

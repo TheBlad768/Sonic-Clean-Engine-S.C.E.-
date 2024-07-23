@@ -161,9 +161,6 @@ Snd_Boss_Loop01:
 
 ; DAC Data
 Snd_Boss_DAC:
-	smpsPan             panCenter, $00
-
-Snd_Boss_Jump01:
 	dc.b	dSnareS3, $0C, dKickS3, dKickS3, dSnareS3, dKickS3, dKickS3, dSnareS3, dKickS3, dSnareS3, dKickS3, $24
 	dc.b	dKickS3, $18, dSnareS3, $0C, dSnareS3, dSnareS3, dKickS3, dKickS3, dSnareS3, dKickS3, dKickS3, dSnareS3
 	dc.b	dKickS3, dSnareS3, dKickS3, $24, dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3
@@ -172,7 +169,7 @@ Snd_Boss_Loop00:
 	dc.b	dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dKickS3, $0C, dSnareS3, dKickS3, dSnareS3
 	smpsLoop            $00, $0F, Snd_Boss_Loop00
 	dc.b	dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3, $06, dSnareS3, dKickS3, $0C, dSnareS3, dSnareS3, dSnareS3
-	smpsJump            Snd_Boss_Jump01
+	smpsJump            Snd_Boss_DAC
 
 ; PSG1 Data
 Snd_Boss_PSG1:

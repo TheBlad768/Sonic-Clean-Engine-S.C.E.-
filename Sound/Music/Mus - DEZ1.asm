@@ -197,12 +197,9 @@ Snd_DEZ1_Loop09:
 
 ; DAC Data
 Snd_DEZ1_DAC:
-	smpsPan             panCenter, $00
-
-Snd_DEZ1_Loop18:
 	dc.b	dKickS3, $06, dKickS3, dKickS3, dKickS3, dSnareS3, $18, dKickS3, $06, dKickS3, dKickS3, dKickS3
 	dc.b	dSnareS3, $18
-	smpsLoop            $00, $03, Snd_DEZ1_Loop18
+	smpsLoop            $00, $03, Snd_DEZ1_DAC
 	dc.b	dKickS3, $06, dKickS3, dKickS3, dKickS3, dSnareS3, $18, dKickS3, $06, dKickS3, dKickS3, dKickS3
 	dc.b	dSnareS3, $0C, dSnareS3, $06, dSnareS3
 
@@ -239,7 +236,7 @@ Snd_DEZ1_Loop04:
 	smpsLoop            $00, $04, Snd_DEZ1_Loop04
 	dc.b	dKickS3, $06, dKickS3, dKickS3, dKickS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dSnareS3, dKickS3
 	dc.b	dSnareS3, $0C, dSnareS3, dSnareS3, $06, dSnareS3, $0C, dSnareS3, nRst, $48
-	smpsJump            Snd_DEZ1_Loop18
+	smpsJump            Snd_DEZ1_DAC
 
 ; PSG1 Data
 Snd_DEZ1_PSG1:
@@ -321,3 +318,4 @@ Snd_DEZ1_Voices:
 	smpsVcDecayLevel    $0F, $0F, $0F, $08
 	smpsVcReleaseRate   $08, $09, $08, $09
 	smpsVcTotalLevel    $08, $08, $08, $82
+

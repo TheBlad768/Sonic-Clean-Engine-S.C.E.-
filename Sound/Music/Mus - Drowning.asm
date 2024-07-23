@@ -93,7 +93,6 @@ Snd_Drown_Loop00:
 
 ; DAC Data
 Snd_Drown_DAC:
-	smpsPan             panCenter, $00
 	dc.b	dSnareS3, $0C, dSnareS3, dSnareS3, dSnareS3
 	smpsLoop            $00, $0A, Snd_Drown_DAC
 	dc.b	dSnareS3, $06
