@@ -10,7 +10,7 @@ LevelLoadPointer:
 		include "Levels/DEZ/Pointers/DEZ3 - Pointers.asm"
 		include "Levels/DEZ/Pointers/DEZ4 - Pointers.asm"
 
-		zonewarning LevelLoadPointer,(116*4)
+		zonewarning LevelLoadPointer,(124*4)
 
 ; ===========================================================================
 ; Compressed level graphics - tile, primary patterns and block mappings
@@ -38,7 +38,7 @@ HeightMapsRot:			binclude "Misc Data/Height Maps Rotated.bin"
 ; Level collision data
 ; ===========================================================================
 
-DEZ1_Solid:				binclude "Levels/DEZ/Collision/1.bin"
+DEZ_Solid:				binclude "Levels/DEZ/Collision/1.bin"
 	even
 
 ; ===========================================================================
@@ -55,7 +55,7 @@ DEZ4_Layout:			bincludeEntry "Levels/DEZ/Layout/4.bin"
 	even
 
 ; ===========================================================================
-; Level object data
+; Level objects data
 ; ===========================================================================
 
 	ObjectLayoutBoundary
@@ -70,7 +70,7 @@ DEZ4_Sprites:			binclude "Levels/DEZ/Object Pos/4.bin"
 	even
 
 ; ===========================================================================
-; Level ring data
+; Level rings data
 ; ===========================================================================
 
 	RingLayoutBoundary

@@ -324,7 +324,7 @@ Sonic_OutWater:
 		asl.w	y_vel(a0)
 
 loc_10EFC:
-		cmpi.b	#id_Blank,anim(a0)			; is Sonic in his 'blank' animation
+		cmpi.b	#AniIDSonAni_Blank,anim(a0)	; is Sonic in his 'blank' animation
 		beq.w	locret_10E2C					; if so, branch
 		tst.w	y_vel(a0)
 		beq.w	locret_10E2C
@@ -347,7 +347,31 @@ Sonic_MdNormal:
 		bsr.w	Player_LevelBound
 		jsr	(MoveSprite2_TestGravity).w
 		bsr.s	Call_Player_AnglePos
-		bra.w	Player_SlopeRepel
+		bsr.w	Player_SlopeRepel
+
+		; check flag
+		tst.b	(Background_collision_flag).w
+		beq.s	locret_10F82
+		jsr	(sub_F846).w
+		tst.w	d1
+		bmi.w	Kill_Character
+		movem.l	a4-a6,-(sp)
+		jsr	(CheckLeftWallDist).w
+		tst.w	d1
+		bpl.s	loc_10F72
+		sub.w	d1,x_pos(a0)
+
+loc_10F72:
+		jsr	(CheckRightWallDist).w
+		tst.w	d1
+		bpl.s	loc_10F7E
+		add.w	d1,x_pos(a0)
+
+loc_10F7E:
+		movem.l	(sp)+,a4-a6
+
+locret_10F82:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -415,7 +439,31 @@ loc_10FEA:
 		bsr.w	Player_LevelBound
 		jsr	(MoveSprite2_TestGravity).w
 		bsr.w	Call_Player_AnglePos
-		bra.w	Player_SlopeRepel
+		bsr.w	Player_SlopeRepel
+
+		; check flag
+		tst.b	(Background_collision_flag).w
+		beq.s	locret_11034
+		jsr	(sub_F846).w
+		tst.w	d1
+		bmi.w	Kill_Character
+		movem.l	a4-a6,-(sp)
+		jsr	(CheckLeftWallDist).w
+		tst.w	d1
+		bpl.s	loc_11024
+		sub.w	d1,x_pos(a0)
+
+loc_11024:
+		jsr	(CheckRightWallDist).w
+		tst.w	d1
+		bpl.s	loc_11030
+		add.w	d1,x_pos(a0)
+
+loc_11030:
+		movem.l	(sp)+,a4-a6
+
+locret_11034:
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Start of subroutine Sonic_MdJump
@@ -465,7 +513,7 @@ Sonic_ChgFallAnim:
 		beq.s	.return
 		bset	#Status_Roll,status(a0)
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)	; set y_radius and x_radius
-		move.b	#id_Roll,anim(a0)				; use "rolling"	animation
+		move.b	#AniIDSonAni_Roll,anim(a0)	; use "rolling"	animation
 		addq.w	#5,y_pos(a0)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.return
@@ -515,7 +563,7 @@ Sonic_NotRight:
 		tst.w	d1
 		bne.w	loc_112EA
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Wait,anim(a0)			; use standing animation
+		move.b	#AniIDSonAni_Wait,anim(a0)	; use standing animation
 		btst	#Status_OnObj,status(a0)
 		beq.w	Sonic_Balance
 		movea.w	interact(a0),a1				; load interacting object's RAM space
@@ -541,42 +589,42 @@ Sonic_NotRight:
 Sonic_BalanceOnObjRight:
 		btst	#Status_Facing,status(a0)	; is Sonic facing right?
 		bne.s	loc_11128			; if so, branch
-		move.b	#id_Balance,anim(a0)	; Balance animation 1
+		move.b	#AniIDSonAni_Balance,anim(a0)	; Balance animation 1
 		addq.w	#6,d2				; extend balance range
 		cmp.w	d2,d1				; is Sonic within (two units before and) four units past the right edge?
 		blt.w	loc_112EA			; if so branch
-		move.b	#id_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
+		move.b	#AniIDSonAni_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
 		bra.w	loc_112EA
 loc_11128:	; +
 		; Somewhat dummied out/redundant code from Sonic 2
 		; Originally, Sonic displayed different animations for each direction faced
 		; But now, Sonic uses only the one set of animations no matter what, making the check pointless, and the code redundant
 		bclr	#Status_Facing,status(a0)
-		move.b	#id_Balance,anim(a0)	; Balance animation 1
+		move.b	#AniIDSonAni_Balance,anim(a0)	; Balance animation 1
 		addq.w	#6,d2				; extend balance range
 		cmp.w	d2,d1				; is Sonic within (two units before and) four units past the right edge?
 		blt.w	loc_112EA			; if so branch
-		move.b	#id_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
+		move.b	#AniIDSonAni_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
 		bra.w	loc_112EA
 ; ---------------------------------------------------------------------------
 
 Sonic_BalanceOnObjLeft:
 		btst	#Status_Facing,status(a0)	; is Sonic facing right?
 		beq.s	loc_11166
-		move.b	#id_Balance,anim(a0)	; Balance animation 1
+		move.b	#AniIDSonAni_Balance,anim(a0)	; Balance animation 1
 		cmpi.w	#-4,d1		; is Sonic within (two units before and) four units past the left edge?
 		bge.w	loc_112EA	; if so branch (instruction signed to match)
-		move.b	#id_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
+		move.b	#AniIDSonAni_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
 		bra.w	loc_112EA
 loc_11166:	; +
 		; Somewhat dummied out/redundant code from Sonic 2
 		; Originally, Sonic displayed different animations for each direction faced
 		; But now, Sonic uses only the one set of animations no matter what, making the check pointless, and the code redundant
 		bset	#Status_Facing,status(a0)	; is Sonic facing right?
-		move.b	#id_Balance,anim(a0)	; Balance animation 1
+		move.b	#AniIDSonAni_Balance,anim(a0)	; Balance animation 1
 		cmpi.w	#-4,d1		; is Sonic within (two units before and) four units past the left edge?
 		bge.w	loc_112EA	; if so branch (instruction signed to match)
-		move.b	#id_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
+		move.b	#AniIDSonAni_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
 		bra.w	loc_112EA
 ; ---------------------------------------------------------------------------
 ; balancing checks for when you're on the edge of part of the level
@@ -589,13 +637,13 @@ Sonic_Balance:
 		bne.s	loc_111F6
 		btst	#Status_Facing,status(a0)
 		bne.s	loc_111CE
-		move.b	#id_Balance,anim(a0)
+		move.b	#AniIDSonAni_Balance,anim(a0)
 		move.w	x_pos(a0),d3
 		subq.w	#6,d3
 		bsr.w	ChooseChkFloorEdge
 		cmpi.w	#$C,d1
 		blt.w	loc_112EA
-		move.b	#id_Balance2,anim(a0)
+		move.b	#AniIDSonAni_Balance2,anim(a0)
 		bra.w	loc_112EA
 		; on right edge but facing left:
 loc_111CE:	; +
@@ -603,13 +651,13 @@ loc_111CE:	; +
 		; Originally, Sonic displayed different animations for each direction faced
 		; But now, Sonic uses only the one set of animations no matter what, making the check pointless, and the code redundant
 		bclr	#Status_Facing,status(a0)
-		move.b	#id_Balance,anim(a0)
+		move.b	#AniIDSonAni_Balance,anim(a0)
 		move.w	x_pos(a0),d3
 		subq.w	#6,d3
 		bsr.w	ChooseChkFloorEdge
 		cmpi.w	#$C,d1
 		blt.w	loc_112EA
-		move.b	#id_Balance2,anim(a0)
+		move.b	#AniIDSonAni_Balance2,anim(a0)
 		bra.w	loc_112EA
 ; ---------------------------------------------------------------------------
 
@@ -618,25 +666,25 @@ loc_111F6:
 		bne.s	loc_11276
 		btst	#Status_Facing,status(a0)
 		beq.s	loc_11228
-		move.b	#id_Balance,anim(a0)
+		move.b	#AniIDSonAni_Balance,anim(a0)
 		move.w	x_pos(a0),d3
 		addq.w	#6,d3
 		bsr.w	ChooseChkFloorEdge
 		cmpi.w	#$C,d1
 		blt.w	loc_112EA
-		move.b	#id_Balance2,anim(a0)
+		move.b	#AniIDSonAni_Balance2,anim(a0)
 		bra.w	loc_112EA
 ; ---------------------------------------------------------------------------
 
 loc_11228:
 		bset	#Status_Facing,status(a0)
-		move.b	#id_Balance,anim(a0)
+		move.b	#AniIDSonAni_Balance,anim(a0)
 		move.w	x_pos(a0),d3
 		addq.w	#6,d3
 		bsr.w	ChooseChkFloorEdge
 		cmpi.w	#$C,d1
 		blt.w	loc_112EA
-		move.b	#id_Balance2,anim(a0)
+		move.b	#AniIDSonAni_Balance2,anim(a0)
 		bra.s	loc_112EA
 ; ---------------------------------------------------------------------------
 
@@ -645,7 +693,7 @@ loc_11276:
 		bne.s	loc_112B0
 		btst	#button_down,(Ctrl_1_logical).w
 		beq.s	loc_112B0
-		move.b	#id_Duck,anim(a0)
+		move.b	#AniIDSonAni_Duck,anim(a0)
 		addq.b	#1,scroll_delay_counter(a0)
 		cmpi.b	#2*60,scroll_delay_counter(a0)
 		blo.s		loc_112F0
@@ -668,7 +716,7 @@ loc_112A6:
 loc_112B0:
 		btst	#button_up,(Ctrl_1_logical).w
 		beq.s	loc_112EA
-		move.b	#id_LookUp,anim(a0)
+		move.b	#AniIDSonAni_LookUp,anim(a0)
 		addq.b	#1,scroll_delay_counter(a0)
 		cmpi.b	#2*60,scroll_delay_counter(a0)
 		blo.s		loc_112F0
@@ -808,7 +856,7 @@ loc_113FE:
 		bset	#Status_Facing,status(a0)
 		bne.s	loc_11412
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Run,prev_anim(a0)
+		move.b	#AniIDSonAni_Run,prev_anim(a0)
 
 loc_11412:
 		sub.w	d5,d0
@@ -843,7 +891,7 @@ loc_11438:
 		tst.b	flip_type(a0)
 		bmi.s	locret_11480
 		sfx	sfx_Skid
-		move.b	#id_Stop,anim(a0)
+		move.b	#AniIDSonAni_Stop,anim(a0)
 		bclr	#Status_Facing,status(a0)
 		cmpi.b	#12,air_left(a0)						; check air remaining
 		blo.s		locret_11480							; if less than 12, branch
@@ -861,7 +909,7 @@ sub_11482:
 		bclr	#Status_Facing,status(a0)
 		beq.s	loc_1149C
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Run,prev_anim(a0)
+		move.b	#AniIDSonAni_Run,prev_anim(a0)
 
 loc_1149C:
 		add.w	d5,d0
@@ -874,7 +922,7 @@ loc_1149C:
 
 loc_114AA:
 		move.w	d0,ground_vel(a0)
-		clr.b	anim(a0)	; id_Walk
+		clr.b	anim(a0)	; AniIDSonAni_Walk
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -894,7 +942,7 @@ loc_114BE:
 		tst.b	flip_type(a0)
 		bmi.s	locret_11506
 		sfx	sfx_Skid
-		move.b	#id_Stop,anim(a0)
+		move.b	#AniIDSonAni_Stop,anim(a0)
 		bset	#Status_Facing,status(a0)
 		cmpi.b	#12,air_left(a0)						; check air remaining
 		blo.s		locret_11506							; if less than 12, branch
@@ -963,7 +1011,7 @@ loc_11578:
 		bclr	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
 		move.w	default_y_radius(a0),y_radius(a0)
-		move.b	#id_Wait,anim(a0)
+		move.b	#AniIDSonAni_Wait,anim(a0)
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -1021,7 +1069,7 @@ sub_11608:
 
 loc_11610:
 		bset	#Status_Facing,status(a0)
-		move.b	#id_Roll,anim(a0)
+		move.b	#AniIDSonAni_Roll,anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1040,7 +1088,7 @@ sub_1162C:
 		move.w	ground_vel(a0),d0
 		bmi.s	loc_11640
 		bclr	#Status_Facing,status(a0)
-		move.b	#id_Roll,anim(a0)
+		move.b	#AniIDSonAni_Roll,anim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1209,14 +1257,14 @@ loc_1176A:
 		bhs.s	loc_11790								; if so, branch
 		btst	#Status_OnObj,status(a0)						; is Sonic/Knux stand on object?
 		bne.s	locret_1177E								; if yes, branch
-		move.b	#id_Duck,anim(a0)						; enter ducking animation
+		move.b	#AniIDSonAni_Duck,anim(a0)				; enter ducking animation
 
 locret_1177E:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_11780:
-		cmpi.b	#id_Duck,anim(a0)						; is Sonic ducking?
+		cmpi.b	#AniIDSonAni_Duck,anim(a0)				; is Sonic ducking?
 		bne.s	locret_1177E
 		clr.b	anim(a0)									; if so, enter walking animation
 		rts
@@ -1231,7 +1279,7 @@ loc_11790:
 loc_1179A:
 		bset	#Status_Roll,status(a0)
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)		; set y_radius and x_radius
-		move.b	#id_Roll,anim(a0)							; enter roll animation
+		move.b	#AniIDSonAni_Roll,anim(a0)				; enter roll animation
 		addq.w	#5,y_pos(a0)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_117C2
@@ -1297,7 +1345,7 @@ loc_1182E:
 		btst	#Status_Roll,status(a0)
 		bne.s	locret_118B2
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)		; set y_radius and x_radius
-		move.b	#id_Roll,anim(a0)							; use "jumping" animation
+		move.b	#AniIDSonAni_Roll,anim(a0)				; use "jumping" animation
 		bset	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
 		sub.b	default_y_radius(a0),d0
@@ -1412,30 +1460,54 @@ locret_11A14:
 SonicKnux_Spindash:
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_11C5E
-		cmpi.b	#id_Duck,anim(a0)
+		cmpi.b	#AniIDSonAni_Duck,anim(a0)
 		bne.s	locret_11A14
 		moveq	#btnABC,d0
 		and.b	(Ctrl_1_pressed_logical).w,d0
 		beq.s	locret_11A14
-		move.b	#id_SpinDash,anim(a0)
+		move.b	#AniIDSonAni_SpinDash,anim(a0)
 		sfx	sfx_SpinDash
 		addq.w	#4,sp
 		move.b	#1,spin_dash_flag(a0)
 		clr.w	spin_dash_counter(a0)
-		cmpi.b	#12,air_left(a0)
-		blo.s		loc_11C24
-		move.b	#2,anim(a6)		; Dust
+		cmpi.b	#12,air_left(a0)							; check air remaining
+		blo.s		loc_11C24								; if less than 12, branch
+		move.b	#2,anim(a6)								; Dust
 
 loc_11C24:
 		bsr.w	Player_LevelBound
-		bra.w	Call_Player_AnglePos
+		bsr.w	Call_Player_AnglePos
+
+		; check flag
+		tst.b	(Background_collision_flag).w
+		beq.s	locret_11C5C
+		jsr	(sub_F846).w
+		tst.w	d1
+		bmi.w	Kill_Character
+		movem.l	a4-a6,-(sp)
+		jsr	(CheckLeftWallDist).w
+		tst.w	d1
+		bpl.s	loc_11C4C
+		sub.w	d1,x_pos(a0)
+
+loc_11C4C:
+		jsr	(CheckRightWallDist).w
+		tst.w	d1
+		bpl.s	loc_11C58
+		add.w	d1,x_pos(a0)
+
+loc_11C58:
+		movem.l	(sp)+,a4-a6
+
+locret_11C5C:
+		rts
 ; ---------------------------------------------------------------------------
 
 loc_11C5E:
 		btst	#button_down,(Ctrl_1_logical).w
 		bne.w	loc_11D16
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)		; set y_radius and x_radius
-		move.b	#id_Roll,anim(a0)
+		move.b	#AniIDSonAni_Roll,anim(a0)
 		addq.w	#5,y_pos(a0)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_11C8C
@@ -1501,7 +1573,7 @@ loc_11D2E:
 		moveq	#btnABC,d0
 		and.b	(Ctrl_1_pressed_logical).w,d0
 		beq.s	loc_11D5E
-		move.w	#bytes_to_word(id_SpinDash,id_Walk),anim(a0)
+		move.w	#bytes_to_word(AniIDSonAni_SpinDash,AniIDSonAni_Walk),anim(a0)
 		sfx	sfx_SpinDash
 		addi.w	#$200,spin_dash_counter(a0)
 		cmpi.w	#$800,spin_dash_counter(a0)
@@ -1530,7 +1602,31 @@ loc_11D6A:
 
 loc_11D6C:
 		bsr.w	Player_LevelBound
-		bra.w	Call_Player_AnglePos
+		bsr.w	Call_Player_AnglePos
+
+		; check flag
+		tst.b	(Background_collision_flag).w
+		beq.s	locret_11DA4
+		jsr	(sub_F846).w
+		tst.w	d1
+		bmi.w	Kill_Character
+		movem.l	a4-a6,-(sp)
+		jsr	(CheckLeftWallDist).w
+		tst.w	d1
+		bpl.s	loc_11D94
+		sub.w	d1,x_pos(a0)
+
+loc_11D94:
+		jsr	(CheckRightWallDist).w
+		tst.w	d1
+		bpl.s	loc_11DA0
+		add.w	d1,x_pos(a0)
+
+loc_11DA0:
+		movem.l	(sp)+,a4-a6
+
+locret_11DA4:
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to slow Sonic walking up a slope
@@ -2084,7 +2180,7 @@ BubbleShield_Bounce:
 		move.b	#1,jumping(a0)
 		clr.b	stick_to_convex(a0)
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)		; set y_radius and x_radius
-		move.b	#id_Roll,anim(a0)
+		move.b	#AniIDSonAni_Roll,anim(a0)
 		bset	#Status_Roll,status(a0)
 		move.b	y_radius(a0),d0
 		sub.b	default_y_radius(a0),d0

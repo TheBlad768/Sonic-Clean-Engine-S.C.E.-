@@ -11,9 +11,6 @@ local debug = false
 -- End of settings --
 ---------------------
 
--- Delete old files.
-os.remove("Sonic.h", "Sonic.p")
-
 local common = require "AS.lua.common"
 
 local compression = "kosinskiplus"
@@ -62,9 +59,6 @@ common.fix_header("Sonic.gen")
 if debug then
 	common.fix_header("Sonic.Debug.gen")
 end
-
--- Delete old files.
-os.remove("Sonic.h", "Sonic.p")
 
 -- copy ROM.
 local os_name, arch_name = require "AS.lua.get_os_name".get_os_name()

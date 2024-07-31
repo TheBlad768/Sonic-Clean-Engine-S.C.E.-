@@ -72,7 +72,7 @@ Obj_TitleCard:
 		move.b	d2,objoff_28(a1)
 		move.b	#rfMulti,render_flags(a1)
 		move.l	#Map_TitleCard,mappings(a1)
-		move.w	#$500,art_tile(a1)
+		move.w	#make_art_tile($500,0,0),art_tile(a1)
 		move.w	a0,parent2(a1)
 		jsr	(Create_New_Sprite4).w
 		dbne	d1,.loop

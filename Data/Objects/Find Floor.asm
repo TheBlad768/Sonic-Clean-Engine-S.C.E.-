@@ -113,7 +113,7 @@ loc_ED32:
 loc_ED38:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Run,prev_anim(a0)
+		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -222,7 +222,7 @@ loc_EE40:
 loc_EE46:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Run,prev_anim(a0)
+		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -295,7 +295,7 @@ loc_EEEE:
 loc_EEF4:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Run,prev_anim(a0)
+		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -368,12 +368,37 @@ loc_EF9C:
 loc_EFA2:
 		bset	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		move.b	#id_Run,prev_anim(a0)
+		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
-GetFloorPosition:
+GetFloorPosition_BG:
+		movea.l	(Level_layout_addr_ROM).w,a1
+		move.w	d2,d0
+		lsr.w	#5,d0
+		and.w	(Layout_row_index_mask).w,d0
+		move.w	d3,d1
+		lsr.w	#3,d1
+		move.w	d1,d4
+		lsr.w	#4,d1
+		add.w	$A(a1,d0.w),d1
+		adda.w	d1,a1
+		moveq	#0,d1
+		move.b	(a1),d1
+		lsl.w	#7,d1					; multiply by $80
+		move.w	d2,d0
+		andi.w	#$70,d0
+		add.w	d0,d1
+		andi.w	#$E,d4
+		add.w	d4,d1
+		movea.l	(Level_chunk_addr_ROM).w,a1
+		adda.w	d1,a1
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+GetFloorPosition_FG:
 		movea.l	(Level_layout_addr_ROM).w,a1
 		move.w	d2,d0
 		lsr.w	#5,d0
@@ -399,7 +424,31 @@ GetFloorPosition:
 ; =============== S U B R O U T I N E =======================================
 
 FindFloor:
-		bsr.s	GetFloorPosition
+		lea	GetFloorPosition_FG(pc),a5
+		tst.b	(Background_collision_flag).w
+		beq.s	sub_F264
+		bsr.s	sub_F264
+		move.b	(a4),Primary_Angle_save-Primary_Angle(a4)
+		move.w	d1,-(sp)
+		sub.w	(Camera_X_diff).w,d3
+		sub.w	(Camera_Y_diff).w,d2
+		lea	GetFloorPosition_BG(pc),a5
+		bsr.s	sub_F264
+		add.w	(Camera_X_diff).w,d3
+		add.w	(Camera_Y_diff).w,d2
+		move.w	(sp)+,d0
+		cmp.w	d0,d1
+		ble.s		.return
+		move.b	Primary_Angle_save-Primary_Angle(a4),(a4)
+		move.w	d0,d1
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_F264:
+		jsr	(a5)
 		move.w	(a1),d0
 		move.w	d0,d4
 		andi.w	#$3FF,d0
@@ -478,7 +527,7 @@ loc_F2FE:
 ; =============== S U B R O U T I N E =======================================
 
 FindFloor2:
-		bsr.w	GetFloorPosition
+		jsr	(a5)
 		move.w	(a1),d0
 		move.w	d0,d4
 		andi.w	#$3FF,d0
@@ -550,7 +599,31 @@ loc_F394:
 ; =============== S U B R O U T I N E =======================================
 
 Ring_FindFloor:
-		bsr.w	GetFloorPosition
+		lea	GetFloorPosition_FG(pc),a5
+		tst.b	(Background_collision_flag).w
+		beq.s	sub_F3DE
+		bsr.s	sub_F3DE
+		move.b	(a4),Primary_Angle_save-Primary_Angle(a4)
+		move.w	d1,-(sp)
+		sub.w	(Camera_X_diff).w,d3
+		sub.w	(Camera_Y_diff).w,d2
+		lea	GetFloorPosition_BG(pc),a5
+		bsr.s	sub_F3DE
+		add.w	(Camera_X_diff).w,d3
+		add.w	(Camera_Y_diff).w,d2
+		move.w	(sp)+,d0
+		cmp.w	d0,d1
+		ble.s		.return
+		move.b	Primary_Angle_save-Primary_Angle(a4),(a4)
+		move.w	d0,d1
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_F3DE:
+		jsr	(a5)
 		move.w	(a1),d0
 		move.w	d0,d4
 		andi.w	#$3FF,d0
@@ -626,7 +699,53 @@ loc_F470:
 ; =============== S U B R O U T I N E =======================================
 
 FindWall:
-		bsr.w	GetFloorPosition
+		lea	GetFloorPosition_FG(pc),a5
+		tst.b	(Background_collision_flag).w
+		beq.s	sub_F4DC
+		bsr.s	sub_F4DC
+		move.b	(a4),Primary_Angle_save-Primary_Angle(a4)
+		move.w	d1,-(sp)
+		move.w	a3,d0
+		bpl.s	loc_F4A4
+		eori.w	#$F,d3
+		sub.w	(Camera_X_diff).w,d3
+		eori.w	#$F,d3
+		bra.s	loc_F4A8
+; ---------------------------------------------------------------------------
+
+loc_F4A4:
+		sub.w	(Camera_X_diff).w,d3
+
+loc_F4A8:
+		sub.w	(Camera_Y_diff).w,d2
+		lea	GetFloorPosition_BG(pc),a5
+		bsr.s	sub_F4DC
+		move.w	a3,d0
+		bpl.s	loc_F4C6
+		eori.w	#$F,d3
+		add.w	(Camera_X_diff).w,d3
+		eori.w	#$F,d3
+		bra.s	loc_F4CA
+; ---------------------------------------------------------------------------
+
+loc_F4C6:
+		add.w	(Camera_X_diff).w,d3
+
+loc_F4CA:
+		add.w	(Camera_Y_diff).w,d2
+		move.w	(sp)+,d0
+		cmp.w	d0,d1
+		ble.s		.return
+		move.b	Primary_Angle_save-Primary_Angle(a4),(a4)
+		move.w	d0,d1
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_F4DC:
+		jsr	(a5)
 		move.w	(a1),d0
 		move.w	d0,d4
 		andi.w	#$3FF,d0
@@ -705,7 +824,7 @@ loc_F576:
 ; =============== S U B R O U T I N E =======================================
 
 FindWall2:
-		bsr.w	GetFloorPosition
+		jsr	(a5)
 		move.w	(a1),d0
 		move.w	d0,d4
 		andi.w	#$3FF,d0

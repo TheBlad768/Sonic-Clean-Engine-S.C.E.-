@@ -77,7 +77,7 @@ Init_InputPSG:
 Init_SkipPowerOn:
 		bra.s	Game_Program									; branch to game program
 ; ---------------------------------------------------------------------------
-; InitArray:
+
 SetupValues:
 		dc.w $8000, bytesToLcnt($10000), $100						; VDP init, clear RAM, VDP init and Z80
 
@@ -87,7 +87,8 @@ SetupValues:
 .vdata	dc.l VDP_data_port
 .vcontrol	dc.l VDP_control_port
 
-VDPInitValues:													; values for VDP registers
+		; values for VDP registers
+VDPInitValues:
 		dc.b 4													; command $8004 - HInt off, enable HV counter read
 		dc.b $14													; command $8114 - display off, VInt off, DMA on, PAL off
 		dc.b $30													; command $8230 - scroll A address $C000
@@ -114,13 +115,14 @@ VDPInitValues:													; values for VDP registers
 		dc.b $80													; command $9700 - see above + VRAM fill mode
 VDPInitValues_end
 
-		dc.l vdpComm($0000,VRAM,DMA)							; value for VRAM write mode
+		dc.l vdpComm(0,VRAM,DMA)								; value for VRAM write mode
 
 		; Z80 instructions (not the sound driver; that gets loaded later)
 Z80StartupCodeBegin:
-	save
-	CPU Z80														; start assembling Z80 code
-	phase 0														; pretend we're at address 0
+		save
+		CPU Z80													; start assembling Z80 code
+		phase 0													; pretend we're at address 0
+
 		xor	a													; clear a to 0
 		ld	bc,((Z80_RAM_end-Z80_RAM)-zStartupCodeEndLoc)-1	; prepare to loop this many times
 		ld	de,zStartupCodeEndLoc+1								; initial destination address
@@ -147,15 +149,15 @@ Z80StartupCodeBegin:
 		ld	(hl),0E9h											; replace the first instruction with a jump to itself
 		jp	(hl)													; jump to the first instruction (to stay there forever)
 zStartupCodeEndLoc:
-	dephase														; stop pretending
+		dephase													; stop pretending
 		restore
-	padding off													; unfortunately our flags got reset so we have to set them again...
+		padding off												; unfortunately our flags got reset so we have to set them again...
 Z80StartupCode_end
 
 		dc.w	$8104												; value for VDP display mode
 		dc.w	$8F02												; value for VDP increment
-		dc.l vdpComm($0000,CRAM,WRITE)						; value for CRAM write mode
-		dc.l vdpComm($0000,VSRAM,WRITE)						; value for VSRAM write mode
+		dc.l vdpComm(0,CRAM,WRITE)								; value for CRAM write mode
+		dc.l vdpComm(0,VSRAM,WRITE)							; value for VSRAM write mode
 
 PSGInitValues:
 		dc.b	$9F,$BF,$DF,$FF										; values for PSG channel volumes

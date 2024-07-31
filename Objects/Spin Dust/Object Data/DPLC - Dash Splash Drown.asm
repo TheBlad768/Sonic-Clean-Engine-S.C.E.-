@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; DPLC mappings - Spin Dust
+; ---------------------------------------------------------------------------
+
 DPLC_DashSplashDrown:
 		dc.w word_18F1E-DPLC_DashSplashDrown
 		dc.w word_18F20-DPLC_DashSplashDrown

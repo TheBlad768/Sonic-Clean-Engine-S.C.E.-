@@ -86,6 +86,8 @@ Camera_max_Y_pos_changing:			ds.b 1						; set when the maximum camera Y pos is 
 									ds.b 1						; even
 Fast_V_scroll_flag:					ds.b 1						; if this is set vertical scroll when the player is on the ground and has a speed of less than $800 is capped at 24 pixels per frame instead of 6
 Scroll_lock:							ds.b 1						; if this is set scrolling routines aren't called
+Camera_X_diff:						ds.w 1						; difference between Camera_X_pos_copy and Camera_X_pos_BG_copy, used for background collision in SSZ and other levels
+Camera_Y_diff:						ds.w 1						; difference between Camera_Y_pos_copy and Camera_Y_pos_BG_copy, used for background collision in SSZ and other levels
 Camera_X_pos:						ds.l 1
 Camera_Y_pos:						ds.l 1
 Camera_X_pos_copy:					ds.l 1
@@ -127,6 +129,7 @@ Draw_delayed_position:				ds.w 1						; position to redraw screen from. Screen i
 Draw_delayed_rowcount:				ds.w 1						; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
 Events_bg:							ds.b $18						; various flags used by background events
 Boss_events:							ds.b $10
+Plane_buffer_2_addr:					ds.l 1						; the address of the second plane buffer to process, if applicable
 Ring_start_addr_ROM:				ds.l 1						; address in the ring layout of the first ring whose X position is >= camera X position - 8
 Ring_end_addr_ROM:					ds.l 1						; address in the ring layout of the first ring whose X position is >= camera X position + 328
 Ring_start_addr_RAM:				ds.w 1						; address in the ring status table of the first ring whose X position is >= camera X position - 8
@@ -199,17 +202,20 @@ Secondary_collision_addr:				ds.l 1
 Player_prev_frame:					ds.b 1
 Reverse_gravity_flag:					ds.b 1
 Primary_Angle:						ds.b 1
+Primary_Angle_save:					ds.b 1						; used in FindFloor/FindWall
 Secondary_Angle:						ds.b 1
+Secondary_Angle_save:				ds.b 1						; used in FindFloor/FindWall
 Deform_lock:							ds.b 1
 Boss_flag:							ds.b 1						; set if a boss fight is going on
 TitleCard_end_flag:					ds.b 1
 Results_end_flag:						ds.b 1
+Special_events_addr:					ds.l 1						; jump for special events
 NoBackground_event_flag:				ds.b 1
 Screen_event_routine:					ds.b 1
 Screen_event_flag:					ds.b 1
 Background_event_routine:				ds.b 1
 Background_event_flag:				ds.b 1
-									ds.b 1						; even
+Background_collision_flag:				ds.b 1						; if set, background collision is enabled
 Debug_placement_mode:				= *							; both routine and type (word)
 Debug_placement_routine:				ds.b 1
 Debug_placement_type:				ds.b 1						; 0 = normal gameplay, 1 = normal object placement, 2 = frame cycling
@@ -271,7 +277,9 @@ Level_data_addr_RAM:				= *
 .8x8data1							ds.l 1
 .8x8data2							ds.l 1
 .WaterPalette							= *
-.16x16data							ds.l 1
+.16x16ram							ds.l 1
+.16x16data1							ds.l 1
+.16x16data2							ds.l 1
 .Music								= *
 .128x128ram							ds.l 1
 .128x128data1						ds.l 1

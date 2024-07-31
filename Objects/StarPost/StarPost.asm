@@ -148,7 +148,6 @@ Obj_StarPost:
 
 ; =============== S U B R O U T I N E =======================================
 
-Lamp_StoreInfo:
 Save_StarPost_Settings:
 		move.b	subtype(a0),(Last_star_post_hit).w
 		move.w	x_pos(a0),(Saved_X_pos).w
@@ -177,7 +176,6 @@ Save_Level_Data:
 
 ; =============== S U B R O U T I N E =======================================
 
-Lamp_LoadInfo:
 Load_StarPost_Settings:
 		move.b	(Saved_last_star_post_hit).w,(Last_star_post_hit).w
 		move.w	(Saved_zone_and_act).w,(Current_zone_and_act).w

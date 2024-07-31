@@ -39,7 +39,7 @@ HScroll_Deform:
 VScroll_Deform:
 		lea	(VDP_data_port).l,a6
 		lea	VDP_control_port-VDP_data_port(a6),a5
-		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
+		move.l	#vdpComm(0,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		moveq	#bytesToXcnt((320*2),16),d6
 
 .loop

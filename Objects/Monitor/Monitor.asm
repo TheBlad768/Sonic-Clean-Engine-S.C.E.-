@@ -103,7 +103,7 @@ Obj_MonitorFallUpsideDown:
 SolidObject_Monitor_SonicKnux:
 		btst	d6,status(a0)											; is Sonic/Knux standing on the monitor?
 		bne.s	Monitor_ChkOverEdge								; if so, branch
-		cmpi.b	#id_Roll,anim(a1)									; is Sonic/Knux in their rolling animation?
+		cmpi.b	#AniIDSonAni_Roll,anim(a1)						; is Sonic/Knux in their rolling animation?
 		beq.s	Obj_MonitorFallUpsideDown.return					; if so, return
 
 		; solid

@@ -1,19 +1,17 @@
 ; ---------------------------------------------------------------------------
-; Palette cycling routine loading subroutine
+; Special events
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Animate_Palette:
-		tst.w	(Palette_fade_timer).w
-		bmi.s	AnimateTiles_NULL
-		beq.s	.load
-		subq.w	#1,(Palette_fade_timer).w
-		jmp	(Pal_FromBlack).w
-; ---------------------------------------------------------------------------
-
-.load
-		move.l	(Level_data_addr_RAM.AnPal).w,d0
-		beq.s	AnimateTiles_NULL
+Special_Events:
+		move.l	(Special_events_addr).w,d0
+		beq.s	.return
+		cmpi.b	#PlayerID_Death,(Player_1+routine).w		; is player dead?
+		bhs.s	.return									; if yes, branch
 		movea.l	d0,a0
 		jmp	(a0)
+; ---------------------------------------------------------------------------
+
+.return
+		rts

@@ -3,45 +3,48 @@
 ; ---------------------------------------------------------------------------
 
 VInt:
-		movem.l	d0-a6,-(sp)							; save all the registers to the stack
+		movem.l	d0-a6,-(sp)											; save all the registers to the stack
 		lea	(VDP_data_port).l,a6
 		lea	VDP_control_port-VDP_data_port(a6),a5
 
+		; check
 		tst.b	(V_int_routine).w
 		beq.s	VInt_Lag_Main
 
 .wait
 		moveq	#8,d0
 		and.w	VDP_control_port-VDP_control_port(a5),d0
-		beq.s	.wait	; wait until vertical blanking is taking place
+		beq.s	.wait												; wait until vertical blanking is taking place
 
 		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		move.l	(V_scroll_value).w,VDP_data_port-VDP_data_port(a6)	; send screen ypos to VSRAM
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
-		beq.s	.notpal								; branch if it's not a PAL system
+		beq.s	.notpal												; branch if it's not a PAL system
 		move.w	#$700,d0
-		dbf	d0,*										; otherwise, waste a bit of time here
+		dbf	d0,*														; otherwise, waste a bit of time here
 
 .notpal
 		moveq	#$7E,d0
 		and.b	(V_int_routine).w,d0
 		clr.b	(V_int_routine).w
-		st	(H_int_flag).w							; allow H Interrupt code to run
+		st	(H_int_flag).w											; allow H Interrupt code to run
 		move.w	VInt_Table(pc,d0.w),d0
 		jsr	VInt_Table(pc,d0.w)
 
 VInt_Music:
-		SMPS_UpdateSoundDriver						; update SMPS	; warning: a5-a6 will be overwritten
+		SMPS_UpdateSoundDriver										; update SMPS	; warning: a5-a6 will be overwritten
 
 VInt_Done:
 		jsr	(Random_Number).w
 		addq.l	#1,(V_int_run_count).w
+
 	if Lagometer
-		move.w	#$9193,(VDP_control_port).l			; window H right side, base point $80
+		move.w	#$9193,(VDP_control_port).l							; window H right side, base point $80
 	endif
-		movem.l	(sp)+,d0-a6							; return saved registers from the stack
+
+		movem.l	(sp)+,d0-a6											; return saved registers from the stack
 		rte
 ; ---------------------------------------------------------------------------
 
@@ -67,10 +70,10 @@ VInt_Lag_Main:
 		addq.w	#1,(Lag_frame_count).w
 
 		; branch if a level is running
-		moveq	#$7C,d0								; limit Game Mode value to $7C max
-		and.b	(Game_mode).w,d0					; load Game Mode
-		cmpi.b	#GameModeID_LevelScreen,d0			; is game on a level?
-		bne.s	VInt_Done							; if not, return from V-int
+		moveq	#$7C,d0												; limit Game Mode value to $7C max
+		and.b	(Game_mode).w,d0									; load Game Mode
+		cmpi.b	#GameModeID_LevelScreen,d0							; is game on a level?
+		bne.s	VInt_Done											; if not, return from V-int
 
 VInt_Lag_Level:
 		tst.b	(Water_flag).w
@@ -79,15 +82,15 @@ VInt_Lag_Level:
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
-		beq.s	.notpal								; branch if it isn't a PAL system
+		beq.s	.notpal												; branch if it isn't a PAL system
 		move.w	#$700,d0
-		dbf	d0,*										; otherwise waste a bit of time here
+		dbf	d0,*														; otherwise waste a bit of time here
 
 .notpal
-		st	(H_int_flag).w							; set HInt flag
+		st	(H_int_flag).w											; set HInt flag
 		stopZ80
-		tst.b	(Water_full_screen_flag).w					; is water above top of screen?
-		bne.s	VInt_Lag_FullyUnderwater 			; if yes, branch
+		tst.b	(Water_full_screen_flag).w									; is water above top of screen?
+		bne.s	VInt_Lag_FullyUnderwater 							; if yes, branch
 		dma68kToVDP Normal_palette,$0000,$80,CRAM
 		bra.s	VInt_Lag_Water_Cont
 ; ---------------------------------------------------------------------------
@@ -106,9 +109,9 @@ VInt_Lag_NoWater:
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
-		beq.s	.notpal								; branch if it isn't a PAL system
+		beq.s	.notpal												; branch if it isn't a PAL system
 		move.w	#$700,d0
-		dbf	d0,*										; otherwise, waste a bit of time here
+		dbf	d0,*														; otherwise, waste a bit of time here
 
 .notpal
 		st	(H_int_flag).w
@@ -125,9 +128,9 @@ VInt_Lag_Done:
 
 VInt_Main:
 		bsr.s	Do_ControllerPal
-		tst.w	(Demo_timer).w						; is there time left on the demo?
+		tst.w	(Demo_timer).w										; is there time left on the demo?
 		beq.s	.return
-		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w									; subtract 1 from time left
 
 .return
 		rts
@@ -140,9 +143,9 @@ VInt_Main:
 
 VInt_Menu:
 		bsr.s	Do_ControllerPal
-		tst.w	(Demo_timer).w						; is there time left on the demo?
+		tst.w	(Demo_timer).w										; is there time left on the demo?
 		beq.s	.kospm
-		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w									; subtract 1 from time left
 
 .kospm
 		jmp	(Set_KosPlus_Bookmark).w
@@ -201,9 +204,9 @@ VInt_LevelSelect:
 		dma68kToVDP (LevelSelect_buffer2),vram_fg,(256<<4),VRAM		; foreground buffer to VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
-		tst.w	(Demo_timer).w						; is there time left on the demo?
+		tst.w	(Demo_timer).w										; is there time left on the demo?
 		beq.s	.return
-		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w									; subtract 1 from time left
 
 .return
 		rts
@@ -217,7 +220,7 @@ VInt_LevelSelect:
 VInt_Sega:
 		moveq	#$F,d0
 		and.b	(V_int_run_count+3).w,d0
-		bne.s	.skip								; run the following code once every 16 frames
+		bne.s	.skip												; run the following code once every 16 frames
 		stopZ80
 		stopZ802
 		jsr	(Poll_Controllers).w
@@ -225,9 +228,9 @@ VInt_Sega:
 		startZ80
 
 .skip
-		tst.w	(Demo_timer).w						; is there time left on the demo?
+		tst.w	(Demo_timer).w										; is there time left on the demo?
 		beq.s	.kospm
-		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w									; subtract 1 from time left
 
 .kospm
 		jmp	(Set_KosPlus_Bookmark).w
@@ -252,7 +255,7 @@ VInt_Level:
 		subq.b	#1,(Hyper_Sonic_flash_timer).w
 		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		moveq	#64/2-1,d1
-		move.l	#cWhite<<16|cWhite,d0
+		move.l	#words_to_long(cWhite,cWhite),d0
 
 .copy
 		move.l	d0,VDP_data_port-VDP_data_port(a6)
@@ -270,7 +273,7 @@ VInt_Level_NoFlash:
 		beq.s	VInt_Level_NoNegativeFlash
 		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		moveq	#64/2-1,d1
-		move.l	#$0EEE0EEE,d2
+		move.l	#words_to_long($EEE,$EEE),d2
 		lea	(Normal_palette).w,a1
 
 .copy
@@ -304,10 +307,10 @@ VInt_Level_Cont:
 		enableInts
 		tst.b	(Water_flag).w
 		beq.s	.notwater
-		cmpi.b	#92,(H_int_counter).w				; is H-int occuring on or below line 92?
-		bhs.s	.notwater							; if it is, branch
+		cmpi.b	#92,(H_int_counter).w								; is H-int occuring on or below line 92?
+		bhs.s	.notwater											; if it is, branch
 		st	(Do_Updates_in_H_int).w
-		move.l	#VInt_Done,(sp)						; skip update SMPS
+		move.l	#VInt_Done,(sp)										; skip update SMPS
 		jmp	(Set_KosPlus_Bookmark).w
 ; ---------------------------------------------------------------------------
 
@@ -323,9 +326,9 @@ VInt_Level_Cont:
 Do_Updates:
 		jsr	(UpdateHUD).w
 		clr.w	(Lag_frame_count).w
-		tst.w	(Demo_timer).w						; is there time left on the demo?
+		tst.w	(Demo_timer).w										; is there time left on the demo?
 		beq.s	.return
-		subq.w	#1,(Demo_timer).w					; subtract 1 from time left
+		subq.w	#1,(Demo_timer).w									; subtract 1 from time left
 
 .return
 		rts
@@ -389,10 +392,10 @@ HInt:
 		tst.b	(Do_Updates_in_H_int).w
 		beq.s	HInt_Done
 		clr.b	(Do_Updates_in_H_int).w
-		movem.l	d0-a6,-(sp)							; move all the registers to the stack
+		movem.l	d0-a6,-(sp)											; move all the registers to the stack
 		bsr.w	Do_Updates
-		SMPS_UpdateSoundDriver						; Update SMPS
-		movem.l	(sp)+,d0-a6							; load saved registers from the stack
+		SMPS_UpdateSoundDriver										; Update SMPS
+		movem.l	(sp)+,d0-a6											; load saved registers from the stack
 
 HInt_Done:
 		rte

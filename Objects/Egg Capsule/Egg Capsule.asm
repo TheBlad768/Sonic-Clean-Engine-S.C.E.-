@@ -353,9 +353,9 @@ Obj_EggCapsule_FlippedButton:
 		movea.w	d0,a1									; get Sonic address
 		tst.w	y_vel(a1)
 		bpl.s	.notp1
-		cmpi.b	#id_Roll,anim(a1)							; is player in his rolling animation?
+		cmpi.b	#AniIDSonAni_Roll,anim(a1)				; is player in his rolling animation?
 		beq.s	.press									; if so, branch
-		cmpi.b	#1,objoff_38(a1)							; is Tails?
+		cmpi.b	#PlayerID_Tails,character_id(a1)			; is Tails?
 		beq.s	.press									; if yes, branch
 
 .notp1
@@ -586,10 +586,10 @@ EggCapsule_Animals_Yvel:
 		dc.w -$280
 		dc.w -$200
 EggCapsule_Animals_VRAM:
-		dc.w $8580
-		dc.w $8592
-		dc.w $842E
-		dc.w $8440
+		dc.w make_art_tile($580,0,1)
+		dc.w make_art_tile($592,0,1)
+		dc.w make_art_tile($42E,0,1)
+		dc.w make_art_tile($440,0,1)
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -649,42 +649,11 @@ Load_EggCapsule:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_EggCapsule:
-		dc.l Map_EggCapsule
-		dc.w $843E
-		dc.w $200
-		dc.b 64/2
-		dc.b 64/2
-		dc.b 0
-		dc.b 0
-ObjDat_EggCapsule_Button:
-		dc.w $200
-		dc.b 32/2
-		dc.b 16/2
-		dc.b 5
-		dc.b 0
-ObjDat3_EggCapsule_Propeller:
-		dc.w $200
-		dc.b 40/2
-		dc.b 8/2
-		dc.b 6
-		dc.b 0
-ObjDat_EggCapsule_Pieces:
-		dc.l Map_EggCapsule
-		dc.w $843E
-		dc.w $180
-		dc.b 24/2
-		dc.b 24/2
-		dc.b 0
-		dc.b 0
-ObjDat_EggCapsule_Animals:
-		dc.w $280
-		dc.b 16/2
-		dc.b 24/2
-		dc.b 2
-		dc.b 0
-
-
+ObjDat_EggCapsule:				subObjData Map_EggCapsule, $494, 0, 1, $200, 64/2, 64/2, 0, 0
+ObjDat_EggCapsule_Button:		subObjData3 $200, 32/2, 16/2, 5, 0
+ObjDat3_EggCapsule_Propeller:		subObjData3 $200, 40/2, 8/2, 6, 0
+ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, 1, $180, 24/2, 24/2, 0, 0
+ObjDat_EggCapsule_Animals:		subObjData3 $280, 16/2, 24/2, 2, 0
 
 Child6_EggCapsule:
 		dc.w 1-1
@@ -754,7 +723,7 @@ Child1_EggCapsule_Animals:
 
 
 PLC_EggCapsule: plrlistheader
-		plreq $43E, ArtKosPM_EggCapsule
+		plreq $494, ArtKosPM_EggCapsule
 		plreq $5A0, ArtKosPM_Explosion
 PLC_EggCapsule_end
 ; ---------------------------------------------------------------------------

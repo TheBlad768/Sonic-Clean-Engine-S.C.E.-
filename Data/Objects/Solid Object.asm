@@ -16,16 +16,16 @@
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFull:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 SolidObjectFull_1P:
-		btst	d6,status(a0)
-		beq.w	SolidObject_OnScreenTest
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	SolidObject_OnScreenTest								; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	+
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	+													; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -50,16 +50,16 @@ SolidObjectFull_1P:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFull2:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 SolidObjectFull2_1P:
-		btst	d6,status(a0)
-		beq.w	SolidObject_cont
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	SolidObject_cont										; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1DCF0
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1DCF0											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -99,16 +99,16 @@ loc_1DD04:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFullSloped_Spring:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 SolidObjectFullSloped_Spring_1P:
-		btst	d6,status(a0)
-		beq.w	SlopedSolid_cont
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	SlopedSolid_cont										; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1DD48
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1DD48											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -128,7 +128,7 @@ loc_1DD5C:
 		move.w	d4,d2
 		bsr.w	SolidObjSloped2
 		move.w	d6,d4
-		addi.b	#$11,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_top_bit),d4
 		bset	d4,d6
 		moveq	#0,d4
 		rts
@@ -136,16 +136,16 @@ loc_1DD5C:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectDoubleSloped:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 SolidObjectDoubleSloped_1P:
-		btst	d6,status(a0)
-		beq.w	DoubleSlopedSolid_cont
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	DoubleSlopedSolid_cont								; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1DDA8
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1DDA8											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -170,16 +170,16 @@ loc_1DDBC:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFullSloped:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 SolidObjectFullSloped_1P:
-		btst	d6,status(a0)
-		beq.w	SlopedSolid_cont
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	SlopedSolid_cont										; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1DE00
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1DE00											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -198,7 +198,7 @@ loc_1DE0E:
 		move.w	d4,d2
 		bsr.w	SolidObjSloped2
 		move.w	d6,d4
-		addi.b	#$11,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_top_bit),d4
 		bset	d4,d6
 		moveq	#0,d4
 		rts
@@ -206,14 +206,14 @@ loc_1DE0E:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFull_Offset:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 SolidObjectFull_Offset_1P:
-		btst	d6,status(a0)
-		beq.s	OffsetSolid_cont
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1DE58
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.s	OffsetSolid_cont										; if not, branch
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1DE58											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -231,6 +231,8 @@ loc_1DE58:
 ; ---------------------------------------------------------------------------
 
 loc_1DE6C:
+
+		; inlined call to MvSonicOnPtfm
 		move.w	y_pos(a0),d0
 		sub.w	d2,d0
 		add.w	d3,d0
@@ -346,19 +348,28 @@ DoubleSlopedSolid_cont:
 ; ---------------------------------------------------------------------------
 
 SolidObject_OnScreenTest:
+
+		; if the object is not on-screen, then don't try to collide with it
+		; this is presumably an optimisation, but this means that if Sonic
+		; outruns the screen then he can phase through solid objects
 		tst.b	render_flags(a0)
 		bpl.w	SolidObject_TestClearPush
 
 SolidObject_cont:
-		move.w	x_pos(a1),d0
-		sub.w	x_pos(a0),d0
-		add.w	d1,d0
+
+		; we now perform the x portion of a bounding box check. to do this, we assume a
+		; coordinate system where the x origin is at the object's left edge
+		move.w	x_pos(a1),d0											; load Sonic's x position...
+		sub.w	x_pos(a0),d0											; ...and calculate his x position relative to the object
+		add.w	d1,d0												; put object's left edge at (0,0). this is also Sonic's distance to the object's left edge
 		move.w	d1,d3
-		add.w	d3,d3
+		add.w	d3,d3												; calculate object's width
 		cmp.w	d3,d0
-		bhi.w	SolidObject_TestClearPush
+		bhi.w	SolidObject_TestClearPush								; branch if Sonic is outside the object's right edge
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
+
+		; reverse gravity
 		move.b	default_y_radius(a1),d4
 		ext.w	d4
 		add.w	d2,d4
@@ -391,134 +402,149 @@ SolidObject_cont:
 		andi.w	#$FFF,d3
 		add.w	d2,d4
 		cmp.w	d4,d3
-		bhs.w	SolidObject_TestClearPush
+		bhs.w	SolidObject_TestClearPush								; branch if Sonic is below this point
 
 SolidObject_ChkBounds:
 		tst.b	object_control(a1)
-		bmi.w	SolidObject_TestClearPush
-		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
-		bhs.w	SolidObject_NoCollision					; if yes, branch
-		tst.w	(Debug_placement_mode).w
-		bne.w	SolidObject_NoCollision
+		bmi.w	SolidObject_TestClearPush								; branch if object collisions are disabled for Sonic
+		cmpi.b	#PlayerID_Death,routine(a1)							; has player just died?
+		bhs.w	SolidObject_NoCollision								; if yes, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		bne.w	SolidObject_NoCollision								; if yes, branch
+
 		move.w	d0,d5
 		cmp.w	d0,d1
-		bhs.s	loc_1E026
+		bhs.s	.isToTheLeft											; branch if Sonic is to the object's left
+
+;.isToTheRight
 		add.w	d1,d1
 		sub.w	d1,d0
-		move.w	d0,d5
-		neg.w	d5
+		move.w	d0,d5												; calculate Sonic's distance to the object's right edge...
+		neg.w	d5													; ...and calculate the absolute value
 
-loc_1E026:
+.isToTheLeft
 		move.w	d3,d1
 		cmp.w	d3,d2
-		bhs.s	loc_1E034
+		bhs.s	.isAbove
+
+;.isBelow
 		subq.w	#4,d3
 		sub.w	d4,d3
 		move.w	d3,d1
 		neg.w	d1
 
-loc_1E034:
+.isAbove
+
+		; now...
+		; 'd0' contains Sonic's distance to the nearest object horizontal edge
+		; 'd5' contains the absolute version of 'd0'
+		; 'd3' contains Sonic's distance to the nearest object vertical edge
+		; 'd1' contains the absolute version of 'd3'
 		cmp.w	d1,d5
-		bhi.w	SolidObject_TopBottom
+		bhi.w	SolidObject_TopBottom								; branch, if horizontal distance is greater than vertical distance
+
+		; if Sonic is extremely close to the top or bottom, then branch
+		; I guess the point of this is to let Sonic walk over objects that
+		; are barely poking out of the ground?
 		cmpi.w	#4,d1
 		bls.w	SolidObject_TopBottom
 
 SolidObject_LeftRight:
-		tst.w	d0
-		beq.s	SolidObject_AtEdge
-		bmi.s	SolidObject_InsideRight
+		tst.w	d0													; where is Sonic?
+		beq.s	SolidObject_AtEdge									; if at the object's edge, branch
+		bmi.s	SolidObject_InsideRight								; if in the right side of the object, branch
 
 ; SolidObject_InsideLeft:
-		tst.w	x_vel(a1)
-		bmi.s	SolidObject_AtEdge
+		tst.w	x_vel(a1)												; is Sonic moving left?
+		bmi.s	SolidObject_AtEdge									; if yes, branch
 		bra.s	SolidObject_StopCharacter
 ; ---------------------------------------------------------------------------
 
 SolidObject_InsideRight:
-		tst.w	x_vel(a1)
-		bpl.s	SolidObject_AtEdge
+		tst.w	x_vel(a1)												; is Sonic moving right?
+		bpl.s	SolidObject_AtEdge									; if yes, branch
 
 SolidObject_StopCharacter:
 		clr.w	x_vel(a1)
-		clr.w	ground_vel(a1)
+		clr.w	ground_vel(a1)										; stop Sonic moving
 		tst.b	status_tertiary(a1)
 		bpl.s	SolidObject_AtEdge
 		bset	#6,status_tertiary(a1)
 
 SolidObject_AtEdge:
-		sub.w	d0,x_pos(a1)
-		btst	#Status_InAir,status(a1)
-		bne.s	SolidObject_SideAir
+		sub.w	d0,x_pos(a1)											; correct Sonic's position
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	SolidObject_SideAir									; if yes, branch
 		move.l	d6,d4
-		addq.b	#pushing_bit_delta,d4
-		bset	d4,status(a0)
-		bset	#Status_Push,status(a1)
+		addq.b	#pushing_bit_delta,d4									; character is pushing, not standing
+		bset	d4,status(a0)												; make object be pushed
+		bset	#Status_Push,status(a1)									; make Sonic push object
 		move.w	d6,d4
-		addi.b	#$D,d4
-		bset	d4,d6
-		moveq	#1,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_side_bit),d4
+		bset	d4,d6													; this sets bits 0 (Sonic) or 1 (Tails) of high word of d6
+		moveq	#1,d4												; return side collision
 		rts
 ; ---------------------------------------------------------------------------
 
 SolidObject_SideAir:
 		bsr.s	Solid_NotPushing
 		move.w	d6,d4
-		addi.b	#$D,d4
-		bset	d4,d6
-		moveq	#1,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_side_bit),d4
+		bset	d4,d6													; this sets bits 0 (Sonic) or 1 (Tails) of high word of d6
+		moveq	#1,d4												; return side collision
 		rts
 ; ---------------------------------------------------------------------------
 
 SolidObject_TestClearPush:
 		move.l	d6,d4
 		addq.b	#pushing_bit_delta,d4
-		btst	d4,status(a0)
-		beq.s	SolidObject_NoCollision
+		btst	d4,status(a0)												; is Sonic pushing?
+		beq.s	SolidObject_NoCollision								; if not, branch
 
 		; check player anim
-		cmpi.b	#id_Roll,anim(a1)
+		cmpi.b	#AniIDSonAni_Roll,anim(a1)
 		beq.s	Solid_NotPushing
-		cmpi.b	#id_SpinDash,anim(a1)
+		cmpi.b	#AniIDSonAni_SpinDash,anim(a1)
 		beq.s	Solid_NotPushing
-		cmpi.b	#id_Hurt2,anim(a1)
+		cmpi.b	#AniIDSonAni_Hurt2,anim(a1)
 		beq.s	Solid_NotPushing
-		cmpi.b	#id_Death,anim(a1)
+		cmpi.b	#AniIDSonAni_Death,anim(a1)
 		beq.s	Solid_NotPushing
-		cmpi.b	#id_Drown,anim(a1)
+		cmpi.b	#AniIDSonAni_Drown,anim(a1)
 		beq.s	Solid_NotPushing
-		cmpi.b	#id_Landing,anim(a1)
+		cmpi.b	#AniIDSonAni_Landing,anim(a1)
 		beq.s	Solid_NotPushing
-		move.w	#bytes_to_word(id_Walk,id_Run),anim(a1)
+		move.w	#bytes_to_word(AniIDSonAni_Walk,AniIDSonAni_Run),anim(a1)	; use walking animation (and force it to restart)
 
 Solid_NotPushing:
 		move.l	d6,d4
 		addq.b	#pushing_bit_delta,d4
-		bclr	d4,status(a0)
-		bclr	#Status_Push,status(a1)
+		bclr	d4,status(a0)												; clear pushing flag
+		bclr	#Status_Push,status(a1)									; clear Sonic's pushing flag
 
 SolidObject_NoCollision:
-		moveq	#0,d4
+		moveq	#0,d4												; return no collision
 		rts
 ; ---------------------------------------------------------------------------
 
 SolidObject_TopBottom:
-		tst.w	d3
-		bmi.s	SolidObject_InsideBottom
+		tst.w	d3													; is Sonic below the object?
+		bmi.s	SolidObject_InsideBottom								; if yes, branch
 
 ; SolidObject_InsideTop:
-		cmpi.w	#16,d3
-		blo.s		SolidObject_Landed
+		cmpi.w	#16,d3												; has Sonic landed on the object?
+		blo.s		SolidObject_Landed									; if yes, branch
 		bra.s	SolidObject_TestClearPush
 ; ---------------------------------------------------------------------------
 
 SolidObject_InsideBottom:
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E0F6
-		tst.w	y_vel(a1)
-		beq.s	SolidObject_Squash
-		bpl.s	loc_1E10E
-		tst.w	d3
-		bpl.s	loc_1E10E
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1E0F6											; if yes, branch
+		tst.w	y_vel(a1)												; is Sonic moving vertically?
+		beq.s	SolidObject_Squash									; if not, branch
+		bpl.s	loc_1E10E											; if moving downwards, branch
+		tst.w	d3													; is Sonic above the object?
+		bpl.s	loc_1E10E											; if yes, branch (this will never be true)
 		bra.s	loc_1E0FC
 ; ---------------------------------------------------------------------------
 
@@ -526,7 +552,7 @@ loc_1E0F6:
 		clr.w	ground_vel(a1)
 
 loc_1E0FC:
-		clr.w	y_vel(a1)
+		clr.w	y_vel(a1)												; stop Sonic from moving
 
 loc_1E10E:
 		tst.b	status_tertiary(a1)
@@ -539,17 +565,17 @@ loc_1E11A:
 		neg.w	d3
 
 .notgrav
-		sub.w	d3,y_pos(a1)
+		sub.w	d3,y_pos(a1)											; push Sonic out of the object
 		move.w	d6,d4
-		addi.b	#$F,d4
-		bset	d4,d6
-		moveq	#-2,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_bottom_bit),d4
+		bset	d4,d6													; this sets bits 2 (Sonic) or 3 (Tails) of high word of d6
+		moveq	#-2,d4												; return bottom collision
 		rts
 ; ---------------------------------------------------------------------------
 
 SolidObject_Squash:
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E10E
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1E10E											; if yes, branch
 		mvabs.w	d0,d4
 
 		cmpi.w	#16,d4
@@ -558,11 +584,11 @@ SolidObject_Squash:
 		movea.w	a0,a2
 		movea.w	a1,a0
 		jsr	Kill_Character(pc)
-		movea.w	(sp)+,a0
+		movea.w	(sp)+,a0												; load 0bj address
 		move.w	d6,d4
-		addi.b	#$F,d4
-		bset	d4,d6
-		moveq	#-2,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_bottom_bit),d4
+		bset	d4,d6													; this sets bits 2 (Sonic) or 3 (Tails) of high word of d6
+		moveq	#-2,d4												; return bottom collision
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -574,9 +600,9 @@ SolidObject_Landed:
 		add.w	d2,d2
 		add.w	x_pos(a1),d1
 		sub.w	x_pos(a0),d1
-		bmi.s	SolidObject_Miss
-		cmp.w	d2,d1
-		bhs.s	SolidObject_Miss
+		bmi.s	SolidObject_Miss										; if Sonic is right of object, branch
+		cmp.w	d2,d1												; is Sonic left of object?
+		bhs.s	SolidObject_Miss										; if yes, branch
 		subq.w	#1,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_1E17E
@@ -584,20 +610,24 @@ SolidObject_Landed:
 		addq.w	#2,y_pos(a1)
 
 loc_1E17E:
-		sub.w	d3,y_pos(a1)
-		tst.w	y_vel(a1)
-		bmi.s	SolidObject_Miss
+		sub.w	d3,y_pos(a1)											; correct Sonic's position
+		tst.w	y_vel(a1)												; is Sonic moving upwards?
+		bmi.s	SolidObject_Miss										; if yes, branch
 		bsr.w	RideObject_SetRide
 		move.w	d6,d4
-		addi.b	#$11,d4
-		bset	d4,d6
-		moveq	#-1,d4
+		addi.b	#($10-p1_standing_bit+p1_touch_top_bit),d4
+		bset	d4,d6													; this sets bits 4 (Sonic) or 5 (Tails) of high word of d6
+		moveq	#-1,d4												; return top collision
 		rts
 ; ---------------------------------------------------------------------------
 
 SolidObject_Miss:
-		moveq	#0,d4
+		moveq	#0,d4												; return no collision
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to change Sonic's position with a platform
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -618,10 +648,10 @@ loc_1E1AA:
 loc_1E1CA:
 		tst.b	object_control(a1)
 		bmi.s	locret_1E1F2
-		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
-		bhs.s	locret_1E1F2								; if yes, branch
-		tst.w	(Debug_placement_mode).w
-		bne.s	locret_1E1F2
+		cmpi.b	#PlayerID_Death,routine(a1)							; has player just died?
+		bhs.s	locret_1E1F2											; if yes, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		bne.s	locret_1E1F2											; if yes, branch
 		moveq	#0,d1
 		move.b	y_radius(a1),d1
 		sub.w	d1,d0
@@ -636,10 +666,10 @@ locret_1E1F2:
 loc_1E1F4:
 		tst.b	object_control(a1)
 		bmi.s	locret_1E21C
-		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
-		bhs.s	locret_1E21C								; if yes, branch
-		tst.w	(Debug_placement_mode).w
-		bne.s	locret_1E21C
+		cmpi.b	#PlayerID_Death,routine(a1)							; has player just died?
+		bhs.s	locret_1E21C											; if yes, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		bne.s	locret_1E21C											; if yes, branch
 		moveq	#0,d1
 		move.b	y_radius(a1),d1
 		add.w	d1,d0
@@ -716,17 +746,16 @@ loc_1E2A0:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectTop:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-sub_1E2BC:
 SolidObjectTop_1P:
-		btst	d6,status(a0)
-		beq.w	loc_1E42E
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	loc_1E42E											; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E2E0
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1E2E0											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -751,17 +780,16 @@ loc_1E2F4:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectTopSloped2:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-sub_1E314:
 SolidObjectTopSloped2_1P:
-		btst	d6,status(a0)
-		beq.w	SolidObjCheckSloped2
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	SolidObjCheckSloped2									; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E338
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1E338											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -786,17 +814,16 @@ loc_1E34C:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectTopSloped:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-sub_1E36C:
 SolidObjectTopSloped_1P:
-		btst	d6,status(a0)
-		beq.w	SolidObjCheckSloped
+		btst	d6,status(a0)												; is player standing on the current object?
+		beq.w	SolidObjCheckSloped									; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E390
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1E390											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -821,22 +848,22 @@ loc_1E3A4:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1E3AE:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
 sub_1E3C4:
-		btst	d6,status(a0)
-		bne.s	loc_1E3D6
-		btst	#3,status(a1)
-		bne.s	loc_1E402
+		btst	d6,status(a0)												; is player standing on the current object?
+		bne.s	loc_1E3D6											; if yes, branch
+		btst	#Status_OnObj,status(a1)									; is player standing on any object?
+		bne.s	loc_1E402											; if yes, branch
 		bra.s	loc_1E42E
 ; ---------------------------------------------------------------------------
 
 loc_1E3D6:
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)
-		bne.s	loc_1E3F2
+		btst	#Status_InAir,status(a1)									; is the player in the air?
+		bne.s	loc_1E3F2											; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
@@ -845,8 +872,8 @@ loc_1E3D6:
 		blo.s		loc_1E406
 
 loc_1E3F2:
-		bclr	#3,status(a1)
-		bset	#1,status(a1)
+		bclr	#Status_OnObj,status(a1)
+		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 
 loc_1E402:
@@ -905,10 +932,10 @@ loc_1E45A:
 		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
 		bmi.s	locret_1E4D4
-		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
-		bhs.s	locret_1E4D4								; if yes, branch
-		tst.w	(Debug_placement_mode).w
-		bne.s	locret_1E4D4
+		cmpi.b	#PlayerID_Death,routine(a1)							; has player just died?
+		bhs.s	locret_1E4D4											; if yes, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		bne.s	locret_1E4D4											; if yes, branch
 		add.w	d0,d2
 		addq.w	#3,d2
 		move.w	d2,y_pos(a1)
@@ -954,10 +981,10 @@ loc_1E4D6:
 		blo.s		locret_1E4D4
 		tst.b	object_control(a1)
 		bmi.s	locret_1E4D4
-		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
-		bhs.s	locret_1E4D4								; if yes, branch
-		tst.w	(Debug_placement_mode).w
-		bne.s	locret_1E4D4
+		cmpi.b	#PlayerID_Death,routine(a1)							; has player just died?
+		bhs.s	locret_1E4D4											; if yes, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		bne.s	locret_1E4D4											; if yes, branch
 		sub.w	d1,d2
 		subq.w	#4,d2
 		move.w	d2,y_pos(a1)
@@ -1013,16 +1040,16 @@ SolidObjCheckSloped:
 CheckPlayerReleaseFromObj:
 
 		; player 1
-		lea	(Player_1).w,a1
-		btst	#p1_standing_bit,status(a0)
-		beq.s	.end
+		lea	(Player_1).w,a1											; a1=character
+		btst	#p1_standing_bit,status(a0)								; is Sonic standing on the object?
+		beq.s	.end													; if not, branch
 		bsr.w	SonicOnObjHitFloor
 		tst.w	d1
 		beq.s	.setp1
 		bpl.s	.end
 
 .setp1
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1											; a1=character
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a0)

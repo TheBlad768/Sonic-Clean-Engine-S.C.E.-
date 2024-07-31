@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; DPLC mappings - lightning shield
+; ---------------------------------------------------------------------------
+
 DPLC_LightningShield:
 		dc.w word_19F28-DPLC_LightningShield
 		dc.w word_19F30-DPLC_LightningShield

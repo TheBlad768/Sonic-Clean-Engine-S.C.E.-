@@ -48,20 +48,26 @@ Handle_Onscreen_Water_Height:
 ; =============== S U B R O U T I N E =======================================
 
 DynamicWaterHeight:
-		movea.l	(Level_data_addr_RAM.WaterResize).w,a0
+
+		; check
+		move.l	(Level_data_addr_RAM.WaterResize).w,d0
+		beq.s	.wrskip
+		movea.l	d0,a0
 		jsr	(a0)
+
+.wrskip
 		moveq	#0,d1
 		move.b	(Water_speed).w,d1
 		move.w	(Target_water_level).w,d0
 		sub.w	(Mean_water_level).w,d0
-		beq.s	No_WaterResize
+		beq.s	.return
 		bhs.s	.skip
 		neg.w	d1
 
 .skip
 		add.w	d1,(Mean_water_level).w
 
-No_WaterResize:
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================

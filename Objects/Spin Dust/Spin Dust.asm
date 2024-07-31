@@ -126,9 +126,9 @@ Obj_DashDust:
 DashDust_CheckSkid:
 		movea.w	parent(a0),a2											; a2=character
 		moveq	#16,d1
-		cmpi.b	#id_Stop,anim(a2)									; is Sonic stopped?
+		cmpi.b	#AniIDSonAni_Stop,anim(a2)							; is Sonic stopped?
 		beq.s	.create												; if so, branch
-		cmpi.b	#2,character_id(a2)									; is player Knuckles?
+		cmpi.b	#PlayerID_Knuckles,character_id(a2)					; is player Knuckles?
 		bne.s	.back												; if not, branch
 		moveq	#6,d1
 		cmpi.b	#3,double_jump_flag(a2)								; is Knuckles sliding across the ground after gliding?

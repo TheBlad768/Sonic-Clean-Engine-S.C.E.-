@@ -25,10 +25,10 @@ Obj_Spring:
 		bra.s	Spring_UpDiag											; 6
 ; ---------------------------------------------------------------------------
 
-Spring_DownDiag:														; 8
+		; down diag														; 8
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
-		move.w	#$468,art_tile(a0)										; set diagonal
+		move.w	#make_art_tile($468,0,0),art_tile(a0)						; set diagonal
 		bset	#1,status(a0)
 		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
@@ -37,7 +37,7 @@ Spring_DownDiag:														; 8
 Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
-		move.w	#$468,art_tile(a0)										; set diagonal
+		move.w	#make_art_tile($468,0,0),art_tile(a0)						; set diagonal
 		move.l	#Obj_Spring_UpDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ sub_22F98:
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
-		move.b	#id_Spring,anim(a1)
+		move.b	#AniIDSonAni_Spring,anim(a1)
 		move.b	#PlayerID_Control,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0
@@ -454,7 +454,7 @@ loc_23542:
 		bset	#Status_InAir,status(a1)
 		bclr	#Status_OnObj,status(a1)
 		clr.b	jumping(a1)
-		move.b	#id_Spring,anim(a1)
+		move.b	#AniIDSonAni_Spring,anim(a1)
 		move.b	#PlayerID_Control,routine(a1)
 		move.b	subtype(a0),d0
 		btst	#0,d0

@@ -6,7 +6,7 @@
 
 Obj_Button:
 		move.l	#Map_Button,mappings(a0)
-		move.w	#$47E,art_tile(a0)
+		move.w	#make_art_tile($47E,0,0),art_tile(a0)
 		move.b	#4,render_flags(a0)
 		move.w	#bytes_to_word(16/2,32/2),height_pixels(a0)		; set height and width
 		move.w	#$200,priority(a0)
