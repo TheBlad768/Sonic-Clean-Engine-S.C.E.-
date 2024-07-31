@@ -3,35 +3,35 @@
   <Images>
     <ImageFromMappings id="vert1">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="0" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="0" />
     </ImageFromMappings>
     <ImageFromMappings id="vert2">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="1" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="1" />
     </ImageFromMappings>
     <ImageFromMappings id="vert3">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="2" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="2" />
     </ImageFromMappings>
     <ImageFromMappings id="vert4">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="3" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="3" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz1">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="4" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="4" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz2">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="5" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="5" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz3">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="6" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="6" />
     </ImageFromMappings>
     <ImageFromMappings id="horiz4">
       <ArtFile filename="Common/pathswapper-art.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../Objects/PathSwap/Object Data/Map - Path Swap.asm" frame="7" />
+      <MapFile type="ASM" filename="../Objects/Path Swap/Object Data/Map - Path Swap.asm" frame="7" />
     </ImageFromMappings>
   </Images>
   <Subtypes>
