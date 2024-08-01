@@ -1,9 +1,13 @@
+; ---------------------------------------------------------------------------
+; Sprite mappings - title card
+; ---------------------------------------------------------------------------
+
 Map_TitleCard:
-		dc.w 0									; Null
-		dc.w Map_TitleCardRBanner-Map_TitleCard	; Red Banner
-		dc.w Map_TitleCardAct-Map_TitleCard		; ACT
-		dc.w Map_TitleCardZone-Map_TitleCard		; ZONE
-		dc.w Map_TitleCardDEZ-Map_TitleCard		; DEATH EGG
+		dc.w 0										; null
+		dc.w Map_TitleCardRBanner-Map_TitleCard		; red banner
+		dc.w Map_TitleCardAct-Map_TitleCard			; ACT
+		dc.w Map_TitleCardZone-Map_TitleCard			; ZONE
+		dc.w Map_TitleCardDEZ-Map_TitleCard			; DEATH EGG
 Map_TitleCardRBanner:
 		dc.w $10
 		dc.b $58, 9, $80, $10, $FF, $E8

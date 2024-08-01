@@ -13,7 +13,7 @@ Obj_Bubbler:
 
 		; mapping
 		move.l	#Map_Bubbler,mappings(a0)
-		move.w	#$348,art_tile(a0)
+		move.w	#make_art_tile($348,0,0),art_tile(a0)
 		move.b	#$84,render_flags(a0)
 		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)		; set height and width
 		move.w	#$80,priority(a0)
@@ -225,7 +225,7 @@ sub_2FBA8:
 		sfx	sfx_Bubble
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
-		move.b	#id_GetAir,anim(a1)
+		move.b	#AniIDSonAni_GetAir,anim(a1)
 		move.w	#35,move_lock(a1)
 		clr.b	jumping(a1)
 		clr.b	double_jump_flag(a1)

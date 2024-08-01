@@ -6,8 +6,14 @@
 
 Animate_Tiles:
 		lea	(Level_data_addr_RAM.AnimateTiles).w,a0
+
+		; check
+		tst.l	(a0)										; is there animated art in here?
+		beq.s	AnimateTiles_NULL					; if not, branch
+
+		; jump
 		movea.l	(a0)+,a1
-		movea.l	(a0),a2
+		movea.l	(a0),a2								; get PLC scripts
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================

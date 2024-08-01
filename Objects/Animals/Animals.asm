@@ -54,10 +54,10 @@ Squirrel:		objanimaldecl Map_Animals2, Obj_Animal_Walk, -$280, -$380		; 6
 
 Obj_Animal:
 		jsr	(Random_Number).w
-		move.w	#$580,d1											; animal 1 (VRAM)
+		move.w	#make_art_tile($580,0,0),d1							; animal 1 (VRAM)
 		andi.w	#1,d0
 		beq.s	.rskip
-		move.w	#$592,d1											; animal 2 (VRAM)
+		move.w	#make_art_tile($592,0,0),d1							; animal 2 (VRAM)
 
 .rskip
 		move.w	d1,art_tile(a0)
@@ -192,17 +192,17 @@ objanimalending macro address, mappings, vram, xvel, yvel
 Animal_Ending_Index:
 
 		; the following tables tell the properties of animals based on their subtype
-		objanimalending Obj_Animal_FlickyWait, Map_Animals1, $5A5, -$440, -$400			; 0 ($F)
-		objanimalending Obj_Animal_FlickyWait, Map_Animals1, $5A5, -$440, -$400			; 1 ($10)
-		objanimalending Obj_Animal_FlickyJump, Map_Animals1, $5A5	, -$440, -$400		; 2 ($11)
-		objanimalending Obj_Animal_RabbitWait, Map_Animals5, $553, -$300, -$400		; 3 ($12)
-		objanimalending Obj_Animal_LandJump, Map_Animals5, $553, -$300, -$400			; 4 ($13)
-		objanimalending Obj_Animal_SingleBounce, Map_Animals5, $573, -$180, -$300		; 5 ($14)
-		objanimalending Obj_Animal_LandJump, Map_Animals5, $573, -$180, -$300			; 6 ($15)
-		objanimalending Obj_Animal_SingleBounce, Map_Animals4, $585, -$140, -$180 		; 7 ($16)
-		objanimalending Obj_Animal_LandJump, Map_Animals3, $593, -$1C0, -$300			; 8 ($17)
-		objanimalending Obj_Animal_FlyBounce, Map_Animals1, $565, -$200, -$300			; 9 ($18)
-		objanimalending Obj_Animal_DoubleBounce, Map_Animals2, $5B3, -$280, -$380		; A ($19)
+		objanimalending Obj_Animal_FlickyWait, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 0 ($F)
+		objanimalending Obj_Animal_FlickyWait, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 1 ($10)
+		objanimalending Obj_Animal_FlickyJump, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 2 ($11)
+		objanimalending Obj_Animal_RabbitWait, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 3 ($12)
+		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 4 ($13)
+		objanimalending Obj_Animal_SingleBounce, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 5 ($14)
+		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 6 ($15)
+		objanimalending Obj_Animal_SingleBounce, Map_Animals4, make_art_tile($585,0,0), -$140, -$180 		; 7 ($16)
+		objanimalending Obj_Animal_LandJump, Map_Animals3, make_art_tile($593,0,0), -$1C0, -$300		; 8 ($17)
+		objanimalending Obj_Animal_FlyBounce, Map_Animals1, make_art_tile($565,0,0), -$200, -$300		; 9 ($18)
+		objanimalending Obj_Animal_DoubleBounce, Map_Animals2, make_art_tile($5B3,0,0), -$280, -$380		; A ($19)
 
 ; =============== S U B R O U T I N E =======================================
 

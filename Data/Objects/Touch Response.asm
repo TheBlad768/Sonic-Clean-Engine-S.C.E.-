@@ -39,7 +39,7 @@ TouchResponse:
 		move.b	y_radius(a0),d5							; load Sonic's height
 		subq.b	#3,d5
 		sub.w	d5,d3
-		cmpi.b	#id_Duck,anim(a0)						; is player ducking?
+		cmpi.b	#AniIDSonAni_Duck,anim(a0)				; is player ducking?
 		bne.s	.Touch_NotDuck							; if not, branch
 		addi.w	#$C,d3
 		moveq	#$A,d5
@@ -256,7 +256,7 @@ Touch_Monitor:
 ; ---------------------------------------------------------------------------
 
 .checkdestroy
-		cmpi.b	#id_Roll,anim(a0)							; is Sonic rolling/jumping?
+		cmpi.b	#AniIDSonAni_Roll,anim(a0)				; is Sonic rolling/jumping?
 		bne.s	.locret									; if not, branch
 
 		; okaytodestroy
@@ -268,11 +268,11 @@ Touch_Monitor:
 Touch_Enemy:
 		btst	#Status_Invincible,status_secondary(a0)			; does Sonic have invincibility?
 		bne.s	.checkhurtenemy							; if yes, branch
-		cmpi.b	#id_SpinDash,anim(a0)					; is Sonic Spin Dashing?
+		cmpi.b	#AniIDSonAni_SpinDash,anim(a0)			; is Sonic Spin Dashing?
 		beq.s	.checkhurtenemy							; if yes, branch
-		cmpi.b	#id_Roll,anim(a0)							; is Sonic rolling/jumping?
+		cmpi.b	#AniIDSonAni_Roll,anim(a0)				; is Sonic rolling/jumping?
 		beq.s	.checkhurtenemy							; if not, branch
-		cmpi.b	#2,character_id(a0)						; is player Knuckles?
+		cmpi.b	#PlayerID_Knuckles,character_id(a0)		; is player Knuckles?
 		bne.s	.notknuckles								; if not, branch
 		cmpi.b	#1,double_jump_flag(a0)					; is Knuckles gliding?
 		beq.s	.checkhurtenemy							; if so, branch
@@ -282,7 +282,7 @@ Touch_Enemy:
 ; ---------------------------------------------------------------------------
 
 .notknuckles
-		cmpi.b	#1,character_id(a0)						; is player Tails
+		cmpi.b	#PlayerID_Tails,character_id(a0)			; is player Tails
 		bne.w	Touch_ChkHurt							; if not, branch
 		tst.b	double_jump_flag(a0)							; is Tails flying ("gravity-affected")
 		beq.w	Touch_ChkHurt							; if not, branch
@@ -467,7 +467,7 @@ HurtCharacter:
 
 .isleft
 		clr.w	ground_vel(a0)
-		move.b	#id_Hurt2,anim(a0)						; set hurt anim
+		move.b	#AniIDSonAni_Hurt2,anim(a0)				; set hurt anim
 		move.b	#2*60,invulnerability_timer(a0)				; set temp invincible time to 2 seconds
 		moveq	#signextendB(sfx_SpikeHit),d0				; load spikes damage sound
 		cmpi.l	#Map_Spikes,mappings(a2)				; was damage caused by spikes?
@@ -511,11 +511,10 @@ Kill_Character:
 		move.w	#-$700,y_vel(a0)
 		clr.w	x_vel(a0)
 		clr.w	ground_vel(a0)
-		move.b	#id_Death,anim(a0)
+		move.b	#AniIDSonAni_Death,anim(a0)
 		move.l	priority(a0),(Debug_saved_priority).w		; save priority and art_tile
 		clr.w	priority(a0)
-		st	(Deform_lock).w
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 		jsr	(Play_SFX).w
 
 .dontdie

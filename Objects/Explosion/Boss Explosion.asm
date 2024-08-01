@@ -135,7 +135,7 @@ Obj_NormalExpControl:
 		lea	Child6_MakeNormalExplosion(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	locret_83EC0
-		bset	#7,art_tile(a1)
+		bset	#high_priority_bit,art_tile(a1)
 		bra.s	loc_83E90
 
 ; =============== S U B R O U T I N E =======================================
@@ -212,8 +212,8 @@ Obj_BossExplosionOffsetAnim:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $8500, 0, 24/2, 24/2, 0, 0
-ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $84D2, 0, 24/2, 24/2, 0, 0
+ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, 1, 0, 24/2, 24/2, 0, 0
+ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, 1, 0, 24/2, 24/2, 0, 0
 
 Child6_MakeBossExplosion1:
 		dc.w 1-1

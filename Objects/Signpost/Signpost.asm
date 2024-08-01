@@ -6,9 +6,7 @@
 
 Obj_EndSignControl:
 		move.l	#Obj_Wait,address(a0)
-		st	(Level_end_flag).w										; end of level is in effect
-		clr.b	(TitleCard_end_flag).w
-		clr.b	(Results_end_flag).w
+		st	(Level_results_flag).w										; end of level is in effect
 		move.w	#(2*60)-1,objoff_2E(a0)
 		move.l	#Obj_EndSignControlDoSign,objoff_34(a0)
 
@@ -23,12 +21,14 @@ Obj_EndSignControlDoSign:
 		jsr	(CreateChild6_Simple).w
 
 AfterBoss_Cleanup:
-		movea.l	(Level_data_addr_RAM.AfterBoss).w,a1
+		move.l	(Level_data_addr_RAM.AfterBoss).w,d0
+		beq.s	Obj_EndSignControl.return
+		movea.l	d0,a1
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlAwaitStart:
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		bne.s	Obj_EndSignControl.return
 		move.l	#Obj_EndSignControlDoStart,address(a0)
 
@@ -38,7 +38,7 @@ Obj_EndSignControlAwaitStart:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlDoStart:
-		tst.b	(TitleCard_end_flag).w										; wait for title card to finish
+		tst.b	(End_of_level_flag).w										; wait for title card to finish
 		beq.s	Obj_EndSignControl.return
 		jsr	(Change_ActSizes).w										; set level size
 		jmp	(Delete_Current_Sprite).w
@@ -263,7 +263,7 @@ EndSign_CheckPlayerHit:
 
 .checkhit
 		movea.w	d0,a1												; this can be done up to twice depending on who hit the signpost
-		cmpi.b	#id_Roll,anim(a1)
+		cmpi.b	#AniIDSonAni_Roll,anim(a1)
 		bne.s	.return												; only go on if player is currently jumping
 		tst.w	y_vel(a1)
 		bpl.s	.return												; and if he's actually moving upwards
@@ -336,9 +336,9 @@ EndSign_CheckWall:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjSlot_EndSigns:		subObjSlotData 0, $494, $18, 0, Map_EndSigns, $300, 48/2, 32/2, 0, 0
-ObjDat_SignpostStub:		subObjData Map_SignpostStub, $482, $300, 8/2, 16/2, 0, 0
-ObjDat_SignpostSparkle:	subObjData Map_Ring, make_art_tile(ArtTile_Ring,1,0), $280, 16/2, 16/2, 4, 0
+ObjSlot_EndSigns:		subObjSlotData 0, $494, 0, 0, $18, 0, Map_EndSigns, $300, 48/2, 32/2, 0, 0
+ObjDat_SignpostStub:		subObjData Map_SignpostStub, $482, 0, 0, $300, 8/2, 16/2, 0, 0
+ObjDat_SignpostSparkle:	subObjData Map_Ring, ArtTile_Ring, 1, 0, $280, 16/2, 16/2, 4, 0
 PLCPtr_EndSigns:		dc.l dmaSource(ArtUnc_EndSigns), DPLC_EndSigns
 
 Child6_EndSign:

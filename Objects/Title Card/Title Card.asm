@@ -72,7 +72,7 @@ Obj_TitleCard:
 		move.b	d2,objoff_28(a1)
 		move.b	#rfMulti,render_flags(a1)
 		move.l	#Map_TitleCard,mappings(a1)
-		move.w	#$500,art_tile(a1)
+		move.w	#make_art_tile($500,0,0),art_tile(a1)
 		move.w	a0,parent2(a1)
 		jsr	(Create_New_Sprite4).w
 		dbne	d1,.loop
@@ -124,21 +124,27 @@ Obj_TitleCard:
 ; ---------------------------------------------------------------------------
 
 .branch2
+		tst.b	objoff_44(a0)
+		bne.s	.delete
 		tst.w	objoff_3E(a0)
 		beq.s	.skiplevel2
-		st	(TitleCard_end_flag).w											; if in-level, set end of title card flag
+		st	(End_of_level_flag).w											; if in-level, set end of title card flag
+		bra.s	.skiplevel3
+; ---------------------------------------------------------------------------
 
 .skiplevel2
 		lea	(PLC2_Sonic).l,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w
 		movea.l	(Level_data_addr_RAM.PLC2).w,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w									; load main art
+
+.skiplevel3
 		movea.l	(Level_data_addr_RAM.PLCAnimals).w,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w									; load animals art
 		move.b	#1,(HUD_RAM.status).w									; load HUD
 		clr.b	(Ctrl_1_locked).w												; unlock control 1
 
-		; delete
+.delete
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================

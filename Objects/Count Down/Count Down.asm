@@ -6,7 +6,7 @@
 
 Obj_AirCountdown:
 		move.l	#Map_Bubbler,mappings(a0)					; 1P
-		move.w	#$348,art_tile(a0)
+		move.w	#make_art_tile($348,0,0),art_tile(a0)
 		move.b	#$84,render_flags(a0)
 		move.w	#$80,priority(a0)
 		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)		; set height and width
@@ -76,7 +76,7 @@ AirCountdown_ReduceAir:
 		bset	#Status_InAir,status(a2)
 		clr.l	x_vel(a2)
 		clr.w	ground_vel(a2)
-		move.b	#id_Drown,anim(a2)
+		move.b	#AniIDSonAni_Drown,anim(a2)
 		move.b	#PlayerID_Drown,routine(a2)
 		cmpa.w	#Player_1,a2
 		bne.s	.notp1
@@ -85,14 +85,14 @@ AirCountdown_ReduceAir:
 		st	(Deform_lock).w
 
 .notp1
-		bset	#7,art_tile(a2)
+		bset	#high_priority_bit,art_tile(a2)
 
 locret_1857A:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1857C:
-		move.b	#id_Drown,anim(a2)
+		move.b	#AniIDSonAni_Drown,anim(a2)
 		subq.w	#1,objoff_30(a0)
 		bne.s	loc_18594
 		move.b	#PlayerID_Death,routine(a2)

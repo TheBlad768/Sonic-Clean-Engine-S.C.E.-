@@ -3,12 +3,12 @@
 ; ===========================================================================
 
 		include "Objects/Rings/Rings.asm"
-		include "Objects/PathSwap/PathSwap.asm"
+		include "Objects/Path Swap/Path Swap.asm"
 		include "Objects/Monitor/Monitor.asm"
 		include "Objects/Hidden Monitor/Hidden Monitor.asm"
 		include "Objects/Spring/Spring.asm"
 		include "Objects/Spikes/Spikes.asm"
-		include "Objects/AutoSpin/AutoSpin.asm"
+		include "Objects/Auto Spin/Auto Spin.asm"
 		include "Objects/Invisible Blocks/Invisible Block(Solid).asm"
 		include "Objects/Invisible Blocks/Invisible Block(Hurt).asm"
 		include "Objects/Invisible Blocks/Invisible Block(Kill).asm"

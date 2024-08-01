@@ -103,7 +103,7 @@ Obj_MonitorFallUpsideDown:
 SolidObject_Monitor_SonicKnux:
 		btst	d6,status(a0)											; is Sonic/Knux standing on the monitor?
 		bne.s	Monitor_ChkOverEdge								; if so, branch
-		cmpi.b	#id_Roll,anim(a1)									; is Sonic/Knux in their rolling animation?
+		cmpi.b	#AniIDSonAni_Roll,anim(a1)						; is Sonic/Knux in their rolling animation?
 		beq.s	Obj_MonitorFallUpsideDown.return					; if so, return
 
 		; solid
@@ -338,7 +338,7 @@ Monitor_Give_Bubble_Shield:
 Monitor_Give_Invincibility:
 		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#150,invincibility_timer(a1)
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		bne.s	.skipmusic
 		tst.b	(Boss_flag).w
 		bne.s	.skipmusic

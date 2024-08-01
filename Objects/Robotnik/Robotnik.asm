@@ -24,9 +24,9 @@ Obj_RobotnikHead3Init:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#AniRaw_RobotnikHead,objoff_30(a0)
 		movea.w	parent3(a0),a1
-		btst	#7,art_tile(a1)
+		btst	#high_priority_bit,art_tile(a1)
 		beq.s	+
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 +		rts
 ; ---------------------------------------------------------------------------
 
@@ -96,6 +96,8 @@ loc_67CFE:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_RobotnikShipFlame:
+
+		; mapping
 		lea	ObjDat2_RoboShipFlame(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#RobotnikShipFlame_Main,address(a0)
@@ -120,6 +122,8 @@ RobotnikShipFlame_Main:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_RobotnikShipPieces:
+
+		; mapping
 		lea	ObjDat_RobotnikShipPieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_FlickerMove,address(a0)
@@ -131,11 +135,11 @@ Obj_RobotnikShipPieces:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_RobotnikShip:			subObjData Map_RobotnikShip, $52E, $200, 64/2, 64/2, $C, $F
-ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, $200, 64/2, 64/2, 7, $F
-ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, $280, 32/2, 16/2, 0, 0
+ObjDat_RobotnikShip:			subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64/2, 64/2, $C, $F
+ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64/2, 64/2, 7, $F
+ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, 0, $280, 32/2, 16/2, 0, 0
 ObjDat2_RoboShipFlame:		subObjData3 $280, 16/2, 8/2, 8, 0
-ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $852E, 0, 64/2, 64/2, 0, 0
+ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, 1, 0, 64/2, 64/2, 0, 0
 
 AniRaw_RobotnikHead:
 		dc.b 5, 0, 1, arfEnd

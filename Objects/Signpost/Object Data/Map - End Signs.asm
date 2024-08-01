@@ -1,27 +1,35 @@
+; ---------------------------------------------------------------------------
+; Sprite mappings - signpost
+; ---------------------------------------------------------------------------
+
 Map_EndSigns:
-		dc.w word_83BAC-Map_EndSigns
-		dc.w word_83BBA-Map_EndSigns
-		dc.w word_83BC8-Map_EndSigns
-		dc.w word_83BD6-Map_EndSigns
-		dc.w word_83BE4-Map_EndSigns
-		dc.w word_83BEC-Map_EndSigns
-		dc.w word_83BF4-Map_EndSigns
-word_83BAC:	dc.w 2
-		dc.b  $F0,  $B,	  0,   0, $FF, $E8
-		dc.b  $F0,  $B,	  0,  $C,   0,	 0
-word_83BBA:	dc.w 2
-		dc.b  $F0,  $B,	  0,   0, $FF, $E8
-		dc.b  $F0,  $B,	  0,  $C,   0,	 0
-word_83BC8:	dc.w 2
-		dc.b  $F0,  $B,	  0,   0, $FF, $E8
-		dc.b  $F0,  $B,	  0,  $C,   0,	 0
-word_83BD6:	dc.w 2
-		dc.b  $F0,  $B,	  0,   0, $FF, $E8
-		dc.b  $F0,  $B,	  8,  $C,   0,	 0
-word_83BE4:	dc.w 1
-		dc.b  $F0,  $F,	  0,   0, $FF, $F0
-word_83BEC:	dc.w 1
-		dc.b  $F0,   3,	  0,   0, $FF, $FC
-word_83BF4:	dc.w 1
-		dc.b  $F0,  $F,	  8,   0, $FF, $F0
+Map_EndSigns_0: 	dc.w Map_EndSigns_10-Map_EndSigns
+Map_EndSigns_2: 	dc.w Map_EndSigns_1E-Map_EndSigns
+Map_EndSigns_4: 	dc.w Map_EndSigns_2C-Map_EndSigns
+Map_EndSigns_6: 	dc.w Map_EndSigns_3A-Map_EndSigns
+Map_EndSigns_8: 	dc.w Map_EndSigns_48-Map_EndSigns
+Map_EndSigns_A: 	dc.w Map_EndSigns_56-Map_EndSigns
+Map_EndSigns_C: 	dc.w Map_EndSigns_5E-Map_EndSigns
+Map_EndSigns_E: 	dc.w Map_EndSigns_66-Map_EndSigns
+Map_EndSigns_10: 	dc.b $0, $2
+	dc.b $F0, $B, $0, $0, $FF, $E8
+	dc.b $F0, $B, $0, $C, $0, $0
+Map_EndSigns_1E: 	dc.b $0, $2
+	dc.b $F0, $B, $0, $0, $FF, $E8
+	dc.b $F0, $B, $0, $C, $0, $0
+Map_EndSigns_2C: 	dc.b $0, $2
+	dc.b $F0, $B, $0, $0, $FF, $E8
+	dc.b $F0, $B, $0, $C, $0, $0
+Map_EndSigns_3A: 	dc.b $0, $2
+	dc.b $F0, $B, $0, $0, $FF, $E8
+	dc.b $F0, $B, $8, $C, $0, $0
+Map_EndSigns_48: 	dc.b $0, $2
+	dc.b $F0, $B, $0, $0, $FF, $E8
+	dc.b $F0, $B, $8, $C, $0, $0
+Map_EndSigns_56: 	dc.b $0, $1
+	dc.b $F0, $F, $0, $0, $FF, $F0
+Map_EndSigns_5E: 	dc.b $0, $1
+	dc.b $F0, $3, $0, $0, $FF, $FC
+Map_EndSigns_66: 	dc.b $0, $1
+	dc.b $F0, $F, $8, $0, $FF, $F0
 	even

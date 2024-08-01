@@ -6,7 +6,7 @@
 
 Obj_WaterWave:
 		move.l	#Map_WaterWave,mappings(a0)
-		move.w	#$8300,art_tile(a0)
+		move.w	#make_art_tile($300,0,1),art_tile(a0)
 		move.b	#rfCoord+rfMulti,render_flags(a0)				; set screen coordinates and multi-draw flag
 		move.w	#bytes_to_word(24/2,256/2),height_pixels(a0)	; set height and width
 		move.w	#1,mainspr_childsprites(a0)

@@ -103,8 +103,14 @@ LevelScreen:
 		disableInts
 		jsr	(Level_Setup).w														; draw level
 		enableInts
-		movea.l	(Level_data_addr_RAM.AnimateTilesInit).w,a0						; animate art init
-		jsr	(a0)
+
+		; check
+		move.l	(Level_data_addr_RAM.AnimateTilesInit).w,d0
+		beq.s	.askip
+		movea.l	d0,a0
+		jsr	(a0)																	; animate art init
+
+.askip
 		jsr	(Load_Solids).w
 		jsr	(Handle_Onscreen_Water_Height).w
 		moveq	#0,d0
@@ -156,6 +162,7 @@ LevelScreen:
 		jsr	(Process_KosPlus_Queue).w
 		jsr	(Wait_VSync).w
 		addq.w	#1,(Level_frame_counter).w
+		jsr	(Special_Events).w
 		jsr	(Load_Sprites).w
 		jsr	(Process_Sprites).w
 		tst.b	(Restart_level_flag).w

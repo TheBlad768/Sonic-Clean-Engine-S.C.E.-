@@ -88,7 +88,7 @@ Obj_LevelResults:
 		move.b	d2,objoff_28(a1)
 		move.b	#rfMulti,render_flags(a1)
 		move.l	#Map_Results,mappings(a1)
-		move.w	#$500,art_tile(a1)
+		move.w	#make_art_tile($500,0,0),art_tile(a1)
 		move.w	a0,parent2(a1)
 		jsr	(Create_New_Sprite4).w
 		dbne	d1,.loop
@@ -164,7 +164,7 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .endr
-		clr.b	(Level_end_flag).w
+		clr.b	(Level_results_flag).w
 		tst.b	(Last_act_end_flag).w
 		bne.s	.skiptc
 		clr.b	(Last_star_post_hit).w
@@ -175,8 +175,7 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .skiptc
-		clr.b	(TitleCard_end_flag).w										; stop level results flag and set title card finished flag
-		st	(Results_end_flag).w
+		st	(End_of_level_flag).w										; stop level results flag and set title card finished flag
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================

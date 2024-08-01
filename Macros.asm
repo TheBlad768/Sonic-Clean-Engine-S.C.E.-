@@ -143,11 +143,10 @@ dbglistobj macro obj, mapaddr, subtype, frame, vram
 ; macro for declaring a "main level load block" (MLLB)
 ; ---------------------------------------------------------------------------
 
-levartptrs macro art1,art2,map16x16,mapram,map128x1281,map128x1282,palette,wpalette,music
-	dc.l (palette)<<24|(art1&$FFFFFF), art2
-	dc.l (wpalette)<<24|((map16x16)&$FFFFFF)
-	dc.l (music)<<24|((mapram)&$FFFFFF)
-	dc.l map128x1281, map128x1282
+levartptrs macro art1,art2,map16x16r,map16x161,map16x162,map128x128r,map128x1281,map128x1282,palette,wpalette,music
+	dc.l (palette)<<24|((art1)&$FFFFFF), art2
+	dc.l (wpalette)<<24|((map16x16r)&$FFFFFF), map16x161, map16x162
+	dc.l (music)<<24|((map128x128r)&$FFFFFF), map128x1281, map128x1282
     endm
 ; ---------------------------------------------------------------------------
 
@@ -164,15 +163,15 @@ watpalptrs macro height,spal,kpal
 ; ---------------------------------------------------------------------------
 
 ; macro to declare sub-object data
-subObjData	macro mappings,vram,priority,width,height,frame,collision
+subObjData	macro mappings,vram,pal,pri,priority,width,height,frame,collision
 	dc.l mappings
-	dc.w vram,priority
+	dc.w make_art_tile(vram,pal,pri),priority
 	dc.b width,height,frame,collision
     endm
 
 ; macro to declare sub-object data
-subObjData2	macro vram,priority,width,height,frame,collision
-	dc.w vram,priority
+subObjData2	macro vram,pal,pri,priority,width,height,frame,collision
+	dc.w make_art_tile(vram,pal,pri),priority
 	dc.b width,height,frame,collision
     endm
 
@@ -183,35 +182,35 @@ subObjData3	macro priority,width,height,frame,collision
     endm
 
 ; macro to declare sub-object slotted data
-subObjSlotData macro slots,vram,offset,index,mappings,priority,width,height,frame,collision
-	dc.w slots,vram,offset,index
+subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,priority,width,height,frame,collision
+	dc.w slots,make_art_tile(vram,pal,pri),offset,index
 	dc.l mappings
 	dc.w priority
 	dc.b width,height,frame,collision
     endm
 
 ; macro to declare sub-object data
-subObjMainData	macro address,render,routine,height,width,priority,art,mappings,frame,collision
-	dc.l address						; address
-	dc.b render, routine, height, width	; render, routine, height, width
-	dc.w priority, art					; priority, art tile
-	dc.l mappings						; mappings
-	dc.b frame, collision				; mapping frame, collision flags
+subObjMainData	macro address,render,routine,height,width,priority,vram,pal,pri,mappings,frame,collision
+	dc.l address								; address
+	dc.b render, routine, height, width			; render, routine, height, width
+	dc.w priority, make_art_tile(vram,pal,pri)	; priority, art tile
+	dc.l mappings								; mappings
+	dc.b frame, collision						; mapping frame, collision flags
     endm
 
 ; macro to declare sub-object data
-subObjMainData2	macro address,render,routine,height,width,priority,art,mappings
-	dc.l address						; address
-	dc.b render, routine, height, width	; render, routine, height, width
-	dc.w priority, art					; priority, art tile
-	dc.l mappings						; mappings
+subObjMainData2	macro address,render,routine,height,width,priority,vram,pal,pri,mappings
+	dc.l address								; address
+	dc.b render, routine, height, width			; render, routine, height, width
+	dc.w priority, make_art_tile(vram,pal,pri)	; priority, art tile
+	dc.l mappings								; mappings
     endm
 
 ; macro to declare sub-object data
-subObjMainData3	macro render,routine,height,width,priority,art,mappings
-	dc.b render, routine, height, width	; render, routine, height, width
-	dc.w priority, art					; priority, art tile
-	dc.l mappings						; mappings
+subObjMainData3	macro render,routine,height,width,priority,vram,pal,pri,mappings
+	dc.b render, routine, height, width			; render, routine, height, width
+	dc.w priority, make_art_tile(vram,pal,pri)	; priority, art tile
+	dc.l mappings								; mappings
     endm
 ; ---------------------------------------------------------------------------
 
@@ -403,14 +402,14 @@ QueueKosPlusModule macro art,vram,terminate
 ; ---------------------------------------------------------------------------
 
 ; load Enigma data to RAM
-EniDecomp macro data,ram,vram,terminate
+EniDecomp macro data,ram,vram,palette,priority,terminate
 	lea	(data).l,a0
     if ((ram)&$8000)==0
 	lea	(ram).l,a1
     else
 	lea	(ram).w,a1
     endif
-	move.w	#make_art_tile vram,d0
+	move.w	#make_art_tile(vram,palette,priority),d0
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Eni_Decomp).w
       else

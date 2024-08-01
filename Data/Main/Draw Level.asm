@@ -9,6 +9,10 @@ VInt_DrawLevel:
 
 .main
 		lea	(Plane_buffer).w,a0
+		bsr.s	VInt_DrawLevel_2
+		move.l	(Plane_buffer_2_addr).w,d0
+		beq.s	VInt_DrawLevel_Return
+		movea.l	d0,a0
 
 VInt_DrawLevel_2:
 		move.w	(a0),d0
@@ -16,13 +20,13 @@ VInt_DrawLevel_2:
 		clr.w	(a0)+
 		move.w	(a0)+,d1
 		bmi.s	VInt_DrawLevel_Col
-		move.w	#$8F02,d2				; VRAM increment at 2 bytes (horizontal level write)
+		move.w	#$8F02,d2										; VRAM increment at 2 bytes (horizontal level write)
 		move.w	#$80,d3
 		bra.s	VInt_DrawLevel_Draw
 ; ---------------------------------------------------------------------------
 
 VInt_DrawLevel_Col:
-		move.w	#$8F80,d2				; VRAM increment at $80 bytes (vertical level write)
+		move.w	#$8F80,d2										; VRAM increment at $80 bytes (vertical level write)
 		moveq	#2,d3
 		andi.w	#$7FFF,d1
 
@@ -39,7 +43,7 @@ VInt_DrawLevel_Draw:
 ; ---------------------------------------------------------------------------
 
 VInt_DrawLevel_Done:
-		move.w	#$8F02,VDP_control_port-VDP_data_port(a6)
+		move.w	#$8F02,VDP_control_port-VDP_data_port(a6)		; VRAM increment at 2 bytes
 
 VInt_DrawLevel_Return:
 		rts
@@ -52,7 +56,7 @@ VInt_VRAMWrite:
 		swap	d0
 		lsl.l	#2,d0
 		lsr.w	#2,d0
-		ori.w	#vdpComm($0000,VRAM,WRITE)>>16,d0
+		ori.w	#vdpComm(0,VRAM,WRITE)>>16,d0
 		swap	d0
 		move.l	d0,VDP_control_port-VDP_data_port(a6)
 
@@ -956,7 +960,7 @@ LoadLevelLoadBlock:
 
 		; load primary level art
 		movea.l	(Level_data_addr_RAM.8x8data1).w,a1
-		move.w	(a1),d4											; save size
+		move.w	(a1),d4											; save art size
 		moveq	#tiles_to_bytes(0),d2								; VRAM
 		bsr.w	Queue_KosPlus_Module
 
@@ -964,7 +968,7 @@ LoadLevelLoadBlock:
 		move.l	(Level_data_addr_RAM.8x8data2).w,d0
 		beq.s	.waitplc
 		movea.l	d0,a1
-		move.w	d4,d2											; return size for the starting position
+		move.w	d4,d2											; return art size for the starting position
 		bsr.w	Queue_KosPlus_Module
 
 .waitplc
@@ -1036,27 +1040,47 @@ LoadLevelLoadBlock2:
 		bsr.w	LoadPLC_Raw_KosPlusM
 
 .skipPLC
-		lea	(Level_data_addr_RAM.8x8data1).w,a2
-		pea	(a2)													; save a2
-		addq.w	#4*2,a2											; skip level art
+		lea	(Level_data_addr_RAM.16x16ram).w,a2
+
+		; save blocks address
 		move.l	(a2)+,(Block_table_addr_ROM).w
+
+		; load primary level blocks
+		move.l	(a2)+,d0
+		beq.s	.notbsec
+		movea.l	d0,a0
+		movea.l	-8(a2),a1											; load blocks address
+		bsr.w	KosPlus_Decomp
+
+		; load secondary level blocks
+		move.l	(a2),d0
+		beq.s	.notbsec
+		movea.l	d0,a0
+		bsr.w	KosPlus_Decomp
+
+.notbsec
+		addq.w	#4,a2											; next
+
+		; save chunks address
 		move.l	(a2)+,(Level_chunk_addr_ROM).w
 
 		; load primary level chunks
 		move.l	(a2)+,d0
-		beq.s	.notsec
+		beq.s	.notcsec
 		movea.l	d0,a0
-		lea	(RAM_start).l,a1
+		movea.l	-8(a2),a1											; load chunks address
 		bsr.w	KosPlus_Decomp
 
 		; load secondary level chunks
-		move.l	(a2)+,d0
-		beq.s	.notsec
+		move.l	(a2),d0
+		beq.s	.notcsec
 		movea.l	d0,a0
 		bsr.w	KosPlus_Decomp
 
-.notsec
-		movea.l	(sp)+,a2											; restore a2
+.notcsec
+
+		; load level palette
+		lea	(Level_data_addr_RAM.Palette).w,a2					; palette
 		moveq	#0,d0
 		move.b	(a2),d0
 		bsr.w	LoadPalette
@@ -1084,13 +1108,15 @@ Load_Level2:
 
 LoadLevelPointer:
 		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0											; multiply by $74
+		ror.b	#2,d0											; multiply by $7C
 		move.w	d0,d1
 		lsr.w	#2,d1
 		add.w	d1,d0
 		add.w	d1,d0
 		add.w	d1,d0
 		lsr.w	#2,d1
+		add.w	d1,d0
+		add.w	d1,d0
 		add.w	d1,d0
 
 .skip
@@ -1102,13 +1128,13 @@ LoadLevelPointer:
 
 		; if you make a different buffer size, you need to change this code
 
-	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$74
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$7C
 		fatal "Warning! The buffer size is different!"
 	endif
 
 		set	.a,0
 
-	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $74 bytes
+	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $7C bytes
 		movem.l	(a2)+,d0-d7
 		movem.l	d0-d7,.a(a3)										; copy $20 bytes
 		set	.a,.a + $20

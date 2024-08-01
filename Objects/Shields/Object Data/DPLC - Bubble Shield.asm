@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; DPLC mappings - bubble shield
+; ---------------------------------------------------------------------------
+
 DPLC_BubbleShield:
 		dc.w word_1A090-DPLC_BubbleShield
 		dc.w word_1A094-DPLC_BubbleShield

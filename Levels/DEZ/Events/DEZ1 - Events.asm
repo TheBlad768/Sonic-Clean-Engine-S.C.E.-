@@ -23,7 +23,9 @@ DEZ1_BackgroundInit:
 		jsr	(Refresh_PlaneFull).w
 
 		; deform
-		bra.s	DEZ1_BackgroundEvent.deform
+		lea	DEZ1_BGDeformArray(pc),a4
+		lea	(H_scroll_table).w,a5
+		jmp	(ApplyDeformation).w
 
 ; =============== S U B R O U T I N E =======================================
 

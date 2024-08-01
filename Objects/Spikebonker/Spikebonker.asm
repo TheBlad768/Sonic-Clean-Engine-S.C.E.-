@@ -207,7 +207,7 @@ Obj_Spikebonker_SpikeBall:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_Spikebonker:				subObjData Map_Spikebonker, $8500, $280, 40/2, 40/2, 0, $1A
+ObjDat_Spikebonker:				subObjData Map_Spikebonker, $500, 0, 1, $280, 40/2, 40/2, 0, $1A
 ObjDat3_Spikebonker_SpikeBall:	subObjData3 $200, 32/2, 32/2, 1, $1A|$80
 
 ChildObjDat_Spikebonker_Control:

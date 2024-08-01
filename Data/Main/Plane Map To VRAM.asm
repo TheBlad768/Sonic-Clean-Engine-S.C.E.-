@@ -7,7 +7,7 @@
 Clear_DisplayData:
 		stopZ80
 		lea	(VDP_control_port).l,a5
-		dmaFillVRAM 0,$0000,($1000<<4)						; clear VRAM
+		dmaFillVRAM 0,0,$10000								; clear VRAM
 		startZ80
 		clearRAM Sprite_table_buffer, Sprite_table_buffer_end	; clear sprite table buffer
 		clearRAM H_scroll_buffer, V_scroll_buffer_end			; clear hvscroll buffer
@@ -236,6 +236,6 @@ CalcVRAM:
 CalcVRAM2:
 		lsl.l	#2,d0
 		lsr.w	#2,d0
-		ori.w	#vdpComm($0000,VRAM,WRITE)>>16,d0
+		ori.w	#vdpComm(0,VRAM,WRITE)>>16,d0
 		swap	d0
 		rts

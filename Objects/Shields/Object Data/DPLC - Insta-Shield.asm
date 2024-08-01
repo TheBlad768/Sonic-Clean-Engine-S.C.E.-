@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; DPLC mappings - insta shield
+; ---------------------------------------------------------------------------
+
 DPLC_InstaShield:
 		dc.w word_1A164-DPLC_InstaShield
 		dc.w word_1A164-DPLC_InstaShield

@@ -37,7 +37,7 @@ Obj_FireShield:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.w	.return											; if so, do not display and do not update variables
-		cmpi.b	#id_Blank,anim(a2)								; is player in their 'blank' animation?
+		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
 		beq.w	.return											; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2) 					; should the player still have a shield?
 		beq.w	.destroy											; if not, change to Insta-Shield
@@ -120,7 +120,7 @@ Obj_LightningShield:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.w	.return											; if so, do not display and do not update variables
-		cmpi.b	#id_Blank,anim(a2)								; is player in their 'blank' animation?
+		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
 		beq.w	.return											; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
 		beq.s	.destroy											; if not, change to Insta-Shield
@@ -182,7 +182,7 @@ Obj_LightningShield:
 
 .loop
 		move.l	(a1),(a2)+										; backup palette entries
-		move.l	#$0EEE0EEE,(a1)+								; overwrite palette entries with white
+		move.l	#words_to_long(cWhite,cWhite),(a1)+				; overwrite palette entries with white
 		dbf	d0,.loop												; loop until entire thing is overwritten
 		move.b	#3,anim_frame_timer(a0)
 		rts
@@ -293,7 +293,7 @@ Obj_BubbleShield:
 		lea	(Player_1).w,a2
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.s	.return											; if so, do not display and do not update variables
-		cmpi.b	#id_Blank,anim(a2)								; is player in their 'blank' animation?
+		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
 		beq.s	.return											; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
 		beq.s	.destroy											; if not, change to Insta-Shield
@@ -485,7 +485,7 @@ Obj_Invincibility:
 
 .found
 		addq.w	#1,objoff_38(a0)
-		lea	word_189A0(pc),a6
+		lea	byte_189A0(pc),a6
 		move.b	objoff_34(a0),d6
 		bsr.w	sub_1898A
 		move.w	d2,(a2)+		; sub2_x_pos
@@ -547,7 +547,7 @@ Obj_188E8:
 		add.b	objoff_35(a0),d2
 		move.b	(a3,d2.w),d5
 		addq.w	#1,objoff_38(a0)
-		lea	word_189A0(pc),a6
+		lea	byte_189A0(pc),a6
 		move.b	objoff_34(a0),d6
 		bsr.s	sub_1898A
 		move.w	d2,(a2)+		; sub2_x_pos
@@ -582,26 +582,57 @@ sub_1898A:
 ; ---------------------------------------------------------------------------
 
 off_187DE:
-		dc.l byte_189ED
+		dc.l byte_189ED		; 1
 		dc.b 0, $B
-		dc.l byte_18A02
+		dc.l byte_18A02		; 2
 		dc.b $16, $D
-		dc.l byte_18A1B
+		dc.l byte_18A1B		; 3
 		dc.b $2C, $D
-word_189A0:
-		dc.w   $F00,  $F03,  $E06,  $D08,  $B0B,  $80D,	 $60E,	$30F,	$10, $FC0F, $F90E, $F70D, $F40B, $F208,	$F106, $F003
-		dc.w  $F000, $F0FC, $F1F9, $F2F7, $F4F4, $F7F2,	$F9F1, $FCF0, $FFF0,  $3F0,  $6F1,  $8F2,  $BF4,  $DF7,	 $EF9,	$FFC
+
+byte_189A0:
+		dc.b $F, 0
+		dc.b $F, 3
+		dc.b $E, 6
+		dc.b $D, 8
+		dc.b $B, $B
+		dc.b 8, $D
+		dc.b 6, $E
+		dc.b 3, $F
+		dc.b 0, $10
+		dc.b -4, $F
+		dc.b -7, $E
+		dc.b -9, $D
+		dc.b -$C, $B
+		dc.b -$E, 8
+		dc.b -$F, 6
+		dc.b -$10, 3
+		dc.b -$10, 0
+		dc.b -$10, -4
+		dc.b -$F, -7
+		dc.b -$E, -9
+		dc.b -$C, -$C
+		dc.b -9, -$E
+		dc.b -7, -$F
+		dc.b -4,-$10
+		dc.b -1,-$10
+		dc.b 3,-$10
+		dc.b 6, -$F
+		dc.b 8, -$E
+		dc.b $B, -$C
+		dc.b $D, -9
+		dc.b $E, -7
+		dc.b $F, -4
 byte_189E0:
-		dc.b	8,   5,	  7,   6,   6,	 7,   5,   8,	6,   7,	  7,   6, $FF
+		dc.b	8, 5, 7, 6, 6, 7, 5, 8, 6, 7, 7, 6, $FF
 byte_189ED:
-		dc.b    8,   7,   6,   5,   4,   3,   4,   5,   6,   7, $FF,   3,   4,   5,   6,   7,   8,   7,   6,   5
-		dc.b    4
+		dc.b 8, 7, 6, 5, 4, 3, 4, 5, 6, 7, $FF, 3, 4, 5, 6, 7, 8, 7, 6, 5
+		dc.b 4
 byte_18A02:
-		dc.b    8,   7,   6,   5,   4,   3,   2,   3,   4,   5,   6,   7, $FF,   2,   3,   4,   5,   6,   7,   8
-		dc.b    7,   6,   5,   4,   3
+		dc.b 8, 7, 6, 5, 4, 3, 2, 3, 4, 5, 6, 7, $FF, 2, 3, 4, 5, 6, 7, 8
+		dc.b 7, 6, 5, 4, 3
 byte_18A1B:
-		dc.b    7,   6,   5,   4,   3,   2,   1,   2,   3,   4,   5,   6, $FF,   1,   2,   3,   4,   5,   6,   7
-		dc.b    6,   5,   4,   3,   2
+		dc.b 7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, $FF, 1, 2, 3, 4, 5, 6, 7
+		dc.b 6, 5, 4, 3, 2
 	even
 ; ---------------------------------------------------------------------------
 

@@ -12,7 +12,7 @@
 
 Queue_KosPlus:
 		move.w	(KosPlus_decomp_queue_count).w,d0
-		lsl.w	#3,d0
+		lsl.w	#3,d0															; multiply by 8
 		lea	(KosPlus_decomp_queue).w,a3
 		move.l	a1,(a3,d0.w)													; store source
 		move.l	a2,4(a3,d0.w)													; store destination
@@ -141,7 +141,7 @@ LoadPLC_Raw_KosPlusM:
 
 Queue_KosPlus_Module:
 		lea	(KosPlus_module_queue).w,a2
-		tst.l	(a2)	; is the first slot free?
+		tst.l	(a2)																; is the first slot free?
 		beq.s	Process_KosPlus_Module_Queue_Init							; if it is, branch
 
 .findFreeSlot:

@@ -25,11 +25,11 @@ Test_Checksum:
 
 		; failed
 		move.l	#vdpComm($0000,CRAM,WRITE),(VDP_control_port).l	; set VDP to CRAM write
-		moveq	#64-1,d7
+		moveq	#(64/2)-1,d7
 
 .fill
-		move.w	#$E,(VDP_data_port).l								; fill palette with red
-		dbf	d7,.fill													; repeat 64 more times
+		move.l	#words_to_long($E,$E),(VDP_data_port).l				; fill palette with red
+		dbf	d7,.fill													; repeat 32 more times
 
 		; freeze
 		bra.s	*

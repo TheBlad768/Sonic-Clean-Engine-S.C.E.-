@@ -21,13 +21,25 @@ Level_Setup:
 		lea	(Plane_buffer).w,a0
 		movea.l	(Block_table_addr_ROM).w,a2
 		movea.l	(Level_layout_addr2_ROM).w,a3
-		move.w	#vram_fg,d7
-		movea.l	(Level_data_addr_RAM.ScreenInit).w,a1
+		move.w	#VRAM_Plane_A_Name_Table,d7						; PNT A base: $C000
+
+		; check
+		move.l	(Level_data_addr_RAM.ScreenInit).w,d0
+		beq.s	.sskip
+		movea.l	d0,a1
 		jsr	(a1)
+
+.sskip
 		addq.w	#2,a3
-		move.w	#vram_bg,d7
-		movea.l	(Level_data_addr_RAM.BackgroundInit).w,a1
+		move.w	#VRAM_Plane_B_Name_Table,d7						; PNT B base: $E000
+
+		; check
+		move.l	(Level_data_addr_RAM.BackgroundInit).w,d0
+		beq.s	.bskip
+		movea.l	d0,a1
 		jsr	(a1)
+
+.bskip
 		move.w	(Camera_Y_pos_copy).w,(V_scroll_value).w
 		move.w	(Camera_Y_pos_BG_copy).w,(V_scroll_value_BG).w
 		rts
@@ -40,13 +52,25 @@ Screen_Events:
 		lea	(Plane_buffer).w,a0
 		movea.l	(Block_table_addr_ROM).w,a2
 		movea.l	(Level_layout_addr2_ROM).w,a3
-		move.w	#vram_fg,d7
-		movea.l	(Level_data_addr_RAM.ScreenEvent).w,a1
+		move.w	#VRAM_Plane_A_Name_Table,d7						; PNT A base: $C000
+
+		; check
+		move.l	(Level_data_addr_RAM.ScreenEvent).w,d0
+		beq.s	.sskip
+		movea.l	d0,a1
 		jsr	(a1)
+
+.sskip
 		addq.w	#2,a3
-		move.w	#vram_bg,d7
-		movea.l	(Level_data_addr_RAM.BackgroundEvent).w,a1
+		move.w	#VRAM_Plane_B_Name_Table,d7						; PNT B base: $E000
+
+		; check
+		move.l	(Level_data_addr_RAM.BackgroundEvent).w,d0
+		beq.s	.bskip
+		movea.l	d0,a1
 		jsr	(a1)
+
+.bskip
 		move.w	(Camera_Y_pos_copy).w,(V_scroll_value).w
 		move.w	(Camera_Y_pos_BG_copy).w,(V_scroll_value_BG).w
 		rts
