@@ -6,9 +6,7 @@
 
 Obj_EndSignControl:
 		move.l	#Obj_Wait,address(a0)
-		st	(Level_end_flag).w										; end of level is in effect
-		clr.b	(TitleCard_end_flag).w
-		clr.b	(Results_end_flag).w
+		st	(Level_results_flag).w										; end of level is in effect
 		move.w	#(2*60)-1,objoff_2E(a0)
 		move.l	#Obj_EndSignControlDoSign,objoff_34(a0)
 
@@ -30,7 +28,7 @@ AfterBoss_Cleanup:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlAwaitStart:
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		bne.s	Obj_EndSignControl.return
 		move.l	#Obj_EndSignControlDoStart,address(a0)
 
@@ -40,7 +38,7 @@ Obj_EndSignControlAwaitStart:
 ; ---------------------------------------------------------------------------
 
 Obj_EndSignControlDoStart:
-		tst.b	(TitleCard_end_flag).w										; wait for title card to finish
+		tst.b	(End_of_level_flag).w										; wait for title card to finish
 		beq.s	Obj_EndSignControl.return
 		jsr	(Change_ActSizes).w										; set level size
 		jmp	(Delete_Current_Sprite).w

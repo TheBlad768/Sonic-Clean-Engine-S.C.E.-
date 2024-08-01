@@ -478,7 +478,7 @@ Obj_EggCapsule_Animals:
 		move.w	objoff_3E(a0),y_vel(a0)
 		jsr	(Find_SonicTails).w
 		move.w	#-$200,d1
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		beq.s	.setxvel
 		tst.w	d0
 		beq.s	.setxvel
@@ -526,7 +526,7 @@ Obj_EggCapsule_Animals_Flipped:
 		bsr.s	EggCapsule_Animals_Move
 		jsr	(MoveSprite2).w
 		jsr	(Change_FlipXWithVelocity2).w
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		bne.s	Obj_EggCapsule_Animals.anim
 		move.l	#.back,address(a0)
 		bset	#0,render_flags(a0)							; left side
@@ -643,7 +643,7 @@ EggCapsule_Animals_Load:
 
 Load_EggCapsule:
 		st	(Last_act_end_flag).w
-		st	(Level_end_flag).w
+		st	(Level_results_flag).w
 		lea	Child6_EggCapsule(pc),a2
 		jmp	(CreateChild6_Simple).w
 

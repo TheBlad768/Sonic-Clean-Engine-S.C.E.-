@@ -164,7 +164,7 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .endr
-		clr.b	(Level_end_flag).w
+		clr.b	(Level_results_flag).w
 		tst.b	(Last_act_end_flag).w
 		bne.s	.skiptc
 		clr.b	(Last_star_post_hit).w
@@ -175,8 +175,7 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .skiptc
-		clr.b	(TitleCard_end_flag).w										; stop level results flag and set title card finished flag
-		st	(Results_end_flag).w
+		st	(End_of_level_flag).w										; stop level results flag and set title card finished flag
 		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================

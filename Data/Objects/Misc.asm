@@ -415,7 +415,7 @@ Load_LevelResults:
 		cmpi.b	#PlayerID_Death,routine(a1)						; is player dead?
 		bhs.s	.return											; if yes, branch
 		bsr.s	Set_PlayerEndingPose
-		clr.b	(TitleCard_end_flag).w
+		clr.b	(End_of_level_flag).w
 		bsr.w	Create_New_Sprite
 		bne.s	.return
 		move.l	#Obj_LevelResults,address(a1)

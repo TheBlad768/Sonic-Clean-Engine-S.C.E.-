@@ -337,7 +337,7 @@ Monitor_Give_Bubble_Shield:
 Monitor_Give_Invincibility:
 		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#150,invincibility_timer(a1)
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		bne.s	.skipmusic
 		tst.b	(Boss_flag).w
 		bne.s	.skipmusic

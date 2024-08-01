@@ -207,8 +207,8 @@ Secondary_Angle:						ds.b 1
 Secondary_Angle_save:				ds.b 1						; used in FindFloor/FindWall
 Deform_lock:							ds.b 1
 Boss_flag:							ds.b 1						; set if a boss fight is going on
-TitleCard_end_flag:					ds.b 1
-Results_end_flag:						ds.b 1
+Level_results_flag:					ds.b 1
+End_of_level_flag:					ds.b 1
 Special_events_addr:					ds.l 1						; jump for special events
 NoBackground_event_flag:				ds.b 1
 Screen_event_routine:					ds.b 1
@@ -222,9 +222,7 @@ Debug_placement_type:				ds.b 1						; 0 = normal gameplay, 1 = normal object pl
 Debug_camera_delay:					ds.b 1
 Debug_camera_speed:					ds.b 1
 Debug_object:						ds.b 1						; the current position in the debug mode object list
-Level_end_flag:						ds.b 1
 Last_act_end_flag:					ds.b 1
-									ds.b 1						; even
 Slotted_object_bits:					ds.b 8						; index of slot array to use
 Signpost_addr:						ds.w 1
 Palette_cycle_counters:				ds.b $10

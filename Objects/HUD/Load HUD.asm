@@ -26,7 +26,7 @@ Render_HUD:
 		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)			; set 3
 
 .check
-		tst.b	(Level_end_flag).w
+		tst.b	(Level_results_flag).w
 		beq.s	.process
 		st	HUD_RAM.status-HUD_RAM(a1)
 

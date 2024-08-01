@@ -206,7 +206,7 @@ Sonic_ChkInvin:										; checks if invincibility has expired and disables it i
 		bne.s	Sonic_ChkShoes
 		subq.b	#1,invincibility_timer(a0)				; reduce invincibility_timer only on every 8th frame
 		bne.s	Sonic_ChkShoes						; if time is still left, branch
-		tst.b	(Level_end_flag).w						; don't change music if level is end
+		tst.b	(Level_results_flag).w						; don't change music if level is end
 		bne.s	Sonic_RmvInvin
 		tst.b	(Boss_flag).w								; don't change music if in a boss fight
 		bne.s	Sonic_RmvInvin
