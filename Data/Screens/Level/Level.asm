@@ -3,17 +3,17 @@
 ; ---------------------------------------------------------------------------
 
 Level_VDP:
-		dc.w $8004					; disable HInt, HV counter, 8-colour mode
-		dc.w $8200+(vram_fg>>10)	; set foreground nametable address
-		dc.w $8300+(vram_bg>>10)	; set window nametable address
-		dc.w $8400+(vram_bg>>13)	; set background nametable address
-		dc.w $8700+(2<<4)			; set background colour (line 3; colour 0)
-		dc.w $8B03					; line scroll mode
-		dc.w $8C81					; set 40cell screen size, no interlacing, no s/h
-		dc.w $9001					; 64x32 cell nametable area
-		dc.w $9100					; set window H position at default
-		dc.w $9200					; set window V position at default
-		dc.w 0						; end
+		dc.w $8004																; disable HInt, HV counter, 8-colour mode
+		dc.w $8200+(VRAM_Plane_A_Name_Table>>10)								; set foreground nametable address
+		dc.w $8300+(VRAM_Plane_B_Name_Table>>10)								; set window nametable address
+		dc.w $8400+(VRAM_Plane_B_Name_Table>>13)								; set background nametable address
+		dc.w $8700+(2<<4)														; set background colour (line 3; colour 0)
+		dc.w $8B03																; line scroll mode
+		dc.w $8C81																; set 40cell screen size, no interlacing, no s/h
+		dc.w $9001																; 64x32 cell nametable area
+		dc.w $9100																; set window H position at default
+		dc.w $9200																; set window V position at default
+		dc.w 0																	; end marker
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -45,7 +45,7 @@ LevelScreen:
 	if GameDebug
 		btst	#button_C,(Ctrl_1_held).w												; is C button held?
 		beq.s	.cnotheld															; if not, branch
-		move.w	#$8C89,VDP_control_port-VDP_control_port(a6)						; set shadow/highlight mode
+		move.w	#$8C89,VDP_control_port-VDP_control_port(a6)						; set shadow/highlight mode	; warning: don't overwrite a6
 
 .cnotheld
 		btst	#button_A,(Ctrl_1_held).w												; is A button held?
@@ -67,7 +67,7 @@ LevelScreen:
 
 		; load HUD art
 		lea	(PLC1_Sonic).l,a5
-		jsr	(LoadPLC_Raw_KosPlusM).w												; load hud and ring art
+		jsr	(LoadPLC_Raw_KosPlusM).w											; load hud and ring art
 		jsr	(CheckLevelForWater).w
 		clearRAM Water_palette_line_2, Normal_palette
 		tst.b	(Water_flag).w
@@ -132,7 +132,6 @@ LevelScreen:
 		move.b	d0,(Ctrl_1_locked).w
 		move.b	d0,(Update_HUD_score).w											; update score counter
 		move.b	d0,(Update_HUD_ring_count).w									; update rings counter
-		move.b	d0,(Update_HUD_timer).w											; update time counter
 		move.b	d0,(Level_started_flag).w
 		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w

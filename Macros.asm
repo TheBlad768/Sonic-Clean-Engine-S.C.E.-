@@ -16,7 +16,7 @@ vdpComm function addr,type,rwd,(((type&rwd)&3)<<30)|((addr&$3FFF)<<16)|(((type&r
 
 ; sign-extends a 32-bit integer to 64-bit
 ; all RAM addresses are run through this function to allow them to work in both 16-bit and 32-bit addressing modes
-ramaddr function x,(-(x&$80000000)<<1)|x
+ramaddr function x,-(-x)&$FFFFFFFF
 
 ; function using these variables
 id function ptr,((ptr-offset)/ptrsize+idstart)

@@ -1108,8 +1108,15 @@ Load_Level2:
 
 LoadLevelPointer:
 		move.w	(Current_zone_and_act).w,d0
-		ror.b	#2,d0											; multiply by $7C
-		move.w	d0,d1
+		ror.b	#2,d0
+
+.mul		= 0
+
+	if .mul
+		lsr.w	#6,d0
+		mulu.w	#(Level_data_addr_RAM_end-Level_data_addr_RAM),d0
+	else
+		move.w	d0,d1											; multiply by $7C
 		lsr.w	#2,d1
 		add.w	d1,d0
 		add.w	d1,d0
@@ -1118,6 +1125,7 @@ LoadLevelPointer:
 		add.w	d1,d0
 		add.w	d1,d0
 		add.w	d1,d0
+	endif
 
 .skip
 		lea	(LevelLoadPointer).l,a2
@@ -1155,6 +1163,11 @@ LoadLevelPointer:
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&4
 		move.l	(a2)+,.a(a3)										; copy 4 bytes
 		set	.a,.a + 4
+	endif
+
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&2
+		move.w	(a2)+,.a(a3)										; copy 2 bytes
+		set	.a,.a + 2
 	endif
 
 		rts

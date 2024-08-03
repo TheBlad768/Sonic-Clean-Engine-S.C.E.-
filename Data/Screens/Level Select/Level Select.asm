@@ -159,7 +159,7 @@ LevelSelect_Controls:
 ; Play sample
 ; ---------------------------------------------------------------------------
 
-.getsample															; 4
+		; get sample													; 4
 		moveq	#LevelSelect_MaxSampleNumber,d2						; set max count
 		move.w	(LevelSelect_sample_count).w,d3
 		lea	(LevelSelect_control_timer).w,a3
@@ -538,7 +538,6 @@ LevelSelect_LoadText:
 
 .next
 		dbf	d1,.load
-		copyTilemap	vram_fg, 512, 224
 
 		; copy buffer
 		lea	(LevelSelect_buffer).l,a1

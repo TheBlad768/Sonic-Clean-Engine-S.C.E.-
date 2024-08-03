@@ -16,7 +16,7 @@ VInt:
 		and.w	VDP_control_port-VDP_control_port(a5),d0
 		beq.s	.wait												; wait until vertical blanking is taking place
 
-		move.l	#vdpComm($0000,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
+		move.l	#vdpComm(0,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		move.l	(V_scroll_value).w,VDP_data_port-VDP_data_port(a6)	; send screen ypos to VSRAM
 
 		; detect PAL region consoles
@@ -91,12 +91,12 @@ VInt_Lag_Level:
 		stopZ80
 		tst.b	(Water_full_screen_flag).w									; is water above top of screen?
 		bne.s	VInt_Lag_FullyUnderwater 							; if yes, branch
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	VInt_Lag_Water_Cont
 ; ---------------------------------------------------------------------------
 
 VInt_Lag_FullyUnderwater:
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,$80,CRAM
 
 VInt_Lag_Water_Cont:
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
@@ -174,15 +174,15 @@ Do_ControllerPal:
 		startZ802
 		tst.b	(Water_full_screen_flag).w
 		bne.s	.water
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	.skipwater
 
 .water
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,$80,CRAM
 
 .skipwater
-		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
-		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
+		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,(224<<2),VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
 		rts
@@ -198,10 +198,10 @@ VInt_LevelSelect:
 		stopZ802
 		jsr	(Poll_Controllers).w
 		startZ802
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
-		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
-		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
-		dma68kToVDP (LevelSelect_buffer2),vram_fg,(256<<4),VRAM		; foreground buffer to VRAM
+		dma68kToVDP Normal_palette,0,$80,CRAM
+		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,(224<<2),VRAM
+		dma68kToVDP (LevelSelect_buffer2),VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size,VRAM		; foreground buffer to VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
 		tst.w	(Demo_timer).w										; is there time left on the demo?
@@ -253,13 +253,13 @@ VInt_Level:
 
 		; flash screen white
 		subq.b	#1,(Hyper_Sonic_flash_timer).w
-		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
+		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		moveq	#64/2-1,d1
 		move.l	#words_to_long(cWhite,cWhite),d0
 
 .copy
 		move.l	d0,VDP_data_port-VDP_data_port(a6)
-		dbf	d1,.copy	; fill entire palette with white
+		dbf	d1,.copy													; fill entire palette with white
 		bra.s	VInt_Level_Cont
 ; ---------------------------------------------------------------------------
 
@@ -271,7 +271,7 @@ VInt_Level_NoFlash:
 		subq.b	#1,(Negative_flash_timer).w
 		btst	#2,(Negative_flash_timer).w
 		beq.s	VInt_Level_NoNegativeFlash
-		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
+		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
 		moveq	#64/2-1,d1
 		move.l	#words_to_long($EEE,$EEE),d2
 		lea	(Normal_palette).w,a1
@@ -288,18 +288,18 @@ VInt_Level_NoFlash:
 VInt_Level_NoNegativeFlash:
 		tst.b	(Water_full_screen_flag).w
 		bne.s	.water
-		dma68kToVDP Normal_palette,$0000,$80,CRAM
+		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	.skipwater
 
 .water
-		dma68kToVDP Water_palette,$0000,$80,CRAM
+		dma68kToVDP Water_palette,0,$80,CRAM
 
 .skipwater
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
 
 VInt_Level_Cont:
-		dma68kToVDP H_scroll_buffer,vram_hscroll,(224<<2),VRAM
-		dma68kToVDP Sprite_table_buffer,vram_sprites,$280,VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,(224<<2),VRAM
+		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
 		bsr.s	VInt_SpecialFunction
 		jsr	(VInt_DrawLevel.main).w
@@ -365,7 +365,7 @@ VInt_SpecialFunction:
 
 .vscrollcopy
 		stopZ80
-		dma68kToVDP V_scroll_buffer,$0000,(320/4),VSRAM
+		dma68kToVDP V_scroll_buffer,0,(320/4),VSRAM
 		startZ80
 		rts
 
@@ -384,10 +384,12 @@ HInt:
 		lea	(VDP_data_port).l,a1
 		move.w	#$8A00+223,VDP_control_port-VDP_data_port(a1)
 		lea	(Water_palette).w,a0
-		move.l	#vdpComm($0000,CRAM,WRITE),VDP_control_port-VDP_data_port(a1)
+		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_data_port(a1)
+
 	rept 64/2
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a1)
 	endr
+
 		movem.l	(sp)+,a0-a1
 		tst.b	(Do_Updates_in_H_int).w
 		beq.s	HInt_Done

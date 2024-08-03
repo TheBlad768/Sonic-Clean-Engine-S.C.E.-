@@ -11,6 +11,9 @@ local debug = false
 -- End of settings --
 ---------------------
 
+-- Delete old files.
+os.remove("Sonic.gen")
+
 local common = require "AS.lua.common"
 
 local compression = "kosinskiplus"
