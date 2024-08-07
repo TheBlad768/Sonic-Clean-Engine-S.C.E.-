@@ -185,6 +185,16 @@ MPCM_stopZ80:	macro OPBUSREQ
 	endm
 
 ; ------------------------------------------------------------------------------
+; Macro to safe stop Z80 and take over its bus
+; ------------------------------------------------------------------------------
+
+MPCM_stopZ80_safe:	macro
+	move.w	sr,-(sp)
+	move.w	#$2700,sr	; mask off interrupts
+	MPCM_stopZ80 ALLARGS
+	endm
+
+; ------------------------------------------------------------------------------
 ; Macro to start Z80 and release its bus
 ; ------------------------------------------------------------------------------
 
@@ -194,6 +204,15 @@ MPCM_startZ80:	macro OPBUSREQ
 	else
 		move.w	#0, MPCM_Z80_BUSREQ
 	endif
+	endm
+
+; ------------------------------------------------------------------------------
+; Macro to safe start Z80 and release its bus
+; ------------------------------------------------------------------------------
+
+MPCM_startZ80_safe:	macro
+	MPCM_startZ80 ALLARGS
+	move.w	(sp)+,sr
 	endm
 
 ; ------------------------------------------------------------------------------

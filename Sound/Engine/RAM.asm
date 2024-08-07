@@ -166,6 +166,10 @@ SMPS_RAM STRUCT DOTS
 
 	v_track_ram_end:
 
+    if ~~SMPS_EnableSpecSFX
+	v_1up_fm6_track:	SMPS_Track
+	v_1up_psg1_track:	SMPS_Track
+    endif
 	v_1up_psg2_track:	SMPS_Track
 	v_1up_psg3_track:	SMPS_Track
     if SMPS_EnablePWM

@@ -235,9 +235,9 @@ DACUpdateSample:
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	move.b	d2,(SMPS_z80_ram+Z_MPCM_CommandInput).l
-	MPCM_startZ80
+	MPCM_startZ80_safe
 
     if SMPS_SoundTest
 	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'new note playing' flag (used by my homebrew Sound Test)
@@ -251,20 +251,25 @@ locret_71CAA:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 SetDACVolume:
-	move.b	SMPS_Track.Volume(a5),d0
-	bpl.s	.setvol			; $7F is the last valid volume
-	moveq	#$F,d0			; cap at maximum value (minimum volume)
-	MPCM_stopZ80
-	move.b	d0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l
-	MPCM_startZ80
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d0
+	add.b	d0,d0
+	add.b	d0,d0
+	add.b	SMPS_Track.Volume(a5),d0
+	bcs.s	.cap
+	bpl.s	.do_not_cap		; $7F is the last valid volume
+
+.cap
+	MPCM_stopZ80_safe
+	move.b	#$F,(SMPS_z80_ram+Z_MPCM_VolumeInput).l		; cap at maximum value (minimum volume)
+	MPCM_startZ80_safe
 	rts
 ; ===========================================================================
 
-.setvol
+.do_not_cap:
 	lsr.b	#3,d0
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	move.b	d0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l
-	MPCM_startZ80
+	MPCM_startZ80_safe
 	rts
 ; End of function SetDACVolume
 
@@ -710,9 +715,9 @@ HandlePause:
 	; From Vladikcomper:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	move.b	#Z_MPCM_COMMAND_PAUSE,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; pause DAC
-	MPCM_startZ80
+	MPCM_startZ80_safe
 
 .locret:
 	rts
@@ -762,9 +767,9 @@ HandleUnpause:
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	clr.b	(SMPS_z80_ram+Z_MPCM_CommandInput).l	; unpause DAC
-	MPCM_startZ80
+	MPCM_startZ80_safe
 	rts
 
 
@@ -999,12 +1004,12 @@ PlaySegaSound:
 	bsr.w	WriteFMII
 
 	; Prepare to send DAC request
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 
 	; This is a DAC SFX: set to full volume
 	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l					; 100% volume
 	move.b	#dSega,(SMPS_z80_ram+Z_MPCM_CommandInput).l		; Queue Sega PCM
-	MPCM_startZ80
+	MPCM_startZ80_safe
 
     if SMPS_IdlingSegaSound
 	; Waste cycles until the Sega sound finishes playing
@@ -2001,9 +2006,9 @@ StopAllSound:
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	move.b	#Z_MPCM_COMMAND_STOP,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; stop DAC playback
-	MPCM_startZ80
+	MPCM_startZ80_safe
 
     if SMPS_EnablePWM
 	bsr.w	PWMSilenceAll
@@ -2066,9 +2071,9 @@ InitMusicPlayback:
 	move.l	d6,SMPS_RAM.variables.queue+4(a6)
 
 	; Reset DAC volume
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l		; 100% volume
-	MPCM_startZ80
+	MPCM_startZ80_safe
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
 	; don't do a very good job of setting up the music tracks.
@@ -2327,16 +2332,16 @@ WriteFMIorII:
 
 ; sub_7272E:
 WriteFMI:
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	MPCM_ensureYMWriteReady
 	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
 	SMPS_waitYM
-	move.b	d0,(a0)					; 8(1/1)
+	move.b	d0,(a0)						; 8(1/1)
 	move.b	d1,SMPS_ym2612_d0-SMPS_ym2612_a0(a0)	; 12(2/1)
 	SMPS_delayYM
 	SMPS_waitYM
-	move.b	#$2A,(a0)				; 12(2/1)
-	MPCM_startZ80
+	move.b	#$2A,(a0)					; 12(2/1)
+	MPCM_startZ80_safe
 	rts
 ; End of function WriteFMI
 
@@ -2351,7 +2356,7 @@ WriteFMIIPart:
 
 ; sub_72764:
 WriteFMII:
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	MPCM_ensureYMWriteReady
 	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
 	SMPS_waitYM
@@ -2359,8 +2364,8 @@ WriteFMII:
 	move.b	d1,SMPS_ym2612_d1-SMPS_ym2612_a0(a0)	; 12(2/1)
 	SMPS_delayYM
 	SMPS_waitYM
-	move.b	#$2A,(a0)				; 12(2/1)
-	MPCM_startZ80
+	move.b	#$2A,(a0)					; 12(2/1)
+	MPCM_startZ80_safe
 	rts
 ; End of function WriteFMII
 
@@ -3462,12 +3467,12 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play. (TODO - Wait, these are meant to be 1-based?)
 ;
 cfPlayDACSample:
-	MPCM_stopZ80
+	MPCM_stopZ80_safe
 	move.b	(a4)+,(SMPS_z80_ram+Z_MPCM_CommandInput).l
 
 	; This is a DAC SFX: set to full volume
 	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l	; 100% volume
-	MPCM_startZ80
+	MPCM_startZ80_safe
 	rts
 ; ===========================================================================
 ; Plays another song or SFX.
