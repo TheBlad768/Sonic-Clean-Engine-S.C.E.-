@@ -29,6 +29,6 @@ These projects are based on this source code:
 
 Check out the Sonic Retro source code:
 
-https://github.com/sonicretro/s1disasm
-https://github.com/sonicretro/s2disasm
-https://github.com/sonicretro/skdisasm
+- https://github.com/sonicretro/s1disasm
+- https://github.com/sonicretro/s2disasm
+- https://github.com/sonicretro/skdisasm
