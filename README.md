@@ -22,7 +22,7 @@ Discord: https://discords.com/servers/redmisostudios
 
 These projects are based on this source code:
 
-- Sonic The Hedgehog in Hellfire Saga
+- [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
 - Sonic 3 & Knuckles: Epilogue
 - TishaProject (2019)
 - Sonic Virtual Adventure (2017) (Cancelled) — In the past I made this source code specifically for this project (:
