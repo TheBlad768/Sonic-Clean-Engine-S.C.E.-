@@ -19,7 +19,7 @@ Obj_TitleCard:
 		; load act number art
 		moveq	#0,d0
 		move.b	(Current_act).w,d0
-		add.w	d0,d0
+		add.w	d0,d0													; multiply by 4
 		add.w	d0,d0
 		movea.l	TitleCardAct_Index(pc,d0.w),a1
 		move.w	#tiles_to_bytes($53D),d2
@@ -28,7 +28,7 @@ Obj_TitleCard:
 		; load zone name art
 		moveq	#0,d0
 		move.b	(Current_zone).w,d0										; otherwise, just use current zone
-		add.w	d0,d0
+		add.w	d0,d0													; multiply by 4
 		add.w	d0,d0
 		movea.l	.levelgfx(pc,d0.w),a1
 		move.w	#tiles_to_bytes($54D),d2

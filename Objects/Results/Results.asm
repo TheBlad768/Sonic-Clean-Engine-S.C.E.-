@@ -14,7 +14,7 @@ Obj_LevelResults:
 		moveq	#0,d0
 		lea	TitleCardAct_Index(pc),a1
 		move.b	(Current_act).w,d0
-		add.w	d0,d0
+		add.w	d0,d0												; multiply by 4
 		add.w	d0,d0
 		movea.l	(a1,d0.w),a1
 		move.w	#tiles_to_bytes($566),d2
