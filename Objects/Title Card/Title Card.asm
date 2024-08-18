@@ -19,7 +19,7 @@ Obj_TitleCard:
 		; load act number art
 		moveq	#0,d0
 		move.b	(Current_act).w,d0
-		add.w	d0,d0
+		add.w	d0,d0													; multiply by 4
 		add.w	d0,d0
 		movea.l	TitleCardAct_Index(pc,d0.w),a1
 		move.w	#tiles_to_bytes($53D),d2
@@ -28,7 +28,7 @@ Obj_TitleCard:
 		; load zone name art
 		moveq	#0,d0
 		move.b	(Current_zone).w,d0										; otherwise, just use current zone
-		add.w	d0,d0
+		add.w	d0,d0													; multiply by 4
 		add.w	d0,d0
 		movea.l	.levelgfx(pc,d0.w),a1
 		move.w	#tiles_to_bytes($54D),d2
@@ -42,8 +42,8 @@ Obj_TitleCard:
 		rts
 
 ; ---------------------------------------------------------------------------
-; The letters for the name of the zone.
-; Exception: ENOZ/ZONE. These letters are already in VRAM.
+; The letters for the name of the zone
+; Exception: ENOZ/ZONE. These letters are already in VRAM
 ; ---------------------------------------------------------------------------
 
 .levelgfx
@@ -141,7 +141,9 @@ Obj_TitleCard:
 .skiplevel3
 		movea.l	(Level_data_addr_RAM.PLCAnimals).w,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w									; load animals art
-		move.b	#1,(HUD_RAM.status).w									; load HUD
+		moveq	#1,d0
+		move.b	d0,(HUD_RAM.status).w									; load HUD
+		move.b	d0,(Update_HUD_timer).w									; update time counter
 		clr.b	(Ctrl_1_locked).w												; unlock control 1
 
 .delete

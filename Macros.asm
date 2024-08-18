@@ -16,7 +16,7 @@ vdpComm function addr,type,rwd,(((type&rwd)&3)<<30)|((addr&$3FFF)<<16)|(((type&r
 
 ; sign-extends a 32-bit integer to 64-bit
 ; all RAM addresses are run through this function to allow them to work in both 16-bit and 32-bit addressing modes
-ramaddr function x,(-(x&$80000000)<<1)|x
+ramaddr function x,-(-x)&$FFFFFFFF
 
 ; function using these variables
 id function ptr,((ptr-offset)/ptrsize+idstart)
@@ -1013,29 +1013,9 @@ sample	macro id, terminate, byte
 	move.w	#(id),d0
     endif
       if ("terminate"="0") || ("terminate"="")
-	jsr	(SMPS_PlayDACSample).w
+	jsr	(Play_Sample).w
       else
-	jmp	(SMPS_PlayDACSample).w
-      endif
-    endm
-
-	; extended music
-emusic	macro track, terminate
-	move.w	#(track),d0
-      if ("terminate"="0") || ("terminate"="")
-	jsr	(SMPS_QueueSound1_Extended).w
-      else
-	jmp	(SMPS_QueueSound1_Extended).w
-      endif
-    endm
-
-	; extended sfx
-esfx	macro track, terminate
-	move.w	#(track),d0
-      if ("terminate"="0") || ("terminate"="")
-	jsr	(SMPS_QueueSound2_Extended).w
-      else
-	jmp	(SMPS_QueueSound2_Extended).w
+	jmp	(Play_Sample).w
       endif
     endm
 

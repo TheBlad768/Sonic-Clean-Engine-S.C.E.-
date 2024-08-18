@@ -538,7 +538,6 @@ LevelSelect_LoadText:
 
 .next
 		dbf	d1,.load
-		copyTilemap	vram_fg, 512, 224
 
 		; copy buffer
 		lea	(LevelSelect_buffer).l,a1

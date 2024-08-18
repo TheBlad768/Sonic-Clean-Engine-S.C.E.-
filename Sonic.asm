@@ -85,31 +85,33 @@ Vectors:
 		dc.l ErrorTrap			; unused (reserved)
 		dc.l ErrorTrap			; unused (reserved) (64)
 
-Header:			dc.b "SEGA GENESIS    "
-Copyright:		dc.b "(C)SEGA XXXX.XXX"
-Domestic_Name:	dc.b "SONIC THE               HEDGEHOG                "
-Overseas_Name:	dc.b "SONIC THE               HEDGEHOG                "
-Serial_Number:	dc.b "GM MK-0000 -00"
-Checksum:		dc.w 0
-Input:			dc.b "J               "
-ROMStartLoc:	dc.l StartOfROM
-ROMEndLoc:		dc.l EndOfROM-1
-RAMStartLoc:	dc.l (RAM_start&$FFFFFF)
-RAMEndLoc:		dc.l (RAM_start&$FFFFFF)+$FFFF
+Header:				dc.b "SEGA GENESIS    "
+Copyright:			dc.b "(C)SEGA XXXX.XXX"
+Domestic_Name:		dc.b "SONIC THE               HEDGEHOG                "
+Overseas_Name:		dc.b "SONIC THE               HEDGEHOG                "
+Serial_Number:		dc.b "GM MK-0000 -00"
+Checksum:			dc.w 0
+Input:				dc.b "J               "
+ROMStartLoc:		dc.l StartOfROM
+ROMEndLoc:			dc.l EndOfROM-1
+RAMStartLoc:		dc.l (RAM_start&$FFFFFF)
+RAMEndLoc:			dc.l (RAM_start&$FFFFFF)+$FFFF
 SRAMSupport:
-	if EnableSRAM=1
-CartRAM_Info:	dc.b "RA"
-CartRAM_Type:	dc.b $A0+(BackupSRAM<<6)+(AddressSRAM<<3), $20
-CartRAMStartLoc:dc.l SRAM_Size|SRAM_Type.SRAM_Start	; SRAM start ($200000)
-CartRAMEndLoc:	dc.l SRAM_Size|SRAM_Type.SRAM_End		; SRAM end ($20xxxx)
+
+	if EnableSRAM
+CartRAM_Info:		dc.b "RA"
+CartRAM_Type:		dc.b $A0+(BackupSRAM<<6)+(AddressSRAM<<3), $20
+CartRAMStartLoc:	dc.l SRAM_Start				; SRAM start ($200000)
+CartRAMEndLoc:		dc.l SRAM_Start+SRAM_End	; SRAM end ($20xxxx)
 	else
-CartRAM_Info:	dc.b "  "
-CartRAM_Type:	dc.w %10000000100000
-CartRAMStartLoc:dc.l $20202020	; SRAM start ($200000)
-CartRAMEndLoc:	dc.l $20202020	; SRAM end ($20xxxx)
+CartRAM_Info:		dc.b "  "
+CartRAM_Type:		dc.w %10000000100000
+CartRAMStartLoc:	dc.b "    "						; SRAM start ($200000)
+CartRAMEndLoc:		dc.b "    "						; SRAM end ($20xxxx)
 	endif
-Modem_Info:		dc.b "                                                    "
-Country_Code:	dc.b "JUE             "
+
+Modem_Info:			dc.b "                                                    "
+Country_Code:		dc.b "JUE             "
 EndOfHeader
 
 ; ---------------------------------------------------------------------------
