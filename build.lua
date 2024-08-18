@@ -52,8 +52,12 @@ end
 
 os.execute(extra_tools.convsym .. " Sonic.lst Sonic.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a")
 
+os.execute(extra_tools.convsym .. " Sonic.lst RAM.asm -in as_lst -out asm -range FF0000 FFFFFF")
+
 if debug then
 	os.execute(extra_tools.convsym .. " Sonic.Debug.lst Sonic.Debug.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a")
+
+	os.execute(extra_tools.convsym .. " Sonic.Debug.lst RAM.asm -in as_lst -out asm -range FF0000 FFFFFF")
 end
 
 -- Correct the ROM's header with a proper checksum and end-of-ROM value.
