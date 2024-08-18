@@ -81,12 +81,7 @@ namespace S3KObjectDefinitions.Common
 			properties[0] = new PropertySpec("Next Zone", typeof(int), "Extended",
 				"The destination Zone.", null, new Dictionary<string, int>
 				{
-					{ "Green Hill Zone", 0x00 },
-					{ "Marble Zone", 0x01 },
-					{ "Spring Yard Zone", 0x02 },
-					{ "Labyrinth Zone", 0x03 },
-					{ "Star Light Zone", 0x04 },
-					{ "Scrap Brain Zone", 0x05 }
+					{ "Death Egg Zone", 0x00 }
 				},
 				(obj) => obj.SubType >> 2,
 				(obj, value) => obj.SubType = (byte)((obj.SubType & 1) | (((int)value << 2) & 0xFE)));
