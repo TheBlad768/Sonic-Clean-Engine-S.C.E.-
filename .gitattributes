@@ -10,6 +10,8 @@
 *.nem binary
 *.kos binary
 *.kosm binary
+*.kosp binary
+*.kospm binary
 *.unc binary
 *.pcm binary
 *.dpcm binary
