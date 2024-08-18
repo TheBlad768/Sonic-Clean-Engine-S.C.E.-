@@ -2,6 +2,7 @@ desktop.ini
 *.gen
 Sonic.lst
 Sonic.Debug.lst
+RAM.asm
 *.log
 *.[ph]
 SonLVL INI Files/dllcache/*

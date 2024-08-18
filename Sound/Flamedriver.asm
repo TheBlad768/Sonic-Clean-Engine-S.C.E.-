@@ -5139,12 +5139,12 @@ Sound_1E:	include "Sound/SFX/Snd - Register.asm"
 ; ---------------------------------------------------------------------------
 Mus_Bank1_Start:	startBank
 	Music_Master_Table
-z80_UniVoiceBank:	include "Sound/UniBank.asm"
-MusData_DEZ:		include	"Sound/Music/Mus - DEZ1.asm"
-MusData_Boss:		include	"Sound/Music/Mus - Miniboss.asm"
-MusData_Boss2:		include	"Sound/Music/Mus - Zone Boss.asm"
-MusData_Invin:		include	"Sound/Music/Mus - Invincibility.asm"
-MusData_Through:	include	"Sound/Music/Mus - Sonic Got Through.asm"
-MusData_Drowning:	include	"Sound/Music/Mus - Drowning.asm"
+z80_UniVoiceBank:		include "Sound/UniBank.asm"
+MusData_DEZ:			include "Sound/Music/Mus - DEZ1.asm"
+MusData_Boss:			include "Sound/Music/Mus - Miniboss.asm"
+MusData_Boss2:			include "Sound/Music/Mus - Zone Boss.asm"
+MusData_Invin:			include "Sound/Music/Mus - Invincibility.asm"
+MusData_Through:		include "Sound/Music/Mus - Sonic Got Through.asm"
+MusData_Drowning:		include "Sound/Music/Mus - Drowning.asm"
 
 	finishBank
