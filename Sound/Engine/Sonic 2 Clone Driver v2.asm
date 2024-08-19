@@ -768,7 +768,7 @@ HandleUnpause:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	MPCM_stopZ80_safe
-	clr.b	(SMPS_z80_ram+Z_MPCM_CommandInput).l	; unpause DAC
+	move.b	#0,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; unpause DAC
 	MPCM_startZ80_safe
 	rts
 
@@ -1007,7 +1007,7 @@ PlaySegaSound:
 	MPCM_stopZ80_safe
 
 	; This is a DAC SFX: set to full volume
-	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l					; 100% volume
+	move.b	#0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l			; 100% volume
 	move.b	#dSega,(SMPS_z80_ram+Z_MPCM_CommandInput).l		; Queue Sega PCM
 	MPCM_startZ80_safe
 
@@ -2072,7 +2072,7 @@ InitMusicPlayback:
 
 	; Reset DAC volume
 	MPCM_stopZ80_safe
-	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l		; 100% volume
+	move.b	#0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l		; 100% volume
 	MPCM_startZ80_safe
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
@@ -3471,7 +3471,7 @@ cfPlayDACSample:
 	move.b	(a4)+,(SMPS_z80_ram+Z_MPCM_CommandInput).l
 
 	; This is a DAC SFX: set to full volume
-	clr.b	(SMPS_z80_ram+Z_MPCM_VolumeInput).l	; 100% volume
+	move.b	#0,(SMPS_z80_ram+Z_MPCM_VolumeInput).l	; 100% volume
 	MPCM_startZ80_safe
 	rts
 ; ===========================================================================
