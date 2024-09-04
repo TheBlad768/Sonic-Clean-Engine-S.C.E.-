@@ -283,41 +283,6 @@ Obj_Attracted_Ring:
 		move.w	height_pixels(a0),y_radius(a0)						; set y_radius and x_radius
 
 .main
-		bsr.s	AttractedRing_Move
-		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
-		bne.s	.chkdel											; if yes, branch
-
-		; set bouncing
-		st	(Ring_spill_anim_counter).w							; set time
-		move.l	#Obj_Bouncing_Ring_Normal,address(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.chkdel
-		move.l	#Obj_Bouncing_Ring_TestGravity,address(a0)
-
-.chkdel
-		out_of_xrange.s	.offscreen
-		Add_SpriteToCollisionResponseList a1
-		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
-
-.offscreen
-		move.w	respawn_addr(a0),d0
-		beq.s	.offscreen2
-		movea.w	d0,a2
-		bclr	#7,(a2)
-
-.offscreen2
-		move.w	objoff_30(a0),d0									; load ring RAM address
-		beq.s	.delete
-		movea.w	d0,a2
-		clr.w	(a2)
-
-.delete
-		jmp	(Delete_Current_Sprite).w
-
-; =============== S U B R O U T I N E =======================================
-
-AttractedRing_Move:
 
 		; move on x axis
 		moveq	#48,d1
@@ -366,7 +331,39 @@ AttractedRing_Move:
 
 .applymovementy
 		add.w	d1,y_vel(a0)
-		MoveSprite2 a0,1
+		MoveSprite2 a0
+
+		; check shield
+		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
+		bne.s	.chkdel											; if yes, branch
+
+		; set bouncing
+		st	(Ring_spill_anim_counter).w							; set time
+		move.l	#Obj_Bouncing_Ring_Normal,address(a0)
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.chkdel
+		move.l	#Obj_Bouncing_Ring_TestGravity,address(a0)
+
+.chkdel
+		out_of_xrange.s	.offscreen
+		Add_SpriteToCollisionResponseList a1
+		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.offscreen
+		move.w	respawn_addr(a0),d0
+		beq.s	.offscreen2
+		movea.w	d0,a2
+		bclr	#7,(a2)
+
+.offscreen2
+		move.w	objoff_30(a0),d0									; load ring RAM address
+		beq.s	.delete
+		movea.w	d0,a2
+		clr.w	(a2)
+
+.delete
+		jmp	(Delete_Current_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
