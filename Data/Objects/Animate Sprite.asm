@@ -299,3 +299,120 @@ Anim_End_FB:
 
 Anim_End:
 		rts
+
+; ---------------------------------------------------------------------------
+; a1 = animation script pointer
+; AnimationArray: up to 8 2-byte entries:
+	; 4-bit: anim_ID (1)
+	; 4-bit: anim_ID (2) - the relevant one
+	; 4-bit: anim_frame
+	; 4-bit: anim_timer until next anim_frame
+; if anim_ID (1) & (2) are not equal, new animation data is loaded
+; a2 = animation script buffer
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Animate_MultiSprite:
+		movea.l	a1,a4								; save address of animation script
+		lea	mapping_frame(a0),a3						; mapframe 1 (main object)
+		tst.b	(a3)										; is it 0 frame? (not draw)
+		bne.s	.load								; if not, branch
+		addq.w	#2,a2								; skip
+		bra.s	.main
+; ---------------------------------------------------------------------------
+
+.load
+		moveq	#0,d6								; set 0 number of child sprites
+		bsr.s	.loop
+
+.main
+		move.w	mainspr_childsprites(a0),d6			; get number of child sprites
+		subq.w	#1,d6								; = amount of iterations to run the code from AnimateBoss_Loop
+		bmi.s	.return								; if was 0, don't run
+		lea	sub2_mapframe(a0),a3					; mapframe 2
+
+.loop
+		movea.l	a4,a1								; load address of animation script
+
+	irp	reg, d0,d1,d2
+		moveq	#0,reg
+	endr
+
+		move.b	(a2)+,d0
+		move.b	d0,d1
+		lsr.b	#4,d1									; anim_ID (1)
+		andi.b	#$F,d0								; anim_ID (2)
+		move.b	d0,d2
+		cmp.b	d0,d1
+		sne	d4										; anim_IDs not equal
+		move.b	d0,d5
+		lsl.b	#4,d5
+		or.b	d0,d5									; anim_ID (2) in both nybbles
+		move.b	(a2)+,d0
+		move.b	d0,d1
+		lsr.b	#4,d1									; anim_frame
+		tst.b	d4										; are the anim_IDs equal?
+		beq.s	.run
+
+	irp	reg, d0,d1
+		moveq	#0,reg								; reset d0,d1 if anim_IDs not equal
+	endr
+
+.run
+		andi.b	#$F,d0								; timer until next anim_frame
+		subq.b	#1,d0
+		bpl.s	.next2								; timer not yet at 0, and anim_IDs are equal
+		add.w	d2,d2								; anim_ID (2)
+		adda.w	(a1,d2.w),a1							; address of animation data with this ID
+		move.b	(a1),d0								; animation speed
+		move.b	1(a1,d1.w),d2							; mapping_frame of first/next anim_frame
+		bmi.s	.chk_end_FF							; if animation command parameter, branch
+
+.next
+		andi.b	#$7F,d2
+		move.b	d2,(a3)								; store mapping_frame to OST of object
+		addq.b	#1,d1								; anim_frame
+
+.next2
+		lsl.b	#4,d1
+		or.b	d1,d0
+		move.b	d0,-1(a2)								; (2nd byte) anim_frame and anim_timer
+		move.b	d5,-2(a2)								; (1st byte) anim_ID (both nybbles)
+		addq.w	#next_subspr,a3						; mapping_frame of next subobject
+		dbf	d6,.loop
+
+.return
+		rts
+; ---------------------------------------------------------------------------
+
+.chk_end_FF
+		addq.b	#1,d2								; code FF - repeat animation from beginning
+		bne.s	.chk_end_FE
+		move.b	#0,d1
+		move.b	1(a1),d2
+		bra.s	.next
+; ---------------------------------------------------------------------------
+
+.chk_end_FE
+		addq.b	#1,d2								; code FE - repeat animation from earlier point
+		bne.s	.chk_end_FD
+		moveq	#0,d3
+		move.b	2(a1,d1.w),d1							; anim_frame
+		move.b	1(a1,d1.w),d2							; mapping_frame
+		bra.s	.next
+; ---------------------------------------------------------------------------
+
+.chk_end_FD
+		addq.b	#1,d2								; code FD - start new animation
+		bne.s	.chk_end_FC
+		andi.b	#$F0,d5								; keep anim_ID (1)
+		or.b	2(a1,d1.w),d5								; set anim_ID (2)
+		bra.s	.next2
+; ---------------------------------------------------------------------------
+
+.chk_end_FC
+		addq.b	#1,d2								; code FC - increment routine counter
+		bne.s	.return
+		addq.b	#2,routine(a0)						; next routine
+		rts

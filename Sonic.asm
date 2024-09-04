@@ -399,7 +399,7 @@ EndOfHeader
 		; Sonic
 		include "Objects/Sonic/Object Data/Anim - Sonic.asm"
 		include "Objects/Sonic/Object Data/Map - Sonic.asm"
-		include "Objects/Sonic/Object Data/Sonic pattern load cues.asm"
+		include "Objects/Sonic/Object Data/DPLC - Sonic.asm"
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load level events

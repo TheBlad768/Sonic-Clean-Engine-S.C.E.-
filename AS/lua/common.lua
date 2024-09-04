@@ -157,6 +157,26 @@ local function find_assembler(repository)
 	return tools[as_filename]
 end
 
+-- ROM padding process.
+local function rom_padding(filename)
+	local rom = io.open(filename, "r+b")
+
+	-- Obtain the end-of-ROM value.
+	local rom_end = rom:seek("end", 0)
+
+	-- ROM padding
+	local new_size = 512 * 1024
+		while new_size <= rom_end do
+			new_size = new_size * 2
+		end
+		if rom_end < new_size then
+			rom:write(string.rep(string.char(255), new_size - rom_end))
+		end
+
+	-- We're done padding the bytes
+	rom:close()
+end
+
 -- Correct the ROM's header with a proper checksum and end-of-ROM value.
 local function fix_header(filename)
 	local rom = io.open(filename, "r+b")
@@ -284,6 +304,7 @@ return {
 	file_exists = file_exists,
 	show_flashy_message = show_flashy_message,
 	find_tools = find_tools,
+	rom_padding = rom_padding,
 	fix_header = fix_header,
 	assemble_file = assemble_file,
 	build_rom = build_rom,

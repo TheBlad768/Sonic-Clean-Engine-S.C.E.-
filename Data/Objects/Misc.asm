@@ -47,7 +47,7 @@ SetUp_ObjAttributesSlotted:
 		move.b	d0,subtype(a0)
 		move.b	d0,render_flags(a0)
 		move.w	d0,status(a0)					; if no open slots, then destroy this object period
-		addq.w	#4*2,sp
+		addq.w	#4*2,sp						; exit from current object
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -879,18 +879,20 @@ Reset_ObjectsPosition4:
 ; =============== S U B R O U T I N E =======================================
 
 Offset_ObjectsDuringTransition:
-		lea	(Dynamic_object_RAM+next_object).w,a1
-		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d2
+
+		; all objects in this range
+		lea	(Dynamic_object_RAM).w,a1
+		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d2
 
 .check
-		tst.l	address(a1)
-		beq.s	.nextobj
-		btst	#2,render_flags(a1)
-		beq.s	.nextobj
+		tst.l	address(a1)											; is this object slot occupied?
+		beq.s	.nextobj											; if not, branch
+		btst	#2,render_flags(a1)									; is this object using screen coordinates?
+		beq.s	.nextobj											; if not, branch
 		sub.w	d0,x_pos(a1)
 		sub.w	d1,y_pos(a1)
 
 .nextobj
-		lea	next_object(a1),a1
+		lea	next_object(a1),a1										; next slot
 		dbf	d2,.check
 		rts

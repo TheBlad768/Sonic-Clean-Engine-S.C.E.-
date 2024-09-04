@@ -135,11 +135,11 @@ Obj_RobotnikShipPieces:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_RobotnikShip:			subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64/2, 64/2, $C, $F
-ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64/2, 64/2, 7, $F
-ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, 0, $280, 32/2, 16/2, 0, 0
-ObjDat2_RoboShipFlame:		subObjData3 $280, 16/2, 8/2, 8, 0
-ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, 1, 0, 64/2, 64/2, 0, 0
+ObjDat_RobotnikShip:			subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64, 64, $C, $F
+ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64, 64, 7, $F
+ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, 0, $280, 32, 16, 0, 0
+ObjDat2_RoboShipFlame:		subObjData3 $280, 16, 8, 8, 0
+ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, 1, 0, 64, 64, 0, 0
 
 AniRaw_RobotnikHead:
 		dc.b 5, 0, 1, arfEnd

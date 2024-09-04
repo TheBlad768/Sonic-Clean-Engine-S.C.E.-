@@ -10,7 +10,7 @@ Process_Sprites:
 		bhs.s	Process_Sprites_FreezeObject								; if yes, branch
 
 Process_Sprites_Skip:
-		moveq	#((Object_RAM_end-Object_RAM)/object_size)-1,d7			; run objects
+		moveq	#bytesToXcnt(Object_RAM_end-Object_RAM,object_size),d7	; run objects
 
 Process_Sprites_Loop:
 		move.l	address(a0),d0
@@ -30,15 +30,15 @@ Process_Sprites_FreezeObject:
 		beq.s	Process_Sprites_Skip										; if yes, branch
 
 		; run the first objects normally
-		moveq	#(((Dynamic_object_RAM+object_size)-Object_RAM)/object_size)-1,d7
+		moveq	#bytesToXcnt(Dynamic_object_RAM-Object_RAM,object_size),d7
 		bsr.s	Process_Sprites_Loop
 
 		; all objects in this range are paused
-		moveq	#(((Dynamic_object_RAM_end+object_size)-(Dynamic_object_RAM+object_size))/object_size)-1,d7
+		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d7
 		bsr.s	Process_Sprites_FreezeObject_Loop
 
 		; run the last objects normally
-		moveq	#((Object_RAM_end-(Dynamic_object_RAM_end+object_size))/object_size)-1,d7
+		moveq	#bytesToXcnt(Object_RAM_end-Dynamic_object_RAM_end,object_size),d7
 		bra.s	Process_Sprites_Loop
 ; ---------------------------------------------------------------------------
 

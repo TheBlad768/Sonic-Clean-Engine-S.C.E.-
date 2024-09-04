@@ -52,7 +52,7 @@ Obj_HiddenMonitor:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_HiddenMonitor:	subObjData Map_Monitor, ArtTile_Monitors, 0, 0, $280, 28/2, 32/2, 0, 0
+ObjDat_HiddenMonitor:	subObjData Map_Monitor, ArtTile_Monitors, 0, 0, $280, 28, 32, 0, 0
 
 HiddenMonitor_Range:
 		dc.w -14, 28		; xpos

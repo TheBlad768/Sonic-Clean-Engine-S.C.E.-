@@ -39,11 +39,6 @@ VInt_Music:
 VInt_Done:
 		jsr	(Random_Number).w
 		addq.l	#1,(V_int_run_count).w
-
-	if Lagometer
-		move.w	#$9193,(VDP_control_port).l							; window H right side, base point $80
-	endif
-
 		movem.l	(sp)+,d0-a6											; return saved registers from the stack
 		rte
 ; ---------------------------------------------------------------------------

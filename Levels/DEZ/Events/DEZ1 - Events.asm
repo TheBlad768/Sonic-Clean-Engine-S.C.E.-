@@ -60,11 +60,10 @@ DEZ1_Deform:
 		asr.w	d0											; get 50% ($800)
 		move.w	d0,d1										; save 50% speed star 1
 		asr.w	d0											; get 25% ($400)
-		move.w	d0,d2										; save 25% speed star 2
 
 	rept 16/2
 		move.w	d1,(a1)+										; set 50% speed star 1
-		move.w	d2,(a1)+										; set 25% speed star 2
+		move.w	d0,(a1)+										; set 25% speed star 2
 	endr
 
 		rts

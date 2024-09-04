@@ -385,7 +385,7 @@ GetFloorPosition_BG:
 		add.w	$A(a1,d0.w),d1
 		adda.w	d1,a1
 		moveq	#0,d1
-		move.b	(a1),d1
+		move.b	(a1),d1				; move 128*128 chunk ID to d1
 		lsl.w	#7,d1					; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
@@ -410,7 +410,7 @@ GetFloorPosition_FG:
 		add.w	8(a1,d0.w),d1
 		adda.w	d1,a1
 		moveq	#0,d1
-		move.b	(a1),d1
+		move.b	(a1),d1				; move 128*128 chunk ID to d1
 		lsl.w	#7,d1					; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
@@ -989,6 +989,14 @@ CalcRoomInFront:
 		andi.b	#$38,d1
 		bne.s	+
 		addq.w	#8,d2
+
+		; by devon
+		btst	#Status_Roll,status(a0)			; is Sonic rolling?
+		beq.s	+							; if not, branch
+		subq.w	#5,d2						; if so, move push sensor up a bit
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	+
+		subi.w	#-(5+5),d2
 +		cmpi.b	#$40,d0
 		beq.w	CheckLeftWallDist_Part2
 		bra.w	CheckRightWallDist_Part2
@@ -1229,21 +1237,6 @@ ObjCheckFloorDist2:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-
-; =============== S U B R O U T I N E =======================================
-
-RingCheckFloorDist:
-		move.w	x_pos(a0),d3
-		move.w	y_pos(a0),d2
-		move.b	y_radius(a0),d0
-		ext.w	d0
-		add.w	d0,d2
-		lea	(Primary_Angle).w,a4
-		clr.b	(a4)
-		movea.w	#$10,a3
-		moveq	#0,d6
-		moveq	#$C,d5
-		bra.w	Ring_FindFloor
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1528,22 +1521,6 @@ ChkFloorEdge_ReverseGravity_Part2:
 		beq.s	+
 		move.b	#0,d3
 +		rts
-
-; =============== S U B R O U T I N E =======================================
-
-RingCheckFloorDist_ReverseGravity:
-		move.w	x_pos(a0),d3
-		move.w	y_pos(a0),d2
-		move.b	y_radius(a0),d0
-		ext.w	d0
-		sub.w	d0,d2
-		eori.w	#$F,d2
-		lea	(Primary_Angle).w,a4
-		clr.b	(a4)
-		movea.w	#-$10,a3
-		move.w	#$800,d6
-		moveq	#$C,d5
-		bra.w	Ring_FindFloor
 
 ; =============== S U B R O U T I N E =======================================
 

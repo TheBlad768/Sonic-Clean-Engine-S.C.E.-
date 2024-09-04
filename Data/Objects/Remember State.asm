@@ -42,11 +42,11 @@ Delete_Sprite_If_Not_In_Range2:
 
 ; =============== S U B R O U T I N E =======================================
 
-Delete_Sprite_If_Not_In_RangeCheck:
+Delete_Sprite_If_Not_In_Range_Check:
 		moveq	#-$80,d0										; round down to nearest $80
 		and.w	x_pos(a0),d0										; get object position
 
-Delete_Sprite_If_Not_In_RangeCheck2:
+Delete_Sprite_If_Not_In_Range_Check2:
 		out_of_xrange2.s	Sprite_CheckDelete.offscreen
 		rts
 

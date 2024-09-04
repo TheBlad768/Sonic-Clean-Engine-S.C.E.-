@@ -185,14 +185,18 @@ Touch_ChkValue:
 		; if 01...
 		moveq	#$3F,d0									; get only collision size
 		and.b	collision_flags(a1),d0						; get collision flags
+		cmpi.b	#7,d0									; is touch response $47?
+		beq.s	Touch_Ring								; if yes, branch
 		cmpi.b	#6,d0									; is touch response $46?
 		beq.s	Touch_Monitor							; if yes, branch
+		rts
+; ---------------------------------------------------------------------------
 
-		; touch ring
+Touch_Ring:
 		move.b	(Player_1+invulnerability_timer).w,d0		; get the main character's invulnerability_timer
 		cmpi.b	#(1*60)+30,d0							; is there more than 90 frames on the timer remaining?
 		bhs.s	.locret									; if so, branch
-		move.b	#4,routine(a1)							; set target object's routine to 4 (must be reserved for collision response)
+		move.l	#Obj_Ring_Collect,address(a1)
 
 .locret
 		rts
