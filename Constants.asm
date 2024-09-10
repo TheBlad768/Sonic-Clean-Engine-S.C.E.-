@@ -638,7 +638,7 @@ afReset								= $FB							; move offscreen for remove(Using the Sprite_OnScreen
 
 arfIndex								= $FF							; go to animate raw index
 arfEnd								= $FE							; return to beginning of animation
-arfBack								= $FC							; go back (specified number) bytes
+arfChange							= $FC							; run specified animation (specified offset)
 arfJump								= $FA							; jump from $34(a0) address
 
 ; ---------------------------------------------------------------------------

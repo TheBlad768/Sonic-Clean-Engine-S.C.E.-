@@ -80,21 +80,21 @@ Animate_RawNoSST:
 
 .index
 		bra.s	.restart								; FE
-		bra.s	.jump								; FC
+		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
-		; custom code									; FA
+		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
-.jump
+.change
 		move.b	2(a1,d0.w),d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)
+		move.l	a1,objoff_30(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)
@@ -137,10 +137,10 @@ Animate_RawNoSSTCheckResult:
 
 .index
 		bra.s	.restart								; FE
-		bra.s	.jump								; FC
+		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
-		; custom code									; FA
+		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		movea.l	objoff_34(a0),a1
@@ -149,11 +149,11 @@ Animate_RawNoSSTCheckResult:
 		rts
 ; ---------------------------------------------------------------------------
 
-.jump
+.change
 		move.b	(a2)+,d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)
+		move.l	a1,objoff_30(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)
@@ -223,10 +223,10 @@ Animate_RawNoSSTMultiDelay:
 
 .index
 		bra.s	.restart								; FE
-		bra.s	.jump								; FC
+		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
-		; custom code									; FA
+		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		movea.l	objoff_34(a0),a1
@@ -235,11 +235,11 @@ Animate_RawNoSSTMultiDelay:
 		rts
 ; ---------------------------------------------------------------------------
 
-.jump
+.change
 		move.b	1(a1,d0.w),d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)
+		move.l	a1,objoff_30(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)
@@ -312,10 +312,10 @@ Animate_Raw2NoSSTMultiDelay:
 
 .index
 		bra.s	.restart								; FE
-		bra.s	.jump								; FC
+		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
-		; custom code									; FA
+		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		movea.l	objoff_34(a0),a1
@@ -324,11 +324,11 @@ Animate_Raw2NoSSTMultiDelay:
 		rts
 ; ---------------------------------------------------------------------------
 
-.jump
+.change
 		move.b	(a2)+,d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)
+		move.l	a1,objoff_30(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)
@@ -388,7 +388,7 @@ Animate_RawNoSSTGetFaster:
 		cmp.b	1(a1),d0
 		blo.s		.end
 
-		; custom code
+		; jump to custom code
 		bclr	#5,objoff_38(a0)
 		clr.b	objoff_2F(a0)
 		movea.l	objoff_34(a0),a2
@@ -439,7 +439,7 @@ Animate_RawNoSSTGetSlower:
 		cmp.b	1(a1),d0
 		blo.s		.return
 
-		; custom code
+		; jump to custom code
 		bclr	#5,objoff_38(a0)
 		clr.b	objoff_2F(a0)
 		movea.l	objoff_34(a0),a2
