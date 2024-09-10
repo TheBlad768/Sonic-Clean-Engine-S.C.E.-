@@ -7,6 +7,9 @@
 -- Create the debug ROM.
 local debug = false
 
+-- ROM padding
+local padding = false
+
 ---------------------
 -- End of settings --
 ---------------------
@@ -60,10 +63,21 @@ if debug then
 	os.execute(extra_tools.convsym .. " Sonic.Debug.lst RAM.asm -in as_lst -out asm -range FF0000 FFFFFF")
 end
 
+if padding then
+	-- ROM padding process
+	common.rom_padding("Sonic.gen")
+end
+
 -- Correct the ROM's header with a proper checksum and end-of-ROM value.
 common.fix_header("Sonic.gen")
 
 if debug then
+
+	if padding then
+		-- ROM padding process
+		common.rom_padding("Sonic.Debug.gen")
+	end
+
 	common.fix_header("Sonic.Debug.gen")
 end
 

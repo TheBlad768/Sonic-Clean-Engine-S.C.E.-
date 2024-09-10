@@ -166,19 +166,19 @@ watpalptrs macro height,spal,kpal
 subObjData	macro mappings,vram,pal,pri,priority,width,height,frame,collision
 	dc.l mappings
 	dc.w make_art_tile(vram,pal,pri),priority
-	dc.b width,height,frame,collision
+	dc.b (width/2),(height/2),frame,collision
     endm
 
 ; macro to declare sub-object data
 subObjData2	macro vram,pal,pri,priority,width,height,frame,collision
 	dc.w make_art_tile(vram,pal,pri),priority
-	dc.b width,height,frame,collision
+	dc.b (width/2),(height/2),frame,collision
     endm
 
 ; macro to declare sub-object data
 subObjData3	macro priority,width,height,frame,collision
 	dc.w priority
-	dc.b width,height,frame,collision
+	dc.b (width/2),(height/2),frame,collision
     endm
 
 ; macro to declare sub-object slotted data
@@ -186,31 +186,44 @@ subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,priority,width,hei
 	dc.w slots,make_art_tile(vram,pal,pri),offset,index
 	dc.l mappings
 	dc.w priority
-	dc.b width,height,frame,collision
+	dc.b (width/2),(height/2),frame,collision
     endm
 
 ; macro to declare sub-object data
 subObjMainData	macro address,render,routine,height,width,priority,vram,pal,pri,mappings,frame,collision
-	dc.l address								; address
-	dc.b render, routine, height, width			; render, routine, height, width
-	dc.w priority, make_art_tile(vram,pal,pri)	; priority, art tile
-	dc.l mappings								; mappings
-	dc.b frame, collision						; mapping frame, collision flags
+	dc.l address
+	dc.b render,routine,(height/2),(width/2)
+	dc.w priority,make_art_tile(vram,pal,pri)
+	dc.l mappings
+	dc.b frame, collision
     endm
 
 ; macro to declare sub-object data
 subObjMainData2	macro address,render,routine,height,width,priority,vram,pal,pri,mappings
-	dc.l address								; address
-	dc.b render, routine, height, width			; render, routine, height, width
-	dc.w priority, make_art_tile(vram,pal,pri)	; priority, art tile
-	dc.l mappings								; mappings
+	dc.l address
+	dc.b render,routine,(height/2),(width/2)
+	dc.w priority,make_art_tile(vram,pal,pri)
+	dc.l mappings
     endm
 
 ; macro to declare sub-object data
 subObjMainData3	macro render,routine,height,width,priority,vram,pal,pri,mappings
-	dc.b render, routine, height, width			; render, routine, height, width
-	dc.w priority, make_art_tile(vram,pal,pri)	; priority, art tile
-	dc.l mappings								; mappings
+	dc.b render,routine,(height/2),(width/2)
+	dc.w priority,make_art_tile(vram,pal,pri)
+	dc.l mappings
+    endm
+; ---------------------------------------------------------------------------
+
+titlecardresultsheader macro {INTLABEL}
+__LABEL__ label *
+	dc.w ((__LABEL___end - __LABEL__) / $E)-1
+    endm
+
+titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
+	dc.l address							; object address
+	dc.w 128+xdest,128+xpos,128+ypos		; x destination, xpos, ypos
+	dc.b frame,(width/2)					; mapping frame, width
+	dc.w exit								; place in exit queue
     endm
 ; ---------------------------------------------------------------------------
 
@@ -486,7 +499,7 @@ getobjectRAMslot macro address
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
 	lsr.w	#6,d0												; divide by $40... even though SSTs are $4A bytes long in this game
-	lea	(AllocateObjectAfterCurrent.find_first_sprite_table).w,address
+	lea	(Create_New_Sprite3.find_first_sprite_table).w,address
 	move.b	(address,d0.w),d0										; use a look-up table to get the right loop counter
     endm
 

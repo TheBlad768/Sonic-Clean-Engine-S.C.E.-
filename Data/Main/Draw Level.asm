@@ -198,14 +198,14 @@ Setup_TileColumnDraw:
 		move.w	d7,d3
 		btst	#$B,d4
 		beq.s	+
-		eori.l	#$10001000,d5
-		eori.l	#$10001000,d3
+		eori.l	#words_to_long(flip_y,flip_y),d5
+		eori.l	#words_to_long(flip_y,flip_y),d3
 		swap	d5
 		swap	d3
 +		btst	#$A,d4
 		beq.s	+
-		eori.l	#$8000800,d5
-		eori.l	#$8000800,d3
+		eori.l	#words_to_long(flip_x,flip_x),d5
+		eori.l	#words_to_long(flip_x,flip_x),d3
 		exg	d3,d5
 +		move.l	d5,(a1)+
 		move.l	d3,(a0)+
@@ -229,7 +229,7 @@ Get_LevelChunkColumn:
 		add.w	(a3,d1.w),d3
 		adda.w	d3,a4
 		moveq	#0,d3
-		move.b	(a4),d3
+		move.b	(a4),d3				; move 128*128 chunk ID to d3
 		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		asr.w	#3,d4
@@ -387,13 +387,13 @@ Setup_TileRowDraw:
 		move.l	4(a2,d3.w),d3
 		btst	#$B,d4
 		beq.s	+
-		eori.l	#$10001000,d5
-		eori.l	#$10001000,d3
+		eori.l	#words_to_long(flip_y,flip_y),d5
+		eori.l	#words_to_long(flip_y,flip_y),d3
 		exg	d3,d5
 +		btst	#$A,d4
 		beq.s	+
-		eori.l	#$8000800,d5
-		eori.l	#$8000800,d3
+		eori.l	#words_to_long(flip_x,flip_x),d5
+		eori.l	#words_to_long(flip_x,flip_x),d3
 		swap	d5
 		swap	d3
 +		move.l	d5,(a1)+
@@ -418,7 +418,7 @@ Get_LevelAddrChunkRow:
 
 Get_ChunkRow:
 		moveq	#0,d3
-		move.b	(a4,d1.w),d3
+		move.b	(a4,d1.w),d3			; move 128*128 chunk ID to d3
 		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		andi.w	#$70,d4

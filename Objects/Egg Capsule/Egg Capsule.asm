@@ -29,9 +29,9 @@ Obj_EggCapsule:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
 
+		; check
 		btst	#1,render_flags(a0)					; is egg capsule flipped?
 		bne.s	.flipy							; if yes, branch
-
 		move.l	#.normal,objoff_34(a0)
 
 		; create object
@@ -649,11 +649,11 @@ Load_EggCapsule:
 
 ; =============== S U B R O U T I N E =======================================
 
-ObjDat_EggCapsule:				subObjData Map_EggCapsule, $494, 0, 1, $200, 64/2, 64/2, 0, 0
-ObjDat_EggCapsule_Button:		subObjData3 $200, 32/2, 16/2, 5, 0
-ObjDat3_EggCapsule_Propeller:		subObjData3 $200, 40/2, 8/2, 6, 0
-ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, 1, $180, 24/2, 24/2, 0, 0
-ObjDat_EggCapsule_Animals:		subObjData3 $280, 16/2, 24/2, 2, 0
+ObjDat_EggCapsule:				subObjData Map_EggCapsule, $494, 0, 1, $200, 64, 64, 0, 0
+ObjDat_EggCapsule_Button:		subObjData3 $200, 32, 16, 5, 0
+ObjDat3_EggCapsule_Propeller:		subObjData3 $200, 40, 8, 6, 0
+ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, 1, $180, 24, 24, 0, 0
+ObjDat_EggCapsule_Animals:		subObjData3 $280, 16, 24, 2, 0
 
 Child6_EggCapsule:
 		dc.w 1-1

@@ -638,7 +638,7 @@ afReset								= $FB							; move offscreen for remove(Using the Sprite_OnScreen
 
 arfIndex								= $FF							; go to animate raw index
 arfEnd								= $FE							; return to beginning of animation
-arfBack								= $FC							; go back (specified number) bytes
+arfChange							= $FC							; run specified animation (specified offset)
 arfJump								= $FA							; jump from $34(a0) address
 
 ; ---------------------------------------------------------------------------
@@ -729,6 +729,7 @@ ObjHitCeiling							= ObjCheckCeilingDist				; alias from Sonic 1 (GitHub)
 ObjHitWallLeft						= ObjCheckLeftWallDist			; alias from Sonic 1 (GitHub)
 SolidObject							= SolidObjectFull					; alias from Sonic 1/2 (Hivebrain/GitHub)
 SolidObject_Always					= SolidObjectFull2					; alias from Sonic 2 (GitHub)
+CollectRing							= GiveRing						; alias from Sonic 1/2 (Hivebrain/GitHub)
 ReactToItem							= TouchResponse					; alias from Sonic 1 (GitHub)
 HurtSonic							= HurtCharacter					; alias from Sonic 1 (Hivebrain/GitHub)
 KillSonic								= Kill_Character					; alias from Sonic 1 (Hivebrain/GitHub)

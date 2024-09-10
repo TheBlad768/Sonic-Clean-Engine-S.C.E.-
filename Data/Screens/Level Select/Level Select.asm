@@ -247,7 +247,7 @@ LevelSelect_Controls:
 
 		; play sfx
 		move.w	d3,d0
-		addi.w	#sfx__First,d0										; skip music
+		addq.w	#sfx__First,d0										; skip music
 		jmp	(Play_SFX).w												; play sfx
 
 ; ---------------------------------------------------------------------------

@@ -229,68 +229,16 @@ Obj_TitleCardAct:
 ;		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
-ObjArray_TtlCard:
-		dc.w ((ObjArray_TtlCard_end-ObjArray_TtlCard)/$E)-1				; count
-
-		; 1
-		dc.l Obj_TitleCardName											; object address
-		dc.w $120														; x destination
-		dc.w $260														; xpos
-		dc.w $E0														; ypos
-		dc.b 4															; mapping frame
-		dc.b $80															; width
-		dc.w 3															; place in exit queue
-
-		; 2
-		dc.l Obj_TitleCardElement
-		dc.w $17C
-		dc.w $2FC
-		dc.w $100
-		dc.b 3
-		dc.b $24
-		dc.w 5
-
-		; 3
-		dc.l Obj_TitleCardAct
-		dc.w $184
-		dc.w $344
-		dc.w $120
-		dc.b 2
-		dc.b $1C
-		dc.w 7
-
-		; 4
-		dc.l Obj_TitleCardRedBanner
-		dc.w $C0
-		dc.w $E0
-		dc.w $10
-		dc.b 1
-		dc.b 0
-		dc.w 1
-
+ObjArray_TtlCard: titlecardresultsheader
+	titlecardresultsobjdata	Obj_TitleCardName, 160, 480, 96, 4, 256, 3			; 1
+	titlecardresultsobjdata	Obj_TitleCardElement, 252, 636, 128, 3, 72, 5			; 2
+	titlecardresultsobjdata	Obj_TitleCardAct, 260, 708, 160, 2, 56, 7				; 3
+	titlecardresultsobjdata	Obj_TitleCardRedBanner, 64, 96, 16-128, 1, 0, 1		; 4
 ObjArray_TtlCard_end
 
-ObjArray_TtlCardBonus:
-		dc.w ((ObjArray_TtlCardBonus_end-ObjArray_TtlCardBonus)/$E)-1
-
-		; 1
-		dc.l Obj_TitleCardElement
-		dc.w $C8
-		dc.w $188
-		dc.w $E8
-		dc.b $13
-		dc.b $80
-		dc.w 1
-
-		; 2
-		dc.l Obj_TitleCardElement
-		dc.w $128
-		dc.w $1E8
-		dc.w $E8
-		dc.b $14
-		dc.b $80
-		dc.w 1
-
+ObjArray_TtlCardBonus: titlecardresultsheader
+	titlecardresultsobjdata	Obj_TitleCardElement, 72, 264, 104, $13, 256, 1		; 1
+	titlecardresultsobjdata	Obj_TitleCardElement, 168, 360, 104, $14, 256, 1		; 2
 ObjArray_TtlCardBonus_end
 ; ---------------------------------------------------------------------------
 

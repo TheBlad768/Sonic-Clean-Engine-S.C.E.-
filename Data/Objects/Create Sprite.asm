@@ -7,8 +7,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Create_New_Sprite:
-		lea	(Dynamic_object_RAM).w,a1				; start address for object RAM
-		moveq	#((Dynamic_object_RAM_end-Dynamic_object_RAM)/object_size)-1,d0
+		lea	(Dynamic_object_RAM-next_object).w,a1	; start address for object RAM
+		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d0
 
 .loop
 		lea	next_object(a1),a1							; goto next object RAM slot
@@ -19,12 +19,14 @@ Create_New_Sprite:
 ; =============== S U B R O U T I N E =======================================
 
 Create_New_Sprite3:
-		movea.w	a0,a1								; load current object to a1
 		move.w	#Dynamic_object_RAM_end,d0
 		sub.w	a0,d0
-		lsr.w	#6,d0								; divide by $40... even though SSTs are $4A bytes long in this game
+		lsr.w	#object_size_bits,d0					; divide by $40... even though SSTs are $4A bytes long in this game
 		move.b	.find_first_sprite_table(pc,d0.w),d0		; use a look-up table to get the right loop counter
 		bmi.s	.found
+
+		; find slot
+		lea	-next_object(a0),a1						; load current object to a1
 
 .loop
 		lea	next_object(a1),a1							; goto next object RAM slot
@@ -43,6 +45,6 @@ Create_New_Sprite3:
 
 		rept	(.b-.a)/$40								; repeat for all slots, minus exception
 			set	.c,.c-$40								; address for previous $40 (also skip last part)
-			dc.b	(.b-.c-1)/object_size-1					; write possible slots according to object_size division + hack + dbf hack
+			dc.b (.b-.c-1)/object_size-1					; write possible slots according to object_size division + hack + dbf hack
 		endr
 	even

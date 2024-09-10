@@ -5,31 +5,38 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Ring:
+
+		; init
+		movem.l	ObjDat_Ring(pc),d0-d3							; copy data to d0-d3
+		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
+		move.b	#7|$40,collision_flags(a0)							; set ring collision
+
+		; jump
+		movea.l	address(a0),a1
+		jmp	(a1)
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_Ring_Collect:
 		move.l	#Map_Ring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$100,priority(a0)
-		move.b	#7|$40,collision_flags(a0)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)			; set height and width
-		move.l	#.anim,address(a0)
-
-.anim
-		tst.b	routine(a0)
-		bne.s	.collect
-		jmp	(Sprite_OnScreen_Test_Collision).w
-; ---------------------------------------------------------------------------
-
-.collect
-		clr.b	routine(a0)
+		move.b	#rfCoord,render_flags(a0)
 		move.l	#.sparkle,address(a0)
 		move.w	#$80,priority(a0)
 		jsr	(GiveRing).w
 
 .sparkle
-		lea	Ani_RingSparkle(pc),a1
-		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
-		bne.s	.delete
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)							; decrement timer
+		bpl.s	.draw											; if time remains, branch
+		addq.b	#5+1,anim_frame_timer(a0)						; reset timer to 5 frames
+
+		; next frame
+		addq.b	#1,mapping_frame(a0)
+		cmpi.b	#5,mapping_frame(a0)
+		beq.s	.delete
+
+.draw
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -43,180 +50,223 @@ Obj_Ring:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Bouncing_Ring:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		add.b	d0,d0
-		jmp	off_1A658(pc,d0.w)
-; ---------------------------------------------------------------------------
-
-off_1A658:
-		bra.w	loc_1A67A	; 0
-		bra.w	loc_1A75C	; 2
-		bra.w	loc_1A7C2	; 4
-		bra.w	loc_1A7D6	; 6
-		bra.w	loc_1A7E4	; 8
-; ---------------------------------------------------------------------------
-
-Obj_Bouncing_Ring_Reverse_Gravity:
-		moveq	#0,d0
-		move.b	routine(a0),d0
-		add.b	d0,d0
-		jmp	off_1A670(pc,d0.w)
-; ---------------------------------------------------------------------------
-
-off_1A670:
-		bra.w	loc_1A67A	; 0
-		bra.w	loc_1A7E8	; 2
-		bra.w	loc_1A7C2	; 4
-		bra.w	loc_1A7D6	; 6
-		bra.w	loc_1A7E4	; 8
-; ---------------------------------------------------------------------------
-
-loc_1A67A:
-		move.l	#Obj_Bouncing_Ring,d6
+		move.l	#Obj_Bouncing_Ring_Normal,d6
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	+
-		move.l	#Obj_Bouncing_Ring_Reverse_Gravity,d6
-+		movea.w	a0,a1
-		moveq	#0,d5
+		beq.s	.notgrav
+		move.l	#Obj_Bouncing_Ring_TestGravity,d6
+
+.notgrav
 		move.w	(Ring_count).w,d5
-		moveq	#32,d0	; max rings
+		moveq	#32,d0											; max rings
 		cmp.w	d0,d5
-		blo.s		+
-		move.w	d0,d5
-+		subq.w	#1,d5
-		move.w	#$288,d4
-		bra.s	loc_1A6B6
+		blo.s		.notmax
+		move.w	d0,d5											; set max rings
+
+.notmax
+		subq.w	#1,d5											; fix dbf
+
+		; get RAM slot
+		getobjectRAMslot a2
+
+		; load ring data
+		movea.w	a0,a1											; load current object to a1
+		lea	ObjDat3_BouncingRing(pc),a3							; load ring data
+		lea	Rings_Velocity(pc),a2
+		tst.b	(Water_flag).w										; does level have water?
+		beq.s	.load											; if not, branch
+		move.w	(Water_level).w,d1
+		cmp.w	y_pos(a0),d1										; is ring above the water?
+		bge.s	.load											; if yes, branch
+		lea	Rings_WaterVelocity(pc),a2
+		bra.s	.load
 ; ---------------------------------------------------------------------------
 
-loc_1A6AE:
-		jsr	(Create_New_Sprite3).w
-		bne.s	loc_1A738
+.create
 
-loc_1A6B6:
-		move.l	d6,address(a1)
-		addq.b	#2,routine(a1)
-		move.l	#Map_Ring,mappings(a1)
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a1)
-		move.b	#$84,render_flags(a1)
-		move.w	#$180,priority(a1)
+		; create bouncing ring object
+
+.find
+		lea	next_object(a1),a1										; goto next object RAM slot
+		tst.l	address(a1)											; is object RAM slot empty?
+		dbeq	d0,.find											; if not, branch
+		bne.s	.notfree											; branch, if object RAM slot is not empty
+		subq.w	#1,d0											; dbeq didn't subtract sprite table so we'll do it ourselves
+
+		; load object
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
+
+.load
+		move.l	d6,address(a1)									; set object address
+		movem.l	(a3),d2-d4										; load ring data
+		movem.l	d2-d4,render_flags(a1)								; set ring data
 		move.b	#7|$40,collision_flags(a1)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)			; set height and width
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a1)				; set y_radius and x_radius
-		tst.w	d4
-		bmi.s	loc_1A728
-		move.w	d4,d0
-		jsr	(GetSineCosine).w
-		move.w	d4,d2
-		move.w	d2,-(sp)
-		clr.w	d2
-		move.b	(sp)+,d2
-		asl.w	d2,d0
-		asl.w	d2,d1
-		move.w	d0,d2
-		move.w	d1,d3
-		addi.b	#$10,d4
-		bhs.s	loc_1A728
-		subi.w	#$80,d4
-		bhs.s	loc_1A728
-		move.w	#$288,d4
+		move.w	height_pixels(a1),y_radius(a1)						; set y_radius and x_radius
+		move.l	(a2)+,x_vel(a1)
+		tst.w	d0												; object RAM slots ended?
+		dbmi	d5,.create										; if not, loop
 
-loc_1A728:
-		movem.w	d2-d3,x_vel(a1)
-		neg.w	d2
-		neg.w	d4
-		dbf	d5,loc_1A6AE
-		st	(Ring_spill_anim_counter).w
-
-loc_1A738:
+.notfree
 		sfx	sfx_RingLoss											; play ring loss sound
+		st	(Ring_spill_anim_counter).w							; set time
 		clr.w	(Ring_count).w
 		move.b	#$80,(Update_HUD_ring_count).w
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_1A7E8
 
-loc_1A75C:
-		jsr	(MoveSprite2).w
-		addi.w	#$18,y_vel(a0)
-		bmi.s	loc_1A7B0
+		; check gravity
+		tst.b	(Reverse_gravity_flag).w
+		bne.w	Obj_Bouncing_Ring_TestGravity
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_Bouncing_Ring_Normal:
+		MoveSprite2 a0
+
+		; check speed
+		moveq	#$18,d2											; normal speed
+		tst.b	(Water_flag).w										; does level have water?
+		beq.s	.check											; if not, branch
+		move.w	(Water_level).w,d0
+		cmp.w	y_pos(a0),d0										; is ring above the water?
+		bge.s	.check											; if yes, branch
+		moveq	#$A,d2											; water speed
+
+.check
+		add.w	d2,y_vel(a0)
+		bmi.s	.main
 		move.b	(V_int_run_count+3).w,d0
-		add.b	d7,d0
+		add.b	d7,d0											; d7 - object count (Process_Sprites)
 		andi.b	#7,d0
-		bne.s	loc_1A7B0
-		tst.b	render_flags(a0)
-		bpl.s	loc_1A79C
-		jsr	(RingCheckFloorDist).w
+		bne.s	.main
+		tst.b	render_flags(a0)										; object visible on the screen?
+		bpl.s	.chkdel											; if not, branch
+
+		; check shield
+		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does Sonic have a Lightning Shield?
+		beq.s	.notshield										; if not, branch
+		move.l	#Obj_Attracted_Ring.main,address(a0)
+
+.notshield
+
+		; check floor
+		move.w	x_pos(a0),d3
+		move.w	y_pos(a0),d2
+		move.b	y_radius(a0),d0
+		ext.w	d0
+		add.w	d0,d2
+		lea	(Primary_Angle).w,a4
+		clr.b	(a4)
+		movea.w	#$10,a3
+		moveq	#0,d6
+		moveq	#$C,d5
+		jsr	(Ring_FindFloor).w
 		tst.w	d1
-		bpl.s	loc_1A79C
+		bpl.s	.chkdel
 		add.w	d1,y_pos(a0)
 		move.w	y_vel(a0),d0
 		asr.w	#2,d0
 		sub.w	d0,y_vel(a0)
 		neg.w	y_vel(a0)
 
-loc_1A79C:
+.chkdel
 		tst.b	(Ring_spill_anim_counter).w
-		beq.s	loc_1A7E4
+		beq.s	.delete
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
-		blo.s		loc_1A7E4
+		blo.s		.delete
 
-loc_1A7B0:
+.main
 		move.w	(Level_repeat_offset).w,d0
 		sub.w	d0,x_pos(a0)
-		jmp	(Draw_And_Touch_Sprite).w
-; ---------------------------------------------------------------------------
-
-loc_1A7C2:
-		addq.b	#2,routine(a0)
-		clr.b	collision_flags(a0)
-		move.w	#$80,priority(a0)
-		jsr	(GiveRing).w
-
-loc_1A7D6:
-		lea	Ani_RingSparkle(pc),a1
-		jsr	(Animate_Sprite).w
+		Add_SpriteToCollisionResponseList a1
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-loc_1A7E4:
+.delete
 		jmp	(Delete_Current_Sprite).w
-; ---------------------------------------------------------------------------
 
-loc_1A7E8:
-		jsr	(MoveSprite2_TestGravity).w
-		addi.w	#$18,y_vel(a0)
-		bmi.s	loc_1A83C
+; =============== S U B R O U T I N E =======================================
+
+Obj_Bouncing_Ring_TestGravity:
+
+		; move sprite
+		movem.w	x_vel(a0),d0-d1								; load xy speed
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.notgrav
+		neg.w	d1												; reverse y speed
+
+.notgrav
+		ext.l	d0
+		asl.l	#8,d0												; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d0,x_pos(a0)										; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+		ext.l	d1
+		asl.l	#8,d1												; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d1,y_pos(a0)										; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+
+		; check speed
+		moveq	#$18,d2											; normal speed
+		tst.b	(Water_flag).w										; does level have water?
+		beq.s	.check											; if not, branch
+		move.w	(Water_level).w,d0
+		cmp.w	y_pos(a0),d0										; is ring above the water?
+		bge.s	.check											; if yes, branch
+		moveq	#$A,d2											; water speed
+
+.check
+		add.w	d2,y_vel(a0)
+		bmi.s	.main
 		move.b	(V_int_run_count+3).w,d0
-		add.b	d7,d0
+		add.b	d7,d0											; d7 - object count (Process_Sprites)
 		andi.b	#7,d0
-		bne.s	loc_1A83C
-		tst.b	render_flags(a0)
-		bpl.s	loc_1A828
-		jsr	(RingCheckFloorDist_ReverseGravity).w
+		bne.s	.main
+		tst.b	render_flags(a0)										; object visible on the screen?
+		bpl.s	.chkdel											; if not, branch
+
+		; check shield
+		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does Sonic have a Lightning Shield?
+		beq.s	.notshield										; if not, branch
+		move.l	#Obj_Attracted_Ring.main,address(a0)
+
+.notshield
+
+		; check floor
+		move.w	x_pos(a0),d3
+		move.w	y_pos(a0),d2
+		move.b	y_radius(a0),d0
+		ext.w	d0
+		sub.w	d0,d2
+		eori.w	#$F,d2
+		lea	(Primary_Angle).w,a4
+		clr.b	(a4)
+		movea.w	#-$10,a3
+		move.w	#$800,d6
+		moveq	#$C,d5
+		jsr	(Ring_FindFloor).w
 		tst.w	d1
-		bpl.s	loc_1A828
+		bpl.s	.chkdel
 		sub.w	d1,y_pos(a0)
 		move.w	y_vel(a0),d0
 		asr.w	#2,d0
 		sub.w	d0,y_vel(a0)
 		neg.w	y_vel(a0)
 
-loc_1A828:
+.chkdel
 		tst.b	(Ring_spill_anim_counter).w
-		beq.s	loc_1A7E4
+		beq.s	.delete
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
-		blo.s		loc_1A7E4
+		blo.s		.delete
 
-loc_1A83C:
+.main
 		move.w	(Level_repeat_offset).w,d0
 		sub.w	d0,x_pos(a0)
-		jmp	(Draw_And_Touch_Sprite).w
+		Add_SpriteToCollisionResponseList a1
+		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.delete
+		jmp	(Delete_Current_Sprite).w
 
 ; ---------------------------------------------------------------------------
 ; Attracted ring (Object)
@@ -227,117 +277,172 @@ loc_1A83C:
 Obj_Attracted_Ring:
 
 		; init
-		move.l	#Map_Ring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Ring,1,1),art_tile(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$100,priority(a0)
-		move.b	#7|$40,collision_flags(a0)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)			; set height and width
-		move.w	#bytes_to_word(16/2,16/2),y_radius(a0)				; set y_radius and x_radius
-		move.l	#loc_1A88C,address(a0)
+		movem.l	ObjDat_Ring2(pc),d0-d3							; copy data to d0-d3
+		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
+		move.b	#7|$40,collision_flags(a0)							; set ring collision
+		move.w	height_pixels(a0),y_radius(a0)						; set y_radius and x_radius
 
-loc_1A88C:
-		tst.b	routine(a0)
-		bne.s	AttractedRing_GiveRing
-		bsr.s	AttractedRing_Move
-		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
-		bne.s	loc_1A8C6
-		move.l	#Obj_Bouncing_Ring,address(a0)					; if not, change object
-		move.b	#2,routine(a0)
-		st	(Ring_spill_anim_counter).w
-
-loc_1A8C6:
-		out_of_xrange.s	loc_1A8E4
-		jmp	(Draw_And_Touch_Sprite).w
-; ---------------------------------------------------------------------------
-
-loc_1A8E4:
-		move.w	respawn_addr(a0),d0
-		beq.s	loc_1A8F0
-		movea.w	d0,a2
-		bclr	#7,(a2)
-
-loc_1A8F0:
-		move.w	objoff_30(a0),d0									; load ring RAM address
-		beq.s	loc_1A8FC
-		movea.w	d0,a2
-		clr.w	(a2)
-
-loc_1A8FC:
-		jmp	(Delete_Current_Sprite).w
-; ---------------------------------------------------------------------------
-
-AttractedRing_GiveRing:
-		clr.b	collision_flags(a0)
-		move.w	#$80,priority(a0)
-		jsr	(GiveRing).w
-		move.l	#loc_1A920,address(a0)
-		clr.b	routine(a0)
-
-loc_1A920:
-		tst.b	routine(a0)
-		bne.s	loc_1A934
-		lea	Ani_RingSparkle(pc),a1
-		jsr	(Animate_Sprite).w
-		jmp	(Draw_Sprite).w
-; ---------------------------------------------------------------------------
-
-loc_1A934:
-		jmp	(Delete_Current_Sprite).w
-
-; =============== S U B R O U T I N E =======================================
-
-AttractedRing_Move:
+.main
 
 		; move on x axis
 		moveq	#48,d1
 		move.w	(Player_1+x_pos).w,d0
 		cmp.w	x_pos(a0),d0
-		bge.s	AttractedRing_MoveRight							; if ring is to the left of the player, branch
+		bge.s	.moveright										; if ring is to the left of the player, branch
 
 		; move left
 		neg.w	d1
 		tst.w	x_vel(a0)
-		bmi.s	AttractedRing_ApplyMovementX
+		bmi.s	.applymovementx
 		add.w	d1,d1
 		add.w	d1,d1
-		bra.s	AttractedRing_ApplyMovementX
+		bra.s	.applymovementx
 ; ---------------------------------------------------------------------------
 
-AttractedRing_MoveRight:
+.moveright
 		tst.w	x_vel(a0)
-		bpl.s	AttractedRing_ApplyMovementX
+		bpl.s	.applymovementx
 		add.w	d1,d1
 		add.w	d1,d1
 
-AttractedRing_ApplyMovementX:
+.applymovementx
 		add.w	d1,x_vel(a0)
 
 		; move on y axis
 		moveq	#48,d1
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	y_pos(a0),d0
-		bge.s	AttractedRing_MoveUp							; if ring is below the player, branch
+		bge.s	.moveup											; if ring is below the player, branch
 
 		; move down
 		neg.w	d1
 		tst.w	y_vel(a0)
-		bmi.s	AttractedRing_ApplyMovementY
+		bmi.s	.applymovementy
 		add.w	d1,d1
 		add.w	d1,d1
-		bra.s	AttractedRing_ApplyMovementY
+		bra.s	.applymovementy
 ; ---------------------------------------------------------------------------
 
-AttractedRing_MoveUp:
+.moveup
 		tst.w	y_vel(a0)
-		bpl.s	AttractedRing_ApplyMovementY
+		bpl.s	.applymovementy
 		add.w	d1,d1
 		add.w	d1,d1
 
-AttractedRing_ApplyMovementY:
+.applymovementy
 		add.w	d1,y_vel(a0)
-		jmp	(MoveSprite2).w
+		MoveSprite2 a0
+
+		; check shield
+		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
+		bne.s	.chkdel											; if yes, branch
+
+		; set bouncing
+		st	(Ring_spill_anim_counter).w							; set time
+		move.l	#Obj_Bouncing_Ring_Normal,address(a0)
+		tst.b	(Reverse_gravity_flag).w
+		beq.s	.chkdel
+		move.l	#Obj_Bouncing_Ring_TestGravity,address(a0)
+
+.chkdel
+		out_of_xrange.s	.offscreen
+		Add_SpriteToCollisionResponseList a1
+		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-		include "Objects/Rings/Object Data/Anim - Rings.asm"
+.offscreen
+		move.w	respawn_addr(a0),d0
+		beq.s	.offscreen2
+		movea.w	d0,a2
+		bclr	#7,(a2)
+
+.offscreen2
+		move.w	objoff_30(a0),d0									; load ring RAM address
+		beq.s	.delete
+		movea.w	d0,a2
+		clr.w	(a2)
+
+.delete
+		jmp	(Delete_Current_Sprite).w
+
+; =============== S U B R O U T I N E =======================================
+
+ObjDat_Ring:			subObjMainData2 Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, $100, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat_Ring2:			subObjMainData2 Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, $100, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat3_BouncingRing:	subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, $180, ArtTile_Ring, 1, 1, Map_Ring_10+2
+; ---------------------------------------------------------------------------
+
+Rings_Velocity:
+
+		; xvel, yvel (normal)
+		dc.w -$C4, -$3EC			; 1
+		dc.w $C4, -$3EC			; 2
+		dc.w -$238, -$350			; 3
+		dc.w $238, -$350			; 4
+		dc.w -$350, -$238			; 5
+		dc.w $350, -$238			; 6
+		dc.w -$3EC, -$C4			; 7
+		dc.w $3EC, -$C4			; 8
+		dc.w -$3EC, $C4			; 9
+		dc.w $3EC, $C4			; 10
+		dc.w -$350, $238			; 11
+		dc.w $350, $238			; 12
+		dc.w -$238, $350			; 13
+		dc.w $238, $350			; 14
+		dc.w -$C4, $3EC			; 15
+		dc.w $C4, $3EC			; 16
+		dc.w -$62, -$1F6			; 17
+		dc.w $62, -$1F6			; 18
+		dc.w -$11C, -$1A8			; 19
+		dc.w $11C, -$1A8			; 20
+		dc.w -$1A8, -$11C			; 21
+		dc.w $1A8, -$11C			; 22
+		dc.w -$1F6, -$62			; 23
+		dc.w $1F6, -$62			; 24
+		dc.w -$1F6, $62			; 25
+		dc.w $1F6, $62			; 26
+		dc.w -$1A8, $11C			; 27
+		dc.w $1A8, $11C			; 28
+		dc.w -$11C, $1A8			; 29
+		dc.w $11C, $1A8			; 30
+		dc.w -$62, $1F6			; 31
+		dc.w $62, $1F6			; 32
+
+Rings_WaterVelocity:
+
+		; xvel, yvel (water)
+		dc.w -$64, -$1F8			; 1
+		dc.w $64, -$1F8			; 2
+		dc.w -$11C, -$1A8			; 3
+		dc.w $11C, -$1A8			; 4
+		dc.w -$1A8, -$11C			; 5
+		dc.w $1A8, -$11C			; 6
+		dc.w -$1F8, -$64			; 7
+		dc.w $1F8, -$64			; 8
+		dc.w -$1F8, $60			; 9
+		dc.w $1F8, $60			; 10
+		dc.w -$1A8, $11C			; 11
+		dc.w $1A8, $11C			; 12
+		dc.w -$11C, $1A8			; 13
+		dc.w $11C, $1A8			; 14
+		dc.w -$64, $1F4			; 15
+		dc.w $64, $1F4			; 16
+		dc.w -$32, -$FC			; 17
+		dc.w $32, -$FC			; 18
+		dc.w -$8E, -$D4			; 19
+		dc.w $8E, -$D4			; 20
+		dc.w -$D4, -$8E			; 21
+		dc.w $D4, -$8E			; 22
+		dc.w -$FC, -$32			; 23
+		dc.w $FC, -$32			; 24
+		dc.w -$FC, $30			; 25
+		dc.w $FC, $30			; 26
+		dc.w -$D4, $8E			; 27
+		dc.w $D4, $8E			; 28
+		dc.w -$8E, $D4			; 29
+		dc.w $8E, $D4			; 30
+		dc.w -$32, $FA			; 31
+		dc.w $32, $FA			; 32
+; ---------------------------------------------------------------------------
+
 		include "Objects/Rings/Object Data/Map - Rings.asm"

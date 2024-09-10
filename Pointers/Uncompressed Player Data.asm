@@ -2,6 +2,8 @@
 ; Uncompressed player graphics
 ; ===========================================================================
 
+	align $8000
+
 ArtUnc_Sonic:						binclude "Objects/Sonic/Uncompressed Art/Sonic.unc"
 	even
 ArtUnc_DashDust:					binclude "Objects/Spin Dust/Uncompressed Art/Dash Dust.unc"

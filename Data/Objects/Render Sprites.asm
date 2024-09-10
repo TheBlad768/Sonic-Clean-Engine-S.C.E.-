@@ -5,18 +5,21 @@
 ; =============== S U B R O U T I N E =======================================
 
 Init_SpriteTable:
+		clearRAM Sprite_table_input, Sprite_table_input_end
+
+		; clear
+		move.b	d0,(Spritemask_flag).w
 		lea	(Sprite_table_buffer).w,a0
-		moveq	#0,d0
-		moveq	#1,d1
+		moveq	#1,d1					; set link number
 		moveq	#80-1,d7
 
--		move.w	d0,(a0)
-		move.b	d1,3(a0)
-		addq.w	#1,d1
+.loop
+		move.w	d0,(a0)
+		move.b	d1,3(a0)					; set link number
+		addq.w	#1,d1					; next link number
 		addq.w	#8,a0
-		dbf	d7,-
+		dbf	d7,.loop
 		move.b	d0,-5(a0)
-		clearRAM Sprite_table_input, Sprite_table_input_end
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -94,6 +97,16 @@ Render_Sprites_NextObj:
 		bne.w	Render_Sprites_ObjLoop			; if there are objects left, repeat
 
 Render_Sprites_NextLevel:
+		cmpa.w	#Sprite_table_input,a5
+		bne.s	Render_Sprites_NextLevel2
+
+		; render last extra sprites
+		move.l	(Render_sprite_last_RAM).w,d0
+		beq.s	Render_Sprites_NextLevel2
+		movea.l	d0,a1
+		jsr	(a1)
+
+Render_Sprites_NextLevel2:
 		lea	$80(a5),a5							; load next priority level
 		cmpa.w	#Sprite_table_input_end,a5
 		blo.w	Render_Sprites_LevelLoop
@@ -143,11 +156,11 @@ Render_Sprites_MultiDraw:
 		subi.w	#128,d0
 		move.w	d0,d3
 		add.w	d2,d3
-		bmi.s	Render_Sprites_NextObj
+		bmi.w	Render_Sprites_NextObj
 		move.w	d0,d3
 		sub.w	d2,d3
 		cmpi.w	#320,d3
-		bge.s	Render_Sprites_NextObj
+		bge.w	Render_Sprites_NextObj
 		addi.w	#128,d0
 
 		; check if object is within Y bounds
@@ -290,7 +303,7 @@ loc_1AFA2:
 		addq.w	#1,a6
 		move.w	(a1)+,d2
 		add.w	d5,d2
-		eori.w	#$800,d2
+		eori.w	#flip_x,d2
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		neg.w	d2
@@ -329,7 +342,7 @@ loc_1AFE8:
 		addq.w	#1,a6
 		move.w	(a1)+,d2
 		add.w	d5,d2
-		eori.w	#$1800,d2
+		eori.w	#flip_x+flip_y,d2
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		neg.w	d2
@@ -367,7 +380,7 @@ loc_1B038:
 		addq.w	#2,a6
 		move.w	(a1)+,d2
 		add.w	d5,d2
-		eori.w	#$1000,d2
+		eori.w	#flip_y,d2
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		add.w	d0,d2
@@ -445,7 +458,7 @@ loc_1B0C6:
 		addq.w	#1,a6
 		move.w	(a1)+,d2
 		add.w	d5,d2
-		eori.w	#$800,d2
+		eori.w	#flip_x,d2
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		neg.w	d2
@@ -499,7 +512,7 @@ loc_1B12C:
 		addq.w	#1,a6
 		move.w	(a1)+,d2
 		add.w	d5,d2
-		eori.w	#$1800,d2
+		eori.w	#flip_x+flip_y,d2
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		neg.w	d2
@@ -552,7 +565,7 @@ loc_1B19C:
 		addq.w	#2,a6
 		move.w	(a1)+,d2
 		add.w	d5,d2
-		eori.w	#$1000,d2
+		eori.w	#flip_y,d2
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		add.w	d0,d2

@@ -11,24 +11,22 @@ Chunk_table_end						= *
 ; object variables
 Object_RAM:							= *
 Player_1:								ds.b object_size				; main character in 1 player mode
-									ds.b object_size				; unused
+									ds.b object_size				; Tails in a Sonic and Tails game
 Reserved_object_3:					ds.b object_size				; during a level, an object whose sole purpose is to clear the collision response list is stored here
 Dynamic_object_RAM:				ds.b object_size*90			; 90 objects
 Dynamic_object_RAM_end				= *
 									ds.b object_size				; unused
-Dust:								ds.b object_size
+Breathing_bubbles:					ds.b object_size				; for the main character
+									ds.b object_size				; for Tails in a Sonic and Tails game
+									ds.b object_size				; unused
+									ds.b object_size				; Tails' tails
+Dust:								ds.b object_size				; for the main character
+									ds.b object_size				; for Tails in a Sonic and Tails game
 Shield:								ds.b object_size
 									ds.b object_size				; unused
-Breathing_bubbles:					ds.b object_size
-									ds.b object_size				; unused
-									ds.b object_size				; unused
-									ds.b object_size				; unused
-									ds.b object_size				; unused
-									ds.b object_size				; unused
-									ds.b object_size				; unused
-									ds.b object_size				; unused
-WaterWave:							ds.b object_size
 Invincibility_stars:					ds.b object_size*4				; 4 objects
+									ds.b object_size*3				; unused
+WaterWave:							ds.b object_size
 									ds.b $34						; unused
 Object_RAM_end						= *
 
@@ -222,6 +220,7 @@ Debug_object:						ds.b 1						; the current position in the debug mode object l
 Last_act_end_flag:					ds.b 1
 Slotted_object_bits:					ds.b 8						; index of slot array to use
 Signpost_addr:						ds.w 1
+Render_sprite_last_RAM:				ds.l 1
 Palette_cycle_counters:				ds.b $10
 Pal_fade_delay:						ds.w 1
 Pal_fade_delay2:						ds.w 1
