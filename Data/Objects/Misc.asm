@@ -170,7 +170,7 @@ Release_PlayerFromObject:
 		beq.s	.return											; if not, branch
 		bclr	#p1_pushing_bit,status(a0)
 		beq.s	.return
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		bclr	#Status_Push,status(a1)
 		move.w	#bytes_to_word(AniIDSonAni_Walk,AniIDSonAni_Run),anim(a1)	; reset player anim
 
@@ -187,7 +187,7 @@ Displace_PlayerOffObject:
 		beq.s	.return											; if not, branch
 		bclr	#p1_standing_bit,status(a0)
 		beq.s	.return
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 
@@ -198,7 +198,7 @@ Displace_PlayerOffObject:
 
 Go_CheckPlayerRelease:
 		movem.l	d7-a0/a2-a3,-(sp)
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		btst	#Status_OnObj,status(a1)
 		beq.s	.notp1
 		movea.w	interact(a1),a0
@@ -332,7 +332,7 @@ EnemyDefeat_Score:
 ; =============== S U B R O U T I N E =======================================
 
 HurtCharacter_WithoutDamage:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		move.b	#PlayerID_Hurt,routine(a1)							; hit animation
 		bclr	#Status_OnObj,status(a1)
 		bclr	#Status_Push,status(a1)								; player is not standing on/pushing an object
@@ -407,7 +407,7 @@ Check_PlayerCollision:
 ; =============== S U B R O U T I N E =======================================
 
 Load_LevelResults:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		btst	#7,status(a1)
 		bne.s	.return
 		btst	#Status_InAir,status(a1)
@@ -462,7 +462,7 @@ Stop_Object:
 ; =============== S U B R O U T I N E =======================================
 
 Restore_PlayerControl:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 
 Restore_PlayerControl2:
 		clr.b	object_control(a1)

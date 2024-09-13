@@ -12,6 +12,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_StartNewLevel:
+
+		; init
 		move.l	#Map_InvisibleBlock,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Monitors,0,1),art_tile(a0)
 		ori.b	#4,render_flags(a0)
@@ -28,7 +30,7 @@ Obj_StartNewLevel:
 		move.l	a2,objoff_30(a0)							; save data
 
 .main
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1								; a1=character
 		movea.l	objoff_30(a0),a2							; load xydata
 		jsr	(Check_InMyRange).w
 		beq.s	.chkdel

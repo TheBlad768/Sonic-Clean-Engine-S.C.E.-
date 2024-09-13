@@ -167,7 +167,7 @@ MoveSprite_AtAngleLookup:
 		bra.s	AtAngle_80_BF		; 4
 ; ---------------------------------------------------------------------------
 
-AtAngle_C0_FF:						; 6
+		; AtAngle_C0_FF:				; 6
 		moveq	#0,d5
 		move.b	(a3,d4.w),d5
 		neg.w	d5
@@ -228,7 +228,7 @@ MoveSprite_AngleYLookup:
 		bra.s	loc_84E28		; 4
 ; ---------------------------------------------------------------------------
 
-loc_84E32:						; 6
+								; 6
 		moveq	#0,d1
 		move.b	(a2,d0.w),d1
 		rts
@@ -263,11 +263,11 @@ loc_84E28:
 ; =============== S U B R O U T I N E =======================================
 
 Calc_ObjAngle:
-		moveq	#0,d0
-		moveq	#0,d1
-		moveq	#0,d2
-		moveq	#0,d3
-		moveq	#0,d4
+
+	irp	reg, d0,d1,d2,d3,d4
+		moveq	#0,reg
+	endr
+
 		move.w	x_pos(a2),d0
 		move.w	y_pos(a2),d1
 		sub.w	x_pos(a1),d0
@@ -288,11 +288,11 @@ Calc_ObjAngle:
 		divu.w	d1,d0
 		add.w	d2,d3
 		add.w	d3,d4
-		jmp	.index(pc,d4.w)
+		beq.s	locret_8627E
+		jmp	.index-2(pc,d4.w)
 ; ---------------------------------------------------------------------------
 
 .index
-		rts						; 0
 		bra.s	loc_86280		; 2
 		bra.s	loc_86288		; 4
 		bra.s	loc_86290		; 6
@@ -301,7 +301,7 @@ Calc_ObjAngle:
 		bra.s	loc_862A0		; C
 ; ---------------------------------------------------------------------------
 
-loc_862A6:						; E
+								; E
 		subi.w	#$C0,d0
 		neg.w	d0
 
@@ -357,7 +357,7 @@ MoveSprite_AngleXLookupOffset:
 		bra.s	loc_84E6C			; 4
 ; ---------------------------------------------------------------------------
 
-loc_84E7C:							; 6
+									; 6
 		move.w	#$FF,d1
 		sub.w	d0,d1
 		move.b	(a1,d1.w),d1
@@ -420,7 +420,7 @@ MoveSprite_AngleXLookupOffset2:
 		bra.s	loc_84EF0			; 4
 ; ---------------------------------------------------------------------------
 
-loc_84F00:							; 6
+									; 6
 		move.w	#$FF,d1
 		sub.w	d0,d1
 		move.w	(a1,d1.w),d1

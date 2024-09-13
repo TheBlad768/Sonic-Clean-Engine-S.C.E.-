@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Object swing subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -42,13 +45,13 @@ Swing_UpAndDown_Count:
 ; =============== S U B R O U T I N E =======================================
 
 Swing_UpAndDown:
-		move.w	objoff_40(a0),d0		; acceleration
-		move.w	y_vel(a0),d1			; velocity
-		move.w	objoff_3E(a0),d2		; maximum acceleration before "swinging"
+		move.w	objoff_40(a0),d0			; acceleration
+		move.w	y_vel(a0),d1				; velocity
+		move.w	objoff_3E(a0),d2			; maximum acceleration before "swinging"
 		moveq	#0,d3
 		btst	#0,objoff_38(a0)
 		bne.s	+
-		neg.w	d0					; apply upward acceleration
+		neg.w	d0						; apply upward acceleration
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
@@ -57,7 +60,7 @@ Swing_UpAndDown:
 		neg.w	d0
 		neg.w	d2
 		moveq	#1,d3
-+		add.w	d0,d1				; apply downward acceleration
++		add.w	d0,d1					; apply downward acceleration
 		cmp.w	d2,d1
 		blt.s		+
 		bclr	#0,objoff_38(a0)
@@ -498,7 +501,7 @@ Chase_Object2:
 ; =============== S U B R O U T I N E =======================================
 
 Shot_Object:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1				; a1=character
 
 Shot_Object_2:
 		moveq	#0,d0

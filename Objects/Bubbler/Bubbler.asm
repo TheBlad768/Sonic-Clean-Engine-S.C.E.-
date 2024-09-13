@@ -207,7 +207,7 @@ loc_2FA14:
 sub_2FBA8:
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
 		bne.s	.return										; if yes, branch
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1									; a1=character
 
 		; main
 		tst.b	object_control(a1)

@@ -34,7 +34,7 @@ Obj_FireShield:
 		move.l	#.main,address(a0)
 
 .main
-		lea	(Player_1).w,a2
+		lea	(Player_1).w,a2										; a2=character
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.w	.return											; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
@@ -117,7 +117,7 @@ Obj_LightningShield:
 		move.l	#.main,address(a0)
 
 .main
-		lea	(Player_1).w,a2
+		lea	(Player_1).w,a2										; a2=character
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.w	.return											; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
@@ -285,12 +285,12 @@ Obj_BubbleShield:
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
 		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		jsr	(Player_ResetAirTimer).l
 		move.l	#.main,address(a0)
 
 .main
-		lea	(Player_1).w,a2
+		lea	(Player_1).w,a2										; a2=character
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
 		bne.s	.return											; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
@@ -352,7 +352,7 @@ Obj_InstaShield:
 		move.l	#.main,address(a0)
 
 .main
-		lea	(Player_1).w,a2
+		lea	(Player_1).w,a2										; a2=character
 		btst	#Status_Invincible,status_secondary(a2)					; is the player invincible?
 		bne.s	Obj_BubbleShield.return							; if so, return
 		move.w	x_pos(a2),x_pos(a0)								; inherit player's x_pos
@@ -512,7 +512,7 @@ Obj_Invincibility:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_188E8:
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		btst	#Status_Invincible,status_secondary(a1)					; should the player still have a invincible?
 		beq.s	Obj_Invincibility.delete							; if not, delete
 		lea	(Pos_table_index).w,a5
