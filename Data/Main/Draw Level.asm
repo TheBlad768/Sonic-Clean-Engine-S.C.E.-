@@ -70,7 +70,7 @@ VInt_VRAMWrite_Return:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn:
-		moveq	#-$10,d0
+		moveq	#-16,d0
 		and.w	(a6),d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
@@ -96,7 +96,7 @@ Draw_TileColumn:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn2:
-		moveq	#-$10,d0
+		moveq	#-16,d0
 		and.w	(a6),d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
