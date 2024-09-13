@@ -239,21 +239,9 @@ HUD_DrawInitial:
 		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-		; set the character set for HUD
-		CHARSET ' ',$FF
-		CHARSET '0',0
-		CHARSET '1',2
-		CHARSET '2',4
-		CHARSET '3',6
-		CHARSET '4',8
-		CHARSET '5',$A
-		CHARSET '6',$C
-		CHARSET '7',$E
-		CHARSET '8',$10
-		CHARSET '9',$12
-		CHARSET '*',$14
-		CHARSET ':',$16
-		CHARSET 'E',$18
+		; set the character
+		save
+		codepage HUD
 
 HUD_Initial_Parts:
 		dc.b "E      0"
@@ -263,7 +251,7 @@ HUD_Zero_Rings:
 HUD_Initial_Parts_end
 		even
 
-		CHARSET	; reset character set
+		restore	; reset character set
 
 	if GameDebug
 
