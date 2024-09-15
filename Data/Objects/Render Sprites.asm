@@ -406,9 +406,9 @@ loc_1B07A:
 		move.b	(a1)+,d2
 		ext.w	d2
 		add.w	d1,d2
-		cmpi.w	#$60,d2
+		cmpi.w	#-32+128,d2
 		bls.s		loc_1B0BA
-		cmpi.w	#$160,d2
+		cmpi.w	#224+128,d2
 		bhs.s	loc_1B0BA
 		move.w	d2,(a6)+
 		move.b	(a1)+,(a6)+
@@ -418,9 +418,9 @@ loc_1B07A:
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		add.w	d0,d2
-		cmpi.w	#$60,d2
+		cmpi.w	#-32+128,d2
 		bls.s		loc_1B0B2
-		cmpi.w	#$1C0,d2
+		cmpi.w	#320+128,d2
 		bhs.s	loc_1B0B2
 		move.w	d2,(a6)+
 		subq.w	#1,d7
@@ -448,9 +448,9 @@ loc_1B0C6:
 		move.b	(a1)+,d2
 		ext.w	d2
 		add.w	d1,d2
-		cmpi.w	#$60,d2
-		bls.s	loc_1B114
-		cmpi.w	#$160,d2
+		cmpi.w	#-32+128,d2
+		bls.s		loc_1B114
+		cmpi.w	#224+128,d2
 		bhs.s	loc_1B114
 		move.w	d2,(a6)+
 		move.b	(a1)+,d6
@@ -465,9 +465,9 @@ loc_1B0C6:
 		move.b	byte_1B11C(pc,d6.w),d6
 		sub.w	d6,d2
 		add.w	d0,d2
-		cmpi.w	#$60,d2
-		bls.s	loc_1B10C
-		cmpi.w	#$1C0,d2
+		cmpi.w	#-32+128,d2
+		bls.s		loc_1B10C
+		cmpi.w	#320+128,d2
 		bhs.s	loc_1B10C
 		move.w	d2,(a6)+
 		subq.w	#1,d7
@@ -502,9 +502,9 @@ loc_1B12C:
 		move.b	byte_1B18C(pc,d6.w),d6
 		sub.w	d6,d2
 		add.w	d1,d2
-		cmpi.w	#$60,d2
+		cmpi.w	#-32+128,d2
 		bls.s		loc_1B184
-		cmpi.w	#$160,d2
+		cmpi.w	#224+128,d2
 		bhs.s	loc_1B184
 		move.w	d2,(a6)+
 		move.b	(a1)+,d6
@@ -519,9 +519,9 @@ loc_1B12C:
 		move.b	byte_1B11C(pc,d6.w),d6
 		sub.w	d6,d2
 		add.w	d0,d2
-		cmpi.w	#$60,d2
+		cmpi.w	#-32+128,d2
 		bls.s		loc_1B17C
-		cmpi.w	#$1C0,d2
+		cmpi.w	#320+128,d2
 		bhs.s	loc_1B17C
 		move.w	d2,(a6)+
 		subq.w	#1,d7
@@ -557,9 +557,9 @@ loc_1B19C:
 		move.b	byte_1B18C(pc,d6.w),d6
 		sub.w	d6,d2
 		add.w	d1,d2
-		cmpi.w	#$60,d2
+		cmpi.w	#-32+128,d2
 		bls.s		loc_1B1EC
-		cmpi.w	#$160,d2
+		cmpi.w	#224+128,d2
 		bhs.s	loc_1B1EC
 		move.w	d2,(a6)+
 		addq.w	#2,a6
@@ -569,9 +569,9 @@ loc_1B19C:
 		move.w	d2,(a6)+
 		move.w	(a1)+,d2
 		add.w	d0,d2
-		cmpi.w	#$60,d2
+		cmpi.w	#-32+128,d2
 		bls.s		loc_1B1E4
-		cmpi.w	#$1C0,d2
+		cmpi.w	#320+128,d2
 		bhs.s	loc_1B1E4
 		move.w	d2,(a6)+
 		subq.w	#1,d7
