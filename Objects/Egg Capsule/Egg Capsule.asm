@@ -250,7 +250,7 @@ Check_SonicEndPose:
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
 
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1								; a1=character
 		btst	#7,status(a1)
 		bne.s	.return
 		btst	#Status_InAir,status(a1)
@@ -274,7 +274,7 @@ Check_SonicEndPose_MGZ:
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
 
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1								; a1=character
 		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.s	.return									; if yes, branch
 		tst.b	render_flags(a1)								; player visible on the screen?
@@ -516,7 +516,7 @@ Obj_EggCapsule_Animals_Flipped:
 ; ---------------------------------------------------------------------------
 
 .move
-		lea	(Player_1).w,a1								; load player address
+		lea	(Player_1).w,a1								; a1=character
 		move.w	#$300,d0								; max xvel
 		move.w	#$100,d1								; max yvel
 		moveq	#$10,d2									; add xyvel

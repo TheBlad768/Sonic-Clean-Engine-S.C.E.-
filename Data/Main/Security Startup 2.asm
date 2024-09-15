@@ -6,9 +6,10 @@
 
 Game_Program:
 		tst.w	(VDP_control_port).l
-		move.w	#$4EF9,(V_int_jump).w							; machine code for jmp
+		move.w	#$4EF9,d0										; machine code for jmp
+		move.w	d0,(V_int_jump).w
+		move.w	d0,(H_int_jump).w
 		move.l	#VInt,(V_int_addr).w
-		move.w	#$4EF9,(H_int_jump).w
 		move.l	#HInt,(H_int_addr).w
 
 .wait

@@ -93,7 +93,7 @@ Obj_Spring_Up:
 		moveq	#8,d2
 		moveq	#$10,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2_1P).w
 		btst	#p1_standing_bit,status(a0)
@@ -111,7 +111,7 @@ Obj_Spring_Up_NoSolid:
 		moveq	#$1B,d1
 		moveq	#8,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectTop_1P).w
 		btst	#p1_standing_bit,status(a0)
@@ -181,7 +181,7 @@ Obj_Spring_Horizontal:
 		moveq	#$E,d2
 		moveq	#$F,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2_1P).w
 		swap	d6
@@ -285,7 +285,7 @@ loc_2328E:
 		move.w	d2,d3
 		subi.w	#$18,d2
 		addi.w	#$18,d3
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		tst.b	object_control(a1)
 		bmi.s	locret_23324
 		cmpi.b	#PlayerID_Death,routine(a1)								; has player just died?
@@ -325,7 +325,7 @@ Obj_Spring_Down:
 		moveq	#8,d2
 		moveq	#9,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2_1P).w
 		cmpi.w	#-2,d4
@@ -400,7 +400,7 @@ Obj_Spring_UpDiag:
 		moveq	#$10,d2
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagUp(pc),a2
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFullSloped_Spring_1P).w
 		btst	#p1_standing_bit,status(a0)
@@ -497,7 +497,7 @@ Obj_Spring_DownDiag:
 		moveq	#$10,d2
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagDown(pc),a2
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFullSloped_Spring_1P).w
 		cmpi.w	#-2,d4

@@ -195,7 +195,7 @@ MoveSpikes:
 		and.b	status(a0),d3
 		beq.s	.notp1
 		move.w	x_pos(a0),d2
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1												; a1=character
 		move.b	objoff_3E(a0),d0
 		moveq	#p1_pushing_bit,d6
 		bsr.s	.movepush

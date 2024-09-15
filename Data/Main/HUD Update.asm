@@ -107,7 +107,7 @@ UpdateHUD:
 
 UpdateHUD_TimeOver:
 		clr.b	(Update_HUD_timer).w
-		lea	(Player_1).w,a0
+		lea	(Player_1).w,a0									; a0=character
 		cmpi.b	#PlayerID_Death,routine(a0)					; has player just died?
 		bhs.s	.finish										; if yes, branch
 		movea.w	a0,a2

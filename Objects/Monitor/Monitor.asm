@@ -43,7 +43,7 @@ Obj_Monitor:
 		move.w	x_pos(a0),d4
 
 		; check p1
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		moveq	#p1_standing_bit,d6
 		bsr.s	SolidObject_Monitor_SonicKnux
 
@@ -261,7 +261,7 @@ loc_1D850:
 		move.l	#Obj_MonitorContents.waitdel,address(a0)
 
 		; give powerup
-		lea	(Player_1).w,a1
+		lea	(Player_1).w,a1										; a1=character
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		add.w	d0,d0
