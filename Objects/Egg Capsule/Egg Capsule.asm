@@ -231,8 +231,8 @@ sub_866EC:											; Routine $10 (LBZ)
 
 .swing
 		jsr	(Swing_UpAndDown).w
-		move.w	(Camera_X_pos).w,d0
-		subi.w	#96,d0
+		moveq	#-96,d0
+		add.w	(Camera_X_pos).w,d0
 		cmp.w	x_pos(a0),d0
 		blo.s		.loc_8670C
 		rts
@@ -295,6 +295,8 @@ Check_SonicEndPose_MGZ:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EggCapsule_Button:
+
+		; mapping
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#.main,address(a0)
@@ -338,6 +340,8 @@ Obj_EggCapsule_Button:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EggCapsule_FlippedButton:
+
+		; mapping
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		bset	#1,render_flags(a0)							; set flipy flag
@@ -395,6 +399,8 @@ Obj_EggCapsule_FlippedButton:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EggCapsule_Pieces:
+
+		; mapping
 		lea	ObjDat_EggCapsule_Pieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_FlickerMove,address(a0)
@@ -423,6 +429,8 @@ Obj_EggCapsule_Pieces:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EggCapsule_Propeller:
+
+		; mapping
 		lea	ObjDat3_EggCapsule_Propeller(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#.main,address(a0)
@@ -449,10 +457,12 @@ ecapa_yvel				= objoff_3E	; .w
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EggCapsule_Animals:
+
+		; mapping
 		lea	ObjDat_EggCapsule_Animals(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#.normal,address(a0)
-		move.b	#16/2,y_radius(a0)			; 24/2?
+		move.b	#16/2,y_radius(a0)						; 24/2?
 		bsr.w	EggCapsule_Animals_Load
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -470,33 +480,48 @@ Obj_EggCapsule_Animals:
 ; ---------------------------------------------------------------------------
 
 .jump
-		jsr	(MoveSprite_LightGravity).w
+
+		; Obj_Animal_Fly
+		MoveSprite a0, $20
+		tst.w	y_vel(a0)
+		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
 		tst.w	d1
 		bpl.s	.anim
 		add.w	d1,y_pos(a0)
 		move.w	objoff_3E(a0),y_vel(a0)
+
+		; check Sonic
 		jsr	(Find_SonicTails).w
-		move.w	#-$200,d1
+		move.w	#-$200,d1								; left
 		tst.b	(Level_results_flag).w
 		beq.s	.setxvel
 		tst.w	d0
 		beq.s	.setxvel
-		neg.w	d1
+		neg.w	d1										; right
 
 .setxvel
 		move.w	d1,x_vel(a0)
-		jsr	(Change_FlipXWithVelocity2).w
+
+		; check
+		bclr	#0,render_flags(a0)
+		tst.w	d1
+		bpl.s	.anim
+		bset	#0,render_flags(a0)
 
 .anim
 		moveq	#0,d0
-		btst	#3,(V_int_run_count+3).w
+		btst	#3,(V_int_run_count+3).w						; 0 or 8
 		bne.s	.setframe
 		addq.b	#1,d0
 
 .setframe
 		move.b	d0,mapping_frame(a0)
 		jmp	(Sprite_CheckDelete).w
+
+; ---------------------------------------------------------------------------
+; Egg Capsule animals flipped (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -520,31 +545,12 @@ Obj_EggCapsule_Animals_Flipped:
 		move.w	#$300,d0								; max xvel
 		move.w	#$100,d1								; max yvel
 		moveq	#$10,d2									; add xyvel
-		moveq	#0,d3									; add xpos
 		moveq	#-48,d4									; add ypos
 		sub.b	subtype(a0),d4
-		bsr.s	EggCapsule_Animals_Move
-		jsr	(MoveSprite2).w
-		jsr	(Change_FlipXWithVelocity2).w
-		tst.b	(Level_results_flag).w
-		bne.s	Obj_EggCapsule_Animals.anim
-		move.l	#.back,address(a0)
-		bset	#0,render_flags(a0)							; left side
-		bra.s	Obj_EggCapsule_Animals.anim
-; ---------------------------------------------------------------------------
-
-.back
-		subq.w	#2,x_pos(a0)								; left move
-		bra.s	Obj_EggCapsule_Animals.anim
-
-; =============== S U B R O U T I N E =======================================
-
-EggCapsule_Animals_Move:
 
 		; xvel
 		move.w	d2,d5
 		move.w	x_pos(a1),d6								; player xpos
-		add.w	d3,d6
 		cmp.w	x_pos(a0),d6
 		bhs.s	.skipx
 		neg.w	d2
@@ -570,14 +576,41 @@ EggCapsule_Animals_Move:
 		move.w	y_vel(a0),d6
 		add.w	d5,d6
 		cmp.w	d1,d6
-		bgt.s	.return
+		bgt.s	.xyvel
 		neg.w	d1
 		cmp.w	d1,d6
-		blt.s		.return									; ???
+		blt.s		.xyvel
 		move.w	d6,y_vel(a0)
 
-.return
-		rts
+.xyvel
+		MoveSprite2 a0
+
+		; check xvel
+		bclr	#0,render_flags(a0)
+		tst.w	x_vel(a0)
+		bpl.s	.check
+		bset	#0,render_flags(a0)
+
+.check
+		tst.b	(Level_results_flag).w
+		bne.s	.anim
+		move.l	#.back,address(a0)
+		bset	#0,render_flags(a0)							; left side
+		bra.s	.anim
+; ---------------------------------------------------------------------------
+
+.back
+		subq.w	#2,x_pos(a0)								; left move
+
+.anim
+		moveq	#0,d0
+		btst	#3,(V_int_run_count+3).w						; 0 or 8
+		bne.s	.setframe
+		addq.b	#1,d0
+
+.setframe
+		move.b	d0,mapping_frame(a0)
+		jmp	(Sprite_CheckDelete).w
 ; ---------------------------------------------------------------------------
 
 EggCapsule_Animals_Yvel:
@@ -591,6 +624,10 @@ EggCapsule_Animals_VRAM:
 		dc.w make_art_tile($42E,0,1)
 		dc.w make_art_tile($440,0,1)
 
+; ---------------------------------------------------------------------------
+; Egg Capsule load animals
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 EggCapsule_Animals_Load:
@@ -601,6 +638,8 @@ EggCapsule_Animals_Load:
 		move.w	EggCapsule_Animals_Yvel(pc,d0.w),d2
 		move.w	d2,y_vel(a0)
 		move.w	d2,objoff_3E(a0)
+
+		; check
 		movea.w	parent3(a0),a1							; load egg capsule address
 		btst	#1,render_flags(a1)							; is egg capsule flipped?
 		beq.s	.skipf									; if not, branch
@@ -619,7 +658,7 @@ EggCapsule_Animals_Load:
 		add.w	d2,d2
 		lea	Obj_Animal_ZoneAnimals(pc),a1
 		adda.w	d2,a1
-		lsr.w	d0
+		lsr.w	d0										; division by 2
 		move.b	(a1,d0.w),d0
 		lea	Obj_Animal_Properties(pc),a2
 		move.l	(a2,d0.w),mappings(a0)
@@ -641,14 +680,7 @@ EggCapsule_Animals_Load:
 
 ; =============== S U B R O U T I N E =======================================
 
-Load_EggCapsule:
-		st	(Last_act_end_flag).w
-		st	(Level_results_flag).w
-		lea	Child6_EggCapsule(pc),a2
-		jmp	(CreateChild6_Simple).w
-
-; =============== S U B R O U T I N E =======================================
-
+; mapping
 ObjDat_EggCapsule:				subObjData Map_EggCapsule, $494, 0, 1, $200, 64, 64, 0, 0
 ObjDat_EggCapsule_Button:		subObjData3 $200, 32, 16, 5, 0
 ObjDat3_EggCapsule_Propeller:		subObjData3 $200, 40, 8, 6, 0

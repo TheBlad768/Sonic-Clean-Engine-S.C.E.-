@@ -3,10 +3,13 @@
 ; ---------------------------------------------------------------------------
 
 		; Level init
-		dc.l AnPal_DEZ								; Animate palette
 		dc.l 0										; Resize
 		dc.l 0										; Water resize
 		dc.l 0										; After boss
+
+		; Animate palette
+		dc.l AnimatePalette_DoAniPal					; Animate palette main code
+		dc.l AniPalette_DEZ							; Animate palette scripts
 
 		; Level setup
 		dc.l DEZ1_ScreenInit							; Screen init
@@ -50,14 +53,19 @@
 		dc.w 0										; Level ystart
 		dc.w $4A0									; Level yend
 
-		; Starting water height, Water Sonic palette, Water Knuckles palette
-		watpalptrs \
-		$1000, \
-		PalID_WaterSonic, \
-		PalID_WaterSonic
+		; Starting water height
+		dc.w $1000
 
-		; Start location
-		binclude "Levels/DEZ/Start Location/4.bin"		; Players start location
+		; Sonic palette, Knuckles palette
+		dc.b PalID_Sonic
+		dc.b PalID_Sonic								; Unused
+
+		; Water Sonic palette, Water Knuckles palette
+		dc.b PalID_WaterSonic
+		dc.b PalID_WaterSonic						; Unused
+
+		; Players start location
+		binclude "Levels/DEZ/Start Location/4.bin"
 
 		; Debug Mode
 	if (GameDebug<>0)&&(GameDebugAlt==0)

@@ -26,7 +26,7 @@ Shield:								ds.b object_size
 									ds.b object_size				; unused
 Invincibility_stars:					ds.b object_size*4				; 4 objects
 									ds.b object_size*3				; unused
-WaterWave:							ds.b object_size
+Wave_Splash:						ds.b object_size				; Obj_WaveSplash is loaded here
 									ds.b $34						; unused
 Object_RAM_end						= *
 
@@ -259,17 +259,18 @@ Object_load_addr_RAM:				ds.l 1						; jump for the object loading manager
 
 ; level pointers variables
 Level_data_addr_RAM:				= *
-.AnPal								ds.l 1
 .Resize								ds.l 1
 .WaterResize							ds.l 1
 .AfterBoss							ds.l 1
+.AnimatePalette						ds.l 1						; animate palette main code
+.AnPalScript							ds.l 1						; animate palette scripts
 .ScreenInit							ds.l 1
 .BackgroundInit						ds.l 1
 .ScreenEvent							ds.l 1
 .BackgroundEvent						ds.l 1
-.AnimateTilesInit						ds.l 1
-.AnimateTiles							ds.l 1
-.AniPLC								ds.l 1
+.AnimateTilesInit						ds.l 1						; animate tiles init
+.AnimateTiles							ds.l 1						; animate tiles main code
+.AnPLCScript							ds.l 1						; animate tiles PLC scripts
 .Palette								= *
 .8x8data1							ds.l 1
 .8x8data2							ds.l 1
@@ -293,6 +294,8 @@ Level_data_addr_RAM:				= *
 .ystart								ds.w 1
 .yend								ds.w 1
 .WaterHeight							ds.w 1
+.Spal								ds.b 1
+.Kpal								ds.b 1
 .WaterSpal							ds.b 1
 .WaterKpal							ds.b 1
 .Location								ds.l 1

@@ -10,7 +10,7 @@ LevelLoadPointer:
 		include "Levels/DEZ/Pointers/DEZ3 - Pointers.asm"
 		include "Levels/DEZ/Pointers/DEZ4 - Pointers.asm"
 
-		zonewarning LevelLoadPointer,(124*4)
+		zonewarning LevelLoadPointer,((Level_data_addr_RAM_end-Level_data_addr_RAM)*4)
 
 ; ===========================================================================
 ; Compressed level graphics - tile, primary patterns and block mappings

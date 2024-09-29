@@ -79,7 +79,7 @@ CreateChild3_NormalRepeated:
 		move.w	(a2)+,d6
 
 .loop
-		movea.l	a2,a3						; save ROM address
+		lea	(a2),a3							; save ROM address to a3
 		bsr.w	Create_New_Sprite3
 		bne.s	.notfree
 		move.w	a0,parent3(a1)

@@ -19,11 +19,11 @@ namespace SCECustomLayout
 				ushort lfp = ByteConverter.ToUInt16(rawdata, 8 + la);
 				if (lfp != 0)
 					for (int laf = 0; laf < fgw; laf++)
-						layout.FGLayout[laf, la / 4] = rawdata[lfp + laf];
+						layout.FGLayout[laf, la / 4] = ByteConverter.ToUInt16(rawdata, lfp + laf * 2);
 				ushort lbp = ByteConverter.ToUInt16(rawdata, 8 + la + 2);
 				if (lbp != 0)
 					for (int lab = 0; lab < bgw; lab++)
-						layout.BGLayout[lab, la / 4] = rawdata[lbp + lab];
+						layout.BGLayout[lab, la / 4] = ByteConverter.ToUInt16(rawdata, lbp + lab * 2);
 			}
 		}
 
@@ -41,20 +41,20 @@ namespace SCECustomLayout
 			for (int la = 0; la < MaxSize.Height; la++)
 			{
 				if (la < fgh)
-					tmp.AddRange(ByteConverter.GetBytes((ushort)(0x88 + (la * fgw))));
+					tmp.AddRange(ByteConverter.GetBytes((ushort)(0x88 + (la * fgw * 2))));
 				else
 					tmp.AddRange(new byte[2]);
 				if (la < bgh)
-					tmp.AddRange(ByteConverter.GetBytes((ushort)(0x88 + (fgh * fgw) + (la * bgw))));
+					tmp.AddRange(ByteConverter.GetBytes((ushort)(0x88 + (fgh * fgw * 2) + (la * bgw * 2))));
 				else
 					tmp.AddRange(new byte[2]);
 			}
 			for (int y = 0; y < fgh; y++)
 				for (int x = 0; x < fgw; x++)
-					tmp.Add((byte)layout.FGLayout[x, y]);
+					tmp.AddRange(ByteConverter.GetBytes((ushort)(layout.FGLayout[x, y])));
 			for (int y = 0; y < bgh; y++)
 				for (int x = 0; x < bgw; x++)
-					tmp.Add((byte)layout.BGLayout[x, y]);
+					tmp.AddRange(ByteConverter.GetBytes((ushort)(layout.BGLayout[x, y])));
 			rawdata = tmp.ToArray();
 		}
 

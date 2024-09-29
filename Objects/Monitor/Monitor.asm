@@ -210,8 +210,8 @@ Obj_MonitorContents:
 
 		; set move
 		move.w	#-$300,y_vel(a0)
-		btst	#1,render_flags(a0)
-		beq.s	.notflipy
+		btst	#1,render_flags(a0)									; is monitor upside down?
+		beq.s	.notflipy											; if not, branch
 		neg.w	y_vel(a0)
 
 .notflipy
@@ -241,8 +241,8 @@ Obj_MonitorContents:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1D820:
-		btst	#1,render_flags(a0)
-		bne.s	loc_1D83C
+		btst	#1,render_flags(a0)									; is monitor upside down?
+		bne.s	loc_1D83C										; if so, branch
 		tst.w	y_vel(a0)
 		bpl.s	loc_1D850
 		moveq	#$18,d1

@@ -19,7 +19,7 @@
 		include "Objects/Explosion/Explosion.asm"
 		include "Objects/Bubbler/Bubbler.asm"
 		include "Objects/Count Down/Count Down.asm"
-		include "Objects/Water Wave/Water Wave.asm"
+		include "Objects/Wave Splash/Wave Splash.asm"
 		include "Objects/StarPost/StarPost.asm"
 		include "Objects/Button/Button.asm"
 		include "Objects/Animals/Animals.asm"

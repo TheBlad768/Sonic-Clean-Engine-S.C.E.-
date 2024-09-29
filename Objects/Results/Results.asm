@@ -309,9 +309,9 @@ LevResults_GetDecimalScore:
 		addi.w	#0,d0												; clear carry bit for extend
 ;		move	#0,ccr												; "
 
+	rept 3	; 3 bytes
 		abcd	-(a1),-(a2)
-		abcd	-(a1),-(a2)
-		abcd	-(a1),-(a2)
+	endr
 
 .next
 		dbf	d2,.loop

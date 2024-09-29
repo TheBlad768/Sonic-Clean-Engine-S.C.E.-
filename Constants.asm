@@ -458,6 +458,19 @@ sub9_mapframe						= objoff_47
 next_subspr							= 6								; size
 
 ; ---------------------------------------------------------------------------
+; Sprite priority
+; ---------------------------------------------------------------------------
+
+priority_0							= 0
+priority_1							= 1<<7
+priority_2							= 2<<7
+priority_3							= 3<<7
+priority_4							= 4<<7
+priority_5							= 5<<7
+priority_6							= 6<<7
+priority_7							= 7<<7
+
+; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
 ; bitfield with the following meaning:
 ; ---------------------------------------------------------------------------
@@ -587,6 +600,8 @@ cMagenta:							equ cBlue+cRed					; colour magenta
 
 flip_x								= (1<<11)
 flip_y								= (1<<12)
+flip_bit_x							= 3
+flip_bit_y							= 4
 palette_bit_0							= 5
 palette_bit_1							= 6
 palette_line0							= (0<<13)

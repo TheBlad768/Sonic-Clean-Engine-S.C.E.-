@@ -160,5 +160,5 @@ Z80StartupCode_end
 		dc.l vdpComm(0,VSRAM,WRITE)							; value for VSRAM write mode
 
 PSGInitValues:
-		dc.b	$9F,$BF,$DF,$FF										; values for PSG channel volumes
+		dc.b $9F,$BF,$DF,$FF										; values for PSG channel volumes
 PSGInitValues_end

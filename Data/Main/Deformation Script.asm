@@ -15,7 +15,6 @@ HScroll_Deform:
 
 .next
 		movem.w	(a2)+,d2/d5/a1							; get velocity parameter, deformation size, deformation buffer
-		ext.l	d2
 		asl.l	#8,d2											; shift velocity to line up with the middle 16 bits of the 32-bit position
 
 .loop

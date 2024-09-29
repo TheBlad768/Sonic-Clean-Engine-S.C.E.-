@@ -178,7 +178,7 @@ Obj_LightningShield:
 		; Flashes the underwater palette white
 		lea	(Water_palette).w,a1
 		lea	(Target_water_palette).w,a2
-		moveq	#(128/4)-1,d0										; size of Water_palette/4-1
+		moveq	#bytesToLcnt(Water_palette-Target_water_palette),d0	; size of Water_palette/4-1
 
 .loop
 		move.l	(a1),(a2)+										; backup palette entries
@@ -232,8 +232,7 @@ Obj_LightningShield_Create_Spark:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_LightningShield_Spark:
-		jsr	(MoveSprite2).w
-		addi.w	#$18,y_vel(a0)
+		MoveSprite a0, $18
 		lea	Ani_LightningShield(pc),a1
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)											; changed by Animate_Sprite
@@ -248,18 +247,13 @@ Obj_LightningShield_Spark:
 
 Obj_LightningShield_DestroyUnderwater2:
 		subq.b	#1,anim_frame_timer(a0)							; is it time to end the white flash?
-		bpl.s	.return											; if not, return
+		bpl.s	Obj_LightningShield_Create_Spark.return			; if not, return
 		move.l	#Obj_InstaShield,address(a0)						; replace Lightning Shield with Insta-Shield
+
+		; restore backed-up underwater palette
 		lea	(Target_water_palette).w,a1
 		lea	(Water_palette).w,a2
-		moveq	#(128/4)-1,d0										; size of Water_palette/4-1
-
-.loop
-		move.l	(a1)+,(a2)+										; restore backed-up underwater palette
-		dbf	d0,.loop												; loop until entire thing is restored
-
-.return
-		rts
+		jmp	(PalLoad_Line64).w
 
 ; ---------------------------------------------------------------------------
 ; Bubble Shield
@@ -623,7 +617,7 @@ byte_189A0:
 		dc.b $E, -7
 		dc.b $F, -4
 byte_189E0:
-		dc.b	8, 5, 7, 6, 6, 7, 5, 8, 6, 7, 7, 6, $FF
+		dc.b 8, 5, 7, 6, 6, 7, 5, 8, 6, 7, 7, 6, $FF
 byte_189ED:
 		dc.b 8, 7, 6, 5, 4, 3, 4, 5, 6, 7, $FF, 3, 4, 5, 6, 7, 8, 7, 6, 5
 		dc.b 4

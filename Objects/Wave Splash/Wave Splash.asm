@@ -1,11 +1,11 @@
 ; ---------------------------------------------------------------------------
-; Water Wave (Object)
+; Wave Splash (Object)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_WaterWave:
-		move.l	#Map_WaterWave,mappings(a0)
+Obj_WaveSplash:
+		move.l	#Map_WaveSplash,mappings(a0)
 		move.w	#make_art_tile($300,0,1),art_tile(a0)
 		move.b	#rfCoord+rfMulti,render_flags(a0)				; set screen coordinates and multi-draw flag
 		move.w	#bytes_to_word(24/2,256/2),height_pixels(a0)	; set height and width
@@ -66,7 +66,10 @@ Obj_WaterWave:
 
 .setframe
 		move.b	mapping_frame(a0),1(a2)
-		jmp	(Draw_Sprite).w
+
+		; draw
+		lea	(Sprite_table_input).w,a1
+		jmp	(Draw_Sprite.find).w
 ; ---------------------------------------------------------------------------
 
-		include "Objects/Water Wave/Object Data/Map - Water Wave.asm"
+		include "Objects/Wave Splash/Object Data/Map - Wave Splash.asm"

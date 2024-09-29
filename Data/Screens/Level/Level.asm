@@ -59,9 +59,11 @@ LevelScreen:
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a6)	; warning: don't overwrite a6
 
 		; load player palette
-		moveq	#PalID_Sonic,d0
+		lea	(Level_data_addr_RAM.Spal).w,a1										; load Sonic palette
+		moveq	#0,d0
+		move.b	(a1),d0															; player palette
 		move.w	d0,d1
-		jsr	(LoadPalette).w														; load Sonic's palette
+		jsr	(LoadPalette).w														; load player's palette
 		move.w	d1,d0
 		jsr	(LoadPalette_Immediate).w
 
@@ -137,7 +139,7 @@ LevelScreen:
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		tst.b	(Water_flag).w
 		beq.s	.notwater2
-		move.l	#Obj_WaterWave,(WaterWave+address).w
+		move.l	#Obj_WaveSplash,(Wave_Splash+address).w
 
 .notwater2
 		bsr.w	SpawnLevelMainSprites

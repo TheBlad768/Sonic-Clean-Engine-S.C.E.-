@@ -53,11 +53,11 @@ word_18E6A:	dc.w 1
 word_18E72:	dc.w 1
 		dc.b $FA, $C, 0, 0, $FF, $F0
 word_18E7A:	dc.w 1
-		dc.b	4, $D, 0, 0, $FF, $E0
+		dc.b 4, $D, 0, 0, $FF, $E0
 word_18E82:	dc.w 1
-		dc.b	4, $D, 0, 0, $FF, $E0
+		dc.b 4, $D, 0, 0, $FF, $E0
 word_18E8A:	dc.w 1
-		dc.b	4, $D, 0, 0, $FF, $E0
+		dc.b 4, $D, 0, 0, $FF, $E0
 word_18E92:	dc.w 1
 		dc.b $FC, $E, 0, 0, $FF, $E0
 word_18E9A:	dc.w 1

@@ -126,9 +126,9 @@ Obj_StarPost:
 ; ---------------------------------------------------------------------------
 
 .cmove
-		move.b	angle(a0),d0
+		moveq	#-$40,d0
+		add.b	angle(a0),d0
 		subi.b	#$10,angle(a0)
-		subi.b	#$40,d0
 		jsr	(GetSineCosine).w
 		move.w	#$C00,d2
 		muls.w	d2,d1

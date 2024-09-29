@@ -35,7 +35,7 @@ Init_VDP:
 		move.w	#$8A00+223,(H_int_counter_command).w
 
 		; clear data
-		movea.l	a6,a5									; load VDP control address to a5
+		lea	VDP_data_port-VDP_data_port(a6),a5			; load VDP control address to a5
 		lea	VDP_data_port-VDP_control_port(a5),a6		; load VDP data address to a6
 		moveq	#0,d0
 

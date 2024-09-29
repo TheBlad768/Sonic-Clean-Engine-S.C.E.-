@@ -16,7 +16,7 @@ loc_85994:
 		bpl.s	loc_859CA							; if still positive, go to next entry
 		movea.l	4(a1),a2								; load palette script address to a2
 		movea.w	(a2),a3								; load destination address to a3
-		movea.l	a2,a4								; copy script address to a4
+		lea	(a2),a4									; copy script ROM address to a4
 		adda.w	d0,a4								; skip to palette data
 		move.w	(a4),d1								; load the first entry to d1
 		bpl.s	.skip								; if positive, it is a normal entry
@@ -75,8 +75,7 @@ loc_859E2:
 		clr.w	2(a1)
 
 loc_859FC:
-		movea.l	a2,a4								; start from the beginning of the rotation
-		addq.w	#4,a4
+		lea	4(a2),a4									; start from the beginning of the rotation
 
 locret_85A00:
 		rts

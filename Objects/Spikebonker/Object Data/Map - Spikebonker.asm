@@ -10,7 +10,7 @@ Map_Spikebonker:
 word_184E64:
 		dc.w 2
 		dc.b $F0, $E, 0, 0, $FF, $F5
-		dc.b	8, 9, 0, $C, $FF, $F5
+		dc.b 8, 9, 0, $C, $FF, $F5
 word_184E72:
 		dc.w 1
 		dc.b $F0, $F, 0, $12, $FF, $F0

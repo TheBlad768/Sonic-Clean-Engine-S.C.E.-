@@ -155,7 +155,7 @@ Obj_Bouncing_Ring_Normal:
 		add.w	d0,d2
 		lea	(Primary_Angle).w,a4
 		clr.b	(a4)
-		movea.w	#$10,a3
+		lea	($10).w,a3
 		moveq	#0,d6
 		moveq	#$C,d5
 		jsr	(Ring_FindFloor).w
@@ -193,13 +193,11 @@ Obj_Bouncing_Ring_TestGravity:
 		movem.w	x_vel(a0),d0-d1								; load xy speed
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		neg.w	d1												; reverse y speed
+		neg.l	d1												; reverse y speed
 
 .notgrav
-		ext.l	d0
 		asl.l	#8,d0												; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d0,x_pos(a0)										; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-		ext.l	d1
 		asl.l	#8,d1												; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d1,y_pos(a0)										; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 
@@ -238,7 +236,7 @@ Obj_Bouncing_Ring_TestGravity:
 		eori.w	#$F,d2
 		lea	(Primary_Angle).w,a4
 		clr.b	(a4)
-		movea.w	#-$10,a3
+		lea	(-$10).w,a3
 		move.w	#$800,d6
 		moveq	#$C,d5
 		jsr	(Ring_FindFloor).w
@@ -367,6 +365,7 @@ Obj_Attracted_Ring:
 
 ; =============== S U B R O U T I N E =======================================
 
+; mapping
 ObjDat_Ring:			subObjMainData2 Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, $100, ArtTile_Ring, 1, 1, Map_Ring_10+2
 ObjDat_Ring2:			subObjMainData2 Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, $100, ArtTile_Ring, 1, 1, Map_Ring_10+2
 ObjDat3_BouncingRing:	subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, $180, ArtTile_Ring, 1, 1, Map_Ring_10+2

@@ -238,7 +238,7 @@ loc_1C172:
 		mvabs.w	ground_vel(a0),d1										; get player ground velocity, force it to be positive
 		cmpi.w	#$800,d1											; is the player travelling very fast?
 		bhs.s	loc_1C1B0											; if he is, branch
-		move.w	#6<<8,d1											; if player is going too fast, cap camera movement to 6 pixels per frame
+		move.w	#bytes_to_word(6,0),d1								; if player is going too fast, cap camera movement to 6 pixels per frame
 		cmpi.w	#6,d0												; is player going down too fast?
 		bgt.s	loc_1C1FA											; if so, move camera at capped speed
 		cmpi.w	#-6,d0												; is player going up too fast?
@@ -247,7 +247,7 @@ loc_1C172:
 ; ---------------------------------------------------------------------------
 
 loc_1C19E:
-		move.w	#2<<8,d1											; if player is going too fast, cap camera movement to 2 pixels per frame
+		move.w	#bytes_to_word(2,0),d1								; if player is going too fast, cap camera movement to 2 pixels per frame
 		cmpi.w	#2,d0												; is player going down too fast?
 		bgt.s	loc_1C1FA											; if so, move camera at capped speed
 		cmpi.w	#-2,d0												; is player going up too fast?
@@ -256,7 +256,7 @@ loc_1C19E:
 ; ---------------------------------------------------------------------------
 
 loc_1C1B0:
-		move.w	#24<<8,d1											; if player is going too fast, cap camera movement to $18 pixels per frame
+		move.w	#bytes_to_word(24,0),d1								; if player is going too fast, cap camera movement to $18 pixels per frame
 		cmpi.w	#24,d0												; is player going down too fast?
 		bgt.s	loc_1C1FA											; if so, move camera at capped speed
 		cmpi.w	#-24,d0												; is player going up too fast?

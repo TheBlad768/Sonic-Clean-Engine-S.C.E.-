@@ -226,17 +226,18 @@ Get_LevelChunkColumn:
 		movea.l	(Level_layout_addr_ROM).w,a4
 		move.w	d0,d3
 		asr.w	#7,d3
+		add.w	d3,d3				; chunk ID to word
 		add.w	(a3,d1.w),d3
 		adda.w	d3,a4
 		moveq	#0,d3
-		move.b	(a4),d3				; move 128*128 chunk ID to d3
+		move.w	(a4),d3				; move 128*128 chunk ID to d3
 		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		asr.w	#3,d4
 		andi.w	#$E,d4
 		add.w	d4,d3
 		movea.l	(Level_chunk_addr_ROM).w,a5
-		adda.w	d3,a5
+		adda.l	d3,a5
 
 Get_LevelChunkColumn_Return:
 		rts
@@ -322,6 +323,7 @@ Setup_TileRowDraw:
 		move.w	d1,d2
 		move.w	d1,d4
 		asr.w	#3,d1
+		add.w	d1,d1				; chunk ID to word
 		add.w	d2,d2
 		move.w	d2,d3
 		andi.w	#$E,d2
@@ -334,7 +336,7 @@ Setup_TileRowDraw:
 		sub.w	d6,d5
 		bmi.s	+
 		move.w	d0,d5
-		andi.w	#$F0,d5			; if the length of the write can fit without wrapping the nametable
+		andi.w	#$F0,d5				; if the length of the write can fit without wrapping the nametable
 		lsl.w	#4,d5
 		add.w	d7,d5
 		add.w	d3,d5
@@ -348,7 +350,7 @@ Setup_TileRowDraw:
 		adda.w	d5,a0
 		bsr.w	Get_LevelAddrChunkRow
 		bra.s	++
-+		neg.w	d5				; if the length of the write wraps over the length of the nametable
++		neg.w	d5					; if the length of the write wraps over the length of the nametable
 		move.w	d5,-(sp)
 		move.w	d0,d5
 		andi.w	#$F0,d5
@@ -365,7 +367,7 @@ Setup_TileRowDraw:
 		adda.w	d4,a0
 		bsr.s	Get_LevelAddrChunkRow
 		bsr.s	+
-		move.w	(sp)+,d6			; must place one more write command to account for rollover
+		move.w	(sp)+,d6				; must place one more write command to account for rollover
 		move.w	d0,d5
 		andi.w	#$F0,d5
 		lsl.w	#4,d5
@@ -401,7 +403,7 @@ Setup_TileRowDraw:
 		addq.w	#2,d2
 		andi.w	#$E,d2
 		bne.s	+
-		addq.w	#1,d1
+		addq.w	#2,d1				; chunk ID to word
 		bsr.s	Get_ChunkRow
 +		dbf	d6,-
 		clr.w	(a0)
@@ -418,13 +420,13 @@ Get_LevelAddrChunkRow:
 
 Get_ChunkRow:
 		moveq	#0,d3
-		move.b	(a4,d1.w),d3			; move 128*128 chunk ID to d3
+		move.w	(a4,d1.w),d3			; move 128*128 chunk ID to d3
 		lsl.w	#7,d3					; multiply by $80
 		move.w	d0,d4
 		andi.w	#$70,d4
 		add.w	d4,d3
 		movea.l	(Level_chunk_addr_ROM).w,a5
-		adda.w	d3,a5
+		adda.l	d3,a5
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -604,16 +606,16 @@ Draw_BG:
 		move.w	(Camera_Y_pos_BG_rounded).w,d6
 		tst.w	(Camera_Y_pos_BG_copy).w
 		bpl.s	Draw_BGNoVert
-		move.w	(Camera_Y_pos_BG_copy).w,d6
-		andi.w	#$FFF0,d6
+		moveq	#-$10,d6								; set align (16 pixels)
+		and.w	(Camera_Y_pos_BG_copy).w,d6
 
 Draw_BGNoVert:
 		move.w	d6,d1
 
 -		sub.w	(a4)+,d6
 		bmi.s	+
-		move.w	(a6)+,d0
-		andi.w	#$FFF0,d0
+		moveq	#-$10,d0								; set align (16 pixels)
+		and.w	(a6)+,d0
 		move.w	d0,(a6)+
 		subq.w	#1,d5
 		bra.s	-
@@ -650,8 +652,8 @@ Draw_BGNoVert:
 +
 -		subq.w	#1,d5
 		beq.s	Get_DeformDrawPosVert_Return
-		move.w	(a6)+,d0
-		andi.w	#$FFF0,d0
+		moveq	#-$10,d0								; set align (16 pixels)
+		and.w	(a6)+,d0
 		move.w	d0,(a6)+
 		bra.s	-
 
@@ -1080,10 +1082,10 @@ LoadLevelLoadBlock2:
 .notcsec
 
 		; load level palette
-		lea	(Level_data_addr_RAM.Palette).w,a2					; palette
+		lea	(Level_data_addr_RAM.Palette).w,a2					; level palette
 		moveq	#0,d0
 		move.b	(a2),d0
-		bsr.w	LoadPalette
+		bsr.w	LoadPalette										; load palette
 
 ; ---------------------------------------------------------------------------
 ; Load level layout
@@ -1116,14 +1118,9 @@ LoadLevelPointer:
 		lsr.w	#6,d0
 		mulu.w	#(Level_data_addr_RAM_end-Level_data_addr_RAM),d0
 	else
-		move.w	d0,d1											; multiply by $7C
-		lsr.w	#2,d1
-		add.w	d1,d0
-		add.w	d1,d0
-		add.w	d1,d0
-		lsr.w	#2,d1
-		add.w	d1,d0
-		add.w	d1,d0
+		move.w	d0,d1											; multiply by $82
+		lsr.w	#5,d1
+		add.w	d0,d0
 		add.w	d1,d0
 	endif
 
@@ -1136,13 +1133,13 @@ LoadLevelPointer:
 
 		; if you make a different buffer size, you need to change this code
 
-	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$7C
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$82
 		fatal "Warning! The buffer size is different!"
 	endif
 
 		set	.a,0
 
-	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $7C bytes
+	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $82 bytes
 		movem.l	(a2)+,d0-d7
 		movem.l	d0-d7,.a(a3)										; copy $20 bytes
 		set	.a,.a + $20
@@ -1168,6 +1165,10 @@ LoadLevelPointer:
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&2
 		move.w	(a2)+,.a(a3)										; copy 2 bytes
 		set	.a,.a + 2
+	endif
+
+	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&1
+		fatal "Warning! Even only!"
 	endif
 
 		rts
