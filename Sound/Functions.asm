@@ -22,11 +22,11 @@ SndDrvInit:
 .copy
 		movep.l	d1,0(a1)
 		movep.l	d1,1(a1)
-		addq.w	#8,a1						; next bytes
+		addq.w	#4*2,a1						; next bytes
 		dbf	d0,.copy
 
 		; detect PAL region consoles
-		btst	#0,(VDP_control_port+1).l
+		btst	#6,(Graphics_flags).w
 		beq.s	.notpal						; branch if it's not a PAL system
 		move.b	#1,(Z80_RAM+zPalFlag).l
 
