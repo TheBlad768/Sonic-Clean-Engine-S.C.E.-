@@ -2,14 +2,14 @@
 ; Sprite mappings - water surface
 ; ---------------------------------------------------------------------------
 
-Map_WaterWave:
-		dc.w word_1F2DC-Map_WaterWave		; 0 (duplicate)
-		dc.w word_1F2DC-Map_WaterWave		; 1 (duplicate)
-		dc.w word_1F2F0-Map_WaterWave		; 2
-		dc.w word_1F304-Map_WaterWave		; 3
-		dc.w word_1F318-Map_WaterWave		; 4
-		dc.w word_1F33E-Map_WaterWave		; 5
-		dc.w word_1F364-Map_WaterWave		; 6
+Map_WaveSplash:
+		dc.w word_1F2DC-Map_WaveSplash		; 0 (duplicate)
+		dc.w word_1F2DC-Map_WaveSplash		; 1 (duplicate)
+		dc.w word_1F2F0-Map_WaveSplash		; 2
+		dc.w word_1F304-Map_WaveSplash		; 3
+		dc.w word_1F318-Map_WaveSplash		; 4
+		dc.w word_1F33E-Map_WaveSplash		; 5
+		dc.w word_1F364-Map_WaveSplash		; 6
 word_1F2DC:	dc.w 3
 		dc.b $FD, $D, 0, 0, $FF, $A0
 		dc.b $FD, $D, 0, 0, $FF, $E0

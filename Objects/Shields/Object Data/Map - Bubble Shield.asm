@@ -31,27 +31,27 @@ word_19FCE:	dc.w 2
 		dc.b $F0, $B, 0, 0, $FF, $E8
 		dc.b $F0, $B, 8, 0, 0, 0
 word_19FDC:	dc.w 2
-		dc.b	0, $A, $10, 0, $FF, $E8
-		dc.b	0, $A, $18, 0, 0, 0
+		dc.b 0, $A, $10, 0, $FF, $E8
+		dc.b 0, $A, $18, 0, 0, 0
 word_19FEA:	dc.w 2
-		dc.b	0, $A, $10, 0, $FF, $E8
-		dc.b	0, $A, $18, 0, 0, 0
+		dc.b 0, $A, $10, 0, $FF, $E8
+		dc.b 0, $A, $18, 0, 0, 0
 word_19FF8:	dc.w 2
-		dc.b	8, 9, $10, 0, $FF, $E8
-		dc.b	8, 9, $18, 0, 0, 0
+		dc.b 8, 9, $10, 0, $FF, $E8
+		dc.b 8, 9, $18, 0, 0, 0
 word_1A006:	dc.w 2
 		dc.b $10, 4, $10, 0, $FF, $F0
 		dc.b $10, 4, $18, 0, 0, 0
 word_1A014:	dc.w 4
 		dc.b $E8, $A, 0, 0, $FF, $E8
 		dc.b $E8, $A, 0, 9, 0, 0
-		dc.b	0, $A, $10, 0, $FF, $E8
-		dc.b	0, $A, $18, 0, 0, 0
+		dc.b 0, $A, $10, 0, $FF, $E8
+		dc.b 0, $A, $18, 0, 0, 0
 word_1A02E:	dc.w 4
 		dc.b $E8, $A, 0, 0, $FF, $E8
 		dc.b $E8, $A, 0, 9, 0, 0
-		dc.b	0, $A, $10, 0, $FF, $E8
-		dc.b	0, $A, $18, 0, 0, 0
+		dc.b 0, $A, $10, 0, $FF, $E8
+		dc.b 0, $A, $18, 0, 0, 0
 word_1A048:	dc.w 4
 		dc.b $EC, $D, 0, 0, $FF, $E4
 		dc.b $EC, 9, 0, 8, 0, 4

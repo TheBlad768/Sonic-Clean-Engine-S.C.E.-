@@ -60,5 +60,5 @@ word_1DC40:
 		dc.b $F0, $F, 0, 0, $FF, $F0
 word_1DC4E:
 		dc.w 1
-		dc.b	0, $D, 0, $10, $FF, $F0
+		dc.b 0, $D, 0, $10, $FF, $F0
 	even

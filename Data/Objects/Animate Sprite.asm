@@ -314,7 +314,7 @@ Anim_End:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_MultiSprite:
-		movea.l	a1,a4								; save address of animation script
+		lea	(a1),a4									; save address of animation script
 		lea	mapping_frame(a0),a3						; mapframe 1 (main object)
 		tst.b	(a3)										; is it 0 frame? (not draw)
 		bne.s	.load								; if not, branch
@@ -333,7 +333,7 @@ Animate_MultiSprite:
 		lea	sub2_mapframe(a0),a3					; mapframe 2
 
 .loop
-		movea.l	a4,a1								; load address of animation script
+		lea	(a4),a1									; load address of animation script
 
 	irp	reg, d0,d1,d2
 		moveq	#0,reg

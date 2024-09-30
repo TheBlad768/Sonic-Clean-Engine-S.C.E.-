@@ -23,6 +23,7 @@ Debug_DEZ1: dbglistheader
 	dbglistobj Obj_Spikes, Map_Spikes, 0, 0, ArtTile_SpikesSprings+8, 0, 0
 	dbglistobj Obj_Spikes, Map_Spikes, $40, 4, ArtTile_SpikesSprings, 0, 0
 	dbglistobj Obj_Spikebonker, Map_Spikebonker, $40, 0, $500, 0, 1
+	dbglistobj Obj_Animal, Map_Animals1, 0, 2, $592, 0, 0
 	dbglistobj Obj_Button,	Map_Button, 0, 2, $47E, 0, 0
 	dbglistobj Obj_StarPost, Map_StarPost, 1, 0, ArtTile_StarPost+8, 0, 0
 	dbglistobj Obj_EggCapsule, Map_EggCapsule, 1, 0, $43E, 0, 0

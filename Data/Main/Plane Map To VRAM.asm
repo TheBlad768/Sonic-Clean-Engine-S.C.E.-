@@ -203,10 +203,10 @@ RAM_Map_Data_To_VDP:
 		moveq	#256/8-1,d2
 
 .loop
-		movea.l	a1,a2
+		lea	(a1),a2
 		move.w	d1,d3
 		bsr.s	RAM_Map_Data_Copy
-		movea.l	a2,a1
+		lea	(a2),a1
 		addi.l	#vdpCommDelta(planeLoc(64,0,1)),d0
 		dbf	d2,.loop
 		rts

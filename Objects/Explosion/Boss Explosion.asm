@@ -50,14 +50,14 @@ CreateBossExpParameterIndex:
 		dc.b 64/2, 64/2, $20, 0							; 0
 		dc.b 256/2, 256/2, $28, $18						; 2
 		dc.b 64/2, 64/2, $80, 8							; 4
-		dc.b	32/2, 32/2, 4, 0								; 6
-		dc.b	64/2, 64/2, 8, $10								; 8
+		dc.b 32/2, 32/2, 4, 0								; 6
+		dc.b 64/2, 64/2, 8, $10								; 8
 		dc.b 64/2, 64/2, $20, 0							; A
 		dc.b 256/2, 64/2, $40, 0							; C
 		dc.b 128/2, 128/2, $80, 8							; E
 		dc.b 64/2, 64/2, $20, $18							; 10
 		dc.b 64/2, 64/2, $80, $20							; 12
-		dc.b	256/2, 64/2, 8, $10							; 14
+		dc.b 256/2, 64/2, 8, $10							; 14
 		dc.b 256/2, 256/2, $80, 8							; 16
 		dc.b 256/2, 256/2, $80, $28						; 18
 		dc.b 128/2, 128/2, $80, $28						; 1A
@@ -235,6 +235,7 @@ Obj_BossExplosionOffset:
 
 ; =============== S U B R O U T I N E =======================================
 
+; mapping
 ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, 1, 0, 24, 24, 0, 0
 ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, 1, 0, 24, 24, 0, 0
 
@@ -258,13 +259,13 @@ Child6_ExplosionSpecial:
 		dc.l Obj_BossExplosionSpecial
 
 AniRaw_BossExplosion:
-		dc.b	0, 0			; frame, wait
-		dc.b	0, 1
-		dc.b	1, 1
-		dc.b	2, 2
-		dc.b	3, 3
-		dc.b	4, 4
-		dc.b	5, 4
+		dc.b 0, 0			; frame, wait
+		dc.b 0, 1
+		dc.b 1, 1
+		dc.b 2, 2
+		dc.b 3, 3
+		dc.b 4, 4
+		dc.b 5, 4
 		dc.b arfJump
 	even
 ; ---------------------------------------------------------------------------

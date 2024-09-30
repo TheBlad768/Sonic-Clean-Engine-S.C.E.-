@@ -24,7 +24,7 @@ ArtKosPM_DiagonalSpring:		binclude "Objects/Spring/KosinskiPM Art/Diagonal Sprin
 	even
 ArtKosPM_Bubbles:				binclude "Objects/Bubbler/KosinskiPM Art/Bubbles.kospm"
 	even
-ArtKosPM_WaterWave:			binclude "Objects/Water Wave/KosinskiPM Art/Water Wave.kospm"
+ArtKosPM_WaveSplash:			binclude "Objects/Wave Splash/KosinskiPM Art/Wave Splash.kospm"
 	even
 ArtKosPM_EggCapsule:			binclude "Objects/Egg Capsule/KosinskiPM Art/Egg Capsule.kospm"
 	even

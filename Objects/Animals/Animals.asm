@@ -11,10 +11,6 @@ animal_ground_pointer			= objoff_34	; .l
 
 ; =============== S U B R O U T I N E =======================================
 
-zoneAnimals macro first,second
-	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties), (Obj_Animal_Properties_second - Obj_Animal_Properties)
-    endm
-
 		; this table declares what animals will appear in the zone
 		; when an enemy is destroyed, a random animal is chosen from the 2 selected animals
 		; note: you must also load the corresponding art in the PLCs
@@ -26,12 +22,6 @@ Obj_Animal_ZoneAnimals:
 
 ; ---------------------------------------------------------------------------
 
-objanimaldecl macro mappings, address, xvel, yvel, {INTLABEL}
-Obj_Animal_Properties___LABEL__: label *
-	dc.l mappings, address
-	dc.w xvel, yvel
-    endm
-
 		; this table declares the speed and mappings of each animal
 
 Obj_Animal_Properties:
@@ -42,13 +32,6 @@ Seal:		objanimaldecl Map_Animals4, Obj_Animal_Walk, -$140, -$180		; 3
 Pig:			objanimaldecl Map_Animals3, Obj_Animal_Walk, -$1C0, -$300		; 4
 Flicky:		objanimaldecl Map_Animals1, Obj_Animal_Fly, -$300, -$400		; 5
 Squirrel:		objanimaldecl Map_Animals2, Obj_Animal_Walk, -$280, -$380		; 6
-
-; left over from Sonic 2
-; Eagle:		objanimaldecl Map_Animals1, Obj_Animal_Fly, -$280,-$300		; 7
-; Mouse:		objanimaldecl Map_Animals2, Obj_Animal_Walk, -$200, -$380		; 8
-; Monkey:	objanimaldecl Map_Animals2, Obj_Animal_Walk, -$2C0, -$300		; 9
-; Turtle:		objanimaldecl Map_Animals2, Obj_Animal_Walk, -$140, -$200		; A
-; Bear:		objanimaldecl Map_Animals2, Obj_Animal_Walk, -$200, -$300		; B
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -86,7 +69,7 @@ Obj_Animal:
 		jsr	(CreateChild6_Simple).w
 		bne.s	.draw
 		move.w	objoff_3E(a0),d0
-		lsr.w	d0
+		lsr.w	d0													; division by 2
 		move.b	d0,mapping_frame(a1)
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
@@ -94,7 +77,7 @@ Obj_Animal:
 .main
 		tst.b	render_flags(a0)											; object visible on the screen?
 		bpl.s	.delete												; if not, branch
-		jsr	(MoveSprite).w
+		MoveSprite a0
 		tst.w	y_vel(a0)
 		bmi.s	.draw
 		jsr	(ObjCheckFloorDist).w
@@ -115,7 +98,7 @@ Obj_Animal:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_Walk:
-		jsr	(MoveSprite).w
+		MoveSprite a0
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.notfloor
@@ -134,8 +117,7 @@ Obj_Animal_Walk:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_Fly:
-		moveq	#$18,d1
-		jsr	(MoveSprite_CustomGravity).w
+		MoveSprite a0, $18
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
@@ -145,14 +127,14 @@ Obj_Animal_Fly:
 		move.w	animal_ground_y_vel(a0),y_vel(a0)
 
 .anim
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.skipanim
-		addq.b	#1+1,anim_frame_timer(a0)
-		bchg	#0,mapping_frame(a0)
+		subq.b	#1,anim_frame_timer(a0)								; decrement timer
+		bpl.s	.skipanim											; if time remains, branch
+		addq.b	#1+1,anim_frame_timer(a0)							; reset timer to 1 frames
+		bchg	#0,mapping_frame(a0)								; change frame
 
 .skipanim
 		tst.b	render_flags(a0)											; object visible on the screen?
-		bpl.s	Obj_Animal.delete									; if not, branch
+		bpl.w	Obj_Animal.delete									; if not, branch
 		jmp	(Draw_Sprite).w
 
 ; ---------------------------------------------------------------------------
@@ -166,7 +148,7 @@ Obj_Animal_Ending:
 		; these are the S1 ending actions
 		moveq	#0,d0
 		move.b	subtype(a0),d0
-		lsl.w	#4,d0
+		lsl.w	#4,d0													; multiply by $10
 		lea	Animal_Ending_Index(pc,d0.w),a1							; $E size data
 		move.l	(a1)+,address(a0)										; Go to "NEXT"
 		move.l	(a1)+,mappings(a0)
@@ -183,39 +165,32 @@ Obj_Animal_Ending:
 
 		; these are the S1 ending actions
 
-objanimalending macro address, mappings, vram, xvel, yvel
-	dc.l address, mappings
-	dc.w vram, xvel, yvel
-	dc.w 0	; even
-    endm
-
 Animal_Ending_Index:
 
 		; the following tables tell the properties of animals based on their subtype
-		objanimalending Obj_Animal_FlickyWait, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 0 ($F)
-		objanimalending Obj_Animal_FlickyWait, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 1 ($10)
-		objanimalending Obj_Animal_FlickyJump, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 2 ($11)
-		objanimalending Obj_Animal_RabbitWait, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 3 ($12)
-		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 4 ($13)
-		objanimalending Obj_Animal_SingleBounce, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 5 ($14)
-		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 6 ($15)
-		objanimalending Obj_Animal_SingleBounce, Map_Animals4, make_art_tile($585,0,0), -$140, -$180 		; 7 ($16)
-		objanimalending Obj_Animal_LandJump, Map_Animals3, make_art_tile($593,0,0), -$1C0, -$300		; 8 ($17)
-		objanimalending Obj_Animal_FlyBounce, Map_Animals1, make_art_tile($565,0,0), -$200, -$300		; 9 ($18)
-		objanimalending Obj_Animal_DoubleBounce, Map_Animals2, make_art_tile($5B3,0,0), -$280, -$380		; A ($19)
+		objanimalending Obj_Animal_FlickyWait, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 0 ($F) (Blue Flicky)
+		objanimalending Obj_Animal_FlickyWait, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 1 ($10) (Blue Flicky)
+		objanimalending Obj_Animal_FlickyJump, Map_Animals1, make_art_tile($5A5,0,0), -$440, -$400		; 2 ($11) (Blue Flicky)
+		objanimalending Obj_Animal_RabbitWait, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 3 ($12) (Rabbit)
+		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 4 ($13) (Rabbit)
+		objanimalending Obj_Animal_SingleBounce, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 5 ($14) (Penguin)
+		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 6 ($15) (Penguin)
+		objanimalending Obj_Animal_SingleBounce, Map_Animals4, make_art_tile($585,0,0), -$140, -$180 		; 7 ($16) (Seal)
+		objanimalending Obj_Animal_LandJump, Map_Animals3, make_art_tile($593,0,0), -$1C0, -$300		; 8 ($17) (Pig)
+		objanimalending Obj_Animal_FlyBounce, Map_Animals1, make_art_tile($565,0,0), -$200, -$300		; 9 ($18) (Chicken)
+		objanimalending Obj_Animal_DoubleBounce, Map_Animals2, make_art_tile($5B3,0,0), -$280, -$380		; A ($19) (Squirrel)
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_FlickyWait:
 		jsr	(Find_SonicObject).w
-		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
-		bhs.s	.chkdel										; if not, branch
+		cmpi.w	#(320/2)+24,d2										; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel												; if not, branch
 		move.l	animal_ground_x_vel(a0),x_vel(a0)
 		move.l	#.fly,address(a0)
 
 .fly
-		moveq	#$18,d1
-		jsr	(MoveSprite_CustomGravity).w
+		MoveSprite a0, $18
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
@@ -229,10 +204,10 @@ Obj_Animal_FlickyWait:
 		bchg	#0,render_flags(a0)
 
 .anim
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.chkdel
-		addq.b	#1+1,anim_frame_timer(a0)
-		bchg	#0,mapping_frame(a0)
+		subq.b	#1,anim_frame_timer(a0)								; decrement timer
+		bpl.s	.chkdel												; if time remains, branch
+		addq.b	#1+1,anim_frame_timer(a0)							; reset timer to 1 frames
+		bchg	#0,mapping_frame(a0)								; change frame
 
 .chkdel
 		bra.w	Obj_Animal_ChkDel
@@ -241,20 +216,22 @@ Obj_Animal_FlickyWait:
 
 Obj_Animal_FlickyJump:
 		jsr	(Find_SonicObject).w
-		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
-		bhs.s	.chkdel										; if not, branch
+		cmpi.w	#(320/2)+24,d2										; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel												; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal_ground_x_vel(a0)
-		moveq	#$18,d1
-		jsr	(MoveSprite_CustomGravity).w
+		move.l	#.jump,address(a0)
+
+.jump
+		MoveSprite a0, $18
 		bsr.w	Obj_Animal_Jump
 		bsr.w	Obj_Animal_FaceSonic
 
 		; anim
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	.chkdel
-		addq.b	#1+1,anim_frame_timer(a0)
-		bchg	#0,mapping_frame(a0)
+		subq.b	#1,anim_frame_timer(a0)								; decrement timer
+		bpl.s	.chkdel												; if time remains, branch
+		addq.b	#1+1,anim_frame_timer(a0)							; reset timer to 1 frames
+		bchg	#0,mapping_frame(a0)								; change frame
 
 .chkdel
 		bra.w	Obj_Animal_ChkDel
@@ -263,13 +240,13 @@ Obj_Animal_FlickyJump:
 
 Obj_Animal_RabbitWait:
 		jsr	(Find_SonicObject).w
-		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
-		bhs.s	.chkdel										; if not, branch
+		cmpi.w	#(320/2)+24,d2										; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel												; if not, branch
 		move.l	animal_ground_x_vel(a0),x_vel(a0)
 		move.l	#.walk,address(a0)
 
 .walk
-		jsr	(MoveSprite).w
+		MoveSprite a0
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.chkdel
@@ -286,7 +263,7 @@ Obj_Animal_RabbitWait:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_DoubleBounce:
-		jsr	(MoveSprite).w
+		MoveSprite a0
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.chkdel
@@ -310,11 +287,14 @@ Obj_Animal_DoubleBounce:
 
 Obj_Animal_LandJump:
 		jsr	(Find_SonicObject).w
-		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
-		bhs.s	.chkdel										; if not, branch
+		cmpi.w	#(320/2)+24,d2										; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel												; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal_ground_x_vel(a0)
-		jsr	(MoveSprite).w
+		move.l	#.jump,address(a0)
+
+.jump
+		MoveSprite a0
 		bsr.w	Obj_Animal_Jump
 		bsr.w	Obj_Animal_FaceSonic
 
@@ -325,9 +305,12 @@ Obj_Animal_LandJump:
 
 Obj_Animal_SingleBounce:
 		jsr	(Find_SonicObject).w
-		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
-		bhs.s	.chkdel										; if not, branch
-		jsr	(MoveSprite).w
+		cmpi.w	#(320/2)+24,d2										; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	.chkdel												; if not, branch
+		move.l	#.bounce,address(a0)
+
+.bounce
+		MoveSprite a0
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.chkdel
@@ -347,10 +330,12 @@ Obj_Animal_SingleBounce:
 
 Obj_Animal_FlyBounce:
 		jsr	(Find_SonicObject).w
-		cmpi.w	#(320/2)+24,d2								; is Sonic within $B8 pixels (x-axis)?
-		bhs.s	Obj_Animal_ChkDel							; if not, branch
-		moveq	#$18,d1
-		jsr	(MoveSprite_CustomGravity).w
+		cmpi.w	#(320/2)+24,d2										; is Sonic within $B8 pixels (x-axis)?
+		bhs.s	Obj_Animal_ChkDel									; if not, branch
+		move.l	#.bounce,address(a0)
+
+.bounce
+		MoveSprite a0, $18
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
@@ -366,10 +351,10 @@ Obj_Animal_FlyBounce:
 		move.w	animal_ground_y_vel(a0),y_vel(a0)
 
 .anim
-		subq.b	#1,anim_frame_timer(a0)
-		bpl.s	Obj_Animal_ChkDel
-		addq.b	#1+1,anim_frame_timer(a0)
-		bchg	#0,mapping_frame(a0)
+		subq.b	#1,anim_frame_timer(a0)								; decrement timer
+		bpl.s	Obj_Animal_ChkDel									; if time remains, branch
+		addq.b	#1+1,anim_frame_timer(a0)							; reset timer to 1 frames
+		bchg	#0,mapping_frame(a0)								; change frame
 
 ; =============== S U B R O U T I N E =======================================
 

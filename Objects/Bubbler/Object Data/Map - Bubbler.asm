@@ -51,17 +51,17 @@ word_2FD46:
 		dc.w 4
 		dc.b $F0, 5, 0, $24, $FF, $F0
 		dc.b $F0, 5, 8, $24, 0, 0
-		dc.b	0, 5, $10, $24, $FF, $F0
-		dc.b	0, 5, $18, $24, 0, 0
+		dc.b 0, 5, $10, $24, $FF, $F0
+		dc.b 0, 5, $18, $24, 0, 0
 word_2FD60:
 		dc.w 4
 		dc.b $F0, 5, 0, $28, $FF, $F0
 		dc.b $F0, 5, 8, $28, 0, 0
-		dc.b	0, 5, $10, $28, $FF, $F0
-		dc.b	0, 5, $18, $28, 0, 0
+		dc.b 0, 5, $10, $28, $FF, $F0
+		dc.b 0, 5, $18, $28, 0, 0
 word_2FD7A:
 		dc.w 1
-		dc.b $F4, 6, 2, $80, $FF, $F8		; Air Countdown
+		dc.b $F4, 6, 2, $80, $FF, $F8		; air countdown (1P)
 word_2FD82:
 		dc.w 1
 		dc.b $F8, 5, 0, $2C, $FF, $F8
@@ -75,5 +75,5 @@ word_2FD9A:
 		dc.w 0
 word_2FD9C:
 		dc.w 1
-		dc.b $F4, 6, 3, $94, $FF, $F8
+		dc.b $F4, 6, 3, $94, $FF, $F8		; air countdown (2P)
 	even

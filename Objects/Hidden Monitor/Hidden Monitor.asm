@@ -52,6 +52,7 @@ Obj_HiddenMonitor:
 
 ; =============== S U B R O U T I N E =======================================
 
+; mapping
 ObjDat_HiddenMonitor:	subObjData Map_Monitor, ArtTile_Monitors, 0, 0, $280, 28, 32, 0, 0
 
 HiddenMonitor_Range:

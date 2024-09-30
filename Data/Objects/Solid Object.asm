@@ -352,8 +352,8 @@ SolidObject_OnScreenTest:
 		; if the object is not on-screen, then don't try to collide with it
 		; this is presumably an optimisation, but this means that if Sonic
 		; outruns the screen then he can phase through solid objects
-		tst.b	render_flags(a0)
-		bpl.w	SolidObject_TestClearPush
+		tst.b	render_flags(a0)											; object visible on the screen?
+		bpl.w	SolidObject_TestClearPush								; if not, branch
 
 SolidObject_cont:
 

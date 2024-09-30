@@ -37,17 +37,17 @@ word_244B4:	dc.w 8
 		dc.b $F0, 7, 0, 0, 0, $30
 word_244E6:	dc.w 2
 		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b	0, $D, 8, 0, $FF, $F0
+		dc.b 0, $D, 8, 0, $FF, $F0
 word_244F4:	dc.w 4
 		dc.b $E0, $D, 8, 0, $FF, $F0
 		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b	0, $D, 8, 0, $FF, $F0
+		dc.b 0, $D, 8, 0, $FF, $F0
 		dc.b $10, $D, 8, 0, $FF, $F0
 word_2450E:	dc.w 6
 		dc.b $D0, $D, 8, 0, $FF, $F0
 		dc.b $E0, $D, 8, 0, $FF, $F0
 		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b	0, $D, 8, 0, $FF, $F0
+		dc.b 0, $D, 8, 0, $FF, $F0
 		dc.b $10, $D, 8, 0, $FF, $F0
 		dc.b $20, $D, 8, 0, $FF, $F0
 word_24534:	dc.w 8
@@ -55,7 +55,7 @@ word_24534:	dc.w 8
 		dc.b $D0, $D, 8, 0, $FF, $F0
 		dc.b $E0, $D, 8, 0, $FF, $F0
 		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b	0, $D, 8, 0, $FF, $F0
+		dc.b 0, $D, 8, 0, $FF, $F0
 		dc.b $10, $D, 8, 0, $FF, $F0
 		dc.b $20, $D, 8, 0, $FF, $F0
 		dc.b $30, $D, 8, 0, $FF, $F0

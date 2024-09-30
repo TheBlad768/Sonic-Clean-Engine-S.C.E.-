@@ -206,7 +206,7 @@ loc_EADA:
 ; =============== S U B R O U T I N E =======================================
 
 Test_Ring_Collisions_AttractRing:
-		movea.l	a1,a3												; save ROM address
+		lea	(a1),a3													; save ROM address
 		bsr.w	Create_New_Sprite
 		bne.s	.notfree
 		move.l	#Obj_Attracted_Ring,address(a1)
@@ -218,7 +218,7 @@ Test_Ring_Collisions_AttractRing:
 ; ---------------------------------------------------------------------------
 
 .notfree
-		movea.l	a3,a1												; return ROM address
+		lea	(a3),a1													; return ROM address
 		bra.s	loc_EAC6
 
 ; ---------------------------------------------------------------------------

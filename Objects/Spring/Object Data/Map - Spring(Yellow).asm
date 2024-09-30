@@ -17,10 +17,10 @@ Map_Spring2:
 word_237AC:
 		dc.w 2
 		dc.b $F8, $C, $20, 0, $FF, $F0
-		dc.b	0, 4, 0, 4, $FF, $F8
+		dc.b 0, 4, 0, 4, $FF, $F8
 word_237BA:
 		dc.w 1
-		dc.b	0, $C, $20, 0, $FF, $F0
+		dc.b 0, $C, $20, 0, $FF, $F0
 word_237C2:
 		dc.w 2
 		dc.b $E8, $C, $20, 0, $FF, $F0
@@ -38,19 +38,19 @@ word_2380A:
 		dc.b $F8, 9, 0, 6, $FF, $F8
 word_23826:
 		dc.w 2
-		dc.b	0, $C, $30, 0, $FF, $F0
+		dc.b 0, $C, $30, 0, $FF, $F0
 		dc.b $F8, 4, $10, 4, $FF, $F8
 word_2389C:
 		dc.w 4
 		dc.b $F1, 8, $20, $A, $FF, $EB
 		dc.b $F9, 8, $20, $D, $FF, $F3
-		dc.b	1, 5, $20, $10, $FF, $FB
+		dc.b 1, 5, $20, $10, $FF, $FB
 		dc.b $FB, 5, 0, $14, $FF, $F1
 word_238B6:
 		dc.w 3
 		dc.b $F7, 8, $20, 0, $FF, $E6
 		dc.b $FF, 8, $20, 3, $FF, $EE
-		dc.b	7, 5, $20, 6, $FF, $F6
+		dc.b 7, 5, $20, 6, $FF, $F6
 word_238CA:
 		dc.w 5
 		dc.b $E6, 8, $20, 0, $FF, $F6
@@ -60,7 +60,7 @@ word_238CA:
 		dc.b $FD, 4, 0, $1A, $FF, $F2
 word_238EA:
 		dc.w 4
-		dc.b	7, 8, $30, 0, $FF, $EB
+		dc.b 7, 8, $30, 0, $FF, $EB
 		dc.b $FF, 8, $30, 3, $FF, $F3
 		dc.b $EF, 5, $30, 6, $FF, $FB
 		dc.b $F5, 5, $10, $14, $FF, $F1

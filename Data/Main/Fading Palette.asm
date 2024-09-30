@@ -269,10 +269,10 @@ Pal_FromWhite:
 ; =============== S U B R O U T I N E =======================================
 
 Pal_DecColor2:
-		move.b	(a1)+,d2
-		andi.b	#$E,d2
-		move.b	(a0),d3
-		andi.b	#$E,d3
+		moveq	#$E,d2
+		and.b	(a1)+,d2
+		moveq	#$E,d3
+		and.b	(a0),d3
 		cmp.b	d2,d3
 		bls.s		.skip
 		subq.b	#2,d3
@@ -558,8 +558,8 @@ IncColor_Obj2:
 ; =============== S U B R O U T I N E =======================================
 
 DecColor_Obj2:
-		move.b	(a2)+,d2
-		andi.b	#$E,d2
+		moveq	#$E,d2
+		and.b	(a2)+,d2
 		move.b	(a1),d3
 		cmp.b	d2,d3
 		bls.s		.skip

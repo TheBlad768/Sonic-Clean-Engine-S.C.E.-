@@ -214,6 +214,23 @@ subObjMainData3	macro render,routine,height,width,priority,vram,pal,pri,mappings
     endm
 ; ---------------------------------------------------------------------------
 
+zoneAnimals macro first,second
+	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties), (Obj_Animal_Properties_second - Obj_Animal_Properties)
+    endm
+
+objanimaldecl macro mappings, address, xvel, yvel, {INTLABEL}
+Obj_Animal_Properties___LABEL__: label *
+	dc.l mappings, address
+	dc.w xvel, yvel
+    endm
+
+objanimalending macro address, mappings, vram, xvel, yvel
+	dc.l address, mappings
+	dc.w vram, xvel, yvel
+	dc.w 0	; even
+    endm
+; ---------------------------------------------------------------------------
+
 titlecardresultsheader macro {INTLABEL}
 __LABEL__ label *
 	dc.w ((__LABEL___end - __LABEL__) / $E)-1
@@ -473,6 +490,26 @@ EniDecomp macro data,ram,vram,palette,priority,terminate
     endm
 
 ; ---------------------------------------------------------------------------
+; load DMA
+; ---------------------------------------------------------------------------
+
+; load DMA
+AddToDMAQueue macro art,vram,size,terminate
+		move.l	#dmaSource(art),d1
+		move.w	#tiles_to_bytes(vram),d2
+      if ((size/2)<=$7F)
+		moveq	#(size/2),d3
+      else
+		move.w	#(size/2),d3
+      endif
+      if ("terminate"="0") || ("terminate"="")
+		jsr	(Add_To_DMA_Queue).w
+      else
+		jmp	(Add_To_DMA_Queue).w
+      endif
+    endm
+
+; ---------------------------------------------------------------------------
 ; check if object moves out of range
 ; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
 ; ---------------------------------------------------------------------------
@@ -545,16 +582,18 @@ getobjectRAMslot macro address
 	move.b	(address,d0.w),d0										; use a look-up table to get the right loop counter
     endm
 
-MoveSprite macro address, terminate
+MoveSprite macro address, gravity, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
 	movem.w	x_vel(address),d0/d2		; load xy speed
-	ext.l	d0
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,x_pos(address)				; add x speed to x position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+      if ("gravity"<>"")
+	addi.w	#gravity,y_vel(address)			; increase vertical speed (apply gravity)
+	else
 	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
-	ext.l	d2
+      endif
 	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d2,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
@@ -567,12 +606,54 @@ MoveSprite2 macro address, terminate
 	fatal "Error! Empty value!"
       endif
 	movem.w	x_vel(address),d0/d2		; load xy speed
+	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+      if ("terminate"<>"")
+	rts
+      endif
+    endm
+
+MoveSpriteXOnly macro address, terminate
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	move.w	x_vel(address),d0				; load x speed
 	ext.l	d0
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-	ext.l	d2
-	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+      if ("terminate"<>"")
+	rts
+      endif
+    endm
+
+MoveSpriteYOnly macro address, gravity, terminate
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	move.w	y_vel(address),d0				; load y speed
+      if ("gravity"<>"")
+	addi.w	#gravity,y_vel(address)			; increase vertical speed (apply gravity)
+	else
+	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
+      endif
+	ext.l	d0
+	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+      if ("terminate"<>"")
+	rts
+      endif
+    endm
+
+MoveSprite2YOnly macro address, terminate
+      if ("address"=="")
+	fatal "Error! Empty value!"
+      endif
+	move.w	y_vel(address),d0				; load y speed
+	ext.l	d0
+	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -966,12 +1047,21 @@ zoneanimcount_{"\{zoneanimcur}"} = zoneanimcount-1
 
 zoneanimdeclanonid := 0
 
-zoneanimdecl macro duration,artaddr,vramaddr,numentries,numvramtiles
+zoneanimplcdecl macro duration,artaddr,vramaddr,numentries,numvramtiles
 zoneanimdeclanonid := zoneanimdeclanonid + 1
 start:
-	dc.l (duration&$FF)<<24|artaddr
+	dc.l (duration&$FF)<<24|dmaSource(artaddr)
 	dc.w tiles_to_bytes(vramaddr)
 	dc.b numentries, numvramtiles
+zoneanimcount := zoneanimcount + 1
+    endm
+
+zoneanimpaldecl macro duration,paladdr,palram,numentries,numcolors
+zoneanimdeclanonid := zoneanimdeclanonid + 1
+start:
+	dc.l (duration&$FF)<<24|paladdr
+	dc.w ((palram)&$FFFF)
+	dc.b numentries, numcolors
 zoneanimcount := zoneanimcount + 1
     endm
 ; ---------------------------------------------------------------------------

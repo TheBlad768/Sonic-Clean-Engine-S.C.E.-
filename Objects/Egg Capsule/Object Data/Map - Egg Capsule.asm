@@ -25,17 +25,17 @@ word_86C16:	dc.w $A
 		dc.b $F0, 6, 8, $17, 0, 8
 		dc.b $F0, 2, 0, $1D, $FF, $E0
 		dc.b $F0, 2, 8, $1D, 0, $18
-		dc.b	8, $E, 0, 0, $FF, $E0
-		dc.b	8, $E, 8, 0, 0, 0
+		dc.b 8, $E, 0, 0, $FF, $E0
+		dc.b 8, $E, 8, 0, 0, 0
 word_86C54:	dc.w 8
 		dc.b $E0, $D, 0, $20, $FF, $E0
 		dc.b $F0, 1, 0, $28, $FF, $F0
-		dc.b	0, $C, 0, $2A, $FF, $E0
+		dc.b 0, $C, 0, $2A, $FF, $E0
 		dc.b $E0, $D, 8, $20, 0, 0
 		dc.b $F0, 1, 8, $28, 0, 8
-		dc.b	0, $C, 8, $2A, 0, 0
-		dc.b	8, $E, 0, 0, $FF, $E0
-		dc.b	8, $E, 8, 0, 0, 0
+		dc.b 0, $C, 8, $2A, 0, 0
+		dc.b 8, $E, 0, 0, $FF, $E0
+		dc.b 8, $E, 8, 0, 0, 0
 word_86C86:	dc.w 2
 		dc.b $F8, 1, 0, $2E, $FF, $F8
 		dc.b $F8, 1, 8, $2E, 0, 0

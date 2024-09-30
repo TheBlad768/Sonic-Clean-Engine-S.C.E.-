@@ -21,8 +21,8 @@ loc_2C5B8:
 		move.l	#loc_2C5BE,address(a0)
 
 loc_2C5BE:
-		tst.b	render_flags(a0)
-		bpl.s	loc_2C626
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.s	loc_2C626									; if not, branch
 		moveq	#(32/2)+$B,d1								; width
 		moveq	#8/2,d2										; height
 		moveq	#(8/2)+1,d3									; height+1
@@ -59,8 +59,8 @@ loc_2C626:
 ; =============== S U B R O U T I N E =======================================
 
 sub_2C62C:
-		tst.b	render_flags(a0)
-		bpl.s	loc_2C690
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.s	loc_2C690									; if not, branch
 		moveq	#32/2,d1										; width
 		moveq	#(10/2)+1,d3									; height+1
 		move.w	x_pos(a0),d4

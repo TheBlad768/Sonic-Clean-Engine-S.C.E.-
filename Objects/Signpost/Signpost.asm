@@ -336,9 +336,12 @@ EndSign_CheckWall:
 
 ; =============== S U B R O U T I N E =======================================
 
+; mapping
 ObjSlot_EndSigns:		subObjSlotData 0, $494, 0, 0, $18, 0, Map_EndSigns, $300, 48, 32, 0, 0
 ObjDat_SignpostStub:		subObjData Map_SignpostStub, $482, 0, 0, $300, 8, 16, 0, 0
 ObjDat_SignpostSparkle:	subObjData Map_Ring, ArtTile_Ring, 1, 0, $280, 16, 16, 4, 0
+
+; dplc
 PLCPtr_EndSigns:		dc.l dmaSource(ArtUnc_EndSigns), DPLC_EndSigns
 
 Child6_EndSign:
@@ -355,9 +358,9 @@ Child6_EndSignScore:
 		dc.w 1-1
 		dc.l Obj_EnemyScore
 
-AniRaw_EndSigns1:		dc.b	1, 0, 4, 5, 6, 1, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Sonic
-AniRaw_EndSigns2:		dc.b	1, 1, 4, 5, 6, 2, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Knuckles
-AniRaw_SignpostSparkle:	dc.b	1, 1, 2, 3, 4, arfEnd
+AniRaw_EndSigns1:		dc.b 1, 0, 4, 5, 6, 1, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Sonic
+AniRaw_EndSigns2:		dc.b 1, 1, 4, 5, 6, 2, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Knuckles
+AniRaw_SignpostSparkle:	dc.b 1, 1, 2, 3, 4, arfEnd
 	even
 ; ---------------------------------------------------------------------------
 

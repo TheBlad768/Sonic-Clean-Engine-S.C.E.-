@@ -965,7 +965,7 @@ Sonic_RollSpeed:
 		asl.w	d6
 		move.w	Acceleration-Max_speed(a4),d5
 		asr.w	d5
-		move.w	#$20,d4
+		moveq	#$20,d4
 		tst.b	spin_dash_flag(a0)
 		bmi.w	loc_115C6
 		tst.b	status_secondary(a0)
@@ -1323,9 +1323,8 @@ loc_117FC:
 		move.w	#$380,d2								; set lower jump speed if under
 
 loc_1182E:
-		moveq	#0,d0
-		move.b	angle(a0),d0
-		subi.b	#$40,d0
+		moveq	#-$40,d0
+		add.b	angle(a0),d0
 		jsr	(GetSineCosine).w
 		muls.w	d2,d1
 		asr.l	#8,d1
@@ -2156,9 +2155,8 @@ BubbleShield_Bounce:
 		btst	#Status_Underwater,status(a0)
 		beq.s	+
 		move.w	#$400,d2
-+		moveq	#0,d0
-		move.b	angle(a0),d0
-		subi.b	#$40,d0
++		moveq	#-$40,d0
+		add.b	angle(a0),d0
 		jsr	(GetSineCosine).w
 		muls.w	d2,d1
 		asr.l	#8,d1

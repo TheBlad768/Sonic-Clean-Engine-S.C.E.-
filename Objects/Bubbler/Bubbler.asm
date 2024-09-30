@@ -6,6 +6,7 @@
 
 Obj_Bubbler:
 
+		; set
 		moveq	#$7F,d0
 		and.b	subtype(a0),d0
 		move.b	d0,objoff_32(a0)
