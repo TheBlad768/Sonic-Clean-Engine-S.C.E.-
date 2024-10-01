@@ -130,20 +130,20 @@ OscillateNumDo:
 ; ---------------------------------------------------------------------------
 
 Osc_Data2:				; frequency, amplitude
-		dc.w	 2, $10		; bit $F
-		dc.w	 2, $18		; bit $E
-		dc.w	 2, $20		; bit $D
-		dc.w	 2, $30		; bit $C
-		dc.w	 4, $20		; bit $B
-		dc.w	 8, 8			; bit $A
-		dc.w	 8, $40		; bit 9
-		dc.w	 4, $40		; bit 8
-		dc.w	 2, $38		; bit 7
-		dc.w	 2, $38		; bit 6
-		dc.w	 2, $20		; bit 5
-		dc.w	 3, $30		; bit 4
-		dc.w	 5, $50		; bit 3
-		dc.w	 7, $70		; bit 2
-		dc.w	 2, $40		; bit 1
-		dc.w	 2, $40		; bit 0
+		dc.w 2, $10		; bit $F
+		dc.w 2, $18		; bit $E
+		dc.w 2, $20		; bit $D
+		dc.w 2, $30		; bit $C
+		dc.w 4, $20		; bit $B
+		dc.w 8, 8			; bit $A
+		dc.w 8, $40		; bit 9
+		dc.w 4, $40		; bit 8
+		dc.w 2, $38		; bit 7
+		dc.w 2, $38		; bit 6
+		dc.w 2, $20		; bit 5
+		dc.w 3, $30		; bit 4
+		dc.w 5, $50		; bit 3
+		dc.w 7, $70		; bit 2
+		dc.w 2, $40		; bit 1
+		dc.w 2, $40		; bit 0
 Osc_Data2_end
