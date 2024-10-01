@@ -189,7 +189,7 @@ AniIDSonAni_Carry2 =				id(ptr_SonAni_Carry2)			; 23
 ; Levels
 ; ---------------------------------------------------------------------------
 
-LevelID_DEZ:							equ 0							; DEATH EGG
+LevelID_DEZ:							equ 0							; Death Egg
 LevelID_NULL:						equ $FF							; NULL
 
 ; ---------------------------------------------------------------------------
