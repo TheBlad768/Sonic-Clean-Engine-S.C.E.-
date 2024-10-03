@@ -110,7 +110,7 @@ UpdateMusic:
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is DAC track playing?
 	bpl.s	.dacdone				; Branch if not
-	bsr.w	DACUpdateTrack
+	bsr.s	DACUpdateTrack
 ; loc_71BD4:
 .dacdone:
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
