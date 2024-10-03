@@ -13,9 +13,13 @@
 ; =============== S U B R O U T I N E =======================================
 
 Level_Setup:
+
+		; set
 		move.w	#$FFF,(Screen_Y_wrap_value).w
 		move.w	#$FF0,(Camera_Y_pos_mask).w
-		move.w	#$7C,(Layout_row_index_mask).w
+		move.w	#$7C,(Layout_row_index_mask).w						; set level size: $FFF
+
+		; next
 		move.w	(Camera_X_pos).w,(Camera_X_pos_copy).w
 		move.w	(Camera_Y_pos).w,(Camera_Y_pos_copy).w
 		lea	(Plane_buffer).w,a0
