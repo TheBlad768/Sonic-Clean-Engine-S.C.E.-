@@ -21,7 +21,7 @@ Alternative programs:
 You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs and you can use more 0x100 chunks for levels.
 
 Alternative programs:
-https://github.com/Project1114/SonLVL-64x64-Compatible
+- https://github.com/Project1114/SonLVL-64x64-Compatible
 
 SPECIAL CREDITS:
 
