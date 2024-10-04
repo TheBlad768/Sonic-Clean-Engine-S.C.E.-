@@ -6,11 +6,11 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 
 If you are interested in the source code with the Z80 Sound Driver:
 
-- [https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Flamedriver-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver)
+- [Sonic-Clean-Engine-S.C.E.-Flamedriver-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver)
 
 Extended source code:
 
-- https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-
+- [Sonic-Clean-Engine-S.C.E.-Extended-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-)
 
 ## Current issues
 
