@@ -7,7 +7,21 @@ If you are interested in the source code with the Z80 Sound Driver:
 
 Extended source code:
 
-https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-
+- https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-
+
+Current issues:
+
+1. S.C.E. uses Kosinski Plus algorithm, but Flex2 program does not support Kosinski Plus Module. Therefore, Flex2.json project is partially useless.
+
+Alternative programs:
+- https://github.com/flamewing/mdcomp/releases
+- https://github.com/Clownacy/ClownMapEd/releases
+
+2. S.C.E. uses two-byte IDs chunks for layout. Official SonLVL can open level projects, but it only supports one-byte ID. You just won't be able to use more than 0x100 chunks.
+You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs and you can use more 0x100 chunks for levels.
+
+Alternative programs:
+https://github.com/Project1114/SonLVL-64x64-Compatible
 
 SPECIAL CREDITS:
 
