@@ -16,7 +16,7 @@ Extended source code:
 Current issues:
 ---
 
-1. S.C.E. uses Kosinski Plus algorithm, but [Flex2](https://github.com/kirjavascript/Flex2) program does not support Kosinski Plus Module. Therefore, Flex2.json project is partially useless.
+1. S.C.E. uses Kosinski Plus algorithm, but [Flex2](https://github.com/kirjavascript/Flex2) program does not support Kosinski Plus Module. Therefore, Flex2.json project file is partially useless.
 
 Alternative programs:
 - https://github.com/flamewing/mdcomp/releases
