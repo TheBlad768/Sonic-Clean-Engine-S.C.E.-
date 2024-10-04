@@ -17,14 +17,14 @@ Extended source code:
 1. S.C.E. uses Kosinski Plus algorithm, but [Flex2](https://github.com/kirjavascript/Flex2) program does not support Kosinski Plus Module. Therefore, Flex2.json project file is partially useless.
 
 Alternative programs:
-- https://github.com/flamewing/mdcomp/releases
-- https://github.com/Clownacy/ClownMapEd/releases
+- [mdcomp](https://github.com/flamewing/mdcomp/releases)
+- [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
 
 2. S.C.E. uses two-byte IDs chunks for layout. Official [SonLVL](https://github.com/sonicretro/SonLVL) can open level projects, but it only supports one-byte ID. You just won't be able to use more than 0x100 chunks.
 You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs and you can use more 0x100 chunks for levels.
 
 Alternative programs:
-- https://github.com/Project1114/SonLVL-64x64-Compatible
+- [SonLVL-64x64-Compatible](https://github.com/Project1114/SonLVL-64x64-Compatible)
 
 ## Special Credits
 
@@ -34,7 +34,7 @@ Alternative programs:
 
 ## Discord
 
-- https://discords.com/servers/redmisostudios
+- [redmisostudios](https://discords.com/servers/redmisostudios)
 
 ## These projects are based on this source code
 
@@ -45,6 +45,6 @@ Alternative programs:
 
 ## Check out the Sonic Retro source code
 
-- https://github.com/sonicretro/s1disasm
-- https://github.com/sonicretro/s2disasm
-- https://github.com/sonicretro/skdisasm
+- [s1disasm](https://github.com/sonicretro/s1disasm)
+- [s2disasm](https://github.com/sonicretro/s2disasm)
+- [skdisasm](https://github.com/sonicretro/skdisasm)
