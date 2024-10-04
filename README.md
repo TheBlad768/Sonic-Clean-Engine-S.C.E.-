@@ -1,9 +1,8 @@
-SONIC-CLEAN-ENGINE-S.C.E.-
----
+# SONIC-CLEAN-ENGINE-S.C.E.-
+
 Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. All code is provided “as is”. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty.
 
-Additional links:
----
+## Additional links
 
 If you are interested in the source code with the Z80 Sound Driver:
 
@@ -13,8 +12,7 @@ Extended source code:
 
 - https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-
 
-Current issues:
----
+## Current issues
 
 1. S.C.E. uses Kosinski Plus algorithm, but [Flex2](https://github.com/kirjavascript/Flex2) program does not support Kosinski Plus Module. Therefore, Flex2.json project file is partially useless.
 
@@ -28,28 +26,24 @@ You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs
 Alternative programs:
 - https://github.com/Project1114/SonLVL-64x64-Compatible
 
-SPECIAL CREDITS:
----
+## SPECIAL CREDITS
 
 - pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
 - FoxConED — Level Select font graphics.
 - Dolphman — Robotnik Head graphics.
 
-Discord:
----
+## Discord
 
 - https://discords.com/servers/redmisostudios
 
-These projects are based on this source code:
----
+## These projects are based on this source code
 
 - [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
 - Sonic 3 & Knuckles: Epilogue
 - TishaProject (2019)
 - Sonic Virtual Adventure (2017) (Cancelled) — In the past I made this source code specifically for this project (:
 
-Check out the Sonic Retro source code:
----
+## Check out the Sonic Retro source code
 
 - https://github.com/sonicretro/s1disasm
 - https://github.com/sonicretro/s2disasm
