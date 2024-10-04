@@ -4,11 +4,11 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 
 ## Additional links
 
-If you are interested in the source code with the Z80 Sound Driver:
+#### If you are interested in the source code with the Z80 Sound Driver:
 
 - [Sonic-Clean-Engine-S.C.E.-Flamedriver-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver)
 
-Extended source code:
+#### Extended source code:
 
 - [Sonic-Clean-Engine-S.C.E.-Extended-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-)
 
@@ -16,14 +16,14 @@ Extended source code:
 
 1. S.C.E. uses Kosinski Plus algorithm, but [Flex2](https://github.com/kirjavascript/Flex2) program does not support Kosinski Plus Module. Therefore, Flex2.json project file is partially useless.
 
-Alternative programs:
+#### Alternative programs:
 - [mdcomp](https://github.com/flamewing/mdcomp/releases)
 - [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
 
 2. S.C.E. uses two-byte IDs chunks for layout. Official [SonLVL](https://github.com/sonicretro/SonLVL) can open level projects, but it only supports one-byte ID. You just won't be able to use more than 0x100 chunks.
 You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs and you can use more 0x100 chunks for levels.
 
-Alternative programs:
+#### Alternative programs:
 - [SonLVL-64x64-Compatible](https://github.com/Project1114/SonLVL-64x64-Compatible)
 
 ## Special Credits
