@@ -26,7 +26,7 @@ You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs
 Alternative programs:
 - https://github.com/Project1114/SonLVL-64x64-Compatible
 
-## SPECIAL CREDITS
+## Special Credits
 
 - pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
 - FoxConED — Level Select font graphics.
