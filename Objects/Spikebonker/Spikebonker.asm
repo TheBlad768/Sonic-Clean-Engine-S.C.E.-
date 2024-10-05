@@ -6,6 +6,8 @@
 
 Obj_Spikebonker:
 		jsr	(Obj_WaitOffscreen).w
+
+		; mapping
 		lea	ObjDat_Spikebonker(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)

@@ -77,6 +77,8 @@ LevelScreen:
 		move.w	#$8014,VDP_control_port-VDP_control_port(a6)						; H-int enabled	; last use a6 here
 
 .notwater
+
+		; get level music id
 		lea	(Level_data_addr_RAM.Music).w,a1										; load music
 		moveq	#0,d0
 		move.b	(a1),d0

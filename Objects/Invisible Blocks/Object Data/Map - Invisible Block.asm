@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 Map_InvisibleBlock:
-		dc.w	word_1ECCC-Map_InvisibleBlock
+		dc.w word_1ECCC-Map_InvisibleBlock
 		dc.w word_1ECE6-Map_InvisibleBlock
 		dc.w word_1ED00-Map_InvisibleBlock
 word_1ECCC:	dc.w 4

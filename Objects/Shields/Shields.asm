@@ -175,7 +175,7 @@ Obj_LightningShield:
 		move.l	#Obj_LightningShield_DestroyUnderwater2,address(a0)
 		andi.b	#$8E,status_secondary(a2)							; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 
-		; Flashes the underwater palette white
+		; flashes the underwater palette white
 		lea	(Water_palette).w,a1
 		lea	(Target_water_palette).w,a2
 		moveq	#bytesToLcnt(Water_palette-Target_water_palette),d0	; size of Water_palette/4-1

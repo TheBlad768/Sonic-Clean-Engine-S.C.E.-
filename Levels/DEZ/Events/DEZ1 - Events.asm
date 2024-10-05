@@ -5,6 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_ScreenInit:
+
+		; update FG
 		jsr	(Reset_TileOffsetPositionActual).w
 		jmp	(Refresh_PlaneFull).w
 
@@ -19,6 +21,8 @@ DEZ1_ScreenEvent:
 
 DEZ1_BackgroundInit:
 		bsr.s	DEZ1_Deform
+
+		; update BG
 		jsr	(Reset_TileOffsetPositionEff).w
 		jsr	(Refresh_PlaneFull).w
 

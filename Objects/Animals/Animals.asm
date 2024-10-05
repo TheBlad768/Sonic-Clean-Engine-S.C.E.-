@@ -225,7 +225,8 @@ Obj_Animal_FlickyJump:
 .jump
 		MoveSprite a0, $18
 		bsr.w	Obj_Animal_Jump
-		bsr.w	Obj_Animal_FaceSonic
+		jsr	(Find_SonicObject).w
+		jsr	(Change_FlipX2).w
 
 		; anim
 		subq.b	#1,anim_frame_timer(a0)								; decrement timer
@@ -296,7 +297,8 @@ Obj_Animal_LandJump:
 .jump
 		MoveSprite a0
 		bsr.w	Obj_Animal_Jump
-		bsr.w	Obj_Animal_FaceSonic
+		jsr	(Find_SonicObject).w
+		jsr	(Change_FlipX2).w
 
 .chkdel
 		bra.w	Obj_Animal_ChkDel
@@ -392,18 +394,6 @@ Obj_Animal_Jump:
 		bpl.s	.return
 		add.w	d1,y_pos(a0)
 		move.w	animal_ground_y_vel(a0),y_vel(a0)
-
-.return
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_Animal_FaceSonic:
-		bset	#0,render_flags(a0)
-		move.w	x_pos(a0),d0
-		sub.w	(Player_1+x_pos).w,d0
-		bhs.s	.return
-		bclr	#0,render_flags(a0)
 
 .return
 		rts
