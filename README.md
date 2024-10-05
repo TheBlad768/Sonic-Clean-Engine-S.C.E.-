@@ -19,7 +19,7 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 #### Alternative programs:
 - [mdcomp](https://github.com/flamewing/mdcomp/releases)
 - [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
-- [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt)
+- [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt/releases)
 
 2. S.C.E. uses two-byte IDs chunks for layout. Official [SonLVL](https://github.com/sonicretro/SonLVL) can open level projects, but it only supports one-byte ID. You just won't be able to use more than 0x100 chunks.
 You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs and you can use more 0x100 chunks for levels.
