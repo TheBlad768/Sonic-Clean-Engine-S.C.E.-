@@ -18,7 +18,7 @@ LevelLoadPointer:
 
 DEZ_8x8_KosPM:		binclude "Levels/DEZ/Tiles/Primary.kospm"
 	even
-DEZ_16x16_Unc:			binclude "Levels/DEZ/Blocks/Primary.bin"
+DEZ_16x16_Unc:			binclude "Levels/DEZ/Blocks/Primary.unc"
 	even
 DEZ_128x128_KosP:		binclude "Levels/DEZ/Chunks/Primary.kosp"
 	even
