@@ -39,6 +39,7 @@ You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs
 
 ## These projects are based on this source code
 
+- Sonic 3 Rebuilt by TomatoWave_0
 - [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
 - Sonic 3 & Knuckles: Epilogue
 - TishaProject (2019)
