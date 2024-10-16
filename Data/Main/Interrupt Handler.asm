@@ -2,6 +2,8 @@
 ; Vertical interrupt handler
 ; ---------------------------------------------------------------------------
 
+; =============== S U B R O U T I N E =======================================
+
 VInt:
 		movem.l	d0-a6,-(sp)											; save all the registers to the stack
 		lea	(VDP_data_port).l,a6

@@ -264,6 +264,8 @@ Add_SpriteToCollisionResponseList:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_WaitOffscreen:
+
+		; init
 		move.l	#Map_Offscreen,mappings(a0)
 		bset	#2,render_flags(a0)									; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width

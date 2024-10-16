@@ -3,9 +3,9 @@
 ; ---------------------------------------------------------------------------
 
 ; Elemental Shield DPLC variables
-LastLoadedDPLC				= $34
-Art_Address					= $38
-DPLC_Address				= $3C
+LastLoadedDPLC				= objoff_34
+Art_Address					= objoff_38
+DPLC_Address				= objoff_3C
 
 ; ---------------------------------------------------------------------------
 ; Fire Shield
@@ -20,8 +20,7 @@ Obj_FireShield:
 		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_FireShield),Art_Address(a0)		; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
+		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
@@ -62,10 +61,10 @@ Obj_FireShield:
 .nothighpriority2
 		lea	Ani_FireShield(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	#$80,priority(a0)									; layer shield over player sprite
+		move.w	#priority_1,priority(a0)							; layer shield over player sprite
 		cmpi.b	#$F,mapping_frame(a0)							; are these the frames that display in front of the player?
 		blo.s		.overplayer										; if so, branch
-		move.w	#$200,priority(a0)								; if not, layer shield behind player sprite
+		move.w	#priority_4,priority(a0)							; if not, layer shield behind player sprite
 
 .overplayer
 		bsr.w	PLCLoad_Shields
@@ -103,8 +102,7 @@ Obj_LightningShield:
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_LightningShield),Art_Address(a0)	; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
+		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
@@ -149,10 +147,10 @@ Obj_LightningShield:
 .display
 		lea	Ani_LightningShield(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	#$80,priority(a0)									; layer shield over player sprite
+		move.w	#priority_1,priority(a0)							; layer shield over player sprite
 		cmpi.b	#$E,mapping_frame(a0)							; are these the frames that display in front of the player?
 		blo.s		.overplayer										; if so, branch
-		move.w	#$200,priority(a0)								; if not, layer shield behind player sprite
+		move.w	#priority_4,priority(a0)							; if not, layer shield behind player sprite
 
 .overplayer
 		bsr.w	PLCLoad_Shields
@@ -215,8 +213,7 @@ Obj_LightningShield_Create_Spark:
 		move.l	mappings(a0),mappings(a1)						; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	art_tile(a0),art_tile(a1)							; (Spark) inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
 		move.b	#4,render_flags(a1)
-		move.w	#$80,priority(a1)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)			; set height and width
+		move.l	#bytes_word_to_long(16/2,16/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)									; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
 		jsr	(Create_New_Sprite4).w								; find next free object slot
@@ -268,8 +265,7 @@ Obj_BubbleShield:
 		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_BubbleShield),Art_Address(a0)	; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
+		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
@@ -332,8 +328,7 @@ Obj_InstaShield:
 		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_InstaShield),Art_Address(a0)	; used by PLCLoad_Shields
 		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)			; set height and width
+		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
@@ -444,9 +439,8 @@ Obj_Invincibility:
 		move.l	#Obj_188E8,address(a1)
 		move.l	#Map_Invincibility,mappings(a1)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a1)
-		move.w	#$80,priority(a1)
 		move.b	#$44,render_flags(a1)								; set screen coordinates and multi-draw flag
-		move.w	#bytes_to_word(32/2,32/2),height_pixels(a1)			; set height and width
+		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.w	#2,mainspr_childsprites(a1)
 		move.b	d2,objoff_36(a1)
 		addq.w	#1,d2

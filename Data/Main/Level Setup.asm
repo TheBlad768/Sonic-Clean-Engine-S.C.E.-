@@ -29,7 +29,7 @@ Level_Setup:
 
 		; check
 		move.l	(Level_data_addr_RAM.ScreenInit).w,d0
-		beq.s	.sskip
+		beq.s	.sskip												; if zero, branch
 		movea.l	d0,a1
 		jsr	(a1)
 
@@ -39,7 +39,7 @@ Level_Setup:
 
 		; check
 		move.l	(Level_data_addr_RAM.BackgroundInit).w,d0
-		beq.s	.bskip
+		beq.s	.bskip												; if zero, branch
 		movea.l	d0,a1
 		jsr	(a1)
 
@@ -60,7 +60,7 @@ Screen_Events:
 
 		; check
 		move.l	(Level_data_addr_RAM.ScreenEvent).w,d0
-		beq.s	.sskip
+		beq.s	.sskip												; if zero, branch
 		movea.l	d0,a1
 		jsr	(a1)
 
@@ -70,7 +70,7 @@ Screen_Events:
 
 		; check
 		move.l	(Level_data_addr_RAM.BackgroundEvent).w,d0
-		beq.s	.bskip
+		beq.s	.bskip												; if zero, branch
 		movea.l	d0,a1
 		jsr	(a1)
 

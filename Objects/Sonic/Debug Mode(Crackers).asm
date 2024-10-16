@@ -62,8 +62,8 @@ Debug_Mode:
 		move.w	d0,ground_vel(a0)
 		move.b	d0,double_jump_flag(a0)
 		move.b	d0,jumping(a0)
-		andi.b	#1,status(a0)
-		ori.b	#2,status(a0)
+		andi.b	#setBit(Status_Facing),status(a0)
+		ori.b	#setBit(Status_InAir),status(a0)
 		move.b	#PlayerID_Control,routine(a0)
 		move.w	default_y_radius(a0),y_radius(a0)			; set y_radius and x_radius
 		rts

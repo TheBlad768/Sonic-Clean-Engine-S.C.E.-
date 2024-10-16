@@ -8,6 +8,8 @@ Obj_SpriteMask:
 		bset	#2,render_flags(a0)					; use screen coordinates
 
 Obj_SpriteMask2:
+
+		; init
 		clr.w	art_tile(a0)
 		move.l	#Map_SpriteMask,mappings(a0)
 		move.b	#64/2,width_pixels(a0)

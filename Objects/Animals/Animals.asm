@@ -36,6 +36,8 @@ Squirrel:		objanimaldecl Map_Animals2, Obj_Animal_Walk, -$280, -$380		; 6
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal:
+
+		; init
 		jsr	(Random_Number).w
 		move.w	#make_art_tile($580,0,0),d1							; animal 1 (VRAM)
 		andi.w	#1,d0
@@ -56,8 +58,7 @@ Obj_Animal:
 		move.l	(a1)+,animal_ground_pointer(a0)
 		move.l	(a1),animal_ground_x_vel(a0)
 		move.b	#rfCoord+1,render_flags(a0)							; rfCoord+flipx
-		move.w	#$300,priority(a0)
-		move.w	#bytes_to_word(24/2,16/2),height_pixels(a0)				; set height and width
+		move.l	#bytes_word_to_long(24/2,16/2,priority_6),height_pixels(a0)	; set height, width and priority
 		move.b	#24/2,y_radius(a0)									; set y_radius
 		move.b	#2,mapping_frame(a0)
 		move.b	#7,anim_frame_timer(a0)
@@ -156,8 +157,7 @@ Obj_Animal_Ending:
 		move.l	(a1),x_vel(a0)											; load horizontal and vertical speed
 		move.l	(a1),animal_ground_x_vel(a0)							; copy horizontal and vertical speed
 		move.b	#rfCoord+1,render_flags(a0)							; rfCoord+flipx
-		move.w	#$300,priority(a0)
-		move.w	#bytes_to_word(24/2,16/2),height_pixels(a0)				; set height and width
+		move.l	#bytes_word_to_long(24/2,16/2,priority_6),height_pixels(a0)	; set height, width and priority
 		move.b	#24/2,y_radius(a0)									; set y_radius
 		move.b	#7,anim_frame_timer(a0)
 		jmp	(Draw_Sprite).w

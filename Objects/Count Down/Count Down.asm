@@ -5,11 +5,12 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AirCountdown:
+
+		; init
 		move.l	#Map_Bubbler,mappings(a0)					; 1P
 		move.w	#make_art_tile($348,0,0),art_tile(a0)
 		move.b	#$84,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)		; set height and width
+		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.b	#1,objoff_37(a0)
 		move.l	#.countdown,address(a0)
 
@@ -233,8 +234,8 @@ loc_18218:
 		move.w	d0,x_pos(a0)
 		bsr.w	AirCountdown_ShowNumber
 		jsr	(MoveSprite2).w
-		tst.b	render_flags(a0)
-		bpl.s	AirCountdown_Delete
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.s	AirCountdown_Delete							; if not, branch
 		jmp	(Draw_Sprite).w
 
 ; ---------------------------------------------------------------------------
@@ -279,8 +280,8 @@ AirCountdown_Display2:
 		tst.b	routine(a0)
 		bne.s	AirCountdown_Delete
 		bsr.s	AirCountdown_Load_Art
-		tst.b	render_flags(a0)
-		bpl.s	AirCountdown_Delete
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.s	AirCountdown_Delete							; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -337,7 +338,7 @@ AirCountdown_Load_Art:
 		move.w	d1,d0
 		add.w	d1,d1
 		add.w	d0,d1
-		lsl.w	#5,d1
+		lsl.w	#5,d1											; multiply by $20
 		addi.l	#dmaSource(ArtUnc_AirCountDown),d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2			; 1P
 		moveq	#$C0/2,d3									; division by 2

@@ -5,11 +5,12 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AutoSpin:
+
+		; init
 		move.l	#Map_PathSwap,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,0,0),art_tile(a0)
 		ori.b	#4,render_flags(a0)
-		move.w	#$280,priority(a0)
-		move.w	#bytes_to_word(256/2,256/2),height_pixels(a0)		; set height and width
+		move.l	#bytes_word_to_long(256/2,256/2,priority_5),height_pixels(a0)	; set height, width and priority
 		move.b	subtype(a0),d0
 		btst	#2,d0
 		beq.s	loc_1E85C

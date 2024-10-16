@@ -7,19 +7,20 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_StarPost:
+
+		; init
 		move.l	#Map_StarPost,mappings(a0)
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a0)
 		move.b	#$44,render_flags(a0)									; set screen coordinates and multi-draw flag
-		move.w	#$280,priority(a0)
 		move.w	#2,mainspr_childsprites(a0)
-		move.w	#bytes_to_word(80/2,16/2),height_pixels(a0)				; set height and width
+		move.l	#bytes_word_to_long(80/2,16/2,priority_5),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 
 		; create circle
 		lea	sub2_x_pos(a0),a1										; $16-$23 bytes reserved
 		move.w	x_pos(a0),(a1)+										; xpos
-		move.w	y_pos(a0),d0
-		subi.w	#32,d0
+		moveq	#-32,d0
+		add.w	y_pos(a0),d0
 		move.w	d0,(a1)+												; ypos
 		move.w	#1,(a1)+												; frame (circle)
 		move.w	x_pos(a0),(a1)+										; xpos
@@ -60,9 +61,8 @@ Obj_StarPost:
 		and.b	subtype(a0),d2
 		cmp.b	d2,d1
 		bhs.s	.taken
-
-		tst.w	(Debug_placement_mode).w
-		bne.s	.return
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		bne.s	.return												; if yes, branch
 
 		; check xpos
 		move.w	(Player_1+x_pos).w,d0
@@ -85,8 +85,8 @@ Obj_StarPost:
 		move.w	#34,objoff_36(a0)										; rotation time
 
 		; check bonus
-		cmpi.w	#50,(Ring_count).w
-		blo.s		.notbonus
+		cmpi.w	#50,(Ring_count).w									; does Sonic have at least 50 rings?
+		blo.s		.notbonus											; if not, branch
 		bsr.w	Load_StarPost_Stars									; load stars
 
 .notbonus
@@ -231,8 +231,8 @@ Load_StarPost_Stars:
 		move.w	x_pos(a0),d3
 		move.w	d3,x_pos(a1)
 		move.w	d3,objoff_30(a1)
-		move.w	y_pos(a0),d3
-		subi.w	#48,d3
+		moveq	#-48,d3
+		add.w	y_pos(a0),d3
 		move.w	d3,y_pos(a1)
 		move.w	d3,objoff_32(a1)
 		move.l	#words_to_long(-$400,0),x_vel(a1)

@@ -5,10 +5,11 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_WaveSplash:
+
+		; init
 		move.l	#Map_WaveSplash,mappings(a0)
+		move.l	#bytes_to_long(rfCoord+rfMulti,0,24/2,256/2),render_flags(a0)		; set screen coordinates, multi-draw flag and height and width
 		move.w	#make_art_tile($300,0,1),art_tile(a0)
-		move.b	#rfCoord+rfMulti,render_flags(a0)				; set screen coordinates and multi-draw flag
-		move.w	#bytes_to_word(24/2,256/2),height_pixels(a0)	; set height and width
 		move.w	#1,mainspr_childsprites(a0)
 		lea	sub2_x_pos(a0),a2
 		move.w	x_pos(a0),(a2)
@@ -68,7 +69,7 @@ Obj_WaveSplash:
 		move.b	mapping_frame(a0),1(a2)
 
 		; draw
-		lea	(Sprite_table_input).w,a1
+		lea	(Sprite_table_input+priority_0).w,a1
 		jmp	(Draw_Sprite.find).w
 ; ---------------------------------------------------------------------------
 

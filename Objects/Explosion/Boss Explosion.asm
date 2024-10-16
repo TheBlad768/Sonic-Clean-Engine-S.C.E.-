@@ -236,8 +236,8 @@ Obj_BossExplosionOffset:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, 1, 0, 24, 24, 0, 0
-ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, 1, 0, 24, 24, 0, 0
+ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, 1, 24, 24, 0, 0, 0
+ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, 1, 24, 24, 0, 0, 0
 
 Child6_MakeBossExplosion1:
 		dc.w 1-1

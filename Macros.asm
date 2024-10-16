@@ -29,6 +29,12 @@ bytes_to_word function byte1,byte2,(((byte1)<<8)&$FF00)|((byte2)&$FF)
 
 ; function to convert two separate word into a long
 words_to_long function word1,word2,(((word1)<<16)&$FFFF0000)|((word2)&$FFFF)
+
+; function to convert two separate bytes and word into a word
+bytes_word_to_long function byte1,byte2,word,((((byte1)<<24)&$FF000000)|(((byte2)<<16)&$FF0000)|((word)&$FFFF))
+
+; function to convert four separate bytes into a long
+bytes_to_long function byte1,byte2,byte3,byte4,(((byte1)<<24)&$FF000000)|(((byte2)<<16)&$FF0000)|(((byte3)<<8)&$FF00)|((byte4)&$FF)
 ; ---------------------------------------------------------------------------
 
 ; values for the type argument
@@ -70,7 +76,7 @@ dmaFillVRAM macro byte,addr,length
 	move.l	#(($9400|((((length)-1)&$FF00)>>8))<<16)|($9300|(((length)-1)&$FF)),VDP_control_port-VDP_control_port(a5)	; DMA length ...
 	move.w	#$9780,VDP_control_port-VDP_control_port(a5)	; VRAM fill
 	move.l	#$40000080|vdpCommDelta(addr),VDP_control_port-VDP_control_port(a5)	; start at ...
-	move.w	#(byte)<<8,(VDP_data_port).l	; fill with byte
+	move.w	#bytes_to_word(byte,0),(VDP_data_port).l	; fill with byte
 
 .loop:
 	moveq	#2,d1
@@ -85,7 +91,7 @@ dmaFillVRAM macro byte,addr,length
 ; 1 - buttons to check
 ; -------------------------------------------------------------
 
-tpress:	macro press,player
+tpress macro press,player
 	if player=2
 		move.b	(Ctrl_2_pressed).w,d0
 	else
@@ -100,7 +106,7 @@ tpress:	macro press,player
 ; 1 - buttons to check
 ; -------------------------------------------------------------
 
-theld:	macro press,player
+theld macro press,player
 	if player=2
 		move.b	(Ctrl_2_held).w,d0
 	else
@@ -163,53 +169,59 @@ watpalptrs macro height,spal,kpal
 ; ---------------------------------------------------------------------------
 
 ; macro to declare sub-object data
-subObjData	macro mappings,vram,pal,pri,priority,width,height,frame,collision
+subObjData macro mappings,vram,pal,pri,height,width,prio,frame,collision
 	dc.l mappings
-	dc.w make_art_tile(vram,pal,pri),priority
-	dc.b (width/2),(height/2),frame,collision
+	dc.w make_art_tile(vram,pal,pri)
+	dc.b (height/2),(width/2)
+	dc.w sprite_priority(prio)
+	dc.b frame,collision
     endm
 
 ; macro to declare sub-object data
-subObjData2	macro vram,pal,pri,priority,width,height,frame,collision
-	dc.w make_art_tile(vram,pal,pri),priority
-	dc.b (width/2),(height/2),frame,collision
+subObjData2 macro vram,pal,pri,height,width,prio,frame,collision
+	dc.w make_art_tile(vram,pal,pri)
+	dc.b (height/2),(width/2)
+	dc.w sprite_priority(prio)
+	dc.b frame,collision
     endm
 
 ; macro to declare sub-object data
-subObjData3	macro priority,width,height,frame,collision
-	dc.w priority
-	dc.b (width/2),(height/2),frame,collision
+subObjData3 macro height,width,prio,frame,collision
+	dc.b (height/2),(width/2)
+	dc.w sprite_priority(prio)
+	dc.b frame,collision
     endm
 
 ; macro to declare sub-object slotted data
-subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,priority,width,height,frame,collision
+subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,height,width,prio,frame,collision
 	dc.w slots,make_art_tile(vram,pal,pri),offset,index
 	dc.l mappings
-	dc.w priority
-	dc.b (width/2),(height/2),frame,collision
+	dc.b (height/2),(width/2)
+	dc.w sprite_priority(prio)
+	dc.b frame,collision
     endm
 
 ; macro to declare sub-object data
-subObjMainData	macro address,render,routine,height,width,priority,vram,pal,pri,mappings,frame,collision
+subObjMainData macro address,render,routine,height,width,prio,vram,pal,pri,mappings,frame,collision
 	dc.l address
 	dc.b render,routine,(height/2),(width/2)
-	dc.w priority,make_art_tile(vram,pal,pri)
+	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
 	dc.l mappings
 	dc.b frame, collision
     endm
 
 ; macro to declare sub-object data
-subObjMainData2	macro address,render,routine,height,width,priority,vram,pal,pri,mappings
+subObjMainData2 macro address,render,routine,height,width,prio,vram,pal,pri,mappings
 	dc.l address
 	dc.b render,routine,(height/2),(width/2)
-	dc.w priority,make_art_tile(vram,pal,pri)
+	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
 	dc.l mappings
     endm
 
 ; macro to declare sub-object data
-subObjMainData3	macro render,routine,height,width,priority,vram,pal,pri,mappings
+subObjMainData3 macro render,routine,height,width,prio,vram,pal,pri,mappings
 	dc.b render,routine,(height/2),(width/2)
-	dc.w priority,make_art_tile(vram,pal,pri)
+	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
 	dc.l mappings
     endm
 ; ---------------------------------------------------------------------------
@@ -474,14 +486,14 @@ QueueKosPlusModule macro art,vram,terminate
 ; ---------------------------------------------------------------------------
 
 ; load Enigma data to RAM
-EniDecomp macro data,ram,vram,palette,priority,terminate
+EniDecomp macro data,ram,vram,palette,pri,terminate
 	lea	(data).l,a0
     if ((ram)&$8000)==0
 	lea	(ram).l,a1
     else
 	lea	(ram).w,a1
     endif
-	move.w	#make_art_tile(vram,palette,priority),d0
+	move.w	#make_art_tile(vram,palette,pri),d0
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Eni_Decomp).w
       else
@@ -514,7 +526,7 @@ AddToDMAQueue macro art,vram,size,terminate
 ; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
 ; ---------------------------------------------------------------------------
 
-out_of_xrange	macro exit, xpos
+out_of_xrange macro exit, xpos
 	moveq	#-$80,d0							; round down to nearest $80
       if ("xpos"<>"")
 		and.w	xpos,d0							; get object position (if specified as not x_pos)
@@ -524,7 +536,7 @@ out_of_xrange	macro exit, xpos
 	out_of_xrange2.ATTRIBUTE	exit
     endm
 
-out_of_xrange2	macro exit
+out_of_xrange2 macro exit
 	sub.w	(Camera_X_pos_coarse_back).w,d0		; get screen position
 	cmpi.w	#$80+320+$40+$80,d0				; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
 	bhi.ATTRIBUTE	exit
@@ -535,7 +547,7 @@ out_of_xrange2	macro exit
 ; input: location to jump to if out of range, x-axis pos (y_pos(a0) by default)
 ; ---------------------------------------------------------------------------
 
-out_of_yrange	macro exit, ypos
+out_of_yrange macro exit, ypos
 	moveq	#-$80,d0							; round down to nearest $80
       if ("ypos"<>"")
 		and.w	ypos,d0							; get object position (if specified as not y_pos)
@@ -545,7 +557,7 @@ out_of_yrange	macro exit, ypos
 	out_of_yrange2.ATTRIBUTE	exit
     endm
 
-out_of_yrange2	macro exit
+out_of_yrange2 macro exit
 	sub.w	(Camera_Y_pos_coarse_back).w,d0
 	cmpi.w	#$80+256+$80,d0
 	bhi.ATTRIBUTE	exit
@@ -555,7 +567,7 @@ out_of_yrange2	macro exit
 ; object respawn delete
 ; ---------------------------------------------------------------------------
 
-respawn_delete	macro terminate
+respawn_delete macro terminate
 	move.w	respawn_addr(a0),d0					; get address in respawn table
 	beq.s	.delete								; if it's zero, it isn't remembered
 	movea.w	d0,a2								; load address into a2
@@ -588,14 +600,14 @@ MoveSprite macro address, gravity, terminate
       endif
 	movem.w	x_vel(address),d0/d2		; load xy speed
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add x speed to x position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("gravity"<>"")
 	addi.w	#gravity,y_vel(address)			; increase vertical speed (apply gravity)
 	else
 	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
       endif
-	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d2,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -607,8 +619,8 @@ MoveSprite2 macro address, terminate
       endif
 	movem.w	x_vel(address),d0/d2		; load xy speed
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
 	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
 	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
@@ -633,14 +645,14 @@ MoveSpriteYOnly macro address, gravity, terminate
 	fatal "Error! Empty value!"
       endif
 	move.w	y_vel(address),d0				; load y speed
+	ext.l	d0
+	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
       if ("gravity"<>"")
 	addi.w	#gravity,y_vel(address)			; increase vertical speed (apply gravity)
 	else
 	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
       endif
-	ext.l	d0
-	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -653,7 +665,7 @@ MoveSprite2YOnly macro address, terminate
 	move.w	y_vel(address),d0				; load y speed
 	ext.l	d0
 	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(address)				; add old y speed to y position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	add.l	d0,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
       if ("terminate"<>"")
 	rts
       endif
@@ -915,88 +927,89 @@ enableScreen macro
 ; long conditional jumps
 ; ---------------------------------------------------------------------------
 
-jhi:		macro loc
+jhi macro loc
 		bls.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jcc:		macro loc
+jcc macro loc
 		bcs.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jhs:		macro loc
+jhs macro loc
 		jcc	loc
 	    endm
 
-jls:		macro loc
+jls macro loc
 		bhi.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jcs:		macro loc
+jcs macro loc
 		bcc.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jlo:		macro loc
+jlo macro loc
 		jcs	loc
 	    endm
 
-jeq:		macro loc
+jeq macro loc
 		bne.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jne:		macro loc
+jne macro loc
 		beq.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jgt:		macro loc
+jgt macro loc
 		ble.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jge:		macro loc
+jge macro loc
 		blt.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jle:		macro loc
+jle macro loc
 		bgt.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jlt:		macro loc
+jlt macro loc
 		bge.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jpl:		macro loc
+jpl macro loc
 		bmi.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 
-jmi:		macro loc
+jmi macro loc
 		bpl.s	.nojump
 		jmp	loc
 .nojump:
 	    endm
 ; ---------------------------------------------------------------------------
 
-; macros to convert from tile index to art tiles, block mapping or VRAM address.
+; macros to convert from tile index to art tiles, block mapping or VRAM address
+sprite_priority function x,((x&7)<<7)
 make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
 tiles_to_bytes function addr,((addr&$7FF)<<5)
 
@@ -1076,20 +1089,20 @@ tribyte macro val
 ; ---------------------------------------------------------------------------
 
 ; macro to define a palette script pointer
-palscriptptr	macro header, data
+palscriptptr macro header, data
 	dc.w data-header, 0
 	dc.l header
 ._headpos :=	header
     endm
 
 ; macro to define a palette script header
-palscripthdr	macro palette, entries, value
+palscripthdr macro palette, entries, value
 	dc.w (palette)&$FFFF
 	dc.b entries-1, value
     endm
 
 ; macro to define a palette script data
-palscriptdata	macro frames, data
+palscriptdata macro frames, data
 .framec :=	frames-1
 	shift
 	dc.w ALLARGS
@@ -1097,7 +1110,7 @@ palscriptdata	macro frames, data
     endm
 
 ; macro to define a palette script data from an external file
-palscriptfile	macro frames, data
+palscriptfile macro frames, data
 .framec :=	frames-1
 	shift
 	binclude ALLARGS
@@ -1105,18 +1118,18 @@ palscriptfile	macro frames, data
     endm
 
 ; macro to repeat script from start
-palscriptrept	macro header
+palscriptrept macro header
 	dc.w -2
     endm
 
 ; macro to define loop from start for x number of times, then initialize with new header
-palscriptloop	macro header
+palscriptloop macro header
 	dc.w -4, header-._headpos
 ._headpos :=	header
     endm
 
 ; macro to run the custom script routine
-palscriptrun	macro header
+palscriptrun macro header
 	dc.w -6
     endm
 
@@ -1125,7 +1138,7 @@ palscriptrun	macro header
 ; input: track, terminate routine, branch or jump, move operand size
 ; ---------------------------------------------------------------------------
 
-music	macro track, terminate, byte
+music macro track, terminate, byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(track),d0
     else
@@ -1138,7 +1151,7 @@ music	macro track, terminate, byte
       endif
     endm
 
-sfx	macro track, terminate, byte
+sfx macro track, terminate, byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(track),d0
     else
@@ -1151,7 +1164,7 @@ sfx	macro track, terminate, byte
       endif
     endm
 
-sample	macro id, terminate, byte
+sample macro id, terminate, byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(id),d0
     else
@@ -1165,7 +1178,7 @@ sample	macro id, terminate, byte
     endm
 
 	; extended music
-emusic	macro track, terminate
+emusic macro track, terminate
 	move.w	#(track),d0
       if ("terminate"="0") || ("terminate"="")
 	jsr	(SMPS_QueueSound1_Extended).w
@@ -1175,7 +1188,7 @@ emusic	macro track, terminate
     endm
 
 	; extended sfx
-esfx	macro track, terminate
+esfx macro track, terminate
 	move.w	#(track),d0
       if ("terminate"="0") || ("terminate"="")
 	jsr	(SMPS_QueueSound2_Extended).w
@@ -1300,7 +1313,7 @@ gotoROM macro
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap	macro loc,width,height,terminate
+copyTilemap macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
@@ -1316,7 +1329,7 @@ copyTilemap	macro loc,width,height,terminate
 ; input: destination, VRAM shift, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap2	macro loc,address,width,height,terminate
+copyTilemap2 macro loc,address,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
@@ -1333,7 +1346,7 @@ copyTilemap2	macro loc,address,width,height,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap3		macro loc,width,height,terminate
+copyTilemap3	 macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
@@ -1349,7 +1362,7 @@ copyTilemap3		macro loc,width,height,terminate
 ; input: source, destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-clearTilemap	macro loc,width,height,terminate
+clearTilemap macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
@@ -1375,7 +1388,7 @@ LoadArtUnc macro offset,size,vram
     endm
 ; ---------------------------------------------------------------------------
 
-LoadMapUnc	macro offset,size,arg,loc,width,height
+LoadMapUnc macro offset,size,arg,loc,width,height
 	lea	(offset).l,a0
 	move.w	#arg,d0
 	move.w	#((size)>>4),d1
@@ -1416,7 +1429,7 @@ plreq macro toVRAMaddr,fromROMaddr
 ; input: index address, element size
 ; ---------------------------------------------------------------------------
 
-zonewarning:	macro loc,elementsize
+zonewarning macro loc,elementsize
 ._end:
 	if (._end-loc)-(ZoneCount*elementsize)<>0
 	fatal "Size of loc (\{(._end-loc)/elementsize}) does not match ZoneCount (\{ZoneCount})."

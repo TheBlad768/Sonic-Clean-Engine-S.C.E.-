@@ -60,7 +60,7 @@ sign_rosaddr			= objoff_3C	; .w
 Obj_EndSign:
 
 		; load stub art
-		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($482)
+		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($492)
 
 		; mapping
 		lea	ObjSlot_EndSigns(pc),a1
@@ -74,8 +74,8 @@ Obj_EndSign:
 		move.w	a0,(Signpost_addr).w									; put RAM address here for use by hidden monitor object
 		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)				; set y_radius and x_radius
 		move.l	#AniRaw_EndSigns1,objoff_30(a0)
-		move.w	(Camera_Y_pos).w,d0
-		subi.w	#32,d0
+		moveq	#-32,d0
+		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)											; place vertical position at top of screen
 		sfx	sfx_Signpost
 		lea	Child1_EndSignStub(pc),a2									; make the little stub at the bottom of the signpost
@@ -208,10 +208,10 @@ Obj_SignpostSparkle:
 		neg.w	d0													; left
 
 .skip
-		move.w	#$280,d1											; high priority
+		move.w	#priority_5,d1										; high priority
 		add.w	d0,x_vel(a0)											; do rotation around sign
 		bpl.s	.priority
-		move.w	#$380,d1											; low priority
+		move.w	#priority_7,d1										; low priority
 
 .priority
 		move.w	d1,priority(a0)										; set priority
@@ -337,9 +337,9 @@ EndSign_CheckWall:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjSlot_EndSigns:		subObjSlotData 0, $494, 0, 0, $18, 0, Map_EndSigns, $300, 48, 32, 0, 0
-ObjDat_SignpostStub:		subObjData Map_SignpostStub, $482, 0, 0, $300, 8, 16, 0, 0
-ObjDat_SignpostSparkle:	subObjData Map_Ring, ArtTile_Ring, 1, 0, $280, 16, 16, 4, 0
+ObjSlot_EndSigns:		subObjSlotData 0, $494, 0, 0, $18, 0, Map_EndSigns, 32, 48, 6, 0, 0
+ObjDat_SignpostStub:		subObjData Map_SignpostStub, $492, 0, 0, 16, 8, 6, 0, 0
+ObjDat_SignpostSparkle:	subObjData Map_Ring, ArtTile_Ring, 1, 0, 16, 16, 5, 4, 0
 
 ; dplc
 PLCPtr_EndSigns:		dc.l dmaSource(ArtUnc_EndSigns), DPLC_EndSigns

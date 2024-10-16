@@ -121,10 +121,10 @@ Test_Ring_Collisions:
 		movea.w	(Ring_start_addr_RAM).w,a4
 		btst	#Status_LtngShield,status_secondary(a0)						; does Sonic have a Lightning Shield?
 		beq.s	Test_Ring_Collisions_NoAttraction						; if not, branch
-		move.w	x_pos(a0),d2
-		move.w	y_pos(a0),d3
-		subi.w	#$40,d2
-		subi.w	#$40,d3
+		moveq	#-64,d2
+		add.w	x_pos(a0),d2
+		moveq	#-64,d3
+		add.w	y_pos(a0),d3
 		moveq	#6,d1
 		moveq	#$C,d6
 		move.w	#$80,d4

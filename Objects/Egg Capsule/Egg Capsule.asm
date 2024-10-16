@@ -473,7 +473,7 @@ Obj_EggCapsule_Animals:
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.draw
 		move.l	#.jump,address(a0)
-		move.w	#$80,priority(a0)
+		move.w	#priority_1,priority(a0)
 
 .draw
 		jmp	(Sprite_CheckDelete).w
@@ -534,7 +534,7 @@ Obj_EggCapsule_Animals_Flipped:
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.draw
 		move.l	#.move,address(a0)
-		move.w	#$80,priority(a0)
+		move.w	#priority_1,priority(a0)
 
 .draw
 		jmp	(Sprite_CheckDelete).w
@@ -681,11 +681,11 @@ EggCapsule_Animals_Load:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_EggCapsule:				subObjData Map_EggCapsule, $494, 0, 1, $200, 64, 64, 0, 0
-ObjDat_EggCapsule_Button:		subObjData3 $200, 32, 16, 5, 0
-ObjDat3_EggCapsule_Propeller:		subObjData3 $200, 40, 8, 6, 0
-ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, 1, $180, 24, 24, 0, 0
-ObjDat_EggCapsule_Animals:		subObjData3 $280, 16, 24, 2, 0
+ObjDat_EggCapsule:				subObjData Map_EggCapsule, $494, 0, 1, 64, 64, 4, 0, 0
+ObjDat_EggCapsule_Button:		subObjData3 16, 32, 4, 5, 0
+ObjDat3_EggCapsule_Propeller:		subObjData3 8, 40, 4, 6, 0
+ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, 1, 24, 24, 3, 0, 0
+ObjDat_EggCapsule_Animals:		subObjData3 24, 16, 5, 2, 0
 
 Child6_EggCapsule:
 		dc.w 1-1
@@ -716,9 +716,8 @@ Child1_EggCapsule_Pieces:
 		dc.b -24, -8
 		dc.l Obj_EggCapsule_Pieces
 		dc.b 24, -8
-
 Child1_EggCapsule_Animals:
-		dc.w 9-1			; why not 15-1?
+		dc.w 9-1
 		dc.l Obj_EggCapsule_Animals
 		dc.b 0, -4
 		dc.l Obj_EggCapsule_Animals
@@ -737,22 +736,6 @@ Child1_EggCapsule_Animals:
 		dc.b -4, -4
 		dc.l Obj_EggCapsule_Animals
 		dc.b 4, -4
-
-
-;		dc.l Obj_EggCapsule_Animals
-;		dc.b 12, -4
-;		dc.l Obj_EggCapsule_Animals
-;		dc.b -12, -4
-;		dc.l Obj_EggCapsule_Animals
-;		dc.b -20, -4
-;		dc.l Obj_EggCapsule_Animals
-;		dc.b 20, -4
-;		dc.l Obj_EggCapsule_Animals
-;		dc.b 28, -4
-;		dc.l Obj_EggCapsule_Animals
-;		dc.b -28, -4
-
-
 
 PLC_EggCapsule: plrlistheader
 		plreq $494, ArtKosPM_EggCapsule

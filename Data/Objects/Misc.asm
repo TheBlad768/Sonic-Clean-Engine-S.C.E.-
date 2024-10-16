@@ -8,9 +8,7 @@ SetUp_ObjAttributes2:
 		move.w	(a1)+,art_tile(a0)				; VRAM offset
 
 SetUp_ObjAttributes3:
-		move.w	(a1)+,priority(a0)				; priority
-		move.b	(a1)+,width_pixels(a0)			; width
-		move.b	(a1)+,height_pixels(a0)		; height
+		move.l	(a1)+,height_pixels(a0)		; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)		; frame number
 		move.b	(a1)+,collision_flags(a0)		; collision number
 		bset	#rbCoord,render_flags(a0)			; use screen coordinates
@@ -44,9 +42,9 @@ SetUp_ObjAttributesSlotted:
 		move.l	d0,address(a0)
 		move.l	d0,x_pos(a0)
 		move.l	d0,y_pos(a0)
-		move.b	d0,subtype(a0)
 		move.b	d0,render_flags(a0)
 		move.w	d0,status(a0)					; if no open slots, then destroy this object period
+		move.b	d0,subtype(a0)
 		addq.w	#4*2,sp						; exit from current object
 		rts
 ; ---------------------------------------------------------------------------
@@ -57,15 +55,16 @@ SetUp_ObjAttributesSlotted:
 		move.w	a2,ros_addr(a0)				; keep track of slot address and bit number
 		move.w	d3,art_tile(a0)				; use correct VRAM offset
 		move.l	(a1)+,mappings(a0)			; mapping address
-		move.w	(a1)+,priority(a0)				; priority
-		move.b	(a1)+,width_pixels(a0)			; width
-		move.b	(a1)+,height_pixels(a0)		; height
+		move.l	(a1)+,height_pixels(a0)		; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)		; frame number
 		move.b	(a1)+,collision_flags(a0)		; collision number
-		bset	#2,status(a0)						; turn object slotting on
 		st	objoff_3A(a0)					; reset DPLC frame
-		bset	#2,render_flags(a0)				; use screen coordinates
-		addq.b	#2,routine(a0)				; next routine
+
+		; set
+		moveq	#2,d0
+		add.b	d0,routine(a0)				; next routine
+		bset	d0,render_flags(a0)				; use screen coordinates
+		bset	d0,status(a0)						; turn object slotting on
 		rts
 
 ; =============== S U B R O U T I N E =======================================

@@ -298,7 +298,7 @@ Level_data_addr_RAM:				= *
 .Kpal								ds.b 1
 .WaterSpal							ds.b 1
 .WaterKpal							ds.b 1
-.Location								ds.l 1
+.Location								ds.l 1						; players start location (xypos)
 .Debug								ds.l 1
 Level_data_addr_RAM_end			= *
 

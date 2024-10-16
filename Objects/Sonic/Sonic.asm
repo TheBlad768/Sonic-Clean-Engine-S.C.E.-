@@ -59,8 +59,7 @@ Sonic_Init:													; Routine 0
 		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)			; set y_radius and x_radius	; this sets Sonic's collision height (2*pixels)
 		move.w	y_radius(a0),default_y_radius(a0)				; set default_y_radius and default_x_radius
 		move.l	#Map_Sonic,mappings(a0)
-		move.w	#$100,priority(a0)
-		move.w	#bytes_to_word(48/2,48/2),height_pixels(a0)		; set height and width
+		move.l	#bytes_word_to_long(48/2,48/2,priority_2),height_pixels(a0)	; set height, width and priority
 		move.b	#4,render_flags(a0)
 		clr.b	character_id(a0)
 		move.w	#$600,Max_speed-Max_speed(a4)
@@ -193,7 +192,7 @@ Sonic_Display:
 		move.b	invulnerability_timer(a0),d0
 		beq.s	.draw
 		subq.b	#1,invulnerability_timer(a0)
-		lsr.b	#3,d0
+		lsr.b	#3,d0									; division by 8
 		bhs.s	Sonic_ChkInvin
 
 .draw
@@ -249,6 +248,8 @@ Sonic_ExitChk:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_RecordPos:
+
+		; record
 		move.w	(Pos_table_index).w,d0
 		lea	(Pos_table).w,a1
 		adda.w	d0,a1
@@ -260,6 +261,8 @@ Sonic_RecordPos:
 ; =============== S U B R O U T I N E =======================================
 
 Reset_Player_Position_Array:
+
+		; copy
 		lea	(Pos_table).w,a1
 		moveq	#$3F,d0
 
@@ -1362,6 +1365,7 @@ Sonic_JumpHeight:
 		tst.b	jumping(a0)									; is Sonic jumping?
 		beq.s	Sonic_UpVelCap							; if not, branch
 
+		; check
 		move.w	#-$400,d1
 		btst	#Status_Underwater,status(a0)					; is Sonic underwater?
 		beq.s	loc_118D2								; if not, branch
@@ -2248,7 +2252,7 @@ loc_12344:
 		move.b	d0,object_control(a0)
 		move.b	d0,anim(a0)				; id_Walk
 		move.b	d0,spin_dash_flag(a0)
-		move.w	#$100,priority(a0)
+		move.w	#priority_2,priority(a0)
 		move.b	#PlayerID_Control,routine(a0)
 		move.b	#2*60,invulnerability_timer(a0)
 
