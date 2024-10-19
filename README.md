@@ -12,20 +12,22 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 
 - [Sonic-Clean-Engine-S.C.E.-Extended-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-)
 
+## Quick start
+
+- For editing sprites you can use [SonMapEd](https://info.sonicretro.org/SonMapEd), [ClownMapEd](https://info.sonicretro.org/ClownMapEd) or [Flex2](https://info.sonicretro.org/Flex_2) (Read the issues).
+
+- For editing levels you can use official [SonLVL](https://info.sonicretro.org/SonLVL) or [SonLVL-64x64-Compatible](https://github.com/Project1114/SonLVL-64x64-Compatible). Unfortunately, [SonED2](https://info.sonicretro.org/SonED2) is no longer supported.
+
 ## Current issues
 
-1. S.C.E. uses Kosinski Plus algorithm, but [Flex2](https://github.com/kirjavascript/Flex2) program does not support Kosinski Plus Module. Therefore, Flex2.json project file is partially useless.
+1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus Module** at all. You can only open uncompressed graphics.
 
 #### Alternative programs:
 - [mdcomp](https://github.com/flamewing/mdcomp/releases)
 - [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
 - [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt/releases)
 
-2. S.C.E. uses two-byte IDs chunks for layout. Official [SonLVL](https://github.com/sonicretro/SonLVL) can open level projects, but it only supports one-byte ID. You just won't be able to use more than 0x100 chunks.
-You can use ProjectFM's alternative version of SonLVL that supports two-byte IDs and you can use more 0x100 chunks for levels.
-
-#### Alternative programs:
-- [SonLVL-64x64-Compatible](https://github.com/Project1114/SonLVL-64x64-Compatible)
+2. ...
 
 ## Special Credits
 
