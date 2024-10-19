@@ -21,7 +21,7 @@ Obj_Ring_Collect:
 
 		; init
 		move.l	#Map_Ring,mappings(a0)
-		move.b	#rfCoord,render_flags(a0)
+		move.b	#rfCoord,render_flags(a0)							; use screen coordinates
 		move.l	#.sparkle,address(a0)
 		move.w	#priority_1,priority(a0)
 		jsr	(GiveRing).w

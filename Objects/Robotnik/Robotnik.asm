@@ -20,14 +20,18 @@ RobotnikHead3_Index: offsetTable
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Init:
+
+		; init
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#AniRaw_RobotnikHead,objoff_30(a0)
 		movea.w	parent3(a0),a1
 		btst	#high_priority_bit,art_tile(a1)
-		beq.s	+
+		beq.s	.nothighpriority
 		bset	#high_priority_bit,art_tile(a0)
-+		rts
+
+.nothighpriority
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Main:
@@ -36,13 +40,17 @@ Obj_RobotnikHead3Main:
 		jsr	(Animate_Raw).w
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
-		bne.s	++
+		bne.s	.defeated
 		btst	#6,status(a1)
-		beq.s	+
+		beq.s	.return
 		move.b	#2,mapping_frame(a0)
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
-+		move.b	#4,routine(a0)
+
+.defeated
+		move.b	#4,routine(a0)
 		move.b	#5,mapping_frame(a0)
 
 Obj_RobotnikHeadEnd:
@@ -97,7 +105,7 @@ loc_67CFE:
 
 Obj_RobotnikShipFlame:
 
-		; mapping
+		; init
 		lea	ObjDat2_RoboShipFlame(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#RobotnikShipFlame_Main,address(a0)
@@ -123,7 +131,7 @@ RobotnikShipFlame_Main:
 
 Obj_RobotnikShipPieces:
 
-		; mapping
+		; init
 		lea	ObjDat_RobotnikShipPieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_FlickerMove,address(a0)

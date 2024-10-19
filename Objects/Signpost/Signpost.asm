@@ -62,7 +62,7 @@ Obj_EndSign:
 		; load stub art
 		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($492)
 
-		; mapping
+		; init
 		lea	ObjSlot_EndSigns(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).w
 		move.l	#.signfall,address(a0)
@@ -183,6 +183,8 @@ Obj_EndSign:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_SignpostSparkle:
+
+		; init
 		lea	ObjDat_SignpostSparkle(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		btst	#high_priority_bit,(Player_1+art_tile).w
@@ -228,6 +230,8 @@ Obj_SignpostSparkle:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_SignpostStub:
+
+		; init
 		lea	ObjDat_SignpostStub(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		bset	#rbStatic,render_flags(a0)									; set flag to "static mappings flag"

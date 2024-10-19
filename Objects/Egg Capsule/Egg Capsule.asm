@@ -24,7 +24,7 @@ Obj_EggCapsule:
 		lea	PLC_EggCapsule(pc),a5
 		jsr	(LoadPLC_Raw_KosPlusM).w
 
-		; mapping
+		; init
 		lea	ObjDat_EggCapsule(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
@@ -296,7 +296,7 @@ Check_SonicEndPose_MGZ:
 
 Obj_EggCapsule_Button:
 
-		; mapping
+		; init
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#.main,address(a0)
@@ -341,7 +341,7 @@ Obj_EggCapsule_Button:
 
 Obj_EggCapsule_FlippedButton:
 
-		; mapping
+		; init
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		bset	#1,render_flags(a0)							; set flipy flag
@@ -400,7 +400,7 @@ Obj_EggCapsule_FlippedButton:
 
 Obj_EggCapsule_Pieces:
 
-		; mapping
+		; init
 		lea	ObjDat_EggCapsule_Pieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_FlickerMove,address(a0)
@@ -430,7 +430,7 @@ Obj_EggCapsule_Pieces:
 
 Obj_EggCapsule_Propeller:
 
-		; mapping
+		; init
 		lea	ObjDat3_EggCapsule_Propeller(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#.main,address(a0)
@@ -458,7 +458,7 @@ ecapa_yvel				= objoff_3E	; .w
 
 Obj_EggCapsule_Animals:
 
-		; mapping
+		; init
 		lea	ObjDat_EggCapsule_Animals(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#.normal,address(a0)

@@ -9,7 +9,7 @@ Obj_Spring:
 		; init
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	; set red
-		ori.b	#4,render_flags(a0)
+		ori.b	#4,render_flags(a0)										; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
 		move.w	x_pos(a0),objoff_32(a0)
 		move.w	y_pos(a0),objoff_34(a0)

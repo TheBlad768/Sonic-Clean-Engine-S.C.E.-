@@ -9,7 +9,7 @@ Obj_Spikebonker:
 		; wait
 		jsr	(Obj_WaitOffscreen).w
 
-		; mapping
+		; init
 		lea	ObjDat_Spikebonker(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
@@ -164,6 +164,8 @@ Obj_Spikebonker_Control:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker_SpikeBall:
+
+		; init
 		lea	ObjDat3_Spikebonker_SpikeBall(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		movea.w	parent3(a0),a1			; spikebonker (main)

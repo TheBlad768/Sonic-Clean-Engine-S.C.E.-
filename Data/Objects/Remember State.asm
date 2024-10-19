@@ -267,7 +267,7 @@ Obj_WaitOffscreen:
 
 		; init
 		move.l	#Map_Offscreen,mappings(a0)
-		bset	#2,render_flags(a0)									; use screen coordinates
+		bset	#rbCoord,render_flags(a0)								; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
 		move.l	(sp)+,objoff_34(a0)								; save address after bsr/jsr
 		move.l	#.main,address(a0)

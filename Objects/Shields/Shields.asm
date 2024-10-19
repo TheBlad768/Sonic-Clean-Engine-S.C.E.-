@@ -19,7 +19,7 @@ Obj_FireShield:
 		move.l	#Map_FireShield,mappings(a0)
 		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_FireShield),Art_Address(a0)		; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)
+		move.b	#4,render_flags(a0)								; use screen coordinates
 		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
@@ -101,7 +101,7 @@ Obj_LightningShield:
 		move.l	#Map_LightningShield,mappings(a0)
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_LightningShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)
+		move.b	#4,render_flags(a0)									; use screen coordinates
 		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
@@ -212,7 +212,7 @@ Obj_LightningShield_Create_Spark:
 		move.w	y_pos(a0),y_pos(a1)								; (Spark) inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.l	mappings(a0),mappings(a1)						; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	art_tile(a0),art_tile(a1)							; (Spark) inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
-		move.b	#4,render_flags(a1)
+		move.b	#4,render_flags(a1)								; use screen coordinates
 		move.l	#bytes_word_to_long(16/2,16/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)									; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
@@ -264,7 +264,7 @@ Obj_BubbleShield:
 		move.l	#Map_BubbleShield,mappings(a0)
 		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_BubbleShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)
+		move.b	#4,render_flags(a0)								; use screen coordinates
 		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
@@ -327,7 +327,7 @@ Obj_InstaShield:
 		move.l	#Map_InstaShield,mappings(a0)
 		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_InstaShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)
+		move.b	#4,render_flags(a0)								; use screen coordinates
 		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
