@@ -20,7 +20,7 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 
 ## Current issues
 
-1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus Module** at all. You can only open uncompressed graphics.
+1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus** at all. You can only open uncompressed graphics.
 
 #### Alternative programs:
 - [mdcomp](https://github.com/flamewing/mdcomp/releases)
