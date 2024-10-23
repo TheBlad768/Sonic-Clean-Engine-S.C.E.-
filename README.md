@@ -27,7 +27,7 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 - [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
 - [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt/releases)
 
-2. S.C.E. uses a different layout format. Unfortunately there are no converters here for the new layout format. You just won't be able to use the original layouts from Sonic 3 & Knuckles.
+2. S.C.E. uses a different layout format to support two-byte IDs chunks. Unfortunately there are no converters here for the new layout format. You just won't be able to use the original layouts from Sonic 3 & Knuckles.
 You could try using different [Layout.cs](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/master/SonLVL%20INI%20Files/Common/Layout) for **SonLVL** to convert layout to the new format.
 
 ## Special Credits
