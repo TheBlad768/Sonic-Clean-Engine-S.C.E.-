@@ -90,17 +90,17 @@ Camera_X_pos:						ds.l 1
 Camera_Y_pos:						ds.l 1
 Camera_X_pos_copy:					ds.l 1
 Camera_Y_pos_copy:					ds.l 1
-Camera_X_pos_rounded:				ds.w 1						; rounded down to the nearest block boundary ($10th pixel)
-Camera_Y_pos_rounded:				ds.w 1						; rounded down to the nearest block boundary ($10th pixel)
+Camera_X_pos_rounded:				ds.w 1						; rounded down to the nearest block boundary (16th pixel)
+Camera_Y_pos_rounded:				ds.w 1						; rounded down to the nearest block boundary (16th pixel)
 Camera_X_pos_BG_copy:				ds.l 1
 Camera_Y_pos_BG_copy:				ds.l 1
-Camera_X_pos_BG_rounded:			ds.w 1						; rounded down to the nearest block boundary ($10th pixel)
-Camera_Y_pos_BG_rounded:			ds.w 1						; rounded down to the nearest block boundary ($10th pixel)
+Camera_X_pos_BG_rounded:			ds.w 1						; rounded down to the nearest block boundary (16th pixel)
+Camera_Y_pos_BG_rounded:			ds.w 1						; rounded down to the nearest block boundary (16th pixel)
 Camera_X_pos_coarse:				ds.w 1						; rounded down to the nearest chunk boundary (128th pixel)
 Camera_Y_pos_coarse:				ds.w 1						; rounded down to the nearest chunk boundary (128th pixel)
 Camera_X_pos_coarse_back:			ds.w 1						; Camera_X_pos_coarse - $80
 Camera_Y_pos_coarse_back:			ds.w 1						; Camera_Y_pos_coarse - $80
-Plane_double_update_flag:				ds.b 1						; set when two block are to be updated instead of one (i.e. the camera's scrolled by more than $10 pixels)
+Plane_double_update_flag:				ds.b 1						; set when two block are to be updated instead of one (i.e. the camera's scrolled by more than 16 pixels)
 Special_V_int_routine:				ds.b 1
 Camera_H_scroll_shift:				ds.w 3
 

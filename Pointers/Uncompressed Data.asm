@@ -1,5 +1,5 @@
 ; ===========================================================================
-; Uncompressed graphics
+; Uncompressed Main graphics
 ; ===========================================================================
 
 ArtUnc_Ring:				binclude "Objects/Rings/Uncompressed Art/Rings.unc"

@@ -1,5 +1,5 @@
 ; ===========================================================================
-; Kosinski Plus Module compressed main graphics
+; Kosinski Plus Module compressed Main graphics
 ; ===========================================================================
 
 ArtKosPM_Ring_Sparks:			binclude "Objects/Rings/KosinskiPM Art/Sparks.kospm"

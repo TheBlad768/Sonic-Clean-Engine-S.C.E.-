@@ -1,5 +1,5 @@
 ; ===========================================================================
-; Normal palette
+; Palette Main data
 ; ===========================================================================
 
 Pal_Sonic:			bincludeEntry "Objects/Sonic/Palettes/Sonic.pal"
@@ -14,7 +14,7 @@ Pal_WaterDEZ:		bincludeEntry "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
 	even
 
 ; ===========================================================================
-; Dynamic palette
+; Animated palette Level screen data
 ; ===========================================================================
 
 AnPal_PalDEZ12_1:	bincludeEntry "Levels/DEZ/Palettes/Animate/1.pal"
