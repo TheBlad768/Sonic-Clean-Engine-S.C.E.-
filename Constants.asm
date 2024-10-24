@@ -307,7 +307,7 @@ mapping_frame =						objoff_22						; byte
 ; Conventions followed by most objects
 ; ---------------------------------------------------------------------------
 
-routine =								5								; byte
+routine =								objoff_05						; byte
 x_vel =								objoff_18						; word
 y_vel =								objoff_1A						; word
 y_radius =							objoff_1E						; byte ; collision height / 2
@@ -384,9 +384,8 @@ lrb_solid_bit =						objoff_47						; byte ; the bit to check for left/right/bot
 ; Conventions followed by some/most bosses
 ; ---------------------------------------------------------------------------
 
-boss_saved_player =					objoff_1C						; byte ; save player address
 boss_invulnerable_time =				objoff_1D						; byte ; flash time
-collision_saved_flags =					objoff_25						; byte ; restore saved collision after hit
+boss_backup_collision =				objoff_25						; byte ; restore boss collision after hit
 boss_hitcount2 =						objoff_29						; byte ; usage varies, bosses use it as a hit counter
 
 ; ---------------------------------------------------------------------------
@@ -458,19 +457,6 @@ sub9_mapframe						= objoff_47
 next_subspr							= 6								; size
 
 ; ---------------------------------------------------------------------------
-; Sprite priority
-; ---------------------------------------------------------------------------
-
-priority_0							= 0
-priority_1							= 1<<7
-priority_2							= 2<<7
-priority_3							= 3<<7
-priority_4							= 4<<7
-priority_5							= 5<<7
-priority_6							= 6<<7
-priority_7							= 7<<7
-
-; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
 ; bitfield with the following meaning:
 ; ---------------------------------------------------------------------------
@@ -533,13 +519,13 @@ Status_LtngShield						= 5
 Status_BublShield						= 6
 
 ; ---------------------------------------------------------------------------
-; Object Status Variables
+; Object status variables
 ; ---------------------------------------------------------------------------
 
-Status_ObjOrienX						= 0
-Status_ObjOrienY						= 1
-Status_ObjTouch						= 6
-Status_ObjDefeated					= 7
+Status_FlipX							= 0								; used by Animate_Sprite
+Status_FlipY							= 1								; used by Animate_Sprite
+Status_Touch							= 6								; some/most bosses
+Status_Defeated						= 7								; some/most bosses
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
@@ -621,6 +607,19 @@ plane_size_64x32						= 64*32*2
 tile_mask							= $7FF
 nontile_mask							= $F800
 drawing_mask						= $7FFF
+
+; ---------------------------------------------------------------------------
+; Sprite priority
+; ---------------------------------------------------------------------------
+
+priority_0							= sprite_priority(0)				; high priority
+priority_1							= sprite_priority(1)
+priority_2							= sprite_priority(2)
+priority_3							= sprite_priority(3)
+priority_4							= sprite_priority(4)
+priority_5							= sprite_priority(5)
+priority_6							= sprite_priority(6)
+priority_7							= sprite_priority(7)				; low priority
 
 ; ---------------------------------------------------------------------------
 ; Sprite render screen flags

@@ -5,11 +5,12 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring:
+
+		; init
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	; set red
-		ori.b	#4,render_flags(a0)
-		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)					; set height and width
-		move.w	#$200,priority(a0)
+		ori.b	#4,render_flags(a0)										; use screen coordinates
+		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
 		move.w	x_pos(a0),objoff_32(a0)
 		move.w	y_pos(a0),objoff_34(a0)
 		move.b	subtype(a0),d0
@@ -283,8 +284,8 @@ sub_2326C:
 loc_2328E:
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
-		subi.w	#$18,d2
-		addi.w	#$18,d3
+		subi.w	#24,d2
+		addi.w	#24,d3
 		lea	(Player_1).w,a1												; a1=character
 		tst.b	object_control(a1)
 		bmi.s	locret_23324

@@ -162,7 +162,7 @@ EniDec_GetInlineTile:
 		subq.w	#1,d6								; does this tile have its priority flag set?
 		rol.w	d5
 		bhs.s	.CheckPalette0						; if not, branch
-		ori.w	#1<<15,d3							; set priority flag in base tile properties
+		ori.w	#setBit(15),d3							; set priority flag in base tile properties
 
 .CheckPalette0:
 		add.b	d7,d7								; is the high palette bit set?
@@ -170,7 +170,7 @@ EniDec_GetInlineTile:
 		subq.w	#1,d6								; does this tile have its high palette bit set?
 		rol.w	d5
 		bhs.s	.CheckPalette1						; if not, branch
-		addi.w	#1<<14,d3							; offset palette in base tile properties
+		addi.w	#setBit(14),d3						; offset palette in base tile properties
 
 .CheckPalette1:
 		add.b	d7,d7								; is the low palette bit set?
@@ -178,7 +178,7 @@ EniDec_GetInlineTile:
 		subq.w	#1,d6								; does this tile have its low palette bit set?
 		rol.w	d5
 		bhs.s	.CheckYFlip							; if not, branch
-		addi.w	#1<<13,d3							; offset palette in base tile properties
+		addi.w	#setBit(13),d3							; offset palette in base tile properties
 
 .CheckYFlip:
 		add.b	d7,d7								; is the Y flip flag set?
@@ -186,7 +186,7 @@ EniDec_GetInlineTile:
 		subq.w	#1,d6								; does this tile have its Y flip bit set?
 		rol.w	d5
 		bhs.s	.CheckXFlip							; if not, branch
-		ori.w	#1<<12,d3							; set Y flip flag in base tile properties
+		ori.w	#setBit(12),d3						; set Y flip flag in base tile properties
 
 .CheckXFlip:
 		add.b	d7,d7								; is the X flip flag set?
@@ -194,7 +194,7 @@ EniDec_GetInlineTile:
 		subq.w	#1,d6								; does this tile have its X flip bit set?
 		rol.w	d5
 		bhs.s	.GotFlags							; if not, branch
-		ori.w	#1<<11,d3							; set X flip flag in base tile properties
+		ori.w	#setBit(11),d3							; set X flip flag in base tile properties
 
 .GotFlags:
 		cmpi.w	#8,d6								; should we get another byte?

@@ -10,10 +10,11 @@ dashdust_tails				= objoff_38	; .b
 ; =============== S U B R O U T I N E =======================================
 
 Obj_DashDust:
+
+		; init
 		move.l	#Map_DashDust,mappings(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)				; set height and width
+		move.b	#4,render_flags(a0)									; use screen coordinates
+		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 		move.w	#ArtTile_DashDust,art_tile(a0)
 		move.w	#Player_1,parent(a0)
@@ -172,8 +173,7 @@ DashDust_CheckSkid:
 		move.b	#4,anim(a1)											; skid dust anim
 		move.l	mappings(a0),mappings(a1)
 		move.b	render_flags(a0),render_flags(a1)
-		move.w	#$80,priority(a1)
-		move.w	#bytes_to_word(8/2,8/2),height_pixels(a1)				; set height and width
+		move.l	#bytes_word_to_long(8/2,8/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.w	art_tile(a0),art_tile(a1)
 		move.w	parent(a0),parent(a1)
 		andi.w	#drawing_mask,art_tile(a1)

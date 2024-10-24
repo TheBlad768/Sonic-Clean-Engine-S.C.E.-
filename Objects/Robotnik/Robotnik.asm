@@ -20,14 +20,18 @@ RobotnikHead3_Index: offsetTable
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Init:
+
+		; init
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#AniRaw_RobotnikHead,objoff_30(a0)
 		movea.w	parent3(a0),a1
 		btst	#high_priority_bit,art_tile(a1)
-		beq.s	+
+		beq.s	.nothighpriority
 		bset	#high_priority_bit,art_tile(a0)
-+		rts
+
+.nothighpriority
+		rts
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Main:
@@ -36,13 +40,17 @@ Obj_RobotnikHead3Main:
 		jsr	(Animate_Raw).w
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
-		bne.s	++
+		bne.s	.defeated
 		btst	#6,status(a1)
-		beq.s	+
+		beq.s	.return
 		move.b	#2,mapping_frame(a0)
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
-+		move.b	#4,routine(a0)
+
+.defeated
+		move.b	#4,routine(a0)
 		move.b	#5,mapping_frame(a0)
 
 Obj_RobotnikHeadEnd:
@@ -97,7 +105,7 @@ loc_67CFE:
 
 Obj_RobotnikShipFlame:
 
-		; mapping
+		; init
 		lea	ObjDat2_RoboShipFlame(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		move.l	#RobotnikShipFlame_Main,address(a0)
@@ -123,7 +131,7 @@ RobotnikShipFlame_Main:
 
 Obj_RobotnikShipPieces:
 
-		; mapping
+		; init
 		lea	ObjDat_RobotnikShipPieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#Obj_FlickerMove,address(a0)
@@ -136,11 +144,11 @@ Obj_RobotnikShipPieces:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_RobotnikShip:			subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64, 64, $C, $F
-ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, 0, $200, 64, 64, 7, $F
-ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, 0, $280, 32, 16, 0, 0
-ObjDat2_RoboShipFlame:		subObjData3 $280, 16, 8, 8, 0
-ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, 1, 0, 64, 64, 0, 0
+ObjDat_RobotnikShip:			subObjData Map_RobotnikShip, $52E, 0, 0, 64, 64, 4, $C, $F
+ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, 0, 64, 64, 4, 7, $F
+ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, 0, 16, 32, 5, 0, 0
+ObjDat2_RoboShipFlame:		subObjData3 8, 16, 5, 8, 0
+ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, 1, 64, 64, 0, 0, 0
 
 AniRaw_RobotnikHead:
 		dc.b 5, 0, 1, arfEnd

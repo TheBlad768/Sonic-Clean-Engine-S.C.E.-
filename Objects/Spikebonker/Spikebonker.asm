@@ -5,9 +5,11 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker:
+
+		; wait
 		jsr	(Obj_WaitOffscreen).w
 
-		; mapping
+		; init
 		lea	ObjDat_Spikebonker(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
@@ -162,6 +164,8 @@ Obj_Spikebonker_Control:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker_SpikeBall:
+
+		; init
 		lea	ObjDat3_Spikebonker_SpikeBall(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		movea.w	parent3(a0),a1			; spikebonker (main)
@@ -171,13 +175,13 @@ Obj_Spikebonker_SpikeBall:
 .main
 		move.b	objoff_3C(a0),d0			; angle
 		bsr.s	.findangle
-		move.w	#$200,d1
+		move.w	#priority_4,d1			; high priority
 		addi.b	#$40,d0
 		bpl.s	.highpriority
-		move.w	#$280,d1
+		move.w	#priority_5,d1			; low priority
 
 .highpriority
-		move.w	d1,priority(a0)
+		move.w	d1,priority(a0)			; set priority
 		lea	(AngleLookup_1).l,a1
 		jsr	(MoveSprite_AngleXLookupOffset).w
 		jmp	(Child_DrawTouch_Sprite).w
@@ -210,8 +214,8 @@ Obj_Spikebonker_SpikeBall:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Spikebonker:				subObjData Map_Spikebonker, $500, 0, 1, $280, 40, 40, 0, $1A
-ObjDat3_Spikebonker_SpikeBall:	subObjData3 $200, 32, 32, 1, $1A|$80
+ObjDat_Spikebonker:				subObjData Map_Spikebonker, $500, 0, 1, 40, 40, 5, 0, $1A
+ObjDat3_Spikebonker_SpikeBall:	subObjData3 32, 32, 4, 1, $1A|$80
 
 ChildObjDat_Spikebonker_Control:
 		dc.w 1-1

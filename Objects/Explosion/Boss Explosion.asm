@@ -21,6 +21,8 @@ Obj_BossExplosionSpecial:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_CreateBossExplosion:
+
+		; set
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		add.b	d0,d0									; multiply by 2
@@ -186,7 +188,7 @@ Obj_BossExpControlOff:
 
 Obj_BossExplosion2:
 
-		; mapping
+		; init
 		lea	ObjDat_BossExplosion2(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		bra.s	loc_83F52
@@ -199,7 +201,7 @@ Obj_BossExplosion2:
 
 Obj_BossExplosion1:
 
-		; mapping
+		; init
 		lea	ObjDat_BossExplosion1(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 
@@ -221,7 +223,7 @@ Obj_BossExplosionAnim:
 
 Obj_BossExplosionOffset:
 
-		; mapping
+		; init
 		lea	ObjDat_BossExplosion1(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
@@ -236,8 +238,8 @@ Obj_BossExplosionOffset:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, 1, 0, 24, 24, 0, 0
-ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, 1, 0, 24, 24, 0, 0
+ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, 1, 24, 24, 0, 0, 0
+ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, 1, 24, 24, 0, 0, 0
 
 Child6_MakeBossExplosion1:
 		dc.w 1-1

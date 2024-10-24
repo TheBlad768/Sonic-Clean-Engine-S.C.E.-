@@ -95,6 +95,7 @@ tracenum := (tracenum+1)
 tracenum := 0
 
 bit function nBits,1<<(nBits-1)
+setBit function nBits,1<<(nBits)
 signmask function val,nBits,-((-(val&bit(nBits)))&bit(nBits))
 signextend function val,nBits,(val+signmask(val,nBits))!signmask(val,nBits)
 signextendB function val,signextend(val,8)
@@ -110,7 +111,7 @@ max function a,b,a!((a!b)&(-(a<b)))
 chkop function op,ref,(substr(lowstring(op),0,strlen(ref))<>ref)
 
 ; 1-arg instruction that's self-patching to remove 0-offset optimization
-insn1op	 macro oper,x
+insn1op macro oper,x
 	  if (chkop("x","0(") && chkop("x","objoff_00(") && chkop("x","obid(") && chkop("x","id(") && chkop("x","address(") && chkop("x","smps_queue.v_playsnd1("))
 		!oper	x
 	  else
@@ -121,7 +122,7 @@ insn1op	 macro oper,x
 	 endm
 
 ; 2-arg instruction that's self-patching to remove 0-offset optimization
-insn2op	 macro oper,x,y
+insn2op macro oper,x,y
 	  if (chkop("x","0(") && chkop("x","objoff_00(") && chkop("x","obid(") && chkop("x","id(") && chkop("x","address(") && chkop("x","smps_queue.v_playsnd1("))
 		  if (chkop("y","0(") && chkop("y","objoff_00(") && chkop("y","obid(") && chkop("y","id(") && chkop("y","address(") && chkop("y","smps_queue.v_playsnd1("))
 			!oper	x,y
@@ -156,57 +157,57 @@ insn2op	 macro oper,x,y
 
 	; instructions that were used with 0(a#) syntax
 	; defined to assemble as they originally did
-_move	macro
+_move macro
 		insn2op move.ATTRIBUTE, ALLARGS
 	endm
-_add	macro
+_add macro
 		insn2op add.ATTRIBUTE, ALLARGS
 	endm
-_addq	macro
+_addq macro
 		insn2op addq.ATTRIBUTE, ALLARGS
 	endm
-_cmp	macro
+_cmp macro
 		insn2op cmp.ATTRIBUTE, ALLARGS
 	endm
-_cmpi	macro
+_cmpi macro
 		insn2op cmpi.ATTRIBUTE, ALLARGS
 	endm
-_clr	macro
+_clr macro
 		insn1op clr.ATTRIBUTE, ALLARGS
 	endm
-_tst	macro
+_tst macro
 		insn1op tst.ATTRIBUTE, ALLARGS
 	endm
 
 	else
 
 	; regular meaning to the assembler; better but unlike original
-_move	macro
+_move macro
 		!move.ATTRIBUTE ALLARGS
 	endm
-_add	macro
+_add macro
 		!add.ATTRIBUTE ALLARGS
 	endm
-_addq	macro
+_addq macro
 		!addq.ATTRIBUTE ALLARGS
 	endm
-_cmp	macro
+_cmp macro
 		!cmp.ATTRIBUTE ALLARGS
 	endm
-_cmpi	macro
+_cmpi macro
 		!cmpi.ATTRIBUTE ALLARGS
 	endm
-_clr	macro
+_clr macro
 		!clr.ATTRIBUTE ALLARGS
 	endm
-_tst	macro
+_tst macro
 		!tst.ATTRIBUTE ALLARGS
 	endm
 
     endif
 
 ; nop rept
-nops	macro fill
+nops macro fill
       if ("fill"="0") || ("fill"="")
 		nop
       else
@@ -217,16 +218,16 @@ nops	macro fill
     endm
 
 ; alias ds as rs from asm68k compiler
-rs	macro
+rs macro
 	ds.ATTRIBUTE ALLARGS
     endm
 
 ; alias binclude as incbin from asm68k compiler
-incbin	macro
+incbin macro
 	binclude ALLARGS
     endm
 
 ; dcb from asm68k compiler
-dcb	macro fill, byte
+dcb macro fill, byte
 	dc.ATTRIBUTE [fill]byte
     endm

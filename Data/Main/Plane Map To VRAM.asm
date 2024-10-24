@@ -152,6 +152,31 @@ Clear_Plane_Map:
 		dbf	d2,.loop											; and copy it
 		rts
 
+; ---------------------------------------------------------------------------
+; Copies a plane map to RAM
+; Inputs:
+; a1 = map address
+; a2 = output buffer
+; d1 = number of cells in a row - 1
+; d2 = number of cell rows - 1
+; d3 = next row
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Plane_Map_To_RAM:
+
+.loop2
+		move.w	d1,d5
+		lea	(a2),a3
+
+.loop
+		move.w	(a1)+,(a3)+
+		dbf	d5,.loop											; copy one row
+		adda.w	d3,a2										; move onto next row
+		dbf	d2,.loop2											; and copy it
+		rts
+
 ; =============== S U B R O U T I N E =======================================
 
 Copy_Map_Line_To_VRAM:

@@ -18,10 +18,12 @@ Obj_Ring:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Ring_Collect:
+
+		; init
 		move.l	#Map_Ring,mappings(a0)
-		move.b	#rfCoord,render_flags(a0)
+		move.b	#rfCoord,render_flags(a0)							; use screen coordinates
 		move.l	#.sparkle,address(a0)
-		move.w	#$80,priority(a0)
+		move.w	#priority_1,priority(a0)
 		jsr	(GiveRing).w
 
 .sparkle
@@ -122,16 +124,16 @@ Obj_Bouncing_Ring_Normal:
 		MoveSprite2 a0
 
 		; check speed
-		moveq	#$18,d2											; normal speed
+		moveq	#$18,d1											; normal speed
 		tst.b	(Water_flag).w										; does level have water?
 		beq.s	.check											; if not, branch
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0										; is ring above the water?
 		bge.s	.check											; if yes, branch
-		moveq	#$A,d2											; water speed
+		moveq	#$A,d1											; water speed
 
 .check
-		add.w	d2,y_vel(a0)
+		add.w	d1,y_vel(a0)
 		bmi.s	.main
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0											; d7 - object count (Process_Sprites)
@@ -190,28 +192,28 @@ Obj_Bouncing_Ring_Normal:
 Obj_Bouncing_Ring_TestGravity:
 
 		; move sprite
-		movem.w	x_vel(a0),d0-d1								; load xy speed
+		movem.w	x_vel(a0),d0-d2								; load xy speed
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		neg.l	d1												; reverse y speed
+		neg.l	d2												; reverse y speed
 
 .notgrav
 		asl.l	#8,d0												; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d0,x_pos(a0)										; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-		asl.l	#8,d1												; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d1,y_pos(a0)										; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+		asl.l	#8,d2												; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d0,x_pos(a0)										; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+		add.l	d2,y_pos(a0)										; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 
 		; check speed
-		moveq	#$18,d2											; normal speed
+		moveq	#$18,d1											; normal speed
 		tst.b	(Water_flag).w										; does level have water?
 		beq.s	.check											; if not, branch
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0										; is ring above the water?
 		bge.s	.check											; if yes, branch
-		moveq	#$A,d2											; water speed
+		moveq	#$A,d1											; water speed
 
 .check
-		add.w	d2,y_vel(a0)
+		add.w	d1,y_vel(a0)
 		bmi.s	.main
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0											; d7 - object count (Process_Sprites)
@@ -366,9 +368,9 @@ Obj_Attracted_Ring:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Ring:			subObjMainData2 Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, $100, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat_Ring2:			subObjMainData2 Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, $100, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat3_BouncingRing:	subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, $180, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat_Ring:			subObjMainData2 Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat_Ring2:			subObjMainData2 Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat3_BouncingRing:	subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:

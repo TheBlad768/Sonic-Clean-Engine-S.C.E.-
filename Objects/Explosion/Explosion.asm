@@ -18,16 +18,17 @@ Obj_Explosion:
 		sfx	sfx_Break
 
 .skipsound
+
+		; init
 		move.l	#.main,address(a0)
 		move.l	#Map_Explosion,mappings(a0)
 		move.w	art_tile(a0),d0
 		andi.w	#$8000,d0
 		ori.w	#$5A0,d0									; VRAM
 		move.w	d0,art_tile(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
+		move.b	#4,render_flags(a0)							; use screen coordinates
 		clr.b	collision_flags(a0)
-		move.w	#bytes_to_word(24/2,24/2),height_pixels(a0)		; set height and width
+		move.l	#bytes_word_to_long(24/2,24/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.b	#3,anim_frame_timer(a0)
 		clr.b	mapping_frame(a0)
 
@@ -53,11 +54,12 @@ Obj_Explosion:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FireShield_Dissipate:
+
+		; init
 		move.l	#Map_Explosion,mappings(a0)
 		move.w	#make_art_tile($5A0,0,0),art_tile(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$280,priority(a0)
-		move.w	#bytes_to_word(24/2,24/2),height_pixels(a0)		; set height and width
+		move.b	#4,render_flags(a0)							; use screen coordinates
+		move.l	#bytes_word_to_long(24/2,24/2,priority_5),height_pixels(a0)	; set height, width and priority
 		move.b	#3,anim_frame_timer(a0)
 		move.b	#1,mapping_frame(a0)
 		move.l	#.main,address(a0)
@@ -85,11 +87,12 @@ Obj_FireShield_Dissipate:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1E6EC:
+
+		; init
 		move.l	#Map_Explosion,mappings(a0)
 		move.w	#make_art_tile($5A0,0,1),art_tile(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$100,priority(a0)
-		move.w	#bytes_to_word(24/2,24/2),height_pixels(a0)		; set height and width
+		move.b	#4,render_flags(a0)							; use screen coordinates
+		move.l	#bytes_word_to_long(24/2,24/2,priority_2),height_pixels(a0)	; set height, width and priority
 		clr.b	mapping_frame(a0)
 		move.l	#.wait,address(a0)
 
@@ -130,11 +133,12 @@ sub_1E6EC:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EnemyScore:
+
+		; init
 		move.l	#Map_EnemyScore,mappings(a0)
 		move.w	#make_art_tile(ArtTile_StarPost,0,1),art_tile(a0)
-		move.b	#4,render_flags(a0)
-		move.w	#$80,priority(a0)
-		move.w	#bytes_to_word(8/2,32/2),height_pixels(a0)		; set height and width
+		move.b	#4,render_flags(a0)							; use screen coordinates
+		move.l	#bytes_word_to_long(8/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.w	#-$300,y_vel(a0)
 		move.l	#.main,address(a0)
 

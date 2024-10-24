@@ -9,9 +9,8 @@ Obj_Monitor:
 		; init
 		move.l	#Map_Monitor,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
-		ori.b	#4,render_flags(a0)
-		move.w	#$180,priority(a0)
-		move.w	#bytes_to_word(32/2,28/2),height_pixels(a0)			; set height and width
+		ori.b	#4,render_flags(a0)								; use screen coordinates
+		move.l	#bytes_word_to_long(32/2,28/2,priority_3),height_pixels(a0)	; set height, width and priority
 
 		; check broken
 		move.w	respawn_addr(a0),d0								; get address in respawn table
@@ -22,8 +21,11 @@ Obj_Monitor:
 
 		; set broken
 		move.b	#$B,mapping_frame(a0)							; use 'broken monitor' frame
-		move.l	#Sprite_OnScreen_Test,address(a0)
-		jmp	(Sprite_OnScreen_Test).w
+
+		; draw
+		lea	(Sprite_OnScreen_Test).w,a1
+		move.l	a1,address(a0)
+		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
 .notbroken
@@ -38,7 +40,7 @@ Obj_Monitor:
 		; solid
 		moveq	#$19,d1											; monitor's width
 		moveq	#$10,d2
-		move.w	d2,d3
+		move.w	d2,d3											; monitor's height
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
 
@@ -151,7 +153,7 @@ Obj_MonitorBreak:
 		andi.b	#p1_standing|p1_pushing,d1						; is it the main character?
 		beq.s	Obj_MonitorSpawnIcon							; if not, branch
 		andi.b	#$D7,(Player_1+status).w
-		ori.b	#2,(Player_1+status).w								; prevent main character from walking in the air
+		ori.b	#setBit(Status_InAir),(Player_1+status).w			; prevent main character from walking in the air
 
 Obj_MonitorSpawnIcon:
 		andi.b	#3,status(a0)
@@ -204,8 +206,7 @@ Obj_MonitorAnimate:
 Obj_MonitorContents:
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
 		ori.b	#$24,render_flags(a0)								; set static mapping and screen coordinates flag
-		move.w	#$180,priority(a0)
-		move.w	#bytes_to_word(16/2,16/2),height_pixels(a0)			; set height and width
+		move.l	#bytes_word_to_long(16/2,16/2,priority_3),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 
 		; set move
@@ -300,7 +301,7 @@ Monitor_Give_Rings:
 
 Monitor_Give_SpeedShoes:
 		bset	#Status_SpeedShoes,status_secondary(a1)
-		move.b	#150,speed_shoes_timer(a1)
+		move.b	#(20*60)/8,speed_shoes_timer(a1)
 
 		; set player speed
 		lea	(Max_speed).w,a4
@@ -337,7 +338,7 @@ Monitor_Give_Bubble_Shield:
 
 Monitor_Give_Invincibility:
 		bset	#Status_Invincible,status_secondary(a1)
-		move.b	#150,invincibility_timer(a1)
+		move.b	#(20*60)/8,invincibility_timer(a1)
 		tst.b	(Level_results_flag).w
 		bne.s	.skipmusic
 		tst.b	(Boss_flag).w

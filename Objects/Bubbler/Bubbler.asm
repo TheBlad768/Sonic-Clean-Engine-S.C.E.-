@@ -12,12 +12,11 @@ Obj_Bubbler:
 		move.b	d0,objoff_32(a0)
 		move.b	d0,objoff_33(a0)
 
-		; mapping
+		; init
 		move.l	#Map_Bubbler,mappings(a0)
 		move.w	#make_art_tile($348,0,0),art_tile(a0)
-		move.b	#$84,render_flags(a0)
-		move.w	#bytes_to_word(32/2,32/2),height_pixels(a0)		; set height and width
-		move.w	#$80,priority(a0)
+		move.b	#$80+4,render_flags(a0)
+		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.b	#8,anim(a0)
 		move.l	#loc_2FA50,address(a0)
 
@@ -27,8 +26,8 @@ loc_2FA50:
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0
 		bhs.w	loc_2FB5C
-		tst.b	render_flags(a0)
-		bpl.w	loc_2FB5C
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.w	loc_2FB5C									; if not, branch
 		subq.w	#1,objoff_38(a0)
 		bpl.w	loc_2FB50
 		move.w	#1,objoff_36(a0)
@@ -179,8 +178,8 @@ Bubbler_Bubbles_Display:
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)
 		bne.s	Bubbler_Delete
-		tst.b	render_flags(a0)
-		bpl.s	Bubbler_Delete
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.s	Bubbler_Delete								; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -199,8 +198,8 @@ loc_2F9E2:
 
 loc_2FA14:
 		jsr	(MoveSprite2).w
-		tst.b	render_flags(a0)
-		bpl.w	Bubbler_Delete
+		tst.b	render_flags(a0)									; object visible on the screen?
+		bpl.w	Bubbler_Delete								; if not, branch
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
