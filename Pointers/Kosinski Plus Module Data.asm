@@ -64,21 +64,21 @@ ArtKosPM_StarPostStars3:			binclude "Objects/StarPost/KosinskiPM Art/StarPost St
 	even
 
 ; ===========================================================================
-; Kosinski Module compressed title card graphics
+; Kosinski Plus Module compressed title card graphics
 ; ===========================================================================
 
 ArtKosPM_DEZTitleCard:			binclude "Objects/Title Card/KosinskiPM Art/Levels/DEZ - Title Card.kospm"
 	even
 
 ; ===========================================================================
-; Kosinski Module compressed Level Select screen graphics
+; Kosinski Plus Module compressed Level Select screen graphics
 ; ===========================================================================
 
 ArtKosPM_LevelSelectText:			binclude "Data/Screens/Level Select/KosinskiPM Art/Text.kospm"
 	even
 
 ; ===========================================================================
-; Kosinski Module compressed levels graphics
+; Kosinski Plus Module compressed levels graphics
 ; ===========================================================================
 
 ArtKosPM_Spikebonker:			binclude "Objects/Spikebonker/KosinskiPM Art/Spikebonker.kospm"
