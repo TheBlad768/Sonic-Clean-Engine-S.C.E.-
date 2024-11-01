@@ -18,11 +18,11 @@ ArtUnc_SignpostStub:			binclude "Objects/Signpost/Uncompressed Art/Stub.unc"
 ; Animated uncompressed graphics
 ; ===========================================================================
 
-ArtUnc_AniDEZ__3:			binclude "Levels/DEZ/Animated Tiles/Uncompressed Art/3.unc"
+ArtUnc_AniDEZ__3:			binclude "Levels/DEZ/Tiles/Animated/Uncompressed Art/3.unc"
 	even
-ArtUnc_AniDEZ__4:			binclude "Levels/DEZ/Animated Tiles/Uncompressed Art/4.unc"
+ArtUnc_AniDEZ__4:			binclude "Levels/DEZ/Tiles/Animated/Uncompressed Art/4.unc"
 	even
-ArtUnc_AniDEZ__5:			binclude "Levels/DEZ/Animated Tiles/Uncompressed Art/5.unc"
+ArtUnc_AniDEZ__5:			binclude "Levels/DEZ/Tiles/Animated/Uncompressed Art/5.unc"
 	even
-ArtUnc_AniDEZ__6:			binclude "Levels/DEZ/Animated Tiles/Uncompressed Art/6.unc"
+ArtUnc_AniDEZ__6:			binclude "Levels/DEZ/Tiles/Animated/Uncompressed Art/6.unc"
 	even

@@ -12,8 +12,8 @@ Obj_Sonic:
 		lea	(Dust).w,a6
 
 	if GameDebug
-		tst.w	(Debug_placement_mode).w
-		beq.s	Sonic_Normal
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		beq.s	Sonic_Normal										; if not, branch
 
 		; debug only code
 		cmpi.b	#1,(Debug_placement_type).w							; are Sonic in debug object placement mode?
@@ -880,7 +880,7 @@ loc_11412:
 
 loc_11424:
 		move.w	d0,ground_vel(a0)
-		clr.b	anim(a0)	; id_Walk
+		clr.b	anim(a0)	; AniIDSonAni_Walk
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -2100,7 +2100,7 @@ loc_12158:
 Player_TouchFloor_Check_Spindash:
 		tst.b	spin_dash_flag(a0)
 		bne.s	loc_121D8
-		clr.b	anim(a0)									; id_Walk
+		clr.b	anim(a0)									; AniIDSonAni_Walk
 
 Sonic_TouchFloor:
 		move.b	y_radius(a0),d0
@@ -2108,7 +2108,7 @@ Sonic_TouchFloor:
 		btst	#Status_Roll,status(a0)
 		beq.s	loc_121D8
 		bclr	#Status_Roll,status(a0)
-		clr.b	anim(a0)									; id_Walk
+		clr.b	anim(a0)									; AniIDSonAni_Walk
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
@@ -2245,13 +2245,13 @@ loc_12344:
 		movem.l	a4-a6,-(sp)
 		bsr.w	Player_DoLevelCollision
 		movem.l	(sp)+,a4-a6
-		btst	#Status_InAir,status(a0)
-		bne.s	locret_12388
+		btst	#Status_InAir,status(a0)						; is the player in the air?
+		bne.s	locret_12388								; if yes, branch
 		moveq	#0,d0
 		move.l	d0,x_vel(a0)
 		move.w	d0,ground_vel(a0)
 		move.b	d0,object_control(a0)
-		move.b	d0,anim(a0)				; id_Walk
+		move.b	d0,anim(a0)								; AniIDSonAni_Walk
 		move.b	d0,spin_dash_flag(a0)
 		move.w	#priority_2,priority(a0)
 		move.b	#PlayerID_Control,routine(a0)

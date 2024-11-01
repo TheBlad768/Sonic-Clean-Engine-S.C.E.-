@@ -270,8 +270,8 @@ HurtCharacter_Directly2:
 		bhs.s	HurtCharacter_Directly.return						; if yes, branch
 
 HurtCharacter_Directly:
-		tst.w	(Debug_placement_mode).w
-		bne.s	.return
+		tst.w	(Debug_placement_mode).w						; is debug mode on?
+		bne.s	.return											; if yes, branch
 
 		; hurt character
 		movea.w	a0,a2
@@ -411,8 +411,8 @@ Load_LevelResults:
 		lea	(Player_1).w,a1										; a1=character
 		btst	#7,status(a1)
 		bne.s	.return
-		btst	#Status_InAir,status(a1)
-		bne.s	.return
+		btst	#Status_InAir,status(a1)								; is the player in the air?
+		bne.s	.return											; if yes, branch
 		cmpi.b	#PlayerID_Death,routine(a1)						; is player dead?
 		bhs.s	.return											; if yes, branch
 		bsr.s	Set_PlayerEndingPose

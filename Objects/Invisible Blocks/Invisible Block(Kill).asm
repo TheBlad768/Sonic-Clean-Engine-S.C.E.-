@@ -60,9 +60,9 @@ loc_1F606:
 		bsr.w	sub_1F734
 
 loc_1F64A:
-		out_of_xrange.w	loc_1EBAA
-		tst.w	(Debug_placement_mode).w
-		beq.s	locret_1F5FE
+		out_of_xrange.w	Obj_Invisible_SolidBlock.offscreen
+		tst.w	(Debug_placement_mode).w				; is debug mode on?
+		beq.s	locret_1F5FE								; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -85,9 +85,9 @@ loc_1F66C:
 		bsr.s	sub_1F734
 
 loc_1F6AE:
-		out_of_xrange.w	loc_1EBAA
-		tst.w	(Debug_placement_mode).w
-		beq.s	locret_1F742
+		out_of_xrange.w	Obj_Invisible_SolidBlock.offscreen
+		tst.w	(Debug_placement_mode).w				; is debug mode on?
+		beq.s	locret_1F742								; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -110,9 +110,9 @@ loc_1F6D0:
 		bsr.s	sub_1F734
 
 loc_1F712:
-		out_of_xrange.w	loc_1EBAA
-		tst.w	(Debug_placement_mode).w
-		beq.s	locret_1F742
+		out_of_xrange.w	Obj_Invisible_SolidBlock.offscreen
+		tst.w	(Debug_placement_mode).w				; is debug mode on?
+		beq.s	locret_1F742								; if not, branch
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================

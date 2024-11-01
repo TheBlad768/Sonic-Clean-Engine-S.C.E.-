@@ -534,6 +534,7 @@ Status_Defeated						= 7								; some/most bosses
 ArtTile_VRAM_Start					= 0
 ArtTile_SpikesSprings					= $484
 ArtTile_Monitors						= $4AC
+ArtTile_Explosion						= $5A0
 ArtTile_StarPost						= $5E4
 ArtTile_Sonic							= $680
 ArtTile_Ring							= $6BC

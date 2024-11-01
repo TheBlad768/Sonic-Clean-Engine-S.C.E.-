@@ -285,7 +285,8 @@ loc_1D850:
 		rts		; nop
 		bra.s	Monitor_Give_Lightning_Shield	; C
 		rts		; nop
-		bra.w	Monitor_Give_Bubble_Shield		; E
+		bra.s	Monitor_Give_Bubble_Shield		; E
+		rts		; nop
 		bra.w	Monitor_Give_Invincibility			; 10
 ; ---------------------------------------------------------------------------
 
@@ -294,9 +295,8 @@ Monitor_Give_Eggman:							; 12
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Rings:
-		addi.w	#10,(Ring_count).w								; add 10 rings to the number of rings you have
-		ori.b	#1,(Update_HUD_ring_count).w					; update the ring counter
-		sfx	sfx_RingRight,1										; play ring sound
+		moveq	#10,d0											; add 10 rings
+		jmp	(AddRings).w
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_SpeedShoes:

@@ -43,8 +43,8 @@ Obj_StartNewLevel:
 
 .chkdel
 		out_of_xrange.w	.offscreen
-		tst.w	(Debug_placement_mode).w
-		beq.s	.return
+		tst.w	(Debug_placement_mode).w				; is debug mode on?
+		beq.s	.return									; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 

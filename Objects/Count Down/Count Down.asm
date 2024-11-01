@@ -335,10 +335,10 @@ AirCountdown_Load_Art:
 		beq.s	AirCountdown_ShowNumber.return
 		move.b	d1,objoff_32(a0)
 		subi.w	#9,d1
-		move.w	d1,d0
+		move.w	d1,d0										; multiply by $C0/2
 		add.w	d1,d1
 		add.w	d0,d1
-		lsl.w	#5,d1											; multiply by $20
+		lsl.w	#5,d1
 		addi.l	#dmaSource(ArtUnc_AirCountDown),d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2			; 1P
 		moveq	#$C0/2,d3									; division by 2

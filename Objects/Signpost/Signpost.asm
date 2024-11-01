@@ -341,7 +341,7 @@ EndSign_CheckWall:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjSlot_EndSigns:		subObjSlotData 0, $494, 0, 0, $18, 0, Map_EndSigns, 32, 48, 6, 0, 0
+ObjSlot_EndSigns:		subObjSlotData 1-1, $494, 0, 0, $18, 0, Map_EndSigns, 32, 48, 6, 0, 0
 ObjDat_SignpostStub:		subObjData Map_SignpostStub, $492, 0, 0, 16, 8, 6, 0, 0
 ObjDat_SignpostSparkle:	subObjData Map_Ring, ArtTile_Ring, 1, 0, 16, 16, 5, 4, 0
 

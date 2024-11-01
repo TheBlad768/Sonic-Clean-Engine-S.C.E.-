@@ -46,8 +46,8 @@ loc_1CD3C:
 		bhs.s	+
 		move.b	#1,objoff_34(a0)
 +		move.l	#+,address(a0)
-+		tst.w	(Debug_placement_mode).w
-		bne.s	+
++		tst.w	(Debug_placement_mode).w					; is debug mode on?
+		bne.s	+											; if yes, branch
 		move.w	x_pos(a0),d1
 		lea	objoff_34(a0),a2
 		lea	(Player_1).w,a1									; a1=character
@@ -76,8 +76,8 @@ sub_1CDDA:
 		bge.s	locret_1CE6A
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CE1C
-		btst	#Status_InAir,status(a1)
-		bne.s	locret_1CE6A
+		btst	#Status_InAir,status(a1)							; is the player in the air?
+		bne.s	locret_1CE6A									; if yes, branch
 
 loc_1CE1C:
 		move.w	x_pos(a1),d2
@@ -123,8 +123,8 @@ loc_1CE6C:
 		bge.s	locret_1CEF0
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CEA8
-		btst	#Status_InAir,status(a1)
-		bne.s	locret_1CEF0
+		btst	#Status_InAir,status(a1)							; is the player in the air?
+		bne.s	locret_1CEF0									; if yes, branch
 
 loc_1CEA8:
 		move.w	x_pos(a1),d2
@@ -155,8 +155,8 @@ locret_1CEF0:
 ; ---------------------------------------------------------------------------
 
 loc_1CEF2:
-		tst.w	(Debug_placement_mode).w
-		bne.s	+
+		tst.w	(Debug_placement_mode).w					; is debug mode on?
+		bne.s	+											; if yes, branch
 		move.w	y_pos(a0),d1
 		lea	objoff_34(a0),a2
 		lea	(Player_1).w,a1									; a1=character
@@ -185,8 +185,8 @@ sub_1CF42:
 		bge.s	locret_1CFD2
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CF84
-		btst	#Status_InAir,status(a1)
-		bne.s	locret_1CFD2
+		btst	#Status_InAir,status(a1)							; is the player in the air?
+		bne.s	locret_1CFD2									; if yes, branch
 
 loc_1CF84:
 		move.w	y_pos(a1),d2
@@ -232,8 +232,8 @@ loc_1CFD4:
 		bge.s	locret_1D058
 		move.b	subtype(a0),d0
 		bpl.s	loc_1D010
-		btst	#Status_InAir,status(a1)
-		bne.s	locret_1D058
+		btst	#Status_InAir,status(a1)							; is the player in the air?
+		bne.s	locret_1D058									; if yes, branch
 
 loc_1D010:
 		move.w	y_pos(a1),d2
