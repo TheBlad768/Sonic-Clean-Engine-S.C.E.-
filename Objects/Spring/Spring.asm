@@ -146,7 +146,7 @@ sub_22F98:
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; id_Walk
+		clr.b	anim(a1)														; AniIDSonAni_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -227,7 +227,7 @@ loc_231BE:
 		move.w	x_vel(a1),ground_vel(a1)
 		btst	#Status_Roll,status(a1)
 		bne.s	loc_231D8
-		clr.b	anim(a1)														; id_Walk
+		clr.b	anim(a1)														; AniIDSonAni_Walk
 
 loc_231D8:
 		move.b	subtype(a0),d0
@@ -235,7 +235,7 @@ loc_231D8:
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; id_Walk
+		clr.b	anim(a1)														; AniIDSonAni_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -291,10 +291,10 @@ loc_2328E:
 		bmi.s	locret_23324
 		cmpi.b	#PlayerID_Death,routine(a1)								; has player just died?
 		bhs.s	locret_23324												; if yes, branch
-		tst.w	(Debug_placement_mode).w
-		bne.s	locret_23324
-		btst	#Status_InAir,status(a1)
-		bne.s	locret_23324
+		tst.w	(Debug_placement_mode).w								; is debug mode on?
+		bne.s	locret_23324												; if yes, branch
+		btst	#Status_InAir,status(a1)										; is the player in the air?
+		bne.s	locret_23324												; if yes, branch
 		move.w	ground_vel(a1),d4
 		btst	#0,status(a0)
 		beq.s	loc_232B6
@@ -360,7 +360,7 @@ loc_233F8:
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; id_Walk
+		clr.b	anim(a1)														; AniIDSonAni_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -462,7 +462,7 @@ loc_23542:
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; id_Walk
+		clr.b	anim(a1)														; AniIDSonAni_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -541,7 +541,7 @@ loc_23660:
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; id_Walk
+		clr.b	anim(a1)														; AniIDSonAni_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0

@@ -253,8 +253,8 @@ Check_SonicEndPose:
 		lea	(Player_1).w,a1								; a1=character
 		btst	#7,status(a1)
 		bne.s	.return
-		btst	#Status_InAir,status(a1)
-		bne.s	.return
+		btst	#Status_InAir,status(a1)						; is the player in the air?
+		bne.s	.return									; if yes, branch
 		cmpi.b	#PlayerID_Death,routine(a1)				; has player just died?
 		bhs.s	.return									; if yes, branch
 		move.l	d0,objoff_34(a0)							; set routine
@@ -739,7 +739,7 @@ Child1_EggCapsule_Animals:
 
 PLC_EggCapsule: plrlistheader
 		plreq $494, ArtKosPM_EggCapsule
-		plreq $5A0, ArtKosPM_Explosion
+		plreq ArtTile_Explosion, ArtKosPM_Explosion
 PLC_EggCapsule_end
 ; ---------------------------------------------------------------------------
 

@@ -601,3 +601,30 @@ loc_4660E:
 		sub.l	d1,objoff_2E(a0)			; apply speed
 		move.w	objoff_32(a0),d0			; get final offset for us by calling object
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+sub_86458:
+		lea	sub2_x_pos(a0),a2
+		move.w	mainspr_childsprites(a0),d0
+		subq.w	#1,d0
+		move.w	x_pos(a0),d2
+		move.w	y_pos(a0),d3
+
+.next
+		move.b	(a1)+,d1
+		ext.w	d1
+		btst	#0,render_flags(a0)
+		beq.s	.notflipx
+		neg.w	d1
+
+.notflipx
+		add.w	d2,d1
+		move.w	d1,(a2)+					; sub2_x_pos
+		move.b	(a1)+,d1
+		ext.w	d1
+		add.w	d3,d1
+		move.w	d1,(a2)+					; sub2_y_pos
+		addq.w	#2,a2					; skip sub2_mapframe
+		dbf	d0,.next
+		rts

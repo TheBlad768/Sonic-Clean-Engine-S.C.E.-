@@ -17,7 +17,7 @@ Pal_WaterDEZ:		bincludeEntry "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
 ; Animated palette Level screen data
 ; ===========================================================================
 
-AnPal_PalDEZ12_1:	bincludeEntry "Levels/DEZ/Palettes/Animate/1.pal"
+AnPal_PalDEZ12_1:	bincludeEntry "Levels/DEZ/Palettes/Animated/Palettes/1.pal"
 	even
-AnPal_PalDEZ12_2:	bincludeEntry "Levels/DEZ/Palettes/Animate/2.pal"
+AnPal_PalDEZ12_2:	bincludeEntry "Levels/DEZ/Palettes/Animated/Palettes/2.pal"
 	even

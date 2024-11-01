@@ -24,7 +24,7 @@ Obj_Explosion:
 		move.l	#Map_Explosion,mappings(a0)
 		move.w	art_tile(a0),d0
 		andi.w	#$8000,d0
-		ori.w	#$5A0,d0									; VRAM
+		ori.w	#ArtTile_Explosion,d0							; VRAM
 		move.w	d0,art_tile(a0)
 		move.b	#4,render_flags(a0)							; use screen coordinates
 		clr.b	collision_flags(a0)
@@ -57,7 +57,7 @@ Obj_FireShield_Dissipate:
 
 		; init
 		move.l	#Map_Explosion,mappings(a0)
-		move.w	#make_art_tile($5A0,0,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Explosion,0,0),art_tile(a0)
 		move.b	#4,render_flags(a0)							; use screen coordinates
 		move.l	#bytes_word_to_long(24/2,24/2,priority_5),height_pixels(a0)	; set height, width and priority
 		move.b	#3,anim_frame_timer(a0)
@@ -90,7 +90,7 @@ sub_1E6EC:
 
 		; init
 		move.l	#Map_Explosion,mappings(a0)
-		move.w	#make_art_tile($5A0,0,1),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Explosion,0,1),art_tile(a0)
 		move.b	#4,render_flags(a0)							; use screen coordinates
 		move.l	#bytes_word_to_long(24/2,24/2,priority_2),height_pixels(a0)	; set height, width and priority
 		clr.b	mapping_frame(a0)

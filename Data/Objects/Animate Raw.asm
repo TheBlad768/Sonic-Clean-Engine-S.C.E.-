@@ -16,7 +16,7 @@ Animate_RawNoSSTAdjustFlipX:
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1
 		bmi.s	Animate_RawNoSST.main
-		bclr	#6,d1
+		bclr	#6,d1									; $40?
 		beq.s	.skip
 		bchg	#0,render_flags(a0)
 
@@ -41,7 +41,7 @@ Animate_RawNoSSTAdjustFlipY:
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1
 		bmi.s	Animate_RawNoSST.main
-		bclr	#6,d1
+		bclr	#6,d1									; $40?
 		beq.s	.skip
 		bchg	#1,render_flags(a0)
 
@@ -176,7 +176,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1
 		bmi.s	Animate_RawNoSSTMultiDelay.main
-		bclr	#6,d1
+		bclr	#6,d1									; $40?
 		beq.s	.skip
 		bchg	#0,render_flags(a0)
 
@@ -262,7 +262,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1
 		bmi.s	Animate_RawNoSSTMultiDelay.main
-		bclr	#6,d1
+		bclr	#6,d1									; $40?
 		beq.s	.skip
 		bchg	#1,render_flags(a0)
 
