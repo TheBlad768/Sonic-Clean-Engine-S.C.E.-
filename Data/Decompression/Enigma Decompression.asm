@@ -11,7 +11,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Eni_Decomp:
-		move.l	a1,-(sp)								; save current RAM buffer (we save RAM buffer so that we don't duplicate it after decompressing is done)
+		pea	(a1)										; save current RAM buffer (we save RAM buffer so that we don't duplicate it after decompressing is done)
 		movea.w	d0,a2								; save base tile properties
 		moveq	#0,d4								; get number of tile bits
 		move.b	(a0)+,d4
