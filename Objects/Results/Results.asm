@@ -82,7 +82,7 @@ Obj_LevelResults:
 		move.l	(a2)+,address(a1)
 		move.w	(a2)+,objoff_46(a1)
 		move.w	(a2)+,x_pos(a1)
-		spl	5(a1)
+		spl	objoff_05(a1)
 		move.w	(a2)+,y_pos(a1)
 		move.b	(a2)+,mapping_frame(a1)
 		move.b	(a2)+,width_pixels(a1)
@@ -134,6 +134,18 @@ Obj_LevelResults:
 		sub.w	d1,(Ring_bonus_countdown).w							; get 100 points from the ring bonus
 
 .skiprb
+
+		; check buttons
+		moveq	#btnABC,d1											; are buttons A, B, or C being pressed?
+		and.b	(Ctrl_1_pressed).w,d1
+		beq.s	.skipr												; if not, branch
+
+		; skip countdown
+		add.w	(Time_bonus_countdown).w,d0
+		add.w	(Ring_bonus_countdown).w,d0
+		clr.l	(Time_bonus_countdown).w								; clear time and ring bonus countdown
+
+.skipr
 		add.w	d0,(Total_bonus_countup).w							; add to total score for level
 		tst.w	d0
 		beq.s	.finish												; branch once score has finished counting down
@@ -262,8 +274,8 @@ LevelResults_MoveElement:
 .loc_2DE20
 		cmp.b	objoff_28(a0),d0										; level element moving out. Test if value of parent queue matches given queue value
 		blo.s		.return
-		moveq	#-$20,d0											; if so, move out
-		tst.b	5(a0)
+		moveq	#-32,d0												; if so, move out
+		tst.b	objoff_05(a0)
 		beq.s	.loc_2DE32
 		neg.w	d0													; change direction depending on where it came from
 
