@@ -95,7 +95,7 @@ LevelSelectScreen:
 		jsr	(Wait_VSync).w
 		jsr	(Process_KosPlus_Module_Queue).w
 		tst.w	(KosPlus_modules_left).w
-		bne.s	.waitplc
+		bne.s	.waitplc												; wait for KosPlusM queue to clear
 		move.b	#VintID_LevelSelect,(V_int_routine).w
 		jsr	(Wait_VSync).w
 		enableScreen
@@ -370,11 +370,13 @@ LevelSelect_MarkFields:
 		moveq	#bytesToXcnt(64,8),d2
 
 .copy
+
 	rept 8
 		move.w	(a1)+,d0
 		add.w	d3,d0												; VRAM shift
 		move.w	d0,(a2)+
 	endr
+
 		dbf	d2,.copy
 
 	if LevelSelect_VRAM<>0
@@ -475,7 +477,7 @@ LevelSelect_LoadAct:
 
 LevelSelect_LoadMainText:
 		lea	(LevelSelect_buffer2+planeLoc(64,0,1)).l,a5
-		lea	LevelSelect_MainText(pc),a0
+		lea	LevelSelect_HeaderText(pc),a0
 
 .loadtext
 		moveq	#0,d6
@@ -501,7 +503,7 @@ LevelSelect_LoadMainText:
 LevelSelect_LoadText:
 		lea	LevelSelect_MappingOffsets(pc),a0
 		lea	(LevelSelect_buffer).l,a1
-		lea	LevelSelect_Text(pc),a2
+		lea	LevelSelect_MainText(pc),a2
 
 	if ~~LevelSelect_VRAM
 		moveq	#0,d3
@@ -568,10 +570,10 @@ LevelSelect_LoadAct1:		levselstr "ACT 1"
 LevelSelect_LoadAct2:		levselstr "ACT 2"
 LevelSelect_LoadAct3:		levselstr "ACT 3"
 LevelSelect_LoadAct4:		levselstr "ACT 4"
-LevelSelect_MainText:		levselstr "SONIC TEST GAME - *** DEBUG MODE ***                            "
+LevelSelect_HeaderText:	levselstr "SONIC TEST GAME - *** DEBUG MODE ***                            "
 
 ; main text
-LevelSelect_Text:
+LevelSelect_MainText:
 		levselstr "   DEATH EGG          - ACT 1"
 		levselstr "   UNKNOWN LEVEL      - UNKNOWN"
 		levselstr "   UNKNOWN LEVEL      - UNKNOWN"
