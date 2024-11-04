@@ -10,10 +10,9 @@ Obj_StarPost:
 
 		; init
 		move.l	#Map_StarPost,mappings(a0)
-		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a0)
-		move.b	#$44,render_flags(a0)									; set screen coordinates and multi-draw flag
+		move.l	#bytes_to_long(rfCoord+rfMulti,0,80/2,16/2),render_flags(a0)		; set screen coordinates, multi-draw flag and height and width
+		move.l	#words_to_long(priority_5,make_art_tile(ArtTile_StarPost+8,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#2,mainspr_childsprites(a0)
-		move.l	#bytes_word_to_long(80/2,16/2,priority_5),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 
 		; create circle

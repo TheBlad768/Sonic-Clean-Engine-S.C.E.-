@@ -18,9 +18,9 @@ Obj_Bubbler:
 		move.b	#$80+4,render_flags(a0)
 		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.b	#8,anim(a0)
-		move.l	#loc_2FA50,address(a0)
+		move.l	#.main,address(a0)
 
-loc_2FA50:
+.main
 		tst.w	objoff_36(a0)
 		bne.s	loc_2FAB2
 		move.w	(Water_level).w,d0

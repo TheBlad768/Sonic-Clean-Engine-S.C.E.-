@@ -19,9 +19,8 @@ Obj_FireShield:
 		move.l	#Map_FireShield,mappings(a0)
 		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_FireShield),Art_Address(a0)		; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)								; use screen coordinates
-		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
-		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)	; set screen coordinates flag and height and width
+		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
@@ -101,9 +100,8 @@ Obj_LightningShield:
 		move.l	#Map_LightningShield,mappings(a0)
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_LightningShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)									; use screen coordinates
-		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
-		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)		; set screen coordinates flag and height and width
+		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
@@ -264,9 +262,8 @@ Obj_BubbleShield:
 		move.l	#Map_BubbleShield,mappings(a0)
 		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_BubbleShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)								; use screen coordinates
-		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
-		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)	; set screen coordinates flag and height and width
+		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
@@ -327,9 +324,8 @@ Obj_InstaShield:
 		move.l	#Map_InstaShield,mappings(a0)
 		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_InstaShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.b	#4,render_flags(a0)								; use screen coordinates
-		move.l	#bytes_word_to_long(48/2,48/2,priority_1),height_pixels(a0)	; set height, width and priority
-		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a0)
+		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)	; set screen coordinates flag and height and width
+		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
