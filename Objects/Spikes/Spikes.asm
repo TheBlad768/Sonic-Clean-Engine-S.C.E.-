@@ -48,10 +48,10 @@ Obj_Spikes:
 loc_23FE8:
 		move.b	status(a0),d0
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_23FF6
+		beq.s	.notgrav
 		eori.b	#2,d0
 
-loc_23FF6:
+.notgrav
 		andi.b	#2,d0
 		beq.s	loc_24002
 		move.l	#sub_2413E,address(a0)

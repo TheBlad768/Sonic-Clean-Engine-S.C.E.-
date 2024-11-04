@@ -126,7 +126,7 @@ Events_fg:							ds.b $18						; various flags used by foreground events
 Draw_delayed_position:				ds.w 1						; position to redraw screen from. Screen is reloaded 1 row at a time to avoid game lag
 Draw_delayed_rowcount:				ds.w 1						; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
 Events_bg:							ds.b $18						; various flags used by background events
-Boss_events:							ds.b $10
+Boss_events:							ds.b $20
 Plane_buffer_2_addr:					ds.l 1						; the address of the second plane buffer to process, if applicable
 Ring_start_addr_ROM:				ds.l 1						; address in the ring layout of the first ring whose X position is >= camera X position - 8
 Ring_end_addr_ROM:					ds.l 1						; address in the ring layout of the first ring whose X position is >= camera X position + 328
@@ -339,6 +339,7 @@ Target_palette_line_4:					ds.b palette_line_size
 
 ; oscillating variables
 Oscillating_variables:					= *
+Oscillating_table:						= *
 Oscillating_Numbers:					= *
 Oscillation_Control:					ds.w 1
 Oscillating_Data:						ds.b $40
