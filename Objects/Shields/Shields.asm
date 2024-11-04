@@ -435,7 +435,7 @@ Obj_Invincibility:
 		move.l	#Obj_188E8,address(a1)
 		move.l	#Map_Invincibility,mappings(a1)
 		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a1)
-		move.b	#$44,render_flags(a1)								; set screen coordinates and multi-draw flag
+		move.b	#$40+4,render_flags(a1)							; set screen coordinates and multi-draw flag
 		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.w	#2,mainspr_childsprites(a1)
 		move.b	d2,objoff_36(a1)
