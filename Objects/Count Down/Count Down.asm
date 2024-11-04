@@ -8,9 +8,8 @@ Obj_AirCountdown:
 
 		; init
 		move.l	#Map_Bubbler,mappings(a0)					; 1P
-		move.w	#make_art_tile($348,0,0),art_tile(a0)
-		move.b	#$84,render_flags(a0)
-		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
+		move.l	#bytes_to_long(rfCoord+rfOnscreen,0,32/2,32/2),render_flags(a0)	; set screen coordinates, on-screen flag and height and width
+		move.l	#words_to_long(priority_1,make_art_tile($348,0,0)),priority(a0)	; set priority and art_tile
 		move.b	#1,objoff_37(a0)
 		move.l	#.countdown,address(a0)
 
