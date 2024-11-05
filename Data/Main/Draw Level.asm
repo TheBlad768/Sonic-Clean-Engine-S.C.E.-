@@ -212,7 +212,6 @@ Setup_TileColumnDraw:
 		add.w	d5,d5
 		adda.w	d5,a0
 +		swap	d7
-
 -		move.w	(a5,d2.w),d3
 		move.w	d3,d4
 		andi.w	#$3FF,d3
@@ -428,8 +427,7 @@ Setup_TileRowDraw:
 		add.w	d5,d5
 		add.w	d5,d5
 		adda.w	d5,a0
-+
--		move.w	(a5,d2.w),d3
+/		move.w	(a5,d2.w),d3
 		move.w	d3,d4
 		andi.w	#$3FF,d3
 		lsl.w	#3,d3
@@ -696,23 +694,27 @@ Draw_BG:
 Draw_BGNoVert:
 		move.w	d6,d1
 
--		sub.w	(a4)+,d6
-		bmi.s	+
+.find
+		sub.w	(a4)+,d6
+		bmi.s	.found
 		moveq	#-16,d0								; set align (16 pixels)
 		and.w	(a6)+,d0
 		move.w	d0,(a6)+
-		subq.w	#1,d5
-		bra.s	-
+		subq.w	#1,d5								; next
+		bra.s	.find
 ; ---------------------------------------------------------------------------
-+		neg.w	d6
+
+.found
+		neg.w	d6
 		lsr.w	#4,d6
 		moveq	#$F,d4
 		sub.w	d6,d4
-		bhs.s	+
+		bhs.s	.loop
 		moveq	#0,d4
 		moveq	#$F,d6
-+
--		movem.w	d1/d4-d6,-(sp)
+
+.loop
+		movem.w	d1/d4-d6,-(sp)
 		movem.l	a4/a6,-(sp)
 		lea	2(a6),a5
 		bsr.w	Draw_TileColumn
@@ -720,26 +722,27 @@ Draw_BGNoVert:
 		movem.w	(sp)+,d1/d4-d6
 		addq.w	#4,a6
 		tst.w	d4
-		beq.s	+
+		beq.s	.loop2
 		lsl.w	#4,d6
 		add.w	d6,d1
-		subq.w	#1,d5
+		subq.w	#1,d5								; next
 		move.w	(a4)+,d6
 		lsr.w	#4,d6
 		move.w	d4,d0
 		sub.w	d6,d4
-		bpl.s	-
+		bpl.s	.loop
 		move.w	d0,d6
 		moveq	#0,d4
-		bra.s	-
+		bra.s	.loop
 ; ---------------------------------------------------------------------------
-+
--		subq.w	#1,d5
+
+.loop2
+		subq.w	#1,d5								; next
 		beq.s	Get_DeformDrawPosVert.return
 		moveq	#-16,d0								; set align (16 pixels)
 		and.w	(a6)+,d0
 		move.w	d0,(a6)+
-		bra.s	-
+		bra.s	.loop2
 
 ; ---------------------------------------------------------------------------
 ; Get deform position
@@ -802,24 +805,27 @@ DrawTilesVDeform2:
 .main
 		move.w	d6,d1
 
--		sub.w	(a4)+,d6
-		blo.s		+
+.find
+		sub.w	(a4)+,d6
+		blo.s		.found
 		move.w	(a6)+,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(a6)+
-		subq.w	#1,d5
-		bra.s	-
+		subq.w	#1,d5								; next
+		bra.s	.find
 ; ---------------------------------------------------------------------------
-+		neg.w	d6
+
+.found
+		neg.w	d6
 		lsr.w	#4,d6
 		moveq	#$15,d4
 		sub.w	d6,d4
-		bhs.s	+
+		bhs.s	.loop
 		moveq	#0,d4
 		moveq	#$15,d6
 
-+
--		movem.w	d1/d4-d6,-(sp)
+.loop
+		movem.w	d1/d4-d6,-(sp)
 		movem.l	a4/a6,-(sp)
 		lea	2(a6),a5
 		bsr.w	Draw_TileRow
@@ -827,26 +833,27 @@ DrawTilesVDeform2:
 		movem.w	(sp)+,d1/d4-d6
 		addq.w	#4,a6
 		tst.w	d4
-		beq.s	+
+		beq.s	.loop2
 		lsl.w	#4,d6
 		add.w	d6,d1
-		subq.w	#1,d5
+		subq.w	#1,d5								; next
 		move.w	(a4)+,d6
 		lsr.w	#4,d6
 		move.w	d4,d0
 		sub.w	d6,d4
-		bhs.s	-
+		bhs.s	.loop
 		move.w	d0,d6
 		moveq	#0,d4
-		bra.s	-
+		bra.s	.loop
 ; ---------------------------------------------------------------------------
-+
--		subq.w	#1,d5
+
+.loop2
+		subq.w	#1,d5								; next
 		beq.s	Get_XDeformRange.return
 		move.w	(a6)+,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(a6)+
-		bra.s	-
+		bra.s	.loop2
 
 ; ---------------------------------------------------------------------------
 ; Get VScroll deform position

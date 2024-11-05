@@ -1373,7 +1373,7 @@ Sonic_JumpHeight:
 
 loc_118D2:
 		cmp.w	y_vel(a0),d1								; is y speed greater than 4? (2 if underwater)
-		ble.w	Sonic_InstaAndShieldMoves				; if not, branch
+		ble.s		Sonic_InstaAndShieldMoves				; if not, branch
 		moveq	#btnABC,d0								; are buttons A, B or C being pressed?
 		and.b	(Ctrl_1_logical).w,d0
 		bne.s	locret_118E8								; if yes, branch
