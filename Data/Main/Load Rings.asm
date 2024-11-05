@@ -239,7 +239,7 @@ GiveRing:
 ; =============== S U B R O U T I N E =======================================
 
 AddRings:
-		add.w	d0,(Ring_count).w									; add 1 to rings
+		add.w	d0,(Ring_count).w									; add to rings
 		ori.b	#1,(Update_HUD_ring_count).w						; update the rings counter
 		sfx	sfx_RingRight,1											; play ring sound
 
