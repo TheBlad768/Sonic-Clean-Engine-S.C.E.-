@@ -23,7 +23,7 @@ ChangeRingFrame:
 		lsl.w	#6,d1										; multiply by $40
 		addi.l	#dmaSource(ArtUnc_Ring),d1				; get next frame
 		move.w	#tiles_to_bytes(ArtTile_Ring),d2			; load art destination
-		moveq	#$80/2,d3								; size of art (in words)	; we only need one frame
+		moveq	#tiles_to_bytes(dmaLength(4)),d3			; size of art (in words)	; we only need one frame
 		bsr.w	Add_To_DMA_Queue
 
 .syncrings2
