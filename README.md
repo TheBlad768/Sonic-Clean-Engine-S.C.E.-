@@ -14,6 +14,10 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 
 - [Sonic-Clean-Engine-S.C.E.-Extended-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-)
 
+#### Sonic 1 in Sonic 3 & Knuckles (S.C.E. Version):
+
+- [Sonic-1-in-Sonic-3-S.C.E.-](https://github.com/TheBlad768/Sonic-1-in-Sonic-3-S.C.E.-)
+
 ## Quick start
 
 - For editing sprites you can use [SonMapEd](https://info.sonicretro.org/SonMapEd), [ClownMapEd](https://info.sonicretro.org/ClownMapEd) or [Flex2](https://info.sonicretro.org/Flex_2) (Read the issues).
