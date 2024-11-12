@@ -428,7 +428,7 @@ Obj_Invincibility:
 		; init
 		moveq	#0,d2
 		lea	off_187DE-6(pc),a2
-		lea	address(a0),a1
+		lea	(a0),a1
 		moveq	#4-1,d1
 
 .loop
