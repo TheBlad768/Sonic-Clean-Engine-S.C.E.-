@@ -785,6 +785,9 @@ v_screenposy							= Camera_Y_pos					; alias from Sonic 1 (GitHub)
 v_trackpos							= Pos_table_index				; alias from Sonic 1 (GitHub)
 v_trackbyte							= Pos_table_index+1				; alias from Sonic 1 (GitHub)
 v_lookshift							= Distance_from_top				; alias from Sonic 1 (GitHub)
+Screen_shake_flag					= Screen_shaking_flag				; alias from Sonic 3K (GitHub)
+Screen_shake_offset					= Screen_shaking_offset			; alias from Sonic 3K (GitHub)
+Screen_shake_last_offset				= Screen_shaking_last_offset		; alias from Sonic 3K (GitHub)
 
 ; misc variables
 v_gamemode							= Game_mode					; alias from Sonic 1 (GitHub)
