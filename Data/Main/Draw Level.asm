@@ -283,7 +283,7 @@ Draw_BG2:
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		moveq	#0,d1		; Camera_X_pos_BG_copy
-		moveq	#$20,d6
+		moveq	#512/16,d6
 
 ; ---------------------------------------------------------------------------
 ; Draw tile row
@@ -486,11 +486,11 @@ Get_ChunkRow:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFull:
-		moveq	#$10-1,d2
+		moveq	#(256/16)-1,d2
 
 .refresh
 		movem.l	d0-d2/a0,-(sp)
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/a0
@@ -506,7 +506,7 @@ Refresh_PlaneFull:
 
 Refresh_PlaneTileDeform:
 		move.w	(a4)+,d2
-		moveq	#$10-1,d3
+		moveq	#(256/16)-1,d3
 
 .find
 		cmp.w	d2,d0
@@ -518,7 +518,7 @@ Refresh_PlaneTileDeform:
 
 .refresh
 		move.w	(a5),d1
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
@@ -535,7 +535,7 @@ Refresh_PlaneTileDeform:
 
 Refresh_PlaneDirectVScroll:
 		move.w	(a4)+,d2
-		moveq	#$20-1,d3
+		moveq	#(512/16)-1,d3
 
 .find
 		cmp.w	d2,d0
@@ -547,7 +547,7 @@ Refresh_PlaneDirectVScroll:
 
 .refresh
 		move.w	(a5),d1
-		moveq	#$10,d6
+		moveq	#256/16,d6
 		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
@@ -563,12 +563,12 @@ Refresh_PlaneDirectVScroll:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFullDirect_BG:
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		bra.s	Refresh_PlaneDirect2_BG
 ; ---------------------------------------------------------------------------
 
 Refresh_PlaneScreenDirect_BG:
-		moveq	#$15,d6
+		moveq	#(320+16)/16,d6
 
 Refresh_PlaneDirect2_BG:
 		move.w	(Camera_Y_pos_BG_copy).w,d0
@@ -576,7 +576,7 @@ Refresh_PlaneDirect2_BG:
 
 Refresh_PlaneDirect_BG:
 		disableInts
-		moveq	#$F-1,d2
+		moveq	#(256/16)-1,d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)			; redraws the entire plane in one go during 68k execution
@@ -595,12 +595,12 @@ Refresh_PlaneDirect_BG:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFullDirect:
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		bra.s	Refresh_PlaneDirect2
 ; ---------------------------------------------------------------------------
 
 Refresh_PlaneScreenDirect:
-		moveq	#$15,d6
+		moveq	#(320+16)/16,d6
 
 Refresh_PlaneDirect2:
 		move.w	(Camera_Y_pos_copy).w,d0
@@ -608,7 +608,7 @@ Refresh_PlaneDirect2:
 
 Refresh_PlaneDirect:
 		disableInts
-		moveq	#$F-1,d2
+		moveq	#((224+16)/16)-1,d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)			; redraws the entire plane in one go during 68k execution
@@ -630,12 +630,12 @@ DrawTilesAsYouMove:
 		lea	(Camera_X_pos_copy).w,a6
 		lea	(Camera_X_pos_rounded).w,a5
 		move.w	(Camera_Y_pos_copy).w,d1
-		moveq	#$F,d6
+		moveq	#(224+16)/16,d6
 		bsr.w	Draw_TileColumn
 		lea	(Camera_Y_pos_copy).w,a6
 		lea	(Camera_Y_pos_rounded).w,a5
 		move.w	(Camera_X_pos_copy).w,d1
-		moveq	#$15,d6
+		moveq	#(320+16)/16,d6
 		bra.w	Draw_TileRow
 
 ; ---------------------------------------------------------------------------
@@ -648,12 +648,12 @@ DrawBGAsYouMove:
 		lea	(Camera_X_pos_BG_copy).w,a6
 		lea	(Camera_X_pos_BG_rounded).w,a5
 		move.w	(Camera_Y_pos_BG_copy).w,d1
-		moveq	#$F,d6
+		moveq	#(224+16)/16,d6
 		bsr.w	Draw_TileColumn
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		move.w	(Camera_X_pos_BG_copy).w,d1
-		moveq	#$15,d6
+		moveq	#(320+16)/16,d6
 		bra.w	Draw_TileRow
 
 ; ---------------------------------------------------------------------------
@@ -707,11 +707,11 @@ Draw_BGNoVert:
 .found
 		neg.w	d6
 		lsr.w	#4,d6
-		moveq	#$F,d4
+		moveq	#(224+16)/16,d4
 		sub.w	d6,d4
 		bhs.s	.loop
 		moveq	#0,d4
-		moveq	#$F,d6
+		moveq	#(224+16)/16,d6
 
 .loop
 		movem.w	d1/d4-d6,-(sp)
@@ -818,11 +818,11 @@ DrawTilesVDeform2:
 .found
 		neg.w	d6
 		lsr.w	#4,d6
-		moveq	#$15,d4
+		moveq	#(320+16)/16,d4
 		sub.w	d6,d4
 		bhs.s	.loop
 		moveq	#0,d4
-		moveq	#$15,d6
+		moveq	#(320+16)/16,d6
 
 .loop
 		movem.w	d1/d4-d6,-(sp)
