@@ -158,7 +158,7 @@ Setup_TileColumnDraw:
 		asr.w	d1
 		and.w	(Layout_row_index_mask).w,d1
 		andi.w	#$F,d4
-		moveq	#$10,d5
+		moveq	#256/16,d5
 		sub.w	d4,d5
 		move.w	d5,d4
 		sub.w	d6,d5
@@ -236,7 +236,7 @@ Setup_TileColumnDraw:
 		exg	d3,d5
 +		move.l	d5,(a1)+
 		move.l	d3,(a0)+
-		addi.w	#$10,d2
+		addi.w	#16,d2
 		andi.w	#$70,d2
 		bne.s	+
 		addq.w	#4,d1
@@ -377,7 +377,7 @@ Setup_TileRowDraw:
 		add.w	d3,d3
 		andi.w	#$7C,d3
 		andi.w	#$1F,d4
-		moveq	#$20,d5
+		moveq	#512/16,d5
 		sub.w	d4,d5
 		move.w	d5,d4
 		sub.w	d6,d5
@@ -911,7 +911,7 @@ Draw_PlaneVertSingleBottomUp:
 		blo.s		.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		bsr.w	Setup_TileRowDraw
 
 .next
@@ -935,7 +935,7 @@ Draw_PlaneVertTopDown:
 		blo.s		.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		bsr.w	Setup_TileRowDraw
 
 .next
@@ -972,7 +972,7 @@ Draw_PlaneHorzSingleRightToLeft:
 		blo.s		.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#$10,d6
+		moveq	#256/16,d6
 		bsr.w	Setup_TileColumnDraw
 
 .next
@@ -1009,7 +1009,7 @@ Draw_PlaneHorzSingleLeftToRight:
 		blo.s		.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#$10,d6
+		moveq	#256/16,d6
 		bsr.w	Setup_TileColumnDraw
 
 .next
@@ -1054,7 +1054,7 @@ Draw_PlaneVertSingleBottomUpComplex:
 
 		; refresh
 		move.w	(a5),d1
-		moveq	#$20,d6
+		moveq	#512/16,d6
 		bsr.w	Setup_TileRowDraw
 
 .next
