@@ -26,7 +26,7 @@ Poll_Controllers:
 		lea	(Ctrl_1).w,a0
 		lea	(HW_Port_1_Data).l,a1
 		bsr.s	Poll_Controller			; poll first controller
-		addq.w	#2,a1					; poll second controller
+		addq.w	#HW_Port_2_Data-HW_Port_1_Data,a1		; poll second controller
 
 Poll_Controller:
 		move.b	#0,(a1)					; poll controller data port

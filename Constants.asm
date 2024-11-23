@@ -502,7 +502,7 @@ Status_Facing						= 0
 Status_InAir							= 1
 Status_Roll							= 2
 Status_OnObj						= 3
-Status_RollJump						= 4
+
 Status_Push							= 5
 Status_Underwater					= 6
 
