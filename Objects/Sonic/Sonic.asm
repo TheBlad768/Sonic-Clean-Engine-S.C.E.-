@@ -1115,8 +1115,6 @@ Sonic_ChgJumpDir:
 		move.w	Max_speed-Max_speed(a4),d6
 		move.w	Acceleration-Max_speed(a4),d5
 		asl.w	d5
-		btst	#Status_RollJump,status(a0)					; did Sonic jump from rolling?
-		bne.s	Sonic_Jump_ResetScr						; if yes, branch to skip midair control
 		move.w	x_vel(a0),d0
 		btst	#button_left,(Ctrl_1_logical).w
 		beq.s	loc_11682								; if not holding left, branch
@@ -1400,7 +1398,6 @@ Sonic_InstaAndShieldMoves:
 		moveq	#btnABC,d0								; are buttons A, B, or C being pressed?
 		and.b	(Ctrl_1_pressed_logical).w,d0
 		beq.s	locret_118FE								; if not, branch
-		bclr	#Status_RollJump,status(a0)
 
 Sonic_FireShield:
 		btst	#Status_Invincible,status_secondary(a0)			; first, does Sonic have invincibility?
@@ -2128,7 +2125,6 @@ loc_121D2:
 loc_121D8:
 		bclr	#Status_InAir,status(a0)
 		bclr	#Status_Push,status(a0)
-		bclr	#Status_RollJump,status(a0)
 		moveq	#0,d0
 		move.b	d0,jumping(a0)
 		move.w	d0,(Chain_bonus_counter).w

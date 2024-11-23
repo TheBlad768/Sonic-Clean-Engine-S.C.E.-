@@ -231,7 +231,6 @@ sub_2FBA8:
 		clr.b	double_jump_flag(a1)
 		clr.b	spin_dash_flag(a1)
 		bclr	#Status_Push,status(a1)
-		bclr	#Status_RollJump,status(a1)
 		bclr	#Status_Roll,status(a1)
 		beq.s	.back
 

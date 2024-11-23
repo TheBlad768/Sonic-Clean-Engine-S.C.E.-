@@ -1126,6 +1126,21 @@ Adjust_BGDuringLoop:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Get BG actual effective (Diff)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Get_BGActualEffectiveDiff:
+		move.w	(Camera_X_pos_copy).w,d0
+		sub.w	(Camera_X_pos_BG_copy).w,d0
+		move.w	d0,(Camera_X_diff).w
+		move.w	(Camera_Y_pos_copy).w,d0
+		sub.w	(Camera_Y_pos_BG_copy).w,d0
+		move.w	d0,(Camera_Y_diff).w
+		rts
+
+; ---------------------------------------------------------------------------
 ; Load level data
 ; ---------------------------------------------------------------------------
 

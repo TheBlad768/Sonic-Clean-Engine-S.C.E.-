@@ -42,9 +42,9 @@ ArtKosPM_Squirrel:				binclude "Objects/Animals/KosinskiPM Art/Squirrel.kospm"
 	even
 ArtKosPM_Rabbit:				binclude "Objects/Animals/KosinskiPM Art/Rabbit.kospm"
 	even
-ArtKosPM_ResultsGeneral:			binclude "Objects/Results/KosinskiPM Art/Results General.kospm"
+ArtKosPM_ResultsGeneral:			binclude "Objects/Results/KosinskiPM Art/General.kospm"
 	even
-ArtKosPM_ResultsSONIC:			binclude "Objects/Results/KosinskiPM Art/Results SONIC.kospm"
+ArtKosPM_ResultsSONIC:			binclude "Objects/Results/KosinskiPM Art/SONIC.kospm"
 	even
 ArtKosPM_TitleCardNum1:			binclude "Objects/Title Card/KosinskiPM Art/Title Card Number 1.kospm"
 	even
