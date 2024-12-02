@@ -35,12 +35,9 @@ Cleaned up and slightly optimized the source code of Sonic 3 & Knuckles. Free us
 - [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
 - [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt/releases)
 
-2. S.C.E. uses a different layout format to support two-byte IDs chunks. Unfortunately there are no converters here for the new layout format. You just won't be able to use the original layouts from Sonic 3 & Knuckles.
-You could try using different [Layout.cs](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/SonLVL%20INI%20Files/Common/Layout) for **SonLVL** to convert layout to the new format.
-
 ## FAQ
 
-- If you want to convert levels from previous Sonic games, you have to use [LevelConverter](https://info.sonicretro.org/LevelConverter) from [SonLVL](https://info.sonicretro.org/SonLVL). Then change the layout format using [Layout.cs](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/SonLVL%20INI%20Files/Common/Layout).
+- If you want to convert levels from previous Sonic games, you have to use [LevelConverter](https://info.sonicretro.org/LevelConverter) from [SonLVL](https://info.sonicretro.org/SonLVL). Then change the layout format using [Layout converter](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Levels/_tools/Layout).
 
 - If you want to make a different text for Title Card, you need to create a file of letters from [List.unc](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Objects/Title%20Card/KosinskiPM%20Art/Levels). This will be loaded before the level starts.
 You don't have to add the letters **'ENOZ' (ZONE)** because those letters are already in VRAM. Then you have to create a mapping of your zone name in [Map - Title Card.asm](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Objects/Title%20Card/Object%20Data).
