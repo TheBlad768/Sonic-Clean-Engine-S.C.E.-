@@ -1,10 +1,10 @@
 ; ---------------------------------------------------------------------------
-; Kosinski decompression subroutine
+; Kosinski Plus decompression subroutine
 ; Inputs:
 ; a0 = compressed data location
 ; a1 = destination
 ; See http://www.segaretro.org/Kosinski_compression for format description
-; New faster version by written by Vladikcomper, with additional improvements by MarkeyJester and Flamewing
+; Created originally by Flamewing and vladikcomper, further improvements by Clownacy
 ; See https://github.com/flamewing/mdcomp
 ; ---------------------------------------------------------------------------
 
