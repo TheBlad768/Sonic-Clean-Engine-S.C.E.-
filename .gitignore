@@ -2,7 +2,7 @@ desktop.ini
 *.gen
 Sonic.lst
 Sonic.Debug.lst
-RAM.asm
+/RAM.asm
 to-do.txt
 *.log
 *.[ph]
