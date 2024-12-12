@@ -1340,9 +1340,10 @@ LoadLevelPointer:
 	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&8
-		movem.l	(a2)+,d0-d1
-		movem.l	d0-d1,.a(a3)										; copy 8 bytes
-		set	.a,.a + 8
+		move.l	(a2)+,.a(a3)										; copy 8 bytes
+		set	.a,.a + 4
+		move.l	(a2)+,.a(a3)
+		set	.a,.a + 4
 	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&4
