@@ -1,12 +1,15 @@
 
 ; ===============================================================
 ; ---------------------------------------------------------------
-; Error handling and debugging modules
+; MD Debugger and Error Handler v.2.6
 ;
-; (c) 2016-2023, Vladikcomper
-; See https://github.com/vladikcomper/md-modules
+;
+; Documentation, references and source code are available at:
+; - https://github.com/vladikcomper/md-modules
+;
+; (c) 2016-2024, Vladikcomper
 ; ---------------------------------------------------------------
-; Debugging macros definitions file
+; Debugger definitions
 ; ---------------------------------------------------------------
 
 ; ---------------------------------------------------------------
@@ -16,13 +19,25 @@
 ; Enable debugger extensions
 ; Pressing A/B/C on the exception screen can open other debuggers
 ; Pressing Start or unmapped button returns to the exception
-DEBUGGER__EXTENSIONS__ENABLE:			equ		1		; 0 = OFF, 1 = ON
+DEBUGGER__EXTENSIONS__ENABLE:			equ		1		; 0 = OFF, 1 = ON (default)
+
+; Whether to show SR and USP registers in exception handler
+DEBUGGER__SHOW_SR_USP:					equ		0		; 0 = OFF (default), 1 = ON
 
 ; Debuggers mapped to pressing A/B/C on the exception screen
 ; Use 0 to disable button, use debugger's entry point otherwise.
-DEBUGGER__EXTENSIONS__BTN_A_DEBUGGER:	equ		Debugger_AddressRegisters	; display address register symbols
-DEBUGGER__EXTENSIONS__BTN_B_DEBUGGER:	equ		Debugger_Backtrace			; display exception backtrace
+DEBUGGER__EXTENSIONS__BTN_A_DEBUGGER:	equ		MDDBG__Debugger_AddressRegisters	; display address register symbols
+DEBUGGER__EXTENSIONS__BTN_B_DEBUGGER:	equ		MDDBG__Debugger_Backtrace			; display exception backtrace
 DEBUGGER__EXTENSIONS__BTN_C_DEBUGGER:	equ		0		; disabled
+
+; Selects between 24-bit (compact) and 32-bit (full) offset format.
+; This affects offset format next to the symbols in the exception screen header.
+; M68K bus is limited to 24 bits anyways, so not displaying unused bits saves screen space.
+; Possible values:
+; - MDDBG__Str_OffsetLocation_24bit (example: 001C04 SomeLoc+4)
+; - MDDBG__Str_OffsetLocation_32bit (example: 00001C04 SomeLoc+4)
+DEBUGGER__STR_OFFSET_SELECTOR:			equ		MDDBG__Str_OffsetLocation_24bit
+
 
 
 ; ===============================================================
@@ -91,51 +106,24 @@ setoff	equ		$F4				; set tile offset: lower byte of base pattern, which points t
 setpat	equ		$F8				; set tile pattern: high byte of base pattern, which determines palette flags and $100-tile section id
 setx	equ		$FA				; set x-position
 
+; -----------------------------
+; Error handler control flags
+; -----------------------------
 
-; ---------------------------------------------------------------
-; Import global functions
-; ---------------------------------------------------------------
+; Screen appearence flags
+_eh_address_error	equ	$01		; use for address and bus errors only (tells error handler to display additional "Address" field)
+_eh_show_sr_usp		equ	$02		; displays SR and USP registers content on error screen
+_eh_hide_caller		equ	$04		; don't guess and print caller in the header (in SGDK and C/C++ projects naive caller detection isn't reliable)
 
-; Debugger extension functions
-__global__ErrorHandler_ConsoleOnly: equ DebuggerExtensions+$0
-__global__ErrorHandler_ClearConsole: equ DebuggerExtensions+$26
-__global__KDebug_WriteLine_Formatted: equ DebuggerExtensions+$50
-__global__KDebug_Write_Formatted: equ DebuggerExtensions+$54
-__global__KDebug_FlushLine: equ DebuggerExtensions+$AA
-__global__ErrorHandler_PauseConsole: equ DebuggerExtensions+$C2
-__global__ErrorHandler_PagesController: equ DebuggerExtensions+$F8
-__global__VSync: equ DebuggerExtensions+$158
+; Advanced execution flags
+; WARNING! For experts only, DO NOT USE them unless you know what you're doing
+_eh_return			equ	$20
+_eh_enter_console	equ	$40
+_eh_align_offset	equ	$80
 
-; Error handler & core functions
-__global__ErrorHandler: equ ErrorHandler+$0
-__global__Error_IdleLoop: equ ErrorHandler+$122
-__global__Error_InitConsole: equ ErrorHandler+$13C
-__global__Error_MaskStackBoundaries: equ ErrorHandler+$148
-__global__Error_DrawOffsetLocation: equ ErrorHandler+$1B2
-__global__Error_DrawOffsetLocation2: equ ErrorHandler+$1B6
-__global__ErrorHandler_SetupVDP: equ ErrorHandler+$23C
-__global__ErrorHandler_VDPConfig: equ ErrorHandler+$274
-__global__ErrorHandler_VDPConfig_Nametables: equ ErrorHandler+$28A
-__global__ErrorHandler_ConsoleConfig_Initial: equ ErrorHandler+$2C6
-__global__ErrorHandler_ConsoleConfig_Shared: equ ErrorHandler+$2CA
-__global__Art1bpp_Font: equ ErrorHandler+$334
-__global__FormatString: equ ErrorHandler+$8F8
-__global__Console_Init: equ ErrorHandler+$9CE
-__global__Console_Reset: equ ErrorHandler+$A10
-__global__Console_InitShared: equ ErrorHandler+$A12
-__global__Console_SetPosAsXY_Stack: equ ErrorHandler+$A4E
-__global__Console_SetPosAsXY: equ ErrorHandler+$A54
-__global__Console_GetPosAsXY: equ ErrorHandler+$A82
-__global__Console_StartNewLine: equ ErrorHandler+$AA4
-__global__Console_SetBasePattern: equ ErrorHandler+$ACC
-__global__Console_SetWidth: equ ErrorHandler+$AE0
-__global__Console_WriteLine_WithPattern: equ ErrorHandler+$AF6
-__global__Console_WriteLine: equ ErrorHandler+$AF8
-__global__Console_Write: equ ErrorHandler+$AFC
-__global__Console_WriteLine_Formatted: equ ErrorHandler+$BA8
-__global__Console_Write_Formatted: equ ErrorHandler+$BAC
-__global__Decomp1bpp: equ ErrorHandler+$BDC
 
+
+; ===============================================================
 ; ---------------------------------------------------------------
 ; Macros
 ; ---------------------------------------------------------------
@@ -153,22 +141,39 @@ __global__Decomp1bpp: equ ErrorHandler+$BDC
 ; Creates assertions for debugging
 ; ---------------------------------------------------------------
 ; EXAMPLES:
-;	assert.b	d0, eq, #1		; d0 must be $01, or else crash!
-;	assert.w	d5, eq			; d5 must be $0000!
-;	assert.l	a1, hi, a0		; asert a1 > a0, or else crash!
-;	assert.b	MemFlag, ne		; MemFlag must be non-zero!
+;	assert.b	d0, eq, #1		; d0 must be $01, or else crash
+;	assert.w	d5, pl			; d5 must be positive
+;	assert.l	a1, hi, a0		; assert a1 > a0, or else crash
+;	assert.b	(MemFlag).w, ne	; MemFlag must be set (non-zero)
+;	assert.l	a0, eq, #Obj_Player, MyObjectsDebugger
+;
+; NOTICE:
+;	All "assert" saves and restores CCR so it's fully safe
+;	to use in-between any instructions.
+;	Use "_assert" instead if you deliberatly want to disbale
+;	this behavior and safe a few cycles.
 ; ---------------------------------------------------------------
 
-assert	macro	SRC, COND, DEST
+assert:	macro	src, cond, dest, consoleprogram
 	; Assertions only work in DEBUG builds
 	ifdef __DEBUG__
-		if "DEST"<>""
-			cmp.ATTRIBUTE	DEST, SRC
+		move.w	sr, -(sp)
+		_assert.ATTRIBUTE	src, cond, dest, consoleprogram
+		move.w	(sp)+, sr
+	endif
+		endm
+
+; Same as "assert", but doesn't save/restore CCR (can be used to save a few cycles)
+_assert:	macro	src, cond, dest, consoleprogram
+	; Assertions only work in DEBUG builds
+	ifdef __DEBUG__
+		if "dest"<>""
+			cmp.ATTRIBUTE	dest, src
 		else
-			tst.ATTRIBUTE	SRC
+			tst.ATTRIBUTE	src
 		endif
 
-		switch lowstring("COND")
+		switch lowstring("cond")
 		case "eq"
 			beq	.skip
 		case "ne"
@@ -197,11 +202,19 @@ assert	macro	SRC, COND, DEST
 			ble	.skip
 		case "lt"
 			blt	.skip
+		case "vs"
+			bvs	.skip
+		case "vc"
+			bvc	.skip
 		elsecase
-			!error "Unknown condition COND"
+			!error "Unknown condition cond"
 		endcase
 
-		RaiseError	"Assertion failed:%<endl>SRC COND DEST"
+	if "dest"<>""
+		RaiseError	"Assertion failed:%<endl>%<pal2>> assert.ATTRIBUTE %<pal0>src,%<pal2>cond%<pal0>,dest%<endl>%<pal1>Got: %<.ATTRIBUTE src>", consoleprogram
+	else
+		RaiseError	"Assertion failed:%<endl>%<pal2>> assert.ATTRIBUTE %<pal0>src,%<pal2>cond%%<endl>%<pal1>Got: %<.ATTRIBUTE src>", consoleprogram
+	endif
 
 	.skip:
 	endif
@@ -216,12 +229,11 @@ assert	macro	SRC, COND, DEST
 ;	RaiseError	"Module crashed! Extra info:", YourMod_Debugger
 ; ---------------------------------------------------------------
 
-RaiseError	macro	string, consoleprogram, opts
-
+RaiseError:	macro	string, consoleprogram, opts
 	pea		*(pc)
 	move.w	sr, -(sp)
 	__FSTRING_GenerateArgumentsCode string
-	jsr		__global__ErrorHandler
+	jsr		MDDBG__ErrorHandler
 	__FSTRING_GenerateDecodedString string
 	if ("consoleprogram"<>"")			; if console program offset is specified ...
 		.__align_flag:	set	((((*)&1)!1)*_eh_align_offset)
@@ -233,7 +245,7 @@ RaiseError	macro	string, consoleprogram, opts
 		!align	2													; ... to tell Error handler to skip this byte, so it'll jump to ...
 		if DEBUGGER__EXTENSIONS__ENABLE
 			jsr		consoleprogram										; ... an aligned "jsr" instruction that calls console program itself
-			jmp		__global__ErrorHandler_PagesController
+			jmp		MDDBG__ErrorHandler_PagesController
 		else
 			jmp		consoleprogram										; ... an aligned "jmp" instruction that calls console program itself
 		endif
@@ -246,14 +258,13 @@ RaiseError	macro	string, consoleprogram, opts
 				dc.b	_eh_return|.__align_flag							; add flag "_eh_align_offset" if the next byte is at odd offset ...
 			endif
 			!align	2													; ... to tell Error handler to skip this byte, so it'll jump to ...
-			jmp		__global__ErrorHandler_PagesController
+			jmp		MDDBG__ErrorHandler_PagesController
 		else
 			dc.b	opts+0						; otherwise, just specify \opts for error handler, +0 will generate dc.b 0 ...
 			!align	2							; ... in case \opts argument is empty or skipped
 		endif
 	endif
 	!align	2
-
 	endm
 
 
@@ -264,28 +275,61 @@ RaiseError	macro	string, consoleprogram, opts
 ;	Console.Run	YourConsoleProgram
 ;	Console.Write "Hello "
 ;	Console.WriteLine "...world!"
-;	Console.SetXY #1, #4
 ;	Console.WriteLine "Your data is %<.b d0>"
 ;	Console.WriteLine "%<pal0>Your code pointer: %<.l a0 sym>"
+;	Console.SetXY #1, #4
+;	Console.SetXY d0, d1
+;	Console.Sleep #60 ; sleep for 1 second
+;	Console.Pause
+;
+; NOTICE:
+;	All "Console.*" calls save and restore CCR so they are fully
+;	safe to use in-between any instructions.
+;	Use "_Console.*" instead if you deliberatly want to disbale
+;	this behavior and safe a few cycles.
 ; ---------------------------------------------------------------
 
-Console	macro	argument1, argument2
+Console:	macro	argument1, argument2
+	switch lowstring("ATTRIBUTE")
+	; "Console.Run" doesn't have to save/restore CCR, because it's a no-return
+	case "run"
+		_Console.ATTRIBUTE	argument1, argument2
 
+	; Other Console calls do save/restore CCR
+	elsecase
+		move.w	sr, -(sp)
+		_Console.ATTRIBUTE	argument1, argument2
+		move.w	(sp)+, sr
+	endcase
+	endm
+
+; Same as "Console", but doesn't save/restore CCR (can be used to save a few cycles)
+_Console:	macro	argument1, argument2
 	switch lowstring("ATTRIBUTE")
 	case "write"
-		move.w	sr, -(sp)
 		__FSTRING_GenerateArgumentsCode argument1
-		movem.l	a0-a2/d7, -(sp)
-		lea		4*4(sp), a2
-		lea		.__data(pc), a1
-		jsr		__global__Console_Write_Formatted
-		movem.l	(sp)+, a0-a2/d7
-		if (.__sp>8)
-			lea		.__sp(sp), sp
-		elseif (.__sp>0)
-			addq.w	#.__sp, sp
+
+		; If we have any arguments in string, use formatted string function ...
+		if (.__sp>0)
+			movem.l	a0-a2/d7, -(sp)
+			lea		4*4(sp), a2
+			lea		.__data(pc), a1
+			jsr		MDDBG__Console_Write_Formatted
+			movem.l	(sp)+, a0-a2/d7
+			if (.__sp>8)
+				lea		.__sp(sp), sp
+			elseif (.__sp>0)
+				addq.w	#.__sp, sp
+			endif
+
+		; ... Otherwise, use direct write as an optimization
+		else
+			move.l	a0, -(sp)
+			lea		.__data(pc), a0
+			jsr		MDDBG__Console_Write
+			move.l	(sp)+, a0
 		endif
-		move.w	(sp)+, sr
+
 		bra.w	.__leave
 	.__data:
 		__FSTRING_GenerateDecodedString argument1
@@ -293,19 +337,27 @@ Console	macro	argument1, argument2
 	.__leave:
 
 	case "writeline"
-		move.w	sr, -(sp)
 		__FSTRING_GenerateArgumentsCode argument1
-		movem.l	a0-a2/d7, -(sp)
-		lea		4*4(sp), a2
-		lea		.__data(pc), a1
-		jsr		__global__Console_WriteLine_Formatted
-		movem.l	(sp)+, a0-a2/d7
-		if (.__sp>8)
-			lea		.__sp(sp), sp
-		elseif (.__sp>0)
-			addq.w	#.__sp, sp
+
+		; If we have any arguments in string, use formatted string function ...
+		if (.__sp>0)
+			movem.l	a0-a2/d7, -(sp)
+			lea		4*4(sp), a2
+			lea		.__data(pc), a1
+			jsr		MDDBG__Console_WriteLine_Formatted
+			movem.l	(sp)+, a0-a2/d7
+			if (.__sp>8)
+				lea		.__sp(sp), sp
+			elseif (.__sp>0)
+				addq.w	#.__sp, sp
+			endif
+		; ... Otherwise, use direct write as an optimization
+		else
+			move.l	a0, -(sp)
+			lea		.__data(pc), a0
+			jsr		MDDBG__Console_WriteLine
+			move.l	(sp)+, a0
 		endif
-		move.w	(sp)+, sr
 		bra.w	.__leave
 	.__data:
 		__FSTRING_GenerateDecodedString argument1
@@ -313,50 +365,40 @@ Console	macro	argument1, argument2
 	.__leave:
 
 	case "run"
-		jsr		__global__ErrorHandler_ConsoleOnly
+		jsr		MDDBG__ErrorHandler_ConsoleOnly
 		jsr		argument1
 		bra.s	*
 
 	case "clear"
-		move.w	sr, -(sp)
-		jsr		__global__ErrorHandler_ClearConsole
-		move.w	(sp)+, sr
+		jsr		MDDBG__ErrorHandler_ClearConsole
 
 	case "pause"
-		move.w	sr, -(sp)
-		jsr		__global__ErrorHandler_PauseConsole
-		move.w	(sp)+, sr
+		jsr		MDDBG__ErrorHandler_PauseConsole
 
 	case "sleep"
-		move.w	sr, -(sp)
 		move.w	d0, -(sp)
 		move.l	a0, -(sp)
 		move.w	argument1, d0
 		subq.w	#1, d0
 		bcs.s	.__sleep_done
 		.__sleep_loop:
-			jsr		__global__VSync
+			jsr		MDDBG__VSync
 			dbf		d0, .__sleep_loop
 
 	.__sleep_done:
 		move.l	(sp)+, a0
 		move.w	(sp)+, d0
-		move.w	(sp)+, sr
 
 	case "setxy"
-		move.w	sr, -(sp)
 		movem.l	d0-d1, -(sp)
 		move.w	argument2, -(sp)
 		move.w	argument1, -(sp)
-		jsr		__global__Console_SetPosAsXY_Stack
+		jsr		MDDBG__Console_SetPosAsXY_Stack
 		addq.w	#4, sp
 		movem.l	(sp)+, d0-d1
-		move.w	(sp)+, sr
 
 	case "breakline"
-		move.w	sr, -(sp)
-		jsr		__global__Console_StartNewLine
-		move.w	(sp)+, sr
+		jsr		MDDBG__Console_StartNewLine
 
 	elsecase
 		!error	"ATTRIBUTE isn't a member of Console"
@@ -365,23 +407,58 @@ Console	macro	argument1, argument2
 	endm
 
 ; ---------------------------------------------------------------
-KDebug	macro	argument1
+; KDebug integration interface
+; ---------------------------------------------------------------
+; EXAMPLES:
+;	KDebug.WriteLine "Look in your debug console!"
+;	KDebug.WriteLine "Your D0 is %<.w d0>"
+;	KDebug.BreakPoint
+;	KDebug.StartTimer
+;	KDebug.EndTimer
+;
+; NOTICE:
+;	All "KDebug.*" calls save and restore CCR so they are fully
+;	safe to use in-between any instructions.
+;	Use "_KDebug.*" instead if you deliberatly want to disbale
+;	this behavior and safe a few cycles.
+; ---------------------------------------------------------------
+
+KDebug:	macro	argument1
+	ifdef __DEBUG__	; KDebug interface is only available in DEBUG builds
+		move.w	sr, -(sp)
+		_KDebug.ATTRIBUTE	argument1
+		move.w	(sp)+, sr
+	endif
+	endm
+
+; Same as "KDebug", but doesn't save/restore CCR (can be used to save a few cycles)
+_KDebug	macro	argument1
 	ifdef __DEBUG__	; KDebug interface is only available in DEBUG builds
 	switch lowstring("ATTRIBUTE")
 	case "write"
-		move.w	sr, -(sp)
 		__FSTRING_GenerateArgumentsCode argument1
-		movem.l	a0-a2/d7, -(sp)
-		lea		4*4(sp), a2
-		lea		.__data(pc), a1
-		jsr		__global__KDebug_Write_Formatted
-		movem.l	(sp)+, a0-a2/d7
-		if (.__sp>8)
-			lea		.__sp(sp), sp
-		elseif (.__sp>0)
-			addq.w	#.__sp, sp
+
+		; If we have any arguments in string, use formatted string function ...
+		if (.__sp>0)
+			movem.l	a0-a2/d7, -(sp)
+			lea		4*4(sp), a2
+			lea		.__data(pc), a1
+			jsr		MDDBG__KDebug_Write_Formatted
+			movem.l	(sp)+, a0-a2/d7
+			if (.__sp>8)
+				lea		.__sp(sp), sp
+			elseif (.__sp>0)
+				addq.w	#.__sp, sp
+			endif
+
+		; ... Otherwise, use direct write as an optimization
+		else
+			move.l	a0, -(sp)
+			lea		.__data(pc), a0
+			jsr		MDDBG__KDebug_Write
+			move.l	(sp)+, a0
 		endif
-		move.w	(sp)+, sr
+
 		bra.w	.__leave
 	.__data:
 		__FSTRING_GenerateDecodedString argument1
@@ -389,19 +466,29 @@ KDebug	macro	argument1
 	.__leave:
 
 	case "writeline"
-		move.w	sr, -(sp)
 		__FSTRING_GenerateArgumentsCode argument1
-		movem.l	a0-a2/d7, -(sp)
-		lea		4*4(sp), a2
-		lea		.__data(pc), a1
-		jsr		__global__KDebug_WriteLine_Formatted
-		movem.l	(sp)+, a0-a2/d7
-		if (.__sp>8)
-			lea		.__sp(sp), sp
-		elseif (.__sp>0)
-			addq.w	#.__sp, sp
+
+		; If we have any arguments in string, use formatted string function ...
+		if (.__sp>0)
+			movem.l	a0-a2/d7, -(sp)
+			lea		4*4(sp), a2
+			lea		.__data(pc), a1
+			jsr		MDDBG__KDebug_WriteLine_Formatted
+			movem.l	(sp)+, a0-a2/d7
+			if (.__sp>8)
+				lea		.__sp(sp), sp
+			elseif (.__sp>0)
+				addq.w	#.__sp, sp
+			endif
+
+		; ... Otherwise, use direct write as an optimization
+		else
+			move.l	a0, -(sp)
+			lea		.__data(pc), a0
+			jsr		MDDBG__KDebug_WriteLine
+			move.l	(sp)+, a0
 		endif
-		move.w	(sp)+, sr
+
 		bra.w	.__leave
 	.__data:
 		__FSTRING_GenerateDecodedString argument1
@@ -409,24 +496,16 @@ KDebug	macro	argument1
 	.__leave:
 
 	case "breakline"
-		move.w	sr, -(sp)
-		jsr		__global__KDebug_FlushLine
-		move.w	(sp)+, sr
+		jsr		MDDBG__KDebug_FlushLine
 
 	case "starttimer"
-		move.w	sr, -(sp)
 		move.w	#$9FC0, ($C00004).l
-		move.w	(sp)+, sr
 
 	case "endtimer"
-		move.w	sr, -(sp)
 		move.w	#$9F00, ($C00004).l
-		move.w	(sp)+, sr
 
 	case "breakpoint"
-		move.w	sr, -(sp)
 		move.w	#$9D00, ($C00004).l
-		move.w	(sp)+, sr
 
 	elsecase
 		!error	"ATTRIBUTE isn't a member of KDebug"
@@ -436,16 +515,16 @@ KDebug	macro	argument1
 	endm
 
 ; ---------------------------------------------------------------
-__ErrorMessage  macro string, opts
+__ErrorMessage:	macro string, opts
 		__FSTRING_GenerateArgumentsCode string
-		jsr		__global__ErrorHandler
+		jsr		MDDBG__ErrorHandler
 		__FSTRING_GenerateDecodedString string
 
 		if DEBUGGER__EXTENSIONS__ENABLE
 		.__align_flag: set (((*)&1)!1)*_eh_align_offset
 			dc.b	(opts)+_eh_return|.__align_flag	; add flag "_eh_align_offset" if the next byte is at odd offset ...
 			!align	2												; ... to tell Error handler to skip this byte, so it'll jump to ...
-			jmp		__global__ErrorHandler_PagesController	; ... extensions controller
+			jmp		MDDBG__ErrorHandler_PagesController	; ... extensions controller
 		else
 			dc.b	(opts)+0
 			!align	2
@@ -456,7 +535,7 @@ __ErrorMessage  macro string, opts
 ; WARNING: Since AS cannot compile instructions out of strings
 ;	we have to do lots of switch-case bullshit down here..
 
-__FSTRING_PushArgument macro OPERAND,DEST
+__FSTRING_PushArgument: macro OPERAND,DEST
 
 	.__operand:		set	OPERAND
 	.__dval:		set	0
@@ -465,6 +544,16 @@ __FSTRING_PushArgument macro OPERAND,DEST
 	if (substr(OPERAND, 0, 1)="#")
 		.__dval:	set	VAL(substr(OPERAND, 1, 0))
 		.__operand:	set	"#"
+
+	; If OPERAND ends with ".w", simulate "XXX.w" mode
+	elseif (substr(OPERAND, strlen(OPERAND)-2, 2)=".w")
+		.__dval:	set VAL(substr(OPERAND, 0, strlen(OPERAND)-2))
+		.__operand:	set	"x.w"
+
+	; If OPERAND ends with ".l", simulate "XXX.l" mode
+	elseif (substr(OPERAND, strlen(OPERAND)-2, 2)=".l")
+		.__dval:	set VAL(substr(OPERAND, 0, strlen(OPERAND)-2))
+		.__operand:	set	"x.l"
 
 	; If OPERAND ends with "(pc)", simulate "d16(pc)" mode by splitting OPERAND string
 	elseif (strlen(OPERAND)>4)&&(substr(OPERAND, strlen(OPERAND)-4, 4)="(pc)")
@@ -475,6 +564,7 @@ __FSTRING_PushArgument macro OPERAND,DEST
 	elseif (strlen(OPERAND)>4)&&(substr(OPERAND, strlen(OPERAND)-4, 2)="(a")&&(substr(OPERAND, strlen(OPERAND)-1, 1)=")")
 		.__dval:	set	VAL(substr(OPERAND, 0, strlen(OPERAND)-4))
 		.__operand:	set substr(OPERAND, strlen(OPERAND)-4, 0)
+
 	endif
 
 	switch lowstring(.__operand)
@@ -525,6 +615,12 @@ __FSTRING_PushArgument macro OPERAND,DEST
 	case "(a6)"
 		move.ATTRIBUTE	.__dval(a6),DEST
 
+	case "x.w"
+		move.ATTRIBUTE	(.__dval).w,DEST
+
+	case "x.l"
+		move.ATTRIBUTE	(.__dval).l,DEST
+
 	case "(pc)"
 		move.ATTRIBUTE	.__dval(pc),DEST
 
@@ -540,7 +636,7 @@ __FSTRING_PushArgument macro OPERAND,DEST
 
 ; ---------------------------------------------------------------
 ; WARNING! Incomplete!
-__FSTRING_GenerateArgumentsCode macro string
+__FSTRING_GenerateArgumentsCode: macro string
 
 	.__pos:	set 	strstr(string,"%<")		; token position
 	.__sp:	set		0						; stack displacement
@@ -605,7 +701,7 @@ __FSTRING_GenerateArgumentsCode macro string
 	endm
 
 ; ---------------------------------------------------------------
-__FSTRING_GenerateDecodedString macro string
+__FSTRING_GenerateDecodedString:	macro string
 
 	.__lpos:	set		0		; start position
 	.__pos:	set		strstr(string, "%<")
@@ -669,3 +765,30 @@ __FSTRING_GenerateDecodedString macro string
 	dc.b	substr(string, .__lpos, 0), 0
 
 	endm
+
+; ---------------------------------------------------------------
+; MIT License
+; 
+; Copyright (c) 2016-2024 Vladikcomper
+; 
+; Permission is hereby granted, free of charge, to any person
+; obtaining a copy ; of this software and associated
+; documentation files (the "Software"), to deal in the Software 
+; without restriction, including without limitation the rights
+; to use, copy, modify, merge, publish, distribute, sublicense,
+; and/or sell copies of the Software, and to permit persons to
+; whom the Software is furnished to do so, subject to the
+; following conditions:
+; 
+; The above copyright notice and this permission notice shall be
+; included in all copies or substantial portions of the Software.
+; 
+; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+; OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+; HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+; WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+; OTHER DEALINGS IN THE SOFTWARE.
+; ---------------------------------------------------------------
