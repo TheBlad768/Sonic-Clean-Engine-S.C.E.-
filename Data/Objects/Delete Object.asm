@@ -10,7 +10,7 @@ Delete_Current_Sprite:
 Delete_Referenced_Sprite:
 		moveq	#0,d0
 
-	rept	bytesTo2Lcnt(object_size)
+	rept bytesTo2Lcnt(object_size)
 		move.l	d0,(a1)+
 	endr
 
