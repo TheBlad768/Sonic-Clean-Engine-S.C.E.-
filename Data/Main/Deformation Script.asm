@@ -145,7 +145,7 @@ FGScroll_Deformation:
 
 .loop
 
-	rept	8
+	rept 8
 		move.w	(a1),d2
 		add.w	d0,d2
 		move.w	d2,(a1)

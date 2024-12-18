@@ -43,7 +43,7 @@ Create_New_Sprite3:
 		set	.b,Dynamic_object_RAM_end
 		set	.c,.b										; begin from bottom of array and decrease backwards
 
-		rept	(.b-.a)/$40								; repeat for all slots, minus exception
+		rept (.b-.a)/$40								; repeat for all slots, minus exception
 			set	.c,.c-$40								; address for previous $40 (also skip last part)
 			dc.b (.b-.c-1)/object_size-1					; write possible slots according to object_size division + hack + dbf hack
 		endr

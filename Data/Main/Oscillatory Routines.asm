@@ -74,7 +74,7 @@ OscillateNumInit:
 		lea	Osc_Data(pc),a2
 		lea	(Oscillating_Numbers).w,a1
 
-	rept	bytesTo2Lcnt(Osc_Data_end-Osc_Data)
+	rept bytesTo2Lcnt(Osc_Data_end-Osc_Data)
 		move.l	(a2)+,(a1)+			; copy baseline values to RAM
 	endr
 	if (Osc_Data_end-Osc_Data)&2
