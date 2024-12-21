@@ -13,7 +13,7 @@ Obj_DashDust:
 
 		; init
 		move.l	#Map_DashDust,mappings(a0)
-		move.b	#4,render_flags(a0)									; use screen coordinates
+		move.b	#rfCoord,render_flags(a0)								; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 		move.w	#ArtTile_DashDust,art_tile(a0)
@@ -28,7 +28,7 @@ Obj_DashDust:
 		moveq	#0,d0
 		move.b	anim(a0),d0											; use current animation as a secondary routine counter
 		beq.s	.return												; 0 (null)
-		add.b	d0,d0
+		add.w	d0,d0
 		jmp	.index-2(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
