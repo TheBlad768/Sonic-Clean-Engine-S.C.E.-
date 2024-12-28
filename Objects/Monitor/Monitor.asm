@@ -9,7 +9,7 @@ Obj_Monitor:
 		; init
 		move.l	#Map_Monitor,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
-		ori.b	#4,render_flags(a0)								; use screen coordinates
+		ori.b	#rfCoord,render_flags(a0)							; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,28/2,priority_3),height_pixels(a0)	; set height, width and priority
 
 		; check broken
@@ -204,8 +204,10 @@ Obj_MonitorAnimate:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_MonitorContents:
+
+		; init
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
-		ori.b	#$24,render_flags(a0)								; set static mapping and screen coordinates flag
+		ori.b	#rfCoord+rfStatic,render_flags(a0)					; set static mapping and screen coordinates flag
 		move.l	#bytes_word_to_long(16/2,16/2,priority_3),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 

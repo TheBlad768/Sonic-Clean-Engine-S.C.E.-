@@ -60,7 +60,7 @@ Sonic_Init:													; Routine 0
 		move.w	y_radius(a0),default_y_radius(a0)				; set default_y_radius and default_x_radius
 		move.l	#Map_Sonic,mappings(a0)
 		move.l	#bytes_word_to_long(48/2,48/2,priority_2),height_pixels(a0)	; set height, width and priority
-		move.b	#4,render_flags(a0)							; use screen coordinates
+		move.b	#rfCoord,render_flags(a0)						; use screen coordinates
 		clr.b	character_id(a0)									; PlayerID_Sonic
 		move.w	#$600,Max_speed-Max_speed(a4)
 		move.w	#$C,Acceleration-Max_speed(a4)
