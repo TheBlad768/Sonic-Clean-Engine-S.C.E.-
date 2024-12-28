@@ -13,12 +13,9 @@ Obj_Bubbler:
 		move.b	d0,objoff_33(a0)
 
 		; init
-		move.l	#Map_Bubbler,mappings(a0)
-		move.w	#make_art_tile($348,0,0),art_tile(a0)
-		move.b	#$80+4,render_flags(a0)
-		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a0)	; set height, width and priority
+		movem.l	ObjDat_Bubbler(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)								; set data from d0-d3 to current object
 		move.b	#8,anim(a0)
-		move.l	#.main,address(a0)
 
 .main
 		tst.w	objoff_36(a0)
@@ -144,7 +141,7 @@ Bubbler_Delete:
 
 Obj_Bubbler_Bubbles:
 		move.b	subtype(a0),anim(a0)
-		move.b	#$84,render_flags(a0)
+		move.b	#rfCoord+rfOnscreen,render_flags(a0)			; use screen coordinates
 		move.w	x_pos(a0),objoff_30(a0)
 		move.w	#-$88,y_vel(a0)
 		jsr	(Random_Number).w
@@ -257,6 +254,11 @@ sub_2FBA8:
 .xydata
 		dc.w -16, 32	; xpos
 		dc.w 0, 16	; ypos
+
+; =============== S U B R O U T I N E =======================================
+
+; mapping
+ObjDat_Bubbler:		subObjMainData2 Obj_Bubbler.main, rfCoord+rfOnscreen, 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Bubbler/Object Data/Anim - Bubbler.asm"

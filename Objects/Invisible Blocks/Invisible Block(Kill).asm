@@ -10,9 +10,11 @@ Obj_Invisible_KillBlock:
 
 		; init
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		ori.b	#4,render_flags(a0)						; use screen coordinates
-		move.l	#words_to_long(priority_4,make_art_tile(ArtTile_Monitors,0,1)),priority(a0)
+		ori.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		move.l	#words_to_long(priority_4,make_art_tile(ArtTile_Monitors,0,1)),priority(a0)	; set priority and art_tile
 		bset	#7,status(a0)									; disable player's balance animation
+
+		; set
 		move.b	subtype(a0),d0
 		move.b	d0,d1
 		andi.w	#$F0,d0

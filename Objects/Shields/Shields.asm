@@ -16,11 +16,10 @@ DPLC_Address				= objoff_3C
 Obj_FireShield:
 
 		; init
-		move.l	#Map_FireShield,mappings(a0)
+		movem.l	ObjDat_FireShield(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
 		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_FireShield),Art_Address(a0)		; used by PLCLoad_Shields
-		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)	; set screen coordinates flag and height and width
-		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
@@ -29,7 +28,6 @@ Obj_FireShield:
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
 		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#.main,address(a0)
 
 .main
 		lea	(Player_1).w,a2										; a2=character
@@ -60,12 +58,13 @@ Obj_FireShield:
 .nothighpriority2
 		lea	Ani_FireShield(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	#priority_1,priority(a0)							; layer shield over player sprite
+		move.w	#priority_1,d0									; layer shield over player sprite
 		cmpi.b	#$F,mapping_frame(a0)							; are these the frames that display in front of the player?
 		blo.s		.overplayer										; if so, branch
-		move.w	#priority_4,priority(a0)							; if not, layer shield behind player sprite
+		move.w	#priority_4,d0									; if not, layer shield behind player sprite
 
 .overplayer
+		move.w	d0,priority(a0)
 		bsr.w	PLCLoad_Shields
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -97,12 +96,11 @@ Obj_LightningShield:
 		QueueStaticDMA ArtUnc_LightningShield_Sparks,tiles_to_bytes(5),tiles_to_bytes(ArtTile_Shield_Sparks)
 
 		; init
-		move.l	#Map_LightningShield,mappings(a0)
+		movem.l	ObjDat_LightningShield(pc),d0-d3					; copy data to d0-d3
+		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_LightningShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)		; set screen coordinates flag and height and width
-		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)				; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
 		bset	#high_priority_bit,art_tile(a0)
@@ -110,14 +108,13 @@ Obj_LightningShield:
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
 		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#.main,address(a0)
 
 .main
 		lea	(Player_1).w,a2										; a2=character
 		btst	#Status_Invincible,status_secondary(a2)					; is player invincible?
-		bne.w	.return											; if so, do not display and do not update variables
+		bne.s	Obj_FireShield.return								; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
-		beq.w	.return											; if so, do not display and do not update variables
+		beq.s	Obj_FireShield.return								; if so, do not display and do not update variables
 		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
 		beq.s	.destroy											; if not, change to Insta-Shield
 		btst	#Status_Underwater,status(a2)							; is player underwater?
@@ -145,12 +142,13 @@ Obj_LightningShield:
 .display
 		lea	Ani_LightningShield(pc),a1
 		jsr	(Animate_Sprite).w
-		move.w	#priority_1,priority(a0)							; layer shield over player sprite
+		move.w	#priority_1,d0									; layer shield over player sprite
 		cmpi.b	#$E,mapping_frame(a0)							; are these the frames that display in front of the player?
 		blo.s		.overplayer										; if so, branch
-		move.w	#priority_4,priority(a0)							; if not, layer shield behind player sprite
+		move.w	#priority_4,d0									; if not, layer shield behind player sprite
 
 .overplayer
+		move.w	d0,priority(a0)
 		bsr.w	PLCLoad_Shields
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -210,7 +208,7 @@ Obj_LightningShield_Create_Spark:
 		move.w	y_pos(a0),y_pos(a1)								; (Spark) inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.l	mappings(a0),mappings(a1)						; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	art_tile(a0),art_tile(a1)							; (Spark) inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
-		move.b	#4,render_flags(a1)								; use screen coordinates
+		move.b	#rfCoord,render_flags(a1)							; use screen coordinates
 		move.l	#bytes_word_to_long(16/2,16/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)									; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
@@ -259,11 +257,10 @@ Obj_LightningShield_DestroyUnderwater2:
 Obj_BubbleShield:
 
 		; init
-		move.l	#Map_BubbleShield,mappings(a0)
+		movem.l	ObjDat_BubbleShield(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
 		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_BubbleShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)	; set screen coordinates flag and height and width
-		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
@@ -274,7 +271,6 @@ Obj_BubbleShield:
 		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
 		lea	(Player_1).w,a1										; a1=character
 		jsr	(Player_ResetAirTimer).l
-		move.l	#.main,address(a0)
 
 .main
 		lea	(Player_1).w,a2										; a2=character
@@ -321,11 +317,10 @@ Obj_BubbleShield:
 Obj_InstaShield:
 
 		; init
-		move.l	#Map_InstaShield,mappings(a0)
+		movem.l	ObjDat_InstaShield(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
 		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_InstaShield),Art_Address(a0)	; used by PLCLoad_Shields
-		move.l	#bytes_to_long(rfCoord,0,48/2,48/2),render_flags(a0)	; set screen coordinates flag and height and width
-		move.l	#words_to_long(priority_1,make_art_tile(ArtTile_Shield,0,0)),priority(a0)	; set priority and art_tile
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.nothighpriority
@@ -334,7 +329,6 @@ Obj_InstaShield:
 .nothighpriority
 		move.w	#1,anim(a0)										; clear anim and set prev_anim to 1
 		st	LastLoadedDPLC(a0)									; reset LastLoadedDPLC (used by PLCLoad_Shields)
-		move.l	#.main,address(a0)
 
 .main
 		lea	(Player_1).w,a2										; a2=character
@@ -432,12 +426,10 @@ Obj_Invincibility:
 		moveq	#4-1,d1
 
 .loop
-		move.l	#Obj_188E8,address(a1)
-		move.l	#Map_Invincibility,mappings(a1)
-		move.w	#make_art_tile(ArtTile_Shield,0,0),art_tile(a1)
-		move.b	#$40+4,render_flags(a1)							; set screen coordinates and multi-draw flag
-		move.l	#bytes_word_to_long(32/2,32/2,priority_1),height_pixels(a1)	; set height, width and priority
+		movem.l	ObjDat_Invincibility(pc),d0/d3-d5					; copy data to d0/d3-d5
+		movem.l	d0/d3-d5,address(a1)								; set data from d0/d3-d5 to current object
 		move.w	#2,mainspr_childsprites(a1)
+		move.w	parent(a0),parent(a1)
 		move.b	d2,objoff_36(a1)
 		addq.w	#1,d2
 		move.l	(a2)+,objoff_30(a1)
@@ -618,6 +610,15 @@ byte_18A1B:
 		dc.b 7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, $FF, 1, 2, 3, 4, 5, 6, 7
 		dc.b 6, 5, 4, 3, 2
 	even
+
+; =============== S U B R O U T I N E =======================================
+
+; mapping
+ObjDat_FireShield:		subObjMainData2 Obj_FireShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_FireShield
+ObjDat_LightningShield:	subObjMainData2 Obj_LightningShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_LightningShield
+ObjDat_BubbleShield:		subObjMainData2 Obj_BubbleShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_BubbleShield
+ObjDat_InstaShield:		subObjMainData2 Obj_InstaShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_InstaShield
+ObjDat_Invincibility:		subObjMainData2 Obj_188E8, rfCoord+rfMulti, 0, 32, 32, 1, ArtTile_Shield, 0, 0, Map_Invincibility
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Shields/Object Data/Anim - Fire Shield.asm"

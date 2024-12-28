@@ -7,94 +7,119 @@
 Obj_Button:
 
 		; init
-		move.l	#Map_Button,mappings(a0)
-		move.w	#make_art_tile($47E,0,0),art_tile(a0)
-		move.b	#4,render_flags(a0)							; use screen coordinates
-		move.l	#bytes_word_to_long(24/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
+		movem.l	ObjDat_Button(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)								; set data from d0-d3 to current object
 		addq.w	#4,y_pos(a0)
 
 		; check
 		btst	#5,subtype(a0)									; $20?
-		beq.s	loc_2C5B8
-		move.l	#sub_2C62C,address(a0)						; HCZ only?
-		bra.s	sub_2C62C
-; ---------------------------------------------------------------------------
+		bne.s	Button_Alternate
 
-loc_2C5B8:
-		move.l	#loc_2C5BE,address(a0)
-
-loc_2C5BE:
+.main
 		tst.b	render_flags(a0)									; object visible on the screen?
-		bpl.s	loc_2C626									; if not, branch
+		bpl.s	.draw										; if not, branch
+
+		; solid
 		moveq	#(32/2)+$B,d1								; width
-		moveq	#8/2,d2										; height
-		moveq	#(8/2)+1,d3									; height+1
+		moveq	#(10/2)+1,d3									; height+1
 		move.w	x_pos(a0),d4
-		jsr	(SolidObjectFull).w
+		jsr	(SolidObjectTop).w
 		clr.b	mapping_frame(a0)
+
+		; check
 		moveq	#$F,d0
 		and.b	subtype(a0),d0
 		lea	(Level_trigger_array).w,a3
 		adda.w	d0,a3
-		moveq	#0,d3
+
+		; set
+		moveq	#0,d3										; bit 0
 		btst	#6,subtype(a0)									; $40?
-		beq.s	+
-		moveq	#7,d3
-+		moveq	#standing_mask,d0
+		beq.s	.skip
+		moveq	#7,d3										; bit 7
+
+.skip
+		moveq	#standing_mask,d0
 		and.b	status(a0),d0									; is Sonic or Tails standing on the object?
-		bne.s	loc_2C612									; if not, branch
+		bne.s	.press										; if yes, branch
+
+		; check
 		btst	#4,subtype(a0)									; $10?
-		bne.s	loc_2C626
-		bclr	d3,(a3)
-		bra.s	loc_2C626
+		bne.s	.draw
+		bclr	d3,(a3)											; set as unpressed
+		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
-loc_2C612:
+.press
 		tst.b	(a3)
-		bne.s	+
+		bne.s	.set
 		sfx	sfx_Switch
-+		bset	d3,(a3)
+
+.set
+		bset	d3,(a3)											; set as pressed
 		move.b	#1,mapping_frame(a0)
 
-loc_2C626:
+.draw
 		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_2C62C:
+Button_Alternate:
+
+		; alt
+		move.l	#.main,address(a0)
+
+.main
 		tst.b	render_flags(a0)									; object visible on the screen?
-		bpl.s	loc_2C690									; if not, branch
+		bpl.s	.draw										; if not, branch
+
+		; solid
 		moveq	#32/2,d1										; width
 		moveq	#(10/2)+1,d3									; height+1
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectTop).w
 		clr.b	mapping_frame(a0)
+
+		; check
 		moveq	#$F,d0
 		and.b	subtype(a0),d0
 		lea	(Level_trigger_array).w,a3
 		adda.w	d0,a3
-		moveq	#0,d3
+
+		; set
+		moveq	#0,d3										; bit 0
 		btst	#6,subtype(a0)									; $40?
-		beq.s	+
-		moveq	#7,d3
-+		moveq	#standing_mask,d0
+		beq.s	.skip
+		moveq	#7,d3										; bit 7
+
+.skip
+		moveq	#standing_mask,d0
 		and.b	status(a0),d0									; is Sonic or Tails standing on the object?
-		bne.s	loc_2C67C									; if not, branch
+		bne.s	.press										; if yes, branch
+
+		; check
 		btst	#4,subtype(a0)									; $10?
-		bne.s	loc_2C690
-		bclr	d3,(a3)
-		bra.s	loc_2C690
+		bne.s	.draw
+		bclr	d3,(a3)											; set as unpressed
+		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
-loc_2C67C:
+.press
 		tst.b	(a3)
-		bne.s	+
+		bne.s	.set
 		sfx	sfx_Switch
-+		bset	d3,(a3)
+
+.set
+		bset	d3,(a3)											; set as pressed
 		move.b	#1,mapping_frame(a0)
 
-loc_2C690:
+.draw
 		jmp	(Sprite_OnScreen_Test).w
+
+; =============== S U B R O U T I N E =======================================
+
+; mapping
+ObjDat_Button:		subObjMainData2 Obj_Button.main, rfCoord, 0, 24, 32, 4, $47E, 0, 0, Map_Button
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Button/Object Data/Map - Button.asm"

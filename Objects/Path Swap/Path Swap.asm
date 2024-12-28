@@ -9,8 +9,10 @@ Obj_PathSwap:
 		; init
 		move.l	#Map_PathSwap,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,1,0),art_tile(a0)
-		ori.b	#4,render_flags(a0)							; use screen coordinates
+		ori.b	#rfCoord,render_flags(a0)						; use screen coordinates
 		move.l	#bytes_word_to_long(128/2,128/2,priority_5),height_pixels(a0)	; set height, width and priority
+
+		; check
 		move.b	subtype(a0),d0
 		btst	#2,d0
 		beq.s	loc_1CD3C
@@ -22,10 +24,15 @@ Obj_PathSwap:
 		move.w	y_pos(a0),d1
 		lea	(Player_1).w,a1									; a1=character
 		cmp.w	y_pos(a1),d1
-		bhs.s	+
+		bhs.s	loc_1CD16
 		move.b	#1,objoff_34(a0)
-+		move.l	#loc_1CEF2,address(a0)
-		bra.w	loc_1CEF2
+
+loc_1CD16:
+
+		; next
+		lea	sub_1CEF2(pc),a1
+		move.l	a1,address(a0)
+		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
 word_1CD34:
@@ -43,18 +50,26 @@ loc_1CD3C:
 		move.w	x_pos(a0),d1
 		lea	(Player_1).w,a1									; a1=character
 		cmp.w	x_pos(a1),d1
-		bhs.s	+
+		bhs.s	loc_1CD70
 		move.b	#1,objoff_34(a0)
-+		move.l	#+,address(a0)
-+		tst.w	(Debug_placement_mode).w					; is debug mode on?
-		bne.s	+											; if yes, branch
+
+loc_1CD70:
+		move.l	#loc_1CD8A,address(a0)
+
+; =============== S U B R O U T I N E =======================================
+
+loc_1CD8A:
+		tst.w	(Debug_placement_mode).w					; is debug mode on?
+		bne.s	loc_1CDAC									; if yes, branch
 		move.w	x_pos(a0),d1
 		lea	objoff_34(a0),a2
 		lea	(Player_1).w,a1									; a1=character
 		bsr.s	sub_1CDDA
 		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
-+		jmp	(Sprite_OnScreen_Test).w
+
+loc_1CDAC:
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -90,12 +105,10 @@ loc_1CE26:
 		bhs.s	locret_1CE6A
 		btst	#0,render_flags(a0)
 		bne.s	loc_1CE54
-		move.b	#$C,top_solid_bit(a1)
-		move.b	#$D,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#3,d0
 		beq.s	loc_1CE54
-		move.b	#$E,top_solid_bit(a1)
-		move.b	#$F,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($E,$F),top_solid_bit(a1)
 
 loc_1CE54:
 		andi.w	#drawing_mask,art_tile(a1)
@@ -105,7 +118,8 @@ loc_1CE54:
 
 locret_1CE6A:
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 loc_1CE6C:
 		cmp.w	x_pos(a1),d1
@@ -137,12 +151,10 @@ loc_1CEB2:
 		bhs.s	locret_1CEF0
 		btst	#0,render_flags(a0)
 		bne.s	loc_1CEDE
-		move.b	#$C,top_solid_bit(a1)
-		move.b	#$D,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#4,d0
 		beq.s	loc_1CEDE
-		move.b	#$E,top_solid_bit(a1)
-		move.b	#$F,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($E,$F),top_solid_bit(a1)
 
 loc_1CEDE:
 		andi.w	#drawing_mask,art_tile(a1)
@@ -152,18 +164,21 @@ loc_1CEDE:
 
 locret_1CEF0:
 		rts
-; ---------------------------------------------------------------------------
 
-loc_1CEF2:
+; =============== S U B R O U T I N E =======================================
+
+sub_1CEF2:
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
-		bne.s	+											; if yes, branch
+		bne.s	loc_1CF14									; if yes, branch
 		move.w	y_pos(a0),d1
 		lea	objoff_34(a0),a2
 		lea	(Player_1).w,a1									; a1=character
 		bsr.s	sub_1CF42
 		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
-+		jmp	(Sprite_OnScreen_Test).w
+
+loc_1CF14:
+		jmp	(Sprite_OnScreen_Test).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -199,12 +214,10 @@ loc_1CF8E:
 		bhs.s	locret_1CFD2
 		btst	#0,render_flags(a0)
 		bne.s	loc_1CFBC
-		move.b	#$C,top_solid_bit(a1)
-		move.b	#$D,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#3,d0
 		beq.s	loc_1CFBC
-		move.b	#$E,top_solid_bit(a1)
-		move.b	#$F,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($E,$F),top_solid_bit(a1)
 
 loc_1CFBC:
 		andi.w	#drawing_mask,art_tile(a1)
@@ -214,7 +227,8 @@ loc_1CFBC:
 
 locret_1CFD2:
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 loc_1CFD4:
 		cmp.w	y_pos(a1),d1
@@ -246,12 +260,10 @@ loc_1D01A:
 		bhs.s	locret_1D058
 		btst	#0,render_flags(a0)
 		bne.s	loc_1D046
-		move.b	#$C,top_solid_bit(a1)
-		move.b	#$D,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#4,d0
 		beq.s	loc_1D046
-		move.b	#$E,top_solid_bit(a1)
-		move.b	#$F,lrb_solid_bit(a1)
+		move.w	#bytes_to_word($E,$F),top_solid_bit(a1)
 
 loc_1D046:
 		andi.w	#drawing_mask,art_tile(a1)

@@ -11,9 +11,8 @@ Obj_Ring:
 		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
 		move.b	#7|$40,collision_flags(a0)							; set ring collision
 
-		; jump
-		movea.l	address(a0),a1
-		jmp	(a1)
+		; draw
+		jmp	(Sprite_OnScreen_Test_Collision).w
 
 ; =============== S U B R O U T I N E =======================================
 

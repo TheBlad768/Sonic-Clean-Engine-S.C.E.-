@@ -9,11 +9,9 @@
 Obj_StarPost:
 
 		; init
-		move.l	#Map_StarPost,mappings(a0)
-		move.l	#bytes_to_long(rfCoord+rfMulti,0,80/2,16/2),render_flags(a0)		; set screen coordinates, multi-draw flag and height and width
-		move.l	#words_to_long(priority_5,make_art_tile(ArtTile_StarPost+8,0,0)),priority(a0)	; set priority and art_tile
+		movem.l	ObjDat_StarPost(pc),d0-d3								; copy data to d0-d3
+		movem.l	d0-d3,address(a0)										; set data from d0-d3 to current object
 		move.w	#2,mainspr_childsprites(a0)
-		move.l	#.main,address(a0)
 
 		; create circle
 		lea	sub2_x_pos(a0),a1										; $16-$23 bytes reserved
@@ -222,7 +220,7 @@ Load_StarPost_Stars:
 		move.l	#Obj_StarPost_Stars,address(a1)
 		move.l	#Map_StarPostStars,mappings(a1)
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a1)
-		move.b	#4,render_flags(a1)									; use screen coordinates
+		move.b	#rfCoord,render_flags(a1)								; use screen coordinates
 		move.w	priority(a0),priority(a1)
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)				; set height and width
 		move.b	#1,mapping_frame(a1)
@@ -257,7 +255,7 @@ Obj_StarPost_Stars:
 
 		; load special stage
 		addq.w	#4*2,sp												; exit from object and current screen
-		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w		; set screen mode to Level Select (SCE)
+		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w		; set screen mode to special stage
 		moveq	#$71,d0
 		and.b	(Player_1+status_secondary).w,d0
 		move.b	d0,(Saved_status_secondary).w
@@ -348,6 +346,11 @@ loc_2D5B6:
 
 loc_2D5C0:
 		jmp	(Delete_Current_Sprite).w
+
+; =============== S U B R O U T I N E =======================================
+
+; mapping
+ObjDat_StarPost:		subObjMainData2 Obj_StarPost.main, rfCoord+rfMulti, 0, 80, 16, 5, ArtTile_StarPost+8, 0, 0, Map_StarPost
 ; ---------------------------------------------------------------------------
 
 		include "Objects/StarPost/Object Data/Map - StarPost.asm"
