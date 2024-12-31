@@ -16,7 +16,7 @@ Get_LevelSizeStart:
 		move.l	d0,(Camera_target_min_Y_pos).w
 
 		; set
-		move.w	#$60,(Distance_from_top).w
+		move.w	#(224/2)-16,(Distance_from_top).w
 
 	if ExtendedCamera
 		move.w	#320/2,(Camera_X_center).w
