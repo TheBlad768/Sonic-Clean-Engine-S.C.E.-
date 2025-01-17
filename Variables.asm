@@ -224,7 +224,7 @@ Last_act_end_flag:					ds.b 1
 Slotted_object_bits:					ds.b 8						; index of slot array to use
 Signpost_addr:						ds.w 1
 Render_sprite_last_RAM:				ds.l 1
-Palette_cycle_counters:				ds.b $10
+Palette_cycle_counters:				ds.b $40
 Pal_fade_delay:						ds.w 1
 Pal_fade_delay2:						ds.w 1
 Hyper_Sonic_flash_timer:				ds.b 1
