@@ -218,20 +218,9 @@ DACUpdateSample:
 	beq.s	locret_71CAA				; Return if yes
 
 	bclr	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)
-	beq.s	.dac_already_enabled					; If FM6 track already overridden, don't bother doing it all again
+	beq.s	.notoverriden						; If FM6 track already overridden, don't bother doing it all again
 	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)	; Mark FM6 track as overridden
-
-	; Enable DAC, muting FM6
-	moveq	#$2B,d0				; DAC enable/disable register
-	move.b	#$80,d1				; Enable DAC
-	bsr.w	WriteFMI
-
-	; Update DAC's panning (the panning may have been changed by the FM6 track)
-	move.b	#$B6,d0				; Register for FM6/DAC AMS/FMS/Panning
-	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
-	bsr.w	WriteFMII
-
-.dac_already_enabled:
+.notoverriden:
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -717,9 +706,7 @@ HandlePause:
 	bsr.w	PWMSilenceAll
     endif
 
-	; From Vladikcomper:
-	; "Playing sample $7F executes pause command."
-	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
+    	; Pause DAC channel
 	MPCM_stopZ80_safe
 	move.b	#Z_MPCM_COMMAND_PAUSE,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; pause DAC
 	MPCM_startZ80_safe
@@ -740,8 +727,17 @@ HandleUnpause:
 
 	; Resume music FM channels
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1-1,d7	; 5 FM (FM is handled differently)
 	bsr.s	RestoreFMTrackVoices
+
+	; Special case: Resume FM6 channel (follows `RestoreFMTrackVoices` logic with extra checks)
+	lea	SMPS_RAM.v_music_fm6_track(a6),a5
+	move.b	SMPS_Track.PlaybackControl(a5),d7
+	bpl.s	.skip_fm6				; Skip if FM6 track not playing
+	and.b	#(1<<2)|(1<<6),d7			; Tests bits 2 (SFX overriding) and 6 (DAC overriding)
+	bne.s	.skip_fm6				; if either of bits are set, skip update
+	bsr.w	SetVoice
+.skip_fm6:
 
 	; Resume SFX FM channels
 	lea	SMPS_RAM.v_sfx_fm_tracks(a6),a5
@@ -755,23 +751,7 @@ HandleUnpause:
 	bsr.s	RestoreFMTrackVoices
     endif
 
-	; Apply DAC panning if necessary (RestoreFMTrackVoices reapplied FM6's panning)
-	lea	SMPS_RAM.v_music_dac_track(a6),a5
-
-	tst.b	SMPS_Track.PlaybackControl(a5)
-	bpl.s	.no_dac					; Skip if DAC track not playing
-	btst	#2,SMPS_Track.PlaybackControl(a5)
-	bne.s	.no_dac					; Skip if DAC track is being overridden by SFX
-	btst	#6,SMPS_Track.PlaybackControl(a5)
-	bne.s	.no_dac					; Skip if DAC track is being overridden by other track (FM6/DAC)?
-	move.b	#$B6,d0					; Register for FM6/DAC AMS/FMS/Panning
-	move.b	SMPS_Track.AMSFMSPan(a5),d1		; Value to send
-	bsr.w	WriteFMII
-.no_dac:
-
-	; From Vladikcomper:
-	; "Playing sample $00 cancels pause mode."
-	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
+	; Sending $00 to Mega PCM command input cancels pause mode if it was set.
 	MPCM_stopZ80_safe
 	move.b	#0,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; unpause DAC
 	MPCM_startZ80_safe
@@ -2901,16 +2881,29 @@ cfPanningAMSFMS:
 	move.b	(a4)+,d1				; New AMS/FMS/panning value
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	locret_72AEA				; Return if yes
-	move.b	SMPS_Track.AMSFMSPan(a5),d0		; Get current AMS/FMS/panning
-	andi.b	#$37,d0					; Retain bits 0-2, 3-4 if set
+	moveq	#$37,d0
+	and.b	SMPS_Track.AMSFMSPan(a5),d0		; Get current AMS/FMS/panning, Retain bits 0-2, 3-4 if set
 	or.b	d0,d1					; Mask in new value
 	move.b	d1,SMPS_Track.AMSFMSPan(a5)		; Store value
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overriden by sfx?
 	bne.s	locret_72AEA				; Return if yes
 	btst	#6,SMPS_Track.PlaybackControl(a5)	; Is track being overriden by other track (FM6/DAC)?
 	bne.s	locret_72AEA				; Return if yes
-	move.b	#$B4,d0					; Command to set AMS/FMS/panning
+	btst	#4,SMPS_Track.VoiceControl(a5)		; Are we updating DAC?
+	bne.s	.updateDACPanning			; if yes, branch
+	moveq	#$FFFFFFB4,d0				; Command to set AMS/FMS/panning
 	bra.w	WriteFMIorII
+
+.updateDACPanning:
+	; Send to DAC panning Mega PCM instead of updating it directly.
+	; Mega PCM needs to track panning on its own to restore it when
+	; normal sample is interrupted by an SFX sample
+	MPCM_stopZ80_safe
+	and.b	#$C0,d1
+	move.b	d1,(MPCM_Z80_RAM+Z_MPCM_PanInput).l
+	MPCM_startZ80_safe
+	rts
+
 ; ===========================================================================
 ; loc_72AEC: cfAlterNotes:
 cfDetune:

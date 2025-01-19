@@ -11,7 +11,7 @@ SMPS_LoadDACDriver:
 
 	ifdef __DEBUG__
 		; for MD Debugger v.2.5 or above
-		RaiseError	"Bad sample table (code %<.b d0>)"
+		RaiseError "MegaPCM_LoadSampleTable returned %<.b d0>", MPCM_Debugger_LoadSampleTableException
 	else
 		illegal
 	endif
