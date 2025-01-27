@@ -72,8 +72,11 @@ SMPS_RAM_Variables STRUCT DOTS
 	v_main_tempo_timeout:	ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
 	v_main_tempo:			ds.b 1	; Used for music only
 	bitfield2:					ds.b 1
+
+	if MSUMode
 	v_cda_playing:			ds.b 1
 	v_cda_ignore:			ds.b 1
+	endif
 
 f_1up_playing:				= 0	; flag indicating 1-up song is playing
 f_speedup:					= 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
