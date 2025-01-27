@@ -25,13 +25,15 @@ SMPS_LoadDACDriver:
 
 .not_pal
 
-	; check CD mode
-	tst.b	(SegaCD_Mode).w
-	beq.s	.skip
-	disableIntsSave
-	MCDSend	#_MCD_SetVolume, #255
-	MCDSend	#_MCD_NoSeek, #1
-	enableIntsSave
+	if MSUMode
+		; check CD mode
+		tst.b	(SegaCD_Mode).w
+		beq.s	.skip
+		disableIntsSave
+		MCDSend	#_MCD_SetVolume, #255
+		MCDSend	#_MCD_NoSeek, #1
+		enableIntsSave
+	endif
 
 .skip
 	rts

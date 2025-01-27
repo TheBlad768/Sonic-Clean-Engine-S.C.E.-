@@ -695,11 +695,15 @@ HandlePause:
 	cmpi.b	#2,SMPS_RAM.f_pause(a6)
 	beq.s	.locret
 	move.b	#2,SMPS_RAM.f_pause(a6)
+
+	if MSUMode
 	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
 	beq.s	.skip
 	MCDSend	#_MCD_PauseTrack, #20	; flag, timer
 
 .skip:
+	endif
+
 	bsr.w	FMSilenceAll
 	bsr.w	PSGSilenceAll
     if SMPS_EnablePWM
@@ -718,12 +722,14 @@ HandlePause:
 HandleUnpause:
 	clr.b	SMPS_RAM.f_pause(a6)
 
+	if MSUMode
 	; Resume CDA
 	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
 	beq.s	.skip
 	MCDSend	#_MCD_UnPauseTrack
 
 .skip:
+	endif
 
 	; Resume music FM channels
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
@@ -826,6 +832,7 @@ CycleSoundQueue:
 	rts
 ; End of function CycleSoundQueue
 
+	if MSUMode
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -938,6 +945,7 @@ PlayCD_Index:
 	; Extra
 	dc.l _MCD_PlayTrack<<24|$00000000			; $07 (Speedup)
 	even
+	endif
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -947,7 +955,12 @@ PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it 
 	cmpi.w	#MusID__First,d7			; Is this before music?
 	blo.w	CycleSoundQueue.locret		; Return if yes
 	cmpi.w	#MusID__End,d7				; Is this music ($01-$1F)?
-	blo.w	Sound_PlayCDA				; Branch if yes
+
+	if MSUMode
+		blo.w	Sound_PlayCDA				; Branch if yes
+	else
+		blo.w	Sound_PlayBGM				; Branch if yes
+	endif
 
 	; SFX
 	cmpi.w	#SndID__First,d7				; Is this after music but before sfx?
@@ -1111,6 +1124,7 @@ Sound_PlayBGM:
 ; loc_7202C:
 .bgm_loadMusic:
 
+	if MSUMode
 	; If CDA is playing, stop it
 	tst.b SMPS_RAM.variables.v_cda_playing(a6)
 	beq.s	.NoCD
@@ -1118,6 +1132,8 @@ Sound_PlayBGM:
 	clr.b	SMPS_RAM.variables.v_cda_playing(a6)
 
 .NoCD:
+	endif
+
 	bsr.w	InitMusicPlayback
 	subi.w	#MusID__First,d7
 	add.w	d7,d7
@@ -1823,11 +1839,12 @@ FadeOutMusic:
 ;    endif
 	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)	; Set fadeout delay to 3
 	move.b	#$28,SMPS_RAM.variables.v_fadeout_counter(a6)	; Set fadeout counter
-
+	if MSUMode
 	; Fade out CD track
 	tst.b	(SegaCD_Mode).w
 	beq.s	.skip
 	MCDSend	#_MCD_PauseTrack, #$28		; flag, timer
+	endif
 
 .skip:
 	bclr	#f_speedup,SMPS_RAM.variables.bitfield2(a6)	; Disable speed shoes tempo
@@ -1974,6 +1991,7 @@ FMSilenceAll:
 ; Sound_E4: StopSoundAndMusic:
 StopAllSound:
 
+	if MSUMode
 	; If CDA is playing, stop it
 	tst.b	SMPS_RAM.variables.v_cda_playing(a6)
 	beq.s	.NoCD
@@ -1981,6 +1999,8 @@ StopAllSound:
 	clr.b	SMPS_RAM.variables.v_cda_playing(a6)
 
 .NoCD:
+	endif
+
 	moveq	#$27,d0		; Timers, FM3/FM6 mode
 	moveq	#0,d1		; FM3/FM6 normal mode, disable timers
 	bsr.w	WriteFMI
