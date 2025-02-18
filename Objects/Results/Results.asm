@@ -244,7 +244,7 @@ LevResults_DisplayScore:
 .loop
 		move.w	d2,(a1)+												; xpos
 		move.w	d3,(a1)												; ypos
-		addq.w	#3,a1												; skip
+		addq.w	#next_subspr-3,a1										; skip
 		rol.l	#4,d1
 		move.w	d1,d0
 		andi.w	#$F,d0

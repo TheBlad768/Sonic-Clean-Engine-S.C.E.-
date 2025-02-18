@@ -625,6 +625,6 @@ sub_86458:
 		ext.w	d1
 		add.w	d3,d1
 		move.w	d1,(a2)+					; sub2_y_pos
-		addq.w	#2,a2					; skip sub2_mapframe
+		addq.w	#next_subspr-4,a2		; skip sub2_mapframe
 		dbf	d0,.next
 		rts
