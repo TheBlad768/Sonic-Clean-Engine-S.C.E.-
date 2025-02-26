@@ -74,7 +74,7 @@ ArtKosPM_DEZTitleCard:			binclude "Objects/Title Card/KosinskiPM Art/Levels/DEZ 
 ; Kosinski Plus Module compressed Level Select screen graphics
 ; ===========================================================================
 
-ArtKosPM_LevelSelectText:			binclude "Data/Screens/Level Select/KosinskiPM Art/Text.kospm"
+ArtKosPM_LevelSelectText:			binclude "General/Screens/Level Select/KosinskiPM Art/Text.kospm"
 	even
 
 ; ===========================================================================

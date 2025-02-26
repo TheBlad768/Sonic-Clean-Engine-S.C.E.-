@@ -224,7 +224,7 @@ Process_KosPlus_Queue:
 		ori.w	#$8000,(KosPlus_decomp_queue_count).w						; set sign bit to signify decompression in progress
 		movea.l	(KosPlus_decomp_queue).w,a0
 		movea.l	(KosPlus_decomp_destination).w,a1
-		include "Data/Decompression/Kosinski Plus Internal.asm"
+		include "General/Decompression/Kosinski Plus Internal.asm"
 		move.l	a0,(KosPlus_decomp_queue).w
 		move.l	a1,(KosPlus_decomp_destination).w
 		andi.w	#$7FFF,(KosPlus_decomp_queue_count).w						; clear decompression in progress bit
