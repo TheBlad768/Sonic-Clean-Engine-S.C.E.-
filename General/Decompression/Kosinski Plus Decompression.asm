@@ -26,5 +26,5 @@ KosPlusArt_To_VDP:
 
 ; =============== S U B R O U T I N E =======================================
 
-KosPlus_Decomp:		include "Data/Decompression/Kosinski Plus Internal.asm"
+KosPlus_Decomp:		include "General/Decompression/Kosinski Plus Internal.asm"
 		rts

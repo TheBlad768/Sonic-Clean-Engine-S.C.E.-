@@ -10,7 +10,7 @@
 		include "Constants.asm"									; include constants
 		include "Variables.asm"									; include RAM variables
 		include "Sound/Definitions.asm"							; include sound driver macros and functions
-		include "Misc Data/Debugger/ErrorHandler/Debugger.asm"		; include debugger macros and functions
+		include "Misc/Debugger/ErrorHandler/Debugger.asm"			; include debugger macros and functions
 ; ---------------------------------------------------------------------------
 
 StartOfROM:
@@ -118,33 +118,33 @@ EndOfHeader
 ; VDP Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/VDP.asm"
+		include "General/Main/VDP.asm"
 
 ; ---------------------------------------------------------------------------
 ; Controllers Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Controllers.asm"
+		include "General/Main/Controllers.asm"
 
 ; ---------------------------------------------------------------------------
 ; DMA Queue Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/DMA Queue.asm"
+		include "General/Main/DMA Queue.asm"
 
 ; ---------------------------------------------------------------------------
 ; Plane Map To VRAM Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Plane Map To VRAM.asm"
+		include "General/Main/Plane Map To VRAM.asm"
 
 ; ---------------------------------------------------------------------------
 ; Decompression Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Decompression/Enigma Decompression.asm"
-		include "Data/Decompression/Kosinski Plus Decompression.asm"
-		include "Data/Decompression/Kosinski Plus Module Decompression.asm"
+		include "General/Decompression/Enigma Decompression.asm"
+		include "General/Decompression/Kosinski Plus Decompression.asm"
+		include "General/Decompression/Kosinski Plus Module Decompression.asm"
 
 ; ---------------------------------------------------------------------------
 ; Flamedriver - Functions Subroutine
@@ -156,62 +156,62 @@ EndOfHeader
 ; Fading Palettes Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Fading Palette.asm"
+		include "General/Main/Fading Palette.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load Palettes Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Load Palette.asm"
+		include "General/Main/Load Palette.asm"
 
 ; ---------------------------------------------------------------------------
 ; Wait VSync Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Wait VSync.asm"
+		include "General/Main/Wait VSync.asm"
 
 ; ---------------------------------------------------------------------------
 ; Pause Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Pause Game.asm"
+		include "General/Main/Pause Game.asm"
 
 ; ---------------------------------------------------------------------------
 ; Random Number Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Random Number.asm"
+		include "General/Main/Random Number.asm"
 
 ; ---------------------------------------------------------------------------
 ; Oscillatory Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Oscillatory Routines.asm"
+		include "General/Main/Oscillatory Routines.asm"
 
 ; ---------------------------------------------------------------------------
 ; HUD Update Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/HUD Update.asm"
+		include "General/Main/HUD Update.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load Text Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Load Text.asm"
+		include "General/Main/Load Text.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects Process Subroutines
 ; ---------------------------------------------------------------------------
 
-		include "Data/Objects/Process Sprites.asm"
-		include "Data/Objects/Render Sprites.asm"
+		include "General/Objects/Process Sprites.asm"
+		include "General/Objects/Render Sprites.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load Objects Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Load Objects.asm"
+		include "General/Main/Load Objects.asm"
 
 ; ---------------------------------------------------------------------------
 ; Load HUD Subroutine
@@ -223,116 +223,116 @@ EndOfHeader
 ; Load Rings Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Load Rings.asm"
+		include "General/Main/Load Rings.asm"
 
 ; ---------------------------------------------------------------------------
 ; Draw Level Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Draw Level.asm"
+		include "General/Main/Draw Level.asm"
 
 ; ---------------------------------------------------------------------------
 ; Deform Layer Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Move Camera.asm"
+		include "General/Main/Move Camera.asm"
 
 ; ---------------------------------------------------------------------------
 ; Parallax Engine Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Deformation Script.asm"
+		include "General/Main/Deformation Script.asm"
 
 ; ---------------------------------------------------------------------------
 ; Shake Screen Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Shake Screen.asm"
+		include "General/Main/Shake Screen.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects Subroutines
 ; ---------------------------------------------------------------------------
 
-		include "Data/Objects/Animate Raw.asm"
-		include "Data/Objects/Animate Sprite.asm"
-		include "Data/Objects/Calc Angle.asm"
-		include "Data/Objects/Calc Sine.asm"
-		include "Data/Objects/Draw Sprite.asm"
-		include "Data/Objects/Delete Object.asm"
-		include "Data/Objects/Create Sprite.asm"
-		include "Data/Objects/Move Sprite.asm"
-		include "Data/Objects/Move Sprite Circular.asm"
-		include "Data/Objects/Object Swing.asm"
-		include "Data/Objects/Object Wait.asm"
-		include "Data/Objects/Change Flip.asm"
-		include "Data/Objects/Create Child Sprite.asm"
-		include "Data/Objects/Child Get Priority.asm"
-		include "Data/Objects/Check Range.asm"
-		include "Data/Objects/Find Sonic.asm"
-		include "Data/Objects/Misc.asm"
-		include "Data/Objects/Palette Script.asm"
-		include "Data/Objects/Remember State.asm"
+		include "General/Objects/Animate Raw.asm"
+		include "General/Objects/Animate Sprite.asm"
+		include "General/Objects/Calc Angle.asm"
+		include "General/Objects/Calc Sine.asm"
+		include "General/Objects/Draw Sprite.asm"
+		include "General/Objects/Delete Object.asm"
+		include "General/Objects/Create Sprite.asm"
+		include "General/Objects/Move Sprite.asm"
+		include "General/Objects/Move Sprite Circular.asm"
+		include "General/Objects/Object Swing.asm"
+		include "General/Objects/Object Wait.asm"
+		include "General/Objects/Change Flip.asm"
+		include "General/Objects/Create Child Sprite.asm"
+		include "General/Objects/Child Get Priority.asm"
+		include "General/Objects/Check Range.asm"
+		include "General/Objects/Find Sonic.asm"
+		include "General/Objects/Misc.asm"
+		include "General/Objects/Palette Script.asm"
+		include "General/Objects/Remember State.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects Functions Subroutines
 ; ---------------------------------------------------------------------------
 
-		include "Data/Objects/Find Floor.asm"
-		include "Data/Objects/Solid Object.asm"
+		include "General/Objects/Find Floor.asm"
+		include "General/Objects/Solid Object.asm"
 
 ; ---------------------------------------------------------------------------
 ; Animate Palette Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Animate Palette.asm"
+		include "General/Main/Animate Palette.asm"
 
 ; ---------------------------------------------------------------------------
 ; Animate Level Graphics Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Animate Tiles.asm"
+		include "General/Main/Animate Tiles.asm"
 
 ; ---------------------------------------------------------------------------
 ; Level Setup Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Level Setup.asm"
+		include "General/Main/Level Setup.asm"
 
 ; ---------------------------------------------------------------------------
 ; Special Events Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Special Events.asm"
+		include "General/Main/Special Events.asm"
 
 ; ---------------------------------------------------------------------------
 ; Get Level Size Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Level Start.asm"
+		include "General/Main/Level Start.asm"
 
 ; ---------------------------------------------------------------------------
 ; Resize Events Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Level Events.asm"
+		include "General/Main/Level Events.asm"
 
 ; ---------------------------------------------------------------------------
 ; Handle On screen Water Height Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Water Effects.asm"
+		include "General/Main/Water Effects.asm"
 
 ; ---------------------------------------------------------------------------
 ; Interrupt Handler Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Interrupt Handler.asm"
+		include "General/Main/Interrupt Handler.asm"
 
 ; ---------------------------------------------------------------------------
 ; Touch Response Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Objects/Touch Response.asm"
+		include "General/Objects/Touch Response.asm"
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load Sonic object
@@ -352,13 +352,13 @@ EndOfHeader
 ; Level Select screen subroutines
 ; ---------------------------------------------------------------------------
 
-		include "Data/Screens/Level Select/Level Select.asm"
+		include "General/Screens/Level Select/Level Select.asm"
 
 ; ---------------------------------------------------------------------------
 ; Level screen Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Screens/Level/Level.asm"
+		include "General/Screens/Level/Level.asm"
 
 	if GameDebug
 
@@ -379,8 +379,8 @@ EndOfHeader
 ; Security Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Security Startup 1.asm"
-		include "Data/Main/Security Startup 2.asm"
+		include "General/Main/Security Startup 1.asm"
+		include "General/Main/Security Startup 2.asm"
 
 	if ChecksumCheck
 
@@ -388,7 +388,7 @@ EndOfHeader
 ; Checksum Subroutine
 ; ---------------------------------------------------------------------------
 
-		include "Data/Main/Checksum.asm"
+		include "General/Main/Checksum.asm"
 
 	endif
 
@@ -473,7 +473,7 @@ EndOfHeader
 ; Error handling module
 ; ---------------------------------------------------------------
 
-		include "Misc Data/Debugger/ErrorHandler/ErrorHandler.asm"
+		include "Misc/Debugger/ErrorHandler/ErrorHandler.asm"
 
 ; end of 'ROM'
 EndOfROM:

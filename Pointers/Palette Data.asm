@@ -6,7 +6,7 @@ Pal_Sonic:			bincludeEntry "Objects/Sonic/Palettes/Sonic.pal"
 	even
 Pal_WaterSonic:		bincludeEntry "Objects/Sonic/Palettes/Water Sonic.pal"
 	even
-Pal_LevelSelect:		bincludeEntry "Data/Screens/Level Select/Palettes/1.pal"
+Pal_LevelSelect:		bincludeEntry "General/Screens/Level Select/Palettes/1.pal"
 	even
 Pal_DEZ:			bincludeEntry "Levels/DEZ/Palettes/Death Egg Zone.pal"
 	even

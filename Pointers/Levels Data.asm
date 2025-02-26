@@ -27,11 +27,11 @@ DEZ_128x128_KosP:		binclude "Levels/DEZ/Chunks/Primary.kosp"
 ; Collision data
 ; ===========================================================================
 
-AngleArray:				binclude "Misc Data/Angle Map.bin"
+AngleArray:				binclude "Misc/Angle Map.bin"
 	even
-HeightMaps:				binclude "Misc Data/Height Maps.bin"
+HeightMaps:				binclude "Misc/Height Maps.bin"
 	even
-HeightMapsRot:			binclude "Misc Data/Height Maps Rotated.bin"
+HeightMapsRot:			binclude "Misc/Height Maps Rotated.bin"
 	even
 
 ; ===========================================================================
