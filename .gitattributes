@@ -5,6 +5,8 @@
 *.cpp text
 *.ini text
 *.py text
+*.log text
+*.lst text
 *.pal binary
 *.eni binary
 *.nem binary

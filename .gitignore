@@ -1,10 +1,11 @@
 desktop.ini
 *.gen
-Sonic.lst
-Sonic.Debug.lst
-/RAM.asm
+Main.lst
+Main.Debug.lst
+Engine/_RAM.asm
+Engine/_RAM.Debug.asm
 to-do.txt
 *.log
 *.[ph]
-SonLVL INI Files/dllcache/*
-SonLVL INI Files/SonLVL.log
+Projects/SonLVL INI Files/dllcache/*
+Projects/SonLVL INI Files/SonLVL.log
