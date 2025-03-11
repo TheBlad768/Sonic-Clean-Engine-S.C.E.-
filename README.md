@@ -43,10 +43,10 @@ To build this, use Build.bat if you're a Windows user, or build.lua otherwise. T
 
 ## FAQ
 
-- If you want to convert levels from previous Sonic games, you have to use [LevelConverter](https://info.sonicretro.org/LevelConverter) from [SonLVL](https://info.sonicretro.org/SonLVL). Then change the layout format using [Layout converter](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/master/Levels/_tools/Layout).
+- If you want to convert levels from previous Sonic games, you have to use [LevelConverter](https://info.sonicretro.org/LevelConverter) from [SonLVL](https://info.sonicretro.org/SonLVL). Then change the layout format using [Layout converter](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Utilities/Layout).
 
-- If you want to make a different text for Title Card, you need to create a file of letters from [List.unc](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/master/Objects/Title%20Card/KosinskiPM%20Art/Levels). This will be loaded before the level starts.
-You don't have to add the letters **'ENOZ' (ZONE)** because those letters are already in VRAM. Then you have to create a mapping of your zone name in [Map - Title Card.asm](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/master/Objects/Title%20Card/Object%20Data).
+- If you want to make a different text for Title Card, you need to create a file of letters from [List.unc](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Objects/Main/Title%20Card/KosinskiPM%20Art/Levels). This will be loaded before the level starts.
+You don't have to add the letters **'ENOZ' (ZONE)** because those letters are already in VRAM. Then you have to create a mapping of your zone name in [Map - Title Card.asm](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Objects/Main/Title%20Card/Object%20Data).
 
 - If you want to use other SMPS music you can use [Valley Bell's SMPS Research](https://forums.sonicretro.org/index.php?threads/valley-bells-smps-research.32473) or [vgm2smps](https://github.com/Ivan-YO/vgm2smps/releases).
 
