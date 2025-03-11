@@ -1,10 +1,15 @@
 ; ===========================================================================
+; Kosinski Plus Module compressed Renders graphics
+; ===========================================================================
+
+ArtKosPM_HUD:					binclude "Objects/Renders/HUD/KosinskiPM Art/HUD.kospm"
+	even
+
+; ===========================================================================
 ; Kosinski Plus Module compressed Main graphics
 ; ===========================================================================
 
 ArtKosPM_Ring_Sparks:			binclude "Objects/Main/Rings/KosinskiPM Art/Sparks.kospm"
-	even
-ArtKosPM_HUD:					binclude "Objects/Renders/HUD/KosinskiPM Art/HUD.kospm"
 	even
 ArtKosPM_Monitors:				binclude "Objects/Main/Monitor/KosinskiPM Art/Monitors.kospm"
 	even
