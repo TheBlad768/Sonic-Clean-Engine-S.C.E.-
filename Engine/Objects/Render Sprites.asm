@@ -34,8 +34,21 @@ Render_Sprites:
 		; check
 		tst.b	(Level_started_flag).w
 		beq.s	Render_Sprites_LevelLoop
-		bsr.w	Render_HUD
-		bsr.w	Render_Rings
+
+		; render first extra sprites
+		lea	(Render_sprite_first_RAM).w,a2
+
+.loop
+		move.l	(a2)+,d0
+		beq.s	Render_Sprites_LevelLoop
+
+		; jump
+		movea.l	d0,a1
+		jsr	(a1)
+
+		; next
+		bra.s	.loop
+; ---------------------------------------------------------------------------
 
 Render_Sprites_LevelLoop:
 		tst.w	(a5)								; does this level have any objects?
@@ -596,4 +609,77 @@ loc_1B1E4:
 loc_1B1EC:
 		addq.w	#4,a1
 		dbf	d4,loc_1B19C
+		rts
+
+; ---------------------------------------------------------------------------
+; Load extra sprites
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Load_ExtraRender:
+		lea	(Render_sprite_first_RAM).w,a2
+		move.w	(a1)+,d1
+
+.load
+		move.l	(a1)+,(a2)+
+		dbf	d1,.load
+
+		; end marker
+		clr.l	(a2)
+		rts
+
+; ---------------------------------------------------------------------------
+; Add new extra sprites slot
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+AddSlot_ExtraRender:
+		andi.w	#7,d1							; maximum 8 slots
+
+		; calc slot
+		lea	(Render_sprite_first_RAM_end).w,a1
+		add.w	d1,d1							; multiply by 4
+		add.w	d1,d1
+		jmp	.shift(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+.shift
+
+	rept ((Render_sprite_first_RAM_end-Render_sprite_first_RAM)/4)
+		subq.w	#4+4,a1							; next
+		move.l	(a1)+,(a1)						; shift data
+	endr
+
+		; save new pointer
+		move.l	d0,(a1)
+		rts
+
+; ---------------------------------------------------------------------------
+; Delete extra sprites slot
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+DeleteSlot_ExtraRender:
+		andi.w	#7,d1							; maximum 8 slots
+
+		; calc slot
+		lea	(Render_sprite_first_RAM+4).w,a1
+		add.w	d1,d1							; multiply by 4
+		add.w	d1,d1
+		adda.w	d1,a1
+		jmp	.shift(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+.shift
+
+	rept ((Render_sprite_first_RAM_end-Render_sprite_first_RAM)/4)-1
+		move.l	(a1),-(a1)							; shift data
+		addq.w	#4+4,a1							; next
+	endr
+
+		; last shift data
+		move.l	(a1),-(a1)
 		rts
