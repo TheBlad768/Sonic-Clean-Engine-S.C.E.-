@@ -137,6 +137,8 @@ LevelScreen:
 		move.b	d0,(Update_HUD_score).w											; update score counter
 		move.b	d0,(Update_HUD_ring_count).w									; update rings counter
 		move.b	d0,(Level_started_flag).w
+		lea	LevelExtraRender_Data(pc),a1
+		jsr	(Load_ExtraRender).w
 		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		tst.b	(Water_flag).w
@@ -181,6 +183,12 @@ LevelScreen:
 		jsr	(ChangeRingFrame).w
 		jsr	(Render_Sprites).w
 		bra.s	.loop
+; ---------------------------------------------------------------------------
+
+LevelExtraRender_Data:
+		dc.w 2-1
+		dc.l Render_HUD		; 0
+		dc.l Render_Rings		; 1
 
 ; =============== S U B R O U T I N E =======================================
 
