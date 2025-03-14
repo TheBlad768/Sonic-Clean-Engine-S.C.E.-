@@ -175,37 +175,37 @@ _assert:	macro	src, cond, dest, consoleprogram
 
 		switch lowstring("cond")
 		case "eq"
-			beq	.skip
+			beq.w	.skip
 		case "ne"
-			bne	.skip
+			bne.w	.skip
 		case "cs"
-			bcs	.skip
+			bcs.w	.skip
 		case "cc"
-			bcc	.skip
+			bcc.w	.skip
 		case "pl"
-			bpl	.skip
+			bpl.w	.skip
 		case "mi"
-			bmi	.skip
+			bmi.w	.skip
 		case "hi"
-			bhi	.skip
+			bhi.w	.skip
 		case "hs"
-			bhs	.skip
+			bhs.w	.skip
 		case "ls"
-			bls	.skip
+			bls.w	.skip
 		case "lo"
-			blo	.skip
+			blo.w	.skip
 		case "gt"
-			bgt	.skip
+			bgt.w	.skip
 		case "ge"
-			bge	.skip
+			bge.w	.skip
 		case "le"
-			ble	.skip
+			ble.w	.skip
 		case "lt"
-			blt	.skip
+			blt.w	.skip
 		case "vs"
-			bvs	.skip
+			bvs.w	.skip
 		case "vc"
-			bvc	.skip
+			bvc.w	.skip
 		elsecase
 			!error "Unknown condition cond"
 		endcase
@@ -233,7 +233,7 @@ RaiseError:	macro	string, consoleprogram, opts
 	pea		*(pc)
 	move.w	sr, -(sp)
 	__FSTRING_GenerateArgumentsCode string
-	jsr		MDDBG__ErrorHandler
+	jsr	(MDDBG__ErrorHandler).l
 	__FSTRING_GenerateDecodedString string
 	if ("consoleprogram"<>"")			; if console program offset is specified ...
 		.__align_flag:	set	((((*)&1)!1)*_eh_align_offset)
@@ -244,10 +244,10 @@ RaiseError:	macro	string, consoleprogram, opts
 		endif
 		!align	2													; ... to tell Error handler to skip this byte, so it'll jump to ...
 		if DEBUGGER__EXTENSIONS__ENABLE
-			jsr		consoleprogram										; ... an aligned "jsr" instruction that calls console program itself
-			jmp		MDDBG__ErrorHandler_PagesController
+			jsr	(consoleprogram).l										; ... an aligned "jsr" instruction that calls console program itself
+			jmp		(MDDBG__ErrorHandler_PagesController).l
 		else
-			jmp		consoleprogram										; ... an aligned "jmp" instruction that calls console program itself
+			jmp		(consoleprogram).l										; ... an aligned "jmp" instruction that calls console program itself
 		endif
 	else
 		if DEBUGGER__EXTENSIONS__ENABLE
@@ -258,7 +258,7 @@ RaiseError:	macro	string, consoleprogram, opts
 				dc.b	_eh_return|.__align_flag							; add flag "_eh_align_offset" if the next byte is at odd offset ...
 			endif
 			!align	2													; ... to tell Error handler to skip this byte, so it'll jump to ...
-			jmp		MDDBG__ErrorHandler_PagesController
+			jmp		(MDDBG__ErrorHandler_PagesController).l
 		else
 			dc.b	opts+0						; otherwise, just specify \opts for error handler, +0 will generate dc.b 0 ...
 			!align	2							; ... in case \opts argument is empty or skipped
@@ -314,7 +314,7 @@ _Console:	macro	argument1, argument2
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr		MDDBG__Console_Write_Formatted
+			jsr	(MDDBG__Console_Write_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -326,7 +326,7 @@ _Console:	macro	argument1, argument2
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr		MDDBG__Console_Write
+			jsr	(MDDBG__Console_Write).l
 			move.l	(sp)+, a0
 		endif
 
@@ -344,7 +344,7 @@ _Console:	macro	argument1, argument2
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr		MDDBG__Console_WriteLine_Formatted
+			jsr	(MDDBG__Console_WriteLine_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -355,7 +355,7 @@ _Console:	macro	argument1, argument2
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr		MDDBG__Console_WriteLine
+			jsr	(MDDBG__Console_WriteLine).l
 			move.l	(sp)+, a0
 		endif
 		bra.w	.__leave
@@ -365,15 +365,15 @@ _Console:	macro	argument1, argument2
 	.__leave:
 
 	case "run"
-		jsr		MDDBG__ErrorHandler_ConsoleOnly
-		jsr		argument1
+		jsr	(MDDBG__ErrorHandler_ConsoleOnly).l
+		jsr	(argument1).l
 		bra.s	*
 
 	case "clear"
-		jsr		MDDBG__ErrorHandler_ClearConsole
+		jsr	(MDDBG__ErrorHandler_ClearConsole).l
 
 	case "pause"
-		jsr		MDDBG__ErrorHandler_PauseConsole
+		jsr	(MDDBG__ErrorHandler_PauseConsole).l
 
 	case "sleep"
 		move.w	d0, -(sp)
@@ -382,7 +382,7 @@ _Console:	macro	argument1, argument2
 		subq.w	#1, d0
 		bcs.s	.__sleep_done
 		.__sleep_loop:
-			jsr		MDDBG__VSync
+			jsr	(MDDBG__VSync).l
 			dbf		d0, .__sleep_loop
 
 	.__sleep_done:
@@ -393,12 +393,12 @@ _Console:	macro	argument1, argument2
 		movem.l	d0-d1, -(sp)
 		move.w	argument2, -(sp)
 		move.w	argument1, -(sp)
-		jsr		MDDBG__Console_SetPosAsXY_Stack
+		jsr	(MDDBG__Console_SetPosAsXY_Stack).l
 		addq.w	#4, sp
 		movem.l	(sp)+, d0-d1
 
 	case "breakline"
-		jsr		MDDBG__Console_StartNewLine
+		jsr	(MDDBG__Console_StartNewLine).l
 
 	elsecase
 		!error	"ATTRIBUTE isn't a member of Console"
@@ -443,7 +443,7 @@ _KDebug	macro	argument1
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr		MDDBG__KDebug_Write_Formatted
+			jsr	(MDDBG__KDebug_Write_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -455,7 +455,7 @@ _KDebug	macro	argument1
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr		MDDBG__KDebug_Write
+			jsr	(MDDBG__KDebug_Write).l
 			move.l	(sp)+, a0
 		endif
 
@@ -473,7 +473,7 @@ _KDebug	macro	argument1
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr		MDDBG__KDebug_WriteLine_Formatted
+			jsr	(MDDBG__KDebug_WriteLine_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -485,7 +485,7 @@ _KDebug	macro	argument1
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr		MDDBG__KDebug_WriteLine
+			jsr	(MDDBG__KDebug_WriteLine).l
 			move.l	(sp)+, a0
 		endif
 
@@ -496,7 +496,7 @@ _KDebug	macro	argument1
 	.__leave:
 
 	case "breakline"
-		jsr		MDDBG__KDebug_FlushLine
+		jsr	(MDDBG__KDebug_FlushLine).l
 
 	case "starttimer"
 		move.w	#$9FC0, ($C00004).l
@@ -517,14 +517,14 @@ _KDebug	macro	argument1
 ; ---------------------------------------------------------------
 __ErrorMessage:	macro string, opts
 		__FSTRING_GenerateArgumentsCode string
-		jsr		MDDBG__ErrorHandler
+		jsr	(MDDBG__ErrorHandler).l
 		__FSTRING_GenerateDecodedString string
 
 		if DEBUGGER__EXTENSIONS__ENABLE
 		.__align_flag: set (((*)&1)!1)*_eh_align_offset
 			dc.b	(opts)+_eh_return|.__align_flag	; add flag "_eh_align_offset" if the next byte is at odd offset ...
 			!align	2												; ... to tell Error handler to skip this byte, so it'll jump to ...
-			jmp		MDDBG__ErrorHandler_PagesController	; ... extensions controller
+			jmp		(MDDBG__ErrorHandler_PagesController).l	; ... extensions controller
 		else
 			dc.b	(opts)+0
 			!align	2
