@@ -233,7 +233,7 @@ RaiseError:	macro	string, consoleprogram, opts
 	pea		*(pc)
 	move.w	sr, -(sp)
 	__FSTRING_GenerateArgumentsCode string
-	jsr	(MDDBG__ErrorHandler).l
+	jsr		(MDDBG__ErrorHandler).l
 	__FSTRING_GenerateDecodedString string
 	if ("consoleprogram"<>"")			; if console program offset is specified ...
 		.__align_flag:	set	((((*)&1)!1)*_eh_align_offset)
@@ -244,7 +244,7 @@ RaiseError:	macro	string, consoleprogram, opts
 		endif
 		!align	2													; ... to tell Error handler to skip this byte, so it'll jump to ...
 		if DEBUGGER__EXTENSIONS__ENABLE
-			jsr	(consoleprogram).l										; ... an aligned "jsr" instruction that calls console program itself
+			jsr		(consoleprogram).l										; ... an aligned "jsr" instruction that calls console program itself
 			jmp		(MDDBG__ErrorHandler_PagesController).l
 		else
 			jmp		(consoleprogram).l										; ... an aligned "jmp" instruction that calls console program itself
@@ -314,7 +314,7 @@ _Console:	macro	argument1, argument2
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr	(MDDBG__Console_Write_Formatted).l
+			jsr		(MDDBG__Console_Write_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -326,7 +326,7 @@ _Console:	macro	argument1, argument2
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr	(MDDBG__Console_Write).l
+			jsr		(MDDBG__Console_Write).l
 			move.l	(sp)+, a0
 		endif
 
@@ -344,7 +344,7 @@ _Console:	macro	argument1, argument2
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr	(MDDBG__Console_WriteLine_Formatted).l
+			jsr		(MDDBG__Console_WriteLine_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -355,7 +355,7 @@ _Console:	macro	argument1, argument2
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr	(MDDBG__Console_WriteLine).l
+			jsr		(MDDBG__Console_WriteLine).l
 			move.l	(sp)+, a0
 		endif
 		bra.w	.__leave
@@ -365,15 +365,15 @@ _Console:	macro	argument1, argument2
 	.__leave:
 
 	case "run"
-		jsr	(MDDBG__ErrorHandler_ConsoleOnly).l
-		jsr	(argument1).l
+		jsr		(MDDBG__ErrorHandler_ConsoleOnly).l
+		jsr		(argument1).l
 		bra.s	*
 
 	case "clear"
-		jsr	(MDDBG__ErrorHandler_ClearConsole).l
+		jsr		(MDDBG__ErrorHandler_ClearConsole).l
 
 	case "pause"
-		jsr	(MDDBG__ErrorHandler_PauseConsole).l
+		jsr		(MDDBG__ErrorHandler_PauseConsole).l
 
 	case "sleep"
 		move.w	d0, -(sp)
@@ -382,7 +382,7 @@ _Console:	macro	argument1, argument2
 		subq.w	#1, d0
 		bcs.s	.__sleep_done
 		.__sleep_loop:
-			jsr	(MDDBG__VSync).l
+			jsr		(MDDBG__VSync).l
 			dbf		d0, .__sleep_loop
 
 	.__sleep_done:
@@ -393,12 +393,12 @@ _Console:	macro	argument1, argument2
 		movem.l	d0-d1, -(sp)
 		move.w	argument2, -(sp)
 		move.w	argument1, -(sp)
-		jsr	(MDDBG__Console_SetPosAsXY_Stack).l
+		jsr		(MDDBG__Console_SetPosAsXY_Stack).l
 		addq.w	#4, sp
 		movem.l	(sp)+, d0-d1
 
 	case "breakline"
-		jsr	(MDDBG__Console_StartNewLine).l
+		jsr		(MDDBG__Console_StartNewLine).l
 
 	elsecase
 		!error	"ATTRIBUTE isn't a member of Console"
@@ -443,7 +443,7 @@ _KDebug	macro	argument1
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr	(MDDBG__KDebug_Write_Formatted).l
+			jsr		(MDDBG__KDebug_Write_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -455,7 +455,7 @@ _KDebug	macro	argument1
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr	(MDDBG__KDebug_Write).l
+			jsr		(MDDBG__KDebug_Write).l
 			move.l	(sp)+, a0
 		endif
 
@@ -473,7 +473,7 @@ _KDebug	macro	argument1
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr	(MDDBG__KDebug_WriteLine_Formatted).l
+			jsr		(MDDBG__KDebug_WriteLine_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -485,7 +485,7 @@ _KDebug	macro	argument1
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr	(MDDBG__KDebug_WriteLine).l
+			jsr		(MDDBG__KDebug_WriteLine).l
 			move.l	(sp)+, a0
 		endif
 
@@ -496,7 +496,7 @@ _KDebug	macro	argument1
 	.__leave:
 
 	case "breakline"
-		jsr	(MDDBG__KDebug_FlushLine).l
+		jsr		(MDDBG__KDebug_FlushLine).l
 
 	case "starttimer"
 		move.w	#$9FC0, ($C00004).l
@@ -517,7 +517,7 @@ _KDebug	macro	argument1
 ; ---------------------------------------------------------------
 __ErrorMessage:	macro string, opts
 		__FSTRING_GenerateArgumentsCode string
-		jsr	(MDDBG__ErrorHandler).l
+		jsr		(MDDBG__ErrorHandler).l
 		__FSTRING_GenerateDecodedString string
 
 		if DEBUGGER__EXTENSIONS__ENABLE
