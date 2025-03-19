@@ -92,7 +92,7 @@ Example of correct code:
 
 - Sonic 3 Rebuilt by TomatoWave_0
 - [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
-- Sonic 3 & Knuckles: Epilogue
+- [Sonic 3 & Knuckles: Epilogue](https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source)
 - TishaProject (2019)
 - Sonic Virtual Adventure (2017) (Cancelled) — In the past I made this source code specifically for this project (:
 
