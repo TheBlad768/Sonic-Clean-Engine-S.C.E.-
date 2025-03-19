@@ -50,6 +50,34 @@ You don't have to add the letters **'ENOZ' (ZONE)** because those letters are al
 
 - If you want to use other SMPS music you can use [Valley Bell's SMPS Research](https://forums.sonicretro.org/index.php?threads/valley-bells-smps-research.32473) or [vgm2smps](https://github.com/Ivan-YO/vgm2smps/releases).
 
+## The Macro Assembler AS issues
+
+#### Why does the ROM take so long to build?
+
+- The speed of the ROM build process depends entirely on the power of your computer. A high-performance machine will build the ROM quickly, while a slower one will take significantly more time.
+
+- Always specify jump sizes for instructions. Writing code without specifying jump sizes will significantly slow down the ROM build. The Macro Assembler AS will perform multiple passes until it can successfully build the ROM, which increases build time.
+
+Example of problematic code:
+
+```
+		beq	sub_1234	; and any other branch instructions
+		jsr	sub_1234
+		jmp	sub_1234
+		lea	sub_1234,a1
+```
+
+Example of correct code:
+
+```
+		beq.s	sub_1234	; and any other branch instructions
+		jsr	(sub_1234).l
+		jmp	(sub_1234).l
+		lea	(sub_1234).l,a1
+```
+
+#### Pay close attention to your code to avoid such issues.
+
 ## Special Credits
 
 - pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
