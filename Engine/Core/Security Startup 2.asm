@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Game_Program:
-		tst.w	(VDP_control_port).l
+		tst.w	(VDP_control_port).l								; test VDP
 		move.w	#$4EF9,d0										; machine code for jmp
 		move.w	d0,(V_int_jump).w
 		move.w	d0,(H_int_jump).w

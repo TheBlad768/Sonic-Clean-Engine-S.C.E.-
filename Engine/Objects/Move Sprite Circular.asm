@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Move sprite circular subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -271,24 +274,30 @@ Calc_ObjAngle:
 		move.w	x_pos(a2),d0
 		move.w	y_pos(a2),d1
 		sub.w	x_pos(a1),d0
-		bpl.s	+
+		bpl.s	.skipx
 		neg.w	d0
 		moveq	#8,d2
-+		sub.w	y_pos(a1),d1
-		bpl.s	+
+
+.skipx
+		sub.w	y_pos(a1),d1
+		bpl.s	.skipy
 		neg.w	d1
 		moveq	#4,d3
-+		cmp.w	d0,d1
-		bhs.s	+
+
+.skipy
+		cmp.w	d0,d1
+		bhs.s	.check
 		exg	d0,d1
 		moveq	#2,d4
-+		tst.w	d1
-		beq.s	locret_8627E
+
+.check
+		tst.w	d1
+		beq.s	.return
 		lsl.w	#5,d0
 		divu.w	d1,d0
 		add.w	d2,d3
 		add.w	d3,d4
-		beq.s	locret_8627E
+		beq.s	.return
 		jmp	.index-2(pc,d4.w)
 ; ---------------------------------------------------------------------------
 
@@ -305,7 +314,7 @@ Calc_ObjAngle:
 		subi.w	#$C0,d0
 		neg.w	d0
 
-locret_8627E:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 

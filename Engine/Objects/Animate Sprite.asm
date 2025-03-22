@@ -8,11 +8,13 @@ Animate_Sprite:
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		cmp.b	prev_anim(a0),d0
-		beq.s	+
+		beq.s	loc_1AC00
 		move.b	d0,prev_anim(a0)
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
-+		subq.b	#1,anim_frame_timer(a0)
+
+loc_1AC00:
+		subq.b	#1,anim_frame_timer(a0)
 		bhs.s	locret_1AC36
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
@@ -84,11 +86,13 @@ Animate_SpriteIrregularDelay:
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		cmp.b	prev_anim(a0),d0
-		beq.s	+
+		beq.s	loc_1ACA0
 		move.b	d0,prev_anim(a0)
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
-+		subq.b	#1,anim_frame_timer(a0)
+
+loc_1ACA0:
+		subq.b	#1,anim_frame_timer(a0)
 		bhs.s	locret_1ACDA
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
@@ -389,7 +393,7 @@ Animate_MultiSprite:
 .chk_end_FF
 		addq.b	#1,d2								; code FF - repeat animation from beginning
 		bne.s	.chk_end_FE
-		move.b	#0,d1
+		moveq	#0,d1
 		move.b	1(a1),d2
 		bra.s	.next
 ; ---------------------------------------------------------------------------

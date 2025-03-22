@@ -228,7 +228,7 @@ Pal_fade_delay:						ds.w 1
 Pal_fade_delay2:						ds.w 1
 Hyper_Sonic_flash_timer:				ds.b 1
 Negative_flash_timer:					ds.b 1
-									ds.b 1						; even
+Music_results_flag:					ds.b 1
 Palette_rotation_disable:				ds.b 1
 Palette_rotation_custom:				ds.l 1
 Palette_rotation_data:					ds.w 9

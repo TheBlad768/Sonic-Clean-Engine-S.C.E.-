@@ -50,24 +50,28 @@ Swing_UpAndDown:
 		move.w	objoff_3E(a0),d2			; maximum acceleration before "swinging"
 		moveq	#0,d3
 		btst	#0,objoff_38(a0)
-		bne.s	+
+		bne.s	.check
 		neg.w	d0						; apply upward acceleration
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
-		bgt.s	++
+		bgt.s	.set
 		bset	#0,objoff_38(a0)
 		neg.w	d0
 		neg.w	d2
 		moveq	#1,d3
-+		add.w	d0,d1					; apply downward acceleration
+
+.check
+		add.w	d0,d1					; apply downward acceleration
 		cmp.w	d2,d1
-		blt.s		+
+		blt.s		.set
 		bclr	#0,objoff_38(a0)
 		neg.w	d0
 		add.w	d0,d1
 		moveq	#1,d3
-+		move.w	d1,y_vel(a0)
+
+.set
+		move.w	d1,y_vel(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -78,24 +82,28 @@ Swing_LeftAndRight:
 		move.w	objoff_3A(a0),d2
 		moveq	#0,d3
 		btst	#3,objoff_38(a0)
-		bne.s	+
+		bne.s	.check
 		neg.w	d0
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
-		bgt.s	++
+		bgt.s	.set
 		bset	#3,objoff_38(a0)
 		neg.w	d0
 		neg.w	d2
 		moveq	#1,d3
-+		add.w	d0,d1
+
+.check
+		add.w	d0,d1
 		cmp.w	d2,d1
-		blt.s		+
+		blt.s		.set
 		bclr	#3,objoff_38(a0)
 		neg.w	d0
 		add.w	d0,d1
 		moveq	#1,d3
-+		move.w	d1,x_vel(a0)
+
+.set
+		move.w	d1,x_vel(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -361,40 +369,54 @@ sub_7675C:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_Object:
-		move.w	d0,d2
+		move.w	d0,d2					; d0 = maximum speed
 		neg.w	d2
-		move.w	d1,d3
+		move.w	d1,d3					; d1 = acceleration
+
+		; check xpos
 		move.w	x_pos(a0),d4
 		cmp.w	x_pos(a1),d4
 		seq	d5
-		beq.s	++
-		blo.s		+
+		beq.s	.checky
+		blo.s		.setx
 		neg.w	d1
-+		move.w	x_vel(a0),d4
+
+.setx
+		move.w	x_vel(a0),d4
 		add.w	d1,d4
 		cmp.w	d2,d4
-		blt.s		+
+		blt.s		.checky
 		cmp.w	d0,d4
-		bgt.s	+
+		bgt.s	.checky
 		move.w	d4,x_vel(a0)
-+		move.w	y_pos(a0),d4
+
+.checky
+		move.w	y_pos(a0),d4
 		cmp.w	y_pos(a1),d4
-		beq.s	+++
-		blo.s		+
+		beq.s	.exit
+		blo.s		.sety
 		neg.w	d3
-+		move.w	y_vel(a0),d4
+
+.sety
+		move.w	y_vel(a0),d4
 		add.w	d3,d4
 		cmp.w	d2,d4
-		blt.s		+
+		blt.s		.return
 		cmp.w	d0,d4
-		bgt.s	+
+		bgt.s	.return
 		move.w	d4,y_vel(a0)
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
-+		tst.b	d5
-		beq.s	+
+
+.exit
+		tst.b	d5
+		beq.s	.return2
 		clr.l	x_vel(a0)
-+		rts
+
+.return2
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Chase xpos object subroutine
@@ -403,23 +425,29 @@ Chase_Object:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_ObjectXOnly:
-		move.w	d0,d2
+		move.w	d0,d2					; d0 = maximum speed
 		neg.w	d2
+
+		; check xpos
 		move.w	x_pos(a1),d3
 		move.b	child_dx(a0),d4
 		ext.w	d4
 		add.w	d4,d3
 		cmp.w	x_pos(a0),d3
-		bhs.s	+
+		bhs.s	.setx
 		neg.w	d1
-+		move.w	x_vel(a0),d3
+
+.setx
+		move.w	x_vel(a0),d3
 		add.w	d1,d3
 		cmp.w	d2,d3
-		blt.s		+
+		blt.s		.return
 		cmp.w	d0,d3
-		bgt.s	+
+		bgt.s	.return
 		move.w	d3,x_vel(a0)
-+		rts
+
+.return
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Chase ypos object subroutine
@@ -428,71 +456,91 @@ Chase_ObjectXOnly:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_ObjectYOnly:
-		move.w	d0,d2
+		move.w	d0,d2					; d0 = maximum speed
 		neg.w	d2
+
+		; check ypos
 		move.w	y_pos(a1),d3
 		move.b	child_dy(a0),d4
 		ext.w	d4
 		add.w	d4,d3
 		cmp.w	y_pos(a0),d3
-		bhs.s	+
+		bhs.s	.sety
 		neg.w	d1
-+		move.w	y_vel(a0),d3
+
+.sety
+		move.w	y_vel(a0),d3
 		add.w	d1,d3
 		cmp.w	d2,d3
-		blt.s		+
+		blt.s		.return
 		cmp.w	d0,d3
-		bgt.s	+
+		bgt.s	.return
 		move.w	d3,y_vel(a0)
-+		rts
+
+.return
+		rts
 
 ; ---------------------------------------------------------------------------
-; Chase object 2 subroutine
+; Chase object offset subroutine
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Chase_Object2:
-		move.w	d0,d2
+Chase_ObjectOffset:
+		move.w	d0,d2					; d0 = maximum speed
 		neg.w	d2
-		move.w	d1,d3
+		move.w	d1,d3					; d1 = acceleration
+
+		; check xpos
 		move.w	x_pos(a1),d6
 		move.b	child_dx(a0),d4
 		ext.w	d4
 		add.w	d4,d6
 		cmp.w	x_pos(a0),d6
 		seq	d5
-		beq.s	++
-		bhs.s	+
+		beq.s	.checky
+		bhs.s	.setx
 		neg.w	d1
-+		move.w	x_vel(a0),d4
+
+.setx
+		move.w	x_vel(a0),d4
 		add.w	d1,d4
 		cmp.w	d2,d4
-		blt.s		+
+		blt.s		.checky
 		cmp.w	d0,d4
-		bgt.s	+
+		bgt.s	.checky
 		move.w	d4,x_vel(a0)
-+		move.w	y_pos(a1),d6
+
+.checky
+		move.w	y_pos(a1),d6
 		move.b	child_dy(a0),d4
 		ext.w	d4
 		add.w	d4,d6
 		cmp.w	y_pos(a0),d6
-		beq.s	+++
-		bhs.s	+
+		beq.s	.exit
+		bhs.s	.sety
 		neg.w	d3
-+		move.w	y_vel(a0),d4
+
+.sety
+		move.w	y_vel(a0),d4
 		add.w	d3,d4
 		cmp.w	d2,d4
-		blt.s		+
+		blt.s		.return
 		cmp.w	d0,d4
-		bgt.s	+
+		bgt.s	.return
 		move.w	d4,y_vel(a0)
-+		rts
+
+.return
+		rts
 ; ---------------------------------------------------------------------------
-+		tst.b	d5
-		beq.s	+
+
+.exit
+		tst.b	d5
+		beq.s	.return2
 		clr.l	x_vel(a0)
-+		rts
+
+.return2
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Shot object subroutine
@@ -512,45 +560,61 @@ Shot_Object_2:
 Shot_Object_3:
 		sub.w	x_pos(a0),d0
 		smi	d2
-		bpl.s	+
+		bpl.s	.skipx
 		neg.w	d0
-+		sub.w	y_pos(a0),d1
+
+.skipx
+		sub.w	y_pos(a0),d1
 		smi	d3
-		bpl.s	+
+		bpl.s	.skipy
 		neg.w	d1
-+		cmp.w	d1,d0
+
+.skipy
+		cmp.w	d1,d0
 		scs	d4
-		beq.s	loc_8621A
-		bhs.s	+
+		beq.s	.exit
+		bhs.s	.skip1
 		exg	d0,d1
-+		swap	d1
+
+.skip1
+		swap	d1
 		divu.w	d0,d1
--		move.w	#256,d0
+
+.calc
+		move.w	#256,d0
 		lsl.w	d5,d0
 		moveq	#8,d6
 		sub.w	d5,d6
 		lsr.w	d6,d1
--		tst.b	d4
-		beq.s	+
+
+.check
+		tst.b	d4
+		beq.s	.skip2
 		exg	d0,d1
-+		tst.b	d2
-		beq.s	+
+
+.skip2
+		tst.b	d2
+		beq.s	.skip3
 		neg.w	d0
-+		tst.b	d3
-		beq.s	+
+
+.skip3
+		tst.b	d3
+		beq.s	.setxy
 		neg.w	d1
-+		movem.w	d0-d1,x_vel(a0)
+
+.setxy
+		movem.w	d0-d1,x_vel(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_8621A:
+.exit
 		tst.w	d0
-		beq.s	--
+		beq.s	.calc
 		move.w	#256,d0
 		lsl.w	d5,d0
 		move.w	#256,d1
 		lsl.w	d5,d1
-		bra.s	-
+		bra.s	.check
 
 ; =============== S U B R O U T I N E =======================================
 

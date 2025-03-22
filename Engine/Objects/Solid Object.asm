@@ -16,29 +16,37 @@
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFull:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectFull_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	SolidObject_OnScreenTest								; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	+													; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	+
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		++
-+		bclr	#Status_OnObj,status(a1)
+		blo.s		.stand
+
+.release
+		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
-+		move.w	d4,d2
+
+.stand
+		move.w	d4,d2
 		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 		rts
@@ -50,32 +58,36 @@ SolidObjectFull_1P:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFull2:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectFull2_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	SolidObject_cont										; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1DCF0											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1DCF0
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1DD04
+		blo.s		.stand
 
-loc_1DCF0:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1DD04:
+.stand
 		move.w	d4,d2
 		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
@@ -92,39 +104,43 @@ loc_1DD04:
 
 ; address registers:
 ; a0 = the object to check collision with
-; a1 = Sonic or Tails (set inside these subroutines)
+; a1 = Sonic (set inside these subroutines)
 ; a2 = height data for slope
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFullSloped_Spring:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectFullSloped_Spring_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	SlopedSolid_cont										; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1DD48											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1DD48
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1DD5C
+		blo.s		.stand
 
-loc_1DD48:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1DD5C:
+.stand
 		move.w	d4,d2
 		bsr.w	SolidObjSloped2
 		move.w	d6,d4
@@ -133,35 +149,43 @@ loc_1DD5C:
 		moveq	#0,d4
 		rts
 
+; ---------------------------------------------------------------------------
+; This is for a sloped object that is sloped at the top and at the bottom
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectDoubleSloped:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectDoubleSloped_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	DoubleSlopedSolid_cont								; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1DDA8											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1DDA8
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1DDBC
+		blo.s		.stand
 
-loc_1DDA8:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1DDBC:
+.stand
 		move.w	d4,d2
 		bsr.w	SolidObjSloped4
 		moveq	#0,d4
@@ -170,31 +194,35 @@ loc_1DDBC:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFullSloped:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectFullSloped_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	SlopedSolid_cont										; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1DE00											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1DE00
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1DE0E
+		blo.s		.stand
 
-loc_1DE00:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1DE0E:
+.stand
 		move.w	d4,d2
 		bsr.w	SolidObjSloped2
 		move.w	d6,d4
@@ -206,31 +234,35 @@ loc_1DE0E:
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectFull_Offset:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectFull_Offset_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.s	OffsetSolid_cont										; if not, branch
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1DE58											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1DE58
+		bmi.s	.release
 		add.w	d1,d1
 		cmp.w	d1,d0
-		blo.s		loc_1DE6C
+		blo.s		.stand
 
-loc_1DE58:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1DE6C:
+.stand
 
 		; inlined call to MvSonicOnPtfm
 		move.w	y_pos(a0),d0
@@ -684,17 +716,17 @@ locret_1E21C:
 
 SolidObjSloped:
 		btst	#Status_OnObj,status(a1)
-		beq.s	locret_1E280
+		beq.s	locret_1E21C
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
 		btst	#0,render_flags(a0)
-		beq.s	loc_1E23E
+		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
 		add.w	d1,d0
 
-loc_1E23E:
+.notflipx
 		bra.s	loc_1E260
 
 ; =============== S U B R O U T I N E =======================================
@@ -735,111 +767,144 @@ SolidObjSloped4:
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
 		btst	#0,render_flags(a0)
-		beq.s	loc_1E2A0
+		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
 
-loc_1E2A0:
+.notflipx
 		andi.w	#$FFFE,d0
 		bra.s	loc_1E260
+
+; ---------------------------------------------------------------------------
+; Subroutine to collide Sonic with the top of a platform
+
+; input variables:
+; d1 = object width
+; d3 = object height / 2
+; d4 = object x-axis position
+
+; address registers:
+; a0 = the object to check collision with
+; a1 = Sonic (set inside these subroutines)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectTop:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectTop_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	loc_1E42E											; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1E2E0											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1E2E0
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1E2F4
+		blo.s		.stand
 
-loc_1E2E0:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E2F4:
+.stand
 		move.w	d4,d2
 		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 		rts
 
+; ---------------------------------------------------------------------------
+; Subroutine to collide Sonic with the top of a sloped platform
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectTopSloped2:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectTopSloped2_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	SolidObjCheckSloped2									; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1E338											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1E338
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1E34C
+		blo.s		.stand
 
-loc_1E338:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E34C:
+.stand
 		move.w	d4,d2
 		bsr.w	SolidObjSloped2
 		moveq	#0,d4
 		rts
 
+; ---------------------------------------------------------------------------
+; Subroutine to collide Sonic with the top of a sloped platform
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 SolidObjectTopSloped:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-SolidObjectTopSloped_1P:
-		btst	d6,status(a0)												; is player standing on the current object?
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
 		beq.w	SolidObjCheckSloped									; if not, branch
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1E390											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1E390
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1E3A4
+		blo.s		.stand
 
-loc_1E390:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 		moveq	#0,d4
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E3A4:
+.stand
 		move.w	d4,d2
 		bsr.w	SolidObjSloped
 		moveq	#0,d4
@@ -848,71 +913,73 @@ loc_1E3A4:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1E3AE:
+
+		; player 1
 		lea	(Player_1).w,a1											; a1=character
 		moveq	#p1_standing_bit,d6
 
-sub_1E3C4:
-		btst	d6,status(a0)												; is player standing on the current object?
-		bne.s	loc_1E3D6											; if yes, branch
+.check
+		btst	d6,status(a0)												; is the player standing on the current object?
+		bne.s	.check2												; if yes, branch
 		btst	#Status_OnObj,status(a1)									; is player standing on any object?
-		bne.s	loc_1E402											; if yes, branch
+		bne.s	.exit													; if yes, branch
 		bra.s	loc_1E42E
 ; ---------------------------------------------------------------------------
 
-loc_1E3D6:
+.check2
 		move.w	d1,d2
 		add.w	d2,d2
 		btst	#Status_InAir,status(a1)									; is the player in the air?
-		bne.s	loc_1E3F2											; if yes, branch
+		bne.s	.release												; if yes, branch
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	loc_1E3F2
+		bmi.s	.release
 		cmp.w	d2,d0
-		blo.s		loc_1E406
+		blo.s		.stand
 
-loc_1E3F2:
+.release
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
 		bclr	d6,status(a0)
 
-loc_1E402:
+.exit
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1E406:
+.stand
 		move.w	d4,d2
 		bsr.w	MvSonicOnPtfm
 		moveq	#0,d4
 
-locret_1E40E:
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_1E410:
 		tst.w	y_vel(a1)
-		bmi.s	locret_1E40E
+		bmi.s	sub_1E3AE.return
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	locret_1E40E
+		bmi.s	sub_1E3AE.return
 		cmp.w	d2,d0
-		bhs.s	locret_1E40E
+		bhs.s	sub_1E3AE.return
 		bra.s	loc_1E44C
 ; ---------------------------------------------------------------------------
 
 loc_1E42E:
 		tst.w	y_vel(a1)
-		bmi.s	locret_1E40E
+		bmi.s	sub_1E3AE.return
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		bmi.s	locret_1E40E
+		bmi.s	sub_1E3AE.return
 		add.w	d1,d1
 		cmp.w	d1,d0
-		bhs.s	locret_1E40E
+		bhs.s	sub_1E3AE.return
 
 loc_1E44C:
 		tst.b	(Reverse_gravity_flag).w
@@ -1002,11 +1069,11 @@ SolidObjCheckSloped2:
 		cmp.w	d1,d0
 		bhs.s	locret_1E4D4
 		btst	#0,render_flags(a0)
-		beq.s	loc_1E534
+		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
 
-loc_1E534:
+.notflipx
 		lsr.w	d0
 		move.b	(a2,d0.w),d3
 		ext.w	d3
@@ -1026,10 +1093,12 @@ SolidObjCheckSloped:
 		cmp.w	d1,d0
 		bhs.s	CheckPlayerReleaseFromObj.return
 		btst	#0,render_flags(a0)
-		beq.s	+
+		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
-+		move.b	(a2,d0.w),d3
+
+.notflipx
+		move.b	(a2,d0.w),d3
 		ext.w	d3
 		move.w	y_pos(a0),d0
 		sub.w	d3,d0
@@ -1052,7 +1121,7 @@ CheckPlayerReleaseFromObj:
 		lea	(Player_1).w,a1											; a1=character
 		bclr	#Status_OnObj,status(a1)
 		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a0)
+		bclr	#p1_standing_bit,status(a0)
 
 .end
 		moveq	#0,d4

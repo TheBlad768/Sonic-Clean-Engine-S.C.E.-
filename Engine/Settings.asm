@@ -10,6 +10,7 @@ Lagometer:					= 1	; if 1, enable debug lagometer
 BossDebug:					= 0	; if 1, set one hit on all bosses
 ExtendedCamera:				= 0	; if 1, enable extended camera
 RollInAir:					= 1	; if 1, enable roll in air for Sonic
+PlayerMoveLock:				= 0	; if 1, lock control during the fall animation (Android, Mania, Origins style...)
 OptimiseStopZ80:				= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for controllers (ignores sound driver)
 ZeroOffsetOptimization:		= 1	; if 1, makes a handful of zero-offset instructions smaller
 AllOptimizations:				= 1	; if 1, enables all optimizations

@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Sonic (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -21,13 +24,17 @@ Obj_Sonic:
 
 		; by this point, we're assuming you're in frame cycling mode
 		btst	#button_B,(Ctrl_1_pressed).w
-		beq.s	+
+		beq.s	.next
 		clr.w	(Debug_placement_mode).w							; leave debug mode
-+		addq.b	#1,mapping_frame(a0)									; next frame
+
+.next
+		addq.b	#1,mapping_frame(a0)									; next frame
 		cmpi.b	#((Map_Sonic_end-Map_Sonic)/2)-1,mapping_frame(a0)	; have we reached the end of Sonic's frames?
-		blo.s		+
+		blo.s		.draw
 		clr.b	mapping_frame(a0)										; if so, reset to Sonic's first frame
-+		bsr.w	Sonic_Load_PLC
+
+.draw
+		bsr.w	Sonic_Load_PLC
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -151,7 +158,7 @@ loc_10C26:
 		move.b	(Secondary_Angle).w,tilt(a0)
 		tst.b	(WindTunnel_flag).w
 		beq.s	.anim
-		tst.b	anim(a0)
+		tst.b	anim(a0)							; AniIDSonAni_Walk
 		bne.s	.anim
 		move.b	prev_anim(a0),anim(a0)
 
@@ -208,7 +215,7 @@ Sonic_ChkInvin:										; checks if invincibility has expired and disables it i
 		bne.s	Sonic_ChkShoes
 		subq.b	#1,invincibility_timer(a0)				; reduce invincibility_timer only on every 8th frame
 		bne.s	Sonic_ChkShoes						; if time is still left, branch
-		tst.b	(Level_results_flag).w						; don't change music if level is end
+		tst.b	(Music_results_flag).w						; don't change music if level is end
 		bne.s	Sonic_RmvInvin
 		tst.b	(Boss_flag).w								; don't change music if in a boss fight
 		bne.s	Sonic_RmvInvin
@@ -281,8 +288,8 @@ Reset_Player_Position_Array:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_Water:
-		tst.b	(Water_flag).w			; does level have water?
-		bne.s	Sonic_InWater		; if yes, branch
+		tst.b	(Water_flag).w									; does level have water?
+		bne.s	Sonic_InWater								; if yes, branch
 
 locret_10E2C:
 		rts
@@ -540,7 +547,7 @@ Sonic_ChgFallAnim:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_Move:
-		move.w	Max_speed-Max_speed(a4),d6		; set Max_speed
+		move.w	Max_speed-Max_speed(a4),d6	; set Max_speed
 		move.w	Acceleration-Max_speed(a4),d5	; set Acceleration
 		move.w	Deceleration-Max_speed(a4),d4	; set Deceleration
 		tst.b	status_secondary(a0)				; is bit 7 set? (Infinite inertia)
@@ -558,12 +565,14 @@ Sonic_NotLeft:
 
 Sonic_NotRight:
 		move.w	(Camera_H_scroll_shift).w,d1
-		beq.s	+
+		beq.s	.skip
 		bclr	#Status_Facing,status(a0)
 		tst.w	d1
-		bpl.s	+
+		bpl.s	.skip
 		bset	#Status_Facing,status(a0)
-+		moveq	#$20,d0
+
+.skip
+		moveq	#$20,d0
 		add.b	angle(a0),d0
 		andi.b	#$C0,d0						; is Sonic on a slope?
 		bne.w	loc_112EA					; if yes, branch
@@ -604,7 +613,10 @@ Sonic_BalanceOnObjRight:
 		blt.w	loc_112EA			; if so branch
 		move.b	#AniIDSonAni_Balance2,anim(a0)	; if REALLY close to the edge, use different animation (Balance animation 2)
 		bra.w	loc_112EA
-loc_11128:	; +
+; ---------------------------------------------------------------------------
+
+loc_11128:
+
 		; Somewhat dummied out/redundant code from Sonic 2
 		; Originally, Sonic displayed different animations for each direction faced
 		; But now, Sonic uses only the one set of animations no matter what, making the check pointless, and the code redundant
@@ -812,7 +824,7 @@ loc_1137E:
 		move.b	angle(a0),d0
 		add.b	d1,d0
 		move.w	d0,-(sp)
-		bsr.w	CalcRoomInFront
+		jsr	(CalcRoomInFront).w
 		move.w	(sp)+,d0
 		tst.w	d1
 		bpl.s	locret_113CE
@@ -1244,38 +1256,49 @@ Player_Boundary_Sides:
 SonicKnux_Roll:
 		tst.b	status_secondary(a0)
 		bmi.s	locret_1177E
+
+	if PlayerMoveLock
+		tst.w	move_lock(a0)
+		bne.s	locret_1177E
+	else
+		cmpi.b	#AniIDSonAni_Slide,anim(a0)
+		beq.s	locret_1177E
+	endif
+
 		tst.w	(Camera_H_scroll_shift).w
 		bne.s	locret_1177E
 		moveq	#btnLR,d0								; is left/right being pressed?
 		and.b	(Ctrl_1_logical).w,d0
 		bne.s	locret_1177E
 		btst	#button_down,(Ctrl_1_logical).w				; is down being pressed?
-		beq.s	loc_11780								; if not, branch
+		beq.s	SonicKnux_ChkWalk						; if not, branch
 		mvabs.w	ground_vel(a0),d0
 		cmpi.w	#$100,d0								; is Sonic moving at $100 speed or faster?
-		bhs.s	loc_11790								; if so, branch
-		btst	#Status_OnObj,status(a0)						; is Sonic/Knux stand on object?
-		bne.s	locret_1177E								; if yes, branch
+		bhs.s	SonicKnux_ChkRoll						; if so, branch
+
+;		btst	#Status_OnObj,status(a0)						; is Sonic/Knux stand on object?
+;		bne.s	locret_1177E								; if yes, branch
+
 		move.b	#AniIDSonAni_Duck,anim(a0)				; enter ducking animation
 
 locret_1177E:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_11780:
+SonicKnux_ChkWalk:
 		cmpi.b	#AniIDSonAni_Duck,anim(a0)				; is Sonic ducking?
 		bne.s	locret_1177E
 		clr.b	anim(a0)									; if so, enter walking animation
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_11790:
+SonicKnux_ChkRoll:
 		btst	#Status_Roll,status(a0)						; is Sonic already rolling?
-		beq.s	loc_1179A								; if not, branch
+		beq.s	SonicKnux_DoRoll						; if not, branch
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1179A:
+SonicKnux_DoRoll:
 		bset	#Status_Roll,status(a0)
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)		; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a0)				; enter roll animation
@@ -1300,6 +1323,12 @@ locret_117D8:
 ; =============== S U B R O U T I N E =======================================
 
 Sonic_Jump:
+
+	if PlayerMoveLock
+		tst.w	move_lock(a0)
+		bne.s	locret_117D8
+	endif
+
 		moveq	#btnABC,d0
 		and.b	(Ctrl_1_pressed_logical).w,d0
 		beq.s	locret_117D8
@@ -1531,7 +1560,7 @@ loc_11C8C:
 
 loc_11CDC:
 		bset	#Status_Roll,status(a0)
-		clr.b	anim(a6)		; Dust
+		clr.w	anim(a6)		; Dust
 		sfx	sfx_Dash
 		bra.s	loc_11D5E
 ; ---------------------------------------------------------------------------
@@ -1586,9 +1615,10 @@ loc_11D5E:
 		add.w	d0,d0
 		move.w	word_11CF2(pc,d0.w),ground_vel(a0)
 		btst	#Status_Facing,status(a0)
-		beq.s	+
+		beq.s	.notflipx
 		neg.w	ground_vel(a0)
-+
+
+.notflipx
 	endif
 
 		addq.w	#4,sp
@@ -1825,15 +1855,15 @@ locret_11EEA:
 
 ; =============== S U B R O U T I N E =======================================
 
-; Sonic_Floor:
 Player_DoLevelCollision:
 		move.l	(Primary_collision_addr).w,(Collision_addr).w
 		cmpi.b	#$C,top_solid_bit(a0)
-		beq.s	+
+		beq.s	.check
 		move.l	(Secondary_collision_addr).w,(Collision_addr).w
-+		move.b	lrb_solid_bit(a0),d5
-		move.w	x_vel(a0),d1
-		move.w	y_vel(a0),d2
+
+.check
+		move.b	lrb_solid_bit(a0),d5
+		movem.w	x_vel(a0),d1-d2	; load xy speed
 		jsr	(GetArcTan).w
 		subi.b	#$20,d0
 		andi.b	#$C0,d0
@@ -2152,10 +2182,12 @@ locret_12230:
 BubbleShield_Bounce:
 		movem.l	d1-d2,-(sp)
 		move.w	#$780,d2
-		btst	#Status_Underwater,status(a0)
-		beq.s	+
+		btst	#Status_Underwater,status(a0)					; is Sonic underwater?
+		beq.s	.isdry									; if not, branch
 		move.w	#$400,d2
-+		moveq	#-$40,d0
+
+.isdry
+		moveq	#-$40,d0
 		add.b	angle(a0),d0
 		jsr	(GetSineCosine).w
 		muls.w	d2,d1
@@ -2176,9 +2208,11 @@ BubbleShield_Bounce:
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	+
+		beq.s	.notgrav
 		neg.w	d0
-+		sub.w	d0,y_pos(a0)
+
+.notgrav
+		sub.w	d0,y_pos(a0)
 		move.b	#2,(Shield+anim).w
 		sfx	sfx_BubbleAttack,1
 ; ---------------------------------------------------------------------------
@@ -2187,14 +2221,14 @@ Sonic_Hurt:
 
 	if GameDebug
 		tst.b	(Debug_mode_flag).w
-		beq.s	+
+		beq.s	.nodebug
 		btst	#button_B,(Ctrl_1_pressed).w
-		beq.s	+
+		beq.s	.nodebug
 		move.w	#1,(Debug_placement_mode).w
 		clr.b	(Ctrl_1_locked).w								; unlock control
 		rts
 ; ---------------------------------------------------------------------------
-+
+.nodebug
 	endif
 
 		jsr	(MoveSprite2_TestGravity).w
@@ -2267,14 +2301,14 @@ Sonic_Death:
 
 	if GameDebug
 		tst.b	(Debug_mode_flag).w
-		beq.s	+
+		beq.s	.nodebug
 		btst	#button_B,(Ctrl_1_pressed).w
-		beq.s	+
+		beq.s	.nodebug
 		move.w	#1,(Debug_placement_mode).w
 		clr.b	(Ctrl_1_locked).w								; unlock control
 		rts
 ; ---------------------------------------------------------------------------
-+
+.nodebug
 	endif
 
 		bsr.s	sub_123C2
@@ -2308,8 +2342,6 @@ loc_12410:
 		move.b	#PlayerID_Restart,routine(a0)
 		move.w	#1*60,restart_timer(a0)
 		clr.b	(Respawn_table_keep).w
-
-locret_124C6:
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -2328,11 +2360,13 @@ locret_1258E:
 
 loc_12590:
 		tst.w	(H_scroll_amount).w
-		bne.s	+
+		bne.s	.skip
 		tst.w	(V_scroll_amount).w
-		bne.s	+
+		bne.s	.skip
 		move.b	#PlayerID_Control,routine(a0)
-+		bsr.s	sub_125E0
+
+.skip
+		bsr.s	sub_125E0
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -2341,14 +2375,14 @@ Sonic_Drown:
 
 	if GameDebug
 		tst.b	(Debug_mode_flag).w
-		beq.s	+
+		beq.s	.nodebug
 		btst	#button_B,(Ctrl_1_pressed).w
-		beq.s	+
+		beq.s	.nodebug
 		move.w	#1,(Debug_placement_mode).w
 		clr.b	(Ctrl_1_locked).w								; unlock control
 		rts
 ; ---------------------------------------------------------------------------
-+
+.nodebug
 	endif
 
 		jsr	(MoveSprite2_TestGravity).w
@@ -2362,14 +2396,16 @@ Sonic_Drown:
 sub_125E0:
 		bsr.s	Animate_Sonic
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	+
+		beq.s	.notgrav
 		eori.b	#2,render_flags(a0)
-+		bra.w	Sonic_Load_PLC
+
+.notgrav
+		bra.w	Sonic_Load_PLC
 
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Sonic:
-		lea	AniSonic(pc),a1
+		lea	(AniSonic).l,a1
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		cmp.b	prev_anim(a0),d0
@@ -2719,10 +2755,10 @@ loc_12A2A:
 		bpl.w	SAnim_Delay
 		mvabs.w	ground_vel(a0),d2
 		add.w	(Camera_H_scroll_shift).w,d2
-		lea	SonAni_Roll2(pc),a1
+		lea	SonAni_Roll2(pc),a1 	; use roll 2 animation
 		cmpi.w	#$600,d2
 		bhs.s	loc_12A5E
-		lea	SonAni_Roll(pc),a1
+		lea	SonAni_Roll(pc),a1 	; use roll animation
 
 loc_12A5E:
 		neg.w	d2
@@ -2751,7 +2787,7 @@ loc_12A82:
 loc_12A8A:
 		lsr.w	#6,d2
 		move.b	d2,anim_frame_timer(a0)
-		lea	SonAni_Push(pc),a1
+		lea	SonAni_Push(pc),a1		; use push animation
 		bra.w	SAnim_Do2
 
 ; =============== S U B R O U T I N E =======================================

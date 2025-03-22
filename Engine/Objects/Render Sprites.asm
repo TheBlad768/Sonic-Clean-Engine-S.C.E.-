@@ -103,14 +103,18 @@ Render_Sprites_ScreenSpaceObj:
 		movea.l	mappings(a0),a1
 		moveq	#0,d4
 		btst	#5,d6								; is the static mappings flag set?
-		bne.s	+								; if it is, branch
+		bne.s	.load							; if it is, branch
+
+		; calc
 		move.b	mapping_frame(a0),d4
 		add.w	d4,d4
 		adda.w	(a1,d4.w),a1
 		move.w	(a1)+,d4
 		subq.w	#1,d4							; get number of pieces
 		bmi.s	Render_Sprites_NextObj			; if there are 0 pieces, branch
-+		move.w	art_tile(a0),d5
+
+.load
+		move.w	art_tile(a0),d5
 		bsr.w	sub_1AF6C
 
 Render_Sprites_NextObj:
@@ -131,14 +135,19 @@ Render_Sprites_NextLevel2:
 		lea	$80(a5),a5							; load next priority level
 		cmpa.w	#Sprite_table_input_end,a5
 		blo.w	Render_Sprites_LevelLoop
+
+		; finish
 		move.w	d7,d6
-		bmi.s	+
+		bmi.s	.end
 		moveq	#0,d0
 
--		move.w	d0,(a6)
+.clear
+		move.w	d0,(a6)
 		addq.w	#8,a6
-		dbf	d7,-
-+		subi.w	#80-1,d6
+		dbf	d7,.clear
+
+.end
+		subi.w	#80-1,d6
 		neg.w	d6
 		move.b	d6,(Sprites_drawn).w
 
@@ -165,7 +174,8 @@ loc_1AE3E:
 
 locret_1AE56:
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Render_Sprites_MultiDraw:
 		btst	#2,d6								; is this to be positioned by screen coordinates?
