@@ -98,7 +98,7 @@ Obj_Spring_Up:
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
-		jsr	(SolidObjectFull2_1P).w
+		jsr	(SolidObjectFull2.check).w
 		btst	#p1_standing_bit,status(a0)
 		beq.s	.anim
 		bsr.s	sub_22F98
@@ -116,7 +116,7 @@ Obj_Spring_Up_NoSolid:
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
-		jsr	(SolidObjectTop_1P).w
+		jsr	(SolidObjectTop.check).w
 		btst	#p1_standing_bit,status(a0)
 		beq.s	.anim
 		bsr.s	sub_22F98
@@ -186,7 +186,7 @@ Obj_Spring_Horizontal:
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
-		jsr	(SolidObjectFull2_1P).w
+		jsr	(SolidObjectFull2.check).w
 		swap	d6
 		andi.w	#p1_touch_side,d6
 		beq.s	loc_23092
@@ -330,7 +330,7 @@ Obj_Spring_Down:
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
-		jsr	(SolidObjectFull2_1P).w
+		jsr	(SolidObjectFull2.check).w
 		cmpi.w	#-2,d4
 		bne.s	loc_2334C
 		bsr.s	sub_233CA
@@ -405,7 +405,7 @@ Obj_Spring_UpDiag:
 		lea	ObjSpring_SlopeData_DiagUp(pc),a2
 		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
-		jsr	(SolidObjectFullSloped_Spring_1P).w
+		jsr	(SolidObjectFullSloped_Spring.check).w
 		btst	#p1_standing_bit,status(a0)
 		beq.s	loc_234B8
 		bsr.s	sub_234E6
@@ -502,7 +502,7 @@ Obj_Spring_DownDiag:
 		lea	ObjSpring_SlopeData_DiagDown(pc),a2
 		lea	(Player_1).w,a1												; a1=character
 		moveq	#p1_standing_bit,d6
-		jsr	(SolidObjectFullSloped_Spring_1P).w
+		jsr	(SolidObjectFullSloped_Spring.check).w
 		cmpi.w	#-2,d4
 		bne.s	loc_235F8
 		bsr.s	sub_23624

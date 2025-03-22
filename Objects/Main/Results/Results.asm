@@ -116,6 +116,7 @@ Obj_LevelResults:
 		cmpi.w	#5*60-11,objoff_2E(a0)
 		bne.s	.return2												; play after eh, a second or so
 		move.b	#30,(Player_1+air_left).w								; reset air
+		st	(Music_results_flag).w
 		music	mus_GotThrough,1									; play level complete theme
 ; ---------------------------------------------------------------------------
 
@@ -178,6 +179,7 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .endr
+		clr.b	(Music_results_flag).w
 		clr.b	(Level_results_flag).w
 		tst.b	(Last_act_end_flag).w
 		bne.s	.skiptc

@@ -6,9 +6,10 @@
 
 EntryPoint:
 		tst.l	(HW_Port_1_Control-1).l
-		bne.s	+
+		bne.s	.check
 		tst.w	(HW_Expansion_Control-1).l
-+
+
+.check
 		bne.s	Init_SkipPowerOn									; in case of a soft reset
 		lea	SetupValues(pc),a5									; load setup values array address
 		movem.w	(a5)+,d5-d7
