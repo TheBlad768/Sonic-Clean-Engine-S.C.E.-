@@ -1186,6 +1186,19 @@ sfx	macro track, terminate, byte
       endif
     endm
 
+tempo macro speed, terminate, byte
+    if ("byte"="0") || ("byte"="")
+	moveq	#signextendB(speed),d0
+    else
+	move.w	#(speed),d0
+    endif
+      if ("terminate"="0") || ("terminate"="")
+	jsr	(Change_Music_Tempo).w
+      else
+	jmp	(Change_Music_Tempo).w
+      endif
+    endm
+
 sample	macro id, terminate, byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(id),d0
