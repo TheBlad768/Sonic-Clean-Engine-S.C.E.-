@@ -630,11 +630,16 @@ SolidObject_Landed:
 		move.b	width_pixels(a0),d1
 		move.w	d1,d2
 		add.w	d2,d2
+
+		; s2 version
 		add.w	x_pos(a1),d1
 		sub.w	x_pos(a0),d1
 		bmi.s	SolidObject_Miss										; if Sonic is right of object, branch
 		cmp.w	d2,d1												; is Sonic left of object?
 		bhs.s	SolidObject_Miss										; if yes, branch
+		tst.w	y_vel(a1)												; is Sonic moving upwards?
+		bmi.s	SolidObject_Miss										; if yes, branch
+		sub.w	d3,y_pos(a1)											; correct Sonic's position
 		subq.w	#1,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	loc_1E17E
@@ -642,9 +647,6 @@ SolidObject_Landed:
 		addq.w	#2,y_pos(a1)
 
 loc_1E17E:
-		sub.w	d3,y_pos(a1)											; correct Sonic's position
-		tst.w	y_vel(a1)												; is Sonic moving upwards?
-		bmi.s	SolidObject_Miss										; if yes, branch
 		bsr.w	RideObject_SetRide
 		move.w	d6,d4
 		addi.b	#($10-p1_standing_bit+p1_touch_top_bit),d4
