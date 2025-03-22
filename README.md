@@ -22,7 +22,7 @@ Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You us
 
 ## How to build the ROM
 
-To build this, use Build.bat if you're a Windows user, or build.lua otherwise. The built ROM will be called 'Sonic.gen'.
+To build this, use build.bat if you're a Windows user, or build.sh if you're a Linux user. Use build_debug to debug things.
 
 ## Quick start
 
