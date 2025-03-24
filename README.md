@@ -54,7 +54,7 @@ You don't have to add the letters **'ENOZ' (ZONE)** because those letters are al
 
 #### Why does the ROM take so long to build?
 
-- The speed of the ROM build process depends entirely on the power of your computer. A high-performance machine will build the ROM quickly, while a slower one will take significantly more time.
+- The speed of the ROM build process depends entirely on the power of your computer. A high-performance machine will build the ROM quickly, while a slower one will take significantly more time. If you're a Linux user and you're using Wine and Windows batch script, that will affect build speed too.
 
 - Always specify jump sizes for instructions. Writing code without specifying jump sizes will significantly slow down the ROM build. The Macro Assembler AS will perform multiple passes until it can successfully build the ROM, which increases build time.
 
