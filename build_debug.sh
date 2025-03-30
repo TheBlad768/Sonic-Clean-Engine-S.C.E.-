@@ -41,5 +41,8 @@ ${AS_DIR}/convsym Main.lst "Engine/_RAM.Debug.asm" -in as_lst -out asm -range FF
 # Fix the ROM header
 ${AS_DIR}/fixheader S3CE.Debug.gen
 
-test -f S3CE.Debug.gen || exit 0
+if test -f S3CE.Debug.gen
+then
+  exit 0
+fi
 exit 1
