@@ -26,29 +26,39 @@ Load_Sprites_Init2:
 		lea	(Object_respawn_table).w,a3
 		move.w	(Camera_X_pos).w,d6
 		subi.w	#$80,d6
-		bhs.s	+
+		bhs.s	loc_1B79A
 		moveq	#0,d6
-+		andi.w	#$FF80,d6
+
+loc_1B79A:
+		andi.w	#$FF80,d6
 		movea.l	(Object_load_addr_front).w,a0
 
--		cmp.w	(a0),d6
-		bls.s		+
+loc_1B7A2:
+		cmp.w	(a0),d6
+		bls.s		loc_1B7AC
 		addq.w	#6,a0
 		addq.w	#1,a3
-		bra.s	-
-+		move.l	a0,(Object_load_addr_front).w
+		bra.s	loc_1B7A2
+; ---------------------------------------------------------------------------
+
+loc_1B7AC:
+		move.l	a0,(Object_load_addr_front).w
 		move.w	a3,(Object_respawn_index_front).w
 		lea	(Object_respawn_table).w,a3
 		movea.l	(Object_load_addr_back).w,a0
 		subi.w	#$80,d6
-		blo.s		+
+		blo.s		loc_1B7D8
 
--		cmp.w	(a0),d6
-		bls.s		+
+loc_1B7CE:
+		cmp.w	(a0),d6
+		bls.s		loc_1B7D8
 		addq.w	#6,a0
 		addq.w	#1,a3
-		bra.s	-
-+		move.l	a0,(Object_load_addr_back).w
+		bra.s	loc_1B7CE
+; ---------------------------------------------------------------------------
+
+loc_1B7D8:
+		move.l	a0,(Object_load_addr_back).w
 		move.w	a3,(Object_respawn_index_back).w
 		move.w	#-1,(Camera_X_pos_coarse).w
 		moveq	#-$80,d0
@@ -115,14 +125,15 @@ loc_1B864:
 		bsr.w	Create_New_Sprite
 		bne.s	loc_1B8A8
 
--		cmp.w	-6(a0),d6
+loc_1B892:
+		cmp.w	-6(a0),d6
 		bge.s	loc_1B8A8
 		subq.w	#6,a0
 		subq.w	#1,a3
 		jsr	(a6)
 		bne.s	loc_1B8A4
 		subq.w	#6,a0
-		bra.s	-
+		bra.s	loc_1B892
 ; ---------------------------------------------------------------------------
 
 loc_1B8A4:
@@ -136,11 +147,12 @@ loc_1B8A8:
 		movea.w	(Object_respawn_index_front).w,a3
 		addi.w	#$300,d6
 
--		cmp.w	-6(a0),d6
+loc_1B8BC:
+		cmp.w	-6(a0),d6
 		bgt.s	loc_1B8C8
 		subq.w	#6,a0
 		subq.w	#1,a3
-		bra.s	-
+		bra.s	loc_1B8BC
 ; ---------------------------------------------------------------------------
 
 loc_1B8C8:
@@ -157,11 +169,12 @@ loc_1B8D2:
 		bsr.w	Create_New_Sprite
 		bne.s	loc_1B8F2
 
--		cmp.w	(a0),d6
+loc_1B8E8:
+		cmp.w	(a0),d6
 		bls.s		loc_1B8F2
 		jsr	(a6)
 		addq.w	#1,a3
-		beq.s	-
+		beq.s	loc_1B8E8
 
 loc_1B8F2:
 		move.l	a0,(Object_load_addr_front).w
@@ -171,11 +184,12 @@ loc_1B8F2:
 		subi.w	#$300,d6
 		blo.s		loc_1B912
 
--		cmp.w	(a0),d6
+loc_1B908:
+		cmp.w	(a0),d6
 		bls.s		loc_1B912
 		addq.w	#6,a0
 		addq.w	#1,a3
-		bra.s	-
+		bra.s	loc_1B908
 ; ---------------------------------------------------------------------------
 
 loc_1B912:
