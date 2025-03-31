@@ -23,20 +23,30 @@ Load_Rings_Init:
 		lea	(Ring_status_table).w,a2
 		move.w	(Camera_X_pos).w,d4
 		subq.w	#8,d4
-		bhi.s	+
+		bhi.s	.check
 		moveq	#1,d4												; no negative values allowed
-		bra.s	+
--		addq.w	#4,a1												; load next ring
+		bra.s	.check
+; ---------------------------------------------------------------------------
+
+.next
+		addq.w	#4,a1												; load next ring
 		addq.w	#2,a2												; load next ring status
-+		cmp.w	(a1),d4												; is the X pos of the ring < camera X pos?
-		bhi.s	-													; if it is, check next ring
+
+.check
+		cmp.w	(a1),d4												; is the X pos of the ring < camera X pos?
+		bhi.s	.next												; if it is, check next ring
 		move.l	a1,(Ring_start_addr_ROM).w							; set start addresses
 		move.w	a2,(Ring_start_addr_RAM).w
 		addi.w	#320+16,d4											; advance by a screen
-		bra.s	+
--		addq.w	#4,a1												; load next ring
-+		cmp.w	(a1),d4												; is the X pos of the ring < camera X + 336?
-		bhi.s	-													; if it is, check next ring
+		bra.s	.check2
+; ---------------------------------------------------------------------------
+
+.next2
+		addq.w	#4,a1												; load next ring
+
+.check2
+		cmp.w	(a1),d4												; is the X pos of the ring < camera X + 336?
+		bhi.s	.next2												; if it is, check next ring
 		move.l	a1,(Ring_end_addr_ROM).w							; set end addresses
 		rts
 ; ---------------------------------------------------------------------------
@@ -49,30 +59,50 @@ Load_Rings_Main:
 		movea.w	(Ring_start_addr_RAM).w,a2
 		move.w	(Camera_X_pos).w,d4
 		subq.w	#8,d4
-		bhi.s	+
+		bhi.s	.check
 		moveq	#1,d4												; no negative values allowed
-		bra.s	+
--		addq.w	#4,a1												; load next ring
+		bra.s	.check
+; ---------------------------------------------------------------------------
+
+.next
+		addq.w	#4,a1												; load next ring
 		addq.w	#2,a2												; load next ring status
-+		cmp.w	(a1),d4
-		bhi.s	-
-		bra.s	+
--		subq.w	#4,a1												; load previous ring
+
+.check
+		cmp.w	(a1),d4
+		bhi.s	.next
+		bra.s	.check2
+; ---------------------------------------------------------------------------
+
+.prev
+		subq.w	#4,a1												; load previous ring
 		subq.w	#2,a2												; load previous ring status
-+		cmp.w	-4(a1),d4
-		bls.s		-
+
+.check2
+		cmp.w	-4(a1),d4
+		bls.s		.prev
 		move.l	a1,(Ring_start_addr_ROM).w
 		move.w	a2,(Ring_start_addr_RAM).w
 		movea.l	(Ring_end_addr_ROM).w,a2
 		addi.w	#320+16,d4											; advance by a screen
-		bra.s	+
--		addq.w	#4,a2												; load next ring
-+		cmp.w	(a2),d4
-		bhi.s	-
-		bra.s	+
--		subq.w	#4,a2												; load previous ring
-+		cmp.w	-4(a2),d4
-		bls.s		-
+		bra.s	.check3
+; ---------------------------------------------------------------------------
+
+.next2
+		addq.w	#4,a2												; load next ring
+
+.check3
+		cmp.w	(a2),d4
+		bhi.s	.next2
+		bra.s	.check4
+; ---------------------------------------------------------------------------
+
+.prev2
+		subq.w	#4,a2												; load previous ring
+
+.check4
+		cmp.w	-4(a2),d4
+		bls.s		.prev2
 		move.l	a2,(Ring_end_addr_ROM).w
 		rts
 
@@ -301,7 +331,6 @@ CMap_Ring:
 
 		; frame1
 		dc.w make_art_tile(ArtTile_Ring,1,0)
-
 
 CMap_Ring_Spark:
 
