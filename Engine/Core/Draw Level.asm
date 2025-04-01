@@ -162,7 +162,7 @@ Setup_TileColumnDraw:
 		sub.w	d4,d5
 		move.w	d5,d4
 		sub.w	d6,d5
-		bmi.s	+
+		bmi.s	.next
 		move.w	d0,d5
 		asr.w	#2,d5
 		andi.w	#$7C,d5
@@ -178,8 +178,11 @@ Setup_TileColumnDraw:
 		add.w	d5,d5
 		adda.w	d5,a0
 		bsr.w	Get_LevelChunkColumn
-		bra.s	++
-+		neg.w	d5
+		bra.s	.swap
+; ---------------------------------------------------------------------------
+
+.next
+		neg.w	d5
 		move.w	d5,-(sp)
 		move.w	d0,d5
 		asr.w	#2,d5
@@ -196,7 +199,7 @@ Setup_TileColumnDraw:
 		add.w	d4,d4
 		adda.w	d4,a0
 		bsr.w	Get_LevelChunkColumn
-		bsr.s	+
+		bsr.s	.swap
 		move.w	(sp)+,d6
 		move.w	d0,d5
 		asr.w	#2,d5
@@ -211,8 +214,12 @@ Setup_TileColumnDraw:
 		add.w	d5,d5
 		add.w	d5,d5
 		adda.w	d5,a0
-+		swap	d7
--		move.w	(a5,d2.w),d3
+
+.swap
+		swap	d7
+
+.getblock
+		move.w	(a5,d2.w),d3
 		move.w	d3,d4
 		andi.w	#$3FF,d3
 		lsl.w	#3,d3
@@ -224,25 +231,31 @@ Setup_TileColumnDraw:
 		swap	d3
 		move.w	d7,d3
 		btst	#$B,d4
-		beq.s	+
+		beq.s	.notflipy
 		eori.l	#words_to_long(flip_y,flip_y),d5
 		eori.l	#words_to_long(flip_y,flip_y),d3
 		swap	d5
 		swap	d3
-+		btst	#$A,d4
-		beq.s	+
+
+.notflipy
+		btst	#$A,d4
+		beq.s	.notflipx
 		eori.l	#words_to_long(flip_x,flip_x),d5
 		eori.l	#words_to_long(flip_x,flip_x),d3
 		exg	d3,d5
-+		move.l	d5,(a1)+
+
+.notflipx
+		move.l	d5,(a1)+
 		move.l	d3,(a0)+
 		addi.w	#16,d2
 		andi.w	#$70,d2
-		bne.s	+
+		bne.s	.skip
 		addq.w	#4,d1
 		and.w	(Layout_row_index_mask).w,d1
 		bsr.s	Get_LevelChunkColumn
-+		dbf	d6,-
+
+.skip
+		dbf	d6,.getblock
 		swap	d7
 		clr.w	(a0)
 		rts
@@ -381,7 +394,7 @@ Setup_TileRowDraw:
 		sub.w	d4,d5
 		move.w	d5,d4
 		sub.w	d6,d5
-		bmi.s	+
+		bmi.s	.next
 		move.w	d0,d5
 		andi.w	#$F0,d5							; if the length of the write can fit without wrapping the nametable
 		lsl.w	#4,d5
@@ -396,8 +409,11 @@ Setup_TileRowDraw:
 		add.w	d5,d5
 		adda.w	d5,a0
 		bsr.w	Get_LevelAddrChunkRow
-		bra.s	++
-+		neg.w	d5								; if the length of the write wraps over the length of the nametable
+		bra.s	.getblock
+; ---------------------------------------------------------------------------
+
+.next
+		neg.w	d5								; if the length of the write wraps over the length of the nametable
 		move.w	d5,-(sp)
 		move.w	d0,d5
 		andi.w	#$F0,d5
@@ -413,7 +429,7 @@ Setup_TileRowDraw:
 		add.w	d4,d4
 		adda.w	d4,a0
 		bsr.s	Get_LevelAddrChunkRow
-		bsr.s	+
+		bsr.s	.getblock
 		move.w	(sp)+,d6							; must place one more write command to account for rollover
 		move.w	d0,d5
 		andi.w	#$F0,d5
@@ -427,31 +443,39 @@ Setup_TileRowDraw:
 		add.w	d5,d5
 		add.w	d5,d5
 		adda.w	d5,a0
-/		move.w	(a5,d2.w),d3
+
+.getblock
+		move.w	(a5,d2.w),d3
 		move.w	d3,d4
 		andi.w	#$3FF,d3
 		lsl.w	#3,d3
 		move.l	(a2,d3.w),d5
 		move.l	4(a2,d3.w),d3
 		btst	#$B,d4
-		beq.s	+
+		beq.s	.notflipy
 		eori.l	#words_to_long(flip_y,flip_y),d5
 		eori.l	#words_to_long(flip_y,flip_y),d3
 		exg	d3,d5
-+		btst	#$A,d4
-		beq.s	+
+
+.notflipy
+		btst	#$A,d4
+		beq.s	.notflipx
 		eori.l	#words_to_long(flip_x,flip_x),d5
 		eori.l	#words_to_long(flip_x,flip_x),d3
 		swap	d5
 		swap	d3
-+		move.l	d5,(a1)+
+
+.notflipx
+		move.l	d5,(a1)+
 		move.l	d3,(a0)+
 		addq.w	#2,d2
 		andi.w	#$E,d2
-		bne.s	+
+		bne.s	.skip
 		addq.w	#2,d1							; chunk ID to word
 		bsr.s	Get_ChunkRow
-+		dbf	d6,-
+
+.skip
+		dbf	d6,.getblock
 		clr.w	(a0)
 		rts
 
