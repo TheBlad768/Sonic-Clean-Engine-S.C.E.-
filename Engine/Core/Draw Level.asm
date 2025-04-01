@@ -1211,7 +1211,7 @@ Clear_Switches:
 ; =============== S U B R O U T I N E =======================================
 
 Reset_LevelData:
-		move.l	#Load_Sprites_Init,(Object_load_addr_RAM).w
+		move.l	#Load_Objects_Init,(Object_load_addr_RAM).w
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
 		bsr.s	Clear_Switches
 

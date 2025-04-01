@@ -4,19 +4,19 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-Load_Sprites:
+Load_Objects:
 		movea.l	(Object_load_addr_RAM).w,a0
 		jmp	(a0)
 
 ; =============== S U B R O U T I N E =======================================
 
-Load_Sprites_Init:
+Load_Objects_Init:
 		movea.l	(Level_data_addr_RAM.Sprites).w,a0
 		move.l	a0,(Object_load_addr_front).w
 		move.l	a0,(Object_load_addr_back).w
 
-Load_Sprites_Init2:
-		move.l	#Load_Sprites_Main,(Object_load_addr_RAM).w
+Load_Objects_Init2:
+		move.l	#Load_Objects_Main,(Object_load_addr_RAM).w
 		move.l	#Obj_Index,(Object_index_addr).w
 		tst.b	(Respawn_table_keep).w
 		bne.s	.skip
@@ -65,7 +65,7 @@ loc_1B7D8:
 		and.w	(Camera_Y_pos).w,d0
 		move.w	d0,(Camera_Y_pos_coarse).w
 
-Load_Sprites_Main:
+Load_Objects_Main:
 		moveq	#-$80,d0
 		move.w	(Camera_Y_pos).w,d1
 		add.w	d0,d1									; subtract $80
@@ -416,7 +416,7 @@ Create_New_Sprite4:
 ; ---------------------------------------------------------------------------
 ; Changes the coarse back- and forward-camera edges to match new Camera_X value.
 ; Also seeks to appropriate object locations in the level's object layout, so
-; that Load_Sprites will correctly load the objects again.
+; that Load_Objects will correctly load the objects again.
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
