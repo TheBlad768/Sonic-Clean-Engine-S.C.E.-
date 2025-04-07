@@ -134,9 +134,9 @@ insn2op macro oper,x,y
 	  else
 		if chkop("y","d")
 		  if (chkop("y","0(") && chkop("y","objoff_00(") && chkop("y","obid(") && chkop("y","id(") && chkop("y","address(") && chkop("y","smps_queue.v_playsnd1("))
-.start:
+.start
 			!oper	1+x,y
-.end:
+.end
 			!org	.start+3
 			!dc.b	0
 			!org	.end
