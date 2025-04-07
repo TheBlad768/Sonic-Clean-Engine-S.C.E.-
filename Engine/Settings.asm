@@ -14,7 +14,6 @@ PlayerMoveLock:				= 0	; if 1, lock control during the fall animation (Android, 
 MSUMode:					= 0	; if 1, enable MSU
 OptimiseStopZ80:				= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for controllers (ignores sound driver)
 ZeroOffsetOptimization:		= 1	; if 1, makes a handful of zero-offset instructions smaller
-AllOptimizations:				= 1	; if 1, enables all optimizations
 ChecksumCheck:				= 0	; if 1, enable checksum checking
 EnableSRAM:					= 0	; change to 1 to enable SRAM
 BackupSRAM:				= 0

@@ -487,7 +487,7 @@ StartNewLevel:
 Play_SFX_Continuous:
 		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
-		bra.w	Play_SFX										; play sfx
+		bra.w	Play_SFX										; play continuous sfx
 
 ; =============== S U B R O U T I N E =======================================
 
