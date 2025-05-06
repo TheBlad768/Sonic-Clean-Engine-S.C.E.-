@@ -120,7 +120,7 @@ locret_85A58:
 
 ; =============== S U B R O U T I N E =======================================
 
-PalRotation_SetScript:
+Run_PalRotationSetScript:
 		lea	(Palette_rotation_data).w,a2
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
