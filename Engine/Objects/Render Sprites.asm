@@ -59,8 +59,8 @@ Render_Sprites_ObjLoop:
 		movea.w	(a4)+,a0 							; a0=object
 
 		; debug
-		assert.l	address(a0),ne
-		assert.l	mappings(a0),ne
+		assert.l	address(a0),ne					; raise an error if there is no object address here
+		assert.l	mappings(a0),ne					; raise an error if there is no mappings address here
 
 		; check
 		tst.l	address(a0)							; is this object slot occupied?
