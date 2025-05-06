@@ -7,6 +7,7 @@
 CreateChild1_Normal:
 		moveq	#0,d2						; includes positional offset data
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -40,6 +41,7 @@ CreateChild1_Normal:
 CreateChild2_Complex:
 		moveq	#0,d2						; includes positional offset data and velocity and CHECKLATER
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -77,6 +79,7 @@ CreateChild2_Complex:
 CreateChild3_NormalRepeated:
 		moveq	#0,d2						; same as Child creation routine 1, except it repeats one object several times rather than different objects sequentially
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		lea	(a2),a3							; save ROM address to a3
@@ -109,9 +112,10 @@ CreateChild3_NormalRepeated:
 ; =============== S U B R O U T I N E =======================================
 
 CreateChild4_LinkListRepeated:
-		movea.w	a0,a3						; creates a linked object list. Previous object address is in objoff_46, while next object in list is at objoff_44
 		moveq	#0,d2
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
+		movea.w	a0,a3						; creates a linked object list. Previous object address is in objoff_46, while next object in list is at objoff_44
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -137,6 +141,7 @@ CreateChild4_LinkListRepeated:
 CreateChild5_ComplexAdjusted:
 		moveq	#0,d2						; same as child routine 2, but adjusts both X position and X velocity based on parent object's orientation
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -186,6 +191,7 @@ CreateChild5_ComplexAdjusted:
 CreateChild6_Simple:
 		moveq	#0,d2						; simple child creation routine, merely creates x number of the same object at the parent's position
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -209,6 +215,7 @@ CreateChild6_Simple:
 CreateChild7_Normal2:
 		moveq	#0,d2						; same as child routine 1, but does not limit children to object slots after the parent
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite
@@ -243,8 +250,9 @@ CreateChild8_TreeListRepeated:
 		moveq	#0,d2
 
 CreateChild8_TreeListRepeated2:
-		movea.w	a0,a3						; creates a linked object list like routine 4, but they only chain themselves one way. All maintain the calling object as their parent
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
+		movea.w	a0,a3						; creates a linked object list like routine 4, but they only chain themselves one way. All maintain the calling object as their parent
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -268,9 +276,10 @@ CreateChild8_TreeListRepeated2:
 ; =============== S U B R O U T I N E =======================================
 
 CreateChild9_TreeList:
-		movea.w	a0,a3						; same as routine 8, but creates seperate objects in a list rather than repeating the same object
 		moveq	#0,d2
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
+		movea.w	a0,a3						; same as routine 8, but creates seperate objects in a list rather than repeating the same object
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -296,6 +305,7 @@ CreateChild9_TreeList:
 CreateChild10_NormalAdjusted:
 		moveq	#0,d2						; same as child routine 1, but adjusts X position based on parent object's orientation
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -335,6 +345,7 @@ CreateChild10_NormalAdjusted:
 CreateChild11_Simple:
 		moveq	#0,d2						; same as child routine 6, but creates seperate objects in a list rather than repeating the same object
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite3
@@ -358,6 +369,7 @@ CreateChild11_Simple:
 CreateChild12_Simple:
 		moveq	#0,d2						; same as child routine 6, but does not limit children to object slots after the parent
 		move.w	(a2)+,d6
+		bmi.s	.return						; skip if no objects in list
 
 .loop
 		bsr.w	Create_New_Sprite
