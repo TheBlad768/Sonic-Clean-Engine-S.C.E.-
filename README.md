@@ -84,9 +84,11 @@ Example of correct code:
 - FoxConED — Level Select font graphics.
 - Dolphman — Robotnik Head graphics.
 
-## Discord
+## Links
 
-- [redmisostudios](https://discords.com/servers/redmisostudios)
+- [YouTube channel](https://www.youtube.com/@TheBlad768)
+- [Telegram channel](http://t.me/theblad768channel)
+- [Red Miso Studios Discord](https://discords.com/servers/redmisostudios)
 
 ## These projects are based on this source code
 
