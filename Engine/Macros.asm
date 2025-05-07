@@ -585,7 +585,7 @@ getobjectRAMslot macro address
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
 	lsr.w	#6,d0												; divide by $40... even though SSTs are $4A bytes long in this game
-	lea	(Create_New_Sprite3.find_first_sprite_table).w,address
+	lea	(Create_New_Sprite3.table).w,address
 	move.b	(address,d0.w),d0										; use a look-up table to get the right loop counter
     endm
 

@@ -22,7 +22,7 @@ Create_New_Sprite3:
 		move.w	#Dynamic_object_RAM_end,d0
 		sub.w	a0,d0
 		lsr.w	#object_size_bits,d0					; divide by $40... even though SSTs are $4A bytes long in this game
-		move.b	.find_first_sprite_table(pc,d0.w),d0		; use a look-up table to get the right loop counter
+		move.b	.table(pc,d0.w),d0						; use a look-up table to get the right loop counter
 		bmi.s	.found
 
 		; find slot
@@ -37,7 +37,7 @@ Create_New_Sprite3:
 		rts
 ; ---------------------------------------------------------------------------
 
-.find_first_sprite_table
+.table
 
 		set	.a,Dynamic_object_RAM
 		set	.b,Dynamic_object_RAM_end
