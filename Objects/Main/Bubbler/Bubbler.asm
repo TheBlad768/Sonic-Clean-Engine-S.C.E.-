@@ -125,9 +125,9 @@ loc_2FB5C:
 ; ---------------------------------------------------------------------------
 
 .offscreen
-		move.w	respawn_addr(a0),d0
-		beq.s	Bubbler_Delete
-		movea.w	d0,a2
+		move.w	respawn_addr(a0),d0							; get address in respawn table
+		beq.s	Bubbler_Delete								; if it's zero, it isn't remembered
+		movea.w	d0,a2										; load address into a2
 		bclr	#7,(a2)
 
 Bubbler_Delete:

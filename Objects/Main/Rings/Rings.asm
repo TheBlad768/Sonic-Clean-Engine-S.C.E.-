@@ -350,9 +350,9 @@ Obj_Attracted_Ring:
 ; ---------------------------------------------------------------------------
 
 .offscreen
-		move.w	respawn_addr(a0),d0
-		beq.s	.offscreen2
-		movea.w	d0,a2
+		move.w	respawn_addr(a0),d0								; get address in respawn table
+		beq.s	.offscreen2										; if it's zero, it isn't remembered
+		movea.w	d0,a2											; load address into a2
 		bclr	#7,(a2)
 
 .offscreen2
