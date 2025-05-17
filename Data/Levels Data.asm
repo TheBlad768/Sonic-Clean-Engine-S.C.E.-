@@ -59,13 +59,13 @@ DEZ4_Layout:			bincludeEntry "Levels/DEZ/Layout/4.bin"
 ; ===========================================================================
 
 	ObjectLayoutBoundary
-DEZ1_Sprites:			binclude "Levels/DEZ/Object Pos/1.bin"
+DEZ1_Objects:			binclude "Levels/DEZ/Object Pos/1.bin"
 	ObjectLayoutBoundary
-DEZ2_Sprites:			binclude "Levels/DEZ/Object Pos/2.bin"
+DEZ2_Objects:			binclude "Levels/DEZ/Object Pos/2.bin"
 	ObjectLayoutBoundary
-DEZ3_Sprites:			binclude "Levels/DEZ/Object Pos/3.bin"
+DEZ3_Objects:			binclude "Levels/DEZ/Object Pos/3.bin"
 	ObjectLayoutBoundary
-DEZ4_Sprites:			binclude "Levels/DEZ/Object Pos/4.bin"
+DEZ4_Objects:			binclude "Levels/DEZ/Object Pos/4.bin"
 	ObjectLayoutBoundary
 	even
 
