@@ -220,7 +220,7 @@ HUD_DrawInitial:
 		lsl.w	#5,d0											; multiply by $20
 		lea	(a1,d0.w),a3
 
-	rept 16
+	rept 8*2
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
 
@@ -230,10 +230,10 @@ HUD_DrawInitial:
 ; ---------------------------------------------------------------------------
 
 .clear
-		moveq	#0,d5
+		moveq	#0,d0
 
-	rept 16
-		move.l	d5,VDP_data_port-VDP_data_port(a6)
+	rept 8*2
+		move.l	d0,VDP_data_port-VDP_data_port(a6)
 	endr
 
 		bra.s	.next
@@ -336,7 +336,7 @@ DrawSixDigitNumber:
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		lea	(a1,d2.w),a3
 
-	rept 16
+	rept 8*2
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
 
@@ -388,7 +388,7 @@ DrawTwoDigitNumber:
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		lea	(a1,d2.w),a3
 
-	rept 16
+	rept 8*2
 		move.l	(a3)+,VDP_data_port-VDP_data_port(a6)
 	endr
 
