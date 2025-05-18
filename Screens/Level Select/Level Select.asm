@@ -426,7 +426,6 @@ LevelSelect_MarkFields:
 .drawnumbers
 		move.w	d0,d2
 		move.w	d0,-(sp)												; division by $100
-		clr.w	d0
 		move.b	(sp)+,d0
 		bsr.s	.getnumber
 		move.b	d2,d0
