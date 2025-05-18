@@ -368,6 +368,6 @@ AniRaw_SignpostSparkle:	dc.b 1, 1, 2, 3, 4, arfEnd
 	even
 ; ---------------------------------------------------------------------------
 
-		include "Objects/Main/Signpost/Object Data/DPLC - End Signs.asm"
 		include "Objects/Main/Signpost/Object Data/Map - End Signs.asm"
+		include "Objects/Main/Signpost/Object Data/DPLC - End Signs.asm"
 		include "Objects/Main/Signpost/Object Data/Map - Signpost Stub.asm"
