@@ -28,13 +28,18 @@ Load_PlaneText:
 		bra.s	.loop
 ; ---------------------------------------------------------------------------
 
+.exit
+		enableIntsSave
+		rts
+; ---------------------------------------------------------------------------
+
 .options
-		cmpi.b	#$A0,d0									; if $80-$9F flag, load letters to the next line
-		blo.s		.nextline
 		cmpi.b	#-1,d0									; if $FF(-1) flag, stop loading letters
 		beq.s	.exit
 		cmpi.b	#-2,d0									; if $FE(-2) flag, calc pos loading letters
 		beq.s	.calcxpos
+		cmpi.b	#$A0,d0									; if $80-$9F flag, load letters to the next line
+		blo.s		.nextline
 
 		; check palette line
 		cmpi.b	#$F2,d0									; if $F2-$F5 flag, change palette line
@@ -53,10 +58,13 @@ Load_PlaneText:
 
 .nextline
 		andi.w	#$1F,d0
-
-.donextline
-		add.l	d2,d1
-		dbf	d0,.donextline
+		addq.w	#1,d0
+		swap	d2
+		mulu.w	d2,d0
+		swap	d2
+		swap	d0
+		clr.w	d0
+		add.l	d0,d1
 		bra.s	.setpos
 ; ---------------------------------------------------------------------------
 
@@ -64,24 +72,11 @@ Load_PlaneText:
 
 		; get pos
 		move.l	d1,d5
-		move.l	d5,VDP_control_port-VDP_control_port(a5)
-
-		; clear line
-		moveq	#0,d0
-		moveq	#40-1,d4									; max 40 characters
-
-.clearxpos
-		move.w	d0,VDP_data_port-VDP_data_port(a6)
-		dbf	d4,.clearxpos
-		move.l	d5,VDP_control_port-VDP_control_port(a5)
-
-		moveq	#40-1,d4									; max 40 characters
 
 		; calc center position
 		moveq	#0,d0
-		move.b	(a1)+,d0									; get name size
-		move.w	d0,d6
-		addq.w	#1,d4									; fix dbf count(-1)
+		move.b	(a1)+,d0									; get text size (second byte parameter)
+		moveq	#40,d4									; max 40 characters
 		sub.w	d0,d4
 		lsr.w	d4										; even value
 		add.w	d4,d4
@@ -90,8 +85,3 @@ Load_PlaneText:
 		add.l	d4,d5
 		move.l	d5,VDP_control_port-VDP_control_port(a5)
 		bra.s	.loop
-; ---------------------------------------------------------------------------
-
-.exit
-		enableIntsSave
-		rts
