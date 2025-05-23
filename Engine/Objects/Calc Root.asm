@@ -12,7 +12,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-Calc_Root:
+CalcRoot:
 		moveq	#-1,d1
 
 .find
