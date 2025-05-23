@@ -79,7 +79,7 @@ loc_853D4:
 ; ---------------------------------------------------------------------------
 
 loc_853E2:
-		tst.w	d0					; if X and Y distance are identical
+		tst.w	d0					; if x and y distance are identical
 		beq.s	loc_853EE
 		tst.w	d1
 		beq.s	loc_853FA
