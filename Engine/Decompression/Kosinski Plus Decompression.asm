@@ -3,7 +3,7 @@
 ; Inputs:
 ; a0 = compressed data location
 ; a1 = destination
-; See http://www.segaretro.org/Kosinski_compression for format description
+; See https://segaretro.org/Kosinski_compression for format description
 ; Created originally by Flamewing and vladikcomper, further improvements by Clownacy
 ; See https://github.com/flamewing/mdcomp
 ; ---------------------------------------------------------------------------
