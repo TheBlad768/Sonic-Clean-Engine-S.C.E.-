@@ -85,11 +85,11 @@ dmaFillVRAM macro byte,addr,length
 	move.w	#$8F02,VDP_control_port-VDP_control_port(a5)	; VRAM pointer increment: $0002
     endm
 
-; -------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; Macro to check button presses
 ; Arguments:
 ; 1 - buttons to check
-; -------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
 tpress macro press,player
 	if player=2
@@ -100,11 +100,11 @@ tpress macro press,player
 	andi.b	#(press),d0
     endm
 
-; -------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; Macro to check if buttons are held
 ; Arguments:
 ; 1 - buttons to check
-; -------------------------------------------------------------
+; ---------------------------------------------------------------------------
 
 theld macro press,player
 	if player=2
