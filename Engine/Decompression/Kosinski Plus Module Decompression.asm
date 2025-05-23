@@ -132,7 +132,7 @@ LoadPLC_Raw_KosPlusM:
 ; Inputs:
 ; a1 = address of the archive
 ; d2 = destination in VRAM
-; See http://segaretro.org/Kosinski_compression#Kosinski_Moduled_compression for format description
+; See https://segaretro.org/Kosinski_compression#Kosinski_Moduled_compression for format description
 ; Optimized by Flamewing
 ; See https://github.com/flamewing/mdcomp
 ; ---------------------------------------------------------------------------

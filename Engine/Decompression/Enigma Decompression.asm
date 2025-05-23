@@ -4,7 +4,7 @@
 ; a0 = compressed data location
 ; a1 = destination (in RAM)
 ; d0 = starting art tile
-; See http://www.segaretro.org/Enigma_compression for format description
+; See https://segaretro.org/Enigma_compression for format description
 ; See https://github.com/devon-artmeier/genesis-decompression
 ; ---------------------------------------------------------------------------
 

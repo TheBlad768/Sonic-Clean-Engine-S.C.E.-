@@ -1,6 +1,6 @@
 ; -------------------------------------------------------------------------
 ; 2-argument arctangent (angle between (0,0) and (x,y))
-; Based on http://codebase64.org/doku.php?id=base:8bit_atan2_8-bit_angle
+; Based on https://codebase64.org/doku.php?id=base:8bit_atan2_8-bit_angle
 ; New version by Devon Artmeier
 ; -------------------------------------------------------------------------
 ; PARAMETERS:
