@@ -250,6 +250,7 @@ EndOfHeader
 		include "Engine/Objects/Animate Raw.asm"
 		include "Engine/Objects/Animate Sprite.asm"
 		include "Engine/Objects/Calc Angle.asm"
+		include "Engine/Objects/Calc Root.asm"
 		include "Engine/Objects/Calc Sine.asm"
 		include "Engine/Objects/Draw Sprite.asm"
 		include "Engine/Objects/Delete Object.asm"
