@@ -393,7 +393,8 @@ PLCLoad_Shields:
 		moveq	#0,d1
 		move.w	(a2)+,d1
 		move.w	d1,d3
-		lsr.w	#8,d3
+		move.w	d3,-(sp)
+		move.b	(sp)+,d3
 		andi.w	#$F0,d3
 		addi.w	#$10,d3
 		andi.w	#$FFF,d1
