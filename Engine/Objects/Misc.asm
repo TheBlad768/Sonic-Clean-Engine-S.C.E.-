@@ -37,7 +37,7 @@ SetUp_ObjAttributesSlotted:
 		add.w	d4,d3						; add VRAM offset
 		dbf	d1,.find							; repeat max times
 
-		; delete
+		; delete object
 		moveq	#0,d0
 		move.l	d0,address(a0)
 		move.l	d0,x_pos(a0)
@@ -58,7 +58,7 @@ SetUp_ObjAttributesSlotted:
 		move.l	(a1)+,height_pixels(a0)		; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)		; frame number
 		move.b	(a1)+,collision_flags(a0)		; collision number
-		st	objoff_3A(a0)					; reset DPLC frame
+		st	objoff_3A(a0)					; reset DPLC frame (used by Perform_DPLC)
 
 		; set
 		moveq	#2,d0
@@ -212,15 +212,15 @@ Go_CheckPlayerRelease:
 Obj_Song_Fade_Transition:
 		music	mus_FadeOut									; fade out music
 		move.w	#(2*60)-30,objoff_2E(a0)
-		move.l	#Song_Fade_Transition_Wait,address(a0)
+		move.l	#.wait,address(a0)
 
-Song_Fade_Transition_Return:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Song_Fade_Transition_Wait:
+.wait
 		subq.w	#1,objoff_2E(a0)
-		bpl.s	Song_Fade_Transition_Return
+		bpl.s	.return
 		move.b	subtype(a0),d0
 		move.b	d0,(Current_music+1).w
 		bsr.w	Play_Music										; play music
@@ -231,15 +231,15 @@ Song_Fade_Transition_Wait:
 Obj_Song_Fade_ToLevelMusic:
 		music	mus_FadeOut									; fade out music
 		move.w	#2*60,objoff_2E(a0)
-		move.l	#Song_Fade_ToLevelMusic_Wait,address(a0)
+		move.l	#.wait,address(a0)
 
-Song_Fade_ToLevelMusic_Return:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Song_Fade_ToLevelMusic_Wait:
+.wait
 		subq.w	#1,objoff_2E(a0)
-		bpl.s	Song_Fade_ToLevelMusic_Return
+		bpl.s	.return
 		bsr.s	Restore_LevelMusic
 		bra.w	Delete_Current_Sprite
 
@@ -606,238 +606,6 @@ CopyWordData_1:
 		movea.w	(a1)+,a3
 		move.w	(a2)+,(a3)+
 		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Check_CameraXBoundary:
-		move.w	(Camera_X_pos).w,d0
-
-.skipcam
-		tst.w	x_vel(a0)
-		beq.s	.return
-		bmi.s	.left
-		addi.w	#320-16,d0
-		cmp.w	x_pos(a0),d0
-		bhi.s	.return
-		clr.w	x_vel(a0)
-
-.return
-		rts
-; ---------------------------------------------------------------------------
-
-.left
-		addi.w	#16,d0
-		cmp.w	x_pos(a0),d0
-		blo.s		.return2
-		clr.w	x_vel(a0)
-
-.return2
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Check_CameraXBoundary2:
-		move.w	(Camera_X_pos).w,d0
-
-.skipcam
-		tst.w	x_vel(a0)
-		bmi.s	.left
-		add.w	d2,d0
-		cmp.w	x_pos(a0),d0
-		bls.s		.setflipx
-		rts
-; ---------------------------------------------------------------------------
-
-.left
-		add.w	d1,d0
-		cmp.w	x_pos(a0),d0
-		blo.s		.return
-
-.setflipx
-		bchg	#0,render_flags(a0)
-		neg.w	x_vel(a0)
-
-.return
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Resize_MaxYFromX:
-		move.w	(Camera_X_pos).w,d0
-
-.find
-		move.l	(a1)+,d1
-		cmp.w	d1,d0
-		bhi.s	.find
-		swap	d1
-		tst.w	d1
-		bpl.s	.skip
-		andi.w	#$7FFF,d1
-		move.w	d1,(Camera_max_Y_pos).w
-
-.skip
-		move.w	d1,(Camera_target_max_Y_pos).w
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-WaterResize_MaxYFromX:
-		move.w	(Camera_X_pos).w,d0
-
-.find
-		move.l	(a1)+,d1
-		cmp.w	d1,d0
-		bhi.s	.find
-		swap	d1
-		tst.w	d1
-		bpl.s	.skip
-		andi.w	#$7FFF,d1
-		move.w	d1,(Mean_water_level).w
-
-.skip
-		move.w	d1,(Target_water_level).w
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Change_ActSizes:
-		lea	(Level_data_addr_RAM.xstart).w,a1
-		move.l	(a1)+,d0
-		move.l	d0,(Camera_min_X_pos).w
-		move.l	d0,(Camera_target_min_X_pos).w
-		move.l	(a1)+,d0
-		move.l	d0,(Camera_min_Y_pos).w
-		move.l	d0,(Camera_target_min_Y_pos).w
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Change_ActSizes2:
-		lea	(Level_data_addr_RAM.xstart).w,a1
-		move.w	(a1)+,(Camera_stored_min_X_pos).w
-		move.w	(a1)+,(Camera_stored_max_X_pos).w
-		move.w	(a1)+,(Camera_stored_min_Y_pos).w
-		move.w	(a1)+,d1
-		move.w	d1,(Camera_stored_max_Y_pos).w
-		move.w	d1,(Camera_target_max_Y_pos).w
-
-		; create change level size object
-		lea	Child7_ChangeLevSize(pc),a2
-		bra.w	CreateChild7_Normal2
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_IncLevEndXGradual:
-		move.w	(Camera_max_X_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		add.w	d1,d0
-		cmp.w	(Camera_stored_max_X_pos).w,d0
-		bhs.s	.end
-		move.w	d0,(Camera_max_X_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_max_X_pos).w,(Camera_max_X_pos).w
-		bra.w	Delete_Current_Sprite
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_DecLevStartXGradual:
-		move.w	(Camera_min_X_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		sub.w	d1,d0
-		cmp.w	(Camera_stored_min_X_pos).w,d0
-		ble.s		.end
-		move.w	d0,(Camera_min_X_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_min_X_pos).w,(Camera_min_X_pos).w
-		bra.w	Delete_Current_Sprite
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_IncLevEndYGradual:
-		move.w	(Camera_max_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$8000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		add.w	d1,d0
-		cmp.w	(Camera_stored_max_Y_pos).w,d0
-		bgt.s	.end
-		move.w	d0,(Camera_max_Y_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_max_Y_pos).w,(Camera_max_Y_pos).w
-		bra.w	Delete_Current_Sprite
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_DecLevStartYGradual:
-		move.w	(Camera_min_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		sub.w	d1,d0
-		cmp.w	(Camera_stored_min_Y_pos).w,d0
-		ble.s		.end
-		move.w	d0,(Camera_min_Y_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_min_Y_pos).w,(Camera_min_Y_pos).w
-		bra.w	Delete_Current_Sprite
-; ---------------------------------------------------------------------------
-
-Child6_IncLevX:
-		dc.w 1-1
-		dc.l Obj_IncLevEndXGradual
-Child6_DecLevX:
-		dc.w 1-1
-		dc.l Obj_DecLevStartXGradual
-Child6_IncLevY:
-		dc.w 1-1
-		dc.l Obj_IncLevEndYGradual
-Child6_DecLevY:
-		dc.w 1-1
-		dc.l Obj_DecLevStartYGradual
-Child6_DecIncLevX:
-		dc.w 2-1
-		dc.l Obj_DecLevStartXGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndXGradual
-		dc.b 0, 0
-Child1_ActLevelSize:
-		dc.w 3-1
-		dc.l Obj_IncLevEndXGradual
-		dc.b 0, 0
-		dc.l Obj_DecLevStartYGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndYGradual
-		dc.b 0, 0
-Child7_ChangeLevSize:
-		dc.w 4-1
-		dc.l Obj_DecLevStartYGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndYGradual
-		dc.b 0, 0
-		dc.l Obj_DecLevStartXGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndXGradual
-		dc.b 0, 0
 
 ; =============== S U B R O U T I N E =======================================
 

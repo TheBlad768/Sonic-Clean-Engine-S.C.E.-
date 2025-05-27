@@ -155,8 +155,7 @@ _eh_align_offset	equ	$80
 ; ---------------------------------------------------------------
 
 assert:	macro	src, cond, dest, consoleprogram
-	; Assertions only work in DEBUG builds
-	ifdef __DEBUG__
+	ifdef __DEBUG__	; Assertions only work in DEBUG builds
 		move.w	sr, -(sp)
 		_assert.ATTRIBUTE	src, cond, dest, consoleprogram
 		move.w	(sp)+, sr
@@ -165,8 +164,7 @@ assert:	macro	src, cond, dest, consoleprogram
 
 ; Same as "assert", but doesn't save/restore CCR (can be used to save a few cycles)
 _assert:	macro	src, cond, dest, consoleprogram
-	; Assertions only work in DEBUG builds
-	ifdef __DEBUG__
+	ifdef __DEBUG__	; Assertions only work in DEBUG builds
 		if "dest"<>""
 			cmp.ATTRIBUTE	dest, src
 		else
