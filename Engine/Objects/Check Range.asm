@@ -41,17 +41,15 @@ sub_85C7E:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
 		move.w	(Camera_target_max_Y_pos).w,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
-		blo.s		.return
+		blo.s		Init_BossArena3.return
 		move.w	d0,(Camera_min_Y_pos).w
 		move.w	objoff_3A(a0),d0
 		cmp.w	(Camera_X_pos).w,d0
-		bhi.s	.return
+		bhi.s	Init_BossArena3.return
+
+		; jump
 		movea.l	objoff_34(a0),a1
 		jmp	(a1)
-; ---------------------------------------------------------------------------
-
-.return
-		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -69,6 +67,8 @@ Init_BossArena3:
 		move.w	(Camera_max_X_pos).w,(Camera_stored_max_X_pos).w
 		move.l	(a1)+,(Camera_saved_min_Y_pos).w
 		move.l	(a1)+,(Camera_saved_min_X_pos).w
+
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -135,9 +135,11 @@ loc_85D48:
 		moveq	#7,d0
 		and.b	objoff_27(a0),d0
 		cmpi.b	#7,d0
-		bne.s	Check_InTheirRange_Return
+		bne.s	Check_InTheirRange.return
 		clr.w	objoff_1C(a0)
 		clr.w	objoff_26(a0)
+
+		; jump
 		movea.l	objoff_34(a0),a1
 		jmp	(a1)
 
@@ -148,25 +150,27 @@ Check_InTheirRange:
 		move.w	x_pos(a1),d1
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		blt.s		Check_InTheirRange_Fail
+		blt.s		.fail
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		bge.s	Check_InTheirRange_Fail
+		bge.s	.fail
 		move.w	y_pos(a0),d0
 		move.w	y_pos(a1),d1
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		blt.s		Check_InTheirRange_Fail
+		blt.s		.fail
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		bge.s	Check_InTheirRange_Fail
+		bge.s	.fail
+
+		; success
 		moveq	#1,d0
 
-Check_InTheirRange_Return:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Check_InTheirRange_Fail:
+.fail
 		moveq	#0,d0
 		rts
 
@@ -177,35 +181,41 @@ Check_InMyRange:
 		move.w	x_pos(a1),d1
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		blt.s		Check_InMyRange_Fail
+		blt.s		.fail
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		bge.s	Check_InMyRange_Fail
+		bge.s	.fail
 		move.w	y_pos(a0),d0
 		move.w	y_pos(a1),d1
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		blt.s		Check_InMyRange_Fail
+		blt.s		.fail
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		bge.s	Check_InMyRange_Fail
+		bge.s	.fail
+
+		; success
 		moveq	#1,d0
 		rts
 ; ---------------------------------------------------------------------------
 
-Check_InMyRange_Fail:
+.fail
 		moveq	#0,d0
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Check_PlayerInRange:
+		move.w	x_pos(a0),d3
+
+.skipx
+		move.w	y_pos(a0),d4
+
+.main
 		moveq	#0,d0
 		lea	(Player_1).w,a2														; a2=character
 		move.w	x_pos(a2),d1
 		move.w	y_pos(a2),d2
-		move.w	x_pos(a0),d3
-		move.w	y_pos(a0),d4
 		add.w	(a1)+,d3
 		move.w	d3,d5
 		add.w	(a1)+,d5
@@ -241,7 +251,7 @@ Check_PlayerInRange2:
 		cmp.w	(a1),d1
 		bhi.s	.fail
 
-.done
+		; success
 		moveq	#1,d0
 		rts
 ; ---------------------------------------------------------------------------
@@ -300,3 +310,236 @@ Chk_WidthOffScreen:
 .offscreen
 		moveq	#1,d0															; set flag to 1
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Check_CameraXBoundary:
+		move.w	(Camera_X_pos).w,d0
+
+.skipcam
+		tst.w	x_vel(a0)
+		beq.s	.return
+		bmi.s	.left
+		addi.w	#320-16,d0
+		cmp.w	x_pos(a0),d0
+		bhi.s	.return
+		clr.w	x_vel(a0)
+
+.return
+		rts
+; ---------------------------------------------------------------------------
+
+.left
+		addi.w	#16,d0
+		cmp.w	x_pos(a0),d0
+		blo.s		.return2
+		clr.w	x_vel(a0)
+
+.return2
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Check_CameraXBoundary2:
+		move.w	(Camera_X_pos).w,d0
+
+.skipcam
+		tst.w	x_vel(a0)
+		bmi.s	.left
+		add.w	d2,d0
+		cmp.w	x_pos(a0),d0
+		bls.s		.setflipx
+		rts
+; ---------------------------------------------------------------------------
+
+.left
+		add.w	d1,d0
+		cmp.w	x_pos(a0),d0
+		blo.s		.return
+
+.setflipx
+		bchg	#0,render_flags(a0)
+		neg.w	x_vel(a0)
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Resize_MaxYFromX:
+		move.w	(Camera_X_pos).w,d0
+
+.find
+		move.l	(a1)+,d1
+		cmp.w	d1,d0
+		bhi.s	.find
+		swap	d1
+		tst.w	d1
+		bpl.s	.skip
+		andi.w	#$7FFF,d1
+		move.w	d1,(Camera_max_Y_pos).w
+
+.skip
+		move.w	d1,(Camera_target_max_Y_pos).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+WaterResize_MaxYFromX:
+		move.w	(Camera_X_pos).w,d0
+
+.find
+		move.l	(a1)+,d1
+		cmp.w	d1,d0
+		bhi.s	.find
+		swap	d1
+		tst.w	d1
+		bpl.s	.skip
+		andi.w	#$7FFF,d1
+		move.w	d1,(Mean_water_level).w
+
+.skip
+		move.w	d1,(Target_water_level).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Change_ActSizes:
+		lea	(Level_data_addr_RAM.xstart).w,a1
+		move.l	(a1)+,d0
+		move.l	d0,(Camera_min_X_pos).w
+		move.l	d0,(Camera_target_min_X_pos).w
+		move.l	(a1)+,d0
+		move.l	d0,(Camera_min_Y_pos).w
+		move.l	d0,(Camera_target_min_Y_pos).w
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Change_ActSizes2:
+		lea	(Level_data_addr_RAM.xstart).w,a1
+		move.w	(a1)+,(Camera_stored_min_X_pos).w
+		move.w	(a1)+,(Camera_stored_max_X_pos).w
+		move.w	(a1)+,(Camera_stored_min_Y_pos).w
+		move.w	(a1)+,d1
+		move.w	d1,(Camera_stored_max_Y_pos).w
+		move.w	d1,(Camera_target_max_Y_pos).w
+
+		; create change level size object
+		lea	Child7_ChangeLevSize(pc),a2
+		bra.w	CreateChild7_Normal2
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_IncLevEndXGradual:
+		move.w	(Camera_max_X_pos).w,d0
+		move.l	objoff_30(a0),d1
+		addi.l	#$4000,d1
+		move.l	d1,objoff_30(a0)
+		swap	d1
+		add.w	d1,d0
+		cmp.w	(Camera_stored_max_X_pos).w,d0
+		bhs.s	.end
+		move.w	d0,(Camera_max_X_pos).w
+		rts
+; ---------------------------------------------------------------------------
+
+.end
+		move.w	(Camera_stored_max_X_pos).w,(Camera_max_X_pos).w
+		bra.w	Delete_Current_Sprite
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_DecLevStartXGradual:
+		move.w	(Camera_min_X_pos).w,d0
+		move.l	objoff_30(a0),d1
+		addi.l	#$4000,d1
+		move.l	d1,objoff_30(a0)
+		swap	d1
+		sub.w	d1,d0
+		cmp.w	(Camera_stored_min_X_pos).w,d0
+		ble.s		.end
+		move.w	d0,(Camera_min_X_pos).w
+		rts
+; ---------------------------------------------------------------------------
+
+.end
+		move.w	(Camera_stored_min_X_pos).w,(Camera_min_X_pos).w
+		bra.w	Delete_Current_Sprite
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_IncLevEndYGradual:
+		move.w	(Camera_max_Y_pos).w,d0
+		move.l	objoff_30(a0),d1
+		addi.l	#$8000,d1
+		move.l	d1,objoff_30(a0)
+		swap	d1
+		add.w	d1,d0
+		cmp.w	(Camera_stored_max_Y_pos).w,d0
+		bgt.s	.end
+		move.w	d0,(Camera_max_Y_pos).w
+		rts
+; ---------------------------------------------------------------------------
+
+.end
+		move.w	(Camera_stored_max_Y_pos).w,(Camera_max_Y_pos).w
+		bra.w	Delete_Current_Sprite
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_DecLevStartYGradual:
+		move.w	(Camera_min_Y_pos).w,d0
+		move.l	objoff_30(a0),d1
+		addi.l	#$4000,d1
+		move.l	d1,objoff_30(a0)
+		swap	d1
+		sub.w	d1,d0
+		cmp.w	(Camera_stored_min_Y_pos).w,d0
+		ble.s		.end
+		move.w	d0,(Camera_min_Y_pos).w
+		rts
+; ---------------------------------------------------------------------------
+
+.end
+		move.w	(Camera_stored_min_Y_pos).w,(Camera_min_Y_pos).w
+		bra.w	Delete_Current_Sprite
+
+; =============== S U B R O U T I N E =======================================
+
+Child6_IncLevX:
+		dc.w 1-1
+		dc.l Obj_IncLevEndXGradual
+Child6_DecLevX:
+		dc.w 1-1
+		dc.l Obj_DecLevStartXGradual
+Child6_IncLevY:
+		dc.w 1-1
+		dc.l Obj_IncLevEndYGradual
+Child6_DecLevY:
+		dc.w 1-1
+		dc.l Obj_DecLevStartYGradual
+Child6_DecIncLevX:
+		dc.w 2-1
+		dc.l Obj_DecLevStartXGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndXGradual
+		dc.b 0, 0
+Child1_ActLevelSize:
+		dc.w 3-1
+		dc.l Obj_IncLevEndXGradual
+		dc.b 0, 0
+		dc.l Obj_DecLevStartYGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndYGradual
+		dc.b 0, 0
+Child7_ChangeLevSize:
+		dc.w 4-1
+		dc.l Obj_DecLevStartYGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndYGradual
+		dc.b 0, 0
+		dc.l Obj_DecLevStartXGradual
+		dc.b 0, 0
+		dc.l Obj_IncLevEndXGradual
+		dc.b 0, 0
