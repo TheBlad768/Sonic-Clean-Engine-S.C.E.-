@@ -1034,6 +1034,8 @@ jmi macro loc
 ; macros to convert from tile index to art tiles, block mapping or VRAM address
 sprite_priority function x,((x&7)<<7)
 make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
+make_block_tile function addr,flx,fly,pal,pri,((pri&1)<<15)|((pal&3)<<13)|((fly&1)<<12)|((flx&1)<<11)|(addr&tile_mask)
+make_block_tile_pair function addr,flx,fly,pal,pri,((make_block_tile(addr,flx,fly,pal,pri)<<16)|make_block_tile(addr,flx,fly,pal,pri))
 tiles_to_bytes function addr,((addr&$7FF)<<5)
 
 ; function to calculate the location of a tile in plane mappings
