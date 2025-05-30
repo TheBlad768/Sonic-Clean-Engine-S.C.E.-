@@ -38,7 +38,7 @@ DEZ1_BackgroundEvent:
 		bne.s	DEZ1_Transition
 		bsr.s	DEZ1_Deform
 
-.deform:
+.deform
 		lea	DEZ1_BGDeformArray(pc),a4
 		lea	(H_scroll_table).w,a5
 		jsr	(ApplyDeformation).w
