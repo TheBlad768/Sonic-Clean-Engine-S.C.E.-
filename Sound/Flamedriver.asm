@@ -612,7 +612,7 @@ bankswitch macro
 		rept 7
 			rrca
 			ld	(hl), a
-		endm
+		endr
 		ld	(hl), h							; The low bit of h is 0
 	endm
 
@@ -4490,7 +4490,7 @@ zPlaySEGAPCM:
 ; does not need to worry about special cases.
 DAC_Banks:
 ; Set to zero to not use S3/S&K DAC samples:
-		db		zmake68kBank(DacBank1)
+		db	zmake68kBank(DacBank1)
 	if (use_s3_samples<>0)||(use_sk_samples<>0)||(use_s3d_samples<>0)
 		db	zmake68kBank(DAC_81_Data)
 		db	zmake68kBank(DAC_82_83_84_85_Data)
