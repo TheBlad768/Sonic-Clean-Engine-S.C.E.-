@@ -48,33 +48,33 @@ z80_SoundDriverStart:
 ; ---------------------------------------------------------------------------
 zTrack STRUCT DOTS
 	; Playback control bits:
-	; 	0 (01h)		Noise channel (PSG) or FM3 special mode (FM)
-	; 	1 (02h)		Do not attack next note
-	; 	2 (04h)		SFX is overriding this track
-	; 	3 (08h)		'Alternate frequency mode' flag
-	; 	4 (10h)		'Track is resting' flag
-	; 	5 (20h)		'Pitch slide' flag
-	; 	6 (40h)		'Sustain frequency' flag -- prevents frequency from changing again for the lifetime of the track
-	; 	7 (80h)		Track is playing
+	;	0 (01h)		Noise channel (PSG) or FM3 special mode (FM)
+	;	1 (02h)		Do not attack next note
+	;	2 (04h)		SFX is overriding this track
+	;	3 (08h)		'Alternate frequency mode' flag
+	;	4 (10h)		'Track is resting' flag
+	;	5 (20h)		'Pitch slide' flag
+	;	6 (40h)		'Sustain frequency' flag -- prevents frequency from changing again for the lifetime of the track
+	;	7 (80h)		Track is playing
 	PlaybackControl:	ds.b 1	; S&K: 0
 	; Voice control bits:
-	; 	0-1    		FM channel assignment bits (00 = FM1 or FM4, 01 = FM2 or FM5, 10 = FM3 or FM6/DAC, 11 = invalid)
-	; 	2 (04h)		For FM/DAC channels, selects if reg/data writes are bound for part II (set) or part I (unset)
-	; 	3 (08h)		Unknown/unused
-	; 	4 (10h)		Unknown/unused
-	; 	5-6    		PSG Channel assignment bits (00 = PSG1, 01 = PSG2, 10 = PSG3, 11 = Noise)
-	; 	7 (80h)		PSG track if set, FM or DAC track otherwise
+	;	0-1			FM channel assignment bits (00 = FM1 or FM4, 01 = FM2 or FM5, 10 = FM3 or FM6/DAC, 11 = invalid)
+	;	2 (04h)		For FM/DAC channels, selects if reg/data writes are bound for part II (set) or part I (unset)
+	;	3 (08h)		Unknown/unused
+	;	4 (10h)		Unknown/unused
+	;	5-6			PSG Channel assignment bits (00 = PSG1, 01 = PSG2, 10 = PSG3, 11 = Noise)
+	;	7 (80h)		PSG track if set, FM or DAC track otherwise
 	VoiceControl:		ds.b 1	; S&K: 1
 	TempoDivider:		ds.b 1	; S&K: 2
 	DataPointerLow:		ds.b 1	; S&K: 3
-	DataPointerHigh:	ds.b 1	; S&K: 4
+	DataPointerHigh:		ds.b 1	; S&K: 4
 	Transpose:			ds.b 1	; S&K: 5
 	Volume:				ds.b 1	; S&K: 6
 	ModulationCtrl:		ds.b 1	; S&K: 7		; Modulation is on if nonzero. If only bit 7 is set, then it is normal modulation; otherwise, this-1 is index on modulation envelope pointer table
 	VoiceIndex:			ds.b 1	; S&K: 8		; FM instrument/PSG voice
-	StackPointer:		ds.b 1	; S&K: 9		; For call subroutine coordination flag
-	AMSFMSPan:			ds.b 1	; S&K: 0Ah
-	DurationTimeout:	ds.b 1	; S&K: 0Bh
+	StackPointer:			ds.b 1	; S&K: 9		; For call subroutine coordination flag
+	AMSFMSPan:		ds.b 1	; S&K: 0Ah
+	DurationTimeout:		ds.b 1	; S&K: 0Bh
 	SavedDuration:		ds.b 1	; S&K: 0Ch		; Already multiplied by timing divisor
 	; ---------------------------------
 	; Alternate names for same offset:
@@ -82,7 +82,7 @@ zTrack STRUCT DOTS
 	FreqLow:			ds.b 1	; S&K: 0Dh		; For FM/PSG channels
 	; ---------------------------------
 	FreqHigh:			ds.b 1	; S&K: 0Eh		; For FM/PSG channels
-	VoiceSongID:		ds.b 1	; S&K: 0Fh		; For using voices from a different song
+	VoiceSongID:			ds.b 1	; S&K: 0Fh		; For using voices from a different song
 	DACSFXPlaying:
 	Detune:				ds.b 1	; S&K: 10h/11h	; In S&K, some places used 11h instead of 10h
 	VolEnv:				ds.b 1	; S&K: 17h		; Used for dynamic volume adjustments
@@ -97,7 +97,7 @@ zTrack STRUCT DOTS
 	; ---------------------------------
 	TLPtrLow:			ds.b 1	; S&K: 1Ch
 	TLPtrHigh:			ds.b 1	; S&K: 1Dh
-	NoteFillTimeout:	ds.b 1	; S&K: 1Eh
+	NoteFillTimeout:		ds.b 1	; S&K: 1Eh
 	NoteFillMaster:		ds.b 1	; S&K: 1Fh
 	ModulationPtrLow:	ds.b 1	; S&K: 20h
 	ModulationPtrHigh:	ds.b 1	; S&K: 21h
@@ -113,8 +113,8 @@ zTrack STRUCT DOTS
 	ModulationSpeed:			; S&K: 25h
 	ModEnvIndex:		ds.b 1	; S&K: 25h
 	; ---------------------------------
-	ModulationDelta:	ds.b 1	; S&K: 26h
-	ModulationSteps:	ds.b 1	; S&K: 27h
+	ModulationDelta:		ds.b 1	; S&K: 26h
+	ModulationSteps:		ds.b 1	; S&K: 27h
 	LoopCounters:		ds.b 2	; S&K: 28h		; Might overflow into the following data
 	VoicesLow:			ds.b 1	; S&K: 2Ah		; Low byte of pointer to track's voices, used only if zUpdatingSFX is set
 	VoicesHigh:			ds.b 1	; S&K: 2Bh		; High byte of pointer to track's voices, used only if zUpdatingSFX is set
@@ -4619,11 +4619,11 @@ ModEnv_02:	db    0,   0,   0,   0, 13h, 26h, 39h, 4Ch, 5Fh, 72h, 7Fh, 72h, ModEn
 ModEnv_03:	db    1,   2,   3,   2,   1,   0,  -1,  -2,  -3,  -2,  -1,   0, ModEnvJumpTo,   0
 ModEnv_04:	db    0,   0,   1,   3,   1,   0,  -1,  -3,  -1,   0, ModEnvJumpTo,   2
 ModEnv_05:	db    0,   0,   0,   0,   0, 0Ah, 14h, 1Eh, 14h, 0Ah,   0, -10, -20, -30, -20, -10
-          	db  ModEnvJumpTo,   4
+	db  ModEnvJumpTo,   4
 ModEnv_06:	db    0,   0,   0,   0, 16h, 2Ch, 42h, 2Ch, 16h,   0, -22, -44, -66, -44, -22
-          	db    ModEnvJumpTo, 3
+	db    ModEnvJumpTo, 3
 ModEnv_07:	db    1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1,   0
-          	db  ModEnvJumpTo,   1
+	db  ModEnvJumpTo,   1
 ; ---------------------------------------------------------------------------
 ; ===========================================================================
 ; Volume Envelope Pointers
@@ -4643,87 +4643,87 @@ VolEnv_00:	db    2, VolEnvStopTrack
 VolEnv_01:
 VolEnv_0E:	db    0,   2,   4,   6,   8, 10h, VolEnvStopTrack
 VolEnv_02:	db    2,   1,   0,   0,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2
-          	db    2,   3,   3,   3,   4,   4,   4,   5, VolEnvRestTrack
+	db    2,   3,   3,   3,   4,   4,   4,   5, VolEnvRestTrack
 VolEnv_03:	db    0,   0,   2,   3,   4,   4,   5,   5,   5,   6,   6, VolEnvRestTrack
 VolEnv_04:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, VolEnvRestTrack
 VolEnv_05:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, VolEnvRestTrack
 VolEnv_06:	db    1, 0Ch,   3, 0Fh,   2,   7,   3, 0Fh, VolEnvReset
 VolEnv_07:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Eh, 0Fh
-          	db  VolEnvStopTrack
+	db  VolEnvStopTrack
 VolEnv_08:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, VolEnvRestTrack
 VolEnv_09:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
-          	db    4,   4,   5,   5, VolEnvRestTrack
+	db    4,   4,   5,   5, VolEnvRestTrack
 VolEnv_0A:	db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0,-10h, VolEnvReset
 VolEnv_0B:	db    0,   0,   1,   1,   3,   3,   4,   5, VolEnvStopTrack
 VolEnv_0C:	db    0, VolEnvRestTrack
 VolEnv_0D:	db    2, VolEnvStopTrack
 VolEnv_0F:	db    9,   9,   9,   8,   8,   8,   7,   7,   7,   6,   6,   6,   5,   5,   5,   4
-          	db    4,   4,   3,   3,   3,   2,   2,   2,   1,   1,   1,   0,   0,   0, VolEnvRestTrack
+	db    4,   4,   3,   3,   3,   2,   2,   2,   1,   1,   1,   0,   0,   0, VolEnvRestTrack
 VolEnv_10:	db    1,   1,   1,   0,   0,   0, VolEnvRestTrack
 VolEnv_11:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, VolEnvRestTrack
 VolEnv_12:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, VolEnvRestTrack
 VolEnv_13:	db  0Ah,   5,   0,   4,   8, VolEnvStopTrack
 VolEnv_14:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Eh, 0Fh
-          	db  VolEnvStopTrack
+	db  VolEnvStopTrack
 VolEnv_15:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, VolEnvRestTrack
 VolEnv_16:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
-          	db    4,   4,   5,   5, VolEnvRestTrack
+	db    4,   4,   5,   5, VolEnvRestTrack
 VolEnv_17:	db  10h, 20h, 30h, 40h, 30h, 20h, 10h,   0, VolEnvReset
 VolEnv_18:	db    0,   0,   1,   1,   3,   3,   4,   5, VolEnvStopTrack
 VolEnv_19:	db    0,   2,   4,   6,   8, 16h, VolEnvStopTrack
 VolEnv_1A:	db    0,   0,   1,   1,   3,   3,   4,   5, VolEnvStopTrack
 VolEnv_1B:	db    4,   4,   4,   4,   3,   3,   3,   3,   2,   2,   2,   2,   1,   1,   1,   1
-          	db  VolEnvStopTrack
+	db  VolEnvStopTrack
 VolEnv_1C:	db    0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3
-          	db    4,   4,   4,   4,   5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7
-          	db    8,   8,   8,   8,   9,   9,   9,   9, 0Ah, 0Ah, 0Ah, 0Ah, VolEnvRestTrack
+	db    4,   4,   4,   4,   5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7
+	db    8,   8,   8,   8,   9,   9,   9,   9, 0Ah, 0Ah, 0Ah, 0Ah, VolEnvRestTrack
 VolEnv_1D:	db    0, 0Ah, VolEnvStopTrack
 VolEnv_1E:	db    0,   2,   4, VolEnvRestTrack
 VolEnv_1F:	db  30h, 20h, 10h,   0,   0,   0,   0,   0,   8, 10h, 20h, 30h, VolEnvRestTrack
 VolEnv_20:	db    0,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   6,   6,   6,   8,   8
-          	db  0Ah, VolEnvStopTrack
+	db  0Ah, VolEnvStopTrack
 VolEnv_21:	db    0,   2,   3,   4,   6,   7, VolEnvRestTrack
 VolEnv_22:	db    2,   1,   0,   0,   0,   2,   4,   7, VolEnvRestTrack
 VolEnv_23:	db  0Fh,   1,   5, VolEnvStopTrack
 VolEnv_24:	db    8,   6,   2,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Ch, 0Dh, 0Eh, 0Fh
-          	db  10h, VolEnvStopTrack
+	db  10h, VolEnvStopTrack
 VolEnv_25:	db    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1
-          	db    1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
-          	db    3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4,   4
-          	db    4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6
-          	db    6,   6,   6,   6,   6,   6,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7
-          	db    8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   9,   9,   9,   9,   9,   9
-          	db    9,   9, VolEnvStopTrack
+	db    1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
+	db    3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4,   4
+	db    4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6
+	db    6,   6,   6,   6,   6,   6,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7
+	db    8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   9,   9,   9,   9,   9,   9
+	db    9,   9, VolEnvStopTrack
 VolEnv_26:	db    0,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5, VolEnvStopTrack
 VolEnv_27:	db	  0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5
-          	db	  5,   5,   6,   6,   6,   7, VolEnvRestTrack
+	db	  5,   5,   6,   6,   6,   7, VolEnvRestTrack
 VolEnv_28:	db    0,   2,   4,   6,   8, 10h, VolEnvRestTrack
 VolEnv_29:	db	  0,   0,   1,   1,   2,   2,   3,   3,   4,   4,   5,   5,   6,   6,   7,   7, VolEnvRestTrack
 VolEnv_2A:	db	  0,   0,   2,   3,   4,   4,   5,   5,   5,   6, VolEnvRestTrack
 VolEnv_2C:	db	  3,   3,   3,   2,   2,   2,   2,   1,   1,   1,   0,   0,   0,   0, VolEnvRestTrack
 VolEnv_2B:	db	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1
-          	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2
-          	db	  2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
+	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2
+	db	  2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
 VolEnv_2D:	db	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2
-          	db	  3,   3,   3,   4,   4,   4,   5,   5,   5,   6,   7, VolEnvRestTrack
+	db	  3,   3,   3,   4,   4,   4,   5,   5,   5,   6,   7, VolEnvRestTrack
 VolEnv_2E:	db	  0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2
-          	db	  3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   5,   5,   5,   5,   5,   6
-          	db	  6,   6,   6,   6,   7,   7,   7, VolEnvRestTrack
+	db	  3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   5,   5,   5,   5,   5,   6
+	db	  6,   6,   6,   6,   7,   7,   7, VolEnvRestTrack
 VolEnv_2F:	db	  0,   1,   2,   3,   4,   5,   6,   7,   8,   9, 0Ah, 0Bh, 0Ch, 0Dh, 0Eh, 0Fh, VolEnvRestTrack
 VolEnv_30:	db	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1
-          	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1
-          	db	  1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2
-          	db	  2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
+	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1
+	db	  1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2
+	db	  2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
 VolEnv_31:	db	  4,   4,   4,   3,   3,   3,   2,   2,   2,   1,   1,   1,   1,   1,   1,   1
-          	db	  2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
+	db	  2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
 VolEnv_32:	db	  4,   4,   3,   3,   2,   2,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1
-          	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2
-          	db	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
-          	db	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3
-          	db	  3,   3,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4
-          	db	  4,   4,   4,   4,   4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5
-          	db	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6,   6,   6
-          	db	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   7, VolEnvRestTrack
+	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2
+	db	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
+	db	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3
+	db	  3,   3,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4
+	db	  4,   4,   4,   4,   4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5
+	db	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6,   6,   6
+	db	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   7, VolEnvRestTrack
 VolEnv_33:	db	0Eh, 0Dh, 0Ch, 0Bh, 0Ah,   9,   8,   7,   6,   5,   4,   3,   2,   1,   0, VolEnvRestTrack
 ; ---------------------------------------------------------------------------
 ; ===========================================================================

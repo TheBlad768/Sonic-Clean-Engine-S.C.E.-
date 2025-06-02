@@ -19,7 +19,6 @@ ArtUnc_FireShield:					binclude "Objects/Players/Shields/Uncompressed Art/Fire S
 ArtUnc_LightningShield:				binclude "Objects/Players/Shields/Uncompressed Art/Lightning Shield.unc"
 	even
 ArtUnc_LightningShield_Sparks:		binclude "Objects/Players/Shields/Uncompressed Art/Sparks.unc"
-ArtUnc_LightningShield_Sparks_end
 	even
 ArtUnc_BubbleShield:					binclude "Objects/Players/Shields/Uncompressed Art/Bubble Shield.unc"
 	even

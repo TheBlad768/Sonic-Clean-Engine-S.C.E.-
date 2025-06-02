@@ -84,7 +84,7 @@ VInt_Lag_Level:
 		st	(H_int_flag).w											; set HInt flag
 		stopZ80
 		tst.b	(Water_full_screen_flag).w									; is water above top of screen?
-		bne.s	VInt_Lag_FullyUnderwater 							; if yes, branch
+		bne.s	VInt_Lag_FullyUnderwater								; if yes, branch
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	VInt_Lag_Water_Cont
 ; ---------------------------------------------------------------------------

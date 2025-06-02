@@ -636,30 +636,30 @@ __FSTRING_PushArgument: macro OPERAND,DEST
 ; WARNING! Incomplete!
 __FSTRING_GenerateArgumentsCode: macro string
 
-	.__pos:	set 	strstr(string,"%<")		; token position
+	.__pos:	set		strstr(string,"%<")		; token position
 	.__sp:	set		0						; stack displacement
 	.__str:	set		string
 
 	; Parse string itself
 	while (.__pos>=0)
 
-    	; Find the last occurance "%<" in the string
-    	while ( strstr(substr(.__str,.__pos+2,0),"%<")>=0 )
-			.__pos: 	set		strstr(substr(.__str,.__pos+2,0),"%<")+.__pos+2
+	; Find the last occurance "%<" in the string
+	while ( strstr(substr(.__str,.__pos+2,0),"%<")>=0 )
+			.__pos:	set		strstr(substr(.__str,.__pos+2,0),"%<")+.__pos+2
 		endm
 		.__substr:	set		substr(.__str,.__pos,0)
 
 		; Retrive expression in brackets following % char
-    	.__endpos:	set		strstr(.__substr,">")
+	.__endpos:	set		strstr(.__substr,">")
 		if (.__endpos<0) ; Fix bizzare AS bug as stsstr() fails to check the last character of string
 			.__endpos:	set		strlen(.__substr)-1
 		endif
-    	.__midpos:	set		strstr(substr(.__substr,5,0)," ")
-    	if ((.__midpos<0)||(.__midpos+5>.__endpos))
+	.__midpos:	set		strstr(substr(.__substr,5,0)," ")
+	if ((.__midpos<0)||(.__midpos+5>.__endpos))
 			.__midpos:	set		.__endpos
 		else
 			.__midpos:	set		.__midpos+5
-    	endif
+	endif
 		.__type:		set		substr(.__substr,2,2)	; .type
 
 		; Expression is an effective address (e.g. %(.w d0 hex) )
@@ -712,14 +712,14 @@ __FSTRING_GenerateDecodedString:	macro string
 		endif
 
 		; Retrive expression in brakets following % char
-    	.__endpos:	set		strstr(substr(string,.__pos+1,0),">")+.__pos+1 
+	.__endpos:	set		strstr(substr(string,.__pos+1,0),">")+.__pos+1 
 		if (.__endpos<=.__pos) ; Fix bizzare AS bug as stsstr() fails to check the last character of string
 			.__endpos:	set		strlen(string)-1
 		endif
-    	.__midpos:	set		strstr(substr(string,.__pos+5,0)," ")+.__pos+5
-    	if ((.__midpos<.__pos+5)||(.__midpos>.__endpos))
+	.__midpos:	set		strstr(substr(string,.__pos+5,0)," ")+.__pos+5
+	if ((.__midpos<.__pos+5)||(.__midpos>.__endpos))
 			.__midpos:	set		.__endpos
-    	endif
+	endif
 		.__type:		set		substr(string,.__pos+1+1,2)		; .type
 
 		; Expression is an effective address (e.g. %<.w d0 hex> )
@@ -728,7 +728,7 @@ __FSTRING_GenerateDecodedString:	macro string
 
 			; Validate format setting ("param")
 			if (strlen(.__param)<1)
-				.__param: 	set		"hex"			; if param is ommited, set it to "hex"
+				.__param:	set		"hex"			; if param is ommited, set it to "hex"
 			elseif (.__param=="signed")
 				.__param:	set		"hex+signed"	; if param is "signed", correct it to "hex+signed"
 			endif

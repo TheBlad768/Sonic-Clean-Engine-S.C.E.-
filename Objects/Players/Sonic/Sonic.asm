@@ -2771,10 +2771,10 @@ loc_12A2A:
 		bpl.w	SAnim_Delay
 		mvabs.w	ground_vel(a0),d2
 		add.w	(Camera_H_scroll_shift).w,d2
-		lea	SonAni_Roll2(pc),a1 	; use roll 2 animation
+		lea	SonAni_Roll2(pc),a1	; use roll 2 animation
 		cmpi.w	#$600,d2
 		bhs.s	loc_12A5E
-		lea	SonAni_Roll(pc),a1 	; use roll animation
+		lea	SonAni_Roll(pc),a1	; use roll animation
 
 loc_12A5E:
 		neg.w	d2
