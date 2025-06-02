@@ -1572,7 +1572,7 @@ dScroll_Data macro pixel,size,velocity,plane
 ; macro for generating standard strings
 standardstr macro str
 	save
-	codepage	STANDARD
+	codepage STANDARD
 	dc.b strlen(str)-1, str
 	restore
     endm
@@ -1580,7 +1580,7 @@ standardstr macro str
 ; macro for generating level select strings
 levselstr macro str
 	save
-	codepage	LEVELSCREEN
+	codepage LEVELSCREEN
 	dc.b strlen(str)-1, str
 	restore
     endm
