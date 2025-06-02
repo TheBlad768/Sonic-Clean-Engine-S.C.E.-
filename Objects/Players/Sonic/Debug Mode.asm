@@ -125,7 +125,7 @@ Debug_Mode:
 		move.l	d3,x_pos(a0)
 
 .chgitem
-		btst	#button_A,(Ctrl_1_held).w 								; is button A held?
+		btst	#button_A,(Ctrl_1_held).w								; is button A held?
 		beq.s	.createitem										; if not, branch
 		btst	#button_C,(Ctrl_1_pressed).w							; is button C pressed?
 		beq.s	.nextitem										; if not, branch
