@@ -539,7 +539,7 @@ MPCM_Debugger_LoadSampleTableException:
 ; ------------------------------------------------------------------------------
 .ErrorCodeToDescription:
 	;		Raw error code							String pointer
-	dc.l	(MPCM_ST_TOO_MANY_SAMPLES<<24) 			| .Str_TooManySamples
+	dc.l	(MPCM_ST_TOO_MANY_SAMPLES<<24)			| .Str_TooManySamples
 	dc.l	(MPCM_ST_UNKNOWN_SAMPLE_TYPE<<24)		| .Str_UnknownSampleType
 	dc.l	(MPCM_ST_PITCH_NOT_SET<<24)				| .Str_PitchNotSet
 	dc.l	(MPCM_ST_WAVE_INVALID_HEADER<<24)		| .Str_WaveInvalidHeader

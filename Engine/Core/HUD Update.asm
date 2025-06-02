@@ -87,15 +87,15 @@ UpdateHUD:
 .drawtimer
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$28),d0
 		moveq	#0,d1
-		move.b	(Timer_minute).w,d1 							; load minutes
+		move.b	(Timer_minute).w,d1							; load minutes
 		bsr.w	DrawSingleDigitNumber
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$2C),d0
 		moveq	#0,d1
-		move.b	(Timer_second).w,d1 							; load seconds
+		move.b	(Timer_second).w,d1							; load seconds
 		bsr.w	DrawTwoDigitNumber
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$32),d0
 		moveq	#0,d1
-		move.b	(Timer_frame).w,d1 							; load centiseconds
+		move.b	(Timer_frame).w,d1							; load centiseconds
 		move.b	LUT_HUDCentiseconds(pc,d1.w),d1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(Timer).w
 		bne.s	.skipt

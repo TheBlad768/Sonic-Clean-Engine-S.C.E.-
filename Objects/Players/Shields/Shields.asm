@@ -35,7 +35,7 @@ Obj_FireShield:
 		bne.w	.return											; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)						; is player in their 'blank' animation?
 		beq.w	.return											; if so, do not display and do not update variables
-		btst	#Status_Shield,status_secondary(a2) 					; should the player still have a shield?
+		btst	#Status_Shield,status_secondary(a2)						; should the player still have a shield?
 		beq.w	.destroy											; if not, change to Insta-Shield
 		btst	#Status_Underwater,status(a2)							; is player underwater?
 		bne.s	.destroyunderwater								; if so, branch

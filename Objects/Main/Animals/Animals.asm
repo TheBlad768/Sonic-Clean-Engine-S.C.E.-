@@ -175,7 +175,7 @@ Animal_Ending_Index:
 		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($553,0,0), -$300, -$400		; 4 ($13) (Rabbit)
 		objanimalending Obj_Animal_SingleBounce, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 5 ($14) (Penguin)
 		objanimalending Obj_Animal_LandJump, Map_Animals5, make_art_tile($573,0,0), -$180, -$300		; 6 ($15) (Penguin)
-		objanimalending Obj_Animal_SingleBounce, Map_Animals4, make_art_tile($585,0,0), -$140, -$180 		; 7 ($16) (Seal)
+		objanimalending Obj_Animal_SingleBounce, Map_Animals4, make_art_tile($585,0,0), -$140, -$180		; 7 ($16) (Seal)
 		objanimalending Obj_Animal_LandJump, Map_Animals3, make_art_tile($593,0,0), -$1C0, -$300		; 8 ($17) (Pig)
 		objanimalending Obj_Animal_FlyBounce, Map_Animals1, make_art_tile($565,0,0), -$200, -$300		; 9 ($18) (Chicken)
 		objanimalending Obj_Animal_DoubleBounce, Map_Animals2, make_art_tile($5B3,0,0), -$280, -$380		; A ($19) (Squirrel)

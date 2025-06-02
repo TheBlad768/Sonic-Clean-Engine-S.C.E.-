@@ -710,7 +710,7 @@ HandlePause:
 	bsr.w	PWMSilenceAll
     endif
 
-    	; Pause DAC channel
+	; Pause DAC channel
 	MPCM_stopZ80_safe
 	move.b	#Z_MPCM_COMMAND_PAUSE,(SMPS_z80_ram+Z_MPCM_CommandInput).l	; pause DAC
 	MPCM_startZ80_safe
@@ -3007,7 +3007,7 @@ cfFadeInToPrevious:
 .fadefm:
 	lea	SMPS_Track.len(a5),a5
 
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7 	; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
 ; loc_72B3A:
 .fmloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?

@@ -56,7 +56,7 @@ Render_Sprites_LevelLoop:
 		lea	2(a5),a4
 
 Render_Sprites_ObjLoop:
-		movea.w	(a4)+,a0 							; a0=object
+		movea.w	(a4)+,a0							; a0=object
 
 		; debug
 		assert.l	address(a0),ne					; raise an error if there is no object address here

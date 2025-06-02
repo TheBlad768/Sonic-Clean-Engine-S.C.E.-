@@ -8,7 +8,7 @@
 ; Performs all queued DMA transfers and clears the DMA queue.
 ;
 ; Output:
-; 	a1,a5	trashed
+;	a1,a5	trashed
 ; ---------------------------------------------------------------------------
 ; ROUTINE InitDMAQueue
 ; Pre-initializes the DMA queue with VDP register numbers in alternating bytes.
@@ -16,24 +16,24 @@
 ; write to this region of RAM.
 ;
 ; Output:
-; 	a0,d0,d1	trashed
+;	a0,d0,d1	trashed
 ; ---------------------------------------------------------------------------
 ; ROUTINE Add_To_DMA_Queue / QueueDMATransfer
 ; Queues a DMA with parameters given in registers.
 ;
 ; Options:
-; 	AssumeSourceAddressInBytes (default 1)
-; 	AssumeSourceAddressIsRAMSafe (default 0)
-; 	UseRAMSourceSafeDMA (default 1&(AssumeSourceAddressIsRAMSafe==0))
-; 	Use128kbSafeDMA (default 0)
-; 	UseVIntSafeDMA (default 0)
+;	AssumeSourceAddressInBytes (default 1)
+;	AssumeSourceAddressIsRAMSafe (default 0)
+;	UseRAMSourceSafeDMA (default 1&(AssumeSourceAddressIsRAMSafe==0))
+;	Use128kbSafeDMA (default 0)
+;	UseVIntSafeDMA (default 0)
 ; Input:
-; 	d1	Source address (in bytes, or in words if AssumeSourceAddressInBytes is
-; 		set to 0)
-; 	d2	Destination address
-; 	d3	Transfer length (in words)
+;	d1	Source address (in bytes, or in words if AssumeSourceAddressInBytes is
+;		set to 0)
+;	d2	Destination address
+;	d3	Transfer length (in words)
 ; Output:
-; 	d0,d1,d2,d3,a1	trashed
+;	d0,d1,d2,d3,a1	trashed
 ;
 ; With the default settings, runs in:
 ; * 48(11/0) cycles if queue is full (DMA discarded)
@@ -70,11 +70,11 @@
 ; * a register initialized with `vdpCommReg <reg>,VRAM,DMA`
 ;
 ; Options:
-; 	UseVIntSafeDMA (default 0)
+;	UseVIntSafeDMA (default 0)
 ; Input:
-; 	Source address (in bytes), transfer length (in bytes), destination address
+;	Source address (in bytes), transfer length (in bytes), destination address
 ; Output:
-; 	d0,a1	trashed; avoid using these for passing destination as a register
+;	d0,a1	trashed; avoid using these for passing destination as a register
 ;
 ; With the default settings, runs in:
 ; * 32(7/0) cycles if queue is full (DMA discarded)

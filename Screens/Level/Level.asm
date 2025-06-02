@@ -50,7 +50,7 @@ LevelScreen:
 .cnotheld
 		btst	#button_A,(Ctrl_1_held).w												; is A button held?
 		beq.s	.anotheld															; if not, branch
-		st	(Debug_mode_flag).w 													; enable debug mode
+		st	(Debug_mode_flag).w													; enable debug mode
 
 .anotheld
 	endif

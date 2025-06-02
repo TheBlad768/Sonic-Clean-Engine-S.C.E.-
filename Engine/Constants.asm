@@ -293,9 +293,9 @@ id =									objoff_00							; long
 address =							id									; long
 render_flags =						objoff_04							; bitfield ; refer to SCHG for details
 height_pixels =						objoff_06							; byte
-width_pixels =		 				objoff_07							; byte
-priority =		 	 				objoff_08							; word ; in units of $80
-art_tile =		 					objoff_0A							; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
+width_pixels =						objoff_07							; byte
+priority =							objoff_08							; word ; in units of $80
+art_tile =							objoff_0A							; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
 mappings =							objoff_0C							; long
 x_pos =								objoff_10							; word, or long when extra precision is required
 x_sub =								x_pos+2								; word
@@ -339,10 +339,10 @@ ros_addr =							objoff_3C							; word ; the RAM address whose bit to clear whe
 routine_secondary =					objoff_3C							; byte ; used by monitors for this purpose at least
 vram_art =							objoff_40							; word ; address of art in VRAM (same as art_tile * $20)
 parent =								objoff_42							; word ; address of the object that owns or spawned this one, if applicable
-child_dx = 							objoff_42							; byte ; X offset of child relative to parent
-child_dy = 							objoff_43							; byte ; Y offset of child relative to parent
-parent4 = 							objoff_44							; word
-parent3 = 							objoff_46							; word ; parent of child objects
+child_dx =							objoff_42							; byte ; X offset of child relative to parent
+child_dy =							objoff_43							; byte ; Y offset of child relative to parent
+parent4 =							objoff_44							; word
+parent3 =							objoff_46							; word ; parent of child objects
 parent2 =							objoff_48							; word ; several objects use this instead
 respawn_addr =						objoff_48							; word ; the address of this object's entry in the respawn table
 
@@ -426,7 +426,7 @@ obRespawnNo =						respawn_addr						; word ; the address of this object's entry
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
 ; ---------------------------------------------------------------------------
 
-mainspr_childsprites 					= objoff_16							; word ; amount of child sprites
+mainspr_childsprites					= objoff_16							; word ; amount of child sprites
 
 subspr_data							= objoff_18
 sub2_x_pos							= objoff_18

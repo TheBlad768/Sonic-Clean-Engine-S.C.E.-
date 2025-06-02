@@ -14,3 +14,5 @@ SUPPORTED FORMATS:
         s3k - Sonic 3K combined layout (FG+BG)
         sce - Sonic Clean Engine combined layout (FG+BG)
         scex - Extended Sonic Clean Engine combined layout (WORD-sized chunk IDs, FG+BG)
+
+ONLY LOWERCASE LETTERS ARE SUPPORTED
