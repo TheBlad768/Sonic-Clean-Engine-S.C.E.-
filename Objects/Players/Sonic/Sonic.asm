@@ -516,13 +516,13 @@ loc_11056:
 
 Sonic_ChgFallAnim:
 		btst	#Status_Roll,status(a0)			; is Sonic rolling?
-		bne.s	.return					 	; if yes, branch
+		bne.s	.return						; if yes, branch
 		btst	#Status_OnObj,status(a0)			; is Sonic standing on an object?
-		bne.s	.return 						; if yes, branch
+		bne.s	.return						; if yes, branch
 		tst.b	flip_angle(a0)					; flip angle?
-		bne.s	.return 						; if yes, branch
+		bne.s	.return						; if yes, branch
 		tst.b	anim(a0)						; walk animation?
-		bne.s	.return 						; if not, branch
+		bne.s	.return						; if not, branch
 		moveq	#btnABC,d0					; read only A/B/C buttons
 		and.b	(Ctrl_1_pressed_logical).w,d0	; get button presses
 		beq.s	.return
@@ -2525,10 +2525,10 @@ loc_126DC:
 		add.w	d2,d2
 
 loc_1270A:
-		lea	SonAni_Run(pc),a1 	; use running	animation
+		lea	SonAni_Run(pc),a1	; use running	animation
 		cmpi.w	#$600,d2
 		bhs.s	loc_12724
-		lea	SonAni_Walk(pc),a1 	; use walking animation
+		lea	SonAni_Walk(pc),a1	; use walking animation
 		add.b	d0,d0
 
 loc_12724:
