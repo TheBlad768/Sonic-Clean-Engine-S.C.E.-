@@ -4740,10 +4740,18 @@ VolEnv_33:	db	0Eh, 0Dh, 0Ch, 0Bh, 0Ah,   9,   8,   7,   6,   5,   4,   3,   2,  
 ; MUSIC BANKS
 ; ===========================================================================
 z80_MusicBanks:
+
+	; Levels
 	db zmake68kBank(MusData_DEZ)
+
+	; Bosses
 	db zmake68kBank(MusData_Boss)
 	db zmake68kBank(MusData_Boss2)
+
+	; Main
 	db zmake68kBank(MusData_Invin)
+
+	; End
 	db zmake68kBank(MusData_Through)
 	db zmake68kBank(MusData_Drowning)
 ; ---------------------------------------------------------------------------
