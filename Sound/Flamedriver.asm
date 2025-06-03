@@ -819,7 +819,13 @@ zInitAudioDriver:
 		jr	z, .loop						; Loop if c = 0
 
 		call	zMusicFade					; Stop all music
+
+	if (use_s3_samples<>0)||(use_sk_samples<>0)||(use_s3d_samples<>0)
 		ld	a, zmake68kBank(DacBank2)		; Set song bank to second DAC bank (default value)
+	else
+		ld	a, zmake68kBank(DacBank4)		; Set song bank to second DAC bank (default value)
+	endif
+
 		ld	(zSongBank), a					; Store it
 		xor	a								; a = 0
 		ld	(zSpindashRev), a				; Reset spindash rev
@@ -4470,7 +4476,7 @@ zPlaySEGAPCM:
 		nop
 		nop
 
-		ld	b, 0Ch							; Loop counter
+		ld	b, 0Ah							; Loop counter
 		djnz	$							; Loop in this instruction, decrementing b each iteration, until b = 0
 
 		inc	hl								; Advance to next byte of SEGA PCM
@@ -4490,7 +4496,11 @@ zPlaySEGAPCM:
 ; does not need to worry about special cases.
 DAC_Banks:
 ; Set to zero to not use S3/S&K DAC samples:
+	if (use_s3_samples<>0)||(use_sk_samples<>0)||(use_s3d_samples<>0)
 		db	zmake68kBank(DacBank1)
+	else
+		db	zmake68kBank(DacBank4)
+	endif
 	if (use_s3_samples<>0)||(use_sk_samples<>0)||(use_s3d_samples<>0)
 		db	zmake68kBank(DAC_81_Data)
 		db	zmake68kBank(DAC_82_83_84_85_Data)
