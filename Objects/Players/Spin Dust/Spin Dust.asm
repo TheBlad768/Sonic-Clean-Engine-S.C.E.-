@@ -194,6 +194,8 @@ SplashDrown_Load_DPLC:
 		cmp.b	dashdust_prev_frame(a0),d0
 		beq.s	.return
 		move.b	d0,dashdust_prev_frame(a0)
+
+		; load
 		add.w	d0,d0
 		lea	DPLC_DashSplashDrown(pc),a2
 		adda.w	(a2,d0.w),a2
@@ -202,7 +204,7 @@ SplashDrown_Load_DPLC:
 		bmi.s	.return
 		move.w	vram_art(a0),d4
 
-.loop
+.readentry
 		moveq	#0,d1
 		move.w	(a2)+,d1
 		move.w	d1,d3
@@ -217,7 +219,7 @@ SplashDrown_Load_DPLC:
 		add.w	d3,d4
 		add.w	d3,d4
 		jsr	(Add_To_DMA_Queue).w
-		dbf	d5,.loop
+		dbf	d5,.readentry
 
 .return
 		rts

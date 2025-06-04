@@ -2817,6 +2817,8 @@ Sonic_Load_PLC2:
 		cmp.b	(Player_prev_frame).w,d0
 		beq.s	.return
 		move.b	d0,(Player_prev_frame).w
+
+		; load
 		add.w	d0,d0
 		lea	(DPLC_Sonic).l,a2
 		adda.w	(a2,d0.w),a2
@@ -2826,7 +2828,7 @@ Sonic_Load_PLC2:
 		move.w	#tiles_to_bytes(ArtTile_Sonic),d4
 		move.l	#dmaSource(ArtUnc_Sonic),d6
 
-.loop
+.readentry
 		moveq	#0,d1
 		move.w	(a2)+,d1
 		move.w	d1,d3
@@ -2841,7 +2843,7 @@ Sonic_Load_PLC2:
 		add.w	d3,d4
 		add.w	d3,d4
 		jsr	(Add_To_DMA_Queue).w
-		dbf	d5,.loop
+		dbf	d5,.readentry
 
 .return
 		rts
