@@ -59,8 +59,10 @@ sign_rosaddr			= objoff_3C	; .w
 
 Obj_EndSign:
 
+.artsize	:= (ArtUnc_SignpostStub_end-ArtUnc_SignpostStub)&$FFFF
+
 		; load stub art
-		QueueStaticDMA ArtUnc_SignpostStub,tiles_to_bytes(2),tiles_to_bytes($492)
+		QueueStaticDMA ArtUnc_SignpostStub,.artsize,tiles_to_bytes($492)
 
 		; init
 		lea	ObjSlot_EndSigns(pc),a1

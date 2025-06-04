@@ -92,8 +92,10 @@ Obj_FireShield:
 
 Obj_LightningShield:
 
+.artsize	:= (ArtUnc_LightningShield_Sparks_end-ArtUnc_LightningShield_Sparks)&$FFFF
+
 		; load spark art
-		QueueStaticDMA ArtUnc_LightningShield_Sparks,tiles_to_bytes(5),tiles_to_bytes(ArtTile_Shield_Sparks)
+		QueueStaticDMA ArtUnc_LightningShield_Sparks,.artsize,tiles_to_bytes(ArtTile_Shield_Sparks)
 
 		; init
 		movem.l	ObjDat_LightningShield(pc),d0-d3					; copy data to d0-d3
@@ -417,8 +419,10 @@ PLCLoad_Shields:
 
 Obj_Invincibility:
 
+.artsize	:= (ArtUnc_Invincibility_end-ArtUnc_Invincibility)&$FFFF
+
 		; load invincibility art
-		QueueStaticDMA ArtUnc_Invincibility,tiles_to_bytes($20),tiles_to_bytes(ArtTile_Shield)
+		QueueStaticDMA ArtUnc_Invincibility,.artsize,tiles_to_bytes(ArtTile_Shield)
 
 		; init
 		moveq	#0,d2

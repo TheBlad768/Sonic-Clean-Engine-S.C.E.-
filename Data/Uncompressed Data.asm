@@ -11,7 +11,7 @@ ArtUnc_DebugDigits:			binclude "Objects/Renders/HUD/Uncompressed Art/Debug Digit
 	even
 ArtUnc_EndSigns:			binclude "Objects/Main/Signpost/Uncompressed Art/End Signs.unc"
 	even
-ArtUnc_SignpostStub:			binclude "Objects/Main/Signpost/Uncompressed Art/Stub.unc"
+ArtUnc_SignpostStub:			bincludeEntry "Objects/Main/Signpost/Uncompressed Art/Stub.unc"
 	even
 ArtUnc_AirCountDown:		binclude "Objects/Main/Count Down/Uncompressed Art/Air Countdown.unc"
 	even

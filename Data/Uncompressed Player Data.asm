@@ -10,7 +10,7 @@ ArtUnc_DashDust:					binclude "Objects/Players/Spin Dust/Uncompressed Art/Dash D
 	even
 ArtUnc_SplashDrown:					binclude "Objects/Players/Spin Dust/Uncompressed Art/Splash Drown.unc"
 	even
-ArtUnc_Invincibility:					binclude "Objects/Players/Shields/Uncompressed Art/Invincibility.unc"
+ArtUnc_Invincibility:					bincludeEntry "Objects/Players/Shields/Uncompressed Art/Invincibility.unc"
 	even
 ArtUnc_InstaShield:					binclude "Objects/Players/Shields/Uncompressed Art/Insta-Shield.unc"
 	even
@@ -18,7 +18,7 @@ ArtUnc_FireShield:					binclude "Objects/Players/Shields/Uncompressed Art/Fire S
 	even
 ArtUnc_LightningShield:				binclude "Objects/Players/Shields/Uncompressed Art/Lightning Shield.unc"
 	even
-ArtUnc_LightningShield_Sparks:		binclude "Objects/Players/Shields/Uncompressed Art/Sparks.unc"
+ArtUnc_LightningShield_Sparks:		bincludeEntry "Objects/Players/Shields/Uncompressed Art/Sparks.unc"
 	even
 ArtUnc_BubbleShield:					binclude "Objects/Players/Shields/Uncompressed Art/Bubble Shield.unc"
 	even
