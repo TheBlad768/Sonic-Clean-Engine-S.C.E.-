@@ -390,6 +390,7 @@ PLCLoad_Shields:
 		subq.w	#1,d5
 		bmi.s	.return
 		move.w	vram_art(a0),d4
+		move.l	Art_Address(a0),d6
 
 .readentry
 		moveq	#0,d1
@@ -401,7 +402,7 @@ PLCLoad_Shields:
 		addi.w	#$10,d3
 		andi.w	#$FFF,d1
 		lsl.l	#4,d1
-		add.l	Art_Address(a0),d1
+		add.l	d6,d1
 		move.w	d4,d2
 		add.w	d3,d4
 		add.w	d3,d4
