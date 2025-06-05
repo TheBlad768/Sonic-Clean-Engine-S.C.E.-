@@ -75,15 +75,17 @@ Perform_DPLC:
 		cmp.b	objoff_3A(a0),d0				; if frame number remains the same as before, don't do anything
 		beq.s	.return
 		move.b	d0,objoff_3A(a0)
-		movea.l	(a2)+,a3						; source address of art
-		move.w	art_tile(a0),d4
-		andi.w	#$7FF,d4					; isolate tile location offset
-		lsl.w	#5,d4							; convert to VRAM address
-		movea.l	(a2)+,a2						; address of DPLC script
+
+		; load
 		add.w	d0,d0
+		movea.l	(a2)+,a3						; source address of art
+		movea.l	(a2)+,a2						; address of DPLC script
 		adda.w	(a2,d0.w),a2					; apply offset to script
 		move.w	(a2)+,d5						; get number of DMA transactions
 		bmi.s	.return						; skip if zero queues
+		move.w	art_tile(a0),d4
+		andi.w	#$7FF,d4					; isolate tile location offset
+		lsl.w	#5,d4							; convert to VRAM address
 		moveq	#0,d3
 
 .loop
