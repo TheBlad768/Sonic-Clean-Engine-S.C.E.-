@@ -383,8 +383,10 @@ PLCLoad_Shields:
 		cmp.b	LastLoadedDPLC(a0),d0
 		beq.s	.return
 		move.b	d0,LastLoadedDPLC(a0)
-		movea.l	DPLC_Address(a0),a2
+
+		; load
 		add.w	d0,d0
+		movea.l	DPLC_Address(a0),a2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d5
 		subq.w	#1,d5
