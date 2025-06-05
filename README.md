@@ -43,12 +43,22 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 ## FAQ
 
+#### How do I add levels from previous Sonic games?
+
 - If you want to convert levels from previous Sonic games, you have to use [LevelConverter](https://info.sonicretro.org/LevelConverter) from [SonLVL](https://info.sonicretro.org/SonLVL). Then change the layout format using [Layout converter](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Utilities/Layout).
+
+#### How do I make different text for Title Card?
 
 - If you want to make a different text for Title Card, you need to create a file of letters from [List.unc](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Objects/Main/Title%20Card/KosinskiPM%20Art/Levels). This will be loaded before the level starts.
 You don't have to add the letters **'ENOZ' (ZONE)** because those letters are already in VRAM. Then you have to create a mapping of your zone name in [Map - Title Card.asm](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Objects/Main/Title%20Card/Object%20Data).
 
+#### Where can I find other SMPS music?
+
 - If you want to use other SMPS music you can use [Valley Bell's SMPS Research](https://forums.sonicretro.org/index.php?threads/valley-bells-smps-research.32473) or [vgm2smps](https://github.com/Ivan-YO/vgm2smps/releases).
+
+#### Why don't mappings use MapMacros?
+
+- Unfortunately, not all programs support MapMacros, so I wanted to maintain compatibility with older programs. I don't want to just throw away **SonMapEd**. But there is support for MapMacros here, and you can use it if you want.
 
 ## The Macro Assembler AS issues
 
@@ -65,6 +75,7 @@ Example of problematic code:
 		jsr	sub_1234
 		jmp	sub_1234
 		lea	sub_1234,a1
+		pea	sub_1234
 ```
 
 Example of correct code:
@@ -74,6 +85,7 @@ Example of correct code:
 		jsr	(sub_1234).l
 		jmp	(sub_1234).l
 		lea	(sub_1234).l,a1
+		pea	(sub_1234).l
 ```
 
 #### Pay close attention to your code to avoid such issues.
