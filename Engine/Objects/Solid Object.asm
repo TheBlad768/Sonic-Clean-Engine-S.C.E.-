@@ -642,11 +642,11 @@ SolidObject_Landed:
 		sub.w	d3,y_pos(a1)											; correct Sonic's position
 		subq.w	#1,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_1E17E
+		beq.s	.notgrav
 		neg.w	d3
 		addq.w	#2,y_pos(a1)
 
-loc_1E17E:
+.notgrav
 		bsr.w	RideObject_SetRide
 		move.w	d6,d4
 		addi.b	#($10-p1_standing_bit+p1_touch_top_bit),d4
