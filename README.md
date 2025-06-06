@@ -8,7 +8,7 @@
 
 ## Disclaimer
 
-Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. All code is provided “as is”. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty.
+Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. All code is provided “as is”. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty. Commercial usage is expressly prohibited.
 
 ## Additional links
 
