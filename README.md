@@ -101,6 +101,7 @@ Example of correct code:
 
 ## Special Credits
 
+- Nichloya — Technical and other support.
 - pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
 - FoxConED — Level Select font graphics.
 - Dolphman — Robotnik Head graphics.
