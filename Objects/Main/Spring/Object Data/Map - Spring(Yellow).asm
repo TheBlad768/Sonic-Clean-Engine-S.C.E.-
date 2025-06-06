@@ -45,7 +45,7 @@ word_2389C:
 		dc.b $F1, 8, $20, $A, $FF, $EB
 		dc.b $F9, 8, $20, $D, $FF, $F3
 		dc.b 1, 5, $20, $10, $FF, $FB
-		dc.b $FB, 5, 0, $14, $FF, $F1
+		dc.b $FB, 5, 0, $B, $FF, $F1
 word_238B6:
 		dc.w 3
 		dc.b $F7, 8, $20, 0, $FF, $E6
@@ -56,12 +56,12 @@ word_238CA:
 		dc.b $E6, 8, $20, 0, $FF, $F6
 		dc.b $EE, 8, $20, 3, $FF, $FE
 		dc.b $F6, 5, $20, 6, 0, 6
-		dc.b $F5, 4, 0, $18, $FF, $FA
-		dc.b $FD, 4, 0, $1A, $FF, $F2
+		dc.b $F5, 4, 0, $F, $FF, $FA
+		dc.b $FD, 4, 0, $11, $FF, $F2
 word_238EA:
 		dc.w 4
 		dc.b 7, 8, $30, 0, $FF, $EB
 		dc.b $FF, 8, $30, 3, $FF, $F3
 		dc.b $EF, 5, $30, 6, $FF, $FB
-		dc.b $F5, 5, $10, $14, $FF, $F1
+		dc.b $F5, 5, $10, $B, $FF, $F1
 	even
