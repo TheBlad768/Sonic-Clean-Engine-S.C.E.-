@@ -94,6 +94,11 @@ Example of correct code:
 
 #### Pay close attention to your code to avoid such issues.
 
+### Here you can find more information about Macro AS errors:
+
+- [Sonic Retro](https://forums.sonicretro.org/index.php?threads/guide-to-common-as-assembler-errors.43731/)
+- [SSRG](https://sonicresearch.org/community/index.php?threads/guide-to-common-as-assembler-errors.7201/)
+
 ## Special Credits
 
 - pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
