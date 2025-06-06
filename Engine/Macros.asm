@@ -1373,7 +1373,11 @@ copyTilemap2 macro loc,address,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#(width/8-1),d1
 	moveq	#(height/8-1),d2
+      if ((address)<=$7F)
+	moveq	#(address),d3
+      else
 	move.w	#(address),d3
+      endif
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_Add_VRAM).w
       else
