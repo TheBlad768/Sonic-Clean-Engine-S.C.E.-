@@ -19,12 +19,9 @@ SetUp_ObjAttributes3:
 
 SetUp_ObjAttributesSlotted:
 		moveq	#0,d0
-		move.w	(a1)+,d1						; maximum number of objects that can be made in this array
-		move.w	d1,d2
-		move.w	(a1)+,d3						; base VRAM offset of object
-		move.w	(a1)+,d4						; amount to add to base VRAM offset for each slot
-		moveq	#0,d5
-		move.w	(a1)+,d5						; index of slot array to use (RAM shift)
+		movem.w	(a1)+,d1/d3-d5			; copy data to d1,d3-d5
+
+		; check
 		lea	(Slotted_object_bits).w,a2
 		adda.w	d5,a2						; get the address of the array to use
 		move.b	(a2),d5
