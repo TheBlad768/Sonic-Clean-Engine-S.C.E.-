@@ -42,7 +42,7 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 ### Solution: Fix from Nichloya for **Flex2**:
 
-- Download the [app.asar](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Utilities/Flex2) file and replace `Flex2\resources\app.asar` with this file.
+- Download the [app.asar](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver/Utilities/Flex2) file and replace it in the program folder `Flex2\resources\app.asar` with this file.
 
 #### Alternative programs:
 - [mdcomp](https://github.com/flamewing/mdcomp/releases)
