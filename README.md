@@ -40,6 +40,10 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus** at all. You can only open uncompressed graphics.
 
+### Solution: Fix from Nichloya for **Flex2**:
+
+- Download the [app.asar](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/Clone-Driver-v2/Utilities/Flex2) file and replace `Flex2\resources\app.asar` with this file.
+
 #### Alternative programs:
 - [mdcomp](https://github.com/flamewing/mdcomp/releases)
 - [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
