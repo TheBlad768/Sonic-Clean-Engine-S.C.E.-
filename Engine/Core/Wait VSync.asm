@@ -7,7 +7,7 @@
 Wait_VSync:
 
 	ifdef __DEBUG__	; lagometer is only available in DEBUG builds
-		move.w	#$9100,(VDP_control_port).l		; window H position at default
+		move.w	#$9100,(VDP_control_port).l				; window H position at default
 	endif
 
 		enableInts
@@ -17,7 +17,7 @@ Wait_VSync:
 		bne.s	.wait							; wait until V-int's run
 
 	ifdef __DEBUG__	; lagometer is only available in DEBUG builds
-		move.w	#$9193,(VDP_control_port).l		; window H right side, base point $80
+		move.w	#$9193,(VDP_control_port).l				; window H right side, base point $80
 	endif
 
 		rts

@@ -8,20 +8,20 @@ Do_ResizeEvents:
 
 		; check
 		move.l	(Level_data_addr_RAM.Resize).w,d0
-		beq.s	.rskip											; if zero, branch
+		beq.s	.rskip								; if zero, branch
 		movea.l	d0,a0
 		jsr	(a0)
 
 .rskip
-		moveq	#2,d1											; set camera lowering speed
+		moveq	#2,d1								; set camera lowering speed
 		move.w	(Camera_target_max_Y_pos).w,d0
 		sub.w	(Camera_max_Y_pos).w,d0
-		beq.s	.return											; if it's same position, branch
+		beq.s	.return								; if it's same position, branch
 		bhs.s	.check
-		neg.w	d1												; change to camera raising speed
+		neg.w	d1								; change to camera raising speed
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(Camera_target_max_Y_pos).w,d0
-		bls.s		.set
+		bls.s	.set
 		move.w	d0,(Camera_max_Y_pos).w
 		andi.w	#$FFFE,(Camera_max_Y_pos).w					; align (2 pixels)
 
@@ -37,10 +37,10 @@ Do_ResizeEvents:
 		move.w	(Camera_Y_pos).w,d0
 		addq.w	#8,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
-		blo.s		.set2
-		btst	#Status_InAir,(Player_1+status).w						; is the player in the air?
-		beq.s	.set2											; if not, branch
-		add.w	d1,d1											; multiply by 4
+		blo.s	.set2
+		btst	#Status_InAir,(Player_1+status).w				; is the player in the air?
+		beq.s	.set2								; if not, branch
+		add.w	d1,d1								; multiply by 4
 		add.w	d1,d1
 
 .set2

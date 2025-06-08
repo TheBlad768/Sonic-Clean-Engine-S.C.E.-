@@ -7,12 +7,12 @@
 Clear_DisplayData:
 		stopZ80
 		lea	(VDP_control_port).l,a5
-		dmaFillVRAM 0,0,$10000								; clear VRAM
+		dmaFillVRAM 0,0,$10000							; clear VRAM
 		startZ80
-		clearRAM Sprite_table_buffer, Sprite_table_buffer_end	; clear sprite table buffer
-		clearRAM H_scroll_buffer, V_scroll_buffer_end			; clear hvscroll buffer
-		move.l	d0,(V_scroll_value).w							; clear vscroll value
-		move.l	d0,(H_scroll_value).w							; clear hscroll value
+		clearRAM Sprite_table_buffer, Sprite_table_buffer_end			; clear sprite table buffer
+		clearRAM H_scroll_buffer, V_scroll_buffer_end				; clear hvscroll buffer
+		move.l	d0,(V_scroll_value).w						; clear vscroll value
+		move.l	d0,(H_scroll_value).w						; clear hscroll value
 		bra.w	Init_SpriteTable
 
 ; ---------------------------------------------------------------------------
@@ -27,7 +27,7 @@ Clear_DisplayData:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM_3:
-		move.l	#vdpCommDelta(planeLoc(32,0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(32,0,1)),d4				; row increment value
 		bra.s	Plane_Map_To_VRAM.main
 
 ; ---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ Plane_Map_To_VRAM_3:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM_2:
-		move.l	#vdpCommDelta(planeLoc(128,0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(128,0,1)),d4				; row increment value
 		bra.s	Plane_Map_To_VRAM.main
 
 ; ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ Plane_Map_To_VRAM_2:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM:
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4				; row increment value
 
 .main
 		lea	(VDP_data_port).l,a6
@@ -69,9 +69,9 @@ Plane_Map_To_VRAM:
 
 .loop
 		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
-		dbf	d3,.loop											; copy one row
-		add.l	d4,d0										; move onto next row
-		dbf	d2,.loop2											; and copy it
+		dbf	d3,.loop							; copy one row
+		add.l	d4,d0								; move onto next row
+		dbf	d2,.loop2							; and copy it
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -81,13 +81,13 @@ Plane_Map_To_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 Copy_Listed_Data_To_VRAM:
-		move.w	(a0)+,d6										; count
+		move.w	(a0)+,d6							; count
 
 .load
-		movea.l	(a0)+,a1										; source
-		move.l	(a0)+,d0										; destination
-		move.w	(a0)+,d1										; width
-		move.w	(a0)+,d2										; height
+		movea.l	(a0)+,a1							; source
+		move.l	(a0)+,d0							; destination
+		move.w	(a0)+,d1							; width
+		move.w	(a0)+,d2							; height
 		bsr.s	Plane_Map_To_VRAM
 		dbf	d6,.load
 		rts
@@ -117,11 +117,11 @@ Plane_Map_To_Add_VRAM:
 
 .loop
 		move.w	(a1)+,d6
-		add.w	d3,d6										; add VRAM shift
+		add.w	d3,d6								; add VRAM shift
 		move.w	d6,VDP_data_port-VDP_data_port(a6)
-		dbf	d5,.loop											; copy one row
-		add.l	d4,d0										; move onto next row
-		dbf	d2,.loop2											; and copy it
+		dbf	d5,.loop							; copy one row
+		add.l	d4,d0								; move onto next row
+		dbf	d2,.loop2							; and copy it
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -135,7 +135,7 @@ Plane_Map_To_Add_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Plane_Map:
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4			; row increment value
+		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4				; row increment value
 
 .main
 		lea	(VDP_data_port).l,a6
@@ -147,9 +147,9 @@ Clear_Plane_Map:
 
 .clear
 		move.w	#0,VDP_data_port-VDP_data_port(a6)
-		dbf	d3,.clear											; copy one row
-		add.l	d4,d0										; move onto next row
-		dbf	d2,.loop											; and copy it
+		dbf	d3,.clear							; copy one row
+		add.l	d4,d0								; move onto next row
+		dbf	d2,.loop							; and copy it
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -172,16 +172,16 @@ Plane_Map_To_RAM:
 
 .loop
 		move.w	(a1)+,(a3)+
-		dbf	d5,.loop											; copy one row
-		adda.w	d3,a2										; move onto next row
-		dbf	d2,.loop2											; and copy it
+		dbf	d5,.loop							; copy one row
+		adda.w	d3,a2								; move onto next row
+		dbf	d2,.loop2							; and copy it
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Copy_Map_Line_To_VRAM:
 		subi.w	#16,d1
-		blo.s		.return
+		blo.s	.return
 		move.w	d1,d3
 		andi.w	#7,d3
 		bne.s	.return
@@ -214,7 +214,7 @@ RAM_Map_Data_Copy:
 
 .loop
 		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
-		dbf	d3,.loop											; copy one row
+		dbf	d3,.loop							; copy one row
 		rts
 
 ; =============== S U B R O U T I N E =======================================

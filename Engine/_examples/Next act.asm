@@ -25,7 +25,7 @@ DEZ1_Resize:
 		move.l	#.checksign,(Level_data_addr_RAM.Resize).w
 
 		; set flags
-		st	(Last_act_end_flag).w										; disable background event and Title Card
+		st	(Last_act_end_flag).w								; disable background event and Title Card
 
 		; clear flags
 		moveq	#0,d0
@@ -50,7 +50,7 @@ DEZ1_Resize:
 		beq.s	.return
 
 		; next act
-		move.b	#1,(Current_act).w									; set act 2
+		move.b	#1,(Current_act).w								; set act 2
 		move.w	(Current_zone_and_act).w,(Apparent_zone_and_act).w
 		st	(Restart_level_flag).w
 		clr.b	(Last_star_post_hit).w

@@ -16,7 +16,7 @@ LevelLoadPointer:
 ; Compressed level graphics - tile, primary patterns and block mappings
 ; ===========================================================================
 
-DEZ_8x8_KosPM:		binclude "Levels/DEZ/Tiles/Primary.kospm"
+DEZ_8x8_KosPM:			binclude "Levels/DEZ/Tiles/Primary.kospm"
 	even
 DEZ_16x16_Unc:			binclude "Levels/DEZ/Blocks/Primary.unc"
 	even
@@ -27,9 +27,9 @@ DEZ_128x128_KosP:		binclude "Levels/DEZ/Chunks/Primary.kosp"
 ; Collision data
 ; ===========================================================================
 
-AngleArray:				binclude "Misc/Floor/Angle Map.bin"
+AngleArray:			binclude "Misc/Floor/Angle Map.bin"
 	even
-HeightMaps:				binclude "Misc/Floor/Height Maps.bin"
+HeightMaps:			binclude "Misc/Floor/Height Maps.bin"
 	even
 HeightMapsRot:			binclude "Misc/Floor/Height Maps Rotated.bin"
 	even
@@ -38,7 +38,7 @@ HeightMapsRot:			binclude "Misc/Floor/Height Maps Rotated.bin"
 ; Level collision data
 ; ===========================================================================
 
-DEZ_Solid:				binclude "Levels/DEZ/Collision/1.bin"
+DEZ_Solid:			binclude "Levels/DEZ/Collision/1.bin"
 	even
 
 ; ===========================================================================
@@ -74,12 +74,12 @@ DEZ4_Objects:			binclude "Levels/DEZ/Object Pos/4.bin"
 ; ===========================================================================
 
 	RingLayoutBoundary
-DEZ1_Rings:				binclude "Levels/DEZ/Ring Pos/1.bin"
+DEZ1_Rings:			binclude "Levels/DEZ/Ring Pos/1.bin"
 	RingLayoutBoundary
-DEZ2_Rings:				binclude "Levels/DEZ/Ring Pos/2.bin"
+DEZ2_Rings:			binclude "Levels/DEZ/Ring Pos/2.bin"
 	RingLayoutBoundary
-DEZ3_Rings:				binclude "Levels/DEZ/Ring Pos/3.bin"
+DEZ3_Rings:			binclude "Levels/DEZ/Ring Pos/3.bin"
 	RingLayoutBoundary
-DEZ4_Rings:				binclude "Levels/DEZ/Ring Pos/4.bin"
+DEZ4_Rings:			binclude "Levels/DEZ/Ring Pos/4.bin"
 	RingLayoutBoundary
 	even

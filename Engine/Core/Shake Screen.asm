@@ -7,8 +7,8 @@
 ShakeScreen_Setup:
 		moveq	#0,d1
 		move.w	(Screen_shaking_offset).w,(Screen_shaking_last_offset).w
-		cmpi.b	#PlayerID_Death,(Player_1+routine).w			; has player just died?
-		bhs.s	.setso										; if yes, branch
+		cmpi.b	#PlayerID_Death,(Player_1+routine).w				; has player just died?
+		bhs.s	.setso								; if yes, branch
 		move.w	(Screen_shaking_flag).w,d0
 		beq.s	.setso
 		bmi.s	.shake

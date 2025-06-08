@@ -12,16 +12,16 @@
 
 .FetchNewCode:
 	_KosPlus_ReadBit
-		blo.s		.FetchCodeLoop						; if code = 1, branch.
+		blo.s	.FetchCodeLoop							; if code = 1, branch.
 
 		; codes 00 and 01.
 		moveq	#-1,d5
 		lea	(a1),a5
 	_KosPlus_ReadBit
-		blo.s		.Code_01
+		blo.s	.Code_01
 
 		; code 00 (Dictionary ref. short).
-		move.b	(a0)+,d5								; d5 = displacement.
+		move.b	(a0)+,d5							; d5 = displacement.
 		adda.w	d5,a5
 
 		; always copy at least two bytes.
@@ -42,10 +42,10 @@
 		moveq	#0,d4								; d4 will contain copy count.
 
 		; code 01 (Dictionary ref. long / special).
-		move.b	(a0)+,d4								; d4 = %HHHHHCCC.
+		move.b	(a0)+,d4							; d4 = %HHHHHCCC.
 		move.b	d4,d5								; d5 = %11111111 HHHHHCCC.
-		lsl.w	#5,d5									; d5 = %111HHHHH CCC00000.
-		move.b	(a0)+,d5								; d5 = %111HHHHH LLLLLLLL.
+		lsl.w	#5,d5								; d5 = %111HHHHH CCC00000.
+		move.b	(a0)+,d5							; d5 = %111HHHHH LLLLLLLL.
 
 	if _KosPlus_LoopUnroll==3
 		and.w	d7,d4								; d4 = %00000CCC.
@@ -57,7 +57,7 @@
 		bne.s	.StreamCopy							; if CCC=0, branch.
 
 		; special mode (extended counter)
-		move.b	(a0)+,d4								; read cnt
+		move.b	(a0)+,d4							; read cnt
 		beq.s	.Quit								; if cnt=0, quit decompression.
 
 		adda.w	d5,a5
@@ -83,7 +83,7 @@
 .dolargecopy:
 
 		; special mode (extended counter)
-		move.b	(a0)+,d4								; read cnt
+		move.b	(a0)+,d4							; read cnt
 		beq.s	.Quit								; if cnt=0, quit decompression.
 		adda.w	d5,a5
 	endif
