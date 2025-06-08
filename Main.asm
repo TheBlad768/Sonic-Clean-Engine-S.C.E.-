@@ -101,13 +101,13 @@ SRAMSupport:
 	if EnableSRAM
 CartRAM_Info:		dc.b "RA"
 CartRAM_Type:		dc.b $A0+(BackupSRAM<<6)+(AddressSRAM<<3), $20
-CartRAMStartLoc:	dc.l SRAM_Start				; SRAM start ($200000)
+CartRAMStartLoc:	dc.l SRAM_Start			; SRAM start ($200000)
 CartRAMEndLoc:		dc.l SRAM_Start+SRAM_End	; SRAM end ($20xxxx)
 	else
 CartRAM_Info:		dc.b "  "
 CartRAM_Type:		dc.w %10000000100000
-CartRAMStartLoc:	dc.b "    "						; SRAM start ($200000)
-CartRAMEndLoc:		dc.b "    "						; SRAM end ($20xxxx)
+CartRAMStartLoc:	dc.b "    "			; SRAM start ($200000)
+CartRAMEndLoc:		dc.b "    "			; SRAM end ($20xxxx)
 	endif
 
 Modem_Info:		dc.b "                                                    "
