@@ -12,8 +12,8 @@ Player_AnglePos:
 
 .check
 		move.b	top_solid_bit(a0),d5
-		btst	#Status_OnObj,status(a0)							; is player standing on an object?
-		beq.s	loc_EC5A									; if not, branch
+		btst	#Status_OnObj,status(a0)						; is player standing on an object?
+		beq.s	loc_EC5A								; if not, branch
 
 		; clear
 		moveq	#0,d0
@@ -88,7 +88,7 @@ loc_EC88:
 		beq.s	locret_ED12
 		bpl.s	loc_ED14
 		cmpi.w	#-$E,d1
-		blt.s		locret_ED12
+		blt.s	locret_ED12
 		add.w	d1,y_pos(a0)
 
 locret_ED12:
@@ -105,7 +105,7 @@ loc_ED14:
 loc_ED22:
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
-		blo.s		loc_ED2E
+		blo.s	loc_ED2E
 		move.b	#$E,d0
 
 loc_ED2E:
@@ -129,7 +129,7 @@ Player_Angle:
 		move.w	d0,d3
 		move.b	(Secondary_Angle).w,d2
 		cmp.w	d0,d1
-		ble.s		loc_ED5E
+		ble.s	loc_ED5E
 		move.b	(Primary_Angle).w,d2
 		move.w	d1,d3
 		move.w	d0,d1
@@ -197,7 +197,7 @@ Player_WalkVertR:
 		beq.s	locret_EE00
 		bpl.s	loc_EE22
 		cmpi.w	#-$E,d1
-		blt.s		locret_EE00
+		blt.s	locret_EE00
 		add.w	d1,x_pos(a0)
 
 locret_EE00:
@@ -214,7 +214,7 @@ loc_EE22:
 loc_EE30:
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
-		blo.s		loc_EE3C
+		blo.s	loc_EE3C
 		move.b	#$E,d0
 
 loc_EE3C:
@@ -270,7 +270,7 @@ Player_WalkCeiling:
 		beq.s	locret_EECE
 		bpl.s	loc_EED0
 		cmpi.w	#-$E,d1
-		blt.s		locret_EECE
+		blt.s	locret_EECE
 		sub.w	d1,y_pos(a0)
 
 locret_EECE:
@@ -287,7 +287,7 @@ loc_EED0:
 loc_EEDE:
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
-		blo.s		loc_EEEA
+		blo.s	loc_EEEA
 		move.b	#$E,d0
 
 loc_EEEA:
@@ -343,7 +343,7 @@ Player_WalkVertL:
 		beq.s	locret_EF7C
 		bpl.s	loc_EF7E
 		cmpi.w	#-$E,d1
-		blt.s		locret_EF7C
+		blt.s	locret_EF7C
 		sub.w	d1,x_pos(a0)
 
 locret_EF7C:
@@ -360,7 +360,7 @@ loc_EF7E:
 loc_EF8C:
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
-		blo.s		loc_EF98
+		blo.s	loc_EF98
 		move.b	#$E,d0
 
 loc_EF98:
@@ -394,7 +394,7 @@ GetFloorPosition_BG:
 		adda.w	d1,a1
 		moveq	#0,d1
 		move.w	(a1),d1									; move 128*128 chunk ID to d1
-		lsl.w	#7,d1										; multiply by $80
+		lsl.w	#7,d1									; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
 		add.w	d0,d1
@@ -420,7 +420,7 @@ GetFloorPosition_FG:
 		adda.w	d1,a1
 		moveq	#0,d1
 		move.w	(a1),d1									; move 128*128 chunk ID to d1
-		lsl.w	#7,d1										; multiply by $80
+		lsl.w	#7,d1									; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
 		add.w	d0,d1
@@ -447,7 +447,7 @@ FindFloor:
 		add.w	(Camera_Y_diff).w,d2
 		move.w	(sp)+,d0
 		cmp.w	d0,d1
-		ble.s		.return
+		ble.s	.return
 		move.b	Primary_Angle_save-Primary_Angle(a4),(a4)
 		move.w	d0,d1
 
@@ -622,7 +622,7 @@ Ring_FindFloor:
 		add.w	(Camera_Y_diff).w,d2
 		move.w	(sp)+,d0
 		cmp.w	d0,d1
-		ble.s		.return
+		ble.s	.return
 		move.b	Primary_Angle_save-Primary_Angle(a4),(a4)
 		move.w	d0,d1
 
@@ -744,7 +744,7 @@ loc_F4CA:
 		add.w	(Camera_Y_diff).w,d2
 		move.w	(sp)+,d0
 		cmp.w	d0,d1
-		ble.s		.return
+		ble.s	.return
 		move.b	Primary_Angle_save-Primary_Angle(a4),(a4)
 		move.w	d0,d1
 
@@ -976,7 +976,7 @@ CalcRoomInFront:
 		; check gravity
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		neg.w	d1											; reverse it
+		neg.w	d1									; reverse it
 
 .notgrav
 		ext.l	d1
@@ -1017,8 +1017,8 @@ loc_F68A:
 
 		; fix by devon
 		btst	#Status_Roll,status(a0)							; is Sonic rolling?
-		beq.s	.skip										; if not, branch
-		subq.w	#5,d2										; if so, move push sensor up a bit
+		beq.s	.skip									; if not, branch
+		subq.w	#5,d2									; if so, move push sensor up a bit
 
 		; check gravity
 		tst.b	(Reverse_gravity_flag).w
@@ -1107,7 +1107,7 @@ Sonic_CheckFloor2:
 loc_F7E2:
 		move.b	(Secondary_Angle).w,d3
 		cmp.w	d0,d1
-		ble.s		.skip
+		ble.s	.skip
 		move.b	(Primary_Angle).w,d3
 		exg	d0,d1
 
@@ -1274,7 +1274,7 @@ ObjCheckFloorDist:
 
 ObjCheckFloorDist2:
 		move.w	y_pos(a0),d2								; get object position
-		move.b	y_radius(a0),d0							; get object height
+		move.b	y_radius(a0),d0								; get object height
 		ext.w	d0
 		add.w	d0,d2
 		lea	(Primary_Angle).w,a4

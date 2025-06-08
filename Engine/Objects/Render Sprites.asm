@@ -10,13 +10,13 @@ Init_SpriteTable:
 		; clear
 		move.b	d0,(Spritemask_flag).w
 		lea	(Sprite_table_buffer).w,a0
-		moveq	#1,d1					; set link number
+		moveq	#1,d1								; set link number
 		moveq	#80-1,d7
 
 .loop
 		move.w	d0,(a0)
-		move.b	d1,3(a0)					; set link number
-		addq.w	#1,d1					; next link number
+		move.b	d1,3(a0)							; set link number
+		addq.w	#1,d1								; next link number
 		addq.w	#8,a0
 		dbf	d7,.loop
 		move.b	d0,-5(a0)
@@ -52,37 +52,37 @@ Render_Sprites:
 
 Render_Sprites_LevelLoop:
 		tst.w	(a5)								; does this level have any objects?
-		beq.w	Render_Sprites_NextLevel			; if not, check the next one
+		beq.w	Render_Sprites_NextLevel					; if not, check the next one
 		lea	2(a5),a4
 
 Render_Sprites_ObjLoop:
 		movea.w	(a4)+,a0							; a0=object
 
 		; debug
-		assert.l	address(a0),ne					; raise an error if there is no object address here
-		assert.l	mappings(a0),ne					; raise an error if there is no mappings address here
+		assert.l	address(a0),ne						; raise an error if there is no object address here
+		assert.l	mappings(a0),ne						; raise an error if there is no mappings address here
 
 		; check
 		tst.l	address(a0)							; is this object slot occupied?
-		beq.w	Render_Sprites_NextObj			; if not, check next one
-		andi.b	#$7F,render_flags(a0)				; clear on-screen flag
+		beq.w	Render_Sprites_NextObj						; if not, check next one
+		andi.b	#$7F,render_flags(a0)						; clear on-screen flag
 		move.b	render_flags(a0),d6
 		move.w	x_pos(a0),d0
 		move.w	y_pos(a0),d1
 		btst	#6,d6								; is the multi-draw flag set?
-		bne.w	Render_Sprites_MultiDraw			; if it is, branch
+		bne.w	Render_Sprites_MultiDraw					; if it is, branch
 		btst	#2,d6								; is this to be positioned by screen coordinates?
-		beq.s	Render_Sprites_ScreenSpaceObj	; if not, branch
+		beq.s	Render_Sprites_ScreenSpaceObj					; if not, branch
 		moveq	#0,d2
 		move.b	width_pixels(a0),d2
 		sub.w	(a3),d0
 		move.w	d0,d3
-		add.w	d2,d3							; is the object right edge to the left of the screen?
-		bmi.s	Render_Sprites_NextObj			; if it is, branch
+		add.w	d2,d3								; is the object right edge to the left of the screen?
+		bmi.s	Render_Sprites_NextObj						; if it is, branch
 		move.w	d0,d3
 		sub.w	d2,d3
-		cmpi.w	#320,d3							; is the object left edge to the right of the screen?
-		bge.s	Render_Sprites_NextObj			; if it is, branch
+		cmpi.w	#320,d3								; is the object left edge to the right of the screen?
+		bge.s	Render_Sprites_NextObj						; if it is, branch
 		addi.w	#128,d0
 		sub.w	4(a3),d1
 		move.b	height_pixels(a0),d2
@@ -92,34 +92,34 @@ Render_Sprites_ObjLoop:
 		add.w	d2,d2
 		addi.w	#224,d2
 		cmp.w	d2,d1
-		bhs.s	Render_Sprites_NextObj			; if the object is below the screen
+		bhs.s	Render_Sprites_NextObj						; if the object is below the screen
 		addi.w	#128,d1
 		sub.w	d3,d1
 
 Render_Sprites_ScreenSpaceObj:
-		ori.b	#rfOnscreen,render_flags(a0)		; set on-screen flag
+		ori.b	#rfOnscreen,render_flags(a0)					; set on-screen flag
 		tst.w	d7
 		bmi.s	Render_Sprites_NextObj
 		movea.l	mappings(a0),a1
 		moveq	#0,d4
 		btst	#5,d6								; is the static mappings flag set?
-		bne.s	.load							; if it is, branch
+		bne.s	.load								; if it is, branch
 
 		; calc
 		move.b	mapping_frame(a0),d4
 		add.w	d4,d4
 		adda.w	(a1,d4.w),a1
 		move.w	(a1)+,d4
-		subq.w	#1,d4							; get number of pieces
-		bmi.s	Render_Sprites_NextObj			; if there are 0 pieces, branch
+		subq.w	#1,d4								; get number of pieces
+		bmi.s	Render_Sprites_NextObj						; if there are 0 pieces, branch
 
 .load
 		move.w	art_tile(a0),d5
 		bsr.w	sub_1AF6C
 
 Render_Sprites_NextObj:
-		subq.w	#2,(a5)							; decrement object count
-		bne.w	Render_Sprites_ObjLoop			; if there are objects left, repeat
+		subq.w	#2,(a5)								; decrement object count
+		bne.w	Render_Sprites_ObjLoop						; if there are objects left, repeat
 
 Render_Sprites_NextLevel:
 		cmpa.w	#Sprite_table_input,a5
@@ -154,7 +154,7 @@ Render_Sprites_NextLevel2:
 		; sprite mask
 		tst.b	(Spritemask_flag).w
 		beq.s	locret_1AE56
-		cmpi.b	#PlayerID_Death,(Player_1+routine).w	; has Sonic just died?
+		cmpi.b	#PlayerID_Death,(Player_1+routine).w				; has Sonic just died?
 		bhs.s	loc_1AE34							; if yes, branch
 		clr.b	(Spritemask_flag).w
 
@@ -179,7 +179,7 @@ locret_1AE56:
 
 Render_Sprites_MultiDraw:
 		btst	#2,d6								; is this to be positioned by screen coordinates?
-		bne.s	loc_1AEA2						; if it is, branch
+		bne.s	loc_1AEA2							; if it is, branch
 		moveq	#0,d2
 
 		; check if object is within X bounds
@@ -233,7 +233,7 @@ loc_1AEA2:
 		sub.w	d3,d1
 
 loc_1AEE4:
-		ori.b	#rfOnscreen,render_flags(a0)		; set on-screen flag
+		ori.b	#rfOnscreen,render_flags(a0)					; set on-screen flag
 		tst.w	d7
 		bmi.w	Render_Sprites_NextObj
 		move.w	art_tile(a0),d5
@@ -263,7 +263,7 @@ loc_1AF2A:
 		move.w	(a0)+,d0
 		move.w	(a0)+,d1
 		btst	#2,d6								; is this to be positioned by screen coordinates?
-		beq.s	loc_1AF46						; if not, branch
+		beq.s	loc_1AF46							; if not, branch
 		sub.w	(a3),d0
 		addi.w	#128,d0
 		sub.w	4(a3),d1
@@ -293,7 +293,7 @@ loc_1AF62:
 
 sub_1AF6C:
 		lsr.b	d6
-		blo.s		loc_1AF9E
+		blo.s	loc_1AF9E
 		lsr.b	d6
 		blo.w	loc_1B038
 
@@ -322,7 +322,7 @@ loc_1AF94:
 
 loc_1AF9E:
 		lsr.b	d6
-		blo.s		loc_1AFE8
+		blo.s	loc_1AFE8
 
 loc_1AFA2:
 		move.b	(a1)+,d2
@@ -429,7 +429,7 @@ loc_1B066:
 
 sub_1B070:
 		lsr.b	d6
-		blo.s		loc_1B0C2
+		blo.s	loc_1B0C2
 		lsr.b	d6
 		blo.w	loc_1B19C
 
@@ -438,7 +438,7 @@ loc_1B07A:
 		ext.w	d2
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B0BA
+		bls.s	loc_1B0BA
 		cmpi.w	#224+128,d2
 		bhs.s	loc_1B0BA
 		move.w	d2,(a6)+
@@ -450,7 +450,7 @@ loc_1B07A:
 		move.w	(a1)+,d2
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B0B2
+		bls.s	loc_1B0B2
 		cmpi.w	#320+128,d2
 		bhs.s	loc_1B0B2
 		move.w	d2,(a6)+
@@ -473,14 +473,14 @@ loc_1B0BA:
 
 loc_1B0C2:
 		lsr.b	d6
-		blo.s		loc_1B12C
+		blo.s	loc_1B12C
 
 loc_1B0C6:
 		move.b	(a1)+,d2
 		ext.w	d2
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B114
+		bls.s	loc_1B114
 		cmpi.w	#224+128,d2
 		bhs.s	loc_1B114
 		move.w	d2,(a6)+
@@ -497,7 +497,7 @@ loc_1B0C6:
 		sub.w	d6,d2
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B10C
+		bls.s	loc_1B10C
 		cmpi.w	#320+128,d2
 		bhs.s	loc_1B10C
 		move.w	d2,(a6)+
@@ -534,7 +534,7 @@ loc_1B12C:
 		sub.w	d6,d2
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B184
+		bls.s	loc_1B184
 		cmpi.w	#224+128,d2
 		bhs.s	loc_1B184
 		move.w	d2,(a6)+
@@ -551,7 +551,7 @@ loc_1B12C:
 		sub.w	d6,d2
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B17C
+		bls.s	loc_1B17C
 		cmpi.w	#320+128,d2
 		bhs.s	loc_1B17C
 		move.w	d2,(a6)+
@@ -589,7 +589,7 @@ loc_1B19C:
 		sub.w	d6,d2
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B1EC
+		bls.s	loc_1B1EC
 		cmpi.w	#224+128,d2
 		bhs.s	loc_1B1EC
 		move.w	d2,(a6)+
@@ -601,7 +601,7 @@ loc_1B19C:
 		move.w	(a1)+,d2
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
-		bls.s		loc_1B1E4
+		bls.s	loc_1B1E4
 		cmpi.w	#320+128,d2
 		bhs.s	loc_1B1E4
 		move.w	d2,(a6)+
@@ -646,11 +646,11 @@ Load_ExtraRender:
 ; =============== S U B R O U T I N E =======================================
 
 AddSlot_ExtraRender:
-		andi.w	#7,d1							; maximum 8 slots
+		andi.w	#7,d1								; maximum 8 slots
 
 		; calc slot
 		lea	(Render_sprite_first_RAM_end).w,a1
-		add.w	d1,d1							; multiply by 4
+		add.w	d1,d1								; multiply by 4
 		add.w	d1,d1
 		jmp	.shift(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -658,8 +658,8 @@ AddSlot_ExtraRender:
 .shift
 
 	rept ((Render_sprite_first_RAM_end-Render_sprite_first_RAM)/4)
-		subq.w	#4+4,a1							; next
-		move.l	(a1)+,(a1)						; shift data
+		subq.w	#4+4,a1								; next
+		move.l	(a1)+,(a1)							; shift data
 	endr
 
 		; save new pointer
@@ -673,11 +673,11 @@ AddSlot_ExtraRender:
 ; =============== S U B R O U T I N E =======================================
 
 DeleteSlot_ExtraRender:
-		andi.w	#7,d1							; maximum 8 slots
+		andi.w	#7,d1								; maximum 8 slots
 
 		; calc slot
 		lea	(Render_sprite_first_RAM+4).w,a1
-		add.w	d1,d1							; multiply by 4
+		add.w	d1,d1								; multiply by 4
 		add.w	d1,d1
 		adda.w	d1,a1
 		jmp	.shift(pc,d1.w)
@@ -687,7 +687,7 @@ DeleteSlot_ExtraRender:
 
 	rept ((Render_sprite_first_RAM_end-Render_sprite_first_RAM)/4)-1
 		move.l	(a1),-(a1)							; shift data
-		addq.w	#4+4,a1							; next
+		addq.w	#4+4,a1								; next
 	endr
 
 		; last shift data

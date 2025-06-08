@@ -386,7 +386,7 @@ Animate_RawNoSSTGetFaster:
 		addq.b	#1,d0
 		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
-		blo.s		.end
+		blo.s	.end
 
 		; jump to custom code
 		bclr	#5,objoff_38(a0)
@@ -437,7 +437,7 @@ Animate_RawNoSSTGetSlower:
 		addq.b	#1,d0
 		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
-		blo.s		.return
+		blo.s	.return
 
 		; jump to custom code
 		bclr	#5,objoff_38(a0)

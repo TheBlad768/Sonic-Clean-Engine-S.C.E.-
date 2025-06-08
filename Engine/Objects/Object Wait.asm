@@ -60,7 +60,7 @@ ObjCheckFloorDist2_DoRoutine:
 		swap	d3
 		bsr.w	ObjCheckFloorDist2
 		cmpi.w	#-1,d1
-		blt.s		.jump
+		blt.s	.jump
 		cmpi.w	#12,d1
 		bge.s	.jump
 		add.w	d1,y_pos(a0)

@@ -121,7 +121,7 @@ loc_85D06:
 
 loc_85D28:
 		cmp.w	(Camera_saved_max_X_pos).w,d0
-		bls.s		loc_85D36
+		bls.s	loc_85D36
 		move.w	d0,(Camera_max_X_pos).w
 		bra.s	loc_85D48
 ; ---------------------------------------------------------------------------
@@ -150,7 +150,7 @@ Check_InTheirRange:
 		move.w	x_pos(a1),d1
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
 		bge.s	.fail
@@ -158,7 +158,7 @@ Check_InTheirRange:
 		move.w	y_pos(a1),d1
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
 		bge.s	.fail
@@ -181,7 +181,7 @@ Check_InMyRange:
 		move.w	x_pos(a1),d1
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
 		bge.s	.fail
@@ -189,7 +189,7 @@ Check_InMyRange:
 		move.w	y_pos(a1),d1
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
 		bge.s	.fail
@@ -225,11 +225,11 @@ Check_PlayerInRange:
 
 		; check
 		cmp.w	d3,d1
-		blo.s		.return
+		blo.s	.return
 		cmp.w	d5,d1
 		bhs.s	.return
 		cmp.w	d4,d2
-		blo.s		.return
+		blo.s	.return
 		cmp.w	d6,d2
 		bhs.s	.return
 		move.w	a2,d0
@@ -242,12 +242,12 @@ Check_PlayerInRange:
 Check_PlayerInRange2:
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	(a1)+,d0
-		blo.s		.fail
+		blo.s	.fail
 		cmp.w	(a1)+,d0
 		bhi.s	.fail
 		move.w	(Player_1+x_pos).w,d1
 		cmp.w	(a1)+,d1
-		blo.s		.fail
+		blo.s	.fail
 		cmp.w	(a1),d1
 		bhi.s	.fail
 
@@ -332,7 +332,7 @@ Check_CameraXBoundary:
 .left
 		addi.w	#16,d0
 		cmp.w	x_pos(a0),d0
-		blo.s		.return2
+		blo.s	.return2
 		clr.w	x_vel(a0)
 
 .return2
@@ -348,14 +348,14 @@ Check_CameraXBoundary2:
 		bmi.s	.left
 		add.w	d2,d0
 		cmp.w	x_pos(a0),d0
-		bls.s		.setflipx
+		bls.s	.setflipx
 		rts
 ; ---------------------------------------------------------------------------
 
 .left
 		add.w	d1,d0
 		cmp.w	x_pos(a0),d0
-		blo.s		.return
+		blo.s	.return
 
 .setflipx
 		bchg	#0,render_flags(a0)
@@ -458,7 +458,7 @@ Obj_DecLevStartXGradual:
 		swap	d1
 		sub.w	d1,d0
 		cmp.w	(Camera_stored_min_X_pos).w,d0
-		ble.s		.end
+		ble.s	.end
 		move.w	d0,(Camera_min_X_pos).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -496,7 +496,7 @@ Obj_DecLevStartYGradual:
 		swap	d1
 		sub.w	d1,d0
 		cmp.w	(Camera_stored_min_Y_pos).w,d0
-		ble.s		.end
+		ble.s	.end
 		move.w	d0,(Camera_min_Y_pos).w
 		rts
 ; ---------------------------------------------------------------------------
