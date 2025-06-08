@@ -9,8 +9,8 @@ Obj_AutoSpin:
 		; init
 		move.l	#Map_PathSwap,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,0,0),art_tile(a0)
-		ori.b	#rfCoord,render_flags(a0)							; use screen coordinates
-		move.l	#bytes_word_to_long(256/2,256/2,priority_5),height_pixels(a0)	; set height, width and priority
+		ori.b	#rfCoord,render_flags(a0)						; use screen coordinates
+		move.l	#bytes_word_to_long(256/2,256/2,priority_5),height_pixels(a0)		; set height, width and priority
 
 		; check
 		move.b	subtype(a0),d0
@@ -22,7 +22,7 @@ Obj_AutoSpin:
 		add.w	d0,d0
 		move.w	word_1E854(pc,d0.w),objoff_32(a0)
 		move.w	y_pos(a0),d1
-		lea	(Player_1).w,a1										; a1=character
+		lea	(Player_1).w,a1								; a1=character
 		cmp.w	y_pos(a1),d1
 		bhs.s	loc_1E84A
 		move.b	#1,objoff_34(a0)
@@ -36,10 +36,10 @@ loc_1E84A:
 ; ---------------------------------------------------------------------------
 
 word_1E854:
-		dc.w $20			; 0
-		dc.w $40			; 1
-		dc.w $80			; 2
-		dc.w $100		; 3
+		dc.w $20	; 0
+		dc.w $40	; 1
+		dc.w $80	; 2
+		dc.w $100	; 3
 ; ---------------------------------------------------------------------------
 
 AutoSpin_CheckX:
@@ -48,7 +48,7 @@ AutoSpin_CheckX:
 		add.w	d0,d0
 		move.w	word_1E854(pc,d0.w),objoff_32(a0)
 		move.w	x_pos(a0),d1
-		lea	(Player_1).w,a1										; a1=character
+		lea	(Player_1).w,a1								; a1=character
 		cmp.w	x_pos(a1),d1
 		bhs.s	loc_1E890
 		move.b	#1,objoff_34(a0)
@@ -60,10 +60,10 @@ loc_1E890:
 
 AutoSpin_MainX:
 		tst.w	(Debug_placement_mode).w						; is debug mode on?
-		bne.s	loc_1E8C0										; if yes, branch
+		bne.s	loc_1E8C0								; if yes, branch
 		move.w	x_pos(a0),d1
 		lea	objoff_34(a0),a2
-		lea	(Player_1).w,a1										; a1=character
+		lea	(Player_1).w,a1								; a1=character
 		bsr.s	sub_1E8C6
 		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
@@ -86,13 +86,13 @@ sub_1E8C6:
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
 		cmp.w	d2,d4
-		blo.s		locret_1E942
+		blo.s	locret_1E942
 		cmp.w	d3,d4
 		bhs.s	locret_1E942
 		btst	#5,subtype(a0)
 		beq.s	loc_1E908
-		btst	#Status_InAir,status(a1)								; is the player in the air?
-		bne.s	locret_1E942										; if yes, branch
+		btst	#Status_InAir,status(a1)						; is the player in the air?
+		bne.s	locret_1E942								; if yes, branch
 
 loc_1E908:
 		btst	#0,render_flags(a0)
@@ -121,7 +121,7 @@ locret_1E942:
 
 AutoSpin_MainX_Alt:
 		cmp.w	x_pos(a1),d1
-		bls.s		locret_1E9B4
+		bls.s	locret_1E9B4
 		clr.b	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
@@ -130,13 +130,13 @@ AutoSpin_MainX_Alt:
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
 		cmp.w	d2,d4
-		blo.s		locret_1E9B4
+		blo.s	locret_1E9B4
 		cmp.w	d3,d4
 		bhs.s	locret_1E9B4
 		btst	#5,subtype(a0)
 		beq.s	loc_1E97C
-		btst	#Status_InAir,status(a1)								; is the player in the air?
-		bne.s	locret_1E9B4										; if yes, branch
+		btst	#Status_InAir,status(a1)						; is the player in the air?
+		bne.s	locret_1E9B4								; if yes, branch
 
 loc_1E97C:
 		btst	#0,render_flags(a0)
@@ -171,7 +171,7 @@ sub_1E9B6:
 
 loc_1E9C0:
 		bset	#Status_Roll,status(a1)
-		move.w	#bytes_to_word(28/2,14/2),y_radius(a1)				; set y_radius and x_radius
+		move.w	#bytes_to_word(28/2,14/2),y_radius(a1)					; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a1)
 		addq.w	#5,y_pos(a1)
 		sfx	sfx_Roll,1
@@ -180,10 +180,10 @@ loc_1E9C0:
 
 AutoSpin_MainY:
 		tst.w	(Debug_placement_mode).w						; is debug mode on?
-		bne.s	loc_1EA0E										; if yes, branch
+		bne.s	loc_1EA0E								; if yes, branch
 		move.w	y_pos(a0),d1
 		lea	objoff_34(a0),a2
-		lea	(Player_1).w,a1										; a1=character
+		lea	(Player_1).w,a1								; a1=character
 		bsr.s	sub_1EA14
 		jmp	(Delete_Sprite_If_Not_In_Range).w
 ; ---------------------------------------------------------------------------
@@ -206,13 +206,13 @@ sub_1EA14:
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
 		cmp.w	d2,d4
-		blo.s		locret_1EAAE
+		blo.s	locret_1EAAE
 		cmp.w	d3,d4
 		bhs.s	locret_1EAAE
 		btst	#5,subtype(a0)
 		beq.s	loc_1EA58
-		btst	#Status_InAir,status(a1)								; is the player in the air?
-		bne.s	locret_1EAAE										; if yes, branch
+		btst	#Status_InAir,status(a1)						; is the player in the air?
+		bne.s	locret_1EAAE								; if yes, branch
 
 loc_1EA58:
 		btst	#0,render_flags(a0)
@@ -248,7 +248,7 @@ locret_1EAAE:
 
 AutoSpin_MainY_Alt:
 		cmp.w	y_pos(a1),d1
-		bls.s		locret_1EB30
+		bls.s	locret_1EB30
 		clr.b	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
@@ -257,13 +257,13 @@ AutoSpin_MainY_Alt:
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
 		cmp.w	d2,d4
-		blo.s		locret_1EB30
+		blo.s	locret_1EB30
 		cmp.w	d3,d4
 		bhs.s	locret_1EB30
 		btst	#5,subtype(a0)
 		beq.s	loc_1EAE8
-		btst	#Status_InAir,status(a1)								; is the player in the air?
-		bne.s	locret_1EB30										; if yes, branch
+		btst	#Status_InAir,status(a1)						; is the player in the air?
+		bne.s	locret_1EB30								; if yes, branch
 
 loc_1EAE8:
 		btst	#0,render_flags(a0)

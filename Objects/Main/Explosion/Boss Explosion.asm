@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosionSpecial:
-		move.w	#2,objoff_2E(a0)							; wait
+		move.w	#2,objoff_2E(a0)						; wait
 		move.w	(Camera_X_pos).w,d0
 		addi.w	#320/2,d0
 		move.w	d0,x_pos(a0)
@@ -25,7 +25,7 @@ Obj_CreateBossExplosion:
 		; set
 		moveq	#0,d0
 		move.b	subtype(a0),d0
-		add.b	d0,d0									; multiply by 2
+		add.b	d0,d0								; multiply by 2
 		lea	CreateBossExpParameterIndex(pc,d0.w),a1
 		move.w	(a1)+,objoff_3A(a0)
 		move.b	(a1)+,objoff_39(a0)
@@ -38,10 +38,10 @@ Obj_CreateBossExplosion:
 ; ---------------------------------------------------------------------------
 
 CreateBossExpRoutineSet:
-		dc.l Obj_Wait, Obj_BossExpControl1					; 0
+		dc.l Obj_Wait, Obj_BossExpControl1			; 0
 		dc.l Obj_WaitForParent, Obj_BossExpControl1		; 8
-		dc.l Obj_Wait, Obj_NormalExpControl				; 10
-		dc.l Obj_Wait, Obj_BossExpControl2					; 18
+		dc.l Obj_Wait, Obj_NormalExpControl			; 10
+		dc.l Obj_Wait, Obj_BossExpControl2			; 18
 		dc.l Obj_WaitForParent, Obj_BossExpControl2		; 20
 		dc.l Obj_WaitForParent, Obj_NormalExpControl		; 28
 		dc.l Obj_WaitForParent, Obj_BossExpControlOff		; 30
@@ -49,23 +49,23 @@ CreateBossExpRoutineSet:
 CreateBossExpParameterIndex:
 
 		; x offset range, y offset range, explosion timer, routine set
-		dc.b 64/2, 64/2, $20, 0							; 0
-		dc.b 256/2, 256/2, $28, $18						; 2
-		dc.b 64/2, 64/2, $80, 8							; 4
-		dc.b 32/2, 32/2, 4, 0								; 6
-		dc.b 64/2, 64/2, 8, $10								; 8
-		dc.b 64/2, 64/2, $20, 0							; A
-		dc.b 256/2, 64/2, $40, 0							; C
-		dc.b 128/2, 128/2, $80, 8							; E
-		dc.b 64/2, 64/2, $20, $18							; 10
-		dc.b 64/2, 64/2, $80, $20							; 12
-		dc.b 256/2, 64/2, 8, $10							; 14
-		dc.b 256/2, 256/2, $80, 8							; 16
-		dc.b 256/2, 256/2, $80, $28						; 18
-		dc.b 128/2, 128/2, $80, $28						; 1A
-		dc.b 256/2, 128/2, $80, 8							; 1C
-		dc.b 32/2, 32/2, $80, 8								; 1E
-		dc.b 64/2, 64/2, $80, $30							; 20
+		dc.b 64/2, 64/2, $20, 0					; 0
+		dc.b 256/2, 256/2, $28, $18				; 2
+		dc.b 64/2, 64/2, $80, 8					; 4
+		dc.b 32/2, 32/2, 4, 0					; 6
+		dc.b 64/2, 64/2, 8, $10					; 8
+		dc.b 64/2, 64/2, $20, 0					; A
+		dc.b 256/2, 64/2, $40, 0				; C
+		dc.b 128/2, 128/2, $80, 8				; E
+		dc.b 64/2, 64/2, $20, $18				; 10
+		dc.b 64/2, 64/2, $80, $20				; 12
+		dc.b 256/2, 64/2, 8, $10				; 14
+		dc.b 256/2, 256/2, $80, 8				; 16
+		dc.b 256/2, 256/2, $80, $28				; 18
+		dc.b 128/2, 128/2, $80, $28				; 1A
+		dc.b 256/2, 128/2, $80, 8				; 1C
+		dc.b 32/2, 32/2, $80, 8					; 1E
+		dc.b 64/2, 64/2, $80, $30				; 20
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -73,8 +73,8 @@ Obj_WaitForParent:
 		movea.w	parent3(a0),a1
 		btst	#5,objoff_38(a1)
 		bne.s	loc_83EC2
-		tst.l	address(a1)									; is object RAM slot empty?
-		beq.s	loc_83EC2								; if yes, branch
+		tst.l	address(a1)							; is object RAM slot empty?
+		beq.s	loc_83EC2							; if yes, branch
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
 		jmp	(Obj_Wait).w
@@ -82,13 +82,13 @@ Obj_WaitForParent:
 
 Obj_BossExpControl1:
 		move.b	objoff_39(a0),d0
-		bmi.s	loc_83E7E								; if negative, explosions are constantly created every three frames
+		bmi.s	loc_83E7E							; if negative, explosions are constantly created every three frames
 		subq.b	#1,d0
-		move.b	d0,objoff_39(a0)							; otherwise, continue making explosions until timer runs out
+		move.b	d0,objoff_39(a0)						; otherwise, continue making explosions until timer runs out
 		beq.s	loc_83EC2
 
 loc_83E7E:
-		move.w	#2,objoff_2E(a0)							; wait
+		move.w	#2,objoff_2E(a0)						; wait
 
 sub_83E84:
 		lea	Child6_MakeBossExplosion1(pc),a2
@@ -96,7 +96,7 @@ sub_83E84:
 		bne.s	locret_83EC0
 
 loc_83E90:
-		jsr	(Random_Number).w							; offset the explosion by a random amount capped by an effective range
+		jsr	(Random_Number).w						; offset the explosion by a random amount capped by an effective range
 		moveq	#0,d1
 		move.b	objoff_3A(a0),d1
 		move.w	d1,d2
@@ -131,9 +131,9 @@ loc_83EC2:
 Obj_NormalExpControl:
 
 		; wait
-		subq.b	#1,objoff_39(a0)							; same as above, but uses regular explosions (no animals of course)
+		subq.b	#1,objoff_39(a0)						; same as above, but uses regular explosions (no animals of course)
 		beq.s	loc_83EC2
-		move.w	#2,objoff_2E(a0)							; wait
+		move.w	#2,objoff_2E(a0)						; wait
 
 		; create
 		lea	Child6_MakeNormalExplosion(pc),a2
@@ -153,7 +153,7 @@ Obj_BossExpControl2:
 		; wait
 		subq.b	#1,objoff_39(a0)
 		beq.s	loc_83EC2
-		move.w	#2,objoff_2E(a0)							; wait
+		move.w	#2,objoff_2E(a0)						; wait
 
 		; create
 		lea	Child6_MakeBossExplosion2(pc),a2
@@ -172,7 +172,7 @@ Obj_BossExpControlOff:
 		; wait
 		subq.b	#1,objoff_39(a0)
 		beq.s	loc_83EC2
-		move.w	#2,objoff_2E(a0)							; wait
+		move.w	#2,objoff_2E(a0)						; wait
 
 		; create
 		lea	Child6_MakeBossExplosionOff(pc),a2
@@ -261,7 +261,7 @@ Child6_ExplosionSpecial:
 		dc.l Obj_BossExplosionSpecial
 
 AniRaw_BossExplosion:
-		dc.b 0, 0			; frame, wait
+		dc.b 0, 0	; frame, wait
 		dc.b 0, 1
 		dc.b 1, 1
 		dc.b 2, 2

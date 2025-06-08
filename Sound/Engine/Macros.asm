@@ -5,7 +5,7 @@ SMPS_MUSIC_METADATA macro address,fasttempo,flags
 	dc.l	((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)
 	endm
 
-SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
+SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001				; forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
 
 ; ---------------------------------------------------------------------------
 ; SFX macros and constants
@@ -111,11 +111,11 @@ SMPS_UnpauseMusic macro
 ; update sound driver
 ; ---------------------------------------------------------------------------
 SMPS_UpdateSoundDriver macro
-	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
+	move	#$2300,sr						; enable interrupts (we can accept horizontal interrupts from now on)
 	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; set "SMPS running flag"
-	bne.s	.skip						; if it was set already, don't call another instance of SMPS
-	jsr	(SMPS_UpdateDriver).l			; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; reset "SMPS running flag"
+	bne.s	.skip							; if it was set already, don't call another instance of SMPS
+	jsr	(SMPS_UpdateDriver).l					; update Sonic 2 Clone Driver v2
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w		; reset "SMPS running flag"
 .skip:
 	endm
 
@@ -154,6 +154,6 @@ MCDSend macro	id, arg, arg2
 	addq.b  #1,(MCD_Command_Clock).l
 
 .wait2
-	tst.b	(MCD_Status).l		; Waiting for the first command to be executed
+	tst.b	(MCD_Status).l						; waiting for the first command to be executed
 	beq.s	.wait2
 	endm

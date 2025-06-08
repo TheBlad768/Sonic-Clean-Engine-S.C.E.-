@@ -939,14 +939,14 @@ enableScreen macro
 ; ---------------------------------------------------------------------------
 
 jhi macro loc
-	bls.s		.nojump
+	bls.s	.nojump
 	jmp	(loc).l
 
 .nojump
     endm
 
 jcc macro loc
-	blo.s		.nojump
+	blo.s	.nojump
 	jmp	(loc).l
 
 .nojump
@@ -989,14 +989,14 @@ jne macro loc
     endm
 
 jgt macro loc
-	ble.s		.nojump
+	ble.s	.nojump
 	jmp	(loc).l
 
 .nojump
     endm
 
 jge macro loc
-	blt.s		.nojump
+	blt.s	.nojump
 	jmp	(loc).l
 
 .nojump

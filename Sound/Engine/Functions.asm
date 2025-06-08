@@ -6,8 +6,8 @@ SMPS_LoadDACDriver:
 	jsr	(MegaPCM_LoadDriver).l
 	lea	(MegaPCM_DAC_Table).l,a0
 	jsr	(MegaPCM_LoadSampleTable).l
-	tst.w	d0										; was sample table loaded successfully?
-	beq.s	.SampleTableOk							; if yes, branch
+	tst.w	d0									; was sample table loaded successfully?
+	beq.s	.SampleTableOk								; if yes, branch
 
 	ifdef __DEBUG__
 		; for MD Debugger v.2.5 or above
@@ -20,7 +20,7 @@ SMPS_LoadDACDriver:
 
 	; detect PAL region consoles
 	btst	#6,(Graphics_flags).w
-	beq.s	.not_pal									; branch if it's not a PAL system
+	beq.s	.not_pal								; branch if it's not a PAL system
 	bset	#f_pal,(Clone_Driver_RAM+SMPS_RAM.bitfield1).w
 
 .not_pal

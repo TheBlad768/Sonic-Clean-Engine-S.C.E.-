@@ -9,7 +9,7 @@ Obj_Spring:
 		; init
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	; set red
-		ori.b	#rfCoord,render_flags(a0)									; use screen coordinates
+		ori.b	#rfCoord,render_flags(a0)					; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
 		move.w	x_pos(a0),objoff_32(a0)
 		move.w	y_pos(a0),objoff_34(a0)
@@ -22,16 +22,16 @@ Obj_Spring:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	Spring_Up												; 0
-		bra.s	Spring_Horizontal											; 2
-		bra.s	Spring_Down												; 4
-		bra.s	Spring_UpDiag											; 6
+		bra.s	Spring_Up		; 0
+		bra.s	Spring_Horizontal	; 2
+		bra.s	Spring_Down		; 4
+		bra.s	Spring_UpDiag		; 6
 ; ---------------------------------------------------------------------------
 
-		; down diag														; 8
+		; down diag			; 8
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
-		move.w	#make_art_tile($468,0,0),art_tile(a0)						; set diagonal
+		move.w	#make_art_tile($468,0,0),art_tile(a0)				; set diagonal
 		bset	#1,status(a0)
 		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
@@ -40,7 +40,7 @@ Obj_Spring:
 Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
-		move.w	#make_art_tile($468,0,0),art_tile(a0)						; set diagonal
+		move.w	#make_art_tile($468,0,0),art_tile(a0)				; set diagonal
 		move.l	#Obj_Spring_UpDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Spring_Common:
 		move.w	word_22EF0(pc,d0.w),objoff_30(a0)
 		btst	#1,d0
 		beq.s	locret_22EEE
-		move.l	#Map_Spring2,mappings(a0)								; set yellow
+		move.l	#Map_Spring2,mappings(a0)					; set yellow
 
 locret_22EEE:
 		rts
@@ -96,7 +96,7 @@ Obj_Spring_Up:
 		moveq	#8,d2
 		moveq	#$10,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2.check).w
 		btst	#p1_standing_bit,status(a0)
@@ -114,7 +114,7 @@ Obj_Spring_Up_NoSolid:
 		moveq	#$1B,d1
 		moveq	#8,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectTop.check).w
 		btst	#p1_standing_bit,status(a0)
@@ -129,7 +129,7 @@ Obj_Spring_Up_NoSolid:
 ; =============== S U B R O U T I N E =======================================
 
 sub_22F98:
-		move.w	#bytes_to_word(1,0),anim(a0)								; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(1,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		addq.w	#8,y_pos(a1)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
@@ -148,7 +148,7 @@ sub_22F98:
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; AniIDSonAni_Walk
+		clr.b	anim(a1)							; AniIDSonAni_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -184,7 +184,7 @@ Obj_Spring_Horizontal:
 		moveq	#$E,d2
 		moveq	#$F,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2.check).w
 		swap	d6
@@ -193,7 +193,7 @@ Obj_Spring_Horizontal:
 		move.b	status(a0),d1
 		move.w	x_pos(a0),d0
 		sub.w	x_pos(a1),d0
-		blo.s		loc_23088
+		blo.s	loc_23088
 		eori.b	#1,d1
 
 loc_23088:
@@ -207,14 +207,14 @@ loc_23092:
 		jsr	(Animate_Sprite).w
 
 		; draw
-		moveq	#-$80,d0												; round down to nearest $80
-		and.w	objoff_32(a0),d0											; get object position
+		moveq	#-$80,d0							; round down to nearest $80
+		and.w	objoff_32(a0),d0						; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_23190:
-		move.w	#bytes_to_word(3,0),anim(a0)								; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(3,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
 		bset	#Status_Facing,status(a1)
@@ -229,7 +229,7 @@ loc_231BE:
 		move.w	x_vel(a1),ground_vel(a1)
 		btst	#Status_Roll,status(a1)
 		bne.s	loc_231D8
-		clr.b	anim(a1)														; AniIDSonAni_Walk
+		clr.b	anim(a1)							; AniIDSonAni_Walk
 
 loc_231D8:
 		move.b	subtype(a0),d0
@@ -237,7 +237,7 @@ loc_231D8:
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; AniIDSonAni_Walk
+		clr.b	anim(a1)							; AniIDSonAni_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -288,15 +288,15 @@ loc_2328E:
 		move.w	d2,d3
 		subi.w	#24,d2
 		addi.w	#24,d3
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		tst.b	object_control(a1)
 		bmi.s	locret_23324
-		cmpi.b	#PlayerID_Death,routine(a1)								; has player just died?
-		bhs.s	locret_23324												; if yes, branch
-		tst.w	(Debug_placement_mode).w								; is debug mode on?
-		bne.s	locret_23324												; if yes, branch
-		btst	#Status_InAir,status(a1)										; is the player in the air?
-		bne.s	locret_23324												; if yes, branch
+		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
+		bhs.s	locret_23324							; if yes, branch
+		tst.w	(Debug_placement_mode).w					; is debug mode on?
+		bne.s	locret_23324							; if yes, branch
+		btst	#Status_InAir,status(a1)					; is the player in the air?
+		bne.s	locret_23324							; if yes, branch
 		move.w	ground_vel(a1),d4
 		btst	#0,status(a0)
 		beq.s	loc_232B6
@@ -307,12 +307,12 @@ loc_232B6:
 		bmi.s	locret_23324
 		move.w	x_pos(a1),d4
 		cmp.w	d0,d4
-		blo.s		locret_23324
+		blo.s	locret_23324
 		cmp.w	d1,d4
 		bhs.s	locret_23324
 		move.w	y_pos(a1),d4
 		cmp.w	d2,d4
-		blo.s		locret_23324
+		blo.s	locret_23324
 		cmp.w	d3,d4
 		bhs.s	locret_23324
 		bra.w	sub_23190
@@ -328,7 +328,7 @@ Obj_Spring_Down:
 		moveq	#8,d2
 		moveq	#9,d3
 		move.w	x_pos(a0),d4
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2.check).w
 		cmpi.w	#-2,d4
@@ -349,7 +349,7 @@ sub_233CA:
 		addi.w	#8*2,y_pos(a1)
 
 .notgrav
-		move.w	#bytes_to_word(1,0),anim(a0)								; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(1,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),y_vel(a1)
 		neg.w	y_vel(a1)
 		cmpi.w	#$1000,y_vel(a1)
@@ -362,7 +362,7 @@ loc_233F8:
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; AniIDSonAni_Walk
+		clr.b	anim(a1)							; AniIDSonAni_Walk
 		clr.b	flips_remaining(a1)
 		move.b	#4,flip_speed(a1)
 		btst	#1,d0
@@ -403,7 +403,7 @@ Obj_Spring_UpDiag:
 		moveq	#$10,d2
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagUp(pc),a2
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFullSloped_Spring.check).w
 		btst	#p1_standing_bit,status(a0)
@@ -415,8 +415,8 @@ loc_234B8:
 		jsr	(Animate_Sprite).w
 
 		; draw
-		moveq	#-$80,d0												; round down to nearest $80
-		and.w	objoff_32(a0),d0											; get object position
+		moveq	#-$80,d0							; round down to nearest $80
+		and.w	objoff_32(a0),d0						; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -427,7 +427,7 @@ sub_234E6:
 		move.w	x_pos(a0),d0
 		subq.w	#4,d0
 		cmp.w	x_pos(a1),d0
-		blo.s		loc_2350A
+		blo.s	loc_2350A
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -440,7 +440,7 @@ loc_234FC:
 ; ---------------------------------------------------------------------------
 
 loc_2350A:
-		move.w	#bytes_to_word(5,0),anim(a0)								; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(5,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),d0
 		move.w	d0,x_vel(a1)
 		move.w	d0,y_vel(a1)
@@ -464,7 +464,7 @@ loc_23542:
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; AniIDSonAni_Walk
+		clr.b	anim(a1)							; AniIDSonAni_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0
@@ -500,7 +500,7 @@ Obj_Spring_DownDiag:
 		moveq	#$10,d2
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagDown(pc),a2
-		lea	(Player_1).w,a1												; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFullSloped_Spring.check).w
 		cmpi.w	#-2,d4
@@ -512,14 +512,14 @@ loc_235F8:
 		jsr	(Animate_Sprite).w
 
 		; draw
-		moveq	#-$80,d0												; round down to nearest $80
-		and.w	objoff_32(a0),d0											; get object position
+		moveq	#-$80,d0							; round down to nearest $80
+		and.w	objoff_32(a0),d0						; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_23624:
-		move.w	#bytes_to_word(5,0),anim(a0)								; set anim and clear next_anim/prev_anim
+		move.w	#bytes_to_word(5,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),d0
 		move.w	d0,x_vel(a1)
 		move.w	d0,y_vel(a1)
@@ -543,7 +543,7 @@ loc_23660:
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)
 		move.b	#1,flip_angle(a1)
-		clr.b	anim(a1)														; AniIDSonAni_Walk
+		clr.b	anim(a1)							; AniIDSonAni_Walk
 		move.b	#1,flips_remaining(a1)
 		move.b	#8,flip_speed(a1)
 		btst	#1,d0

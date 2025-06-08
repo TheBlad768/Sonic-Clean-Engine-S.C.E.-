@@ -6,7 +6,7 @@
 
 Obj_SmoothPalette:
 		move.l	#.main,address(a0)
-		move.b	#7,objoff_39(a0)				; set 7 for normal fade
+		move.b	#7,objoff_39(a0)						; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -15,9 +15,9 @@ Obj_SmoothPalette:
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
 	        move.w	objoff_3A(a0),objoff_2E(a0)
-		movea.w	objoff_30(a0),a1				; palette ram
-		movea.l	objoff_32(a0),a2				; palette pointer
-		move.w	objoff_36(a0),d0				; palette size
+		movea.w	objoff_30(a0),a1						; palette ram
+		movea.l	objoff_32(a0),a2						; palette pointer
+		move.w	objoff_36(a0),d0						; palette size
 		jsr	(Pal_SmoothToPalette).w
 
 		; check delete
@@ -34,7 +34,7 @@ Obj_SmoothPalette:
 
 Obj_SmoothPalette2:
 		move.l	#.main,address(a0)
-		move.b	#7,objoff_39(a0)				; set 7-1 for normal fade
+		move.b	#7,objoff_39(a0)						; set 7-1 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -44,12 +44,12 @@ Obj_SmoothPalette2:
 		bpl.s	.return
 	        move.w	objoff_3A(a0),objoff_2E(a0)
 		movea.l	objoff_30(a0),a3
-		move.w	(a3)+,d6						; loop count
+		move.w	(a3)+,d6							; loop count
 
 .loop
-		movea.l	(a3)+,a2						; palette pointer
-		movea.w	(a3)+,a1						; palette ram
-		move.w	(a3)+,d0						; palette size
+		movea.l	(a3)+,a2							; palette pointer
+		movea.w	(a3)+,a1							; palette ram
+		move.w	(a3)+,d0							; palette size
 		jsr	(Pal_SmoothToPalette).w
 		dbf	d6,.loop
 
@@ -79,7 +79,7 @@ Child6_SmoothPalette2:
 
 Obj_FadeSelectedToBlack:
 		move.l	#.main,address(a0)
-		move.b	#7,objoff_39(a0)				; set 7 for normal fade
+		move.b	#7,objoff_39(a0)						; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -113,7 +113,7 @@ Obj_FadeSelectedToBlack:
 
 Obj_FadeSelectedFromBlack:
 		move.l	#.main,address(a0)
-		move.b	#7,objoff_39(a0)				; set 7 for normal fade
+		move.b	#7,objoff_39(a0)						; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -144,7 +144,7 @@ Obj_FadeSelectedFromBlack:
 
 Obj_FadeToWhite:
 		move.l	#.main,address(a0)
-		move.b	#7,objoff_39(a0)				; set 7 for normal fade
+		move.b	#7,objoff_39(a0)						; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -182,7 +182,7 @@ Obj_FadeToWhite:
 
 Obj_FadeFromWhite:
 		move.l	#.main,address(a0)
-		move.b	#7,objoff_39(a0)				; set 7 for normal fade
+		move.b	#7,objoff_39(a0)						; set 7 for normal fade
 		move.w	#3,objoff_2E(a0)
 
 .main

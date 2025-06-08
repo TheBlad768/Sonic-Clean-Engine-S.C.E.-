@@ -565,7 +565,7 @@ SolidObject_TopBottom:
 
 ; SolidObject_InsideTop:
 		cmpi.w	#16,d3										; has Sonic landed on the object?
-		blo.s		SolidObject_Landed							; if yes, branch
+		blo.s	SolidObject_Landed								; if yes, branch
 		bra.s	SolidObject_TestClearPush
 ; ---------------------------------------------------------------------------
 
