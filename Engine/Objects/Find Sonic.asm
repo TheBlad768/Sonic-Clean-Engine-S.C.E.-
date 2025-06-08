@@ -37,7 +37,7 @@ Find_Sonic8Way:
 		cmp.w	d2,d3
 		beq.s	loc_853E2
 		bhi.s	loc_853BC
-		swap	d3					; if y distance is closer to object
+		swap	d3				; if y distance is closer to object
 		clr.w	d3
 		divu.w	d2,d3
 		tst.w	d0
@@ -58,7 +58,7 @@ loc_853AE:
 ; ---------------------------------------------------------------------------
 
 loc_853BC:
-		swap	d2					; if x distance is closer to object
+		swap	d2				; if x distance is closer to object
 		clr.w	d2
 		divu.w	d3,d2
 		tst.w	d1
@@ -79,7 +79,7 @@ loc_853D4:
 ; ---------------------------------------------------------------------------
 
 loc_853E2:
-		tst.w	d0					; if x and y distance are identical
+		tst.w	d0				; if x and y distance are identical
 		beq.s	loc_853EE
 		tst.w	d1
 		beq.s	loc_853FA

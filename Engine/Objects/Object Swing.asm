@@ -51,7 +51,7 @@ Swing_UpAndDown:
 		moveq	#0,d3
 		btst	#0,objoff_38(a0)
 		bne.s	.check
-		neg.w	d0						; apply upward acceleration
+		neg.w	d0					; apply upward acceleration
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
@@ -653,7 +653,7 @@ loc_465F6:
 		bne.s	loc_4660E
 
 loc_465FE:
-		neg.l	d0						; reverse direction to move upwards when speed has reached
+		neg.l	d0					; reverse direction to move upwards when speed has reached
 		move.l	d0,objoff_2E(a0)			; reset initial speed (negative)
 		clr.l	objoff_32(a0)
 		st	objoff_36(a0)
@@ -684,11 +684,11 @@ sub_86458:
 
 .notflipx
 		add.w	d2,d1
-		move.w	d1,(a2)+					; sub2_x_pos
+		move.w	d1,(a2)+				; sub2_x_pos
 		move.b	(a1)+,d1
 		ext.w	d1
 		add.w	d3,d1
-		move.w	d1,(a2)+					; sub2_y_pos
-		addq.w	#next_subspr-4,a2		; skip sub2_mapframe
+		move.w	d1,(a2)+				; sub2_y_pos
+		addq.w	#next_subspr-4,a2			; skip sub2_mapframe
 		dbf	d0,.next
 		rts
