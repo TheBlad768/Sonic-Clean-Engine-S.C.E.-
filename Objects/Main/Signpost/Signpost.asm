@@ -51,7 +51,7 @@ Obj_EndSignControlDoStart:
 sign_timer			= objoff_2E	; .w
 sign_aniraw			= objoff_30	; .l
 
-sign_dplcframe		= objoff_3A	; .b
+sign_dplcframe			= objoff_3A	; .b
 sign_rosbit			= objoff_3B	; .b
 sign_rosaddr			= objoff_3C	; .w
 
