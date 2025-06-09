@@ -6,9 +6,9 @@ SMPS_Track STRUCT DOTS
 	VoiceControl:			ds.b 1		; All tracks
 
 	VolEnvIndex:			;ds.b 1		; PSG only	; Clownacy | Now shared with panning RAM
-	AMSFMSPan:		ds.b 1		; FM/DAC only
+	AMSFMSPan:			ds.b 1		; FM/DAC only
 
-	TempoDivider:		ds.b 1		; All tracks
+	TempoDivider:			ds.b 1		; All tracks
 	Transpose:			ds.b 1		; FM/PSG only
 	Volume:				ds.b 1		; All tracks
 
@@ -23,24 +23,24 @@ SMPS_Track STRUCT DOTS
 
 	StackPointer:			ds.b 1		; All tracks
 	DurationTimeout:		ds.b 1		; All tracks
-	SavedDuration:		ds.b 1		; All tracks
+	SavedDuration:			ds.b 1		; All tracks
 	NoteTimeout:			ds.b 1		; FM/PSG only
 
-	NoteTimeoutMaster:	;ds.b 1		; FM/PSG only
-	ModulationPtr:		ds.l 1		; FM/PSG only
+	NoteTimeoutMaster:		;ds.b 1		; FM/PSG only
+	ModulationPtr:			ds.l 1		; FM/PSG only
 
-	ModulationWait:		ds.b 1		; FM/PSG only
+	ModulationWait:			ds.b 1		; FM/PSG only
 	ModulationSpeed:		ds.b 1		; FM/PSG only
 	ModulationDelta:		ds.b 1		; FM/PSG only
 	ModulationSteps:		ds.b 1		; FM/PSG only
-	ModulationVal:		ds.w 1		; FM/PSG only
+	ModulationVal:			ds.w 1		; FM/PSG only
 
     if SMPS_EnableModulationEnvelopes
-	ModulationCtrl:		ds.b 1		; FM/PSG only
-	ModEnvIndex:		ds.b 1		; FM/PSG only
+	ModulationCtrl:			ds.b 1		; FM/PSG only
+	ModEnvIndex:			ds.b 1		; FM/PSG only
 	ModEnvSens:			ds.b 1		; FM/PSG only
     else
-						ds.b 1		; padding to ensure an even address
+					ds.b 1		; padding to ensure an even address
     endif
 
 	Detune:				ds.b 1		; FM/PSG only
@@ -48,7 +48,7 @@ SMPS_Track STRUCT DOTS
 	PSGNoise:			;ds.b 1		; PSG only
 	VoicePtr:			ds.l 1		; FM only - This used to be FM SFX only (well, technically all SFX tracks), but now music and Special SFX use it too
 
-	LoopCounters:		ds.l 3		; All tracks
+	LoopCounters:			ds.l 3		; All tracks
 	GoSubStack:						; All tracks
 SMPS_Track ENDSTRUCT
 
@@ -68,10 +68,10 @@ SMPS_Queue ENDSTRUCT
 SMPS_RAM_Variables STRUCT DOTS
 	queue:				SMPS_Queue
 
-	v_sndprio:				ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
-	v_main_tempo_timeout:	ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
+	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
+	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
 	v_main_tempo:			ds.b 1	; Used for music only
-	bitfield2:					ds.b 1
+	bitfield2:			ds.b 1
 
 	if MSUMode
 	v_cda_playing:			ds.b 1
@@ -83,16 +83,16 @@ f_speedup:					= 1	; flag indicating whether speed shoes tempo is on ($80) or of
 f_force_pal_tempo			= 2	; flag for if the current song must play at PAL speed on PAL consoles
 
 	v_fadeout_counter:		ds.b 1
-	v_fadeout_delay:			ds.b 1
+	v_fadeout_delay:		ds.b 1
 
-	v_fadein_counter:			ds.b 1	; Timer for fade in/out
+	v_fadein_counter:		ds.b 1	; Timer for fade in/out
 	v_fadein_delay:			ds.b 1
 
 	v_tempo_mod:			ds.b 1	; music - tempo modifier
 	v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
 
-	v_pal_audio_countdown:	ds.b 1
-	v_communication_byte:	ds.b 1
+	v_pal_audio_countdown:		ds.b 1
+	v_communication_byte:		ds.b 1
 
     if SMPS_EnableContSFX
 	v_current_contsfx:		ds.w 1
