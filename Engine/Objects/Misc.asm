@@ -402,7 +402,7 @@ Check_PlayerCollision:
 		rts
 ; ---------------------------------------------------------------------------
 
-.players	dc.w Player_1, Player_1, Player_1, Player_1
+.players	dc.w Player_1&$FFFF, Player_1&$FFFF, Player_1&$FFFF, Player_1&$FFFF
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -564,9 +564,9 @@ BossFlash:
 ; ---------------------------------------------------------------------------
 
 .palram
-		dc.w Normal_palette_line_1+$C
-		dc.w Normal_palette_line_1+$1C
-		dc.w Normal_palette_line_1+$1E
+		dc.w (Normal_palette_line_1+$C)&$FFFF
+		dc.w (Normal_palette_line_1+$1C)&$FFFF
+		dc.w (Normal_palette_line_1+$1E)&$FFFF
 .palcycle
 		dc.w 8, $866, cBlack
 		dc.w $888, $CCC, cWhite
