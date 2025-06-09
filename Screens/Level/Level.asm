@@ -29,11 +29,11 @@ LevelScreen:
 		jsr	(Clear_DisplayData).w
 		enableInts
 		tst.b	(Last_star_post_hit).w
-		beq.s	.nostarpost									; if no starpost was set, branch
+		beq.s	.notstarpost									; if no starpost was set, branch
 		move.w	(Saved_zone_and_act).w,(Current_zone_and_act).w
 		move.w	(Saved_apparent_zone_and_act).w,(Apparent_zone_and_act).w
 
-.nostarpost
+.notstarpost
 		clearRAM Object_RAM, Object_RAM_end							; clear the object RAM
 		clearRAM Lag_frame_count, Lag_frame_count_end						; clear variables
 		clearRAM Camera_RAM, Camera_RAM_end							; clear the camera RAM
