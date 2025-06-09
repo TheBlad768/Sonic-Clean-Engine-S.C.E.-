@@ -39,7 +39,7 @@ SMPS_resetZ80a macro
 ; ---------------------------------------------------------------------------
 
 SMPS_startZ80 macro
-	move.w	#0,(Z80_bus_request).l    ; start the Z80
+	move.w	#0,(Z80_bus_request).l		; start the Z80
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -58,6 +58,6 @@ SMPS_PauseMusic macro
 
 SMPS_UnpauseMusic macro
 	SMPS_stopZ80
-	move.b	#$80,(Z80_RAM+zPauseFlag).l		; unpause music
+	move.b	#$80,(Z80_RAM+zPauseFlag).l	; unpause music
 	SMPS_startZ80
 	endm
