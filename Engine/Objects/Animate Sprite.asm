@@ -73,7 +73,7 @@ loc_1AC68:
 loc_1AC7A:
 		addq.b	#1,d0								; code FB - move offscreen
 		bne.s	locret_1AC86
-		move.w	#$7F00,x_pos(a0)					; delete object
+		move.w	#$7F00,x_pos(a0)						; delete object
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -160,25 +160,25 @@ AnimateSprite_Checked:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
-		beq.s	AnimChk_Run						; if not, branch
+		beq.s	AnimChk_Run							; if not, branch
 		move.b	d0,prev_anim(a0)						; set previous animation to current animation
 		clr.b	anim_frame(a0)							; reset animation
-		clr.b	anim_frame_timer(a0)					; reset frame duration
+		clr.b	anim_frame_timer(a0)						; reset frame duration
 
 AnimChk_Run:
-		subq.b	#1,anim_frame_timer(a0)				; subtract 1 from frame duration
-		bpl.s	AnimChk_Wait						; if time remains, branch
+		subq.b	#1,anim_frame_timer(a0)						; subtract 1 from frame duration
+		bpl.s	AnimChk_Wait							; if time remains, branch
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1							; calculate address of appropriate animation script
-		move.b	(a1),anim_frame_timer(a0)				; load frame duration
+		move.b	(a1),anim_frame_timer(a0)					; load frame duration
 		moveq	#0,d1
-		move.b	anim_frame(a0),d1					; load current frame number
+		move.b	anim_frame(a0),d1						; load current frame number
 		move.b	1(a1,d1.w),d0							; read sprite number from script
-		bmi.s	AnimChk_End_FF					; if animation is complete, branch
+		bmi.s	AnimChk_End_FF							; if animation is complete, branch
 
 AnimChk_Next:
-		move.b	d0,mapping_frame(a0)				; load sprite number
-		addq.b	#1,anim_frame(a0)					; next frame number
+		move.b	d0,mapping_frame(a0)						; load sprite number
+		addq.b	#1,anim_frame(a0)						; next frame number
 
 AnimChk_Wait:
 		moveq	#0,d0								; return 0
@@ -187,9 +187,9 @@ AnimChk_Wait:
 
 AnimChk_End_FF:
 		addq.b	#1,d0								; is the end flag = $FF?
-		bne.s	AnimChk_End_FE					; if not, branch
+		bne.s	AnimChk_End_FE							; if not, branch
 		clr.b	anim_frame(a0)							; restart the animation
-		move.b	1(a1),d0								; read sprite number
+		move.b	1(a1),d0							; read sprite number
 		bsr.s	AnimChk_Next
 		moveq	#1,d0								; return 1
 		rts
@@ -197,8 +197,8 @@ AnimChk_End_FF:
 
 AnimChk_End_FE:
 		addq.b	#1,d0								; is the end flag = $FE?
-		bne.s	AnimChk_End_FD					; if not, branch
-		addq.b	#2,routine(a0)						; jump to next routine
+		bne.s	AnimChk_End_FD							; if not, branch
+		addq.b	#2,routine(a0)							; jump to next routine
 		clr.b	anim_frame_timer(a0)
 		addq.b	#1,anim_frame(a0)
 		moveq	#1,d0								; return 1
@@ -207,16 +207,16 @@ AnimChk_End_FE:
 
 AnimChk_End_FD:
 		addq.b	#1,d0								; is the end flag = $FD?
-		bne.s	AnimChk_End_FC					; if not, branch
-		addq.b	#2,routine_secondary(a0)				; jump to next routine
+		bne.s	AnimChk_End_FC							; if not, branch
+		addq.b	#2,routine_secondary(a0)					; jump to next routine
 		moveq	#1,d0								; return 1
 		rts
 ; ---------------------------------------------------------------------------
 
 AnimChk_End_FC:
 		addq.b	#1,d0								; is the end flag = $FC?
-		bne.s	AnimChk_End						; if not, branch
-		move.b	#1,anim_frame_timer(a0)				; force frame duration to 1
+		bne.s	AnimChk_End							; if not, branch
+		move.b	#1,anim_frame_timer(a0)						; force frame duration to 1
 		moveq	#1,d0								; return 1
 
 AnimChk_End:
@@ -297,7 +297,7 @@ Anim_End_FC:
 Anim_End_FB:
 		addq.b	#1,d0								; code FB - move offscreen
 		bne.s	Anim_End
-		move.w	#$7F00,x_pos(a0)					; delete object
+		move.w	#$7F00,x_pos(a0)						; delete object
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -318,9 +318,9 @@ Anim_End:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_MultiSprite:
-		lea	(a1),a4									; save address of animation script
+		lea	(a1),a4								; save address of animation script
 		lea	mapping_frame(a0),a3						; mapframe 1 (main object)
-		tst.b	(a3)										; is it 0 frame? (not draw)
+		tst.b	(a3)								; is it 0 frame? (not draw)
 		bne.s	.load								; if not, branch
 		addq.w	#2,a2								; skip
 		bra.s	.main
@@ -331,13 +331,13 @@ Animate_MultiSprite:
 		bsr.s	.loop
 
 .main
-		move.w	mainspr_childsprites(a0),d6			; get number of child sprites
+		move.w	mainspr_childsprites(a0),d6					; get number of child sprites
 		subq.w	#1,d6								; = amount of iterations to run the code from AnimateBoss_Loop
 		bmi.s	.return								; if was 0, don't run
-		lea	sub2_mapframe(a0),a3					; mapframe 2
+		lea	sub2_mapframe(a0),a3						; mapframe 2
 
 .loop
-		lea	(a4),a1									; load address of animation script
+		lea	(a4),a1								; load address of animation script
 
 	irp	reg, d0,d1,d2
 		moveq	#0,reg
@@ -345,18 +345,18 @@ Animate_MultiSprite:
 
 		move.b	(a2)+,d0
 		move.b	d0,d1
-		lsr.b	#4,d1									; anim_ID (1)
+		lsr.b	#4,d1								; anim_ID (1)
 		andi.b	#$F,d0								; anim_ID (2)
 		move.b	d0,d2
 		cmp.b	d0,d1
-		sne	d4										; anim_IDs not equal
+		sne	d4								; anim_IDs not equal
 		move.b	d0,d5
 		lsl.b	#4,d5
-		or.b	d0,d5									; anim_ID (2) in both nybbles
+		or.b	d0,d5								; anim_ID (2) in both nybbles
 		move.b	(a2)+,d0
 		move.b	d0,d1
-		lsr.b	#4,d1									; anim_frame
-		tst.b	d4										; are the anim_IDs equal?
+		lsr.b	#4,d1								; anim_frame
+		tst.b	d4								; are the anim_IDs equal?
 		beq.s	.run
 
 	irp	reg, d0,d1
@@ -381,9 +381,9 @@ Animate_MultiSprite:
 .next2
 		lsl.b	#4,d1
 		or.b	d1,d0
-		move.b	d0,-1(a2)								; (2nd byte) anim_frame and anim_timer
-		move.b	d5,-2(a2)								; (1st byte) anim_ID (both nybbles)
-		addq.w	#next_subspr,a3						; mapping_frame of next subobject
+		move.b	d0,-1(a2)							; (2nd byte) anim_frame and anim_timer
+		move.b	d5,-2(a2)							; (1st byte) anim_ID (both nybbles)
+		addq.w	#next_subspr,a3							; mapping_frame of next subobject
 		dbf	d6,.loop
 
 .return
@@ -411,12 +411,12 @@ Animate_MultiSprite:
 		addq.b	#1,d2								; code FD - start new animation
 		bne.s	.chk_end_FC
 		andi.b	#$F0,d5								; keep anim_ID (1)
-		or.b	2(a1,d1.w),d5								; set anim_ID (2)
+		or.b	2(a1,d1.w),d5							; set anim_ID (2)
 		bra.s	.next2
 ; ---------------------------------------------------------------------------
 
 .chk_end_FC
 		addq.b	#1,d2								; code FC - increment routine counter
 		bne.s	.return
-		addq.b	#2,routine(a0)						; next routine
+		addq.b	#2,routine(a0)							; next routine
 		rts

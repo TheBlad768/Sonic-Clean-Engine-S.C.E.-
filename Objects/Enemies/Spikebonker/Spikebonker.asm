@@ -33,7 +33,7 @@ Obj_Spikebonker:
 		move.w	d0,objoff_3E(a0)
 		move.w	d0,y_vel(a0)
 		move.w	#4,objoff_40(a0)
-		bclr	#0,objoff_38(a0)				; clear swing flag
+		bclr	#0,objoff_38(a0)						; clear swing flag
 		lea	ChildObjDat_Spikebonker_Control(pc),a2
 		jsr	(CreateChild1_Normal).w
 		jmp	(Sprite_CheckDeleteTouch).w
@@ -60,7 +60,7 @@ Obj_Spikebonker:
 
 .attack
 		move.l	#.wait,address(a0)
-		bset	#3,objoff_38(a0)				; set attack flag
+		bset	#3,objoff_38(a0)						; set attack flag
 		sfx	sfx_Dash
 		jmp	(Sprite_CheckDeleteTouch).w
 ; ---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ Obj_Spikebonker:
 ; ---------------------------------------------------------------------------
 
 .wait
-		btst	#3,objoff_38(a0)				; check attack flag
+		btst	#3,objoff_38(a0)						; check attack flag
 		bne.s	.draw
 		move.l	#.main,address(a0)
 
@@ -93,11 +93,11 @@ Obj_Spikebonker_Control:
 
 .main
 		jsr	(Refresh_ChildPositionAdjusted).w
-		movea.w	parent4(a0),a1			; spikeball
-		move.b	objoff_3C(a1),d0			; angle
+		movea.w	parent4(a0),a1							; spikeball
+		move.b	objoff_3C(a1),d0						; angle
 		bne.s	.loc_91B08
-		movea.w	parent3(a0),a2			; spikebonker (main)
-		btst	#3,objoff_38(a2)				; check attack flag
+		movea.w	parent3(a0),a2							; spikebonker (main)
+		btst	#3,objoff_38(a2)						; check attack flag
 		bne.s	.loc_91B14
 
 .loc_91B08:
@@ -135,7 +135,7 @@ Obj_Spikebonker_Control:
 
 .loc_91B70:
 		movea.w	parent4(a0),a1
-		move.b	objoff_3C(a1),d0			; angle
+		move.b	objoff_3C(a1),d0						; angle
 		cmpi.b	#$80,d0
 		beq.s	.loc_91B8A
 		subq.b	#8,d0
@@ -153,8 +153,8 @@ Obj_Spikebonker_Control:
 
 .loc_91B56:
 		move.l	#.main,address(a0)
-		movea.w	parent3(a0),a1			; spikebonker (main)
-		bclr	#3,objoff_38(a1)				; clear attack flag
+		movea.w	parent3(a0),a1							; spikebonker (main)
+		bclr	#3,objoff_38(a1)						; clear attack flag
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -168,20 +168,20 @@ Obj_Spikebonker_SpikeBall:
 		; init
 		lea	ObjDat3_Spikebonker_SpikeBall(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		movea.w	parent3(a0),a1			; spikebonker (main)
-		move.w	a0,parent4(a1)			; spikeball
+		movea.w	parent3(a0),a1							; spikebonker (main)
+		move.w	a0,parent4(a1)							; spikeball
 		move.l	#.main,address(a0)
 
 .main
-		move.b	objoff_3C(a0),d0			; angle
+		move.b	objoff_3C(a0),d0						; angle
 		bsr.s	.findangle
-		move.w	#priority_4,d1			; high priority
+		move.w	#priority_4,d1							; high priority
 		addi.b	#$40,d0
 		bpl.s	.highpriority
-		move.w	#priority_5,d1			; low priority
+		move.w	#priority_5,d1							; low priority
 
 .highpriority
-		move.w	d1,priority(a0)			; set priority
+		move.w	d1,priority(a0)							; set priority
 		lea	(AngleLookup_1).l,a1
 		jsr	(MoveSprite_AngleXLookupOffset).w
 		jmp	(Child_DrawTouch_Sprite).w
@@ -193,7 +193,7 @@ Obj_Spikebonker_SpikeBall:
 .find
 		lea	.data(pc,d1.w),a1
 		cmp.b	(a1)+,d0
-		bls.s		.found
+		bls.s	.found
 		addq.w	#2,d1
 		bra.s	.find
 ; ---------------------------------------------------------------------------
@@ -204,7 +204,7 @@ Obj_Spikebonker_SpikeBall:
 ; ---------------------------------------------------------------------------
 
 .data
-		dc.b 0, 1		; angle, frame
+		dc.b 0, 1	; angle, frame
 		dc.b $30, 1
 		dc.b $50, 2
 		dc.b $B0, 3
@@ -214,8 +214,8 @@ Obj_Spikebonker_SpikeBall:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Spikebonker:				subObjData Map_Spikebonker, $500, 0, 1, 40, 40, 5, 0, $1A
-ObjDat3_Spikebonker_SpikeBall:	subObjData3 32, 32, 4, 1, $1A|$80
+ObjDat_Spikebonker:			subObjData Map_Spikebonker, $500, 0, 1, 40, 40, 5, 0, $1A
+ObjDat3_Spikebonker_SpikeBall:		subObjData3 32, 32, 4, 1, $1A|$80
 
 ChildObjDat_Spikebonker_Control:
 		dc.w 1-1

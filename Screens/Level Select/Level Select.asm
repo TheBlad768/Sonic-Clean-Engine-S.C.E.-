@@ -3,12 +3,12 @@
 ; ---------------------------------------------------------------------------
 
 ; Constants
-LevelSelect_Offset:				= *
-LevelSelect_VRAM:				= 0
+LevelSelect_Offset:			= *
+LevelSelect_VRAM:			= 0
 
 ; Variables
 LevelSelect_ZoneCount:			= ZoneCount
-LevelSelect_ActDEZCount:			= 4	; DEZ
+LevelSelect_ActDEZCount:		= 4	; DEZ
 
 LevelSelect_MusicTestCount:		= 8
 LevelSelect_SoundTestCount:		= LevelSelect_MusicTestCount+1
@@ -16,24 +16,24 @@ LevelSelect_SampleTestCount:		= LevelSelect_SoundTestCount+1
 LevelSelect_MaxCount:			= 11
 LevelSelect_MaxMusicNumber:		= (mus__End-mus__First)-1
 LevelSelect_MaxSoundNumber:		= (sfx__End-sfx__First)-1
-LevelSelect_MaxSampleNumber:	= $10
+LevelSelect_MaxSampleNumber:		= $10
 
 ; RAM
 	phase ramaddr(RAM_start)
 
-LevelSelect_buffer:				ds.b $1000							; foreground buffer (copy)
-LevelSelect_buffer2:				ds.b $1000							; foreground buffer (main)
+LevelSelect_buffer:			ds.b $1000					; foreground buffer (copy)
+LevelSelect_buffer2:			ds.b $1000					; foreground buffer (main)
 
 	dephase
 
 	phase ramaddr(Object_load_addr_front)
 
-LevelSelect_music_count:			ds.w 1
-LevelSelect_sound_count:			ds.w 1
-LevelSelect_sample_count:			ds.w 1
-LevelSelect_control_timer:			ds.w 1
-LevelSelect_saved_act:				ds.w 1
-LevelSelect_vertical_count:			ds.w 1
+LevelSelect_music_count:		ds.w 1
+LevelSelect_sound_count:		ds.w 1
+LevelSelect_sample_count:		ds.w 1
+LevelSelect_control_timer:		ds.w 1
+LevelSelect_saved_act:			ds.w 1
+LevelSelect_vertical_count:		ds.w 1
 LevelSelect_horizontal_count:		ds.w $10
 
 	dephase
@@ -42,9 +42,9 @@ LevelSelect_horizontal_count:		ds.w $10
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelectScreen:
-		music	mus_Stop											; stop music
-		jsr	(Clear_KosPlus_Module_Queue).w							; clear KosPlusM PLCs
-		ResetDMAQueue												; clear DMA queue
+		music	mus_Stop							; stop music
+		jsr	(Clear_KosPlus_Module_Queue).w					; clear KosPlusM PLCs
+		ResetDMAQueue								; clear DMA queue
 		jsr	(Pal_FadeToBlack).w
 		disableInts
 		move.l	#VInt,(V_int_addr).w
@@ -54,11 +54,11 @@ LevelSelectScreen:
 		lea	Level_VDP(pc),a1
 		jsr	(Load_VDP).w
 		jsr	(Clear_Palette).w
-		clearRAM RAM_start, (RAM_start+$2000)						; clear foreground buffers
-		clearRAM Object_RAM, Object_RAM_end						; clear the object RAM
+		clearRAM RAM_start, (RAM_start+$2000)					; clear foreground buffers
+		clearRAM Object_RAM, Object_RAM_end					; clear the object RAM
 		clearRAM Lag_frame_count, Lag_frame_count_end				; clear variables
-		clearRAM Camera_RAM, Camera_RAM_end						; clear the camera RAM
-		clearRAM Oscillating_variables, Oscillating_variables_end			; clear variables
+		clearRAM Camera_RAM, Camera_RAM_end					; clear the camera RAM
+		clearRAM Oscillating_variables, Oscillating_variables_end		; clear variables
 
 		; clear
 		move.b	d0,(Water_full_screen_flag).w
@@ -95,7 +95,7 @@ LevelSelectScreen:
 		jsr	(Wait_VSync).w
 		jsr	(Process_KosPlus_Module_Queue).w
 		tst.w	(KosPlus_modules_left).w
-		bne.s	.waitplc												; wait for KosPlusM queue to clear
+		bne.s	.waitplc							; wait for KosPlusM queue to clear
 		move.b	#VintID_LevelSelect,(V_int_routine).w
 		jsr	(Wait_VSync).w
 		enableScreen
@@ -119,9 +119,9 @@ LevelSelectScreen:
 		; load zone and act
 		move.b	#GameModeID_LevelScreen,(Game_mode).w				; set screen mode to Level
 		move.w	(LevelSelect_vertical_count).w,d2
-		move.b	d2,-(sp)												; multiply by $100
+		move.b	d2,-(sp)							; multiply by $100
 		move.w	(sp)+,d2
-		clr.b	d2														; clear garbage data
+		clr.b	d2								; clear garbage data
 		add.w	(LevelSelect_saved_act).w,d2
 		move.w	d2,(Current_zone_and_act).w
 		move.w	d2,(Apparent_zone_and_act).w
@@ -136,7 +136,7 @@ LevelSelectScreen:
 LevelSelect_Controls:
 
 		; set vertical line
-		moveq	#LevelSelect_MaxCount-1,d2							; set max count
+		moveq	#LevelSelect_MaxCount-1,d2					; set max count
 		move.w	(LevelSelect_vertical_count).w,d3
 		lea	(LevelSelect_control_timer).w,a3
 		bsr.w	LevelSelect_FindUpDownControls
@@ -144,23 +144,23 @@ LevelSelect_Controls:
 
 		; check vertical line
 		cmpi.w	#LevelSelect_ZoneCount,d3
-		blo.s		.getact
+		blo.s	.getact
 		subq.w	#LevelSelect_MusicTestCount,d3
-		blo.s		.return
+		blo.s	.return
 		add.w	d3,d3
 		jmp	.index(pc,d3.w)
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.getmusic											; 0
-		bra.s	.getsound											; 2
+		bra.s	.getmusic							; 0
+		bra.s	.getsound							; 2
 
 ; ---------------------------------------------------------------------------
 ; Play sample
 ; ---------------------------------------------------------------------------
 
-		; get sample													; 4
-		moveq	#LevelSelect_MaxSampleNumber,d2						; set max count
+		; get sample								; 4
+		moveq	#LevelSelect_MaxSampleNumber,d2					; set max count
 		move.w	(LevelSelect_sample_count).w,d3
 		lea	(LevelSelect_control_timer).w,a3
 		bsr.w	LevelSelect_FindLeftRightControls
@@ -173,8 +173,8 @@ LevelSelect_Controls:
 
 		; play sample
 		move.w	d3,d0
-		addq.w	#1,d0												; $80 is reserved for pause
-		jmp	(Play_Sample).w											; play sample
+		addq.w	#1,d0								; $80 is reserved for pause
+		jmp	(Play_Sample).w							; play sample
 
 ; ---------------------------------------------------------------------------
 ; Get act
@@ -185,7 +185,7 @@ LevelSelect_Controls:
 		move.w	(LevelSelect_vertical_count).w,d4
 		add.w	d4,d4
 		move.w	(a0,d4.w),d3
-		move.w	.maxacts(pc,d4.w),d2									; set max count
+		move.w	.maxacts(pc,d4.w),d2						; set max count
 		lea	(LevelSelect_control_timer).w,a3
 		bsr.w	LevelSelect_FindLeftRightControls
 		move.w	d3,(a0,d4.w)
@@ -218,12 +218,12 @@ LevelSelect_Controls:
 
 		; check stop music
 		btst	#button_B,d1
-		bne.s	.stop												; branch if B is pressed
+		bne.s	.stop								; branch if B is pressed
 
 		; play music
 		move.w	d3,d0
-		addq.w	#mus__First,d0										; $00 is reserved for silence
-		jmp	(Play_Music).w											; play music
+		addq.w	#mus__First,d0							; $00 is reserved for silence
+		jmp	(Play_Music).w							; play music
 ; --------------------------------------------------------------------------
 
 .stop
@@ -247,8 +247,8 @@ LevelSelect_Controls:
 
 		; play sfx
 		move.w	d3,d0
-		addq.w	#sfx__First,d0										; skip music
-		jmp	(Play_SFX).w												; play sfx
+		addq.w	#sfx__First,d0							; skip music
+		jmp	(Play_SFX).w							; play sfx
 
 ; ---------------------------------------------------------------------------
 ; Control (up/down)
@@ -286,7 +286,7 @@ LevelSelect_FindUpDownControls:
 .notdown
 		addq.w	#1,d3
 		cmp.w	d2,d3
-		bls.s		.returndown
+		bls.s	.returndown
 		moveq	#0,d3
 
 .returndown
@@ -328,7 +328,7 @@ LevelSelect_FindLeftRightControls:
 .notright
 		addq.w	#1,d3
 		cmp.w	d2,d3
-		bls.s		.returnright
+		bls.s	.returnright
 		moveq	#0,d3
 
 .returnright
@@ -373,7 +373,7 @@ LevelSelect_MarkFields:
 
 	rept 8
 		move.w	(a1)+,d0
-		add.w	d3,d0												; VRAM shift
+		add.w	d3,d0								; VRAM shift
 		move.w	d0,(a2)+
 	endr
 
@@ -386,22 +386,22 @@ LevelSelect_MarkFields:
 		; check vertical line
 		move.w	(LevelSelect_vertical_count).w,d0
 		cmpi.w	#LevelSelect_ZoneCount,d0
-		blo.s		LevelSelect_LoadAct
+		blo.s	LevelSelect_LoadAct
 		subq.w	#LevelSelect_MusicTestCount,d0
-		blo.s		.return
+		blo.s	.return
 		add.w	d0,d0
 		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.drawmusic											; 0
-		bra.s	.drawsound											; 2
+		bra.s	.drawmusic							; 0
+		bra.s	.drawsound							; 2
 
 ; ---------------------------------------------------------------------------
 ; Draw sample
 ; ---------------------------------------------------------------------------
 
-.drawsample															; 4
+.drawsample										; 4
 		lea	(LevelSelect_buffer2+planeLoc(64,24,26)).l,a5
 		move.w	(LevelSelect_sample_count).w,d0
 		bra.s	.drawnumbers
@@ -425,7 +425,7 @@ LevelSelect_MarkFields:
 
 .drawnumbers
 		move.w	d0,d2
-		move.w	d0,-(sp)												; division by $100
+		move.w	d0,-(sp)							; division by $100
 		move.b	(sp)+,d0
 		bsr.s	.getnumber
 		move.b	d2,d0
@@ -435,9 +435,9 @@ LevelSelect_MarkFields:
 
 .getnumber
 		andi.w	#$F,d0
-		cmpi.b	#10,d0												; is digit $A-$F?
-		blo.s		.skipsymbols											; if not, branch
-		addq.b	#6,d0												; use alpha characters
+		cmpi.b	#10,d0								; is digit $A-$F?
+		blo.s	.skipsymbols							; if not, branch
+		addq.b	#6,d0								; use alpha characters
 
 .skipsymbols
 		addq.b	#1,d0
@@ -458,9 +458,9 @@ LevelSelect_LoadAct:
 		lea	(LevelSelect_horizontal_count).w,a0
 		move.w	(LevelSelect_vertical_count).w,d0
 		move.w	d0,d1
-		move.b	d0,-(sp)												; multiply by $100
+		move.b	d0,-(sp)							; multiply by $100
 		move.w	(sp)+,d0
-		clr.b	d0														; clear garbage data
+		clr.b	d0								; clear garbage data
 		adda.w	d0,a5
 		add.w	d1,d1
 		move.w	(a0,d1.w),d0
@@ -514,25 +514,25 @@ LevelSelect_LoadText:
 
 .load
 		moveq	#0,d2
-		move.b	(a2)+,d2		; text size
-		move.w	d2,d4		; save text size
-		move.w	(a0)+,d0		; offset
-		lea	(a1,d0.w),a3		; RAM shift
+		move.b	(a2)+,d2							; text size
+		move.w	d2,d4								; save text size
+		move.w	(a0)+,d0							; offset
+		lea	(a1,d0.w),a3							; RAM shift
 
 .copy
 		moveq	#0,d0
-		move.b	(a2)+,d0		; load letter
+		move.b	(a2)+,d0							; load letter
 		add.w	d3,d0
 		move.w	d0,(a3)+
 		dbf	d2,.copy
 
 		; fill with spaces
-		moveq	#64-2,d2		; maximum length of line (dbf + dbf)
+		moveq	#64-2,d2							; maximum length of line (dbf + dbf)
 		sub.w	d4,d2
-		blo.s		.next
+		blo.s	.next
 
 .sloop
-		moveq	#' ',d0		; space
+		moveq	#' ',d0								; space
 		add.w	d3,d0
 		move.w	d0,(a3)+
 		dbf	d2,.sloop
@@ -546,9 +546,11 @@ LevelSelect_LoadText:
 		moveq	#bytesToXcnt(($1000),8*4),d1
 
 .bcopy
+
 	rept 8
 		move.l	(a1)+,(a2)+
 	endr
+
 		dbf	d1,.bcopy
 		rts
 
@@ -569,7 +571,7 @@ LevelSelect_LoadAct1:		levselstr "ACT 1"
 LevelSelect_LoadAct2:		levselstr "ACT 2"
 LevelSelect_LoadAct3:		levselstr "ACT 3"
 LevelSelect_LoadAct4:		levselstr "ACT 4"
-LevelSelect_HeaderText:	levselstr "SONIC TEST GAME - *** DEBUG MODE ***                            "
+LevelSelect_HeaderText:		levselstr "SONIC TEST GAME - *** DEBUG MODE ***                            "
 
 ; main text
 LevelSelect_MainText:
@@ -590,5 +592,5 @@ LevelSelect_MainText:
 		; scroll data
 
 LSScroll_Data: dScroll_Header
-		dScroll_Data 8, 8, -$100, FG									; start pos, size, velocity, plane
+		dScroll_Data 8, 8, -$100, FG	; start pos, size, velocity, plane
 LSScroll_Data_end

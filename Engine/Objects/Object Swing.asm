@@ -51,7 +51,7 @@ Swing_UpAndDown:
 		moveq	#0,d3
 		btst	#0,objoff_38(a0)
 		bne.s	.check
-		neg.w	d0						; apply upward acceleration
+		neg.w	d0					; apply upward acceleration
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
@@ -64,7 +64,7 @@ Swing_UpAndDown:
 .check
 		add.w	d0,d1					; apply downward acceleration
 		cmp.w	d2,d1
-		blt.s		.set
+		blt.s	.set
 		bclr	#0,objoff_38(a0)
 		neg.w	d0
 		add.w	d0,d1
@@ -96,7 +96,7 @@ Swing_LeftAndRight:
 .check
 		add.w	d0,d1
 		cmp.w	d2,d1
-		blt.s		.set
+		blt.s	.set
 		bclr	#3,objoff_38(a0)
 		neg.w	d0
 		add.w	d0,d1
@@ -378,14 +378,14 @@ Chase_Object:
 		cmp.w	x_pos(a1),d4
 		seq	d5
 		beq.s	.checky
-		blo.s		.setx
+		blo.s	.setx
 		neg.w	d1
 
 .setx
 		move.w	x_vel(a0),d4
 		add.w	d1,d4
 		cmp.w	d2,d4
-		blt.s		.checky
+		blt.s	.checky
 		cmp.w	d0,d4
 		bgt.s	.checky
 		move.w	d4,x_vel(a0)
@@ -394,14 +394,14 @@ Chase_Object:
 		move.w	y_pos(a0),d4
 		cmp.w	y_pos(a1),d4
 		beq.s	.exit
-		blo.s		.sety
+		blo.s	.sety
 		neg.w	d3
 
 .sety
 		move.w	y_vel(a0),d4
 		add.w	d3,d4
 		cmp.w	d2,d4
-		blt.s		.return
+		blt.s	.return
 		cmp.w	d0,d4
 		bgt.s	.return
 		move.w	d4,y_vel(a0)
@@ -441,7 +441,7 @@ Chase_ObjectXOnly:
 		move.w	x_vel(a0),d3
 		add.w	d1,d3
 		cmp.w	d2,d3
-		blt.s		.return
+		blt.s	.return
 		cmp.w	d0,d3
 		bgt.s	.return
 		move.w	d3,x_vel(a0)
@@ -472,7 +472,7 @@ Chase_ObjectYOnly:
 		move.w	y_vel(a0),d3
 		add.w	d1,d3
 		cmp.w	d2,d3
-		blt.s		.return
+		blt.s	.return
 		cmp.w	d0,d3
 		bgt.s	.return
 		move.w	d3,y_vel(a0)
@@ -506,7 +506,7 @@ Chase_ObjectOffset:
 		move.w	x_vel(a0),d4
 		add.w	d1,d4
 		cmp.w	d2,d4
-		blt.s		.checky
+		blt.s	.checky
 		cmp.w	d0,d4
 		bgt.s	.checky
 		move.w	d4,x_vel(a0)
@@ -525,7 +525,7 @@ Chase_ObjectOffset:
 		move.w	y_vel(a0),d4
 		add.w	d3,d4
 		cmp.w	d2,d4
-		blt.s		.return
+		blt.s	.return
 		cmp.w	d0,d4
 		bgt.s	.return
 		move.w	d4,y_vel(a0)
@@ -653,7 +653,7 @@ loc_465F6:
 		bne.s	loc_4660E
 
 loc_465FE:
-		neg.l	d0						; reverse direction to move upwards when speed has reached
+		neg.l	d0					; reverse direction to move upwards when speed has reached
 		move.l	d0,objoff_2E(a0)			; reset initial speed (negative)
 		clr.l	objoff_32(a0)
 		st	objoff_36(a0)
@@ -684,11 +684,11 @@ sub_86458:
 
 .notflipx
 		add.w	d2,d1
-		move.w	d1,(a2)+					; sub2_x_pos
+		move.w	d1,(a2)+				; sub2_x_pos
 		move.b	(a1)+,d1
 		ext.w	d1
 		add.w	d3,d1
-		move.w	d1,(a2)+					; sub2_y_pos
-		addq.w	#next_subspr-4,a2		; skip sub2_mapframe
+		move.w	d1,(a2)+				; sub2_y_pos
+		addq.w	#next_subspr-4,a2			; skip sub2_mapframe
 		dbf	d0,.next
 		rts

@@ -244,10 +244,10 @@ __LABEL__ label *
     endm
 
 titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
-	dc.l address							; object address
+	dc.l address					; object address
 	dc.w 128+xdest,128+xpos,128+ypos		; x destination, xpos, ypos
-	dc.b frame,(width/2)					; mapping frame, width
-	dc.w exit								; place in exit queue
+	dc.b frame,(width/2)				; mapping frame, width
+	dc.w exit					; place in exit queue
     endm
 ; ---------------------------------------------------------------------------
 
@@ -532,8 +532,8 @@ out_of_xrange macro exit, xpos
     endm
 
 out_of_xrange2 macro exit
-	sub.w	(Camera_X_pos_coarse_back).w,d0		; get screen position
-	cmpi.w	#$80+320+$40+$80,d0				; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
+	sub.w	(Camera_X_pos_coarse_back).w,d0					; get screen position
+	cmpi.w	#$80+320+$40+$80,d0						; this gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
 	bhi.ATTRIBUTE	exit
     endm
 
@@ -563,7 +563,7 @@ out_of_yrange2 macro exit
 ; ---------------------------------------------------------------------------
 
 respawn_delete macro terminate
-	move.w	respawn_addr(a0),d0					; get address in respawn table
+	move.w	respawn_addr(a0),d0						; get address in respawn table
 	beq.s	.delete								; if it's zero, it isn't remembered
 	movea.w	d0,a2								; load address into a2
 	bclr	#7,(a2)
@@ -584,24 +584,24 @@ getobjectRAMslot macro address
       endif
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
-	lsr.w	#6,d0												; divide by $40... even though SSTs are $4A bytes long in this game
+	lsr.w	#6,d0								; divide by $40... even though SSTs are $4A bytes long in this game
 	lea	(Create_New_Sprite3.table).w,address
-	move.b	(address,d0.w),d0										; use a look-up table to get the right loop counter
+	move.b	(address,d0.w),d0						; use a look-up table to get the right loop counter
     endm
 
 MoveSprite macro address, gravity, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	movem.w	x_vel(address),d0/d2		; load xy speed
-	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	movem.w	x_vel(address),d0/d2						; load xy speed
+	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)						; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	add.l	d2,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("gravity"<>"")
-	addi.w	#gravity,y_vel(address)			; increase vertical speed (apply gravity)
+	addi.w	#gravity,y_vel(address)						; increase vertical speed (apply gravity)
 	else
-	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
+	addi.w	#$38,y_vel(address)						; increase vertical speed (apply gravity)
       endif
       if ("terminate"<>"")
 	rts
@@ -612,11 +612,11 @@ MoveSprite2 macro address, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	movem.w	x_vel(address),d0/d2		; load xy speed
-	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	asl.l	#8,d2							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-	add.l	d2,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	movem.w	x_vel(address),d0/d2						; load xy speed
+	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)						; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	add.l	d2,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -626,10 +626,10 @@ MoveSpriteXOnly macro address, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	move.w	x_vel(address),d0				; load x speed
+	move.w	x_vel(address),d0						; load x speed
 	ext.l	d0
-	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)				; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(address)						; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
       if ("terminate"<>"")
 	rts
       endif
@@ -639,14 +639,14 @@ MoveSpriteYOnly macro address, gravity, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	move.w	y_vel(address),d0				; load y speed
+	move.w	y_vel(address),d0						; load y speed
 	ext.l	d0
-	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
       if ("gravity"<>"")
-	addi.w	#gravity,y_vel(address)			; increase vertical speed (apply gravity)
+	addi.w	#gravity,y_vel(address)						; increase vertical speed (apply gravity)
 	else
-	addi.w	#$38,y_vel(address)			; increase vertical speed (apply gravity)
+	addi.w	#$38,y_vel(address)						; increase vertical speed (apply gravity)
       endif
       if ("terminate"<>"")
 	rts
@@ -657,10 +657,10 @@ MoveSprite2YOnly macro address, terminate
       if ("address"=="")
 	fatal "Error! Empty value!"
       endif
-	move.w	y_vel(address),d0				; load y speed
+	move.w	y_vel(address),d0						; load y speed
 	ext.l	d0
-	asl.l	#8,d0							; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(address)				; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
       if ("terminate"<>"")
 	rts
       endif
@@ -671,11 +671,11 @@ Add_SpriteToCollisionResponseList macro address, terminate
 	fatal "Error! Empty value!"
       endif
 	lea	(Collision_response_list).w,address
-	move.w	(address),d0					; get list to d0
-	addq.b	#2,d0						; is list full? ($80)
-	bmi.s	.full							; if so, return
-	move.w	d0,(address)					; save list  ($7E)
-	move.w	a0,(address,d0.w)				; store RAM address in list
+	move.w	(address),d0							; get list to d0
+	addq.b	#2,d0								; is list full? ($80)
+	bmi.s	.full								; if so, return
+	move.w	d0,(address)							; save list ($7E)
+	move.w	a0,(address,d0.w)						; store RAM address in list
 
 .full
       if ("terminate"<>"")
@@ -747,7 +747,7 @@ clearZ80RAM macro
 .clear
 	movep.l	d1,0(a1)
 	movep.l	d1,1(a1)
-	addq.w	#4*2,a1		; next bytes
+	addq.w	#4*2,a1								; next bytes
 	dbf	d0,.clear
     endm
 
@@ -768,11 +768,11 @@ paddingZ80RAM macro
 stopZ80 macro
 
 	if OptimiseStopZ80=0
-		move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		move.w	#$100,(Z80_bus_request).l				; stop the Z80
 
 .wait
 		btst	#0,(Z80_bus_request).l
-		bne.s	.wait						; loop until it says it's stopped
+		bne.s	.wait							; loop until it says it's stopped
 	endif
 
     endm
@@ -781,7 +781,7 @@ stopZ80 macro
 stopZ80a macro
 
 	if OptimiseStopZ80=0
-		move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		move.w	#$100,(Z80_bus_request).l				; stop the Z80
 	endif
 
     endm
@@ -796,7 +796,7 @@ waitZ80 macro
 	if OptimiseStopZ80=0
 .wait
 		btst	#0,(Z80_bus_request).l
-		bne.s	.wait						; loop until
+		bne.s	.wait							; loop until
 	endif
 
     endm
@@ -831,7 +831,7 @@ resetZ80a macro
 startZ80 macro
 
 	if OptimiseStopZ80=0
-		move.w	#0,(Z80_bus_request).l		; start the Z80
+		move.w	#0,(Z80_bus_request).l					; start the Z80
 	endif
 
     endm
@@ -844,11 +844,11 @@ startZ80 macro
 stopZ802 macro
 
 	if OptimiseStopZ80=2
-		move.w	#$100,(Z80_bus_request).l		; stop the Z80
+		move.w	#$100,(Z80_bus_request).l				; stop the Z80
 
 .wait
 		btst	#0,(Z80_bus_request).l
-		bne.s	.wait						; loop until it says it's stopped
+		bne.s	.wait							; loop until it says it's stopped
 	endif
 
     endm
@@ -861,7 +861,7 @@ stopZ802 macro
 startZ802 macro
 
 	if OptimiseStopZ80=2
-		move.w	#0,(Z80_bus_request).l		; start the Z80
+		move.w	#0,(Z80_bus_request).l					; start the Z80
 	endif
 
     endm
@@ -902,8 +902,8 @@ enableInts macro
 ; ---------------------------------------------------------------------------
 
 disableIntsSave macro
-	move.w	sr,-(sp)		; save current interrupt mask
-	disableInts			; mask off interrupts
+	move.w	sr,-(sp)							; save current interrupt mask
+	disableInts								; mask off interrupts
     endm
 
 ; ---------------------------------------------------------------------------
@@ -911,7 +911,7 @@ disableIntsSave macro
 ; ---------------------------------------------------------------------------
 
 enableIntsSave macro
-	move.w	(sp)+,sr		; restore interrupts to previous state
+	move.w	(sp)+,sr							; restore interrupts to previous state
     endm
 
 ; ---------------------------------------------------------------------------
@@ -939,14 +939,14 @@ enableScreen macro
 ; ---------------------------------------------------------------------------
 
 jhi macro loc
-	bls.s		.nojump
+	bls.s	.nojump
 	jmp	(loc).l
 
 .nojump
     endm
 
 jcc macro loc
-	blo.s		.nojump
+	blo.s	.nojump
 	jmp	(loc).l
 
 .nojump
@@ -989,14 +989,14 @@ jne macro loc
     endm
 
 jgt macro loc
-	ble.s		.nojump
+	ble.s	.nojump
 	jmp	(loc).l
 
 .nojump
     endm
 
 jge macro loc
-	blt.s		.nojump
+	blt.s	.nojump
 	jmp	(loc).l
 
 .nojump
@@ -1058,11 +1058,11 @@ _KosPlus_LoopUnroll := 3
 
 _KosPlus_ReadBit macro
 	dbf	d2,.skip
-	moveq	#7,d2						; We have 8 new bits, but will use one up below.
-	move.b	(a0)+,d0						; Get desc field low-byte.
+	moveq	#7,d2								; We have 8 new bits, but will use one up below.
+	move.b	(a0)+,d0							; Get desc field low-byte.
 
 .skip
-	add.b	d0,d0						; Get a bit from the bitstream.
+	add.b	d0,d0								; Get a bit from the bitstream.
     endm
 ; ---------------------------------------------------------------------------
 
@@ -1071,7 +1071,7 @@ zoneanimstart macro {INTLABEL}
 __LABEL__ label *
 zoneanimcount := 0
 zoneanimcur := "__LABEL__"
-	dc.w zoneanimcount___LABEL__	; Number of scripts for a zone (-1)
+	dc.w zoneanimcount___LABEL__						; Number of scripts for a zone (-1)
     endm
 
 watertransheader macro {INTLABEL}

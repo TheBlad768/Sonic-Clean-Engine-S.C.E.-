@@ -29,7 +29,7 @@ Obj_Invisible_HurtBlock:
 
 		; init
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		ori.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		ori.b	#rfCoord,render_flags(a0)							; use screen coordinates
 		move.l	#words_to_long(priority_4,make_art_tile(ArtTile_Monitors,0,1)),priority(a0)	; set priority and art_tile
 		bset	#7,status(a0)									; disable player's balance animation
 
@@ -45,22 +45,22 @@ Obj_Invisible_HurtBlock:
 		lsl.w	#3,d1
 		move.b	d1,height_pixels(a0)
 		btst	#0,status(a0)									; is it flipx?
-		beq.s	loc_1F448								; if not, branch
-		move.l	#loc_1F4C4,address(a0)					; set side hurt
+		beq.s	loc_1F448									; if not, branch
+		move.l	#loc_1F4C4,address(a0)								; set side hurt
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F448:
 		btst	#1,status(a0)									; is it flipy?
-		beq.s	loc_1F458								; if not, branch
-		move.l	#loc_1F528,address(a0)					; set bottom hurt
+		beq.s	loc_1F458									; if not, branch
+		move.l	#loc_1F528,address(a0)								; set bottom hurt
 
 locret_1F456:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F458:
-		move.l	#loc_1F45E,address(a0)					; set top hurt
+		move.l	#loc_1F45E,address(a0)								; set top hurt
 
 loc_1F45E:
 		moveq	#$B,d1
@@ -72,18 +72,18 @@ loc_1F45E:
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull2).w
 		moveq	#standing_mask,d6
-		and.b	status(a0),d6								; is Sonic or Tails standing on the object?
-		beq.s	loc_1F4A2								; if not, branch
+		and.b	status(a0),d6									; is Sonic or Tails standing on the object?
+		beq.s	loc_1F4A2									; if not, branch
 		move.b	d6,d0
 		andi.b	#p1_standing,d0
 		beq.s	loc_1F4A2
-		lea	(Player_1).w,a1								; a1=character
+		lea	(Player_1).w,a1									; a1=character
 		bsr.w	sub_1F58C
 
 loc_1F4A2:
 		out_of_xrange.w	Obj_Invisible_SolidBlock.offscreen
-		tst.w	(Debug_placement_mode).w				; is debug mode on?
-		beq.s	locret_1F456								; if not, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		beq.s	locret_1F456									; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -102,13 +102,13 @@ loc_1F4C4:
 		move.b	d6,d0
 		andi.b	#p1_touch_side,d0
 		beq.s	loc_1F506
-		lea	(Player_1).w,a1								; a1=character
+		lea	(Player_1).w,a1									; a1=character
 		bsr.s	sub_1F58C
 
 loc_1F506:
 		out_of_xrange.w	Obj_Invisible_SolidBlock.offscreen
-		tst.w	(Debug_placement_mode).w				; is debug mode on?
-		beq.s	locret_1F59E								; if not, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		beq.s	locret_1F59E									; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -127,22 +127,22 @@ loc_1F528:
 		move.b	d6,d0
 		andi.b	#p1_touch_bottom,d0
 		beq.s	loc_1F56A
-		lea	(Player_1).w,a1								; a1=character
+		lea	(Player_1).w,a1									; a1=character
 		bsr.s	sub_1F58C
 
 loc_1F56A:
 		out_of_xrange.w	Obj_Invisible_SolidBlock.offscreen
-		tst.w	(Debug_placement_mode).w				; is debug mode on?
-		beq.s	locret_1F59E								; if not, branch
+		tst.w	(Debug_placement_mode).w							; is debug mode on?
+		beq.s	locret_1F59E									; if not, branch
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_1F58C:
-		moveq	#$73,d0									; does the player have any shields or is invincible?
+		moveq	#$73,d0										; does the player have any shields or is invincible?
 		and.b	shield_reaction(a0),d0
 		and.b	status_secondary(a1),d0
-		bne.s	locret_1F59E								; if so, branch
+		bne.s	locret_1F59E									; if so, branch
 		bra.w	Touch_ChkHurt3
 ; ---------------------------------------------------------------------------
 

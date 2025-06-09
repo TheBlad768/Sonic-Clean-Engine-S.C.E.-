@@ -7,9 +7,9 @@
 Obj_Ring:
 
 		; init
-		movem.l	ObjDat_Ring(pc),d0-d3							; copy data to d0-d3
-		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
-		move.b	#7|$40,collision_flags(a0)							; set ring collision
+		movem.l	ObjDat_Ring(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		move.b	#7|$40,collision_flags(a0)					; set ring collision
 
 		; draw
 		jmp	(Sprite_OnScreen_Test_Collision).w
@@ -20,7 +20,7 @@ Obj_Ring_Collect:
 
 		; init
 		move.l	#Map_Ring,mappings(a0)
-		move.b	#rfCoord,render_flags(a0)							; use screen coordinates
+		move.b	#rfCoord,render_flags(a0)					; use screen coordinates
 		move.l	#.sparkle,address(a0)
 		move.w	#priority_1,priority(a0)
 		jsr	(GiveRing).w
@@ -28,9 +28,9 @@ Obj_Ring_Collect:
 .sparkle
 
 		; wait
-		subq.b	#1,anim_frame_timer(a0)							; decrement timer
-		bpl.s	.draw											; if time remains, branch
-		addq.b	#5+1,anim_frame_timer(a0)						; reset timer to 5 frames
+		subq.b	#1,anim_frame_timer(a0)						; decrement timer
+		bpl.s	.draw								; if time remains, branch
+		addq.b	#5+1,anim_frame_timer(a0)					; reset timer to 5 frames
 
 		; next frame
 		addq.b	#1,mapping_frame(a0)
@@ -58,26 +58,26 @@ Obj_Bouncing_Ring:
 
 .notgrav
 		move.w	(Ring_count).w,d5
-		moveq	#32,d0											; max rings
+		moveq	#32,d0								; max rings
 		cmp.w	d0,d5
-		blo.s		.notmax
-		move.w	d0,d5											; set max rings
+		blo.s	.notmax
+		move.w	d0,d5								; set max rings
 
 .notmax
-		subq.w	#1,d5											; fix dbf
+		subq.w	#1,d5								; fix dbf
 
 		; get RAM slot
 		getobjectRAMslot a2
 
 		; load ring data
-		movea.w	a0,a1											; load current object to a1
-		lea	ObjDat3_BouncingRing(pc),a3							; load ring data
+		movea.w	a0,a1								; load current object to a1
+		lea	ObjDat3_BouncingRing(pc),a3					; load ring data
 		lea	Rings_Velocity(pc),a2
-		tst.b	(Water_flag).w										; does level have water?
-		beq.s	.load											; if not, branch
+		tst.b	(Water_flag).w							; does level have water?
+		beq.s	.load								; if not, branch
 		move.w	(Water_level).w,d1
-		cmp.w	y_pos(a0),d1										; is ring above the water?
-		bge.s	.load											; if yes, branch
+		cmp.w	y_pos(a0),d1							; is ring above the water?
+		bge.s	.load								; if yes, branch
 		lea	Rings_WaterVelocity(pc),a2
 		bra.s	.load
 ; ---------------------------------------------------------------------------
@@ -87,29 +87,29 @@ Obj_Bouncing_Ring:
 		; create bouncing ring object
 
 .find
-		lea	next_object(a1),a1										; goto next object RAM slot
-		tst.l	address(a1)											; is object RAM slot empty?
-		dbeq	d0,.find											; if not, branch
-		bne.s	.notfree											; branch, if object RAM slot is not empty
-		subq.w	#1,d0											; dbeq didn't subtract sprite table so we'll do it ourselves
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
+		bne.s	.notfree							; branch, if object RAM slot is not empty
+		subq.w	#1,d0								; dbeq didn't subtract sprite table so we'll do it ourselves
 
 		; load object
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 
 .load
-		move.l	d6,address(a1)									; set object address
-		movem.l	(a3),d2-d4										; load ring data
-		movem.l	d2-d4,render_flags(a1)								; set ring data
+		move.l	d6,address(a1)							; set object address
+		movem.l	(a3),d2-d4							; load ring data
+		movem.l	d2-d4,render_flags(a1)						; set ring data
 		move.b	#7|$40,collision_flags(a1)
-		move.w	height_pixels(a1),y_radius(a1)						; set y_radius and x_radius
+		move.w	height_pixels(a1),y_radius(a1)					; set y_radius and x_radius
 		move.l	(a2)+,x_vel(a1)
-		tst.w	d0												; object RAM slots ended?
-		dbmi	d5,.create										; if not, loop
+		tst.w	d0								; object RAM slots ended?
+		dbmi	d5,.create							; if not, loop
 
 .notfree
-		sfx	sfx_RingLoss											; play ring loss sound
-		st	(Ring_spill_anim_counter).w							; set time
+		sfx	sfx_RingLoss							; play ring loss sound
+		st	(Ring_spill_anim_counter).w					; set time
 		clr.w	(Ring_count).w
 		move.b	#$80,(Update_HUD_ring_count).w
 
@@ -123,27 +123,27 @@ Obj_Bouncing_Ring_Normal:
 		MoveSprite2 a0
 
 		; check speed
-		moveq	#$18,d1											; normal speed
-		tst.b	(Water_flag).w										; does level have water?
-		beq.s	.check											; if not, branch
+		moveq	#$18,d1								; normal speed
+		tst.b	(Water_flag).w							; does level have water?
+		beq.s	.check								; if not, branch
 		move.w	(Water_level).w,d0
-		cmp.w	y_pos(a0),d0										; is ring above the water?
-		bge.s	.check											; if yes, branch
-		moveq	#$A,d1											; water speed
+		cmp.w	y_pos(a0),d0							; is ring above the water?
+		bge.s	.check								; if yes, branch
+		moveq	#$A,d1								; water speed
 
 .check
 		add.w	d1,y_vel(a0)
 		bmi.s	.main
 		move.b	(V_int_run_count+3).w,d0
-		add.b	d7,d0											; d7 - object count (Process_Sprites)
+		add.b	d7,d0								; d7 - object count (Process_Sprites)
 		andi.b	#7,d0
 		bne.s	.main
-		tst.b	render_flags(a0)										; object visible on the screen?
-		bpl.s	.chkdel											; if not, branch
+		tst.b	render_flags(a0)						; object visible on the screen?
+		bpl.s	.chkdel								; if not, branch
 
 		; check shield
 		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does Sonic have a Lightning Shield?
-		beq.s	.notshield										; if not, branch
+		beq.s	.notshield							; if not, branch
 		move.l	#Obj_Attracted_Ring.main,address(a0)
 
 .notshield
@@ -174,7 +174,7 @@ Obj_Bouncing_Ring_Normal:
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
-		blo.s		.delete
+		blo.s	.delete
 
 .main
 		move.w	(Level_repeat_offset).w,d0
@@ -191,39 +191,39 @@ Obj_Bouncing_Ring_Normal:
 Obj_Bouncing_Ring_TestGravity:
 
 		; move sprite
-		movem.w	x_vel(a0),d0-d2								; load xy speed
+		movem.w	x_vel(a0),d0-d2							; load xy speed
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		neg.l	d2												; reverse y speed
+		neg.l	d2								; reverse y speed
 
 .notgrav
-		asl.l	#8,d0												; shift velocity to line up with the middle 16 bits of the 32-bit position
-		asl.l	#8,d2												; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d0,x_pos(a0)										; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-		add.l	d2,y_pos(a0)										; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+		asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
+		asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d0,x_pos(a0)							; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+		add.l	d2,y_pos(a0)							; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 
 		; check speed
-		moveq	#$18,d1											; normal speed
-		tst.b	(Water_flag).w										; does level have water?
-		beq.s	.check											; if not, branch
+		moveq	#$18,d1								; normal speed
+		tst.b	(Water_flag).w							; does level have water?
+		beq.s	.check								; if not, branch
 		move.w	(Water_level).w,d0
-		cmp.w	y_pos(a0),d0										; is ring above the water?
-		bge.s	.check											; if yes, branch
-		moveq	#$A,d1											; water speed
+		cmp.w	y_pos(a0),d0							; is ring above the water?
+		bge.s	.check								; if yes, branch
+		moveq	#$A,d1								; water speed
 
 .check
 		add.w	d1,y_vel(a0)
 		bmi.s	.main
 		move.b	(V_int_run_count+3).w,d0
-		add.b	d7,d0											; d7 - object count (Process_Sprites)
+		add.b	d7,d0								; d7 - object count (Process_Sprites)
 		andi.b	#7,d0
 		bne.s	.main
-		tst.b	render_flags(a0)										; object visible on the screen?
-		bpl.s	.chkdel											; if not, branch
+		tst.b	render_flags(a0)						; object visible on the screen?
+		bpl.s	.chkdel								; if not, branch
 
 		; check shield
 		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does Sonic have a Lightning Shield?
-		beq.s	.notshield										; if not, branch
+		beq.s	.notshield							; if not, branch
 		move.l	#Obj_Attracted_Ring.main,address(a0)
 
 .notshield
@@ -255,7 +255,7 @@ Obj_Bouncing_Ring_TestGravity:
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#224,d0
 		cmp.w	y_pos(a0),d0
-		blo.s		.delete
+		blo.s	.delete
 
 .main
 		move.w	(Level_repeat_offset).w,d0
@@ -276,10 +276,10 @@ Obj_Bouncing_Ring_TestGravity:
 Obj_Attracted_Ring:
 
 		; init
-		movem.l	ObjDat_Ring2(pc),d0-d3							; copy data to d0-d3
-		movem.l	d0-d3,address(a0)									; set data from d0-d3 to current object
-		move.b	#7|$40,collision_flags(a0)							; set ring collision
-		move.w	height_pixels(a0),y_radius(a0)						; set y_radius and x_radius
+		movem.l	ObjDat_Ring2(pc),d0-d3						; copy data to d0-d3
+		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		move.b	#7|$40,collision_flags(a0)					; set ring collision
+		move.w	height_pixels(a0),y_radius(a0)					; set y_radius and x_radius
 
 .main
 
@@ -287,7 +287,7 @@ Obj_Attracted_Ring:
 		moveq	#48,d1
 		move.w	(Player_1+x_pos).w,d0
 		cmp.w	x_pos(a0),d0
-		bge.s	.moveright										; if ring is to the left of the player, branch
+		bge.s	.moveright							; if ring is to the left of the player, branch
 
 		; move left
 		neg.w	d1
@@ -311,7 +311,7 @@ Obj_Attracted_Ring:
 		moveq	#48,d1
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	y_pos(a0),d0
-		bge.s	.moveup											; if ring is below the player, branch
+		bge.s	.moveup								; if ring is below the player, branch
 
 		; move down
 		neg.w	d1
@@ -334,10 +334,10 @@ Obj_Attracted_Ring:
 
 		; check shield
 		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
-		bne.s	.chkdel											; if yes, branch
+		bne.s	.chkdel								; if yes, branch
 
 		; set bouncing
-		st	(Ring_spill_anim_counter).w							; set time
+		st	(Ring_spill_anim_counter).w					; set time
 		move.l	#Obj_Bouncing_Ring_Normal,address(a0)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.chkdel
@@ -350,13 +350,13 @@ Obj_Attracted_Ring:
 ; ---------------------------------------------------------------------------
 
 .offscreen
-		move.w	respawn_addr(a0),d0								; get address in respawn table
-		beq.s	.offscreen2										; if it's zero, it isn't remembered
-		movea.w	d0,a2											; load address into a2
+		move.w	respawn_addr(a0),d0						; get address in respawn table
+		beq.s	.offscreen2							; if it's zero, it isn't remembered
+		movea.w	d0,a2								; load address into a2
 		bclr	#7,(a2)
 
 .offscreen2
-		move.w	objoff_30(a0),d0									; load ring RAM address
+		move.w	objoff_30(a0),d0						; load ring RAM address
 		beq.s	.delete
 		movea.w	d0,a2
 		clr.w	(a2)
@@ -369,41 +369,41 @@ Obj_Attracted_Ring:
 ; mapping
 ObjDat_Ring:			subObjMainData2 Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
 ObjDat_Ring2:			subObjMainData2 Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat3_BouncingRing:	subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat3_BouncingRing:		subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:
 
 		; xvel, yvel (normal)
-		dc.w -$C4, -$3EC			; 1
+		dc.w -$C4, -$3EC		; 1
 		dc.w $C4, -$3EC			; 2
-		dc.w -$238, -$350			; 3
-		dc.w $238, -$350			; 4
-		dc.w -$350, -$238			; 5
-		dc.w $350, -$238			; 6
-		dc.w -$3EC, -$C4			; 7
+		dc.w -$238, -$350		; 3
+		dc.w $238, -$350		; 4
+		dc.w -$350, -$238		; 5
+		dc.w $350, -$238		; 6
+		dc.w -$3EC, -$C4		; 7
 		dc.w $3EC, -$C4			; 8
 		dc.w -$3EC, $C4			; 9
 		dc.w $3EC, $C4			; 10
-		dc.w -$350, $238			; 11
+		dc.w -$350, $238		; 11
 		dc.w $350, $238			; 12
-		dc.w -$238, $350			; 13
+		dc.w -$238, $350		; 13
 		dc.w $238, $350			; 14
 		dc.w -$C4, $3EC			; 15
 		dc.w $C4, $3EC			; 16
-		dc.w -$62, -$1F6			; 17
+		dc.w -$62, -$1F6		; 17
 		dc.w $62, -$1F6			; 18
-		dc.w -$11C, -$1A8			; 19
-		dc.w $11C, -$1A8			; 20
-		dc.w -$1A8, -$11C			; 21
-		dc.w $1A8, -$11C			; 22
-		dc.w -$1F6, -$62			; 23
+		dc.w -$11C, -$1A8		; 19
+		dc.w $11C, -$1A8		; 20
+		dc.w -$1A8, -$11C		; 21
+		dc.w $1A8, -$11C		; 22
+		dc.w -$1F6, -$62		; 23
 		dc.w $1F6, -$62			; 24
 		dc.w -$1F6, $62			; 25
 		dc.w $1F6, $62			; 26
-		dc.w -$1A8, $11C			; 27
+		dc.w -$1A8, $11C		; 27
 		dc.w $1A8, $11C			; 28
-		dc.w -$11C, $1A8			; 29
+		dc.w -$11C, $1A8		; 29
 		dc.w $11C, $1A8			; 30
 		dc.w -$62, $1F6			; 31
 		dc.w $62, $1F6			; 32
@@ -411,19 +411,19 @@ Rings_Velocity:
 Rings_WaterVelocity:
 
 		; xvel, yvel (water)
-		dc.w -$64, -$1F8			; 1
+		dc.w -$64, -$1F8		; 1
 		dc.w $64, -$1F8			; 2
-		dc.w -$11C, -$1A8			; 3
-		dc.w $11C, -$1A8			; 4
-		dc.w -$1A8, -$11C			; 5
-		dc.w $1A8, -$11C			; 6
-		dc.w -$1F8, -$64			; 7
+		dc.w -$11C, -$1A8		; 3
+		dc.w $11C, -$1A8		; 4
+		dc.w -$1A8, -$11C		; 5
+		dc.w $1A8, -$11C		; 6
+		dc.w -$1F8, -$64		; 7
 		dc.w $1F8, -$64			; 8
 		dc.w -$1F8, $60			; 9
 		dc.w $1F8, $60			; 10
-		dc.w -$1A8, $11C			; 11
+		dc.w -$1A8, $11C		; 11
 		dc.w $1A8, $11C			; 12
-		dc.w -$11C, $1A8			; 13
+		dc.w -$11C, $1A8		; 13
 		dc.w $11C, $1A8			; 14
 		dc.w -$64, $1F4			; 15
 		dc.w $64, $1F4			; 16

@@ -2,18 +2,18 @@
 ; ZONE ANIMATION SCRIPTS
 ;
 ; The AnimatePalette_DoAniPal subroutine uses these scripts to update certain colors.
-
-;	zoneanimplcdecl -1, Pal_SLZCyc, Normal_palette_line_3, 6, 1
-;	-1						Global frame duration. If -1, then each frame will use its own duration, instead
-
-;	Pal_SLZCyc				Source address of palette
-;	Normal_palette_line_3	Palette RAM address
-;	6						Number of frames
-;	1						Number of colors for each frame
-
-;	dc.b 0,$7F				Start of the script proper
-;	0						Color ID of first color in Pal_SLZCyc to transfer
-;	$7F						Frame duration. Only here if global duration is -1
+;
+; zoneanimplcdecl -1, Pal_SLZCyc, Normal_palette_line_3, 6, 1
+; -1						Global frame duration. If -1, then each frame will use its own duration, instead
+;
+; Pal_SLZCyc					Source address of palette
+; Normal_palette_line_3	Palette RAM address
+; 6						Number of frames
+; 1						Number of colors for each frame
+;
+; dc.b 0,$7F					Start of the script proper
+; 0						Color ID of first color in Pal_SLZCyc to transfer
+; $7F						Frame duration. Only here if global duration is -1
 ; ===========================================================================
 
 AniPalette_DEZ: zoneanimstart

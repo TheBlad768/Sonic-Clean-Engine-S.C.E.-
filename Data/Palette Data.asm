@@ -2,13 +2,13 @@
 ; Palette Main data
 ; ===========================================================================
 
-Pal_Sonic:			bincludeEntry "Objects/Players/Sonic/Palettes/Sonic.pal"
+Pal_Sonic:		bincludeEntry "Objects/Players/Sonic/Palettes/Sonic.pal"
 	even
 Pal_WaterSonic:		bincludeEntry "Objects/Players/Sonic/Palettes/Water Sonic.pal"
 	even
-Pal_LevelSelect:		bincludeEntry "Screens/Level Select/Palettes/1.pal"
+Pal_LevelSelect:	bincludeEntry "Screens/Level Select/Palettes/1.pal"
 	even
-Pal_DEZ:			bincludeEntry "Levels/DEZ/Palettes/Death Egg Zone.pal"
+Pal_DEZ:		bincludeEntry "Levels/DEZ/Palettes/Death Egg Zone.pal"
 	even
 Pal_WaterDEZ:		bincludeEntry "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
 	even

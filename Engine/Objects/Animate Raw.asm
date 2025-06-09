@@ -16,7 +16,7 @@ Animate_RawNoSSTAdjustFlipX:
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1
 		bmi.s	Animate_RawNoSST.main
-		bclr	#6,d1									; $40?
+		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#0,render_flags(a0)
 
@@ -41,7 +41,7 @@ Animate_RawNoSSTAdjustFlipY:
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1
 		bmi.s	Animate_RawNoSST.main
-		bclr	#6,d1									; $40?
+		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#1,render_flags(a0)
 
@@ -79,7 +79,7 @@ Animate_RawNoSST:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.restart								; FE
+		bra.s	.restart							; FE
 		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ Animate_RawNoSSTCheckResult:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.restart								; FE
+		bra.s	.restart							; FE
 		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1
 		bmi.s	Animate_RawNoSSTMultiDelay.main
-		bclr	#6,d1									; $40?
+		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#0,render_flags(a0)
 
@@ -222,7 +222,7 @@ Animate_RawNoSSTMultiDelay:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.restart								; FE
+		bra.s	.restart							; FE
 		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
@@ -262,7 +262,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1
 		bmi.s	Animate_RawNoSSTMultiDelay.main
-		bclr	#6,d1									; $40?
+		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#1,render_flags(a0)
 
@@ -311,7 +311,7 @@ Animate_Raw2NoSSTMultiDelay:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.restart								; FE
+		bra.s	.restart							; FE
 		bra.s	.change								; FC
 ; ---------------------------------------------------------------------------
 
@@ -386,7 +386,7 @@ Animate_RawNoSSTGetFaster:
 		addq.b	#1,d0
 		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
-		blo.s		.end
+		blo.s	.end
 
 		; jump to custom code
 		bclr	#5,objoff_38(a0)
@@ -437,7 +437,7 @@ Animate_RawNoSSTGetSlower:
 		addq.b	#1,d0
 		move.b	d0,objoff_2F(a0)
 		cmp.b	1(a1),d0
-		blo.s		.return
+		blo.s	.return
 
 		; jump to custom code
 		bclr	#5,objoff_38(a0)

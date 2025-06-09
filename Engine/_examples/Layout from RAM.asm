@@ -5,8 +5,8 @@
 DEZ1_ScreenInit:
 
 		; copy layout to RAM
-		lea	(RAM_start+$7000).l,a1								; your free layout buffer address
-		lea	(DEZ1_Layout).l,a4									; layout address
+		lea	(RAM_start+$7000).l,a1					; your free layout buffer address
+		lea	(DEZ1_Layout).l,a4					; layout address
 		move.w	#((DEZ1_Layout_end-DEZ1_Layout)/4)-1,d0			; layout size
 
 .copy
@@ -25,13 +25,13 @@ DEZ1_ScreenInit:
 
 
 		; load layout from RAM
-		lea	(RAM_start+$7000).l,a1								; your layout buffer address
-		move.l	a1,(Level_layout_addr_ROM).w						; save to addr
-		addq.w	#8,a1											; skip layout header
-		move.l	a1,(Level_layout_addr2_ROM).w					; save to addr2
+		lea	(RAM_start+$7000).l,a1					; your layout buffer address
+		move.l	a1,(Level_layout_addr_ROM).w				; save to addr
+		addq.w	#8,a1							; skip layout header
+		move.l	a1,(Level_layout_addr2_ROM).w				; save to addr2
 
 		; test
-		move.l	#$0D0D0D0D,(RAM_start+$7120).l					; replace 4 chunks
+		move.l	#$0D0D0D0D,(RAM_start+$7120).l				; replace 4 chunks
 
 		; update FG
 		jsr	(Reset_TileOffsetPositionActual).w

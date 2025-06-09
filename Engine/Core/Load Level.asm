@@ -8,15 +8,15 @@ LoadLevelLoadBlock:
 
 		; load primary level art
 		movea.l	(Level_data_addr_RAM.8x8data1).w,a1
-		move.w	(a1),d4											; save art size
-		moveq	#tiles_to_bytes(0),d2								; VRAM
+		move.w	(a1),d4								; save art size
+		moveq	#tiles_to_bytes(0),d2						; VRAM
 		bsr.w	Queue_KosPlus_Module
 
 		; load secondary level art
 		move.l	(Level_data_addr_RAM.8x8data2).w,d0
 		beq.s	.waitplc
 		movea.l	d0,a1
-		move.w	d4,d2											; return art size for the starting position
+		move.w	d4,d2								; return art size for the starting position
 		bsr.w	Queue_KosPlus_Module
 
 .waitplc
@@ -25,7 +25,7 @@ LoadLevelLoadBlock:
 		bsr.w	Wait_VSync
 		bsr.w	Process_KosPlus_Module_Queue
 		tst.w	(KosPlus_modules_left).w
-		bne.s	.waitplc											; wait for KosPlusM queue to clear
+		bne.s	.waitplc							; wait for KosPlusM queue to clear
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -97,7 +97,7 @@ LoadLevelLoadBlock2:
 		move.l	(a2)+,d0
 		beq.s	.notbsec
 		movea.l	d0,a0
-		movea.l	-8(a2),a1											; load blocks address
+		movea.l	-8(a2),a1							; load blocks address
 		bsr.w	KosPlus_Decomp
 
 		; load secondary level blocks
@@ -107,7 +107,7 @@ LoadLevelLoadBlock2:
 		bsr.w	KosPlus_Decomp
 
 .notbsec
-		addq.w	#4,a2											; next
+		addq.w	#4,a2								; next
 
 		; save chunks address
 		move.l	(a2)+,(Level_chunk_addr_ROM).w
@@ -116,7 +116,7 @@ LoadLevelLoadBlock2:
 		move.l	(a2)+,d0
 		beq.s	.notcsec
 		movea.l	d0,a0
-		movea.l	-8(a2),a1											; load chunks address
+		movea.l	-8(a2),a1							; load chunks address
 		bsr.w	KosPlus_Decomp
 
 		; load secondary level chunks
@@ -128,10 +128,10 @@ LoadLevelLoadBlock2:
 .notcsec
 
 		; load level palette
-		lea	(Level_data_addr_RAM.Palette).w,a2					; level palette
+		lea	(Level_data_addr_RAM.Palette).w,a2				; level palette
 		moveq	#0,d0
 		move.b	(a2),d0
-		bsr.w	LoadPalette										; load palette
+		bsr.w	LoadPalette							; load palette
 
 ; ---------------------------------------------------------------------------
 ; Load level layout
@@ -143,8 +143,8 @@ Load_Level:
 		movea.l	(Level_data_addr_RAM.Layout).w,a1
 
 Load_Level2:
-		move.l	a1,(Level_layout_addr_ROM).w						; save to addr
-		addq.w	#8,a1											; skip layout header
+		move.l	a1,(Level_layout_addr_ROM).w					; save to addr
+		addq.w	#8,a1								; skip layout header
 		move.l	a1,(Level_layout_addr2_ROM).w					; save to addr2
 		rts
 
@@ -164,7 +164,7 @@ LoadLevelPointer:
 		lsr.w	#6,d0
 		mulu.w	#(Level_data_addr_RAM_end-Level_data_addr_RAM),d0
 	else
-		move.w	d0,d1											; multiply by $82
+		move.w	d0,d1								; multiply by $82
 		lsr.w	#5,d1
 		add.w	d0,d0
 		add.w	d1,d0
@@ -185,37 +185,37 @@ LoadLevelPointer:
 
 		set	.a,0
 
-	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20		; copy $82 bytes
+	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20				; copy $82 bytes
 		movem.l	(a2)+,d0-d7
-		movem.l	d0-d7,.a(a3)										; copy $20 bytes
+		movem.l	d0-d7,.a(a3)							; copy $20 bytes
 		set	.a,.a + $20
 	endr
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&$10
 		movem.l	(a2)+,d0-d3
-		movem.l	d0-d3,.a(a3)										; copy $10 bytes
+		movem.l	d0-d3,.a(a3)							; copy $10 bytes
 		set	.a,.a + $10
 	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&8
-		move.l	(a2)+,.a(a3)										; copy 8 bytes
+		move.l	(a2)+,.a(a3)							; copy 8 bytes
 		set	.a,.a + 4
 		move.l	(a2)+,.a(a3)
 		set	.a,.a + 4
 	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&4
-		move.l	(a2)+,.a(a3)										; copy 4 bytes
+		move.l	(a2)+,.a(a3)							; copy 4 bytes
 		set	.a,.a + 4
 	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&2
-		move.w	(a2)+,.a(a3)										; copy 2 bytes
+		move.w	(a2)+,.a(a3)							; copy 2 bytes
 		set	.a,.a + 2
 	endif
 
 	if (Level_data_addr_RAM_end-Level_data_addr_RAM)&1
-		move.b	(a2)+,.a(a3)										; copy 1 byte
+		move.b	(a2)+,.a(a3)							; copy 1 byte
 		set	.a,.a + 1
 	endif
 

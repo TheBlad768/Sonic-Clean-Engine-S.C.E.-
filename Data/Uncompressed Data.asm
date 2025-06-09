@@ -13,7 +13,7 @@ ArtUnc_EndSigns:			binclude "Objects/Main/Signpost/Uncompressed Art/End Signs.un
 	even
 ArtUnc_SignpostStub:			bincludeEntry "Objects/Main/Signpost/Uncompressed Art/Stub.unc"
 	even
-ArtUnc_AirCountDown:		binclude "Objects/Main/Count Down/Uncompressed Art/Air Countdown.unc"
+ArtUnc_AirCountDown:			binclude "Objects/Main/Count Down/Uncompressed Art/Air Countdown.unc"
 	even
 
 ; ===========================================================================

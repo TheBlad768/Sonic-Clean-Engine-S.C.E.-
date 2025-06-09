@@ -14,11 +14,11 @@ Draw_Sprite:
 		adda.w	priority(a0),a1
 
 .find
-		move.w	(a1),d0										; get list to d0
-		addq.b	#2,d0										; is list full? ($80)
-		bmi.s	.next										; if so, return
-		move.w	d0,(a1)										; save list  ($7E)
-		move.w	a0,(a1,d0.w)									; store RAM address in list
+		move.w	(a1),d0								; get list to d0
+		addq.b	#2,d0								; is list full? ($80)
+		bmi.s	.next								; if so, return
+		move.w	d0,(a1)								; save list ($7E)
+		move.w	a0,(a1,d0.w)							; store RAM address in list
 
 .return
 		rts
@@ -26,8 +26,8 @@ Draw_Sprite:
 
 .next
 		cmpa.w	#(Sprite_table_input_end-$80),a1				; is last sprite table?
-		beq.s	.return										; if so, return
-		lea	$80(a1),a1										; next sprite table
+		beq.s	.return								; if so, return
+		lea	$80(a1),a1							; next sprite table
 		bra.s	.find
 
 ; =============== S U B R O U T I N E =======================================

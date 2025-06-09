@@ -7,23 +7,23 @@
 Check_CameraInRange:
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(a1)+,d0
-		blo.s		Check_CameraInRange_Fail
+		blo.s	Check_CameraInRange_Fail
 		cmp.w	(a1)+,d0
 		bhi.s	Check_CameraInRange_Fail
 		move.w	(Camera_X_pos).w,d1
 		cmp.w	(a1)+,d1
-		blo.s		Check_CameraInRange_Fail
+		blo.s	Check_CameraInRange_Fail
 		cmp.w	(a1)+,d1
 		bhi.s	Check_CameraInRange_Fail
 		bclr	#7,objoff_27(a0)
 		cmp.w	(a1),d0
-		bls.s		.skip
+		bls.s	.skip
 		bset	#7,objoff_27(a0)
 
 .skip
 		bclr	#6,objoff_27(a0)
 		cmp.w	4(a1),d1
-		bls.s		.skip2
+		bls.s	.skip2
 		bset	#6,objoff_27(a0)
 
 .skip2
@@ -32,7 +32,7 @@ Check_CameraInRange:
 ; ---------------------------------------------------------------------------
 
 Check_CameraInRange_Fail:
-		addq.w	#4,sp															; exit from current object
+		addq.w	#4,sp								; exit from current object
 		bra.w	Delete_Sprite_If_Not_In_Range
 
 ; =============== S U B R O U T I N E =======================================
@@ -41,7 +41,7 @@ sub_85C7E:
 		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
 		move.w	(Camera_target_max_Y_pos).w,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
-		blo.s		Init_BossArena3.return
+		blo.s	Init_BossArena3.return
 		move.w	d0,(Camera_min_Y_pos).w
 		move.w	objoff_3A(a0),d0
 		cmp.w	(Camera_X_pos).w,d0
@@ -57,7 +57,7 @@ Init_BossArena:
 		st	(Boss_flag).w
 
 Init_BossArena2:
-		music	mus_FadeOut													; fade out music
+		music	mus_FadeOut							; fade out music
 		move.w	#2*60,objoff_2E(a0)
 
 Init_BossArena3:
@@ -121,7 +121,7 @@ loc_85D06:
 
 loc_85D28:
 		cmp.w	(Camera_saved_max_X_pos).w,d0
-		bls.s		loc_85D36
+		bls.s	loc_85D36
 		move.w	d0,(Camera_max_X_pos).w
 		bra.s	loc_85D48
 ; ---------------------------------------------------------------------------
@@ -150,7 +150,7 @@ Check_InTheirRange:
 		move.w	x_pos(a1),d1
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
 		bge.s	.fail
@@ -158,7 +158,7 @@ Check_InTheirRange:
 		move.w	y_pos(a1),d1
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d1
 		cmp.w	d1,d0
 		bge.s	.fail
@@ -181,7 +181,7 @@ Check_InMyRange:
 		move.w	x_pos(a1),d1
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
 		bge.s	.fail
@@ -189,7 +189,7 @@ Check_InMyRange:
 		move.w	y_pos(a1),d1
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
-		blt.s		.fail
+		blt.s	.fail
 		add.w	(a2)+,d0
 		cmp.w	d0,d1
 		bge.s	.fail
@@ -213,7 +213,7 @@ Check_PlayerInRange:
 
 .main
 		moveq	#0,d0
-		lea	(Player_1).w,a2														; a2=character
+		lea	(Player_1).w,a2							; a2=character
 		move.w	x_pos(a2),d1
 		move.w	y_pos(a2),d2
 		add.w	(a1)+,d3
@@ -225,11 +225,11 @@ Check_PlayerInRange:
 
 		; check
 		cmp.w	d3,d1
-		blo.s		.return
+		blo.s	.return
 		cmp.w	d5,d1
 		bhs.s	.return
 		cmp.w	d4,d2
-		blo.s		.return
+		blo.s	.return
 		cmp.w	d6,d2
 		bhs.s	.return
 		move.w	a2,d0
@@ -242,12 +242,12 @@ Check_PlayerInRange:
 Check_PlayerInRange2:
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	(a1)+,d0
-		blo.s		.fail
+		blo.s	.fail
 		cmp.w	(a1)+,d0
 		bhi.s	.fail
 		move.w	(Player_1+x_pos).w,d1
 		cmp.w	(a1)+,d1
-		blo.s		.fail
+		blo.s	.fail
 		cmp.w	(a1),d1
 		bhi.s	.fail
 
@@ -263,24 +263,24 @@ Check_PlayerInRange2:
 ; =============== S U B R O U T I N E =======================================
 
 Chk_OffScreen:
-		move.w	x_pos(a0),d0														; get object x-position
-		sub.w	(Camera_X_pos).w,d0												; subtract screen x-position
+		move.w	x_pos(a0),d0							; get object x-position
+		sub.w	(Camera_X_pos).w,d0						; subtract screen x-position
 		bmi.s	.offscreen
-		cmpi.w	#320,d0															; is object on the screen?
-		bge.s	.offscreen														; if not, branch
-		move.w	y_pos(a0),d0														; get object y-position
-		sub.w	(Camera_Y_pos).w,d0												; subtract screen y-position
+		cmpi.w	#320,d0								; is object on the screen?
+		bge.s	.offscreen							; if not, branch
+		move.w	y_pos(a0),d0							; get object y-position
+		sub.w	(Camera_Y_pos).w,d0						; subtract screen y-position
 		bmi.s	.offscreen
-		cmpi.w	#224,d0															; is object on the screen?
-		bge.s	.offscreen														; if not, branch
+		cmpi.w	#224,d0								; is object on the screen?
+		bge.s	.offscreen							; if not, branch
 
 		; onscreen
-		moveq	#0,d0															; set flag to 0
+		moveq	#0,d0								; set flag to 0
 		rts
 ; ---------------------------------------------------------------------------
 
 .offscreen
-		moveq	#1,d0															; set flag to 1
+		moveq	#1,d0								; set flag to 1
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -288,27 +288,27 @@ Chk_OffScreen:
 Chk_WidthOffScreen:
 		moveq	#0,d1
 		move.b	width_pixels(a0),d1
-		move.w	x_pos(a0),d0														; get object x-position
-		sub.w	(Camera_X_pos).w,d0												; subtract screen x-position
-		add.w	d1,d0															; add object width
+		move.w	x_pos(a0),d0							; get object x-position
+		sub.w	(Camera_X_pos).w,d0						; subtract screen x-position
+		add.w	d1,d0								; add object width
 		bmi.s	.offscreen
 		add.w	d1,d1
 		sub.w	d1,d0
-		cmpi.w	#320,d0															; is object on the screen?
-		bge.s	.offscreen														; if not, branch
-		move.w	y_pos(a0),d0														; get object y-position
-		sub.w	(Camera_Y_pos).w,d0												; subtract screen y-position
+		cmpi.w	#320,d0								; is object on the screen?
+		bge.s	.offscreen							; if not, branch
+		move.w	y_pos(a0),d0							; get object y-position
+		sub.w	(Camera_Y_pos).w,d0						; subtract screen y-position
 		bmi.s	.offscreen
-		cmpi.w	#224,d0															; is object on the screen?
-		bge.s	.offscreen														; if not, branch
+		cmpi.w	#224,d0								; is object on the screen?
+		bge.s	.offscreen							; if not, branch
 
 		; onscreen
-		moveq	#0,d0															; set flag to 0
+		moveq	#0,d0								; set flag to 0
 		rts
 ; ---------------------------------------------------------------------------
 
 .offscreen
-		moveq	#1,d0															; set flag to 1
+		moveq	#1,d0								; set flag to 1
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -332,7 +332,7 @@ Check_CameraXBoundary:
 .left
 		addi.w	#16,d0
 		cmp.w	x_pos(a0),d0
-		blo.s		.return2
+		blo.s	.return2
 		clr.w	x_vel(a0)
 
 .return2
@@ -348,14 +348,14 @@ Check_CameraXBoundary2:
 		bmi.s	.left
 		add.w	d2,d0
 		cmp.w	x_pos(a0),d0
-		bls.s		.setflipx
+		bls.s	.setflipx
 		rts
 ; ---------------------------------------------------------------------------
 
 .left
 		add.w	d1,d0
 		cmp.w	x_pos(a0),d0
-		blo.s		.return
+		blo.s	.return
 
 .setflipx
 		bchg	#0,render_flags(a0)
@@ -458,7 +458,7 @@ Obj_DecLevStartXGradual:
 		swap	d1
 		sub.w	d1,d0
 		cmp.w	(Camera_stored_min_X_pos).w,d0
-		ble.s		.end
+		ble.s	.end
 		move.w	d0,(Camera_min_X_pos).w
 		rts
 ; ---------------------------------------------------------------------------
@@ -496,7 +496,7 @@ Obj_DecLevStartYGradual:
 		swap	d1
 		sub.w	d1,d0
 		cmp.w	(Camera_stored_min_Y_pos).w,d0
-		ble.s		.end
+		ble.s	.end
 		move.w	d0,(Camera_min_Y_pos).w
 		rts
 ; ---------------------------------------------------------------------------

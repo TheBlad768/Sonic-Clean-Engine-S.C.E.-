@@ -4,12 +4,12 @@
 
 		; assembler code
 		CPU 68000
-		include "Engine/Settings.asm"								; include assembly options
-		include "Engine/MacroSetup.asm"							; include a few basic macros
-		include "Engine/Macros.asm"								; include some simplifying macros and functions
-		include "Engine/Constants.asm"								; include constants
-		include "Engine/Variables.asm"								; include RAM variables
-		include "Sound/Definitions.asm"							; include sound driver macros and functions
+		include "Engine/Settings.asm"					; include assembly options
+		include "Engine/MacroSetup.asm"					; include a few basic macros
+		include "Engine/Macros.asm"					; include some simplifying macros and functions
+		include "Engine/Constants.asm"					; include constants
+		include "Engine/Variables.asm"					; include RAM variables
+		include "Sound/Definitions.asm"					; include sound driver macros and functions
 		include "Engine/Debugger/ErrorHandler/Debugger.asm"		; include debugger macros and functions
 ; ---------------------------------------------------------------------------
 
@@ -20,31 +20,31 @@ StartOfROM:
 	endif
 
 Vectors:
-		dc.l System_stack			; initial stack pointer value
+		dc.l System_stack		; initial stack pointer value
 		dc.l EntryPoint			; start of program
-		dc.l BusError				; bus error
-		dc.l AddressError			; address error (4)
-		dc.l IllegalInstr			; illegal instruction
+		dc.l BusError			; bus error
+		dc.l AddressError		; address error (4)
+		dc.l IllegalInstr		; illegal instruction
 		dc.l ZeroDivide			; division by zero
-		dc.l ChkInstr				; chk exception
+		dc.l ChkInstr			; chk exception
 		dc.l TrapvInstr			; trapv exception (8)
-		dc.l PrivilegeViol			; privilege violation
-		dc.l Trace				; trace exception
-		dc.l Line1010Emu			; line-a emulator
-		dc.l Line1111Emu			; line-f emulator (12)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved) (16)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved) (20)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved)
-		dc.l ErrorExcept			; unused (reserved) (24)
-		dc.l ErrorExcept			; spurious exception
+		dc.l PrivilegeViol		; privilege violation
+		dc.l Trace			; trace exception
+		dc.l Line1010Emu		; line-a emulator
+		dc.l Line1111Emu		; line-f emulator (12)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved) (16)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved) (20)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved)
+		dc.l ErrorExcept		; unused (reserved) (24)
+		dc.l ErrorExcept		; spurious exception
 		dc.l ErrorTrap			; irq level 1
 		dc.l ErrorTrap			; irq level 2
 		dc.l ErrorTrap			; irq level 3 (28)
@@ -85,32 +85,32 @@ Vectors:
 		dc.l ErrorTrap			; unused (reserved)
 		dc.l ErrorTrap			; unused (reserved) (64)
 
-Header:				dc.b "SEGA GENESIS    "
-Copyright:			dc.b "(C)SEGA XXXX.XXX"
+Header:			dc.b "SEGA GENESIS    "
+Copyright:		dc.b "(C)SEGA XXXX.XXX"
 Domestic_Name:		dc.b "SONIC THE               HEDGEHOG                "
 Overseas_Name:		dc.b "SONIC THE               HEDGEHOG                "
 Serial_Number:		dc.b "GM MK-0000 -00"
-Checksum:			dc.w 0
-Input:				dc.b "J               "
+Checksum:		dc.w 0
+Input:			dc.b "J               "
 ROMStartLoc:		dc.l StartOfROM
-ROMEndLoc:			dc.l EndOfROM-1
+ROMEndLoc:		dc.l EndOfROM-1
 RAMStartLoc:		dc.l (RAM_start&$FFFFFF)
-RAMEndLoc:			dc.l (RAM_start&$FFFFFF)+$FFFF
+RAMEndLoc:		dc.l (RAM_start&$FFFFFF)+$FFFF
 SRAMSupport:
 
 	if EnableSRAM
 CartRAM_Info:		dc.b "RA"
 CartRAM_Type:		dc.b $A0+(BackupSRAM<<6)+(AddressSRAM<<3), $20
-CartRAMStartLoc:	dc.l SRAM_Start				; SRAM start ($200000)
+CartRAMStartLoc:	dc.l SRAM_Start			; SRAM start ($200000)
 CartRAMEndLoc:		dc.l SRAM_Start+SRAM_End	; SRAM end ($20xxxx)
 	else
 CartRAM_Info:		dc.b "  "
 CartRAM_Type:		dc.w %10000000100000
-CartRAMStartLoc:	dc.b "    "						; SRAM start ($200000)
-CartRAMEndLoc:		dc.b "    "						; SRAM end ($20xxxx)
+CartRAMStartLoc:	dc.b "    "			; SRAM start ($200000)
+CartRAMEndLoc:		dc.b "    "			; SRAM end ($20xxxx)
 	endif
 
-Modem_Info:			dc.b "                                                    "
+Modem_Info:		dc.b "                                                    "
 Country_Code:		dc.b "JUE             "
 EndOfHeader
 

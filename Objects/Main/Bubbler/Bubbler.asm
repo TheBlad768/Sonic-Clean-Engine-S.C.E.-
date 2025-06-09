@@ -14,7 +14,7 @@ Obj_Bubbler:
 
 		; init
 		movem.l	ObjDat_Bubbler(pc),d0-d3						; copy data to d0-d3
-		movem.l	d0-d3,address(a0)								; set data from d0-d3 to current object
+		movem.l	d0-d3,address(a0)							; set data from d0-d3 to current object
 		move.b	#8,anim(a0)
 
 .main
@@ -23,8 +23,8 @@ Obj_Bubbler:
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0
 		bhs.w	loc_2FB5C
-		tst.b	render_flags(a0)									; object visible on the screen?
-		bpl.w	loc_2FB5C									; if not, branch
+		tst.b	render_flags(a0)							; object visible on the screen?
+		bpl.w	loc_2FB5C								; if not, branch
 		subq.w	#1,objoff_38(a0)
 		bpl.w	loc_2FB50
 		move.w	#1,objoff_36(a0)
@@ -38,7 +38,7 @@ loc_2FA78:
 		move.b	d0,objoff_34(a0)
 		andi.w	#$C,d1
 		lea	Bub_BblTypes(pc,d1.w),a1
-		move.l	a1,objoff_3C(a0)								; save "Bub_BblTypes" address
+		move.l	a1,objoff_3C(a0)							; save "Bub_BblTypes" address
 		subq.b	#1,objoff_32(a0)
 		bpl.s	loc_2FABA
 		move.b	objoff_33(a0),objoff_32(a0)
@@ -70,7 +70,7 @@ loc_2FABA:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.w	priority(a0),priority(a1)
-		move.w	height_pixels(a0),height_pixels(a1)				; set height and width
+		move.w	height_pixels(a0),height_pixels(a1)					; set height and width
 		move.w	x_pos(a0),x_pos(a1)
 		jsr	(Random_Number).w
 		andi.w	#$F,d0
@@ -79,7 +79,7 @@ loc_2FABA:
 		move.w	y_pos(a0),y_pos(a1)
 		moveq	#0,d0
 		move.b	objoff_34(a0),d0
-		movea.l	objoff_3C(a0),a2								; load "Bub_BblTypes" address
+		movea.l	objoff_3C(a0),a2							; load "Bub_BblTypes" address
 		move.b	(a2,d0.w),subtype(a1)
 		btst	#7,objoff_36(a0)
 		beq.s	loc_2FB34
@@ -116,7 +116,7 @@ loc_2FB5C:
 		; check water
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0
-		blo.s		.draw
+		blo.s	.draw
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -127,7 +127,7 @@ loc_2FB5C:
 .offscreen
 		move.w	respawn_addr(a0),d0							; get address in respawn table
 		beq.s	Bubbler_Delete								; if it's zero, it isn't remembered
-		movea.w	d0,a2										; load address into a2
+		movea.w	d0,a2									; load address into a2
 		bclr	#7,(a2)
 
 Bubbler_Delete:
@@ -141,7 +141,7 @@ Bubbler_Delete:
 
 Obj_Bubbler_Bubbles:
 		move.b	subtype(a0),anim(a0)
-		move.b	#rfCoord+rfOnscreen,render_flags(a0)			; use screen coordinates
+		move.b	#rfCoord+rfOnscreen,render_flags(a0)					; use screen coordinates
 		move.w	x_pos(a0),objoff_30(a0)
 		move.w	#-$88,y_vel(a0)
 		jsr	(Random_Number).w
@@ -164,7 +164,7 @@ Obj_Bubbler_Bubbles:
 .chkwater
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0
-		blo.s		loc_2F9E2
+		blo.s	loc_2F9E2
 
 .sanim
 		addq.b	#4,anim(a0)
@@ -175,7 +175,7 @@ Bubbler_Bubbles_Display:
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)
 		bne.s	Bubbler_Delete
-		tst.b	render_flags(a0)									; object visible on the screen?
+		tst.b	render_flags(a0)							; object visible on the screen?
 		bpl.s	Bubbler_Delete								; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -195,16 +195,16 @@ loc_2F9E2:
 
 loc_2FA14:
 		jsr	(MoveSprite2).w
-		tst.b	render_flags(a0)									; object visible on the screen?
+		tst.b	render_flags(a0)							; object visible on the screen?
 		bpl.w	Bubbler_Delete								; if not, branch
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
 sub_2FBA8:
-		tst.w	(Debug_placement_mode).w					; is debug mode on?
-		bne.s	.return										; if yes, branch
-		lea	(Player_1).w,a1									; a1=character
+		tst.w	(Debug_placement_mode).w						; is debug mode on?
+		bne.s	.return									; if yes, branch
+		lea	(Player_1).w,a1								; a1=character
 
 		; main
 		tst.b	object_control(a1)
@@ -243,7 +243,7 @@ sub_2FBA8:
 		add.w	d0,y_pos(a1)
 
 .back
-		move.w	default_y_radius(a1),y_radius(a1)				; set y_radius and x_radius
+		move.w	default_y_radius(a1),y_radius(a1)					; set y_radius and x_radius
 		bra.w	Obj_Bubbler_Bubbles.sanim
 ; ---------------------------------------------------------------------------
 

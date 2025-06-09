@@ -15,8 +15,8 @@ Obj_Jump:
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckFloorDist_DoRoutine:
-		tst.w	y_vel(a0)						; is object falling down?
-		bmi.s	.return							; if not, branch
+		tst.w	y_vel(a0)				; is object falling down?
+		bmi.s	.return					; if not, branch
 		bsr.w	ObjCheckFloorDist
 		tst.w	d1
 		bmi.s	.jump
@@ -34,8 +34,8 @@ ObjCheckFloorDist_DoRoutine:
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckCeilingDist_DoRoutine:
-		tst.w	y_vel(a0)						; is object falling upwards?
-		bmi.s	.return							; if not, branch
+		tst.w	y_vel(a0)				; is object falling upwards?
+		bmi.s	.return					; if not, branch
 		bsr.w	ObjCheckCeilingDist
 		tst.w	d1
 		bmi.s	.jump
@@ -60,7 +60,7 @@ ObjCheckFloorDist2_DoRoutine:
 		swap	d3
 		bsr.w	ObjCheckFloorDist2
 		cmpi.w	#-1,d1
-		blt.s		.jump
+		blt.s	.jump
 		cmpi.w	#12,d1
 		bge.s	.jump
 		add.w	d1,y_pos(a0)

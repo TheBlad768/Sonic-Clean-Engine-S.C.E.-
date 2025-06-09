@@ -35,7 +35,7 @@ loc_1B79A:
 
 loc_1B7A2:
 		cmp.w	(a0),d6
-		bls.s		loc_1B7AC
+		bls.s	loc_1B7AC
 		addq.w	#6,a0
 		addq.w	#1,a3
 		bra.s	loc_1B7A2
@@ -47,11 +47,11 @@ loc_1B7AC:
 		lea	(Object_respawn_table).w,a3
 		movea.l	(Object_load_addr_back).w,a0
 		subi.w	#$80,d6
-		blo.s		loc_1B7D8
+		blo.s	loc_1B7D8
 
 loc_1B7CE:
 		cmp.w	(a0),d6
-		bls.s		loc_1B7D8
+		bls.s	loc_1B7D8
 		addq.w	#6,a0
 		addq.w	#1,a3
 		bra.s	loc_1B7CE
@@ -68,11 +68,11 @@ loc_1B7D8:
 Load_Objects_Main:
 		moveq	#-$80,d0
 		move.w	(Camera_Y_pos).w,d1
-		add.w	d0,d1									; subtract $80
+		add.w	d0,d1								; subtract $80
 		and.w	d0,d1
 		move.w	d1,(Camera_Y_pos_coarse_back).w
 		move.w	(Camera_X_pos).w,d1
-		add.w	d0,d1									; subtract $80
+		add.w	d0,d1								; subtract $80
 		and.w	d0,d1
 		move.w	d1,(Camera_X_pos_coarse_back).w
 		movea.l	(Object_index_addr).w,a4
@@ -93,7 +93,7 @@ loc_1B83A:
 		move.w	(Screen_Y_wrap_value).w,d0
 		addq.w	#1,d0
 		cmp.w	d0,d4
-		bls.s		loc_1B860
+		bls.s	loc_1B860
 		and.w	(Screen_Y_wrap_value).w,d4
 		bra.s	loc_1B864
 ; ---------------------------------------------------------------------------
@@ -121,7 +121,7 @@ loc_1B864:
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$80,d6
-		blo.s		loc_1B8A8
+		blo.s	loc_1B8A8
 		bsr.w	Create_New_Sprite
 		bne.s	loc_1B8A8
 
@@ -171,7 +171,7 @@ loc_1B8D2:
 
 loc_1B8E8:
 		cmp.w	(a0),d6
-		bls.s		loc_1B8F2
+		bls.s	loc_1B8F2
 		jsr	(a6)
 		addq.w	#1,a3
 		beq.s	loc_1B8E8
@@ -182,11 +182,11 @@ loc_1B8F2:
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$300,d6
-		blo.s		loc_1B912
+		blo.s	loc_1B912
 
 loc_1B908:
 		cmp.w	(a0),d6
-		bls.s		loc_1B912
+		bls.s	loc_1B912
 		addq.w	#6,a0
 		addq.w	#1,a3
 		bra.s	loc_1B908
@@ -234,7 +234,7 @@ loc_1B956:
 loc_1B968:
 		addi.w	#$180,d3
 		cmp.w	(Screen_Y_wrap_value).w,d3
-		blo.s		loc_1B982
+		blo.s	loc_1B982
 		and.w	(Screen_Y_wrap_value).w,d3
 		bra.s	loc_1B982
 ; ---------------------------------------------------------------------------
@@ -263,7 +263,7 @@ loc_1B9A4:
 		move.w	(a0),d1
 		and.w	d5,d1
 		cmp.w	d3,d1
-		blo.s		loc_1B9F2
+		blo.s	loc_1B9F2
 		cmp.w	d4,d1
 		bhi.s	loc_1B9F2
 		bset	#7,(a3)
@@ -288,9 +288,9 @@ loc_1B9A4:
 		bmi.s	loc_1B9FA
 
 .find
-		lea	next_object(a1),a1										; goto next object RAM slot
-		tst.l	address(a1)											; is object RAM slot empty?
-		dbeq	d0,.find											; if not, branch
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
 		bne.s	loc_1B9FA
 
 loc_1B9F2:
@@ -321,7 +321,7 @@ loc_1BA4A:
 		cmp.w	d3,d1
 		bhs.s	loc_1BA64
 		cmp.w	d4,d1
-		bls.s		loc_1BA64
+		bls.s	loc_1BA64
 		addq.w	#2,a0
 		moveq	#0,d1
 		rts
@@ -350,9 +350,9 @@ loc_1BA64:
 		bmi.s	.return
 
 .find
-		lea	next_object(a1),a1										; goto next object RAM slot
-		tst.l	address(a1)											; is object RAM slot empty?
-		dbeq	d0,.find											; if not, branch
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
 
 .return
 		rts
@@ -373,9 +373,9 @@ loc_1BA9C:
 		bmi.s	loc_1BAB4
 		and.w	d5,d1
 		cmp.w	d3,d1
-		blo.s		loc_1BAAE
+		blo.s	loc_1BAAE
 		cmp.w	d4,d1
-		bls.s		loc_1BAB6
+		bls.s	loc_1BAB6
 
 loc_1BAAE:
 		addq.w	#2,a0
@@ -406,9 +406,9 @@ Create_New_Sprite4:
 		bmi.s	.notfree
 
 .find
-		lea	next_object(a1),a1										; goto next object RAM slot
-		tst.l	address(a1)											; is object RAM slot empty?
-		dbeq	d0,.find											; if not, branch
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
 
 .notfree
 		rts
@@ -432,7 +432,7 @@ Seek_Object_Manager:
 		movea.l	(Object_load_addr_back).w,a1
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$80,d6
-		blo.s		loc_1BBF2
+		blo.s	loc_1BBF2
 
 loc_1BBE6:
 		cmp.w	-6(a1),d6
@@ -471,7 +471,7 @@ loc_1BC1C:
 
 loc_1BC2C:
 		cmp.w	(a1),d6
-		bls.s		loc_1BC36
+		bls.s	loc_1BC36
 		addq.w	#6,a1
 		addq.w	#1,a3
 		bra.s	loc_1BC2C
@@ -483,11 +483,11 @@ loc_1BC36:
 		movea.l	(Object_load_addr_back).w,a1
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$300,d6
-		blo.s		loc_1BC56
+		blo.s	loc_1BC56
 
 loc_1BC4C:
 		cmp.w	(a1),d6
-		bls.s		loc_1BC56
+		bls.s	loc_1BC56
 		addq.w	#6,a1
 		addq.w	#1,a3
 		bra.s	loc_1BC4C

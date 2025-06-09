@@ -3,8 +3,8 @@
 ; ===========================================================================
 
 Obj_Index:
-		dc.l Obj_Ring							; $00
-		dc.l Obj_Monitor						; $01
+		dc.l Obj_Ring						; $00
+		dc.l Obj_Monitor					; $01
 		dc.l Obj_PathSwap					; $02
 		dc.l Delete_Current_Sprite				; $03
 		dc.l Delete_Current_Sprite				; $04
@@ -41,9 +41,9 @@ Obj_Index:
 		dc.l Delete_Current_Sprite				; $23
 		dc.l Delete_Current_Sprite				; $24
 		dc.l Delete_Current_Sprite				; $25
-		dc.l Obj_AutoSpin						; $26
+		dc.l Obj_AutoSpin					; $26
 		dc.l Delete_Current_Sprite				; $27
-		dc.l Obj_Invisible_SolidBlock			; $28
+		dc.l Obj_Invisible_SolidBlock				; $28
 		dc.l Delete_Current_Sprite				; $29
 		dc.l Delete_Current_Sprite				; $2A
 		dc.l Delete_Current_Sprite				; $2B
@@ -55,7 +55,7 @@ Obj_Index:
 		dc.l Delete_Current_Sprite				; $31
 		dc.l Delete_Current_Sprite				; $32
 		dc.l Obj_Button						; $33
-		dc.l Obj_StarPost						; $34
+		dc.l Obj_StarPost					; $34
 		dc.l Delete_Current_Sprite				; $35
 		dc.l Delete_Current_Sprite				; $36
 		dc.l Delete_Current_Sprite				; $37
@@ -87,7 +87,7 @@ Obj_Index:
 		dc.l Delete_Current_Sprite				; $51
 		dc.l Delete_Current_Sprite				; $52
 		dc.l Delete_Current_Sprite				; $53
-		dc.l Obj_Bubbler						; $54
+		dc.l Obj_Bubbler					; $54
 		dc.l Delete_Current_Sprite				; $55
 		dc.l Delete_Current_Sprite				; $56
 		dc.l Delete_Current_Sprite				; $57
@@ -109,11 +109,11 @@ Obj_Index:
 		dc.l Delete_Current_Sprite				; $67
 		dc.l Delete_Current_Sprite				; $68
 		dc.l Delete_Current_Sprite				; $69
-		dc.l Obj_Invisible_HurtBlock			; $6A
+		dc.l Obj_Invisible_HurtBlock				; $6A
 		dc.l Obj_Invisible_KillBlock				; $6B
 		dc.l Delete_Current_Sprite				; $6C
-		dc.l Obj_Invisible_ShockBlock			; $6D
-		dc.l Obj_Invisible_LavaBlock			; $6E
+		dc.l Obj_Invisible_ShockBlock				; $6D
+		dc.l Obj_Invisible_LavaBlock				; $6E
 		dc.l Delete_Current_Sprite				; $6F
 		dc.l Delete_Current_Sprite				; $70
 		dc.l Delete_Current_Sprite				; $71
@@ -131,7 +131,7 @@ Obj_Index:
 		dc.l Delete_Current_Sprite				; $7D
 		dc.l Delete_Current_Sprite				; $7E
 		dc.l Delete_Current_Sprite				; $7F
-		dc.l Obj_HiddenMonitor				; $80
+		dc.l Obj_HiddenMonitor					; $80
 		dc.l Obj_EggCapsule					; $81
 		dc.l Delete_Current_Sprite				; $82
 		dc.l Delete_Current_Sprite				; $83
@@ -182,7 +182,7 @@ Obj_Index:
 		dc.l Delete_Current_Sprite				; $B0
 		dc.l Delete_Current_Sprite				; $B1
 		dc.l Delete_Current_Sprite				; $B2
-		dc.l Obj_StartNewLevel				; $B3
+		dc.l Obj_StartNewLevel					; $B3
 		dc.l Delete_Current_Sprite				; $B4
 		dc.l Delete_Current_Sprite				; $B5
 		dc.l Delete_Current_Sprite				; $B6

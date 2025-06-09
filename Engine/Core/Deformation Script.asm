@@ -8,20 +8,20 @@
 ; =============== S U B R O U T I N E =======================================
 
 HScroll_Deform:
-		lea	(H_scroll_table).w,a3								; load scroll table
+		lea	(H_scroll_table).w,a3						; load scroll table
 
 .main
-		move.w	(a2)+,d6										; get list of deformation
+		move.w	(a2)+,d6							; get list of deformation
 
 .next
 		movem.w	(a2)+,d2/d5/a1							; get velocity parameter, deformation size, deformation buffer
-		asl.l	#8,d2											; shift velocity to line up with the middle 16 bits of the 32-bit position
+		asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
 
 .loop
-		add.l	d2,(a3)										; add velocity to deformation table
-		move.w	(a3),(a1)										; set velocity from deformation table to deformation buffer
-		addq.w	#4,a1										; next deformation line
-		addq.w	#4,a3										; next deformation table
+		add.l	d2,(a3)								; add velocity to deformation table
+		move.w	(a3),(a1)							; set velocity from deformation table to deformation buffer
+		addq.w	#4,a1								; next deformation line
+		addq.w	#4,a3								; next deformation table
 		dbf	d5,.loop
 		dbf	d6,.next
 		rts
@@ -42,11 +42,11 @@ VScroll_Deform:
 		moveq	#bytesToXcnt((320*2),16),d6
 
 .loop
-		move.w	(a2)+,d2										; get velocity parameter
+		move.w	(a2)+,d2							; get velocity parameter
 		ext.l	d2
-		asl.l	#8,d2											; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d2,(a1)										; add velocity to deformation table
-		move.w	(a1),VDP_data_port-VDP_data_port(a6)			; set velocity from deformation table to deformation buffer
+		asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	d2,(a1)								; add velocity to deformation table
+		move.w	(a1),VDP_data_port-VDP_data_port(a6)				; set velocity from deformation table to deformation buffer
 		addq.w	#4,a1
 		dbf	d6,.loop
 		rts
@@ -107,7 +107,7 @@ PlainDeformation_Flipped:
 
 MakeFGDeformArray:
 		move.w	d1,d0
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	.skip
 
 .loop
@@ -149,7 +149,7 @@ FGScroll_Deformation:
 		move.w	(a1),d2
 		add.w	d0,d2
 		move.w	d2,(a1)
-		addq.w	#4,a1		; skip FBG
+		addq.w	#4,a1								; skip FBG
 	endr
 
 		dbf	d1,.loop
@@ -208,7 +208,7 @@ ApplyDeformation2:
 .loc_4F116
 		tst.b	d4
 		beq.s	.loc_4F130
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	.loc_4F124
 
 .loc_4F11E
@@ -227,7 +227,7 @@ ApplyDeformation2:
 .loc_4F130
 		move.w	(a5)+,d3
 		neg.w	d3
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	.loc_4F13A
 
 .loc_4F138
@@ -309,7 +309,7 @@ ApplyTitleDeformation2:
 .loc_4F116
 		tst.b	d4
 		beq.s	.loc_4F130
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	.loc_4F124
 
 .loc_4F11E
@@ -330,7 +330,7 @@ ApplyTitleDeformation2:
 .loc_4F130
 		move.w	(a5)+,d3
 		neg.w	d3
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	.loc_4F13A
 
 .loc_4F138
@@ -413,7 +413,7 @@ loc_4F19E:
 loc_4F1A0:
 		tst.b	d4
 		beq.s	loc_4F1C2
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	loc_4F1B2
 
 loc_4F1A8:
@@ -438,7 +438,7 @@ loc_4F1C2:
 		move.w	(a5)+,d3
 		neg.w	d3
 		swap	d3
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	loc_4F1D0
 
 loc_4F1CE:
@@ -516,7 +516,7 @@ loc_4F228:
 loc_4F22A:
 		tst.b	d7
 		beq.s	loc_4F250
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	loc_4F23E
 
 loc_4F232:
@@ -541,7 +541,7 @@ loc_4F23E:
 loc_4F250:
 		move.w	(a5)+,d5
 		neg.w	d5
-		lsr.w	d0					; division by 2
+		lsr.w	d0								; division by 2
 		bhs.s	loc_4F262
 
 loc_4F258:

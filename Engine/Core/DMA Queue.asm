@@ -134,21 +134,21 @@ UseVIntSafeDMA = 0
 ; Like vdpComm, but starting from an address contained in a register
 vdpCommReg_defined = 1
 vdpCommReg macro reg,type,rwd,clr
-	lsl.l	#2,reg							; Move high bits into (word-swapped) position, accidentally moving everything else
+	lsl.l	#2,reg											; Move high bits into (word-swapped) position, accidentally moving everything else
 	set .upperbits,(type&rwd)&3
 	if .upperbits<>0
-		addq.w	#.upperbits,reg				; Add upper access type bits
+		addq.w	#.upperbits,reg									; Add upper access type bits
 	endif
-	ror.w	#2,reg							; Put upper access type bits into place, also moving all other bits into their correct (word-swapped) places
-	swap	reg								; Put all bits in proper places
+	ror.w	#2,reg											; Put upper access type bits into place, also moving all other bits into their correct (word-swapped) places
+	swap	reg											; Put all bits in proper places
 	if clr <> 0
-		andi.w	#3,reg						; Strip whatever junk was in upper word of reg
+		andi.w	#3,reg										; Strip whatever junk was in upper word of reg
 	endif
 	set .lowerbits,(type&rwd)&$FC
 	if .lowerbits==$20
-		tas.b	reg							; Add in the DMA flag -- tas fails on memory, but works on registers
+		tas.b	reg										; Add in the DMA flag -- tas fails on memory, but works on registers
 	elseif .lowerbits<>0
-		ori.w	#(.lowerbits<<2),reg		; Add in missing access type bits
+		ori.w	#(.lowerbits<<2),reg								; Add in missing access type bits
 	endif
 	endm
 	endif
@@ -205,25 +205,25 @@ QueueStaticDMA macro src,length,dest
 		endif
 	endif
 	if UseVIntSafeDMA==1
-		move.w	sr,-(sp)										; Save current interrupt mask
-		disableInts												; Mask off interrupts
+		move.w	sr,-(sp)									; Save current interrupt mask
+		disableInts										; Mask off interrupts
 	endif ; UseVIntSafeDMA==1
 	movea.w	(DMA_queue_slot).w,a1
 	cmpa.w	#DMA_queue_slot,a1
-	beq.s	.done												; Return if there's no more room in the buffer
-	move.b	#(dmaLength(length)>>8)&$FF,DMAEntry.SizeH(a1)		; Write top byte of size/2
-	move.l	#((dmaLength(length)&$FF)<<24)|dmaSource(src),d0	; Set d0 to bottom byte of size/2 and the low 3 bytes of source/2
-	movep.l	d0,DMAEntry.SizeL(a1)								; Write it all to the queue
+	beq.s	.done											; Return if there's no more room in the buffer
+	move.b	#(dmaLength(length)>>8)&$FF,DMAEntry.SizeH(a1)						; Write top byte of size/2
+	move.l	#((dmaLength(length)&$FF)<<24)|dmaSource(src),d0					; Set d0 to bottom byte of size/2 and the low 3 bytes of source/2
+	movep.l	d0,DMAEntry.SizeL(a1)									; Write it all to the queue
 	lea	DMAEntry.Command(a1),a1									; Seek to correct RAM address to store VDP DMA command
 	if is68kRegister(dest)
 		move.l	dest,(a1)+
 	else
-		move.l	#vdpComm(dest,VRAM,DMA),(a1)+					; Write VDP DMA command for destination address
+		move.l	#vdpComm(dest,VRAM,DMA),(a1)+							; Write VDP DMA command for destination address
 	endif
-	move.w	a1,(DMA_queue_slot).w						; Write next queue slot
+	move.w	a1,(DMA_queue_slot).w									; Write next queue slot
 .done:
 	if UseVIntSafeDMA==1
-		move.w	(sp)+,sr										; Restore interrupts to previous state
+		move.w	(sp)+,sr									; Restore interrupts to previous state
 	endif ;UseVIntSafeDMA==1
 	endm
 	endif
@@ -237,7 +237,7 @@ ResetDMAQueue macro
 Add_To_DMA_Queue:
 	if UseVIntSafeDMA==1
 		move.w	sr,-(sp)									; Save current interrupt mask
-		disableInts											; Mask off interrupts
+		disableInts										; Mask off interrupts
 	endif ; UseVIntSafeDMA==1
 	movea.w	(DMA_queue_slot).w,a1
 	cmpa.w	#DMA_queue_slot,a1
@@ -249,7 +249,7 @@ Add_To_DMA_Queue:
 	if UseRAMSourceSafeDMA<>0
 		bclr.l	#23,d1										; Make sure bit 23 is clear (68k->VDP DMA flag)
 	endif	; UseRAMSourceSafeDMA
-	movep.l	d1,DMAEntry.Source(a1)							; Write source address; the useless top byte will be overwritten later
+	movep.l	d1,DMAEntry.Source(a1)									; Write source address; the useless top byte will be overwritten later
 	moveq	#0,d0											; We need a zero on d0
 
 	if Use128kbSafeDMA<>0
@@ -268,18 +268,18 @@ Add_To_DMA_Queue:
 		; d1.w + d3.w > $10000.
 		sub.w	d3,d0										; Using sub instead of move and add allows checking edge cases
 		sub.w	d1,d0										; Does the transfer cross over to the next 128kB block?
-		blo.s		.doubletransfer								; Branch if yes
+		blo.s	.doubletransfer									; Branch if yes
 	endif	; Use128kbSafeDMA
 	; It does not cross a 128kB boundary. So just finish writing it.
-	movep.w	d3,DMAEntry.Size(a1)							; Write DMA length, overwriting useless top byte of source address
+	movep.w	d3,DMAEntry.Size(a1)									; Write DMA length, overwriting useless top byte of source address
 
 .finishxfer:
 	; Command to specify destination address and begin DMA
 	move.w	d2,d0											; Use the fact that top word of d0 is zero to avoid clearing on vdpCommReg
-	vdpCommReg d0,VRAM,DMA,0								; Convert destination address to VDP DMA command
-	lea	DMAEntry.Command(a1),a1								; Seek to correct RAM address to store VDP DMA command
+	vdpCommReg d0,VRAM,DMA,0									; Convert destination address to VDP DMA command
+	lea	DMAEntry.Command(a1),a1									; Seek to correct RAM address to store VDP DMA command
 	move.l	d0,(a1)+										; Write VDP DMA command for destination address
-	move.w	a1,(DMA_queue_slot).w					; Write next queue slot
+	move.w	a1,(DMA_queue_slot).w									; Write next queue slot
 
 .done:
 	if UseVIntSafeDMA==1
@@ -291,7 +291,7 @@ Add_To_DMA_Queue:
 .doubletransfer:
 		; We need to split the DMA into two parts, since it crosses a 128kB block
 		add.w	d3,d0										; Set d0 to the number of words until end of current 128kB block
-		movep.w	d0,DMAEntry.Size(a1)						; Write DMA length of first part, overwriting useless top byte of source addres
+		movep.w	d0,DMAEntry.Size(a1)								; Write DMA length of first part, overwriting useless top byte of source addres
 
 		cmpa.w	#DMA_queue_slot-DMAEntry.len,a1	; Does the queue have enough space for both parts?
 		beq.s	.finishxfer									; Branch if not
@@ -304,19 +304,19 @@ Add_To_DMA_Queue:
 
 		; If we know top word of d2 is clear, the following vdpCommReg can be set to not
 		; clear it. There is, unfortunately, no faster way to clear it than this.
-		vdpCommReg d2,VRAM,DMA,1							; Convert destination address of first part to VDP DMA command
-		move.l	d2,DMAEntry.Command(a1)						; Write VDP DMA command for destination address of first part
+		vdpCommReg d2,VRAM,DMA,1								; Convert destination address of first part to VDP DMA command
+		move.l	d2,DMAEntry.Command(a1)								; Write VDP DMA command for destination address of first part
 
 		; Do second transfer
-		movep.l	d1,DMAEntry.len+DMAEntry.Source(a1)			; Write source address of second part; useless top byte will be overwritten later
-		movep.w	d3,DMAEntry.len+DMAEntry.Size(a1)			; Write DMA length of second part, overwriting useless top byte of source addres
+		movep.l	d1,DMAEntry.len+DMAEntry.Source(a1)						; Write source address of second part; useless top byte will be overwritten later
+		movep.w	d3,DMAEntry.len+DMAEntry.Size(a1)						; Write DMA length of second part, overwriting useless top byte of source addres
 
 		; Command to specify destination address and begin DMA
-		vdpCommReg d0,VRAM,DMA,0							; Convert destination address to VDP DMA command; we know top half of d0 is zero
-		lea	DMAEntry.len+DMAEntry.Command(a1),a1			; Seek to correct RAM address to store VDP DMA command of second part
+		vdpCommReg d0,VRAM,DMA,0								; Convert destination address to VDP DMA command; we know top half of d0 is zero
+		lea	DMAEntry.len+DMAEntry.Command(a1),a1						; Seek to correct RAM address to store VDP DMA command of second part
 		move.l	d0,(a1)+									; Write VDP DMA command for destination address of second part
 
-		move.w	a1,(DMA_queue_slot).w				; Write next queue slot
+		move.w	a1,(DMA_queue_slot).w								; Write next queue slot
 		if UseVIntSafeDMA==1
 			move.w	(sp)+,sr								; Restore interrupts to previous state
 		endif ;UseVIntSafeDMA==1
@@ -338,7 +338,7 @@ Process_DMA_Queue:
 .jump_table:
 	rts
 	rept 6
-		trap	#0											; Just in case
+		trap	#0										; Just in case
 	endr
 ; ---------------------------------------------------------------------------
 	set	.c,1
@@ -369,9 +369,11 @@ Process_DMA_Queue:
 
 Init_DMA_Queue:
 	lea	(DMA_queue).w,a0
-	moveq	#-$6C,d0				; fast-store $94 (sign-extended) in d0
+	moveq	#-$6C,d0										; fast-store $94 (sign-extended) in d0
 	move.l	#$93979695,d1
+
 	set	.c,0
+
 	rept QueueSlotCount
 		move.b	d0,.c + DMAEntry.Reg94(a0)
 		movep.l	d1,.c + DMAEntry.Reg93(a0)
