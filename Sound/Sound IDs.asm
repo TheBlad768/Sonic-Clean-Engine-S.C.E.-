@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Sound commands list.
+; Sound commands list
 ; ---------------------------------------------------------------------------
 
 	phase $E1
@@ -19,7 +19,8 @@ mus_SEGA =				$FF		; $FF - Play SEGA sound
 	dephase
 
 ; ---------------------------------------------------------------------------
-; Music ID's list. These do not affect the sound driver, be careful.
+; Music ID's list. These do not affect the sound driver, be careful
+; ---------------------------------------------------------------------------
 
 	phase $01
 mus__First =				*		; ID of the first music
@@ -43,7 +44,8 @@ mus__End =				*		; next ID after last music
 	dephase
 
 ; ---------------------------------------------------------------------------
-; Sound effect ID's list. These do not affect the sound driver, be careful.
+; Sound effect ID's list. These do not affect the sound driver, be careful
+; ---------------------------------------------------------------------------
 
 	phase $01
 sfx__First =				*		; ID of the first sound effect
