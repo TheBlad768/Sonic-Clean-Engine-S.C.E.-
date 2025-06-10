@@ -80,6 +80,8 @@ Example of problematic code:
 
 ```
 		beq	sub_1234	; and any other branch instructions
+		bsr	sub_1234
+		bra	sub_1234
 		jsr	sub_1234
 		jmp	sub_1234
 		lea	sub_1234,a1
@@ -90,6 +92,8 @@ Example of correct code:
 
 ```
 		beq.s	sub_1234	; and any other branch instructions
+		bsr.s	sub_1234
+		bra.s	sub_1234
 		jsr	(sub_1234).l
 		jmp	(sub_1234).l
 		lea	(sub_1234).l,a1
