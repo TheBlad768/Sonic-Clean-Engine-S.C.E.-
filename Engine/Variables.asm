@@ -378,7 +378,7 @@ Debug_saved_art_tile:					ds.w 1						; player 1 art_tile before entering debug 
 Last_star_post_hit:					ds.b 1
 Current_music:						ds.w 1
 Palette_fade_timer:					ds.w 1						; the palette gets faded in until this timer expires
-SegaCD_Mode:						ds.b 1
+							ds.b 1						; even
 Respawn_table_keep:					ds.b 1						; if set, respawn table is not reset during level load
 Graphics_flags:						ds.b 1						; bit 7 set = English system, bit 6 set = PAL system
 Debug_mode_flag:					ds.b 1
