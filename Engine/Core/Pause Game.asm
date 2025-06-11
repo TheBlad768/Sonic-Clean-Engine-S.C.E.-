@@ -23,6 +23,7 @@ Pause_Game:
 	if GameDebug
 		btst	#button_A,(Ctrl_1_pressed).w					; is button A pressed?
 		beq.s	.chkframeadvance						; if not, branch
+		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w			; set screen mode to Level Select (SCE)
 		addq.w	#4,sp								; exit from current screen
 		bra.s	.resumemusic
 ; ---------------------------------------------------------------------------
