@@ -87,7 +87,7 @@ VintID_Fade =							id(ptr_VInt_Fade)				; A
 VintID_LevelSelect =						id(ptr_VInt_LevelSelect)			; C
 
 ; ---------------------------------------------------------------------------
-; Game modes
+; Game mode routines
 ; ---------------------------------------------------------------------------
 
 offset :=	Game_Modes
