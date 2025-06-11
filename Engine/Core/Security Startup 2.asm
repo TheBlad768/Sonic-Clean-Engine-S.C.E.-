@@ -62,5 +62,5 @@ Game_Program:
 ; ---------------------------------------------------------------------------
 
 Game_Modes:
-		GameModeEntry LevelSelectScreen						; Level select mode (SCE)
+		GameModeEntry LevelSelectScreen						; Level Select mode (SCE)
 		GameModeEntry LevelScreen						; Zone play mode
