@@ -194,6 +194,8 @@ Debug_Mode:
 		enableInts
 		move.l	(Debug_saved_mappings).w,mappings(a0)				; restore mappings
 		move.l	(Debug_saved_priority).w,priority(a0)				; restore priority and art_tile
+
+		; reset
 		moveq	#0,d0
 		move.b	d0,anim(a0)
 		move.w	d0,x_sub(a0)
