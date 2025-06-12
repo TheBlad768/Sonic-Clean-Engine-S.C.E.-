@@ -203,7 +203,7 @@ Obj_AirCountdown_Bubbles:
 .chkwater
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0							; has bubble reached the water surface?
-		blo.s	AirCountdown_Wobble					; if not, branch
+		blo.s	AirCountdown_Wobble						; if not, branch
 
 		; pop the bubble
 		move.l	#AirCountdown_Display,address(a0)
