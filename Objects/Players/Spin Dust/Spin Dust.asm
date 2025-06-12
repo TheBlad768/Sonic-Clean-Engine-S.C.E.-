@@ -35,12 +35,12 @@ Obj_DashDust:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.splash			; 1
-		bra.s	.spindashdust		; 2
+		bra.s	.splash									; 1
+		bra.s	.spindashdust								; 2
 
 ; =============== S U B R O U T I N E =======================================
 
-.fromground					; 3 (LBZ1 only)
+.fromground											; 3 (LBZ1 only)
 		tst.b	prev_anim(a0)
 		bne.s	.anim
 		move.w	x_pos(a2),x_pos(a0)
