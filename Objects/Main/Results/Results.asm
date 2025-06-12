@@ -115,7 +115,7 @@ Obj_LevelResults:
 		; check timer
 		cmpi.w	#5*60-11,objoff_2E(a0)
 		bne.s	.return2							; play after eh, a second or so
-		move.b	#30,(Player_1+air_left).w					; reset air
+		move.b	#30,(Player_1+air_left).w					; reset air p1
 		st	(Music_results_flag).w
 		music	mus_GotThrough,1						; play level complete theme
 ; ---------------------------------------------------------------------------
