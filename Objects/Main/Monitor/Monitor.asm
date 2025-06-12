@@ -340,7 +340,7 @@ Monitor_Give_Bubble_Shield:
 Monitor_Give_Invincibility:
 		bset	#Status_Invincible,status_secondary(a1)
 		move.b	#(20*60)/8,invincibility_timer(a1)
-		tst.b	(Music_results_flag).w
+		tst.b	(Music_results_flag).w						; don't change music if level is end
 		bne.s	.skipmusic
 		tst.b	(Boss_flag).w
 		bne.s	.skipmusic
