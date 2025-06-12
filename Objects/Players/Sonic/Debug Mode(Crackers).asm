@@ -1,6 +1,5 @@
 ; ---------------------------------------------------------------------------
-; When debug mode is currently in use
-; Sonic Crackers style
+; When debug mode is currently in use (Sonic Crackers style)
 ; ---------------------------------------------------------------------------
 
 DebugMode_Speed:		= $80
@@ -17,7 +16,7 @@ Debug_Mode:
 		move.l	priority(a0),(Debug_saved_priority).w				; save priority and art_tile
 
 .death
-		bset	#7,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)
 		move.b	#DebugMode_Speed,(Debug_camera_speed).w
 		move.w	(Screen_Y_wrap_value).w,d0
 		and.w	d0,y_pos(a0)
@@ -52,6 +51,8 @@ Debug_Mode:
 		enableInts
 		move.l	(Debug_saved_mappings).w,mappings(a0)				; restore mappings
 		move.l	(Debug_saved_priority).w,priority(a0)				; restore priority and art_tile
+
+		; reset
 		moveq	#0,d0
 		move.b	d0,anim(a0)
 		move.w	d0,x_sub(a0)
