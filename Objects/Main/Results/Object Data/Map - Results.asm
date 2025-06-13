@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 Map_Results:
-		dc.w 0							; 0 Null
+		dc.w 0					; 0 Null
 		dc.w word_2F2E2-Map_Results		; 1 (Number 0)
 		dc.w word_2F2EA-Map_Results		; 2 (Number 1)
 		dc.w word_2F2F2-Map_Results		; 3 (Number 2)
@@ -57,22 +57,22 @@ word_2F332:
 		dc.w 3
 		dc.b 0, 1, $A0, $24, 0, 0
 		dc.b 0, $D, $A0, $22, 0, 8
-		dc.b $F6, 6, $80, $14, 0, $24				; (Drop Art)
-word_2F346:		; Bonus
+		dc.b $F6, 6, $80, $14, 0, $24		; (Drop Art)
+word_2F346:						; Bonus
 		dc.w 3
 		dc.b 0, $D, $A0, $1A, $FF, $FF
-		dc.b 0, 1, $A1, $C4, 0, $20				; HUD address
-		dc.b $F6, 6, $80, $14, 0, $24				; (Drop Art)
+		dc.b 0, 1, $A1, $C4, 0, $20		; HUD address
+		dc.b $F6, 6, $80, $14, 0, $24		; (Drop Art)
 word_2F35A:
 		dc.w 1	; Ring
-		dc.b 0, $D, $A1, $CC, 0, 0				; HUD address
+		dc.b 0, $D, $A1, $CC, 0, 0		; HUD address
 word_2F362:
 		dc.w 1	; Time
-		dc.b 0, $D, $A1, $D4, 0, 0				; HUD address
+		dc.b 0, $D, $A1, $D4, 0, 0		; HUD address
 word_2F36A:		; ACT
 		dc.w 2
-		dc.b $10, 9, $80, $2A, 0, 0				; ACT
-		dc.b 0, $F, $80, $66, 0, $11				; (Number)
+		dc.b $10, 9, $80, $2A, 0, 0		; ACT
+		dc.b 0, $F, $80, $66, 0, $11		; (Number)
 word_2F378:
 		dc.w 6
 		dc.b 0, 5, $80, $40, 0, 0

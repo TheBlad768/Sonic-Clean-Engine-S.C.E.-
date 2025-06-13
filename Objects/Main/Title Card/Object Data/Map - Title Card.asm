@@ -3,11 +3,11 @@
 ; ---------------------------------------------------------------------------
 
 Map_TitleCard:
-		dc.w 0										; null
+		dc.w 0						; null
 		dc.w Map_TitleCardRBanner-Map_TitleCard		; red banner
-		dc.w Map_TitleCardAct-Map_TitleCard			; ACT
-		dc.w Map_TitleCardZone-Map_TitleCard			; ZONE
-		dc.w Map_TitleCardDEZ-Map_TitleCard			; DEATH EGG
+		dc.w Map_TitleCardAct-Map_TitleCard		; ACT
+		dc.w Map_TitleCardZone-Map_TitleCard		; ZONE
+		dc.w Map_TitleCardDEZ-Map_TitleCard		; DEATH EGG
 Map_TitleCardRBanner:
 		dc.w $10
 		dc.b $58, 9, $80, $10, $FF, $E8
@@ -32,13 +32,13 @@ Map_TitleCardAct:
 		dc.b 0, $F, $80, $3D, $FF, $F5
 Map_TitleCardZone:
 		dc.w 4
-		dc.b 0, 6, $80, $31, $FF, $DC		; Z
-		dc.b 0, $A, $80, $28, $FF, $EC		; O
+		dc.b 0, 6, $80, $31, $FF, $DC			; Z
+		dc.b 0, $A, $80, $28, $FF, $EC			; O
 		dc.b 0, 6, $80, $22, 0, 4			; N
 		dc.b 0, 6, $80, $1C, 0, $14			; E
 Map_TitleCardDEZ:
 		dc.w 8
-		dc.b 0, 6, $80, $53, $FF, $F8		; D
+		dc.b 0, 6, $80, $53, $FF, $F8			; D
 		dc.b 0, 6, $80, $1C, 0, 8			; E
 		dc.b 0, 6, $80, $4D, 0, $18			; A
 		dc.b 0, 6, $80, $65, 0, $28			; T

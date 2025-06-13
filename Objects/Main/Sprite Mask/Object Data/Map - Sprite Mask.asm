@@ -3,21 +3,21 @@
 ; ---------------------------------------------------------------------------
 
 Map_SpriteMask:
-		dc.w 0								; 0 (null)
+		dc.w 0					; 0 (null)
 		dc.w word_185982-Map_SpriteMask		; 1
 		dc.w word_185990-Map_SpriteMask		; 2
 		dc.w word_18599E-Map_SpriteMask		; 3
-		dc.w word_1859AC-Map_SpriteMask	; 4
-		dc.w word_1859BA-Map_SpriteMask	; 5
-		dc.w word_1859D4-Map_SpriteMask	; 6
+		dc.w word_1859AC-Map_SpriteMask		; 4
+		dc.w word_1859BA-Map_SpriteMask		; 5
+		dc.w word_1859D4-Map_SpriteMask		; 6
 		dc.w word_1859EE-Map_SpriteMask		; 7
-		dc.w word_185A08-Map_SpriteMask	; 8
+		dc.w word_185A08-Map_SpriteMask		; 8
 		dc.w word_185A22-Map_SpriteMask		; 9
 		dc.w word_185A48-Map_SpriteMask		; A
-		dc.w word_185A6E-Map_SpriteMask	; B
+		dc.w word_185A6E-Map_SpriteMask		; B
 		dc.w word_185A94-Map_SpriteMask		; C
-		dc.w word_185ABA-Map_SpriteMask	; D
-		dc.w word_185AEC-Map_SpriteMask	; E
+		dc.w word_185ABA-Map_SpriteMask		; D
+		dc.w word_185AEC-Map_SpriteMask		; E
 		dc.w word_185B1E-Map_SpriteMask		; F
 		dc.w word_185B50-Map_SpriteMask		; 10
 word_185982:

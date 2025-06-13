@@ -273,26 +273,26 @@ loc_1D850:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	Monitor_Give_Eggman			; 0
-		rts		; nop
-		bra.s	Monitor_Give_Eggman			; 2
-		rts		; nop
-		bra.s	Monitor_Give_Eggman			; 4
-		rts		; nop
-		bra.s	Monitor_Give_Rings			; 6
-		rts		; nop
-		bra.s	Monitor_Give_SpeedShoes			; 8
-		rts		; nop
-		bra.s	Monitor_Give_Fire_Shield		; A
-		rts		; nop
-		bra.s	Monitor_Give_Lightning_Shield		; C
-		rts		; nop
-		bra.s	Monitor_Give_Bubble_Shield		; E
-		rts		; nop
-		bra.w	Monitor_Give_Invincibility		; 10
+		bra.s	Monitor_Give_Eggman						; 0
+		rts									; nop
+		bra.s	Monitor_Give_Eggman						; 2
+		rts									; nop
+		bra.s	Monitor_Give_Eggman						; 4
+		rts									; nop
+		bra.s	Monitor_Give_Rings						; 6
+		rts									; nop
+		bra.s	Monitor_Give_SpeedShoes						; 8
+		rts									; nop
+		bra.s	Monitor_Give_Fire_Shield					; A
+		rts									; nop
+		bra.s	Monitor_Give_Lightning_Shield					; C
+		rts									; nop
+		bra.s	Monitor_Give_Bubble_Shield					; E
+		rts									; nop
+		bra.w	Monitor_Give_Invincibility					; 10
 ; ---------------------------------------------------------------------------
 
-Monitor_Give_Eggman:						; 12
+Monitor_Give_Eggman:									; 12
 		jmp	Touch_ChkHurt3(pc)
 ; ---------------------------------------------------------------------------
 
