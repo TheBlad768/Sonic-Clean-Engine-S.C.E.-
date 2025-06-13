@@ -113,8 +113,6 @@ VInt_Lag_NoWater:
 .notpal
 		st	(H_int_flag).w
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
-
-VInt_Lag_Done:
 		bra.w	VInt_Music
 
 ; ---------------------------------------------------------------------------
