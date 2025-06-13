@@ -3,9 +3,9 @@
 ; ---------------------------------------------------------------------------
 
 Ani_BubbleShield: offsetTable
-		offsetTableEntry.w byte_19A80		; 0
-		offsetTableEntry.w byte_19AB8		; 1
-		offsetTableEntry.w byte_19ABF		; 2
+		offsetTableEntry.w byte_19A80	; 0
+		offsetTableEntry.w byte_19AB8	; 1
+		offsetTableEntry.w byte_19ABF	; 2
 
 byte_19A80:
 		dc.b 1, 0, 9, 0, 9, 0, 9, 1, $A, 1, $A, 1, $A, 2, 9, 2, 9, 2, 9, 3
