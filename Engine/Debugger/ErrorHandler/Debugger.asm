@@ -211,7 +211,7 @@ _assert:	macro	src, cond, dest, consoleprogram
 	if "dest"<>""
 		RaiseError	"Assertion failed:%<endl>%<pal2>> assert.ATTRIBUTE %<pal0>src,%<pal2>cond%<pal0>,dest%<endl>%<pal1>Got: %<.ATTRIBUTE src>", consoleprogram
 	else
-		RaiseError	"Assertion failed:%<endl>%<pal2>> assert.ATTRIBUTE %<pal0>src,%<pal2>cond%%<endl>%<pal1>Got: %<.ATTRIBUTE src>", consoleprogram
+		RaiseError	"Assertion failed:%<endl>%<pal2>> assert.ATTRIBUTE %<pal0>src,%<pal2>cond%<endl>%<pal1>Got: %<.ATTRIBUTE src>", consoleprogram
 	endif
 
 	.skip:
