@@ -292,8 +292,8 @@ next_object =							object_size
 id =								objoff_00					; long
 address =							id						; long
 render_flags =							objoff_04					; bitfield ; refer to SCHG for details
-height_pixels =							objoff_06					; byte
-width_pixels =							objoff_07					; byte
+height_pixels =							objoff_06					; byte ; height / 2
+width_pixels =							objoff_07					; byte ; width / 2
 priority =							objoff_08					; word ; in units of $80
 art_tile =							objoff_0A					; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
 mappings =							objoff_0C					; long
