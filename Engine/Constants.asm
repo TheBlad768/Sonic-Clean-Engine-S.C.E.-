@@ -14,6 +14,13 @@ VDP_counter =							$C00008
 
 PSG_input =							$C00011
 
+; alias from Sonic 1 (GitHub)
+vdp_data_port =							VDP_data_port
+vdp_control_port =						VDP_control_port
+vdp_counter =							VDP_counter
+
+psg_input =							PSG_input
+
 ; ---------------------------------------------------------------------------
 ; Address equates
 ; ---------------------------------------------------------------------------
@@ -23,6 +30,12 @@ Z80_RAM =							$A00000						; start of Z80 RAM
 Z80_RAM_end =							$A02000						; end of non-reserved Z80 RAM
 Z80_bus_request =						$A11100
 Z80_reset =							$A11200
+
+; alias from Sonic 1 (GitHub)
+z80_ram =							Z80_RAM
+z80_ram_end =							Z80_RAM_end
+z80_bus_request =						Z80_bus_request
+z80_reset =							Z80_reset
 
 ym2612_a0 =							$A04000
 ym2612_d0 =							$A04001
@@ -50,12 +63,25 @@ HW_Expansion_TxData =						$A1001B
 HW_Expansion_RxData =						$A1001D
 HW_Expansion_SCtrl =						$A1001F
 
+; alias from Sonic 1 (GitHub)
+z80_version =							HW_Version
+z80_port_1_data =						HW_Port_1_Data
+z80_port_2_data =						HW_Port_2_Data
+z80_expansion_data =						HW_Expansion_Data
+z80_port_1_control =						HW_Port_1_Control
+z80_port_2_control =						HW_Port_2_Control
+z80_expansion_control =						HW_Expansion_Control
+
 ; ---------------------------------------------------------------------------
 ; SRAM addresses
 ; ---------------------------------------------------------------------------
 
 SRAM_access_flag =						$A130F1
 Security_addr =							$A14000
+
+; alias from Sonic 1 (GitHub)
+sram_port =							SRAM_access_flag
+security_addr =							Security_addr
 
 ; ---------------------------------------------------------------------------
 ; Level Misc
@@ -390,6 +416,7 @@ boss_hitcount2 =						objoff_29					; byte ; usage varies, bosses use it as a hi
 
 ; ---------------------------------------------------------------------------
 ; Object variables
+; Alias from Sonic 1 (GitHub)
 ; ---------------------------------------------------------------------------
 
 obId =								address						; long
