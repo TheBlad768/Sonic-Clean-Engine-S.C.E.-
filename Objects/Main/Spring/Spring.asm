@@ -92,9 +92,9 @@ word_22EF0:	dc.w -$1000, -$A00
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_Up:
-		moveq	#$1B,d1
-		moveq	#8,d2
-		moveq	#$10,d3
+		moveq	#(32/2)+$B,d1							; width
+		moveq	#16/2,d2							; height
+		moveq	#32/2,d3							; height+1
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
@@ -111,8 +111,8 @@ Obj_Spring_Up:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_Up_NoSolid:
-		moveq	#$1B,d1
-		moveq	#8,d3
+		moveq	#(32/2)+$B,d1							; width
+		moveq	#16/2,d3							; height
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
@@ -180,9 +180,9 @@ loc_23048:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_Horizontal:
-		moveq	#$13,d1
-		moveq	#$E,d2
-		moveq	#$F,d3
+		moveq	#(16/2)+$B,d1							; width
+		moveq	#28/2,d2							; height
+		moveq	#(28/2)+1,d3							; height+1
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
@@ -324,9 +324,9 @@ locret_23324:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_Down:
-		moveq	#$1B,d1
-		moveq	#8,d2
-		moveq	#9,d3
+		moveq	#(32/2)+$B,d1							; width
+		moveq	#16/2,d2							; height
+		moveq	#(16/2)+1,d3							; height+1
 		move.w	x_pos(a0),d4
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
@@ -399,8 +399,8 @@ loc_2346C:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_UpDiag:
-		moveq	#$1B,d1
-		moveq	#$10,d2
+		moveq	#(32/2)+$B,d1							; width
+		moveq	#32/2,d2							; height
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagUp(pc),a2
 		lea	(Player_1).w,a1							; a1=character
@@ -496,8 +496,8 @@ loc_235CA:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spring_DownDiag:
-		moveq	#$1B,d1
-		moveq	#$10,d2
+		moveq	#(32/2)+$B,d1							; width
+		moveq	#32/2,d2							; height
 		move.w	x_pos(a0),d4
 		lea	ObjSpring_SlopeData_DiagDown(pc),a2
 		lea	(Player_1).w,a1							; a1=character
