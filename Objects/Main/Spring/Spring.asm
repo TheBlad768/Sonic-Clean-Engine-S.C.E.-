@@ -573,12 +573,11 @@ loc_236E2:
 		sfx	sfx_Spring,1
 ; ---------------------------------------------------------------------------
 
-ObjSpring_SlopeData_DiagUp:
-		dc.b $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $E, $C, $A, 8
-		dc.b 6, 4, 2, 0, $FE, $FC, $FC, $FC, $FC, $FC, $FC, $FC
-ObjSpring_SlopeData_DiagDown:
-		dc.b $F4, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F0, $F2, $F4, $F6, $F8
-		dc.b $FA, $FC, $FE, 0, 2, 4, 4, 4, 4, 4, 4, 4
+; data
+ObjSpring_SlopeData_DiagUp:	binclude "Objects/Main/Spring/Object Data/Heightmap1.bin"
+	even
+ObjSpring_SlopeData_DiagDown:	binclude "Objects/Main/Spring/Object Data/Heightmap2.bin"
+	even
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Spring/Object Data/Anim - Spring.asm"
