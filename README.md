@@ -2,6 +2,14 @@
 
 ![Title](https://i.imgur.com/2K6zGld.png)
 
+![GitHub Release](https://img.shields.io/github/v/release/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
+![GitHub Repo stars](https://img.shields.io/github/stars/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
+![GitHub watchers](https://img.shields.io/github/watchers/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/TheBlad768/Sonic-Clean-Engine-S.C.E.-/total?style=flat-square)
+
 ## Disclaimer
 
 Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. All code is provided “as is”. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty. Commercial usage is expressly prohibited.
