@@ -13,6 +13,7 @@
 # Download
 
 - [Current version](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/archive/refs/heads/Clone-Driver-v2.zip)
+- [Releases](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/releases)
 
 ## Disclaimer
 
