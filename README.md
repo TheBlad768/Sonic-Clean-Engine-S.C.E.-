@@ -17,6 +17,7 @@ Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You us
 # Download
 
 - [Current version](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/archive/refs/heads/flamedriver.zip)
+- [Releases](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/releases)
 
 ## Additional links
 
