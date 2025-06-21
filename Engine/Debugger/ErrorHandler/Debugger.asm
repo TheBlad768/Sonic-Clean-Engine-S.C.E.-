@@ -232,7 +232,7 @@ RaiseError:	macro	string, consoleprogram, opts
 	move.w	sr, -(sp)
 	__FSTRING_GenerateArgumentsCode string
 	jsr		(MDDBG__ErrorHandler).l
-	__FSTRING_GenerateDecodedString string
+	__FSTRING_GenerateDecodedString string, 0 ; 0 = no automatic newline
 	if ("consoleprogram"<>"")			; if console program offset is specified ...
 		.__align_flag:	set	((((*)&1)!1)*_eh_align_offset)
 		if "opts"<>""
@@ -330,7 +330,7 @@ _Console:	macro	argument1, argument2
 
 		bra.w	.__leave
 	.__data:
-		__FSTRING_GenerateDecodedString argument1
+		__FSTRING_GenerateDecodedString argument1, 0 ; 0 = no automatic newline
 		!align	2
 	.__leave:
 
@@ -342,7 +342,7 @@ _Console:	macro	argument1, argument2
 			movem.l	a0-a2/d7, -(sp)
 			lea		4*4(sp), a2
 			lea		.__data(pc), a1
-			jsr		(MDDBG__Console_WriteLine_Formatted).l
+			jsr		(MDDBG__Console_Write_Formatted).l
 			movem.l	(sp)+, a0-a2/d7
 			if (.__sp>8)
 				lea		.__sp(sp), sp
@@ -353,12 +353,12 @@ _Console:	macro	argument1, argument2
 		else
 			move.l	a0, -(sp)
 			lea		.__data(pc), a0
-			jsr		(MDDBG__Console_WriteLine).l
+			jsr		(MDDBG__Console_Write).l
 			move.l	(sp)+, a0
 		endif
 		bra.w	.__leave
 	.__data:
-		__FSTRING_GenerateDecodedString argument1
+		__FSTRING_GenerateDecodedString argument1, 1 ; 1 = automatic newline at the end
 		!align	2
 	.__leave:
 
@@ -459,7 +459,7 @@ _KDebug	macro	argument1
 
 		bra.w	.__leave
 	.__data:
-		__FSTRING_GenerateDecodedString argument1
+		__FSTRING_GenerateDecodedString argument1, 0 ; 0 = no automatic newline
 		!align	2
 	.__leave:
 
@@ -489,12 +489,12 @@ _KDebug	macro	argument1
 
 		bra.w	.__leave
 	.__data:
-		__FSTRING_GenerateDecodedString argument1
+		__FSTRING_GenerateDecodedString argument1, 0 ; 0 = no automatic newline
 		!align	2
 	.__leave:
 
 	case "breakline"
-		jsr		(MDDBG__KDebug_FlushLine).l
+		move.w	#$9E00, ($C00004).l
 
 	case "starttimer"
 		move.w	#$9FC0, ($C00004).l
@@ -516,7 +516,7 @@ _KDebug	macro	argument1
 __ErrorMessage:	macro string, opts
 		__FSTRING_GenerateArgumentsCode string
 		jsr		(MDDBG__ErrorHandler).l
-		__FSTRING_GenerateDecodedString string
+		__FSTRING_GenerateDecodedString string, 0 ; 0 = no automatic newline
 
 		if DEBUGGER__EXTENSIONS__ENABLE
 		.__align_flag: set (((*)&1)!1)*_eh_align_offset
@@ -636,30 +636,30 @@ __FSTRING_PushArgument: macro OPERAND,DEST
 ; WARNING! Incomplete!
 __FSTRING_GenerateArgumentsCode: macro string
 
-	.__pos:	set		strstr(string,"%<")		; token position
+	.__pos:	set 	strstr(string,"%<")		; token position
 	.__sp:	set		0						; stack displacement
 	.__str:	set		string
 
 	; Parse string itself
 	while (.__pos>=0)
 
-	; Find the last occurance "%<" in the string
-	while ( strstr(substr(.__str,.__pos+2,0),"%<")>=0 )
-			.__pos:	set		strstr(substr(.__str,.__pos+2,0),"%<")+.__pos+2
+    	; Find the last occurance "%<" in the string
+    	while ( strstr(substr(.__str,.__pos+2,0),"%<")>=0 )
+			.__pos: 	set		strstr(substr(.__str,.__pos+2,0),"%<")+.__pos+2
 		endm
 		.__substr:	set		substr(.__str,.__pos,0)
 
 		; Retrive expression in brackets following % char
-	.__endpos:	set		strstr(.__substr,">")
+    	.__endpos:	set		strstr(.__substr,">")
 		if (.__endpos<0) ; Fix bizzare AS bug as stsstr() fails to check the last character of string
 			.__endpos:	set		strlen(.__substr)-1
 		endif
-	.__midpos:	set		strstr(substr(.__substr,5,0)," ")
-	if ((.__midpos<0)||(.__midpos+5>.__endpos))
+    	.__midpos:	set		strstr(substr(.__substr,5,0)," ")
+    	if ((.__midpos<0)||(.__midpos+5>.__endpos))
 			.__midpos:	set		.__endpos
 		else
 			.__midpos:	set		.__midpos+5
-	endif
+    	endif
 		.__type:		set		substr(.__substr,2,2)	; .type
 
 		; Expression is an effective address (e.g. %(.w d0 hex) )
@@ -699,7 +699,7 @@ __FSTRING_GenerateArgumentsCode: macro string
 	endm
 
 ; ---------------------------------------------------------------
-__FSTRING_GenerateDecodedString:	macro string
+__FSTRING_GenerateDecodedString:	macro string, addnewline
 
 	.__lpos:	set		0		; start position
 	.__pos:	set		strstr(string, "%<")
@@ -712,14 +712,14 @@ __FSTRING_GenerateDecodedString:	macro string
 		endif
 
 		; Retrive expression in brakets following % char
-	.__endpos:	set		strstr(substr(string,.__pos+1,0),">")+.__pos+1 
+    	.__endpos:	set		strstr(substr(string,.__pos+1,0),">")+.__pos+1 
 		if (.__endpos<=.__pos) ; Fix bizzare AS bug as stsstr() fails to check the last character of string
 			.__endpos:	set		strlen(string)-1
 		endif
-	.__midpos:	set		strstr(substr(string,.__pos+5,0)," ")+.__pos+5
-	if ((.__midpos<.__pos+5)||(.__midpos>.__endpos))
+    	.__midpos:	set		strstr(substr(string,.__pos+5,0)," ")+.__pos+5
+    	if ((.__midpos<.__pos+5)||(.__midpos>.__endpos))
 			.__midpos:	set		.__endpos
-	endif
+    	endif
 		.__type:		set		substr(string,.__pos+1+1,2)		; .type
 
 		; Expression is an effective address (e.g. %<.w d0 hex> )
@@ -728,7 +728,7 @@ __FSTRING_GenerateDecodedString:	macro string
 
 			; Validate format setting ("param")
 			if (strlen(.__param)<1)
-				.__param:	set		"hex"			; if param is ommited, set it to "hex"
+				.__param: 	set		"hex"			; if param is ommited, set it to "hex"
 			elseif (.__param=="signed")
 				.__param:	set		"hex+signed"	; if param is "signed", correct it to "hex+signed"
 			endif
@@ -760,7 +760,11 @@ __FSTRING_GenerateDecodedString:	macro string
 	endm
 
 	; Write part of string before the end
-	dc.b	substr(string, .__lpos, 0), 0
+	dc.b	substr(string, .__lpos, 0)
+	if addnewline
+		dc.b	endl
+	endif
+	dc.b	0
 
 	endm
 
