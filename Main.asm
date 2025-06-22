@@ -485,11 +485,19 @@ EndOfHeader
 
 	endif
 
-; ---------------------------------------------------------------
-; Error handling module
-; ---------------------------------------------------------------
+; --------------------------------------------------------------
+; Debugging modules
+; --------------------------------------------------------------
 
 		include "Engine/Debugger/ErrorHandler/ErrorHandler.asm"
+
+; ---------------------------------------------------------------
+; WARNING!
+;	DO NOT put any data from now on! DO NOT use ROM padding!
+;	Symbol data should be appended here after ROM is compiled
+;	by ConvSym utility, otherwise debugger modules won't be able
+;	to resolve symbol names.
+; ---------------------------------------------------------------
 
 ; end of 'ROM'
 EndOfROM:
