@@ -58,16 +58,20 @@ Play_Music:
 Play_SFX:
 		SMPS_stopZ80
 		cmp.b	(Z80_RAM+zSFXNumber0).l,d0
-		beq.s	++
+		beq.s	.exit
 		tst.b	(Z80_RAM+zSFXNumber0).l
-		bne.s	+
+		bne.s	.next
 		move.b	d0,(Z80_RAM+zSFXNumber0).l
 		SMPS_startZ80
 		rts
-+
+
+.next
 		move.b	d0,(Z80_RAM+zSFXNumber1).l
-+
+
+.exit
 		SMPS_startZ80
+
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
