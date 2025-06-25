@@ -119,7 +119,7 @@ Button_Alternate:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Button:		subObjMainData2 Obj_Button.main, rfCoord, 0, 24, 32, 4, $47E, 0, 0, Map_Button
+ObjDat_Button:		subObjMainData Obj_Button.main, rfCoord, 0, 24, 32, 4, $47E, 0, 0, Map_Button
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Button/Object Data/Map - Button.asm"

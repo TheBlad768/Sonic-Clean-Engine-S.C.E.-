@@ -258,7 +258,7 @@ sub_2FBA8:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Bubbler:		subObjMainData2 Obj_Bubbler.main, rfCoord+rfOnscreen, 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
+ObjDat_Bubbler:		subObjMainData Obj_Bubbler.main, rfCoord+rfOnscreen, 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Bubbler/Object Data/Anim - Bubbler.asm"

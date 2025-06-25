@@ -165,23 +165,12 @@ palptr macro ptr,lineno
 
 ; macro to declare sub-object data
 subObjData macro mappings,vram,pal,pri,height,width,prio,frame,collision
+      if upstring("mappings")<>"FALSE"
 	dc.l mappings
+      endif
+      if upstring("vram")<>"FALSE"
 	dc.w make_art_tile(vram,pal,pri)
-	dc.b (height/2),(width/2)
-	dc.w sprite_priority(prio)
-	dc.b frame,collision
-    endm
-
-; macro to declare sub-object data
-subObjData2 macro vram,pal,pri,height,width,prio,frame,collision
-	dc.w make_art_tile(vram,pal,pri)
-	dc.b (height/2),(width/2)
-	dc.w sprite_priority(prio)
-	dc.b frame,collision
-    endm
-
-; macro to declare sub-object data
-subObjData3 macro height,width,prio,frame,collision
+      endif
 	dc.b (height/2),(width/2)
 	dc.w sprite_priority(prio)
 	dc.b frame,collision
@@ -198,26 +187,18 @@ subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,height,width,prio,
 
 ; macro to declare sub-object data
 subObjMainData macro address,render,routine,height,width,prio,vram,pal,pri,mappings,frame,collision
+      if upstring("address")<>"FALSE"
 	dc.l address
+      endif
 	dc.b render,routine,(height/2),(width/2)
 	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
 	dc.l mappings
-	dc.b frame, collision
-    endm
-
-; macro to declare sub-object data
-subObjMainData2 macro address,render,routine,height,width,prio,vram,pal,pri,mappings
-	dc.l address
-	dc.b render,routine,(height/2),(width/2)
-	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
-	dc.l mappings
-    endm
-
-; macro to declare sub-object data
-subObjMainData3 macro render,routine,height,width,prio,vram,pal,pri,mappings
-	dc.b render,routine,(height/2),(width/2)
-	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
-	dc.l mappings
+      if ("frame"<>"")
+	dc.b frame
+      endif
+      if ("collision"<>"")
+	dc.b collision
+      endif
     endm
 ; ---------------------------------------------------------------------------
 

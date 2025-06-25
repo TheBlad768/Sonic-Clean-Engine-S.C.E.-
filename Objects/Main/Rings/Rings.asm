@@ -367,9 +367,9 @@ Obj_Attracted_Ring:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Ring:			subObjMainData2 Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat_Ring2:			subObjMainData2 Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat3_BouncingRing:		subObjMainData3 rfCoord+rfStatic+rfOnscreen, 0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat_Ring:			subObjMainData Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat_Ring2:			subObjMainData Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat3_BouncingRing:		subObjMainData FALSE, rfCoord+rfStatic+rfOnscreen, 0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:
