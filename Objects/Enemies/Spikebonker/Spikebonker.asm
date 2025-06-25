@@ -215,7 +215,7 @@ Obj_Spikebonker_SpikeBall:
 
 ; mapping
 ObjDat_Spikebonker:			subObjData Map_Spikebonker, $500, 0, 1, 40, 40, 5, 0, $1A
-ObjDat3_Spikebonker_SpikeBall:		subObjData3 32, 32, 4, 1, $1A|$80
+ObjDat3_Spikebonker_SpikeBall:		subObjData FALSE, FALSE, 0, 0, 32, 32, 4, 1, $1A|$80
 
 ChildObjDat_Spikebonker_Control:
 		dc.w 1-1

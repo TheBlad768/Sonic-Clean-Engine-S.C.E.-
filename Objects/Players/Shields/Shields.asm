@@ -622,11 +622,11 @@ byte_18A1B:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_FireShield:		subObjMainData2 Obj_FireShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_FireShield
-ObjDat_LightningShield:		subObjMainData2 Obj_LightningShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_LightningShield
-ObjDat_BubbleShield:		subObjMainData2 Obj_BubbleShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_BubbleShield
-ObjDat_InstaShield:		subObjMainData2 Obj_InstaShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_InstaShield
-ObjDat_Invincibility:		subObjMainData2 Obj_188E8, rfCoord+rfMulti, 0, 32, 32, 1, ArtTile_Shield, 0, 0, Map_Invincibility
+ObjDat_FireShield:		subObjMainData Obj_FireShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_FireShield
+ObjDat_LightningShield:		subObjMainData Obj_LightningShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_LightningShield
+ObjDat_BubbleShield:		subObjMainData Obj_BubbleShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_BubbleShield
+ObjDat_InstaShield:		subObjMainData Obj_InstaShield.main, rfCoord, 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_InstaShield
+ObjDat_Invincibility:		subObjMainData Obj_188E8, rfCoord+rfMulti, 0, 32, 32, 1, ArtTile_Shield, 0, 0, Map_Invincibility
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Shields/Object Data/Anim - Fire Shield.asm"

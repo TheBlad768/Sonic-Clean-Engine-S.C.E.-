@@ -73,7 +73,7 @@ Obj_WaveSplash:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_WaveSplash:	subObjMainData2 Obj_WaveSplash.main, rfCoord+rfMulti, 0, 24, 256, 0, $300, 0, 1, Map_WaveSplash
+ObjDat_WaveSplash:	subObjMainData Obj_WaveSplash.main, rfCoord+rfMulti, 0, 24, 256, 0, $300, 0, 1, Map_WaveSplash
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Wave Splash/Object Data/Map - Wave Splash.asm"

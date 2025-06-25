@@ -378,7 +378,7 @@ AirCountdown_WobbleData:	binclude "Objects/Main/Count Down/Object Data/Wobble Da
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_AirCountdown:		subObjMainData2 Obj_AirCountdown.countdown, rfCoord+rfOnscreen, 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
+ObjDat_AirCountdown:		subObjMainData Obj_AirCountdown.countdown, rfCoord+rfOnscreen, 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Count Down/Object Data/Anim - Air Countdown.asm"

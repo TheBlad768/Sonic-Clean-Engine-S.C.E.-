@@ -8,8 +8,8 @@ Ref_Checksum_String						= 'S3CE'
 ; VDP addresses
 ; ---------------------------------------------------------------------------
 
-VDP_data_port =							$C00000
-VDP_control_port =						$C00004
+VDP_data_port =							$C00000						; (8=r/w, 16=r/w)
+VDP_control_port =						$C00004						; (8=r/w, 16=r/w)
 VDP_counter =							$C00008
 
 PSG_input =							$C00011
@@ -36,6 +36,10 @@ z80_ram =							Z80_RAM
 z80_ram_end =							Z80_RAM_end
 z80_bus_request =						Z80_bus_request
 z80_reset =							Z80_reset
+
+; alias from Sonic 2 (GitHub)
+Z80_Bus_Request =						Z80_bus_request
+Z80_Reset =							Z80_reset
 
 ym2612_a0 =							$A04000
 ym2612_d0 =							$A04001
@@ -82,6 +86,9 @@ Security_addr =							$A14000
 ; alias from Sonic 1 (GitHub)
 sram_port =							SRAM_access_flag
 security_addr =							Security_addr
+
+; alias from Sonic 2 (GitHub)
+Security_Addr =							Security_addr
 
 ; ---------------------------------------------------------------------------
 ; Level Misc
