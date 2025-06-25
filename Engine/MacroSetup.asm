@@ -206,6 +206,24 @@ _tst macro
 
     endif
 
+; push registers to the stack
+pushr macro op
+	if ((strstr("op", "-") > 0) && (strstr("op", "(") < 0)) || ((strstr("op", "/") > 0) && (strstr("op", "(") < 0))
+		movem.ATTRIBUTE	op,-(sp)
+	else
+		move.ATTRIBUTE	op,-(sp)
+	endif
+    endm
+
+; pop registers from the stack
+popr macro op
+	if ((strstr("op", "-") > 0) && (strstr("op", "(") < 0)) || ((strstr("op", "/") > 0) && (strstr("op", "(") < 0))
+		movem.ATTRIBUTE	(sp)+,op
+	else
+		move.ATTRIBUTE	(sp)+,op
+	endif
+    endm
+
 ; nop rept
 nops macro fill
       if ("fill"="0") || ("fill"="")
