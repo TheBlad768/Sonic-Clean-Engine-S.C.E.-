@@ -1542,15 +1542,13 @@ __LABEL__Scroll:
 
 dScroll_Data macro pixel,size,velocity,plane
 	dc.w velocity, size
-
-	switch lowstring("plane")
-	case "fg"
+	if upstring("plane")=="FG"
 		dc.w H_scroll_buffer+(pixel<<2)
-	case "bg"
+	elseif upstring("plane")=="BG"
 		dc.w (H_scroll_buffer+2)+(pixel<<2)
-	elsecase
+	else
 		fatal "Error! Non-existent plan."
-	endcase
+	endif
     endm
 ; ---------------------------------------------------------------------------
 
