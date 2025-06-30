@@ -14,9 +14,9 @@ Obj_RobotnikHead3:
 ; ---------------------------------------------------------------------------
 
 RobotnikHead3_Index: offsetTable
-		offsetTableEntry.w Obj_RobotnikHead3Init
-		offsetTableEntry.w Obj_RobotnikHead3Main
-		offsetTableEntry.w Obj_RobotnikHead3End
+		offsetTableEntry.w Obj_RobotnikHead3Init				; 0
+		offsetTableEntry.w Obj_RobotnikHead3Main				; 2
+		offsetTableEntry.w Obj_RobotnikHead3End					; 4
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Init:
@@ -89,9 +89,9 @@ Obj_RobotnikHead4:
 ; ---------------------------------------------------------------------------
 
 RobotnikHead4_Index: offsetTable
-		offsetTableEntry.w Obj_RobotnikHead3Init
-		offsetTableEntry.w Obj_RobotnikHead3Main
-		offsetTableEntry.w Obj_RobotnikHead3End
+		offsetTableEntry.w Obj_RobotnikHead3Init				; 0
+		offsetTableEntry.w Obj_RobotnikHead3Main				; 2
+		offsetTableEntry.w Obj_RobotnikHead3End					; 4
 ; ---------------------------------------------------------------------------
 
 loc_67CFE:
