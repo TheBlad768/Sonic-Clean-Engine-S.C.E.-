@@ -35,8 +35,8 @@ Obj_RobotnikHead3Init:
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3Main:
-		cmpi.b	#PlayerID_Hurt,(Player_1+routine).w
-		bhs.s	Obj_RobotnikHead3_Laugh
+		cmpi.b	#PlayerID_Hurt,(Player_1+routine).w				; is Sonic falling back from getting hurt?
+		bhs.s	Obj_RobotnikHead3_Laugh						; if yes, branch
 		jsr	(Animate_Raw).w
 		movea.w	parent3(a0),a1
 		btst	#7,status(a1)
