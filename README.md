@@ -114,6 +114,7 @@ Example of correct code:
 ### Here you can find more information about Macro Assembler AS and errors:
 
 - [Flamewing's Enhanced AS](https://html-preview.github.io/?url=https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/blob/flamedriver/Tools/AS/asl.html)
+- [Flamewing's Enhanced AS wiki](https://github.com/flamewing/asl-releases/wiki)
 - [Sonic Retro](https://forums.sonicretro.org/index.php?threads/guide-to-common-as-assembler-errors.43731/)
 - [SSRG](https://sonicresearch.org/community/index.php?threads/guide-to-common-as-assembler-errors.7201/)
 
