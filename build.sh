@@ -1,5 +1,6 @@
 #!/bin/sh
-AS_DIR="Tools/AS/Linux"
+AS_MSGPATH="Tools/AS/Linux"
+USEANSI=n
 
 # Delete some intermediate assembler output just in case
 rm -f S3CE.gen
@@ -15,7 +16,7 @@ rm -f Main.h
 # -U        forces case-sensitivity
 # -E        output errors to a file (*.log)
 # -i "."    allows (b)include paths to be absolute
-${AS_DIR}/asl -xx -n -q -c -A -L -U -E -i . Main.asm
+${AS_MSGPATH}/asl -xx -n -q -c -A -L -U -E -i . Main.asm
 
 test -f Main.log && cat Main.log
 if [ ! -f "Main.p" ]; then
@@ -24,21 +25,21 @@ if [ ! -f "Main.p" ]; then
 fi
 
 # Convert the assembled file to binary
-${AS_DIR}/p2bin -p=FF -z=0,kosinskiplus,Size_of_Snd_driver_guess,after Main.p S3CE.gen Main.h
+${AS_MSGPATH}/p2bin -p=FF -z=0,kosinskiplus,Size_of_Snd_driver_guess,after Main.p S3CE.gen Main.h
 
 # Delete temporary files with error checking
 rm -f Main.p
 rm -f Main.h
 
 # Generate debug information
-${AS_DIR}/convsym Main.lst S3CE.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
-${AS_DIR}/convsym Main.lst "Engine/_RAM.asm" -in as_lst -out asm -range FF0000 FFFFFF
+${AS_MSGPATH}/convsym Main.lst S3CE.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
+${AS_MSGPATH}/convsym Main.lst "Engine/_RAM.asm" -in as_lst -out asm -range FF0000 FFFFFF
 
 # Make ROM padding (commented out as in the original)
-#${AS_DIR}/rompad S3CE.gen 255 0
+#${AS_MSGPATH}/rompad S3CE.gen 255 0
 
 # Fix the ROM header
-${AS_DIR}/fixheader S3CE.gen
+${AS_MSGPATH}/fixheader S3CE.gen
 
 if test -f S3CE.gen
 then
