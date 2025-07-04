@@ -11,7 +11,7 @@ Load_Objects:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Objects_Init:
-		movea.l	(Level_data_addr_RAM.Sprites).w,a0
+		movea.l	(Level_data_addr_RAM.ObjectsRAM).w,a0
 		move.l	a0,(Object_load_addr_front).w
 		move.l	a0,(Object_load_addr_back).w
 

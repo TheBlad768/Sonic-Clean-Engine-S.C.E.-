@@ -280,7 +280,7 @@ Get_LevelChunkColumn:
 		asr.w	#3,d4
 		andi.w	#$E,d4
 		add.w	d4,d3
-		movea.l	(Level_chunk_addr_ROM).w,a5
+		movea.l	(Level_data_addr_RAM.128x128RAM).w,a5
 		adda.l	d3,a5
 
 .return
@@ -499,7 +499,7 @@ Get_ChunkRow:
 		move.w	d0,d4
 		andi.w	#$70,d4
 		add.w	d4,d3
-		movea.l	(Level_chunk_addr_ROM).w,a5
+		movea.l	(Level_data_addr_RAM.128x128RAM).w,a5
 		adda.l	d3,a5
 		rts
 

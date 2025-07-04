@@ -18,7 +18,7 @@ Load_Rings_Init:
 
 .skip
 		clearRAM Ring_consumption_table, Ring_consumption_table_end
-		movea.l	(Level_data_addr_RAM.Rings).w,a1
+		movea.l	(Level_data_addr_RAM.RingsRAM).w,a1
 		move.l	a1,(Ring_start_addr_ROM).w
 		lea	(Ring_status_table).w,a2
 		move.w	(Camera_X_pos).w,d4
