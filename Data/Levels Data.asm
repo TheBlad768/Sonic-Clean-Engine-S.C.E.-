@@ -38,20 +38,20 @@ HeightMapsRot:			binclude "Data/Misc/Floor/Height Maps Rotated.bin"
 ; Level collision data
 ; ===========================================================================
 
-DEZ_Solid:			binclude "Levels/DEZ/Collision/1.bin"
+DEZ_Solid_Unc:			binclude "Levels/DEZ/Collision/1.unc"
 	even
 
 ; ===========================================================================
 ; Level layout data
 ; ===========================================================================
 
-DEZ1_Layout:			bincludeEntry "Levels/DEZ/Layout/1.bin"
+DEZ1_Layout_Unc:		bincludeEntry "Levels/DEZ/Layout/1.unc"
 	even
-DEZ2_Layout:			bincludeEntry "Levels/DEZ/Layout/2.bin"
+DEZ2_Layout_Unc:		bincludeEntry "Levels/DEZ/Layout/2.unc"
 	even
-DEZ3_Layout:			bincludeEntry "Levels/DEZ/Layout/3.bin"
+DEZ3_Layout_Unc:		bincludeEntry "Levels/DEZ/Layout/3.unc"
 	even
-DEZ4_Layout:			bincludeEntry "Levels/DEZ/Layout/4.bin"
+DEZ4_Layout_Unc:		bincludeEntry "Levels/DEZ/Layout/4.unc"
 	even
 
 ; ===========================================================================
@@ -59,13 +59,13 @@ DEZ4_Layout:			bincludeEntry "Levels/DEZ/Layout/4.bin"
 ; ===========================================================================
 
 	ObjectLayoutBoundary
-DEZ1_Objects:			binclude "Levels/DEZ/Object Pos/1.bin"
+DEZ1_Objects_Unc:		binclude "Levels/DEZ/Object Pos/1.unc"
 	ObjectLayoutBoundary
-DEZ2_Objects:			binclude "Levels/DEZ/Object Pos/2.bin"
+DEZ2_Objects_Unc:		binclude "Levels/DEZ/Object Pos/2.unc"
 	ObjectLayoutBoundary
-DEZ3_Objects:			binclude "Levels/DEZ/Object Pos/3.bin"
+DEZ3_Objects_Unc:		binclude "Levels/DEZ/Object Pos/3.unc"
 	ObjectLayoutBoundary
-DEZ4_Objects:			binclude "Levels/DEZ/Object Pos/4.bin"
+DEZ4_Objects_Unc:		binclude "Levels/DEZ/Object Pos/4.unc"
 	ObjectLayoutBoundary
 	even
 
@@ -74,12 +74,12 @@ DEZ4_Objects:			binclude "Levels/DEZ/Object Pos/4.bin"
 ; ===========================================================================
 
 	RingLayoutBoundary
-DEZ1_Rings:			binclude "Levels/DEZ/Ring Pos/1.bin"
+DEZ1_Rings_Unc:			binclude "Levels/DEZ/Ring Pos/1.unc"
 	RingLayoutBoundary
-DEZ2_Rings:			binclude "Levels/DEZ/Ring Pos/2.bin"
+DEZ2_Rings_Unc:			binclude "Levels/DEZ/Ring Pos/2.unc"
 	RingLayoutBoundary
-DEZ3_Rings:			binclude "Levels/DEZ/Ring Pos/3.bin"
+DEZ3_Rings_Unc:			binclude "Levels/DEZ/Ring Pos/3.unc"
 	RingLayoutBoundary
-DEZ4_Rings:			binclude "Levels/DEZ/Ring Pos/4.bin"
+DEZ4_Rings_Unc:			binclude "Levels/DEZ/Ring Pos/4.unc"
 	RingLayoutBoundary
 	even

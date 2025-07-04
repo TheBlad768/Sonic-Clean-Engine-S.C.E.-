@@ -400,7 +400,7 @@ GetFloorPosition_BG:
 		add.w	d0,d1
 		andi.w	#$E,d4
 		add.w	d4,d1
-		movea.l	(Level_chunk_addr_ROM).w,a1
+		movea.l	(Level_data_addr_RAM.128x128RAM).w,a1
 		adda.l	d1,a1
 		rts
 
@@ -426,7 +426,7 @@ GetFloorPosition_FG:
 		add.w	d0,d1
 		andi.w	#$E,d4
 		add.w	d4,d1
-		movea.l	(Level_chunk_addr_ROM).w,a1
+		movea.l	(Level_data_addr_RAM.128x128RAM).w,a1
 		adda.l	d1,a1
 		rts
 

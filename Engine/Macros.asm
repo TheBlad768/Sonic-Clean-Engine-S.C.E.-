@@ -149,10 +149,14 @@ dbglistobj macro obj, mapaddr, subtype, frame, vram, pal, pri
 ; macro for declaring a "main level load block" (MLLB)
 ; ---------------------------------------------------------------------------
 
-levartptrs macro art1,art2,map16x16r,map16x161,map16x162,map128x128r,map128x1281,map128x1282,palette,wpalette,music
+levartptrs macro art1,art2,map16x16r,map16x161,map16x162,map128x128r,map128x1281,map128x1282,layoutr,layout,solidr,solid,objectsr,objects,ringsr,rings,palette,wpalette,music
 	dc.l (palette)<<24|((art1)&$FFFFFF),art2
 	dc.l (wpalette)<<24|((map16x16r)&$FFFFFF),map16x161,map16x162
 	dc.l (music)<<24|((map128x128r)&$FFFFFF),map128x1281,map128x1282
+	dc.l layoutr,layout
+	dc.l solidr,solid
+	dc.l objectsr,objects
+	dc.l ringsr,rings
     endm
 ; ---------------------------------------------------------------------------
 

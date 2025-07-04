@@ -248,8 +248,6 @@ Water_full_screen_flag:					ds.b 1						; set if water covers the entire screen 
 Water_flag:						ds.b 1
 
 ; program pointers variables
-Block_table_addr_ROM:					ds.l 1						; block table pointer(Block (16x16) definitions, 8 bytes per definition)
-Level_chunk_addr_ROM:					ds.l 1						; chunk pointer
 Level_layout_addr_ROM:					ds.l 1						; level layout pointer
 Level_layout_addr2_ROM:					ds.l 1						; level layout pointer 2 (+8)
 Rings_manager_addr_RAM:					ds.l 1						; jump for the ring loading manager
@@ -271,20 +269,24 @@ Level_data_addr_RAM:					= *
 .AnimateTiles						ds.l 1						; animate tiles main code
 .AnPLCScript						ds.l 1						; animate tiles PLC scripts
 .Palette						= *
-.8x8data1						ds.l 1
-.8x8data2						ds.l 1
+.8x8Data1						ds.l 1
+.8x8Data2						ds.l 1
 .WaterPalette						= *
-.16x16ram						ds.l 1
-.16x16data1						ds.l 1
-.16x16data2						ds.l 1
+.16x16RAM						ds.l 1
+.16x16Data1						ds.l 1
+.16x16Data2						ds.l 1
 .Music							= *
-.128x128ram						ds.l 1
-.128x128data1						ds.l 1
-.128x128data2						ds.l 1
-.Solid							ds.l 1
-.Layout							ds.l 1
-.Sprites						ds.l 1
-.Rings							ds.l 1
+.128x128RAM						ds.l 1
+.128x128Data1						ds.l 1
+.128x128Data2						ds.l 1
+.LayoutRAM						ds.l 1
+.LayoutData						ds.l 1
+.SolidRAM						ds.l 1
+.SolidData						ds.l 1
+.ObjectsRAM						ds.l 1
+.ObjectsData						ds.l 1
+.RingsRAM						ds.l 1
+.RingsData						ds.l 1
 .PLC1							ds.l 1
 .PLC2							ds.l 1
 .PLCAnimals						ds.l 1
