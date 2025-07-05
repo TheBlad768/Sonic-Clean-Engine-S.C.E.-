@@ -20,3 +20,4 @@
 *.snd binary
 *.bin binary
 *.gen binary
+*.html linguist-detectable=false
