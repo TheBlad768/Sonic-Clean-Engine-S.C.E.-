@@ -22,9 +22,13 @@
 		dc.l AnimateTiles_DoAniPLC						; Animate tiles main code
 		dc.l AniPLC_DEZ								; Animate tiles PLC scripts
 
-		; Level 1st 8x8 data, 2nd 8x8 data, Blocks pointer, 1st 16x16 data, 2nd 16x16 data
-		; Chunks pointer, 1st 128x128 data, 2nd 128x128 data, Level layout pointer, Level layout data
-		; Level solid pointer, Level solid, Level objects pointer, Level objects, Level rings pointer, Level rings
+		; Art 1st 8x8 data, 2nd 8x8 data
+		; Blocks pointer, 1st 16x16 data, 2nd 16x16 data
+		; Chunks pointer, 1st 128x128 data, 2nd 128x128 data
+		; Layout pointer, 1st data, 2nd data
+		; Solid pointer, 1st data, 2nd data
+		; Objects pointer, 1st data, 2nd data
+		; Rings pointer, 1st data, 2nd data
 		; Palette, Water palette, Music
 		levartptrs \
 		DEZ_8x8_KosPM, \
@@ -37,11 +41,15 @@
 		0, \
 		DEZ3_Layout_Unc, \
 		0, \
+		0, \
 		DEZ_Solid_Unc, \
+		0, \
 		0, \
 		DEZ3_Objects_Unc, \
 		0, \
+		0, \
 		DEZ3_Rings_Unc, \
+		0, \
 		0, \
 		PalID_DEZ, \
 		PalID_WaterDEZ, \
