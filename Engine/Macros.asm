@@ -14,6 +14,9 @@ vdpCommDelta function addr,((addr&$3FFF)<<16)|((addr&$C000)>>14)
 ; makes a VDP command
 vdpComm function addr,type,rwd,(((type&rwd)&3)<<30)|((addr&$3FFF)<<16)|(((type&rwd)&$FC)<<2)|((addr&$C000)>>14)
 
+; Calc VDP address
+vdpCalc function loc,($40000000|vdpCommDelta(loc))
+
 ; sign-extends a 32-bit integer to 64-bit
 ; all RAM addresses are run through this function to allow them to work in both 16-bit and 32-bit addressing modes
 ramaddr function x,-(-x)&$FFFFFFFF
