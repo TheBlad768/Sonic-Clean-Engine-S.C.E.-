@@ -1,0 +1,13 @@
+-cpu 68000
+-xx
+-n
+-q
+-c
+-A
+-L
+-OLIST S3CE.lst
+-o S3CE.p
+-shareout S3CE.h
+-U
+-E S3CE.log
+-i .

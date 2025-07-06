@@ -1,10 +1,10 @@
 .vscode
 desktop.ini
 *.gen
-Main.lst
-Main.Debug.lst
+S3CE.lst
+S3CE.debug.lst
 Engine/_RAM.asm
-Engine/_RAM.Debug.asm
+Engine/_RAM.debug.asm
 to-do.txt
 *.log
 *.[ph]

@@ -1,0 +1,14 @@
+-cpu 68000
+-xx
+-n
+-q
+-c
+-D __DEBUG__
+-A
+-L
+-OLIST S3CE.debug.lst
+-o S3CE.debug.p
+-shareout S3CE.debug.h
+-U
+-E S3CE.debug.log
+-i .

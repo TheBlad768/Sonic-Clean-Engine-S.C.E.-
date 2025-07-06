@@ -1,48 +1,51 @@
-#!/bin/sh
-AS_MSGPATH="Tools/AS/Linux"
-USEANSI=n
+#!/bin/bash
 
 # Delete some intermediate assembler output just in case
-rm -f S3CE.Debug.gen
-rm -f Main.p
-rm -f Main.h
+rm -f S3CE.debug.gen
+rm -f S3CE.debug.p
+rm -f S3CE.debug.h
+rm -f S3CE.debug.log
 
 # Run the assembler:
-# -xx       shows the most detailed error output
-# -q        shuts up AS
-# -c        outputs a shared file (*.h)
-# -A        gives us a small speedup
-# -L        listing to file
-# -U        forces case-sensitivity
-# -E        output errors to a file (*.log)
-# -i "."    allows (b)include paths to be absolute
-${AS_MSGPATH}/asl -xx -n -q -c -D __DEBUG__ -olist Main.Debug.lst -A -L -U -E -i . Main.asm
+AS_MSGPATH=Tools/AS/Linux
+USEANSI=n
 
+# Allow the user to choose to print error messages out by supplying the -pe parameter
+${AS_MSGPATH}/asl @Tools/AS/Linux/asflags_debug Engine/Includes.asm
 
-test -f Main.log && cat Main.log
-if [ ! -f "Main.p" ]; then
-    echo "Assembler did not produce Main.p"
+test -f S3CE.debug.log && cat S3CE.debug.log
+if [ ! -f S3CE.debug.p ]; then
+    echo "Assembler did not produce S3CE.debug.p"
     exit 1
 fi
 
 # Convert the assembled file to binary
-${AS_MSGPATH}/p2bin -p=FF -z=0,kosinskiplus,Size_of_DAC_driver_guess,after Main.p S3CE.Debug.gen Main.h
+${AS_MSGPATH}/p2bin -p=FF -z=0,kosinskiplus,Size_of_DAC_driver_guess,after S3CE.debug.p S3CE.debug.gen S3CE.debug.h
 
-# Delete temporary files with error checking
-rm -f Main.p
-rm -f Main.h
+# Delete temporary files
+rm -f S3CE.debug.p
+rm -f S3CE.debug.h
 
 # Generate debug information
-${AS_MSGPATH}/convsym Main.lst S3CE.Debug.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
-${AS_MSGPATH}/convsym Main.lst "Engine/_RAM.Debug.asm" -in as_lst -out asm -range FF0000 FFFFFF
+${AS_MSGPATH}/convsym S3CE.debug.lst S3CE.debug.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
+${AS_MSGPATH}/convsym S3CE.debug.lst "Engine/_RAM.debug.asm" -in as_lst -out asm -range FF0000 FFFFFF
 
 # Make ROM padding (commented out as in the original)
-#${AS_MSGPATH}/rompad S3CE.Debug.gen 255 0
+#${AS_MSGPATH}/rompad S3CE.debug.gen 255 0
 
 # Fix the ROM header
-${AS_MSGPATH}/fixheader S3CE.Debug.gen
+${AS_MSGPATH}/fixheader S3CE.debug.gen
 
-if test -f S3CE.Debug.gen
+# Copy rom to CD folder
+if [ -f "S3CE.debug.gen" ]; then
+    cp S3CE.debug.gen _CD/
+    if [ $? -ne 0 ]; then
+        echo "Failed to copy S3CE.debug.gen"
+        exit 1
+    fi
+fi
+
+if test -f S3CE.debug.gen
 then
   exit 0
 fi
