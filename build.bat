@@ -8,80 +8,73 @@ IF EXIST S3CE.gen (
     del S3CE.gen
     IF ERRORLEVEL 1 goto LABLERROR1
 )
-IF EXIST Main.p (
-    del Main.p
+IF EXIST S3CE.p (
+    del S3CE.p
     IF ERRORLEVEL 1 goto LABLERROR2
 )
-IF EXIST Main.h (
-    del Main.h
+IF EXIST S3CE.h (
+    del S3CE.h
     IF ERRORLEVEL 1 goto LABLERROR3
 )
-IF EXIST Main.log (
-    del Main.log
+IF EXIST S3CE.log (
+    del S3CE.log
     IF ERRORLEVEL 1 goto LABLERROR4
 )
 
 REM // Run the assembler
-REM // '-xx' shows the most detailed error output
-REM // '-q' shuts up AS
-REM // '-c' outputs a shared file (*.h)
-REM // '-A' gives us a small speedup
-REM // '-L' listing to file
-REM // '-U' forces case-sensitivity
-REM // '-E' output errors to a file (*.log)
-REM // '-i .' allows (b)include paths to be absolute
 set AS_MSGPATH=Tools\AS\Windows
 set USEANSI=n
+set ASCMD=@%AS_MSGPATH%\asflags
 
 REM // Allow the user to choose to print error messages out by supplying the -pe parameter
-"%AS_MSGPATH%\asw.exe" -xx -n -q -c -A -L -U -E -i . Main.asm
+"%AS_MSGPATH%\asw.exe" Engine\Includes.asm
 IF ERRORLEVEL 1 (
     echo Assembler failed to execute.
     goto LABLERROR5
 )
-IF NOT EXIST Main.p (
-    echo Assembler did not produce Main.p.
+IF NOT EXIST S3CE.p (
+    echo Assembler did not produce S3CE.p
     goto LABLERROR5
 )
 
 REM // Convert the assembled file to binary
-"%AS_MSGPATH%\p2bin.exe" -p=FF -z=0,kosinskiplus,Size_of_Snd_driver_guess,after Main.p S3CE.gen Main.h
+"%AS_MSGPATH%\p2bin.exe" -p=FF -z=0,kosinskiplus,Size_of_Snd_driver_guess,after S3CE.p S3CE.gen S3CE.h
 IF ERRORLEVEL 1 (
-    echo Failed to convert Main.p to S3CE.gen.
+    echo Failed to convert S3CE.p to S3CE.gen
     pause & exit /b 1
 )
 
 REM // Delete temporary files with error checking
-IF EXIST Main.p (
-    del Main.p
+IF EXIST S3CE.p (
+    del S3CE.p
     IF ERRORLEVEL 1 (
-        echo Failed to delete Main.p during final cleanup.
+        echo Failed to delete S3CE.p during final cleanup.
         pause & exit /b 1
     )
 )
-IF EXIST Main.h (
-    del Main.h
+IF EXIST S3CE.h (
+    del S3CE.h
     IF ERRORLEVEL 1 (
-        echo Failed to delete Main.h during final cleanup.
+        echo Failed to delete S3CE.h during final cleanup.
         pause & exit /b 1
     )
 )
 
 REM // Check if the output file was created
 IF NOT EXIST S3CE.gen (
-    echo Failed to generate S3CE.gen.
+    echo Failed to generate S3CE.gen
     pause & exit /b 1
 )
 
 REM // Generate debug information
-"%AS_MSGPATH%\convsym.exe" Main.lst S3CE.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
+"%AS_MSGPATH%\convsym.exe" S3CE.lst S3CE.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
 IF ERRORLEVEL 1 (
-    echo Failed to generate debug information for S3CE.gen.
+    echo Failed to generate debug information for S3CE.gen
     pause & exit /b 1
 )
-"%AS_MSGPATH%\convsym.exe" Main.lst "Engine\_RAM.asm" -in as_lst -out asm -range FF0000 FFFFFF
+"%AS_MSGPATH%\convsym.exe" S3CE.lst "Engine\_RAM.asm" -in as_lst -out asm -range FF0000 FFFFFF
 IF ERRORLEVEL 1 (
-    echo Failed to generate debug information for _RAM.asm.
+    echo Failed to generate debug information for _RAM.asm
     pause & exit /b 1
 )
 
@@ -91,7 +84,7 @@ REM // "%AS_MSGPATH%\rompad.exe" S3CE.gen 255 0
 REM // Fix the ROM header (checksum)
 "%AS_MSGPATH%\fixheader.exe" S3CE.gen
 IF ERRORLEVEL 1 (
-    echo Failed to fix the ROM header for S3CE.gen.
+    echo Failed to fix the ROM header for S3CE.gen
     pause & exit /b 1
 )
 
@@ -103,28 +96,28 @@ echo Failed to build because write access to S3CE.gen was denied.
 pause & exit /b 1
 
 :LABLERROR2
-echo Failed to build because write access to Main.p was denied.
+echo Failed to build because write access to S3CE.p was denied.
 pause & exit /b 1
 
 :LABLERROR3
-echo Failed to build because write access to Main.h was denied.
+echo Failed to build because write access to S3CE.h was denied.
 pause & exit /b 1
 
 :LABLERROR4
-echo Failed to build because write access to Main.log was denied.
+echo Failed to build because write access to S3CE.log was denied.
 pause & exit /b 1
 
 :LABLERROR5
-IF EXIST Main.log (
-    type Main.log
+IF EXIST S3CE.log (
+    type S3CE.log
 ) ELSE (
-    echo Main.log not found, check if assembler ran correctly.
+    echo S3CE.log not found, check if assembler ran correctly.
 )
 REM // Display a noticeable message
 echo.
 echo **********************************************************************
 echo *                                                                    *
-echo *      There were build errors. See Main.log for more details.      *
+echo *      There were build errors. See S3CE.log for more details.      *
 echo *                                                                    *
 echo **********************************************************************
 echo.
