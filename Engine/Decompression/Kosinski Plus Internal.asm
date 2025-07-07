@@ -5,12 +5,12 @@
 		bra.s	.FetchNewCode
 ; ---------------------------------------------------------------------------
 
-.FetchCodeLoop:
+.FetchCodeLoop
 
 		; code 1 (Uncompressed byte).
 		move.b	(a0)+,(a1)+
 
-.FetchNewCode:
+.FetchNewCode
 	_KosPlus_ReadBit
 		blo.s	.FetchCodeLoop							; if code = 1, branch.
 
@@ -32,13 +32,14 @@
 		move.b	(a5)+,(a1)+
 		move.b	(a5)+,(a1)+
 
-.Copy_01:
+.Copy_01
 	_KosPlus_ReadBit
 		bhs.s	.FetchNewCode
 		move.b	(a5)+,(a1)+
 		bra.s	.FetchNewCode
 ; ---------------------------------------------------------------------------
-.Code_01:
+
+.Code_01
 		moveq	#0,d4								; d4 will contain copy count.
 
 		; code 01 (Dictionary ref. long / special).
@@ -72,7 +73,7 @@
 	endif
 ; ---------------------------------------------------------------------------
 
-.StreamCopy:
+.StreamCopy
 		adda.w	d5,a5
 		move.b	(a5)+,(a1)+							; do 1 extra copy (to compensate +1 to copy counter).
 		add.w	d4,d4
@@ -80,7 +81,7 @@
 ; ---------------------------------------------------------------------------
 
 	if _KosPlus_LoopUnroll==0
-.dolargecopy:
+.dolargecopy
 
 		; special mode (extended counter)
 		move.b	(a0)+,d4							; read cnt
@@ -88,17 +89,21 @@
 		adda.w	d5,a5
 	endif
 
-.largecopy:
+.largecopy
+
 	rept (1<<_KosPlus_LoopUnroll)
 		move.b	(a5)+,(a1)+
 	endr
+
 		dbf	d4,.largecopy
 
-.mediumcopy:
+.mediumcopy
+
 	rept 8
 		move.b	(a5)+,(a1)+
 	endr
+
 		bra.w	.FetchNewCode
 ; ---------------------------------------------------------------------------
 
-.Quit:
+.Quit
