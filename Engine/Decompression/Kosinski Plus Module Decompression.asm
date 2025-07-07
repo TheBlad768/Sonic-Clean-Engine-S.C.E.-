@@ -18,8 +18,6 @@ Queue_KosPlus:
 		move.l	a1,(a3,d0.w)										; store source
 		move.l	a2,4(a3,d0.w)										; store destination
 		addq.w	#1,(KosPlus_decomp_queue_count).w
-
-.Done:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -32,13 +30,13 @@ LoadPLC_Raw_KosPlus:
 		move.w	(a5)+,d6
 		bmi.s	.Done
 
-.queuePieces:
+.queuePieces
 		movea.l	(a5)+,a1										; store source address
 		movea.l	(a5)+,a2										; store destination RAM address
 		bsr.s	Queue_KosPlus
 		dbf	d6,.queuePieces
 
-.Done:
+.Done
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -58,11 +56,11 @@ Process_KosPlus_Module_Queue:
 		bsr.s	Queue_KosPlus										; add current module to decompression queue
 		ori.w	#$8000,(KosPlus_modules_left).w								; and set bit to signify decompression in progress
 
-.Done:
+.Done
 		rts
 ; ---------------------------------------------------------------------------
 
-.DecompressionStarted:
+.DecompressionStarted
 		tst.w	(KosPlus_decomp_queue_count).w
 		bne.s	.Done											; branch if the decompression isn't complete
 
@@ -73,7 +71,7 @@ Process_KosPlus_Module_Queue:
 		bne.s	.Skip											; branch if it isn't the last module
 		move.w	(KosPlus_last_module_size).w,d3
 
-.Skip:
+.Skip
 		move.w	(KosPlus_module_destination).w,d2
 		move.w	d2,d0
 		add.w	d3,d0
@@ -119,13 +117,13 @@ LoadPLC_Raw_KosPlusM:
 		move.w	(a5)+,d6
 		bmi.s	.Done
 
-.queuePieces:
+.queuePieces
 		movea.l	(a5)+,a1										; store source address
 		move.w	(a5)+,d2										; store destination VRAM address
 		bsr.s	Queue_KosPlus_Module
 		dbf	d6,.queuePieces
 
-.Done:
+.Done
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -146,7 +144,7 @@ Queue_KosPlus_Module:
 		tst.l	(a2)											; is the first slot free?
 		beq.s	Process_KosPlus_Module_Queue_Init							; if it is, branch
 
-.findFreeSlot:
+.findFreeSlot
 		addq.w	#6,a2											; otherwise, check next slot
 		tst.l	(a2)
 		bne.s	.findFreeSlot
@@ -166,7 +164,7 @@ Process_KosPlus_Module_Queue_Init:
 		bne.s	.Gotsize
 		move.w	#$8000,d3										; $A000 means $8000 for some reason
 
-.Gotsize:
+.Gotsize
 		lsr.w	d3
 		move.w	d3,d0
 		rol.w	#5,d0
@@ -177,7 +175,7 @@ Process_KosPlus_Module_Queue_Init:
 		subq.w	#1,(KosPlus_modules_left).w								; otherwise decrement the number of modules
 		move.w	#$1000/2,d3										; and take the size of the last module to be $800 words
 
-.Gotleftover:
+.Gotleftover
 		move.w	d3,(KosPlus_last_module_size).w
 		move.w	d2,(KosPlus_module_destination).w
 		move.l	a1,(KosPlus_module_queue).w
@@ -202,7 +200,7 @@ Set_KosPlus_Bookmark:
 		move.l	d0,(KosPlus_decomp_bookmark).w
 		move.l	#Backup_KosPlus_Registers,$42(sp)							; force V-int to rte here instead if needed
 
-.Done:
+.Done
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -222,7 +220,7 @@ Process_KosPlus_Queue:
 		rte
 ; ---------------------------------------------------------------------------
 
-.Main:
+.Main
 		ori.w	#$8000,(KosPlus_decomp_queue_count).w							; set sign bit to signify decompression in progress
 		movea.l	(KosPlus_decomp_queue).w,a0
 		movea.l	(KosPlus_decomp_destination).w,a1
@@ -240,7 +238,7 @@ Process_KosPlus_Queue:
 		move.l	(a1)+,(a0)+
 	endr
 
-.Done:
+.Done
 		rts
 ; ---------------------------------------------------------------------------
 
