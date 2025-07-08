@@ -122,11 +122,11 @@ Example of correct code:
 
 ### Macro Assembler AS Passes
 
-I've added console messages about Macro AS passes
+I've added console messages about Macro AS passes.
 
 ![AS1](https://i.imgur.com/IpPy17k.png)
 
-Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should figure out what's causing the extra passes and try to fix it. This will save you a lot of time during the ROM build
+Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should figure out what's causing the extra passes and try to fix it. This will save you a lot of time during the ROM build.
 
 ![AS2](https://i.imgur.com/skmKw5x.png)
 
