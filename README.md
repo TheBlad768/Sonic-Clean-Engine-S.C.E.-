@@ -120,6 +120,16 @@ Example of correct code:
 
 ### <code style="color : RED">For God's sake, always specify the jump sizes for instructions. Don't try to play around with Macro Assembler AS. Sometimes you may see random and meaningless errors just because you didn't specify the code size. You will try to fix something that wasn't actually broken, but these errors were caused only because you didn't specify the jump size in instruction.</code>
 
+### Macro Assembler AS Passes
+
+I've added console messages about Macro AS passes
+
+![AS1](https://i.imgur.com/IpPy17k.png)
+
+Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should figure out what's causing the extra passes and try to fix it. This will save you a lot of time during the ROM build
+
+![AS2](https://i.imgur.com/skmKw5x.png)
+
 ## Special Credits
 
 - Nichloya — Technical and other support.
