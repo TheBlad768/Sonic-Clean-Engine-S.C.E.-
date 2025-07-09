@@ -130,8 +130,9 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 
 ![AS2](https://i.imgur.com/dR923wk.png)
 
-## Special Credits
+## Credits
 
+- TheBlad768 — Project lead, sole programmer, S.C.E. Game Engine
 - Nichloya — Technical and other support.
 - pixelcat — New smooth ring graphics, act 3 and 4 numbers graphics.
 - FoxConED — Level Select font graphics.
