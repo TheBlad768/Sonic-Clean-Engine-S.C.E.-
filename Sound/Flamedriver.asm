@@ -2423,49 +2423,49 @@ zPauseUnpause:
 		ld	(zContinuousSFX), a				; Clear continuous SFX ID
 		ld	(zContinuousSFXFlag), a			; Clear continuous SFX flag
 		ld	(zContSFXLoopCnt), a				; Clear continuous SFX counter
-		ld	a, (zFadeOutTimeout)				; Get fade timeout
+		ld	a, (zFadeOutTimeout)			; Get fade timeout
 		or	a								; Is it zero?
 		jp	nz, zMusicFade					; Stop all music if not
-		ld	ix, zSongFM1						; Start with FM1 track
+		ld	ix, zSongFM1					; Start with FM1 track
 		ld	b, zNumMusicFMTracks			; Number of FM tracks
 		ld	a, (zDACEnable)					; Get DAC enable
 		or	a								; Is it supposed to be on?
-		jr	z, .fm_loop						; Branch if not
-		ld	ix, zSongDAC						; Start with DAC instead
+		jr	z, .song_loop					; Branch if not
+		ld	ix, zSongDAC					; Start with DAC instead
 
-.fm_loop:
+.song_loop:
 		ld	a, (zHaltFlag)					; Get halt flag
 		or	a								; Is song halted?
 		jr	nz, .set_pan					; Branch if yes
 		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is track playing?
-		jr	z, .skip_fm_track				; Branch if not
+		jr	z, .skip_song_track				; Branch if not
 
 .set_pan:
 		ld	c, (ix+zTrack.AMSFMSPan)		; Get track AMS/FMS/panning
 		ld	a, ymPanningAMSensFMSens		; Command to select AMS/FMS/panning register
 		call	zWriteFMIorII				; Write data to YM2612
 
-.skip_fm_track:
+.skip_song_track:
 		ld	de, zTrack.len					; Spacing between tracks
 		add	ix, de							; Advance to next track
-		djnz	.fm_loop					; Loop for all tracks
+		djnz	.song_loop					; Loop for all tracks
 
 		ld	ix, zTracksSFXStart				; Start at the start of SFX track data
 		ld	b, zNumSFXTracks				; Number of tracks
 
-.psg_loop:
+.sfx_loop:
 		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is track playing?
-		jr	z, .skip_psg_track				; Branch if not
+		jr	z, .skip_sfx_track				; Branch if not
 		bit	bitIsPSG, (ix+zTrack.VoiceControl)	; Is this a PSG track?
-		jr	nz, .skip_psg_track				; Branch if yes
+		jr	nz, .skip_sfx_track				; Branch if yes
 		ld	c, (ix+zTrack.AMSFMSPan)		; Get track AMS/FMS/panning
 		ld	a, ymPanningAMSensFMSens		; Command to select AMS/FMS/panning register
 		call	zWriteFMIorII				; Write data to YM2612
 
-.skip_psg_track:
+.skip_sfx_track:
 		ld	de, zTrack.len					; Spacing between tracks
 		add	ix, de							; Go to next track
-		djnz	.psg_loop					; Loop for all tracks
+		djnz	.sfx_loop					; Loop for all tracks
 
 		ret
 ; End of function zPauseUnpause
