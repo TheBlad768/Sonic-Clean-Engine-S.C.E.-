@@ -240,24 +240,28 @@ titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
 ; ---------------------------------------------------------------------------
 
 ; calculates initial loop counter value for a dbf loop
-; that writes n bytes total at 4 bytes per iteration
-bytesTo4Lcnt function n,n>>4
+; that writes n bytes total at x bytes per iteration
+bytesToXcnt function n,x,n/x-1
 
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 4 bytes per iteration
-bytesTo2Lcnt function n,n>>2
-
-; calculates initial loop counter value for a dbf loop
-; that writes n bytes total at 4 bytes per iteration
-bytesToLcnt function n,n>>2-1
+bytesToLcnt function n,bytesToXcnt(n,4)
 
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 2 bytes per iteration
-bytesToWcnt function n,n>>1-1
+bytesToWcnt function n,bytesToXcnt(n,2)
 
-; calculates initial loop counter value for a dbf loop
+; calculates initial loop counter value for a normal loop
 ; that writes n bytes total at x bytes per iteration
-bytesToXcnt function n,x,n/x-1
+bytesTo2Xcnt function n,x,n/x
+
+; calculates initial loop counter value for a normal loop
+; that writes n bytes total at 4 bytes per iteration
+bytesTo2Lcnt function n,bytesTo2Xcnt(n,4)
+
+; calculates initial loop counter value for a normal loop
+; that writes n bytes total at 2 bytes per iteration
+bytesTo2Wcnt function n,bytesTo2Xcnt(n,2)
 ; ---------------------------------------------------------------------------
 
 ; fills a region of 68k RAM with 0
