@@ -54,5 +54,5 @@ Pause_Game:
 .frameadvance
 		st	(Game_paused).w
 		SMPS_UnpauseMusic							; unpause the music
-		rts
+		rts											; advance by a single frame
 	endif
