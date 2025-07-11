@@ -70,7 +70,7 @@ VInt_Lag_Main:
 		moveq	#$7C,d0											; limit Game Mode value to $7C max
 		and.b	(Game_mode).w,d0									; load Game Mode
 		cmpi.b	#GameModeID_LevelScreen,d0								; is game on a level?
-		bne.s	VInt_Done										; if not, return from V-int
+		bne.s	VInt_Music										; if not, return from V-int
 
 VInt_Lag_Level:
 		tst.b	(Water_flag).w
