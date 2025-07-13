@@ -38,34 +38,34 @@ Obj_CreateBossExplosion:
 ; ---------------------------------------------------------------------------
 
 CreateBossExpRoutineSet:
-		dc.l Obj_Wait, Obj_BossExpControl1			; 0
-		dc.l Obj_WaitForParent, Obj_BossExpControl1		; 8
-		dc.l Obj_Wait, Obj_NormalExpControl			; 10
-		dc.l Obj_Wait, Obj_BossExpControl2			; 18
-		dc.l Obj_WaitForParent, Obj_BossExpControl2		; 20
-		dc.l Obj_WaitForParent, Obj_NormalExpControl		; 28
-		dc.l Obj_WaitForParent, Obj_BossExpControlOff		; 30
+		dc.l Obj_Wait, Obj_BossExpControl1					; 0
+		dc.l Obj_WaitForParent, Obj_BossExpControl1				; 8
+		dc.l Obj_Wait, Obj_NormalExpControl					; 10
+		dc.l Obj_Wait, Obj_BossExpControl2					; 18
+		dc.l Obj_WaitForParent, Obj_BossExpControl2				; 20
+		dc.l Obj_WaitForParent, Obj_NormalExpControl				; 28
+		dc.l Obj_WaitForParent, Obj_BossExpControlOff				; 30
 
 CreateBossExpParameterIndex:
 
 		; x offset range, y offset range, explosion timer, routine set
-		dc.b 64/2, 64/2, $20, 0					; 0
-		dc.b 256/2, 256/2, $28, $18				; 2
-		dc.b 64/2, 64/2, $80, 8					; 4
-		dc.b 32/2, 32/2, 4, 0					; 6
-		dc.b 64/2, 64/2, 8, $10					; 8
-		dc.b 64/2, 64/2, $20, 0					; A
-		dc.b 256/2, 64/2, $40, 0				; C
-		dc.b 128/2, 128/2, $80, 8				; E
-		dc.b 64/2, 64/2, $20, $18				; 10
-		dc.b 64/2, 64/2, $80, $20				; 12
-		dc.b 256/2, 64/2, 8, $10				; 14
-		dc.b 256/2, 256/2, $80, 8				; 16
-		dc.b 256/2, 256/2, $80, $28				; 18
-		dc.b 128/2, 128/2, $80, $28				; 1A
-		dc.b 256/2, 128/2, $80, 8				; 1C
-		dc.b 32/2, 32/2, $80, 8					; 1E
-		dc.b 64/2, 64/2, $80, $30				; 20
+		dc.b 64/2, 64/2, $20, 0							; 0
+		dc.b 256/2, 256/2, $28, $18						; 2
+		dc.b 64/2, 64/2, $80, 8							; 4
+		dc.b 32/2, 32/2, 4, 0							; 6
+		dc.b 64/2, 64/2, 8, $10							; 8
+		dc.b 64/2, 64/2, $20, 0							; A
+		dc.b 256/2, 64/2, $40, 0						; C
+		dc.b 128/2, 128/2, $80, 8						; E
+		dc.b 64/2, 64/2, $20, $18						; 10
+		dc.b 64/2, 64/2, $80, $20						; 12
+		dc.b 256/2, 64/2, 8, $10						; 14
+		dc.b 256/2, 256/2, $80, 8						; 16
+		dc.b 256/2, 256/2, $80, $28						; 18
+		dc.b 128/2, 128/2, $80, $28						; 1A
+		dc.b 256/2, 128/2, $80, 8						; 1C
+		dc.b 32/2, 32/2, $80, 8							; 1E
+		dc.b 64/2, 64/2, $80, $30						; 20
 
 ; =============== S U B R O U T I N E =======================================
 

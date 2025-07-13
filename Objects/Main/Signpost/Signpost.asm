@@ -143,7 +143,7 @@ Obj_EndSign:
 
 .signresults
 		lea	(Player_1).w,a1							; a1=character
-		btst	#Status_InAir,status(a1)
+		btst	#status.player.in_air,status(a1)
 		bne.s	.draw2								; if player is not standing on the ground, wait until he is
 		move.l	#.signafter,address(a0)
 		st	(Ctrl_1_locked).w						; null sonic's input
@@ -236,7 +236,7 @@ Obj_SignpostStub:
 		; init
 		lea	ObjDat_SignpostStub(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		bset	#rbStatic,render_flags(a0)					; set flag to "static mappings flag"
+		bset	#render_flags.static_mappings,render_flags(a0)			; set flag to "static mappings flag"
 		move.l	#.main,address(a0)
 		btst	#high_priority_bit,(Player_1+art_tile).w
 		beq.s	.main

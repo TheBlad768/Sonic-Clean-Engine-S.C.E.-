@@ -16,7 +16,7 @@ ecap_tailspos				= 7		; bit
 ; =============== S U B R O U T I N E =======================================
 
 Obj_EggCapsule_Flying:
-		bset	#1,render_flags(a0)						; set flipy flag
+		bset	#render_flags.y_flip,render_flags(a0)				; set flipy flag
 
 Obj_EggCapsule:
 
@@ -30,7 +30,7 @@ Obj_EggCapsule:
 		move.l	#.main,address(a0)
 
 		; check
-		btst	#1,render_flags(a0)						; is egg capsule flipped?
+		btst	#render_flags.y_flip,render_flags(a0)				; is egg capsule flipped?
 		bne.s	.flipy								; if yes, branch
 		move.l	#.normal,objoff_34(a0)
 
@@ -184,8 +184,8 @@ Obj_EggCapsule:
 		jmp	(MoveSprite2).w
 ; ---------------------------------------------------------------------------
 
-.subindex				; $A, $E, $10 only (sub_866BA, sub_866DA, sub_866EC)
-		dc.l sub_866BA	; DEZ
+.subindex										; $A, $E, $10 only (sub_866BA, sub_866DA, sub_866EC)
+		dc.l sub_866BA								; DEZ
 
 		zonewarning .subindex,(1*4)
 
@@ -253,7 +253,7 @@ Check_SonicEndPose:
 		lea	(Player_1).w,a1							; a1=character
 		btst	#7,status(a1)
 		bne.s	.return
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	.return								; if yes, branch
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	.return								; if yes, branch
@@ -344,7 +344,7 @@ Obj_EggCapsule_FlippedButton:
 		; init
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		bset	#1,render_flags(a0)						; set flipy flag
+		bset	#render_flags.y_flip,render_flags(a0)				; set flipy flag
 		move.l	#.main,address(a0)
 
 .main
@@ -389,8 +389,8 @@ Obj_EggCapsule_FlippedButton:
 ; ---------------------------------------------------------------------------
 
 .range
-		dc.w -26, 52		; xpos, xpos (26 pixels width)
-		dc.w -28, 56		; ypos, ypos (28 pixels height)
+		dc.w -26, 52	; xpos, xpos (26 pixels width)
+		dc.w -28, 56	; ypos, ypos (28 pixels height)
 
 ; ---------------------------------------------------------------------------
 ; Egg Capsule flicker pieces (Object)
@@ -504,10 +504,10 @@ Obj_EggCapsule_Animals:
 		move.w	d1,x_vel(a0)
 
 		; check
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	d1
 		bpl.s	.anim
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .anim
 		moveq	#0,d0
@@ -586,16 +586,16 @@ Obj_EggCapsule_Animals_Flipped:
 		MoveSprite2 a0
 
 		; check xvel
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	x_vel(a0)
 		bpl.s	.check
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .check
 		tst.b	(Level_results_flag).w
 		bne.s	.anim
 		move.l	#.back,address(a0)
-		bset	#0,render_flags(a0)						; left side
+		bset	#render_flags.x_flip,render_flags(a0)				; left side
 		bra.s	.anim
 ; ---------------------------------------------------------------------------
 

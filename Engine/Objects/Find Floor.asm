@@ -12,8 +12,8 @@ Player_AnglePos:
 
 .check
 		move.b	top_solid_bit(a0),d5
-		btst	#Status_OnObj,status(a0)						; is player standing on an object?
-		beq.s	loc_EC5A								; if not, branch
+		btst	#status.player.on_object,status(a0)				; is player standing on an object?
+		beq.s	loc_EC5A							; if not, branch
 
 		; clear
 		moveq	#0,d0
@@ -118,8 +118,8 @@ loc_ED32:
 ; ---------------------------------------------------------------------------
 
 loc_ED38:
-		bset	#Status_InAir,status(a0)
-		bclr	#Status_Push,status(a0)
+		bset	#status.player.in_air,status(a0)
+		bclr	#status.player.pushing,status(a0)
 		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
@@ -227,8 +227,8 @@ loc_EE40:
 ; ---------------------------------------------------------------------------
 
 loc_EE46:
-		bset	#Status_InAir,status(a0)
-		bclr	#Status_Push,status(a0)
+		bset	#status.player.in_air,status(a0)
+		bclr	#status.player.pushing,status(a0)
 		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
@@ -300,8 +300,8 @@ loc_EEEE:
 ; ---------------------------------------------------------------------------
 
 loc_EEF4:
-		bset	#Status_InAir,status(a0)
-		bclr	#Status_Push,status(a0)
+		bset	#status.player.in_air,status(a0)
+		bclr	#status.player.pushing,status(a0)
 		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
@@ -373,8 +373,8 @@ loc_EF9C:
 ; ---------------------------------------------------------------------------
 
 loc_EFA2:
-		bset	#Status_InAir,status(a0)
-		bclr	#Status_Push,status(a0)
+		bset	#status.player.in_air,status(a0)
+		bclr	#status.player.pushing,status(a0)
 		move.b	#AniIDSonAni_Run,prev_anim(a0)
 		rts
 
@@ -389,12 +389,12 @@ GetFloorPosition_BG:
 		lsr.w	#3,d1
 		move.w	d1,d4
 		lsr.w	#4,d1
-		add.w	d1,d1									; chunk ID to word
+		add.w	d1,d1								; chunk ID to word
 		add.w	$A(a1,d0.w),d1
 		adda.w	d1,a1
 		moveq	#0,d1
-		move.w	(a1),d1									; move 128*128 chunk ID to d1
-		lsl.w	#7,d1									; multiply by $80
+		move.w	(a1),d1								; move 128*128 chunk ID to d1
+		lsl.w	#7,d1								; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
 		add.w	d0,d1
@@ -415,12 +415,12 @@ GetFloorPosition_FG:
 		lsr.w	#3,d1
 		move.w	d1,d4
 		lsr.w	#4,d1
-		add.w	d1,d1									; chunk ID to word
+		add.w	d1,d1								; chunk ID to word
 		add.w	8(a1,d0.w),d1
 		adda.w	d1,a1
 		moveq	#0,d1
-		move.w	(a1),d1									; move 128*128 chunk ID to d1
-		lsl.w	#7,d1									; multiply by $80
+		move.w	(a1),d1								; move 128*128 chunk ID to d1
+		lsl.w	#7,d1								; multiply by $80
 		move.w	d2,d0
 		andi.w	#$70,d0
 		add.w	d0,d1
@@ -976,7 +976,7 @@ CalcRoomInFront:
 		; check gravity
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		neg.w	d1									; reverse it
+		neg.w	d1								; reverse it
 
 .notgrav
 		ext.l	d1
@@ -1016,9 +1016,9 @@ loc_F68A:
 		addq.w	#8,d2
 
 		; fix by devon
-		btst	#Status_Roll,status(a0)							; is Sonic rolling?
-		beq.s	.skip									; if not, branch
-		subq.w	#5,d2									; if so, move push sensor up a bit
+		btst	#status.player.rolling,status(a0)				; is Sonic rolling?
+		beq.s	.skip								; if not, branch
+		subq.w	#5,d2								; if so, move push sensor up a bit
 
 		; check gravity
 		tst.b	(Reverse_gravity_flag).w
@@ -1273,8 +1273,8 @@ ObjCheckFloorDist:
 		move.w	x_pos(a0),d3
 
 ObjCheckFloorDist2:
-		move.w	y_pos(a0),d2								; get object position
-		move.b	y_radius(a0),d0								; get object height
+		move.w	y_pos(a0),d2							; get object position
+		move.b	y_radius(a0),d0							; get object height
 		ext.w	d0
 		add.w	d0,d2
 		lea	(Primary_Angle).w,a4
@@ -1720,7 +1720,7 @@ sub_FDEC:
 
 ObjCheckLeftWallDist:
 		add.w	x_pos(a0),d3
-		eori.w	#$F,d3									; this was not here in S1/S2, resulting in a bug
+		eori.w	#$F,d3								; this was not here in S1/S2, resulting in a bug
 
 ObjCheckLeftWallDist_Part2:
 		move.w	y_pos(a0),d2

@@ -11,7 +11,7 @@ SetUp_ObjAttributes3:
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
 		move.b	(a1)+,collision_flags(a0)					; collision number
-		bset	#rbCoord,render_flags(a0)					; use screen coordinates
+		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		addq.b	#2,routine(a0)							; next routine
 		rts
 
@@ -169,7 +169,7 @@ Release_PlayerFromObject:
 		bclr	#p1_pushing_bit,status(a0)
 		beq.s	.return
 		lea	(Player_1).w,a1							; a1=character
-		bclr	#Status_Push,status(a1)
+		bclr	#status.player.pushing,status(a1)
 		move.w	#bytes_to_word(AniIDSonAni_Walk,AniIDSonAni_Run),anim(a1)	; reset player anim
 
 .return
@@ -186,8 +186,8 @@ Displace_PlayerOffObject:
 		bclr	#p1_standing_bit,status(a0)
 		beq.s	.return
 		lea	(Player_1).w,a1							; a1=character
-		bclr	#Status_OnObj,status(a1)
-		bset	#Status_InAir,status(a1)
+		bclr	#status.player.on_object,status(a1)
+		bset	#status.player.in_air,status(a1)
 
 .return
 		rts
@@ -197,7 +197,7 @@ Displace_PlayerOffObject:
 Go_CheckPlayerRelease:
 		movem.l	d7-a0/a2-a3,-(sp)
 		lea	(Player_1).w,a1							; a1=character
-		btst	#Status_OnObj,status(a1)
+		btst	#status.player.on_object,status(a1)
 		beq.s	.notp1
 		movea.w	interact(a1),a0
 		bsr.w	CheckPlayerReleaseFromObj
@@ -247,7 +247,7 @@ Restore_LevelMusic:
 		moveq	#0,d0
 		move.b	(a2),d0
 		move.w	d0,(Current_music).w
-		btst	#Status_Invincible,(Player_1+status_secondary).w
+		btst	#status_secondary.invincible,(Player_1+status_secondary).w
 		beq.s	.play
 		moveq	#signextendB(mus_Invincible),d0					; if invincible, play invincibility music
 
@@ -259,7 +259,7 @@ Restore_LevelMusic:
 HurtCharacter_Directly2:
 		tst.b	object_control(a1)
 		bmi.s	HurtCharacter_Directly.return
-		btst	#Status_Invincible,status_secondary(a1)				; is character invincible?
+		btst	#status_secondary.invincible,status_secondary(a1)		; is character invincible?
 		bne.s	HurtCharacter_Directly.return					; if yes, branch
 		tst.b	invulnerability_timer(a1)					; is character invulnerable?
 		bne.s	HurtCharacter_Directly.return					; if yes, branch
@@ -305,7 +305,7 @@ EnemyDefeated:
 ; =============== S U B R O U T I N E =======================================
 
 EnemyDefeat_Score:
-		bset	#7,status(a0)
+		bset	#status.npc.defeated,status(a0)
 		clr.b	collision_flags(a0)
 		moveq	#0,d0
 		move.w	(Chain_bonus_counter).w,d0
@@ -332,9 +332,9 @@ EnemyDefeat_Score:
 HurtCharacter_WithoutDamage:
 		lea	(Player_1).w,a1							; a1=character
 		move.b	#PlayerID_Hurt,routine(a1)					; hit animation
-		bclr	#Status_OnObj,status(a1)
-		bclr	#Status_Push,status(a1)						; player is not standing on/pushing an object
-		bset	#Status_InAir,status(a1)
+		bclr	#status.player.on_object,status(a1)
+		bclr	#status.player.pushing,status(a1)				; player is not standing on/pushing an object
+		bset	#status.player.in_air,status(a1)
 		move.l	#words_to_long(-$200,-$300),x_vel(a1)				; set speed of player
 		clr.w	ground_vel(a1)							; zero out inertia
 		move.b	#AniIDSonAni_Hurt,anim(a1)					; set falling animation
@@ -344,8 +344,8 @@ HurtCharacter_WithoutDamage:
 
 LaunchCharacter:
 		move.w	d0,y_vel(a1)							; set y velocity
-		bset	#Status_InAir,status(a1)					; set character airborne flag
-		bclr	#Status_OnObj,status(a1)					; clear character on object flag
+		bset	#status.player.in_air,status(a1)				; set character airborne flag
+		bclr	#status.player.on_object,status(a1)				; clear character on object flag
 		clr.b	jumping(a1)							; clear character jumping flag
 		clr.b	spin_dash_flag(a1)						; clear spin dash flag
 		move.b	#AniIDSonAni_Spring,anim(a1)					; change Sonic's animation to "spring" ($10)
@@ -355,7 +355,7 @@ LaunchCharacter:
 ; =============== S U B R O U T I N E =======================================
 
 Check_PlayerAttack:
-		btst	#Status_Invincible,status_secondary(a1)				; is character invincible?
+		btst	#status_secondary.invincible,status_secondary(a1)		; is character invincible?
 		bne.s	.hit								; if so, branch
 		cmpi.b	#AniIDSonAni_SpinDash,anim(a1)					; is player in their spin dash animation?
 		beq.s	.hit								; if so, branch
@@ -408,7 +408,7 @@ Load_LevelResults:
 		lea	(Player_1).w,a1							; a1=character
 		btst	#7,status(a1)
 		bne.s	.return
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	.return								; if yes, branch
 		cmpi.b	#PlayerID_Death,routine(a1)					; is player dead?
 		bhs.s	.return								; if yes, branch
@@ -431,8 +431,8 @@ Set_PlayerEndingPose:
 		clr.b	spin_dash_flag(a1)
 		bclr	#p1_pushing_bit,status(a0)
 		bclr	#p2_pushing_bit,status(a0)
-		bclr	#Status_Push,status(a1)
-		bclr	#Status_Roll,status(a1)
+		bclr	#status.player.pushing,status(a1)
+		bclr	#status.player.rolling,status(a1)
 		beq.s	.return								; if the player doesn't roll, branch
 
 		; fix player ypos
@@ -464,7 +464,7 @@ Restore_PlayerControl:
 
 Restore_PlayerControl2:
 		clr.b	object_control(a1)
-		bclr	#Status_InAir,status(a1)
+		bclr	#status.player.in_air,status(a1)
 		move.w	#bytes_to_word(AniIDSonAni_Wait,AniIDSonAni_Wait),anim(a1)
 		clr.b	anim_frame(a1)
 		clr.b	anim_frame_timer(a1)
@@ -531,7 +531,7 @@ Player_IntroRightMove:
 		move.w	#bytes_to_word(btnA+btnR,btnR),d0				; keep jumping
 
 .notjump
-		btst	#Status_Push,status(a1)						; player hitting a solid?
+		btst	#status.player.pushing,status(a1)				; player hitting a solid?
 		beq.s	.notpush							; if not, branch
 		move.w	#$1F,objoff_2E(a0)
 		move.w	#bytes_to_word(btnA+btnR,btnA+btnR),d0				; set player jump

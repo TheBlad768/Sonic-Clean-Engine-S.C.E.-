@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Delete_Current_Sprite:
-		movea.w	a0,a1					; load current object to a1
+		movea.w	a0,a1								; load current object to a1
 
 Delete_Referenced_Sprite:
 		moveq	#0,d0
@@ -27,7 +27,7 @@ Go_Delete_Sprite_3:
 
 Go_Delete_Sprite:
 		move.l	#Delete_Current_Sprite,address(a0)
-		bset	#7,status(a0)
+		bset	#status.npc.defeated,status(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================

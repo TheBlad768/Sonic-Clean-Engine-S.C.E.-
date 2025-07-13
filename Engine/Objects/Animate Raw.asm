@@ -18,7 +18,7 @@ Animate_RawNoSSTAdjustFlipX:
 		bmi.s	Animate_RawNoSST.main
 		bclr	#6,d1								; $40?
 		beq.s	.skip
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 
 .skip
 		move.b	(a1),anim_frame_timer(a0)
@@ -43,7 +43,7 @@ Animate_RawNoSSTAdjustFlipY:
 		bmi.s	Animate_RawNoSST.main
 		bclr	#6,d1								; $40?
 		beq.s	.skip
-		bchg	#1,render_flags(a0)
+		bchg	#render_flags.y_flip,render_flags(a0)
 
 .skip
 		move.b	(a1),anim_frame_timer(a0)
@@ -178,7 +178,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 		bmi.s	Animate_RawNoSSTMultiDelay.main
 		bclr	#6,d1								; $40?
 		beq.s	.skip
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 
 .skip
 		move.b	d1,mapping_frame(a0)
@@ -264,7 +264,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 		bmi.s	Animate_RawNoSSTMultiDelay.main
 		bclr	#6,d1								; $40?
 		beq.s	.skip
-		bchg	#1,render_flags(a0)
+		bchg	#render_flags.y_flip,render_flags(a0)
 
 .skip
 		move.b	d1,mapping_frame(a0)
@@ -457,10 +457,10 @@ Animate_ExternalPlayerSprite:
 		move.b	1(a2,d0.w),d1
 		beq.s	.custom
 		move.b	d1,mapping_frame(a1)
-		bclr	#0,render_flags(a1)
+		bclr	#render_flags.x_flip,render_flags(a1)
 		tst.b	2(a2,d0.w)
 		beq.s	.plc
-		bset	#0,render_flags(a1)
+		bset	#render_flags.x_flip,render_flags(a1)
 
 .plc
 		bra.w	Sonic_Load_PLC

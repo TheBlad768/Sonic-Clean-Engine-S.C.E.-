@@ -69,9 +69,9 @@ Render_Sprites_ObjLoop:
 		move.b	render_flags(a0),d6
 		move.w	x_pos(a0),d0
 		move.w	y_pos(a0),d1
-		btst	#6,d6								; is the multi-draw flag set?
+		btst	#render_flags.multi_sprite,d6					; is the multi-draw flag set?
 		bne.w	Render_Sprites_MultiDraw					; if it is, branch
-		btst	#2,d6								; is this to be positioned by screen coordinates?
+		btst	#render_flags.level,d6						; is this to be positioned by screen coordinates?
 		beq.s	Render_Sprites_ScreenSpaceObj					; if not, branch
 		moveq	#0,d2
 		move.b	width_pixels(a0),d2
@@ -97,12 +97,12 @@ Render_Sprites_ObjLoop:
 		sub.w	d3,d1
 
 Render_Sprites_ScreenSpaceObj:
-		ori.b	#rfOnscreen,render_flags(a0)					; set on-screen flag
+		ori.b	#setBit(render_flags.on_screen),render_flags(a0)		; set on-screen flag
 		tst.w	d7
 		bmi.s	Render_Sprites_NextObj
 		movea.l	mappings(a0),a1
 		moveq	#0,d4
-		btst	#5,d6								; is the static mappings flag set?
+		btst	#render_flags.static_mappings,d6				; is the static mappings flag set?
 		bne.s	.load								; if it is, branch
 
 		; calc
@@ -178,7 +178,7 @@ locret_1AE56:
 ; =============== S U B R O U T I N E =======================================
 
 Render_Sprites_MultiDraw:
-		btst	#2,d6								; is this to be positioned by screen coordinates?
+		btst	#render_flags.level,d6						; is this to be positioned by screen coordinates?
 		bne.s	loc_1AEA2							; if it is, branch
 		moveq	#0,d2
 
@@ -233,7 +233,7 @@ loc_1AEA2:
 		sub.w	d3,d1
 
 loc_1AEE4:
-		ori.b	#rfOnscreen,render_flags(a0)					; set on-screen flag
+		ori.b	#setBit(render_flags.on_screen),render_flags(a0)		; set on-screen flag
 		tst.w	d7
 		bmi.w	Render_Sprites_NextObj
 		move.w	art_tile(a0),d5
@@ -262,7 +262,7 @@ loc_1AF1C:
 loc_1AF2A:
 		move.w	(a0)+,d0
 		move.w	(a0)+,d1
-		btst	#2,d6								; is this to be positioned by screen coordinates?
+		btst	#render_flags.level,d6						; is this to be positioned by screen coordinates?
 		beq.s	loc_1AF46							; if not, branch
 		sub.w	(a3),d0
 		addi.w	#128,d0

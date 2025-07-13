@@ -17,9 +17,9 @@ Debug_Mode:
 		move.w	(Screen_Y_wrap_value).w,d0
 		and.w	d0,y_pos(a0)
 		and.w	d0,(Camera_Y_pos).w
-		bclr	#Status_InAir,status(a0)
-		bclr	#Status_Push,status(a0)
-		bclr	#Status_Underwater,status(a0)
+		bclr	#status.player.in_air,status(a0)
+		bclr	#status.player.pushing,status(a0)
+		bclr	#status.player.underwater,status(a0)
 		beq.s	.select
 		movea.w	a0,a1								; a1=character
 		jsr	Player_ResetAirTimer(pc)
@@ -164,7 +164,7 @@ Debug_Mode:
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		moveq	#$7F,d0
+		moveq	#signextendB(~setBit(render_flags.on_screen)&$FF),d0
 		and.b	render_flags(a0),d0
 		move.b	d0,render_flags(a1)
 		move.b	d0,status(a1)
@@ -201,12 +201,12 @@ Debug_Mode:
 		move.w	d0,x_sub(a0)
 		move.w	d0,y_sub(a0)
 		move.w	d0,object_control(a0)						; clear object control and double jump flag
-		move.l	d0,x_vel(a0)
+		move.l	d0,x_vel(a0)							; clear x_vel and y_vel
 		move.w	d0,ground_vel(a0)
 		move.b	d0,double_jump_flag(a0)
 		move.b	d0,jumping(a0)
-		andi.b	#setBit(Status_Facing),status(a0)
-		ori.b	#setBit(Status_InAir),status(a0)
+		andi.b	#setBit(status.player.underwater),status(a0)
+		ori.b	#setBit(status.player.in_air),status(a0)
 		move.b	#PlayerID_Control,routine(a0)
 		move.w	default_y_radius(a0),y_radius(a0)				; set y_radius and x_radius
 		rts

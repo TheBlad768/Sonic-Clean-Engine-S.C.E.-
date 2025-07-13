@@ -27,9 +27,9 @@ Debug_Mode:
 		move.b	d0,(Deform_lock).w
 		move.b	d0,(WindTunnel_flag).w
 		move.w	d0,(Breathing_bubbles+objoff_30).w				; clear drowning timer
-		bclr	#Status_InAir,status(a0)
-		bclr	#Status_Push,status(a0)
-		bclr	#Status_Underwater,status(a0)
+		bclr	#status.player.in_air,status(a0)
+		bclr	#status.player.pushing,status(a0)
+		bclr	#status.player.underwater,status(a0)
 		beq.s	.control
 		movea.w	a0,a1
 		jsr	Player_ResetAirTimer(pc)
@@ -63,8 +63,8 @@ Debug_Mode:
 		move.w	d0,ground_vel(a0)
 		move.b	d0,double_jump_flag(a0)
 		move.b	d0,jumping(a0)
-		andi.b	#setBit(Status_Facing),status(a0)
-		ori.b	#setBit(Status_InAir),status(a0)
+		andi.b	#setBit(status.player.underwater),status(a0)
+		ori.b	#setBit(status.player.in_air),status(a0)
 		move.b	#PlayerID_Control,routine(a0)
 		move.w	default_y_radius(a0),y_radius(a0)				; set y_radius and x_radius
 		rts

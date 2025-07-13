@@ -529,37 +529,72 @@ p2_touch_top							= 1<<p2_touch_top_bit
 touch_top_mask							= p1_touch_top|p2_touch_top
 
 ; ---------------------------------------------------------------------------
+; Sprite priority
+; ---------------------------------------------------------------------------
+
+priority_0							= sprite_priority(0)				; high priority
+priority_1							= sprite_priority(1)
+priority_2							= sprite_priority(2)
+priority_3							= sprite_priority(3)
+priority_4							= sprite_priority(4)
+priority_5							= sprite_priority(5)
+priority_6							= sprite_priority(6)
+priority_7							= sprite_priority(7)				; low priority
+
+; ---------------------------------------------------------------------------
+; Sprite render screen bits
+; ---------------------------------------------------------------------------
+
+render_flags.x_flip						= 0						; sprite mirrored horizontally
+render_flags.y_flip						= 1						; sprite mirrored vertically
+render_flags.level						= 2						; move with level
+
+render_flags.static_mappings					= 5						; mappings pointer points directly to a lone sprite piece instead of a list of sprites
+render_flags.multi_sprite					= 6						; object SST holds metadata for multiple sprites
+render_flags.on_screen						= 7						; object is on-screen and was rendered on the previous frame
+
+; ---------------------------------------------------------------------------
 ; Player status variables
 ; ---------------------------------------------------------------------------
 
-Status_Facing							= 0
-Status_InAir							= 1
-Status_Roll							= 2
-Status_OnObj							= 3
+status.player.x_flip						= render_flags.x_flip				; facing left
+status.player.in_air						= 1						; airborne
+status.player.rolling						= 2						; spinning, i.e. jumping or rolling
+status.player.on_object						= 3						; stood on an object rather than the level
 
-Status_Push							= 5
-Status_Underwater						= 6
+status.player.pushing						= 5						; pressing against an object
+status.player.underwater					= 6						; submersed
+status.player.prevent_tails_respawn				= 7						; prevents AI Tails from respawning
 
 ; ---------------------------------------------------------------------------
 ; Player status secondary variables
 ; ---------------------------------------------------------------------------
 
-Status_Shield							= 0
-Status_Invincible						= 1
-Status_SpeedShoes						= 2
+status_secondary.shield						= 0
+status_secondary.invincible					= 1
+status_secondary.speed_shoes					= 2
 
-Status_FireShield						= 4
-Status_LtngShield						= 5
-Status_BublShield						= 6
+status_secondary.fire_shield					= 4
+status_secondary.lightning_shield				= 5
+status_secondary.bubble_shield					= 6
+status_secondary.sliding					= 7
 
 ; ---------------------------------------------------------------------------
 ; Object status variables
 ; ---------------------------------------------------------------------------
 
-Status_FlipX							= 0						; used by Animate_Sprite
-Status_FlipY							= 1						; used by Animate_Sprite
-Status_Touch							= 6						; some/most bosses
-Status_Defeated							= 7						; some/most bosses
+status.npc.x_flip						= render_flags.x_flip				; facing right ; used by Animate_Sprite
+status.npc.y_flip						= render_flags.y_flip				; facing up ; used by Animate_Sprite
+
+status.npc.p1_standing						= 3						; stood on by player 1
+status.npc.p2_standing						= 4						; stood on by player 2
+status.npc.p1_pushing						= 5						; pushed by player 1
+status.npc.p2_pushing						= 6						; pushed by player 2
+status.npc.no_balancing						= 7						; prevents player from performing their balancing animation whilst stood upon this object
+
+; bosses
+status.npc.touch						= 6						; set if a player hit the boss
+status.npc.defeated						= 7						; set if a player defeated the enemy or boss
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
@@ -642,39 +677,6 @@ plane_size_64x32						= 64*32*2
 tile_mask							= $7FF
 nontile_mask							= $F800
 drawing_mask							= $7FFF
-
-; ---------------------------------------------------------------------------
-; Sprite priority
-; ---------------------------------------------------------------------------
-
-priority_0							= sprite_priority(0)				; high priority
-priority_1							= sprite_priority(1)
-priority_2							= sprite_priority(2)
-priority_3							= sprite_priority(3)
-priority_4							= sprite_priority(4)
-priority_5							= sprite_priority(5)
-priority_6							= sprite_priority(6)
-priority_7							= sprite_priority(7)				; low priority
-
-; ---------------------------------------------------------------------------
-; Sprite render screen flags
-; ---------------------------------------------------------------------------
-
-rfCoord								= %00000100					; screen coordinates flag ($04)
-
-rfStatic							= %00100000					; static mappings flag ($20)
-rfMulti								= %01000000					; multi-draw flag ($40)
-rfOnscreen							= %10000000					; on-screen flag ($80)
-
-; ---------------------------------------------------------------------------
-; Sprite render screen bits
-; ---------------------------------------------------------------------------
-
-rbCoord								= 2						; screen coordinates bit
-
-rbStatic							= 5						; static mappings bit
-rbMulti								= 6						; multi-draw bit
-rbOnscreen							= 7						; on-screen bit
 
 ; ---------------------------------------------------------------------------
 ; Animation flags

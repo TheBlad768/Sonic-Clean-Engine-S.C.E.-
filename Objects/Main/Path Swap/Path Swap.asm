@@ -9,7 +9,7 @@ Obj_PathSwap:
 		; init
 		move.l	#Map_PathSwap,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Ring,1,0),art_tile(a0)
-		ori.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(128/2,128/2,priority_5),height_pixels(a0)	; set height, width and priority
 
 		; check
@@ -91,7 +91,7 @@ sub_1CDDA:
 		bge.s	locret_1CE6A
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CE1C
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1CE6A							; if yes, branch
 
 loc_1CE1C:
@@ -137,7 +137,7 @@ loc_1CE6C:
 		bge.s	locret_1CEF0
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CEA8
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1CEF0							; if yes, branch
 
 loc_1CEA8:
@@ -200,7 +200,7 @@ sub_1CF42:
 		bge.s	locret_1CFD2
 		move.b	subtype(a0),d0
 		bpl.s	loc_1CF84
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1CFD2							; if yes, branch
 
 loc_1CF84:
@@ -246,7 +246,7 @@ loc_1CFD4:
 		bge.s	locret_1D058
 		move.b	subtype(a0),d0
 		bpl.s	loc_1D010
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1D058							; if yes, branch
 
 loc_1D010:

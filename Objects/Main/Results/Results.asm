@@ -88,7 +88,7 @@ Obj_LevelResults:
 		move.b	(a2)+,width_pixels(a1)
 		move.w	(a2)+,d2
 		move.b	d2,objoff_28(a1)
-		move.b	#rfMulti,render_flags(a1)
+		move.b	#setBit(render_flags.multi_sprite),render_flags(a1)
 		move.l	#Map_Results,mappings(a1)
 		move.w	#make_art_tile($500,0,0),art_tile(a1)
 		move.w	a0,parent2(a1)
