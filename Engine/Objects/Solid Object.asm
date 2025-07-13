@@ -314,7 +314,7 @@ SlopedSolid_cont:
 		cmp.w	d3,d0
 		bhi.w	SolidObject_TestClearPush
 		move.w	d0,d5
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		not.w	d5
 		add.w	d3,d5
@@ -351,7 +351,7 @@ DoubleSlopedSolid_cont:
 		cmp.w	d3,d0
 		bhi.w	SolidObject_TestClearPush
 		move.w	d0,d5
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		not.w	d5
 		add.w	d3,d5
@@ -722,7 +722,7 @@ SolidObjSloped:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
@@ -740,7 +740,7 @@ SolidObjSloped2:
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
 		lsr.w	d0
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	loc_1E260
 		not.w	d0
 		add.w	d1,d0
@@ -768,7 +768,7 @@ SolidObjSloped4:
 		move.w	x_pos(a1),d0
 		sub.w	x_pos(a0),d0
 		add.w	d1,d0
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
@@ -1070,7 +1070,7 @@ SolidObjCheckSloped2:
 		add.w	d1,d1
 		cmp.w	d1,d0
 		bhs.s	locret_1E4D4
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0
@@ -1094,7 +1094,7 @@ SolidObjCheckSloped:
 		add.w	d1,d1
 		cmp.w	d1,d0
 		bhs.s	CheckPlayerReleaseFromObj.return
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		not.w	d0
 		add.w	d1,d0

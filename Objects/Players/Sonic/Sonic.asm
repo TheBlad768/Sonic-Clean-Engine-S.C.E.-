@@ -168,7 +168,7 @@ loc_10C26:
 		bsr.w	Animate_Sonic
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.plc
-		eori.b	#2,render_flags(a0)
+		eori.b	#setBit(render_flags.y_flip),render_flags(a0)
 
 .plc
 		bsr.w	Sonic_Load_PLC
@@ -2412,7 +2412,7 @@ sub_125E0:
 		bsr.s	Animate_Sonic
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		eori.b	#2,render_flags(a0)
+		eori.b	#setBit(render_flags.y_flip),render_flags(a0)
 
 .notgrav
 		bra.w	Sonic_Load_PLC
@@ -2435,9 +2435,9 @@ SAnim_Do:
 		adda.w	(a1,d0.w),a1
 		move.b	(a1),d0
 		bmi.s	SAnim_WalkRun
-		moveq	#1,d1
+		moveq	#signextendB(setBit(status.player.x_flip)),d1
 		and.b	status(a0),d1
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		or.b	d1,render_flags(a0)
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.s	SAnim_Delay
@@ -2500,7 +2500,7 @@ SAnim_WalkRun:
 		subq.b	#1,d0
 
 loc_126C8:
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		bne.s	loc_126D4
 		not.b	d0
@@ -2511,7 +2511,7 @@ loc_126D4:
 		moveq	#3,d1
 
 loc_126DC:
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		eor.b	d1,d2
 		or.b	d2,render_flags(a0)
 		btst	#status.player.pushing,status(a0)
@@ -2568,13 +2568,13 @@ loc_127C0:
 		bne.s	loc_12872
 		move.b	flip_angle(a0),d0
 		moveq	#0,d1
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		bne.s	loc_1281E
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		tst.b	flip_type(a0)
 		bpl.s	loc_12806
-		ori.b	#2,render_flags(a0)
+		ori.b	#setBit(render_flags.y_flip),render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		bra.s	loc_1280A
@@ -2592,8 +2592,8 @@ loc_1280A:
 ; ---------------------------------------------------------------------------
 
 loc_1281E:
-		andi.b	#-4,render_flags(a0)
-		ori.b	#3,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip)|setBit(render_flags.y_flip),render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		divu.w	#$16,d0
@@ -2613,10 +2613,10 @@ loc_12872:
 		bne.s	loc_128CA
 		move.b	flip_angle(a0),d0
 		moveq	#0,d1
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		bne.s	loc_128A8
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		addi.b	#-8,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2626,8 +2626,8 @@ loc_12872:
 ; ---------------------------------------------------------------------------
 
 loc_128A8:
-		andi.b	#-4,render_flags(a0)
-		ori.b	#1,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip),render_flags(a0)
 		addi.b	#-8,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2641,10 +2641,10 @@ loc_128CA:
 		bne.s	loc_12920
 		move.b	flip_angle(a0),d0
 		moveq	#0,d1
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		bne.s	loc_128FC
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		addi.b	#$B,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2654,8 +2654,8 @@ loc_128CA:
 ; ---------------------------------------------------------------------------
 
 loc_128FC:
-		andi.b	#-4,render_flags(a0)
-		ori.b	#3,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip)|setBit(render_flags.y_flip),render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		divu.w	#$16,d0
@@ -2670,10 +2670,10 @@ loc_12920:
 		bne.s	loc_1297C
 		move.b	flip_angle(a0),d0
 		moveq	#0,d1
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		bne.s	loc_1295A
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		ori.b	#2,render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
@@ -2685,8 +2685,8 @@ loc_12920:
 ; ---------------------------------------------------------------------------
 
 loc_1295A:
-		andi.b	#-4,render_flags(a0)
-		ori.b	#1,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip),render_flags(a0)
 		addi.b	#$B,d0
 		divu.w	#$16,d0
 		add.b	d3,d0
@@ -2700,10 +2700,10 @@ loc_1297C:
 		bne.s	loc_129F6
 		move.b	flip_angle(a0),d0
 		moveq	#0,d1
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		bne.s	loc_129BC
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		tst.b	flip_type(a0)
 		bpl.s	loc_129A4
 		addi.b	#$B,d0
@@ -2722,17 +2722,17 @@ loc_129A8:
 ; ---------------------------------------------------------------------------
 
 loc_129BC:
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		tst.b	flip_type(a0)
 		bpl.s	loc_129D6
-		ori.b	#3,render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip)|setBit(render_flags.y_flip),render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 		bra.s	loc_129E2
 ; ---------------------------------------------------------------------------
 
 loc_129D6:
-		ori.b	#3,render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip)|setBit(render_flags.y_flip),render_flags(a0)
 		neg.b	d0
 		addi.b	#$8F,d0
 
@@ -2746,12 +2746,12 @@ loc_129E2:
 
 loc_129F6:
 		move.b	flip_angle(a0),d0
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		moveq	#0,d1
-		moveq	#1,d2
+		moveq	#signextendB(setBit(status.player.x_flip)),d2
 		and.b	status(a0),d2
 		beq.s	loc_12A12
-		ori.b	#1,render_flags(a0)
+		ori.b	#setBit(render_flags.x_flip),render_flags(a0)
 
 loc_12A12:
 		addi.b	#$B,d0
@@ -2763,9 +2763,9 @@ loc_12A12:
 ; ---------------------------------------------------------------------------
 
 loc_12A2A:
-		moveq	#1,d1
+		moveq	#signextendB(setBit(status.player.x_flip)),d1
 		and.b	status(a0),d1
-		andi.b	#-4,render_flags(a0)
+		andi.b	#~(setBit(render_flags.x_flip)|setBit(render_flags.y_flip)),render_flags(a0)
 		or.b	d1,render_flags(a0)
 		subq.b	#1,anim_frame_timer(a0)
 		bpl.w	SAnim_Delay

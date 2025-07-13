@@ -14,7 +14,7 @@ Obj_Spikebonker:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
 		moveq	#signextendB($80),d0
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		neg.w	d0
 
@@ -43,7 +43,7 @@ Obj_Spikebonker:
 		jsr	(Find_SonicObject).w
 		cmpi.w	#96,d2
 		bhs.s	.notfound
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx2
 		subq.w	#2,d0
 
@@ -67,7 +67,7 @@ Obj_Spikebonker:
 
 .changeside
 		neg.w	x_vel(a0)
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 		move.w	objoff_3A(a0),wait(a0)
 		jmp	(Sprite_CheckDeleteTouch).w
 ; ---------------------------------------------------------------------------
@@ -109,7 +109,7 @@ Obj_Spikebonker_Control:
 .loc_91B14:
 		move.l	#.loc_91B3E,address(a0)
 		moveq	#-4,d0
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		neg.w	d0
 

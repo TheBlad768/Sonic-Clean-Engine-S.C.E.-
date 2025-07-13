@@ -103,7 +103,7 @@ loc_1CE1C:
 loc_1CE26:
 		cmpi.w	#$40,d2
 		bhs.s	locret_1CE6A
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1CE54
 		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#3,d0
@@ -149,7 +149,7 @@ loc_1CEA8:
 loc_1CEB2:
 		cmpi.w	#$40,d2
 		bhs.s	locret_1CEF0
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1CEDE
 		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#4,d0
@@ -212,7 +212,7 @@ loc_1CF84:
 loc_1CF8E:
 		cmpi.w	#$40,d2
 		bhs.s	locret_1CFD2
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1CFBC
 		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#3,d0
@@ -258,7 +258,7 @@ loc_1D010:
 loc_1D01A:
 		cmpi.w	#$40,d2
 		bhs.s	locret_1D058
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1D046
 		move.w	#bytes_to_word($C,$D),top_solid_bit(a1)
 		btst	#4,d0

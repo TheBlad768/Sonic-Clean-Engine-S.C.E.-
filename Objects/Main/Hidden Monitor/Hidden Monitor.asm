@@ -42,7 +42,7 @@ Obj_HiddenMonitor:
 		move.b	#4,objoff_3C(a0)
 		move.w	#-$500,y_vel(a0)
 		sfx	sfx_BubbleAttack						; play sfx
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		beq.s	.draw
 		bset	#high_priority_bit,art_tile(a0)
 		clr.b	status(a0)

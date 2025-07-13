@@ -358,7 +358,7 @@ Check_CameraXBoundary2:
 		blo.s	.return
 
 .setflipx
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 		neg.w	x_vel(a0)
 
 .return

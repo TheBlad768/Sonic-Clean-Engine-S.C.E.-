@@ -110,7 +110,7 @@ Set_IndexedVelocity:
 		add.w	d1,d1								; multiply by 2
 		add.w	d1,d0
 		move.l	Obj_VelocityIndex(pc,d0.w),x_vel(a0)
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.return
 		neg.w	x_vel(a0)
 
@@ -497,7 +497,7 @@ Wait_NewDelay:
 ; ---------------------------------------------------------------------------
 
 .end
-		bclr	#7,render_flags(a0)
+		bclr	#render_flags.on_screen,render_flags(a0)
 		move.w	#(2*60)-1,objoff_2E(a0)
 		movea.l	objoff_34(a0),a1
 		jmp	(a1)
@@ -511,7 +511,7 @@ Wait_FadeToLevelMusic:
 ; ---------------------------------------------------------------------------
 
 .end
-		bclr	#7,render_flags(a0)
+		bclr	#render_flags.on_screen,render_flags(a0)
 		move.w	#(2*60)-1,objoff_2E(a0)
 		bsr.w	Create_New_Sprite
 		bne.s	.notfree
@@ -549,7 +549,7 @@ BossDefeated:
 		move.w	#$40-1,objoff_2E(a0)
 
 BossDefeated_NoTime:
-		bclr	#7,render_flags(a0)
+		bclr	#render_flags.on_screen,render_flags(a0)
 		moveq	#100,d0
 		bra.w	HUD_AddToScore							; add 1000 to score
 
@@ -653,7 +653,7 @@ Offset_ObjectsDuringTransition:
 .check
 		tst.l	address(a1)							; is this object slot occupied?
 		beq.s	.nextobj							; if not, branch
-		btst	#2,render_flags(a1)						; is this object using screen coordinates?
+		btst	#render_flags.level,render_flags(a1)				; is this object using screen coordinates?
 		beq.s	.nextobj							; if not, branch
 		sub.w	d0,x_pos(a1)
 		sub.w	d1,y_pos(a1)

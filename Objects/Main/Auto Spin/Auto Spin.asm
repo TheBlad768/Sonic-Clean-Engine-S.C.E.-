@@ -95,7 +95,7 @@ sub_1E8C6:
 		bne.s	locret_1E942							; if yes, branch
 
 loc_1E908:
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1E934
 		btst	#4,subtype(a0)
 		bne.s	loc_1E930
@@ -139,7 +139,7 @@ AutoSpin_MainX_Alt:
 		bne.s	locret_1E9B4							; if yes, branch
 
 loc_1E97C:
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	loc_1E9A6
 		btst	#4,subtype(a0)
 		bne.s	loc_1E9A4
@@ -215,7 +215,7 @@ sub_1EA14:
 		bne.s	locret_1EAAE							; if yes, branch
 
 loc_1EA58:
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1EA9E
 		btst	#4,subtype(a0)
 		bne.s	loc_1EA9A
@@ -266,7 +266,7 @@ AutoSpin_MainY_Alt:
 		bne.s	locret_1EB30							; if yes, branch
 
 loc_1EAE8:
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	loc_1EB22
 		btst	#4,subtype(a0)
 		bne.s	loc_1EB1E

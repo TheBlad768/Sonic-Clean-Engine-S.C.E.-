@@ -641,7 +641,7 @@ EggCapsule_Animals_Load:
 
 		; check
 		movea.w	parent3(a0),a1							; load egg capsule address
-		btst	#1,render_flags(a1)						; is egg capsule flipped?
+		btst	#render_flags.y_flip,render_flags(a1)				; is egg capsule flipped?
 		beq.s	.skipf								; if not, branch
 
 		; egg capsule flipped

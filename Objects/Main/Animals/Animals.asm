@@ -201,7 +201,7 @@ Obj_Animal_FlickyWait:
 		tst.b	subtype(a0)
 		beq.s	.anim
 		neg.w	x_vel(a0)
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 
 .anim
 		subq.b	#1,anim_frame_timer(a0)						; decrement timer
@@ -275,7 +275,7 @@ Obj_Animal_DoubleBounce:
 		not.b	subtype+1(a0)
 		bne.s	.chg
 		neg.w	x_vel(a0)
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 
 .chg
 		add.w	d1,y_pos(a0)
@@ -321,7 +321,7 @@ Obj_Animal_SingleBounce:
 		tst.w	d1
 		bpl.s	.chkdel
 		neg.w	x_vel(a0)
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 		add.w	d1,y_pos(a0)
 		move.w	animal_ground_y_vel(a0),y_vel(a0)
 
@@ -346,7 +346,7 @@ Obj_Animal_FlyBounce:
 		not.b	subtype+1(a0)
 		bne.s	.chg
 		neg.w	x_vel(a0)
-		bchg	#0,render_flags(a0)
+		bchg	#render_flags.x_flip,render_flags(a0)
 
 .chg
 		add.w	d1,y_pos(a0)

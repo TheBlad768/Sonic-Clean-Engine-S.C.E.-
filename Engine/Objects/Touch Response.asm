@@ -209,7 +209,7 @@ Touch_Monitor:
 		neg.w	d0								; negate player's y_vel
 
 .normalgravity
-		btst	#1,render_flags(a1)						; is the monitor upside down?
+		btst	#render_flags.y_flip,render_flags(a1)				; is the monitor upside down?
 		beq.s	.monitornotupsidedown						; if not, branch
 		tst.w	d0
 		beq.s	.checkdestroy							; if player isn't moving up or down at all, branch
