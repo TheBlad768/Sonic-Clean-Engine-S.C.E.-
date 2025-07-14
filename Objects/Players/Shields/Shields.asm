@@ -77,7 +77,15 @@ Obj_FireShield:
 		move.w	y_pos(a0),y_pos(a1)						; put it at shields' y_pos
 
 .destroy
-		andi.b	#~(setBit(status_secondary.shield)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),status_secondary(a2)	; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a2)
+
 		move.l	#Obj_InstaShield,address(a0)					; replace the Fire Shield with the Insta-Shield
 
 .return
@@ -159,7 +167,15 @@ Obj_LightningShield:
 		beq.s	.flashwater
 
 .destroy
-		andi.b	#~(setBit(status_secondary.shield)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),status_secondary(a2)	; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a2)
+
 		move.l	#Obj_InstaShield,address(a0)					; replace the Lightning Shield with the Insta-Shield
 
 .return
@@ -168,7 +184,14 @@ Obj_LightningShield:
 
 .flashwater
 		move.l	#Obj_LightningShield_DestroyUnderwater2,address(a0)
-		andi.b	#~(setBit(status_secondary.shield)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),status_secondary(a2)	; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a2)
 
 		; flashes the underwater palette white
 		lea	(Water_palette).w,a1
@@ -303,7 +326,15 @@ Obj_BubbleShield:
 ; ---------------------------------------------------------------------------
 
 .destroy
-		andi.b	#~(setBit(status_secondary.shield)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),status_secondary(a2)	; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a2)
+
 		move.l	#Obj_InstaShield,address(a0)					; replace the Bubble Shield with the Insta-Shield
 
 .return
@@ -621,11 +652,31 @@ byte_18A1B:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_FireShield:		subObjMainData Obj_FireShield.main, setBit(render_flags.level), 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_FireShield
-ObjDat_LightningShield:		subObjMainData Obj_LightningShield.main, setBit(render_flags.level), 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_LightningShield
-ObjDat_BubbleShield:		subObjMainData Obj_BubbleShield.main, setBit(render_flags.level), 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_BubbleShield
-ObjDat_InstaShield:		subObjMainData Obj_InstaShield.main, setBit(render_flags.level), 0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_InstaShield
-ObjDat_Invincibility:		subObjMainData Obj_188E8, setBit(render_flags.level)|setBit(render_flags.multi_sprite), 0, 32, 32, 1, ArtTile_Shield, 0, 0, Map_Invincibility
+ObjDat_FireShield:		subObjMainData \
+				Obj_FireShield.main, \
+					setBit(render_flags.level), \
+				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_FireShield
+
+ObjDat_LightningShield:		subObjMainData \
+				Obj_LightningShield.main, \
+					setBit(render_flags.level), \
+				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_LightningShield
+
+ObjDat_BubbleShield:		subObjMainData \
+				Obj_BubbleShield.main, \
+					setBit(render_flags.level), \
+				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_BubbleShield
+
+ObjDat_InstaShield:		subObjMainData \
+				Obj_InstaShield.main, \
+					setBit(render_flags.level), \
+				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_InstaShield
+
+ObjDat_Invincibility:		subObjMainData \
+				Obj_188E8, \
+					setBit(render_flags.level) | \
+					setBit(render_flags.multi_sprite), \
+				0, 32, 32, 1, ArtTile_Shield, 0, 0, Map_Invincibility
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Shields/Object Data/Anim - Fire Shield.asm"

@@ -141,7 +141,13 @@ Bubbler_Delete:
 
 Obj_Bubbler_Bubbles:
 		move.b	subtype(a0),anim(a0)
-		move.b	#setBit(render_flags.level)|setBit(render_flags.on_screen),render_flags(a0)	; use screen coordinates
+
+		; use screen coordinates
+		move.b	#( \
+			setBit(render_flags.level) | \
+			setBit(render_flags.on_screen) \
+		),render_flags(a0)
+
 		move.w	x_pos(a0),objoff_30(a0)
 		move.w	#-$88,y_vel(a0)
 		jsr	(Random_Number).w
@@ -258,7 +264,11 @@ sub_2FBA8:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Bubbler:		subObjMainData Obj_Bubbler.main, setBit(render_flags.level)|setBit(render_flags.on_screen), 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
+ObjDat_Bubbler:		subObjMainData \
+			Obj_Bubbler.main, \
+				setBit(render_flags.level) | \
+				setBit(render_flags.on_screen), \
+			0, 32, 32, 1, $348, 0, 0, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Bubbler/Object Data/Anim - Bubbler.asm"

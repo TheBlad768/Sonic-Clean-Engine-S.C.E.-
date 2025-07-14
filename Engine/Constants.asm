@@ -131,7 +131,7 @@ GameModeID_LevelSelectScreen =					id(GameMode_LevelSelectScreen)			; 0
 GameModeID_LevelScreen =					id(GameMode_LevelScreen)			; 4
 
 GameModeFlag_TitleCard =					7						; flag bit
-GameModeID_TitleCard =						1<<GameModeFlag_TitleCard			; flag mask
+GameModeID_TitleCard =						setBit(GameModeFlag_TitleCard)			; flag mask
 
 ; ---------------------------------------------------------------------------
 ; Player IDs
@@ -242,14 +242,14 @@ button_start:							equ 7
 ; Buttons masks (1 << x == pow(2, x))
 ; ---------------------------------------------------------------------------
 
-button_up_mask:							equ 1<<button_up				; $01
-button_down_mask:						equ 1<<button_down				; $02
-button_left_mask:						equ 1<<button_left				; $04
-button_right_mask:						equ 1<<button_right				; $08
-button_B_mask:							equ 1<<button_B					; $10
-button_C_mask:							equ 1<<button_C					; $20
-button_A_mask:							equ 1<<button_A					; $40
-button_start_mask:						equ 1<<button_start				; $80
+button_up_mask:							equ setBit(button_up)				; $01
+button_down_mask:						equ setBit(button_down)				; $02
+button_left_mask:						equ setBit(button_left)				; $04
+button_right_mask:						equ setBit(button_right)				; $08
+button_B_mask:							equ setBit(button_B)					; $10
+button_C_mask:							equ setBit(button_C)					; $20
+button_A_mask:							equ setBit(button_A)					; $40
+button_start_mask:						equ setBit(button_start)				; $80
 
 ; ---------------------------------------------------------------------------
 ; Joypad input
@@ -497,13 +497,13 @@ next_subspr							= 6						; size
 
 p1_standing_bit							= 3
 p2_standing_bit							= p1_standing_bit + 1
-p1_standing							= 1<<p1_standing_bit
-p2_standing							= 1<<p2_standing_bit
+p1_standing							= setBit(p1_standing_bit)
+p2_standing							= setBit(p2_standing_bit)
 pushing_bit_delta						= 2
 p1_pushing_bit							= p1_standing_bit + pushing_bit_delta
 p2_pushing_bit							= p1_pushing_bit + 1
-p1_pushing							= 1<<p1_pushing_bit
-p2_pushing							= 1<<p2_pushing_bit
+p1_pushing							= setBit(p1_pushing_bit)
+p2_pushing							= setBit(p2_pushing_bit)
 standing_mask							= p1_standing|p2_standing
 pushing_mask							= p1_pushing|p2_pushing
 
@@ -514,18 +514,18 @@ pushing_mask							= p1_pushing|p2_pushing
 
 p1_touch_side_bit						= 0
 p2_touch_side_bit						= p1_touch_side_bit + 1
-p1_touch_side							= 1<<p1_touch_side_bit
-p2_touch_side							= 1<<p2_touch_side_bit
+p1_touch_side							= setBit(p1_touch_side_bit)
+p2_touch_side							= setBit(p2_touch_side_bit)
 touch_side_mask							= p1_touch_side|p2_touch_side
 p1_touch_bottom_bit						= p1_touch_side_bit + pushing_bit_delta
 p2_touch_bottom_bit						= p1_touch_bottom_bit + 1
-p1_touch_bottom							= 1<<p1_touch_bottom_bit
-p2_touch_bottom							= 1<<p2_touch_bottom_bit
+p1_touch_bottom							= setBit(p1_touch_bottom_bit)
+p2_touch_bottom							= setBit(p2_touch_bottom_bit)
 touch_bottom_mask						= p1_touch_bottom|p2_touch_bottom
 p1_touch_top_bit						= p1_touch_bottom_bit + pushing_bit_delta
 p2_touch_top_bit						= p1_touch_top_bit + 1
-p1_touch_top							= 1<<p1_touch_top_bit
-p2_touch_top							= 1<<p2_touch_top_bit
+p1_touch_top							= setBit(p1_touch_top_bit)
+p2_touch_top							= setBit(p2_touch_top_bit)
 touch_top_mask							= p1_touch_top|p2_touch_top
 
 ; ---------------------------------------------------------------------------
@@ -670,7 +670,7 @@ palette_line3							= (3<<13)
 palette_line_3							= (3<<13)
 palette_line_size						= 16*2						; 16 word entries
 high_priority_bit						= 7
-high_priority							= (1<<15)
+high_priority							= setBit(15)
 palette_mask							= $6000
 tile_size							= 8*8/2
 plane_size_64x32						= 64*32*2

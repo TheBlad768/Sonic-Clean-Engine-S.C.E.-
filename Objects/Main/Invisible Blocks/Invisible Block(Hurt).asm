@@ -139,7 +139,16 @@ loc_1F56A:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1F58C:
-		moveq	#signextendB(setBit(status_secondary.shield)|setBit(status_secondary.invincible)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),d0	; does the player have any shields or is invincible?
+
+		; does the player have any shields or is invincible?
+		moveq	#signextendB( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.invincible) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),d0
+
 		and.b	shield_reaction(a0),d0
 		and.b	status_secondary(a1),d0
 		bne.s	locret_1F59E							; if so, branch

@@ -350,7 +350,11 @@ loc_2D5C0:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_StarPost:	subObjMainData Obj_StarPost.main, setBit(render_flags.level)|setBit(render_flags.multi_sprite), 0, 80, 16, 5, ArtTile_StarPost+8, 0, 0, Map_StarPost
+ObjDat_StarPost:	subObjMainData \
+				Obj_StarPost.main, \
+					setBit(render_flags.level) | \
+					setBit(render_flags.multi_sprite), \
+				0, 80, 16, 5, ArtTile_StarPost+8, 0, 0, Map_StarPost
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/StarPost/Object Data/Map - StarPost.asm"

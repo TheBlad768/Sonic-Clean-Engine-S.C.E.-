@@ -254,7 +254,10 @@ Obj_DashDust_SkidDust:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_DashDust:	subObjMainData Obj_DashDust.main, setBit(render_flags.level), 0, 32, 32, 1, ArtTile_DashDust, 0, 0, Map_DashDust
+ObjDat_DashDust:	subObjMainData \
+			Obj_DashDust.main, \
+				setBit(render_flags.level), \
+			0, 32, 32, 1, ArtTile_DashDust, 0, 0, Map_DashDust
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"

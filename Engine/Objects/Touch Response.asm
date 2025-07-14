@@ -9,7 +9,16 @@ TouchResponse:
 		bsr.w	ShieldTouchResponse
 		tst.b	character_id(a0)						; is the player Sonic?
 		bne.s	.Touch_NoInstaShield						; if not, branch
-		moveq	#signextendB(setBit(status_secondary.shield)|setBit(status_secondary.invincible)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),d0	; does the player have any shields or is invincible?
+
+		; does the player have any shields or is invincible?
+		moveq	#signextendB( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.invincible) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),d0
+
 		and.b	status_secondary(a0),d0
 		bne.s	.Touch_NoInstaShield						; if so, branch
 
@@ -381,7 +390,16 @@ Enemy_Points:	dc.w 10, 20, 50, 100							; points awarded div 10
 ; =============== S U B R O U T I N E =======================================
 
 Touch_ChkHurt:
-		moveq	#signextendB(setBit(status_secondary.shield)|setBit(status_secondary.invincible)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),d0	; does player have any shields or is invincible?
+
+		; does player have any shields or is invincible?
+		moveq	#signextendB( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.invincible) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),d0
+
 		and.b	status_secondary(a0),d0
 		beq.s	Touch_ChkHurt_NoPowerUp						; if not, branch
 		and.b	shield_reaction(a1),d0						; does one of the player's shields grant immunity to this object??
@@ -408,7 +426,7 @@ Touch_ChkHurt_NoPowerUp:
 		bne.s	Touch_ChkHurt2							; if not, branch
 
 Touch_ChkHurt_HaveShield:
-		moveq	#1<<3,d0							; should the object be bounced away by a shield?
+		moveq	#setBit(3),d0							; should the object be bounced away by a shield?
 		and.b	shield_reaction(a1),d0
 		beq.s	Touch_ChkHurt2							; if not, branch
 
@@ -458,7 +476,13 @@ HurtCharacter:
 		move.w	a0,objoff_3E(a1)
 
 .hasshield
-		andi.b	#~(setBit(status_secondary.shield)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),status_secondary(a0)
+
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a0)
 
 .bounce
 		move.b	#PlayerID_Hurt,routine(a0)
@@ -563,7 +587,15 @@ loc_103FA:
 ; =============== S U B R O U T I N E =======================================
 
 ShieldTouchResponse:
-		moveq	#signextendB(setBit(status_secondary.shield)|setBit(status_secondary.fire_shield)|setBit(status_secondary.lightning_shield)|setBit(status_secondary.bubble_shield)),d0	; does the player have any shields?
+
+		; does the player have any shields?
+		moveq	#signextendB( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),d0
+
 		and.b	status_secondary(a0),d0
 		beq.s	ShieldTouch_Return
 		moveq	#-24,d2								; subtract width of shield
