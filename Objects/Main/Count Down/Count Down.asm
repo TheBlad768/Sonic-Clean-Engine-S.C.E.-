@@ -344,7 +344,12 @@ AirCountdown_Load_Art:
 		lsl.w	#5,d1
 		addi.l	#dmaSource(ArtUnc_AirCountDown),d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2				; 1P
-		moveq	#tiles_to_bytes(dmaLength(6)),d3				; size of art (in words) ; we only need one frame
+
+		; size of art (in words) ; we only need one frame
+		moveq	#tiles_to_bytes( \
+		dmaLength(6) \
+		),d3
+
 		jmp	(Add_To_DMA_Queue).w
 
 ; ----------------------------------------------------------------------------
