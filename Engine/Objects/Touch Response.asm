@@ -426,7 +426,7 @@ Touch_ChkHurt_NoPowerUp:
 		bne.s	Touch_ChkHurt2							; if not, branch
 
 Touch_ChkHurt_HaveShield:
-		moveq	#setBit(3),d0							; should the object be bounced away by a shield?
+		moveq	#setBit(shield_reaction.all_shields),d0				; should the object be bounced away by a shield?
 		and.b	shield_reaction(a1),d0
 		beq.s	Touch_ChkHurt2							; if not, branch
 
@@ -664,7 +664,7 @@ ShieldTouch_Height:
 		bhi.s	ShieldTouch_NextObj						; if so, loop and check next object
 
 .checkdeflect
-		moveq	#8,d0								; should the object be bounced away by a shield?
+		moveq	#setBit(shield_reaction.all_shields),d0				; should the object be bounced away by a shield?
 		and.b	shield_reaction(a1),d0
 		beq.s	ShieldTouch_NextObj						; if not, branch
 		move.w	x_pos(a0),d1

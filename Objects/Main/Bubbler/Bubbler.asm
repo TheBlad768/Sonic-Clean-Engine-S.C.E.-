@@ -215,7 +215,7 @@ sub_2FBA8:
 		; main
 		tst.b	object_control(a1)
 		bmi.s	.return
-		btst	#status_secondary.bubble_shield,shield_reaction(a1)
+		btst	#shield_reaction.bubble_shield,shield_reaction(a1)
 		bne.s	.return
 
 		; check xypos

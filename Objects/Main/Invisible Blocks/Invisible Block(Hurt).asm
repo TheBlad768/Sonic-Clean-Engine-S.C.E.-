@@ -7,7 +7,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invisible_ShockBlock:
-		bset	#status_secondary.lightning_shield,shield_reaction(a0)
+		bset	#shield_reaction.lightning_shield,shield_reaction(a0)
 		bra.s	Obj_Invisible_HurtBlock
 
 ; ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ Obj_Invisible_ShockBlock:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invisible_LavaBlock:
-		bset	#status_secondary.fire_shield,shield_reaction(a0)
+		bset	#shield_reaction.fire_shield,shield_reaction(a0)
 
 ; ---------------------------------------------------------------------------
 ; Invisible horizontal hurt block (Object)
