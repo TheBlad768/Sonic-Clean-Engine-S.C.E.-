@@ -580,6 +580,18 @@ status_secondary.bubble_shield					= 6
 status_secondary.sliding					= 7
 
 ; ---------------------------------------------------------------------------
+; Player shield reaction variables
+; ---------------------------------------------------------------------------
+
+shield_reaction.shield						= 0
+shield_reaction.invincible					= 1
+shield_reaction.speed_shoes					= 2
+shield_reaction.all_shields					= 3
+shield_reaction.fire_shield					= 4
+shield_reaction.lightning_shield				= 5
+shield_reaction.bubble_shield					= 6
+
+; ---------------------------------------------------------------------------
 ; Object status variables
 ; ---------------------------------------------------------------------------
 
