@@ -164,7 +164,11 @@ Debug_Mode:
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		moveq	#signextendB(~setBit(render_flags.on_screen)&$FF),d0
+
+		moveq	#signextendB( \
+			~setBit(render_flags.on_screen)&$FF \
+		),d0
+
 		and.b	render_flags(a0),d0
 		move.b	d0,render_flags(a1)
 		move.b	d0,status(a1)
