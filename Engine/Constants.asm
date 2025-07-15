@@ -245,11 +245,11 @@ button_start:							equ 7
 button_up_mask:							equ setBit(button_up)				; $01
 button_down_mask:						equ setBit(button_down)				; $02
 button_left_mask:						equ setBit(button_left)				; $04
-button_right_mask:						equ setBit(button_right)				; $08
-button_B_mask:							equ setBit(button_B)					; $10
-button_C_mask:							equ setBit(button_C)					; $20
-button_A_mask:							equ setBit(button_A)					; $40
-button_start_mask:						equ setBit(button_start)				; $80
+button_right_mask:						equ setBit(button_right)			; $08
+button_B_mask:							equ setBit(button_B)				; $10
+button_C_mask:							equ setBit(button_C)				; $20
+button_A_mask:							equ setBit(button_A)				; $40
+button_start_mask:						equ setBit(button_start)			; $80
 
 ; ---------------------------------------------------------------------------
 ; Joypad input
