@@ -16,7 +16,13 @@ Obj_StartNewLevel:
 		; init
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		move.l	#Map_InvisibleBlock,mappings(a0)
-		move.l	#words_to_long(priority_4,make_art_tile(ArtTile_Monitors,0,1)),priority(a0)
+
+		; set priority and art_tile
+		move.l	#words_to_long( \
+		priority_4, \
+			make_art_tile(ArtTile_Monitors,0,1) \
+		),priority(a0)
+
 		move.l	#.main,address(a0)
 
 		; get xydata

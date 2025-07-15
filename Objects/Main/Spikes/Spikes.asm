@@ -38,7 +38,13 @@ Obj_Spikes:
 		move.w	Spikes_InitData(pc,d0.w),height_pixels(a0)			; set height and width
 		move.l	#sub_24090,address(a0)						; face up or down
 		move.l	#Map_Spikes,mappings(a0)
-		move.l	#words_to_long(priority_4,make_art_tile(ArtTile_SpikesSprings+8,0,0)),priority(a0)	; set priority and art_tile
+
+		; set priority and art_tile
+		move.l	#words_to_long( \
+		priority_4, \
+			make_art_tile(ArtTile_SpikesSprings+8,0,0) \
+		),priority(a0)
+
 		lsr.w	d0
 		move.b	d0,mapping_frame(a0)
 		cmpi.b	#4,d0
