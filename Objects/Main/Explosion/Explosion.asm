@@ -26,7 +26,7 @@ Obj_Explosion:
 		andi.w	#$8000,d0
 		ori.w	#ArtTile_Explosion,d0						; VRAM
 		move.w	d0,art_tile(a0)
-		move.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		clr.b	collision_flags(a0)
 		move.l	#bytes_word_to_long(24/2,24/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.b	#3,anim_frame_timer(a0)
@@ -142,9 +142,9 @@ Obj_EnemyScore:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_FireShield_Dissipate:		subObjMainData Obj_FireShield_Dissipate.main, rfCoord, 0, 24, 24, 5, ArtTile_Explosion, 0, 0, Map_Explosion
-ObjDat_TensionBridge_Explosion:		subObjMainData Obj_TensionBridge_Explosion.wait, rfCoord, 0, 24, 24, 2, ArtTile_Explosion, 0, 1, Map_Explosion
-ObjDat_EnemyScore:			subObjMainData Obj_EnemyScore.main, rfCoord, 0, 8, 32, 1, ArtTile_StarPost, 0, 1, Map_EnemyScore
+ObjDat_FireShield_Dissipate:		subObjMainData Obj_FireShield_Dissipate.main, setBit(render_flags.level), 0, 24, 24, 5, ArtTile_Explosion, 0, 0, Map_Explosion
+ObjDat_TensionBridge_Explosion:		subObjMainData Obj_TensionBridge_Explosion.wait, setBit(render_flags.level), 0, 24, 24, 2, ArtTile_Explosion, 0, 1, Map_Explosion
+ObjDat_EnemyScore:			subObjMainData Obj_EnemyScore.main, setBit(render_flags.level), 0, 8, 32, 1, ArtTile_StarPost, 0, 1, Map_EnemyScore
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Explosion/Object Data/Map - Explosion.asm"

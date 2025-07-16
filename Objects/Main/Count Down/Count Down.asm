@@ -17,9 +17,9 @@ Obj_AirCountdown:
 		bne.w	loc_1857C
 		cmpi.b	#PlayerID_Death,routine(a2)					; has player just died?
 		bhs.w	locret_1857A							; if yes, branch
-		btst	#Status_BublShield,status_secondary(a2)
+		btst	#status_secondary.bubble_shield,status_secondary(a2)
 		bne.w	locret_1857A
-		btst	#Status_Underwater,status(a2)
+		btst	#status.player.underwater,status(a2)
 		beq.w	locret_1857A
 
 		; wait
@@ -71,7 +71,7 @@ AirCountdown_ReduceAir:
 		movea.w	(sp)+,a0
 
 		; drown character
-		bset	#Status_InAir,status(a2)
+		bset	#status.player.in_air,status(a2)
 		clr.l	x_vel(a2)
 		clr.w	ground_vel(a2)
 		move.b	#AniIDSonAni_Drown,anim(a2)
@@ -121,7 +121,7 @@ AirCountdown_MakeItem:
 		move.w	height_pixels(a0),height_pixels(a1)				; set height and width
 		move.w	x_pos(a2),x_pos(a1)						; copy player X position to object
 		moveq	#6,d0
-		btst	#Status_Facing,status(a2)
+		btst	#status.player.x_flip,status(a2)
 		beq.s	.notflipx
 		neg.w	d0
 		move.b	#$40,angle(a1)
@@ -187,7 +187,13 @@ loc_18676:
 
 Obj_AirCountdown_Bubbles:
 		move.b	subtype(a0),anim(a0)
-		move.b	#rfCoord+rfOnscreen,render_flags(a0)				; use screen coordinates
+
+		; use screen coordinates
+		move.b	#( \
+			setBit(render_flags.level) | \
+			setBit(render_flags.on_screen) \
+		),render_flags(a0)
+
 		move.w	x_pos(a0),objoff_34(a0)
 		move.w	#-$100,y_vel(a0)
 		move.l	#.animate,address(a0)
@@ -338,7 +344,12 @@ AirCountdown_Load_Art:
 		lsl.w	#5,d1
 		addi.l	#dmaSource(ArtUnc_AirCountDown),d1
 		move.w	#tiles_to_bytes(ArtTile_DashDust),d2				; 1P
-		moveq	#tiles_to_bytes(dmaLength(6)),d3				; size of art (in words) ; we only need one frame
+
+		; size of art (in words) ; we only need one frame
+		moveq	#tiles_to_bytes( \
+		dmaLength(6) \
+		),d3
+
 		jmp	(Add_To_DMA_Queue).w
 
 ; ----------------------------------------------------------------------------
@@ -355,7 +366,7 @@ Player_ResetAirTimer:
 		move.w	(Current_music).w,d0						; prepare to play current level's music
 		tst.b	(Boss_flag).w
 		bne.s	.notinvincible							; branch if in a boss fight
-		btst	#Status_Invincible,status_secondary(a1)
+		btst	#status_secondary.invincible,status_secondary(a1)
 		beq.s	.notinvincible							; branch if Sonic is not invincible
 		moveq	#signextendB(mus_Invincible),d0					; prepare to play invincibility music
 
@@ -378,7 +389,11 @@ AirCountdown_WobbleData:	binclude "Objects/Main/Count Down/Object Data/Wobble Da
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_AirCountdown:		subObjMainData Obj_AirCountdown.countdown, rfCoord+rfOnscreen, 0, 32, 32, 1, $348, 0, 0, Map_Bubbler
+ObjDat_AirCountdown:		subObjMainData \
+				Obj_AirCountdown.countdown, \
+					setBit(render_flags.level) | \
+					setBit(render_flags.on_screen), \
+				0, 32, 32, 1, $348, 0, 0, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Count Down/Object Data/Anim - Air Countdown.asm"

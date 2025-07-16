@@ -5,10 +5,10 @@
 ; =============== S U B R O U T I N E =======================================
 
 TitleCardAct_Index:
-		dc.l ArtKosPM_TitleCardNum1	; 0
-		dc.l ArtKosPM_TitleCardNum2	; 1
-		dc.l ArtKosPM_TitleCardNum3	; 2
-		dc.l ArtKosPM_TitleCardNum4	; 3
+		dc.l ArtKosPM_TitleCardNum1						; 0
+		dc.l ArtKosPM_TitleCardNum2						; 1
+		dc.l ArtKosPM_TitleCardNum3						; 2
+		dc.l ArtKosPM_TitleCardNum4						; 3
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCard:
@@ -47,7 +47,7 @@ Obj_TitleCard:
 ; ---------------------------------------------------------------------------
 
 .levelgfx
-		dc.l ArtKosPM_DEZTitleCard	; DEZ
+		dc.l ArtKosPM_DEZTitleCard						; DEZ
 
 		zonewarning .levelgfx,4
 ; ---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ Obj_TitleCard:
 		move.b	(a2)+,width_pixels(a1)
 		move.w	(a2)+,d2
 		move.b	d2,objoff_28(a1)
-		move.b	#rfMulti,render_flags(a1)
+		move.b	#setBit(render_flags.multi_sprite),render_flags(a1)
 		move.l	#Map_TitleCard,mappings(a1)
 		move.w	#make_art_tile($500,0,0),art_tile(a1)
 		move.w	a0,parent2(a1)

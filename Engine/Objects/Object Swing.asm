@@ -45,13 +45,13 @@ Swing_UpAndDown_Count:
 ; =============== S U B R O U T I N E =======================================
 
 Swing_UpAndDown:
-		move.w	objoff_40(a0),d0			; acceleration
-		move.w	y_vel(a0),d1				; velocity
-		move.w	objoff_3E(a0),d2			; maximum acceleration before "swinging"
+		move.w	objoff_40(a0),d0						; acceleration
+		move.w	y_vel(a0),d1							; velocity
+		move.w	objoff_3E(a0),d2						; maximum acceleration before "swinging"
 		moveq	#0,d3
 		btst	#0,objoff_38(a0)
 		bne.s	.check
-		neg.w	d0					; apply upward acceleration
+		neg.w	d0								; apply upward acceleration
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
@@ -62,7 +62,7 @@ Swing_UpAndDown:
 		moveq	#1,d3
 
 .check
-		add.w	d0,d1					; apply downward acceleration
+		add.w	d0,d1								; apply downward acceleration
 		cmp.w	d2,d1
 		blt.s	.set
 		bclr	#0,objoff_38(a0)
@@ -169,11 +169,11 @@ Refresh_ChildPositionAdjusted:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#0,render_flags(a0)
-		btst	#0,render_flags(a1)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
 		add.w	d1,d0
@@ -181,11 +181,11 @@ Refresh_ChildPositionAdjusted:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#1,render_flags(a0)
-		btst	#1,render_flags(a1)
+		bclr	#render_flags.y_flip,render_flags(a0)
+		btst	#render_flags.y_flip,render_flags(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
 		add.w	d1,d0
@@ -201,11 +201,11 @@ Refresh_Child_X_PositionAdjusted:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#0,render_flags(a0)
-		btst	#0,render_flags(a1)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
 		add.w	d1,d0
@@ -221,11 +221,11 @@ Refresh_Child_Y_PositionAdjusted:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#1,render_flags(a0)
-		btst	#1,render_flags(a1)
+		bclr	#render_flags.y_flip,render_flags(a0)
+		btst	#render_flags.y_flip,render_flags(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
 		add.w	d1,d0
@@ -241,13 +241,13 @@ Refresh_ChildPositionAdjusted_Animate:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#0,status(a0)
-		bclr	#0,render_flags(a0)
-		btst	#0,status(a1)
+		bclr	#render_flags.x_flip,status(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,status(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#0,status(a0)
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,status(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
 		add.w	d1,d0
@@ -255,13 +255,13 @@ Refresh_ChildPositionAdjusted_Animate:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#1,status(a0)
-		bclr	#1,render_flags(a0)
-		btst	#1,status(a1)
+		bclr	#render_flags.y_flip,status(a0)
+		bclr	#render_flags.y_flip,render_flags(a0)
+		btst	#render_flags.y_flip,status(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#1,status(a0)
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,status(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
 		add.w	d1,d0
@@ -277,13 +277,13 @@ Refresh_Child_X_PositionAdjusted_Animate:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#0,status(a0)
-		bclr	#0,render_flags(a0)
-		btst	#0,status(a1)
+		bclr	#render_flags.x_flip,status(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,status(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#0,status(a0)
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,status(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
 		add.w	d1,d0
@@ -299,13 +299,13 @@ Refresh_Child_Y_PositionAdjusted_Animate:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#1,status(a0)
-		bclr	#1,render_flags(a0)
-		btst	#1,status(a1)
+		bclr	#render_flags.y_flip,status(a0)
+		bclr	#render_flags.y_flip,render_flags(a0)
+		btst	#render_flags.y_flip,status(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#1,status(a0)
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,status(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
 		add.w	d1,d0
@@ -321,13 +321,13 @@ Refresh_ChildPositionAdjusted_Animate2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#0,status(a0)
-		bclr	#0,render_flags(a0)
-		btst	#0,render_flags(a1)
+		bclr	#render_flags.x_flip,status(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#0,status(a0)
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,status(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
 		add.w	d1,d0
@@ -335,13 +335,13 @@ Refresh_ChildPositionAdjusted_Animate2:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#1,status(a0)
-		bclr	#1,render_flags(a0)
-		btst	#1,render_flags(a1)
+		bclr	#render_flags.y_flip,status(a0)
+		bclr	#render_flags.y_flip,render_flags(a0)
+		btst	#render_flags.y_flip,render_flags(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#1,status(a0)
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,status(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
 		add.w	d1,d0
@@ -354,10 +354,10 @@ sub_7675C:
 		movea.w	parent3(a0),a1
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
-		bclr	#0,render_flags(a0)
-		btst	#0,render_flags(a1)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.return
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .return
 		rts
@@ -369,9 +369,9 @@ sub_7675C:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_Object:
-		move.w	d0,d2					; d0 = maximum speed
+		move.w	d0,d2								; d0 = maximum speed
 		neg.w	d2
-		move.w	d1,d3					; d1 = acceleration
+		move.w	d1,d3								; d1 = acceleration
 
 		; check xpos
 		move.w	x_pos(a0),d4
@@ -425,7 +425,7 @@ Chase_Object:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_ObjectXOnly:
-		move.w	d0,d2					; d0 = maximum speed
+		move.w	d0,d2								; d0 = maximum speed
 		neg.w	d2
 
 		; check xpos
@@ -456,7 +456,7 @@ Chase_ObjectXOnly:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_ObjectYOnly:
-		move.w	d0,d2					; d0 = maximum speed
+		move.w	d0,d2								; d0 = maximum speed
 		neg.w	d2
 
 		; check ypos
@@ -487,9 +487,9 @@ Chase_ObjectYOnly:
 ; =============== S U B R O U T I N E =======================================
 
 Chase_ObjectOffset:
-		move.w	d0,d2					; d0 = maximum speed
+		move.w	d0,d2								; d0 = maximum speed
 		neg.w	d2
-		move.w	d1,d3					; d1 = acceleration
+		move.w	d1,d3								; d1 = acceleration
 
 		; check xpos
 		move.w	x_pos(a1),d6
@@ -549,7 +549,7 @@ Chase_ObjectOffset:
 ; =============== S U B R O U T I N E =======================================
 
 Shot_Object:
-		lea	(Player_1).w,a1				; a1=character
+		lea	(Player_1).w,a1							; a1=character
 
 Shot_Object_2:
 		moveq	#0,d0
@@ -638,32 +638,32 @@ Gradual_SwingOffset:
 		tst.b	objoff_36(a0)
 		beq.s	loc_465F6
 		neg.l	d1
-		add.l	d2,objoff_32(a0)			; moving up and then down. Reset speed/direction when center point is reached going down
+		add.l	d2,objoff_32(a0)						; moving up and then down. Reset speed/direction when center point is reached going down
 		bmi.s	loc_4660E
-		move.l	d0,objoff_2E(a0)			; reset initial speed (positive) to move downwards
+		move.l	d0,objoff_2E(a0)						; reset initial speed (positive) to move downwards
 		clr.l	objoff_32(a0)
 		clr.b	objoff_36(a0)
-		move.w	objoff_32(a0),d0			; get final offset for us by calling object
+		move.w	objoff_32(a0),d0						; get final offset for us by calling object
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_465F6:
-		add.l	d2,objoff_32(a0)			; moving down and then up. Reset speed/direction when center point is reached going up
+		add.l	d2,objoff_32(a0)						; moving down and then up. Reset speed/direction when center point is reached going up
 		bmi.s	loc_465FE
 		bne.s	loc_4660E
 
 loc_465FE:
-		neg.l	d0					; reverse direction to move upwards when speed has reached
-		move.l	d0,objoff_2E(a0)			; reset initial speed (negative)
+		neg.l	d0								; reverse direction to move upwards when speed has reached
+		move.l	d0,objoff_2E(a0)						; reset initial speed (negative)
 		clr.l	objoff_32(a0)
 		st	objoff_36(a0)
-		move.w	objoff_32(a0),d0			; get final offset for us by calling object
+		move.w	objoff_32(a0),d0						; get final offset for us by calling object
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_4660E:
-		sub.l	d1,objoff_2E(a0)			; apply speed
-		move.w	objoff_32(a0),d0			; get final offset for us by calling object
+		sub.l	d1,objoff_2E(a0)						; apply speed
+		move.w	objoff_32(a0),d0						; get final offset for us by calling object
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -678,17 +678,17 @@ sub_86458:
 .next
 		move.b	(a1)+,d1
 		ext.w	d1
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		neg.w	d1
 
 .notflipx
 		add.w	d2,d1
-		move.w	d1,(a2)+				; sub2_x_pos
+		move.w	d1,(a2)+							; sub2_x_pos
 		move.b	(a1)+,d1
 		ext.w	d1
 		add.w	d3,d1
-		move.w	d1,(a2)+				; sub2_y_pos
-		addq.w	#next_subspr-4,a2			; skip sub2_mapframe
+		move.w	d1,(a2)+							; sub2_y_pos
+		addq.w	#next_subspr-4,a2						; skip sub2_mapframe
 		dbf	d0,.next
 		rts

@@ -68,7 +68,7 @@ Sprite_CheckDelete:
 		bclr	#7,(a2)
 
 .delete
-		bset	#7,status(a0)
+		bset	#status.npc.defeated,status(a0)
 		move.l	#Delete_Current_Sprite,address(a0)
 		rts
 
@@ -163,7 +163,7 @@ Sprite_ChildCheckDeleteXY:
 Sprite_ChildCheckDeleteY:
 		out_of_yrange.w	Go_Delete_Sprite
 		movea.w	parent3(a0),a1
-		btst	#7,status(a1)
+		btst	#status.npc.defeated,status(a1)
 		bne.w	Go_Delete_Sprite
 		bra.w	Draw_Sprite
 
@@ -175,7 +175,7 @@ Sprite_ChildCheckDeleteXY_NoDraw:
 Sprite_ChildCheckDeleteY_NoDraw:
 		out_of_yrange.w	Go_Delete_Sprite
 		movea.w	parent3(a0),a1
-		btst	#7,status(a1)
+		btst	#status.npc.defeated,status(a1)
 		bne.w	Go_Delete_Sprite
 
 .return
@@ -210,7 +210,7 @@ Sprite_ChildCheckDeleteTouchXY:
 Sprite_ChildCheckDeleteTouchY:
 		out_of_yrange.w	Go_Delete_Sprite
 		movea.w	parent3(a0),a1
-		btst	#7,status(a1)
+		btst	#status.npc.defeated,status(a1)
 		bne.w	Go_Delete_Sprite
 		bra.w	Draw_And_Touch_Sprite
 
@@ -229,7 +229,7 @@ Go_Delete_SpriteSlotted:
 		bclr	#7,(a2)
 
 Go_Delete_SpriteSlotted2:
-		bset	#7,status(a0)
+		bset	#status.npc.defeated,status(a0)
 
 Go_Delete_SpriteSlotted3:
 		move.l	#Delete_Current_Sprite,address(a0)
@@ -267,7 +267,7 @@ Obj_WaitOffscreen:
 
 		; init
 		move.l	#Map_Offscreen,mappings(a0)
-		bset	#rbCoord,render_flags(a0)					; use screen coordinates
+		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
 		move.l	(sp)+,objoff_34(a0)						; save address after bsr/jsr
 		move.l	#.main,address(a0)

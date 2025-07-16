@@ -23,7 +23,12 @@ ChangeRingFrame:
 		lsl.w	#6,d1								; multiply by $40
 		addi.l	#dmaSource(ArtUnc_Ring),d1					; get next frame
 		move.w	#tiles_to_bytes(ArtTile_Ring),d2				; load art destination
-		moveq	#tiles_to_bytes(dmaLength(4)),d3				; size of art (in words) ; we only need one frame
+
+		; size of art (in words) ; we only need one frame
+		moveq	#tiles_to_bytes( \
+		dmaLength(4) \
+		),d3
+
 		bsr.w	Add_To_DMA_Queue
 
 .syncrings2
@@ -129,21 +134,21 @@ OscillateNumDo:
 		rts
 ; ---------------------------------------------------------------------------
 
-Osc_Data2:				; frequency, amplitude
-		dc.w 2, $10		; bit $F
-		dc.w 2, $18		; bit $E
-		dc.w 2, $20		; bit $D
-		dc.w 2, $30		; bit $C
-		dc.w 4, $20		; bit $B
-		dc.w 8, 8		; bit $A
-		dc.w 8, $40		; bit 9
-		dc.w 4, $40		; bit 8
-		dc.w 2, $38		; bit 7
-		dc.w 2, $38		; bit 6
-		dc.w 2, $20		; bit 5
-		dc.w 3, $30		; bit 4
-		dc.w 5, $50		; bit 3
-		dc.w 7, $70		; bit 2
-		dc.w 2, $40		; bit 1
-		dc.w 2, $40		; bit 0
+Osc_Data2:										; frequency, amplitude
+		dc.w 2, $10								; bit $F
+		dc.w 2, $18								; bit $E
+		dc.w 2, $20								; bit $D
+		dc.w 2, $30								; bit $C
+		dc.w 4, $20								; bit $B
+		dc.w 8, 8								; bit $A
+		dc.w 8, $40								; bit 9
+		dc.w 4, $40								; bit 8
+		dc.w 2, $38								; bit 7
+		dc.w 2, $38								; bit 6
+		dc.w 2, $20								; bit 5
+		dc.w 3, $30								; bit 4
+		dc.w 5, $50								; bit 3
+		dc.w 7, $70								; bit 2
+		dc.w 2, $40								; bit 1
+		dc.w 2, $40								; bit 0
 Osc_Data2_end

@@ -9,7 +9,7 @@ Obj_Spring:
 		; init
 		move.l	#Map_Spring,mappings(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	; set red
-		ori.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
 		move.w	x_pos(a0),objoff_32(a0)
 		move.w	y_pos(a0),objoff_34(a0)
@@ -22,17 +22,17 @@ Obj_Spring:
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	Spring_Up		; 0
-		bra.s	Spring_Horizontal	; 2
-		bra.s	Spring_Down		; 4
-		bra.s	Spring_UpDiag		; 6
+		bra.s	Spring_Up							; 0
+		bra.s	Spring_Horizontal						; 2
+		bra.s	Spring_Down							; 4
+		bra.s	Spring_UpDiag							; 6
 ; ---------------------------------------------------------------------------
 
-		; down diag			; 8
+		; down diag								; 8
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
 		move.w	#make_art_tile($468,0,0),art_tile(a0)				; set diagonal
-		bset	#1,status(a0)
+		bset	#status.npc.y_flip,status(a0)
 		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ Spring_Horizontal:
 Spring_Down:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_22E96
-		bset	#1,status(a0)
+		bset	#status.npc.y_flip,status(a0)
 
 loc_22DFC:
 		move.b	#6,mapping_frame(a0)
@@ -137,8 +137,8 @@ sub_22F98:
 
 .notgrav
 		move.w	objoff_30(a0),y_vel(a1)
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
+		bset	#status.player.in_air,status(a1)
+		bclr	#status.player.on_object,status(a1)
 		clr.b	jumping(a1)
 		clr.b	spin_dash_flag(a1)
 		move.b	#AniIDSonAni_Spring,anim(a1)
@@ -156,7 +156,7 @@ sub_22F98:
 		move.b	#1,flips_remaining(a1)
 
 loc_23010:
-		btst	#Status_Facing,status(a1)
+		btst	#status.player.x_flip,status(a1)
 		beq.s	loc_23020
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
@@ -217,17 +217,17 @@ sub_23190:
 		move.w	#bytes_to_word(3,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		move.w	objoff_30(a0),x_vel(a1)
 		addq.w	#8,x_pos(a1)
-		bset	#Status_Facing,status(a1)
-		btst	#0,status(a0)
+		bset	#status.player.x_flip,status(a1)
+		btst	#status.npc.x_flip,status(a0)
 		bne.s	loc_231BE
-		bclr	#Status_Facing,status(a1)
+		bclr	#status.player.x_flip,status(a1)
 		subi.w	#8*2,x_pos(a1)
 		neg.w	x_vel(a1)
 
 loc_231BE:
 		move.w	#15,move_lock(a1)
 		move.w	x_vel(a1),ground_vel(a1)
-		btst	#Status_Roll,status(a1)
+		btst	#status.player.rolling,status(a1)
 		bne.s	loc_231D8
 		clr.b	anim(a1)							; AniIDSonAni_Walk
 
@@ -245,7 +245,7 @@ loc_231D8:
 		move.b	#3,flips_remaining(a1)
 
 loc_23214:
-		btst	#Status_Facing,status(a1)
+		btst	#status.player.x_flip,status(a1)
 		beq.s	loc_23224
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
@@ -266,7 +266,7 @@ loc_2323A:
 loc_2324C:
 		bclr	#p1_pushing_bit,status(a0)
 		bclr	#p2_pushing_bit,status(a0)
-		bclr	#Status_Push,status(a1)
+		bclr	#status.player.pushing,status(a1)
 		clr.b	double_jump_flag(a1)
 		sfx	sfx_Spring,1
 
@@ -278,7 +278,7 @@ sub_2326C:
 		move.w	x_pos(a0),d0
 		move.w	d0,d1
 		addi.w	#40,d1
-		btst	#0,status(a0)
+		btst	#status.npc.x_flip,status(a0)
 		beq.s	loc_2328E
 		move.w	d0,d1
 		subi.w	#40,d0
@@ -295,10 +295,10 @@ loc_2328E:
 		bhs.s	locret_23324							; if yes, branch
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
 		bne.s	locret_23324							; if yes, branch
-		btst	#Status_InAir,status(a1)					; is the player in the air?
+		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_23324							; if yes, branch
 		move.w	ground_vel(a1),d4
-		btst	#0,status(a0)
+		btst	#status.npc.x_flip,status(a0)
 		beq.s	loc_232B6
 		neg.w	d4
 
@@ -370,7 +370,7 @@ loc_233F8:
 		move.b	#1,flips_remaining(a1)
 
 loc_23434:
-		btst	#Status_Facing,status(a1)
+		btst	#status.player.x_flip,status(a1)
 		beq.s	loc_23444
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
@@ -389,8 +389,8 @@ loc_2345A:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_2346C:
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
+		bset	#status.player.in_air,status(a1)
+		bclr	#status.player.on_object,status(a1)
 		clr.b	jumping(a1)
 		move.b	#PlayerID_Control,routine(a1)
 		clr.b	double_jump_flag(a1)
@@ -422,7 +422,7 @@ loc_234B8:
 ; =============== S U B R O U T I N E =======================================
 
 sub_234E6:
-		btst	#0,status(a0)
+		btst	#status.npc.x_flip,status(a0)
 		bne.s	loc_234FC
 		move.w	x_pos(a0),d0
 		subq.w	#4,d0
@@ -446,16 +446,16 @@ loc_2350A:
 		move.w	d0,y_vel(a1)
 		addq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
-		bset	#Status_Facing,status(a1)
-		btst	#0,status(a0)
+		bset	#status.player.x_flip,status(a1)
+		btst	#status.npc.x_flip,status(a0)
 		bne.s	loc_23542
-		bclr	#Status_Facing,status(a1)
+		bclr	#status.player.x_flip,status(a1)
 		subi.w	#6*2,x_pos(a1)
 		neg.w	x_vel(a1)
 
 loc_23542:
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
+		bset	#status.player.in_air,status(a1)
+		bclr	#status.player.on_object,status(a1)
 		clr.b	jumping(a1)
 		move.b	#AniIDSonAni_Spring,anim(a1)
 		move.b	#PlayerID_Control,routine(a1)
@@ -472,7 +472,7 @@ loc_23542:
 		move.b	#3,flips_remaining(a1)
 
 loc_23592:
-		btst	#Status_Facing,status(a1)
+		btst	#status.player.x_flip,status(a1)
 		beq.s	loc_235A2
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)
@@ -526,16 +526,16 @@ sub_23624:
 		neg.w	y_vel(a1)
 		subq.w	#6,y_pos(a1)
 		addq.w	#6,x_pos(a1)
-		bset	#Status_Facing,status(a1)
-		btst	#0,status(a0)
+		bset	#status.player.x_flip,status(a1)
+		btst	#status.npc.x_flip,status(a0)
 		bne.s	loc_23660
-		bclr	#Status_Facing,status(a1)
+		bclr	#status.player.x_flip,status(a1)
 		subi.w	#6*2,x_pos(a1)
 		neg.w	x_vel(a1)
 
 loc_23660:
-		bset	#Status_InAir,status(a1)
-		bclr	#Status_OnObj,status(a1)
+		bset	#status.player.in_air,status(a1)
+		bclr	#status.player.on_object,status(a1)
 		clr.b	jumping(a1)
 		move.b	#PlayerID_Control,routine(a1)
 		move.b	subtype(a0),d0
@@ -551,7 +551,7 @@ loc_23660:
 		move.b	#3,flips_remaining(a1)
 
 loc_236AA:
-		btst	#Status_Facing,status(a1)
+		btst	#status.player.x_flip,status(a1)
 		beq.s	loc_236BA
 		neg.b	flip_angle(a1)
 		neg.w	ground_vel(a1)

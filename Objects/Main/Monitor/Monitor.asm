@@ -9,7 +9,7 @@ Obj_Monitor:
 		; init
 		move.l	#Map_Monitor,mappings(a0)
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
-		ori.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,28/2,priority_3),height_pixels(a0)	; set height, width and priority
 
 		; check broken
@@ -62,7 +62,7 @@ Obj_Monitor:
 Obj_MonitorFall:
 		move.b	routine_secondary(a0),d0
 		beq.s	Obj_MonitorFallUpsideUp.return
-		btst	#1,render_flags(a0)						; is monitor upside down?
+		btst	#render_flags.y_flip,render_flags(a0)				; is monitor upside down?
 		bne.s	Obj_MonitorFallUpsideDown					; if so, branch
 
 Obj_MonitorFallUpsideUp:
@@ -116,7 +116,7 @@ SolidObject_Monitor_SonicKnux:
 Monitor_ChkOverEdge:
 		move.w	d1,d2
 		add.w	d2,d2
-		btst	#Status_InAir,status(a1)					; is the character in the air?
+		btst	#status.player.in_air,status(a1)				; is the character in the air?
 		bne.s	.notonmonitor							; if so, branch
 
 		; check if character is standing on
@@ -130,8 +130,8 @@ Monitor_ChkOverEdge:
 .notonmonitor
 
 		; if the character isn't standing on the monitor
-		bclr	#Status_OnObj,status(a1)					; clear 'on object' bit
-		bset	#Status_InAir,status(a1)					; set 'in air' bit
+		bclr	#status.player.on_object,status(a1)				; clear 'on object' bit
+		bset	#status.player.in_air,status(a1)				; set 'in air' bit
 		bclr	d6,status(a0)							; clear 'standing on' bit for the current character
 		moveq	#0,d4
 		rts
@@ -152,11 +152,21 @@ Obj_MonitorBreak:
 		move.b	d0,d1
 		andi.b	#p1_standing|p1_pushing,d1					; is it the main character?
 		beq.s	Obj_MonitorSpawnIcon						; if not, branch
-		andi.b	#$D7,(Player_1+status).w
-		ori.b	#setBit(Status_InAir),(Player_1+status).w			; prevent main character from walking in the air
+
+		andi.b	#~( \
+			setBit(status.player.on_object) | \
+			setBit(status.player.pushing) \
+		),(Player_1+status).w
+
+		ori.b	#setBit(status.player.in_air),(Player_1+status).w		; prevent main character from walking in the air
 
 Obj_MonitorSpawnIcon:
-		andi.b	#3,status(a0)
+
+		andi.b	#( \
+			setBit(status.npc.x_flip) | \
+			setBit(status.npc.y_flip) \
+		),status(a0)
+
 		clr.b	collision_flags(a0)
 		jsr	(Create_New_Sprite3).w
 		bne.s	.skipiconcreation
@@ -207,13 +217,19 @@ Obj_MonitorContents:
 
 		; init
 		move.w	#make_art_tile(ArtTile_Monitors,0,0),art_tile(a0)
-		ori.b	#rfCoord+rfStatic,render_flags(a0)				; set static mapping and screen coordinates flag
+
+		; set screen coordinates and static mapping flag
+		ori.b	#( \
+			setBit(render_flags.level) | \
+			setBit(render_flags.static_mappings) \
+		),render_flags(a0)
+
 		move.l	#bytes_word_to_long(16/2,16/2,priority_3),height_pixels(a0)	; set height, width and priority
 		move.l	#.main,address(a0)
 
 		; set move
 		move.w	#-$300,y_vel(a0)
-		btst	#1,render_flags(a0)						; is monitor upside down?
+		btst	#render_flags.y_flip,render_flags(a0)				; is monitor upside down?
 		beq.s	.notflipy							; if not, branch
 		neg.w	y_vel(a0)
 
@@ -244,7 +260,7 @@ Obj_MonitorContents:
 ; =============== S U B R O U T I N E =======================================
 
 sub_1D820:
-		btst	#1,render_flags(a0)						; is monitor upside down?
+		btst	#render_flags.y_flip,render_flags(a0)				; is monitor upside down?
 		bne.s	loc_1D83C							; if so, branch
 		tst.w	y_vel(a0)
 		bpl.s	loc_1D850
@@ -302,7 +318,7 @@ Monitor_Give_Rings:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_SpeedShoes:
-		bset	#Status_SpeedShoes,status_secondary(a1)
+		bset	#status_secondary.speed_shoes,status_secondary(a1)
 		move.b	#(20*60)/8,speed_shoes_timer(a1)
 
 		; set player speed
@@ -314,31 +330,55 @@ Monitor_Give_SpeedShoes:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Fire_Shield:
-		andi.b	#$8E,status_secondary(a1)
-		bset	#Status_Shield,status_secondary(a1)
-		bset	#Status_FireShield,status_secondary(a1)
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a1)
+
+		bset	#status_secondary.shield,status_secondary(a1)
+		bset	#status_secondary.fire_shield,status_secondary(a1)
 		move.l	#Obj_FireShield,(Shield+address).w
 		sfx	sfx_FireShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Lightning_Shield:
-		andi.b	#$8E,status_secondary(a1)
-		bset	#Status_Shield,status_secondary(a1)
-		bset	#Status_LtngShield,status_secondary(a1)
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a1)
+
+		bset	#status_secondary.shield,status_secondary(a1)
+		bset	#status_secondary.lightning_shield,status_secondary(a1)
 		move.l	#Obj_LightningShield,(Shield+address).w
 		sfx	sfx_LightningShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Bubble_Shield:
-		andi.b	#$8E,status_secondary(a1)
-		bset	#Status_Shield,status_secondary(a1)
-		bset	#Status_BublShield,status_secondary(a1)
+
+		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		andi.b	#~( \
+			setBit(status_secondary.shield) | \
+			setBit(status_secondary.fire_shield) | \
+			setBit(status_secondary.lightning_shield) | \
+			setBit(status_secondary.bubble_shield) \
+		),status_secondary(a1)
+
+		bset	#status_secondary.shield,status_secondary(a1)
+		bset	#status_secondary.bubble_shield,status_secondary(a1)
 		move.l	#Obj_BubbleShield,(Shield+address).w
 		sfx	sfx_BubbleShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
-		bset	#Status_Invincible,status_secondary(a1)
+		bset	#status_secondary.invincible,status_secondary(a1)
 		move.b	#(20*60)/8,invincibility_timer(a1)
 		tst.b	(Music_results_flag).w						; don't change music if level is end
 		bne.s	.skipmusic

@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_SpriteMask:
-		bset	#rbCoord,render_flags(a0)					; use screen coordinates
+		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 
 Obj_SpriteMask2:
 

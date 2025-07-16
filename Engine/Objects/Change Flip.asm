@@ -5,10 +5,10 @@
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipX:
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	d0
 		beq.s	.left
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .left
 		rts
@@ -16,10 +16,10 @@ Change_FlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipX2:
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	d0
 		bne.s	.right
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .right
 		rts
@@ -27,10 +27,10 @@ Change_FlipX2:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipY:
-		bclr	#1,render_flags(a0)
+		bclr	#render_flags.y_flip,render_flags(a0)
 		tst.w	d1
 		beq.s	.up
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .up
 		rts
@@ -38,10 +38,10 @@ Change_FlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipY2:
-		bclr	#1,render_flags(a0)
+		bclr	#render_flags.y_flip,render_flags(a0)
 		tst.w	d1
 		bne.s	.down
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .down
 		rts
@@ -49,10 +49,10 @@ Change_FlipY2:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipXWithVelocity:
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	x_vel(a0)
 		bmi.s	.left
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .left
 		rts
@@ -60,10 +60,10 @@ Change_FlipXWithVelocity:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipXWithVelocity2:
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	x_vel(a0)
 		bpl.s	.right
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .right
 		rts
@@ -72,10 +72,10 @@ Change_FlipXWithVelocity2:
 
 Change_FlipXUseParent:
 		movea.w	parent3(a0),a1
-		bclr	#0,render_flags(a0)
-		btst	#0,render_flags(a1)
+		bclr	#render_flags.x_flip,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
 		rts
@@ -84,10 +84,10 @@ Change_FlipXUseParent:
 
 Change_FlipYUseParent:
 		movea.w	parent3(a0),a1
-		bclr	#1,render_flags(a0)
-		btst	#1,render_flags(a1)
+		bclr	#render_flags.y_flip,render_flags(a0)
+		btst	#render_flags.y_flip,render_flags(a1)
 		beq.s	.notflipy
-		bset	#1,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
 		rts
@@ -95,7 +95,7 @@ Change_FlipYUseParent:
 ; =============== S U B R O U T I N E =======================================
 
 Change_VelocityWithFlipX:
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
 		neg.w	d0
 
@@ -107,7 +107,7 @@ Change_VelocityWithFlipX:
 
 Change_VelocityWithFlipXUseParent:
 		movea.w	parent3(a0),a1
-		btst	#0,render_flags(a1)
+		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
 		neg.w	d0
 
@@ -123,11 +123,11 @@ Change_VelocityWithFlipXUseParent:
 
 Set_VelocityXTrackSonic:
 		bsr.w	Find_SonicObject
-		bclr	#0,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)
 		tst.w	d0
 		beq.s	.setxv
 		neg.w	d4
-		bset	#0,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)
 
 .setxv
 		move.w	d4,x_vel(a0)

@@ -79,11 +79,11 @@ Obj_DashDust:
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)
-		andi.b	#1,status(a0)
+		andi.b	#setBit(status.npc.x_flip),status(a0)
 		moveq	#4,d1
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		ori.b	#2,status(a0)
+		ori.b	#setBit(status.npc.y_flip),status(a0)
 		neg.w	d1
 
 .notgrav
@@ -147,7 +147,7 @@ DashDust_CheckSkid:
 		addq.b	#3+1,dashdust_dust_timer(a0)					; reset timer to 3+1 frames
 
 		; check
-		btst	#Status_Underwater,status(a2)					; is player underwater?
+		btst	#status.player.underwater,status(a2)				; is player underwater?
 		bne.s	DashDust_Load_DPLC						; if yes, branch
 
 		; create dust clouds
@@ -236,7 +236,7 @@ Obj_DashDust_SkidDust:
 		; check
 		cmpi.b	#12,air_left(a2)						; check air remaining
 		blo.s	.delete								; if less than 12, branch
-		btst	#Status_Underwater,status(a2)					; is player underwater?
+		btst	#status.player.underwater,status(a2)				; is player underwater?
 		bne.s	.delete								; if yes, branch
 
 		; draw
@@ -254,7 +254,10 @@ Obj_DashDust_SkidDust:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_DashDust:	subObjMainData Obj_DashDust.main, rfCoord, 0, 32, 32, 1, ArtTile_DashDust, 0, 0, Map_DashDust
+ObjDat_DashDust:	subObjMainData \
+			Obj_DashDust.main, \
+				setBit(render_flags.level), \
+			0, 32, 32, 1, ArtTile_DashDust, 0, 0, Map_DashDust
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"

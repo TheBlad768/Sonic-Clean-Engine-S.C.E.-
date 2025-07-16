@@ -158,7 +158,7 @@ CreateChild5_ComplexAdjusted:
 		move.b	(a2)+,d1
 		move.b	d1,child_dx(a1)
 		ext.w	d1
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipxpos
 		neg.w	d1
 
@@ -172,7 +172,7 @@ CreateChild5_ComplexAdjusted:
 		add.w	d1,d0
 		move.w	d0,y_pos(a1)
 		move.w	(a2)+,d1
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipxvel
 		neg.w	d1
 
@@ -317,9 +317,9 @@ CreateChild10_NormalAdjusted:
 		move.b	d2,subtype(a1)
 		move.w	x_pos(a0),d0
 		move.b	(a2)+,d1
-		btst	#0,render_flags(a0)
+		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
-		bset	#0,render_flags(a1)
+		bset	#render_flags.x_flip,render_flags(a1)
 		neg.b	d1
 
 .notflipx

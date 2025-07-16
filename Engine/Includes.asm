@@ -268,9 +268,9 @@
 ; ---------------------------------------------------------------------------
 
 		if GameDebugAlt
-			include "Objects/Players/Sonic/Debug Mode(Crackers).asm"
+			include "Objects/Players/Debug Mode/Debug Mode(Crackers).asm"
 		else
-			include "Objects/Players/Sonic/Debug Mode.asm"
+			include "Objects/Players/Debug Mode/Debug Mode.asm"
 			include "Data/Debug Pointers.asm"
 		endif
 

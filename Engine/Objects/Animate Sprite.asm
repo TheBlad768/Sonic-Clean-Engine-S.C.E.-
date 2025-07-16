@@ -26,9 +26,19 @@ loc_1AC00:
 
 loc_1AC1C:
 		move.b	d0,mapping_frame(a0)
-		moveq	#3,d1
+
+		moveq	#signextendB( \
+			setBit(status.npc.x_flip) | \
+			setBit(status.npc.y_flip) \
+		),d1
+
 		and.b	status(a0),d1
-		andi.b	#-4,render_flags(a0)
+
+		andi.b	#~( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),render_flags(a0)
+
 		or.b	d1,render_flags(a0)
 		addq.b	#1,anim_frame(a0)
 
@@ -105,9 +115,19 @@ loc_1ACA0:
 loc_1ACBA:
 		move.b	1(a1,d1.w),anim_frame_timer(a0)
 		move.b	d0,mapping_frame(a0)
-		moveq	#3,d1
+
+		moveq	#signextendB( \
+			setBit(status.npc.x_flip) | \
+			setBit(status.npc.y_flip) \
+		),d1
+
 		and.b	status(a0),d1
-		andi.b	#-4,render_flags(a0)
+
+		andi.b	#~( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),render_flags(a0)
+
 		or.b	d1,render_flags(a0)
 		addq.b	#1,anim_frame(a0)
 
@@ -251,8 +271,17 @@ Anim_Next:
 		move.b	status(a0),d0
 		rol.b	#3,d1
 		eor.b	d0,d1
-		andi.b	#3,d1
-		andi.b	#-4,render_flags(a0)
+
+		andi.b	#( \
+			setBit(status.npc.x_flip) | \
+			setBit(status.npc.y_flip) \
+		),d1
+
+		andi.b	#~( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),render_flags(a0)
+
 		or.b	d1,render_flags(a0)
 		addq.b	#1,anim_frame(a0)
 

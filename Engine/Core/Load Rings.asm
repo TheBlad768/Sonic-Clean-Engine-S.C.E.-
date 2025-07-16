@@ -149,7 +149,7 @@ Test_Ring_Collisions:
 		cmpa.l	a1,a2
 		beq.s	sub_E994.return
 		movea.w	(Ring_start_addr_RAM).w,a4
-		btst	#Status_LtngShield,status_secondary(a0)						; does Sonic have a Lightning Shield?
+		btst	#status_secondary.lightning_shield,status_secondary(a0)				; does Sonic have a Lightning Shield?
 		beq.s	Test_Ring_Collisions_NoAttraction						; if not, branch
 		moveq	#-64,d2
 		add.w	x_pos(a0),d2
@@ -212,7 +212,7 @@ loc_EAB8:
 		bhi.s	loc_EADA
 
 loc_EABE:
-		btst	#Status_LtngShield,status_secondary(a0)						; does Sonic have a Lightning Shield?
+		btst	#status_secondary.lightning_shield,status_secondary(a0)				; does Sonic have a Lightning Shield?
 		bne.s	Test_Ring_Collisions_AttractRing						; if yes, branch
 
 loc_EAC6:

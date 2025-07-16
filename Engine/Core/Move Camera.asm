@@ -187,7 +187,7 @@ MoveCameraY:
 		and.w	(Screen_Y_wrap_value).w,d0
 
 .notwrap
-		btst	#Status_Roll,status(a0)						; is the player rolling?
+		btst	#status.player.rolling,status(a0)				; is the player rolling?
 		beq.s	.notroll							; if not, branch
 
 		; fix player ypos
@@ -202,7 +202,7 @@ MoveCameraY:
 		add.w	d1,d0
 
 .notroll
-		btst	#Status_InAir,status(a0)					; is the player in the air?
+		btst	#status.player.in_air,status(a0)				; is the player in the air?
 		beq.s	loc_1C164							; if not, branch
 
 		; if Sonic's in the air, he has $20 pixels above and below him to move

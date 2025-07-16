@@ -38,7 +38,7 @@ Do_ResizeEvents:
 		addq.w	#8,d0
 		cmp.w	(Camera_max_Y_pos).w,d0
 		blo.s	.set2
-		btst	#Status_InAir,(Player_1+status).w				; is the player in the air?
+		btst	#status.player.in_air,(Player_1+status).w			; is the player in the air?
 		beq.s	.set2								; if not, branch
 		add.w	d1,d1								; multiply by 4
 		add.w	d1,d1

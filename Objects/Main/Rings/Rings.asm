@@ -20,7 +20,7 @@ Obj_Ring_Collect:
 
 		; init
 		move.l	#Map_Ring,mappings(a0)
-		move.b	#rfCoord,render_flags(a0)					; use screen coordinates
+		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#.sparkle,address(a0)
 		move.w	#priority_1,priority(a0)
 		jsr	(GiveRing).w
@@ -142,7 +142,7 @@ Obj_Bouncing_Ring_Normal:
 		bpl.s	.chkdel								; if not, branch
 
 		; check shield
-		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does Sonic have a Lightning Shield?
+		btst	#status_secondary.lightning_shield,(Player_1+status_secondary).w	; does Sonic have a Lightning Shield?
 		beq.s	.notshield							; if not, branch
 		move.l	#Obj_Attracted_Ring.main,address(a0)
 
@@ -222,7 +222,7 @@ Obj_Bouncing_Ring_TestGravity:
 		bpl.s	.chkdel								; if not, branch
 
 		; check shield
-		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does Sonic have a Lightning Shield?
+		btst	#status_secondary.lightning_shield,(Player_1+status_secondary).w	; does Sonic have a Lightning Shield?
 		beq.s	.notshield							; if not, branch
 		move.l	#Obj_Attracted_Ring.main,address(a0)
 
@@ -333,7 +333,7 @@ Obj_Attracted_Ring:
 		MoveSprite2 a0
 
 		; check shield
-		btst	#Status_LtngShield,(Player_1+status_secondary).w		; does player still have a lightning shield?
+		btst	#status_secondary.lightning_shield,(Player_1+status_secondary).w	; does player still have a lightning shield?
 		bne.s	.chkdel								; if yes, branch
 
 		; set bouncing
@@ -367,82 +367,98 @@ Obj_Attracted_Ring:
 ; =============== S U B R O U T I N E =======================================
 
 ; mapping
-ObjDat_Ring:			subObjMainData Sprite_OnScreen_Test_Collision, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat_Ring2:			subObjMainData Obj_Attracted_Ring.main, rfCoord+rfStatic, 0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
-ObjDat3_BouncingRing:		subObjMainData FALSE, rfCoord+rfStatic+rfOnscreen, 0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
+ObjDat_Ring:			subObjMainData \
+				Sprite_OnScreen_Test_Collision, \
+					setBit(render_flags.level) | \
+					setBit(render_flags.static_mappings), \
+				0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+
+ObjDat_Ring2:			subObjMainData \
+				Obj_Attracted_Ring.main, \
+					setBit(render_flags.level) | \
+					setBit(render_flags.static_mappings), \
+				0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+
+ObjDat3_BouncingRing:		subObjMainData \
+				FALSE, \
+					setBit(render_flags.level) | \
+					setBit(render_flags.static_mappings) | \
+					setBit(render_flags.on_screen), \
+				0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
+
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:
 
 		; xvel, yvel (normal)
-		dc.w -$C4, -$3EC		; 1
-		dc.w $C4, -$3EC			; 2
-		dc.w -$238, -$350		; 3
-		dc.w $238, -$350		; 4
-		dc.w -$350, -$238		; 5
-		dc.w $350, -$238		; 6
-		dc.w -$3EC, -$C4		; 7
-		dc.w $3EC, -$C4			; 8
-		dc.w -$3EC, $C4			; 9
-		dc.w $3EC, $C4			; 10
-		dc.w -$350, $238		; 11
-		dc.w $350, $238			; 12
-		dc.w -$238, $350		; 13
-		dc.w $238, $350			; 14
-		dc.w -$C4, $3EC			; 15
-		dc.w $C4, $3EC			; 16
-		dc.w -$62, -$1F6		; 17
-		dc.w $62, -$1F6			; 18
-		dc.w -$11C, -$1A8		; 19
-		dc.w $11C, -$1A8		; 20
-		dc.w -$1A8, -$11C		; 21
-		dc.w $1A8, -$11C		; 22
-		dc.w -$1F6, -$62		; 23
-		dc.w $1F6, -$62			; 24
-		dc.w -$1F6, $62			; 25
-		dc.w $1F6, $62			; 26
-		dc.w -$1A8, $11C		; 27
-		dc.w $1A8, $11C			; 28
-		dc.w -$11C, $1A8		; 29
-		dc.w $11C, $1A8			; 30
-		dc.w -$62, $1F6			; 31
-		dc.w $62, $1F6			; 32
+		dc.w -$C4, -$3EC	; 1
+		dc.w $C4, -$3EC		; 2
+		dc.w -$238, -$350	; 3
+		dc.w $238, -$350	; 4
+		dc.w -$350, -$238	; 5
+		dc.w $350, -$238	; 6
+		dc.w -$3EC, -$C4	; 7
+		dc.w $3EC, -$C4		; 8
+		dc.w -$3EC, $C4		; 9
+		dc.w $3EC, $C4		; 10
+		dc.w -$350, $238	; 11
+		dc.w $350, $238		; 12
+		dc.w -$238, $350	; 13
+		dc.w $238, $350		; 14
+		dc.w -$C4, $3EC		; 15
+		dc.w $C4, $3EC		; 16
+		dc.w -$62, -$1F6	; 17
+		dc.w $62, -$1F6		; 18
+		dc.w -$11C, -$1A8	; 19
+		dc.w $11C, -$1A8	; 20
+		dc.w -$1A8, -$11C	; 21
+		dc.w $1A8, -$11C	; 22
+		dc.w -$1F6, -$62	; 23
+		dc.w $1F6, -$62		; 24
+		dc.w -$1F6, $62		; 25
+		dc.w $1F6, $62		; 26
+		dc.w -$1A8, $11C	; 27
+		dc.w $1A8, $11C		; 28
+		dc.w -$11C, $1A8	; 29
+		dc.w $11C, $1A8		; 30
+		dc.w -$62, $1F6		; 31
+		dc.w $62, $1F6		; 32
 
 Rings_WaterVelocity:
 
 		; xvel, yvel (water)
-		dc.w -$64, -$1F8		; 1
-		dc.w $64, -$1F8			; 2
-		dc.w -$11C, -$1A8		; 3
-		dc.w $11C, -$1A8		; 4
-		dc.w -$1A8, -$11C		; 5
-		dc.w $1A8, -$11C		; 6
-		dc.w -$1F8, -$64		; 7
-		dc.w $1F8, -$64			; 8
-		dc.w -$1F8, $60			; 9
-		dc.w $1F8, $60			; 10
-		dc.w -$1A8, $11C		; 11
-		dc.w $1A8, $11C			; 12
-		dc.w -$11C, $1A8		; 13
-		dc.w $11C, $1A8			; 14
-		dc.w -$64, $1F4			; 15
-		dc.w $64, $1F4			; 16
-		dc.w -$32, -$FC			; 17
-		dc.w $32, -$FC			; 18
-		dc.w -$8E, -$D4			; 19
-		dc.w $8E, -$D4			; 20
-		dc.w -$D4, -$8E			; 21
-		dc.w $D4, -$8E			; 22
-		dc.w -$FC, -$32			; 23
-		dc.w $FC, -$32			; 24
-		dc.w -$FC, $30			; 25
-		dc.w $FC, $30			; 26
-		dc.w -$D4, $8E			; 27
-		dc.w $D4, $8E			; 28
-		dc.w -$8E, $D4			; 29
-		dc.w $8E, $D4			; 30
-		dc.w -$32, $FA			; 31
-		dc.w $32, $FA			; 32
+		dc.w -$64, -$1F8	; 1
+		dc.w $64, -$1F8		; 2
+		dc.w -$11C, -$1A8	; 3
+		dc.w $11C, -$1A8	; 4
+		dc.w -$1A8, -$11C	; 5
+		dc.w $1A8, -$11C	; 6
+		dc.w -$1F8, -$64	; 7
+		dc.w $1F8, -$64		; 8
+		dc.w -$1F8, $60		; 9
+		dc.w $1F8, $60		; 10
+		dc.w -$1A8, $11C	; 11
+		dc.w $1A8, $11C		; 12
+		dc.w -$11C, $1A8	; 13
+		dc.w $11C, $1A8		; 14
+		dc.w -$64, $1F4		; 15
+		dc.w $64, $1F4		; 16
+		dc.w -$32, -$FC		; 17
+		dc.w $32, -$FC		; 18
+		dc.w -$8E, -$D4		; 19
+		dc.w $8E, -$D4		; 20
+		dc.w -$D4, -$8E		; 21
+		dc.w $D4, -$8E		; 22
+		dc.w -$FC, -$32		; 23
+		dc.w $FC, -$32		; 24
+		dc.w -$FC, $30		; 25
+		dc.w $FC, $30		; 26
+		dc.w -$D4, $8E		; 27
+		dc.w $D4, $8E		; 28
+		dc.w -$8E, $D4		; 29
+		dc.w $8E, $D4		; 30
+		dc.w -$32, $FA		; 31
+		dc.w $32, $FA		; 32
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Rings/Object Data/Map - Rings.asm"
