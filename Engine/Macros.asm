@@ -287,7 +287,7 @@ clearRAM macro startaddr,endaddr
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
     endif
 
-.clear:
+.clear
 	move.l	d0,(a1)+
 	dbf	d1,.clear
     if (((endaddr-startaddr) - ((startaddr)&1))&2)
@@ -349,7 +349,7 @@ clearRAM3 macro startaddr,endaddr
 	move.w	#bytesToXcnt(((endaddr-startaddr) - ((startaddr)&1)),(16*4)),d1
     endif
 
-.clear:
+.clear
     rept 16
 	move.l	d0,(a1)+
     endr
@@ -390,7 +390,7 @@ copyRAM macro startaddr,endaddr,startaddr2
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
     endif
 
-.clear:
+.clear
 	move.l	(a1)+,(a2)+
 	dbf	d1,.clear
     if (((endaddr-startaddr) - ((startaddr)&1))&2)
@@ -1490,7 +1490,7 @@ plreq macro toVRAMaddr,fromROMaddr
 ; ---------------------------------------------------------------------------
 
 zonewarning macro loc,elementsize
-._end:
+._end
 	if (._end-loc)-(ZoneCount*elementsize)<>0
 	fatal "Size of loc (\{(._end-loc)/elementsize}) does not match ZoneCount (\{ZoneCount})."
 	endif

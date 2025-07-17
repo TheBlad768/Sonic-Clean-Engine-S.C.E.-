@@ -221,7 +221,7 @@ QueueStaticDMA macro src,length,dest
 		move.l	#vdpComm(dest,VRAM,DMA),(a1)+							; Write VDP DMA command for destination address
 	endif
 	move.w	a1,(DMA_queue_slot).w									; Write next queue slot
-.done:
+.done
 	if UseVIntSafeDMA==1
 		move.w	(sp)+,sr									; Restore interrupts to previous state
 	endif ;UseVIntSafeDMA==1
@@ -273,7 +273,7 @@ Add_To_DMA_Queue:
 	; It does not cross a 128kB boundary. So just finish writing it.
 	movep.w	d3,DMAEntry.Size(a1)									; Write DMA length, overwriting useless top byte of source address
 
-.finishxfer:
+.finishxfer
 	; Command to specify destination address and begin DMA
 	move.w	d2,d0											; Use the fact that top word of d0 is zero to avoid clearing on vdpCommReg
 	vdpCommReg d0,VRAM,DMA,0									; Convert destination address to VDP DMA command
@@ -281,14 +281,14 @@ Add_To_DMA_Queue:
 	move.l	d0,(a1)+										; Write VDP DMA command for destination address
 	move.w	a1,(DMA_queue_slot).w									; Write next queue slot
 
-.done:
+.done
 	if UseVIntSafeDMA==1
 		move.w	(sp)+,sr									; Restore interrupts to previous state
 	endif ;UseVIntSafeDMA==1
 	rts
 ; ---------------------------------------------------------------------------
 	if Use128kbSafeDMA<>0
-.doubletransfer:
+.doubletransfer
 		; We need to split the DMA into two parts, since it crosses a 128kB block
 		add.w	d3,d0										; Set d0 to the number of words until end of current 128kB block
 		movep.w	d0,DMAEntry.Size(a1)								; Write DMA length of first part, overwriting useless top byte of source addres
@@ -335,7 +335,7 @@ Process_DMA_Queue:
 	movea.w	(DMA_queue_slot).w,a1
 	jmp	.jump_table-DMA_queue(a1)
 ; ---------------------------------------------------------------------------
-.jump_table:
+.jump_table
 	rts
 	rept 6
 		trap	#0										; Just in case
@@ -358,7 +358,7 @@ Process_DMA_Queue:
 		move.w	(a1)+,(a5)									; Destination low, trigger DMA
 	endr
 
-.jump0:
+.jump0
 	ResetDMAQueue
 	rts
 ; ---------------------------------------------------------------------------

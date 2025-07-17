@@ -478,7 +478,7 @@ StartNewLevel:
 		st	(Restart_level_flag).w
 		clr.b	(Last_star_post_hit).w
 
-.return:
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
