@@ -273,7 +273,12 @@ loc_1B9A4:
 		and.w	d5,d1
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
-		andi.w	#3,d2
+
+		andi.w	#( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),d2
+
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.b	2(a0),d2
@@ -335,7 +340,12 @@ loc_1BA64:
 		move.w	d7,x_pos(a1)
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
-		andi.w	#3,d2
+
+		andi.w	#( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),d2
+
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.b	(a0)+,d2
@@ -391,7 +401,12 @@ loc_1BAB6:
 		move.w	d7,x_pos(a1)
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
-		andi.w	#3,d2
+
+		andi.w	#( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),d2
+
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.b	(a0)+,d2

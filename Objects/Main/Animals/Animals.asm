@@ -57,7 +57,12 @@ Obj_Animal:
 		move.l	(a1)+,mappings(a0)
 		move.l	(a1)+,animal_ground_pointer(a0)
 		move.l	(a1),animal_ground_x_vel(a0)
-		move.b	#setBit(render_flags.level)+1,render_flags(a0)			; setBit(render_flags.level)+flipx
+
+		move.b	#( \
+			setBit(render_flags.level) | \
+			setBit(status.npc.x_flip) \
+		),render_flags(a0)
+
 		move.l	#bytes_word_to_long(24/2,16/2,priority_6),height_pixels(a0)	; set height, width and priority
 		move.b	#24/2,y_radius(a0)						; set y_radius
 		move.b	#2,mapping_frame(a0)
@@ -156,7 +161,12 @@ Obj_Animal_Ending:
 		move.w	(a1)+,art_tile(a0)
 		move.l	(a1),x_vel(a0)							; load horizontal and vertical speed
 		move.l	(a1),animal_ground_x_vel(a0)					; copy horizontal and vertical speed
-		move.b	#setBit(render_flags.level)+1,render_flags(a0)			; setBit(render_flags.level)+flipx
+
+		move.b	#( \
+			setBit(render_flags.level) | \
+			setBit(status.npc.x_flip) \
+		),render_flags(a0)
+
 		move.l	#bytes_word_to_long(24/2,16/2,priority_6),height_pixels(a0)	; set height, width and priority
 		move.b	#24/2,y_radius(a0)						; set y_radius
 		move.b	#7,anim_frame_timer(a0)
