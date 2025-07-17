@@ -31,7 +31,7 @@ Debug_Mode:
 		bclr	#status.player.pushing,status(a0)
 		bclr	#status.player.underwater,status(a0)
 		beq.s	.control
-		movea.w	a0,a1
+		movea.w	a0,a1								; a1=character
 		jsr	Player_ResetAirTimer(pc)
 
 		; set player speed (a4 warning!)

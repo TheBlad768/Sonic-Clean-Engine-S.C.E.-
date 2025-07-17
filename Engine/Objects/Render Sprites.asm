@@ -65,7 +65,12 @@ Render_Sprites_ObjLoop:
 		; check
 		tst.l	address(a0)							; is this object slot occupied?
 		beq.w	Render_Sprites_NextObj						; if not, check next one
-		andi.b	#$7F,render_flags(a0)						; clear on-screen flag
+
+		; clear on-screen flag
+		andi.b	#signextendB( \
+			~setBit(render_flags.on_screen)&$FF \
+		),render_flags(a0)
+
 		move.b	render_flags(a0),d6
 		move.w	x_pos(a0),d0
 		move.w	y_pos(a0),d1
