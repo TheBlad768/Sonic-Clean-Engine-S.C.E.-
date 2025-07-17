@@ -146,7 +146,7 @@ HUDDebug:
 		bpl.s	.notzero
 		bsr.s	HUD_DrawZeroRings							; reset rings to 0 if Sonic is hit
 
-.notzero:
+.notzero
 		clr.b	(Update_HUD_ring_count).w
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$36),d0					; set VRAM address
 		moveq	#0,d1

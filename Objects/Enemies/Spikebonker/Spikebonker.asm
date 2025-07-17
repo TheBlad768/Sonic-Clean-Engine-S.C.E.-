@@ -100,13 +100,13 @@ Obj_Spikebonker_Control:
 		btst	#3,objoff_38(a2)						; check attack flag
 		bne.s	.loc_91B14
 
-.loc_91B08:
+.loc_91B08
 		subq.b	#8,d0
 		move.b	d0,objoff_3C(a1)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
-.loc_91B14:
+.loc_91B14
 		move.l	#.loc_91B3E,address(a0)
 		moveq	#-4,d0
 		btst	#render_flags.x_flip,render_flags(a0)
@@ -120,7 +120,7 @@ Obj_Spikebonker_Control:
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
-.loc_91B3E:
+.loc_91B3E
 		move.w	x_pos(a0),d0
 		add.w	x_vel(a0),d0
 		move.w	d0,x_pos(a0)
@@ -128,12 +128,12 @@ Obj_Spikebonker_Control:
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
-.loc_91B68:
+.loc_91B68
 		move.l	#.loc_91B70,address(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
-.loc_91B70:
+.loc_91B70
 		movea.w	parent4(a0),a1
 		move.b	objoff_3C(a1),d0						; angle
 		cmpi.b	#$80,d0
@@ -143,7 +143,7 @@ Obj_Spikebonker_Control:
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
-.loc_91B8A:
+.loc_91B8A
 		move.l	#.loc_91B3E,address(a0)
 		neg.w	x_vel(a0)
 		move.w	#$1F,wait(a0)
@@ -151,7 +151,7 @@ Obj_Spikebonker_Control:
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
-.loc_91B56:
+.loc_91B56
 		move.l	#.main,address(a0)
 		movea.w	parent3(a0),a1							; spikebonker (main)
 		bclr	#3,objoff_38(a1)						; clear attack flag
