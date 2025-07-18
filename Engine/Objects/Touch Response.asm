@@ -117,7 +117,7 @@ Touch_Height:
 ; ---------------------------------------------------------------------------
 ; collision sizes $00-$3F (width,height)
 ; $00-$3F	- touch collision (enemy/boss)
-; $40-$7F	- ring/monitor collision
+; $40-$7F	- item collision (ring/monitor)
 ; $80-$BF	- hurt collision (spikes)
 ; $C0-$FF	- special collision
 ; ---------------------------------------------------------------------------
