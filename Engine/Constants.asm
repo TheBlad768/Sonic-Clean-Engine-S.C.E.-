@@ -612,10 +612,13 @@ status.npc.defeated						= 7						; set if a player defeated the enemy or boss
 ; Object collision variables
 ; ---------------------------------------------------------------------------
 
-collision_flags.npc.touch					= 0
-collision_flags.npc.item					= $40
-collision_flags.npc.hurt					= $80
-collision_flags.npc.special					= $C0
+collision_flags.npc.touch					= (0<<6)
+collision_flags.npc.item					= (1<<6)
+collision_flags.npc.hurt					= (2<<6)
+collision_flags.npc.special					= (3<<6)
+
+collision_flags.npc.size_mask					= $3F
+collision_flags.npc.type_mask					= $C0
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
