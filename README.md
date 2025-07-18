@@ -77,6 +77,17 @@ You don't have to add the letters **'ENOZ' (ZONE)** because those letters are al
 
 - Unfortunately, not all programs support MapMacros, so I wanted to maintain compatibility with older programs. I don't want to just throw away **SonMapEd**. But there is support for MapMacros here, and you can use it if you want.
 
+## Why Macro Assembler AS?
+
+<details>
+<summary>Answer</summary>
+ 
+![AS]
+
+[AS]: https://i.imgur.com/dYq4mPl.gif
+
+</details>
+
 ## The Macro Assembler AS issues
 
 #### Why does the ROM take so long to build?
