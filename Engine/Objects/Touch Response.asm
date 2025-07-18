@@ -199,7 +199,8 @@ Touch_ChkValue:
 		cmpi.b	#6,d0								; is touch response $46?
 		beq.s	Touch_Monitor							; if yes, branch
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Touch_Ring:
 		move.b	(Player_1+invulnerability_timer).w,d0				; get the main character's invulnerability_timer
@@ -209,7 +210,8 @@ Touch_Ring:
 
 .locret
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Touch_Monitor:
 		move.w	y_vel(a0),d0							; get player's y_vel
@@ -276,7 +278,8 @@ Touch_Monitor:
 		neg.w	y_vel(a0)
 		move.l	#Obj_MonitorBreak,address(a1)
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Touch_Enemy:
 		btst	#status_secondary.invincible,status_secondary(a0)		; is player invincible?
@@ -332,7 +335,8 @@ Touch_Enemy:
 
 .bossnotdefeated
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Touch_EnemyNormal:
 		btst	#2,status(a1)							; should the object remember that it's been destroyed (Remember Sprite State flag)?
@@ -554,7 +558,8 @@ Kill_Character:
 .dontdie
 		moveq	#-1,d0
 		rts
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 Touch_Special:
 		moveq	#$3F,d1								; get only collision size (but that doesn't seems to be its use here)
