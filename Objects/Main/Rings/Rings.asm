@@ -9,7 +9,7 @@ Obj_Ring:
 		; init
 		movem.l	ObjDat_Ring(pc),d0-d3						; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.b	#7|$40,collision_flags(a0)					; set ring collision
+		move.b	#7|collision_flags.npc.item,collision_flags(a0)			; set ring collision
 
 		; draw
 		jmp	(Sprite_OnScreen_Test_Collision).w
@@ -101,7 +101,7 @@ Obj_Bouncing_Ring:
 		move.l	d6,address(a1)							; set object address
 		movem.l	(a3),d2-d4							; load ring data
 		movem.l	d2-d4,render_flags(a1)						; set ring data
-		move.b	#7|$40,collision_flags(a1)
+		move.b	#7|collision_flags.npc.item,collision_flags(a1)
 		move.w	height_pixels(a1),y_radius(a1)					; set y_radius and x_radius
 		move.l	(a2)+,x_vel(a1)
 		tst.w	d0								; object RAM slots ended?
@@ -278,7 +278,7 @@ Obj_Attracted_Ring:
 		; init
 		movem.l	ObjDat_Ring2(pc),d0-d3						; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.b	#7|$40,collision_flags(a0)					; set ring collision
+		move.b	#7|collision_flags.npc.item,collision_flags(a0)			; set ring collision
 		move.w	height_pixels(a0),y_radius(a0)					; set y_radius and x_radius
 
 .main

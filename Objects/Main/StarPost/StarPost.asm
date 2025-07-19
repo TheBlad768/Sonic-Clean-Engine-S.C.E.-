@@ -313,7 +313,7 @@ loc_2D56A:
 ; ---------------------------------------------------------------------------
 
 loc_2D574:
-		move.b	#$18|$C0,collision_flags(a0)					; set collision size 8x8
+		move.b	#$18|collision_flags.npc.special,collision_flags(a0)		; set collision size 8x8
 
 loc_2D57A:
 		cmpi.w	#$180,d1
