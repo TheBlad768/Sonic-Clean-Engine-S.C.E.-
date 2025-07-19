@@ -30,7 +30,7 @@ Obj_Monitor:
 
 .notbroken
 		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)				; set y_radius and x_radius
-		move.b	#6|$40,collision_flags(a0)
+		move.b	#6|collision_flags.npc.item,collision_flags(a0)
 		move.b	subtype(a0),anim(a0)						; subtype determines what powerup is inside
 		move.l	#.main,address(a0)
 

@@ -11,7 +11,7 @@ Obj_HiddenMonitor:
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
 		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)				; set y_radius and x_radius
-		move.b	#6|$40,collision_flags(a0)
+		move.b	#6|collision_flags.npc.item,collision_flags(a0)
 		move.b	subtype(a0),anim(a0)						; set monitor content id
 		rts
 ; ---------------------------------------------------------------------------
