@@ -289,7 +289,7 @@ Touch_Enemy:
 		cmpi.b	#AniIDSonAni_Roll,anim(a0)					; is player in their rolling animation?
 		beq.s	.checkhurtenemy							; if so, branch
 		cmpi.b	#PlayerID_Knuckles,character_id(a0)				; is player Knuckles?
-		bne.s	.notknuckles							; if not, branch
+		bne.s	.notKnuckles							; if not, branch
 		cmpi.b	#1,double_jump_flag(a0)						; is Knuckles gliding?
 		beq.s	.checkhurtenemy							; if so, branch
 		cmpi.b	#3,double_jump_flag(a0)						; is Knuckles sliding across the ground after gliding?
@@ -297,7 +297,7 @@ Touch_Enemy:
 		bra.w	Touch_ChkHurt
 ; ---------------------------------------------------------------------------
 
-.notknuckles
+.notKnuckles
 		cmpi.b	#PlayerID_Tails,character_id(a0)				; is player Tails?
 		bne.w	Touch_ChkHurt							; if not, branch
 		tst.b	double_jump_flag(a0)						; is Tails flying? ("gravity-affected")
