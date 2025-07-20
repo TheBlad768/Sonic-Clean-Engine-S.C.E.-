@@ -146,7 +146,7 @@ Obj_EndSign:
 		btst	#status.player.in_air,status(a1)
 		bne.s	.draw2								; if player is not standing on the ground, wait until he is
 		move.l	#.signafter,address(a0)
-		st	(Ctrl_1_locked).w						; null sonic's input
+		st	(Ctrl_1_locked).w						; null Sonic's input
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Sprite).w
 		bne.s	.draw2
