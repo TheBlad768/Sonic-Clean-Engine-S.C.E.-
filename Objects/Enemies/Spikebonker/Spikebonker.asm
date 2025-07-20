@@ -24,7 +24,7 @@ Obj_Spikebonker:
 		move.b	subtype(a0),d0
 		move.w	d0,d1
 		subq.w	#1,d0
-		move.w	d0,wait(a0)
+		move.w	d0,wait_timer(a0)
 		add.w	d1,d1
 		subq.w	#1,d1
 		move.w	d1,objoff_3A(a0)
@@ -68,7 +68,7 @@ Obj_Spikebonker:
 .changeside
 		neg.w	x_vel(a0)
 		bchg	#render_flags.x_flip,render_flags(a0)
-		move.w	objoff_3A(a0),wait(a0)
+		move.w	objoff_3A(a0),wait_timer(a0)
 		jmp	(Sprite_CheckDeleteTouch).w
 ; ---------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ Obj_Spikebonker_Control:
 
 .notflipx
 		move.w	d0,x_vel(a0)
-		move.w	#$1F,wait(a0)
+		move.w	#$1F,wait_timer(a0)
 		move.l	#.loc_91B68,jump(a0)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
@@ -146,7 +146,7 @@ Obj_Spikebonker_Control:
 .loc_91B8A
 		move.l	#.loc_91B3E,address(a0)
 		neg.w	x_vel(a0)
-		move.w	#$1F,wait(a0)
+		move.w	#$1F,wait_timer(a0)
 		move.l	#.loc_91B56,jump(a0)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------

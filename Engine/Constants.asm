@@ -363,7 +363,7 @@ collision_flags =						objoff_28					; byte ; TT SSSSSS ; TT = collision type, S
 collision_property =						objoff_29					; byte ; usage varies, bosses use it as a hit counter
 shield_reaction =						objoff_2B					; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
 subtype =							objoff_2C					; byte
-wait =								objoff_2E					; word
+wait_timer =							objoff_2E					; word
 aniraw =							objoff_30					; long
 jump =								objoff_34					; long
 count =								objoff_39					; byte
@@ -449,7 +449,7 @@ obColType =							collision_flags					; byte ; collision response type
 obColProp =							collision_property				; byte ; collision extra property
 obStatus =							status						; byte ; orientation or mode
 obSubtype =							subtype						; byte ; object subtype
-obTimer =							wait						; word ; object timer
+obTimer =							wait_timer					; word ; object timer
 obParent =							parent						; word ; parent of child objects
 obParent4 =							parent4						; word ; parent of child objects
 obParent3 =							parent3						; word ; parent of child objects
@@ -619,6 +619,13 @@ collision_flags.npc.special					= (3<<6)
 
 collision_flags.npc.size_mask					= $3F
 collision_flags.npc.type_mask					= $C0
+
+; ---------------------------------------------------------------------------
+; Water wind tunnels variables
+; ---------------------------------------------------------------------------
+
+WindTunnel_holding_flag.player_1				= 0
+WindTunnel_holding_flag.player_2				= 1
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
