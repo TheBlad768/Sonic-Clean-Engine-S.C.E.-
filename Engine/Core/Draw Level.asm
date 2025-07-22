@@ -510,7 +510,7 @@ Get_ChunkRow:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFull:
-		moveq	#(256/16)-1,d2
+		moveq	#bytesToXcnt(256,16),d2
 
 .refresh
 		movem.l	d0-d2/a0,-(sp)
@@ -530,7 +530,7 @@ Refresh_PlaneFull:
 
 Refresh_PlaneTileDeform:
 		move.w	(a4)+,d2
-		moveq	#(256/16)-1,d3
+		moveq	#bytesToXcnt(256,16),d3
 
 .find
 		cmp.w	d2,d0
@@ -559,7 +559,7 @@ Refresh_PlaneTileDeform:
 
 Refresh_PlaneDirectVScroll:
 		move.w	(a4)+,d2
-		moveq	#(512/16)-1,d3
+		moveq	#bytesToXcnt(512,16),d3
 
 .find
 		cmp.w	d2,d0
@@ -600,7 +600,7 @@ Refresh_PlaneDirect2_BG:
 
 Refresh_PlaneDirect_BG:
 		disableInts
-		moveq	#(256/16)-1,d2
+		moveq	#bytesToXcnt(256,16),d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)						; redraws the entire plane in one go during 68k execution
@@ -632,7 +632,7 @@ Refresh_PlaneDirect2:
 
 Refresh_PlaneDirect:
 		disableInts
-		moveq	#((224+16)/16)-1,d2
+		moveq	#bytesToXcnt((224+16),16),d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)						; redraws the entire plane in one go during 68k execution

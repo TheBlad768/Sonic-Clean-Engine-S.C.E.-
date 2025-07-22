@@ -246,7 +246,7 @@ VInt_Level:
 		; flash screen white
 		subq.b	#1,(Hyper_Sonic_flash_timer).w
 		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		moveq	#64/2-1,d1
+		moveq	#bytesToXcnt(64,2),d1
 		move.l	#words_to_long(cWhite,cWhite),d0
 
 .copy
@@ -264,7 +264,7 @@ VInt_Level_NoFlash:
 		btst	#2,(Negative_flash_timer).w
 		beq.s	VInt_Level_NoNegativeFlash
 		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		moveq	#64/2-1,d1
+		moveq	#bytesToXcnt(64,2),d1
 		move.l	#words_to_long($EEE,$EEE),d2
 		lea	(Normal_palette).w,a1
 

@@ -237,7 +237,7 @@ Go_Delete_SpriteSlotted3:
 Remove_From_TrackingSlot:
 		move.b	ros_bit(a0),d0							; slot bit
 		movea.w	ros_addr(a0),a1							; slot address
-		bclr	d0,(a1)								; turn off this slot
+		bclr	d0,(a1)								; turn off this slot (SetUp_ObjAttributesSlotted)
 		rts
 
 ; =============== S U B R O U T I N E =======================================

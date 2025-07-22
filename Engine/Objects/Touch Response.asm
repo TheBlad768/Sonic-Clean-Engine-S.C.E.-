@@ -339,13 +339,17 @@ Touch_Enemy:
 ; =============== S U B R O U T I N E =======================================
 
 Touch_EnemyNormal:
-		btst	#2,status(a1)							; should the object remember that it's been destroyed (Remember Sprite State flag)?
-		beq.s	.dontremember							; if not, branch
-		move.b	ros_bit(a1),d0
-		movea.w	ros_addr(a1),a2
-		bclr	d0,(a2)								; mark object as destroyed
 
-.dontremember
+		; check DPLC slot
+		btst	#status.npc.dplc_slot,status(a1)				; was this object slot turned on?
+		beq.s	.notDPLC							; if not, branch
+
+		; Remove_From_TrackingSlot
+		move.b	ros_bit(a1),d0							; slot bit
+		movea.w	ros_addr(a1),a2							; slot address
+		bclr	d0,(a2)								; turn off this slot (SetUp_ObjAttributesSlotted)
+
+.notDPLC
 		bset	#status.npc.defeated,status(a1)
 		moveq	#0,d0
 		move.w	(Chain_bonus_counter).w,d0

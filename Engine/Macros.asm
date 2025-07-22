@@ -1340,8 +1340,8 @@ gotoROM macro
 
 copyTilemap macro loc,width,height,terminate
 	locVRAM	loc,d0
-	moveq	#(width/8-1),d1
-	moveq	#(height/8-1),d2
+	moveq	#bytesToXcnt(width,8),d1
+	moveq	#bytesToXcnt(height,8),d2
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM).w
       else
@@ -1356,8 +1356,8 @@ copyTilemap macro loc,width,height,terminate
 
 copyTilemap2 macro loc,address,width,height,terminate
 	locVRAM	loc,d0
-	moveq	#(width/8-1),d1
-	moveq	#(height/8-1),d2
+	moveq	#bytesToXcnt(width,8),d1
+	moveq	#bytesToXcnt(height,8),d2
       if ((address)<=$7F)
 	moveq	#(address),d3
       else
@@ -1377,8 +1377,8 @@ copyTilemap2 macro loc,address,width,height,terminate
 
 copyTilemap3	 macro loc,width,height,terminate
 	locVRAM	loc,d0
-	moveq	#(width/8-1),d1
-	moveq	#(height/8-1),d2
+	moveq	#bytesToXcnt(width,8),d1
+	moveq	#bytesToXcnt(height,8),d2
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM_3).w
       else
@@ -1392,8 +1392,8 @@ copyTilemap3	 macro loc,width,height,terminate
 ; ---------------------------------------------------------------------------
 
 copyTilemapToRAM macro width,height,row,terminate
-	moveq	#(width/8-1),d1
-	moveq	#(height/8-1),d2
+	moveq	#bytesToXcnt(width,8),d1
+	moveq	#bytesToXcnt(height,8),d2
       if ((row)<=$7F)
 	moveq	#row,d3
       else
@@ -1413,8 +1413,8 @@ copyTilemapToRAM macro width,height,row,terminate
 
 clearTilemap macro loc,width,height,terminate
 	locVRAM	loc,d0
-	moveq	#(width/8-1),d1
-	moveq	#(height/8-1),d2
+	moveq	#bytesToXcnt(width,8),d1
+	moveq	#bytesToXcnt(height,8),d2
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Clear_Plane_Map).w
       else
@@ -1454,8 +1454,8 @@ LoadMapUnc macro offset,size,arg,loc,width,height
 
 	dbf	d1,.load
 	locVRAM	loc,d0
-	moveq	#(width/8-1),d1
-	moveq	#(height/8-1),d2
+	moveq	#bytesToXcnt(width,8),d1
+	moveq	#bytesToXcnt(height,8),d2
 	jsr	(Plane_Map_To_VRAM).w
     endm
 
