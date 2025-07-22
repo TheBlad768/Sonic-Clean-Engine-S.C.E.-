@@ -597,7 +597,7 @@ shield_reaction.bubble_shield					= 6
 
 status.npc.x_flip						= render_flags.x_flip				; facing right ; used by Animate_Sprite
 status.npc.y_flip						= render_flags.y_flip				; facing up ; used by Animate_Sprite
-
+status.npc.dplc_slot						= 2						; set if DPLC is used ; used by SetUp_ObjAttributesSlotted
 status.npc.p1_standing						= 3						; stood on by player 1
 status.npc.p2_standing						= 4						; stood on by player 2
 status.npc.p1_pushing						= 5						; pushed by player 1

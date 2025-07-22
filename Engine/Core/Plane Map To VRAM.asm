@@ -197,7 +197,7 @@ Copy_Map_Line_To_VRAM:
 		swap	d0
 		add.w	d2,d0
 		swap	d0
-		moveq	#320/8-1,d3
+		moveq	#bytesToXcnt(320,8),d3
 		lea	(VDP_data_port).l,a6
 		lea	VDP_control_port-VDP_data_port(a6),a5
 		disableInts
@@ -224,8 +224,8 @@ RAM_Map_Data_To_VDP:
 		lea	VDP_control_port-VDP_data_port(a6),a5
 
 .main
-		moveq	#320/8-1,d1
-		moveq	#256/8-1,d2
+		moveq	#bytesToXcnt(320,8),d1
+		moveq	#bytesToXcnt(256,8),d2
 
 .loop
 		lea	(a1),a2
