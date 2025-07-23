@@ -14,7 +14,7 @@ vdpCommDelta function addr,((addr&$3FFF)<<16)|((addr&$C000)>>14)
 ; makes a VDP command
 vdpComm function addr,type,rwd,(((type&rwd)&3)<<30)|((addr&$3FFF)<<16)|(((type&rwd)&$FC)<<2)|((addr&$C000)>>14)
 
-; Calc VDP address
+; calc VDP address
 vdpCalc function loc,($40000000|vdpCommDelta(loc))
 
 ; sign-extends a 32-bit integer to 64-bit
@@ -480,7 +480,11 @@ EniDecomp macro data,ram,vram,palette,pri,terminate
     else
 	lea	(ram).w,a1
     endif
+    if ((make_art_tile(vram,palette,pri))<=$7F)
+	moveq	#make_art_tile(vram,palette,pri),d0
+      else
 	move.w	#make_art_tile(vram,palette,pri),d0
+      endif
       if ("terminate"="0") || ("terminate"="")
 	jsr	(Eni_Decomp).w
       else
