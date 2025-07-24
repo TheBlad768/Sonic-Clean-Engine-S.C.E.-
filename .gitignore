@@ -1,12 +1,28 @@
+# Visual Studio Code
 .vscode
+
+# Windows system file
 desktop.ini
+
+# Generated ROM files
 *.gen
+
+# Generated listing files
 S3CE.lst
 S3CE.debug.lst
+
+# Generated RAM assembler files
 Engine/_RAM.asm
 Engine/_RAM.debug.asm
+
+# Personal to-do notes
 to-do.txt
+
+# All log files
 *.log
+
+# Temporary assembly files
 *.[ph]
+
+# Cached DLL files in SonLVL INI Files directory
 Projects/SonLVL INI Files/dllcache/*
-Projects/SonLVL INI Files/SonLVL.log
