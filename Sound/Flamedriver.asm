@@ -67,14 +67,14 @@ zTrack STRUCT DOTS
 	VoiceControl:		ds.b 1	; S&K: 1
 	TempoDivider:		ds.b 1	; S&K: 2
 	DataPointerLow:		ds.b 1	; S&K: 3
-	DataPointerHigh:		ds.b 1	; S&K: 4
+	DataPointerHigh:	ds.b 1	; S&K: 4
 	Transpose:			ds.b 1	; S&K: 5
 	Volume:				ds.b 1	; S&K: 6
 	ModulationCtrl:		ds.b 1	; S&K: 7		; Modulation is on if nonzero. If only bit 7 is set, then it is normal modulation; otherwise, this-1 is index on modulation envelope pointer table
 	VoiceIndex:			ds.b 1	; S&K: 8		; FM instrument/PSG voice
-	StackPointer:			ds.b 1	; S&K: 9		; For call subroutine coordination flag
-	AMSFMSPan:		ds.b 1	; S&K: 0Ah
-	DurationTimeout:		ds.b 1	; S&K: 0Bh
+	StackPointer:		ds.b 1	; S&K: 9		; For call subroutine coordination flag
+	AMSFMSPan:			ds.b 1	; S&K: 0Ah
+	DurationTimeout:	ds.b 1	; S&K: 0Bh
 	SavedDuration:		ds.b 1	; S&K: 0Ch		; Already multiplied by timing divisor
 	; ---------------------------------
 	; Alternate names for same offset:
@@ -82,7 +82,7 @@ zTrack STRUCT DOTS
 	FreqLow:			ds.b 1	; S&K: 0Dh		; For FM/PSG channels
 	; ---------------------------------
 	FreqHigh:			ds.b 1	; S&K: 0Eh		; For FM/PSG channels
-	VoiceSongID:			ds.b 1	; S&K: 0Fh		; For using voices from a different song
+	VoiceSongID:		ds.b 1	; S&K: 0Fh		; For using voices from a different song
 	DACSFXPlaying:
 	Detune:				ds.b 1	; S&K: 10h/11h	; In S&K, some places used 11h instead of 10h
 	VolEnv:				ds.b 1	; S&K: 17h		; Used for dynamic volume adjustments
@@ -97,7 +97,7 @@ zTrack STRUCT DOTS
 	; ---------------------------------
 	TLPtrLow:			ds.b 1	; S&K: 1Ch
 	TLPtrHigh:			ds.b 1	; S&K: 1Dh
-	NoteFillTimeout:		ds.b 1	; S&K: 1Eh
+	NoteFillTimeout:	ds.b 1	; S&K: 1Eh
 	NoteFillMaster:		ds.b 1	; S&K: 1Fh
 	ModulationPtrLow:	ds.b 1	; S&K: 20h
 	ModulationPtrHigh:	ds.b 1	; S&K: 21h
@@ -113,8 +113,8 @@ zTrack STRUCT DOTS
 	ModulationSpeed:			; S&K: 25h
 	ModEnvIndex:		ds.b 1	; S&K: 25h
 	; ---------------------------------
-	ModulationDelta:		ds.b 1	; S&K: 26h
-	ModulationSteps:		ds.b 1	; S&K: 27h
+	ModulationDelta:	ds.b 1	; S&K: 26h
+	ModulationSteps:	ds.b 1	; S&K: 27h
 	LoopCounters:		ds.b 2	; S&K: 28h		; Might overflow into the following data
 	VoicesLow:			ds.b 1	; S&K: 2Ah		; Low byte of pointer to track's voices, used only if zUpdatingSFX is set
 	VoicesHigh:			ds.b 1	; S&K: 2Bh		; High byte of pointer to track's voices, used only if zUpdatingSFX is set
