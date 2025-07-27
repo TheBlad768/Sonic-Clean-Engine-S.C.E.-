@@ -123,7 +123,7 @@ theld macro press,player
 ; input: 16-bit VRAM address, control port (default is (VDP_control_port).l)
 ; ---------------------------------------------------------------------------
 
-locVRAM macro loc, controlport
+locVRAM macro loc,controlport
 	if ("controlport"=="")
 		move.l	#$40000000|vdpCommDelta(loc),(VDP_control_port).l
 	else
@@ -142,7 +142,7 @@ __LABEL__ label *
     endm
 
 ; macro to define debug list object data
-dbglistobj macro obj, mapaddr, subtype, frame, vram, pal, pri
+dbglistobj macro obj,mapaddr,subtype,frame,vram,pal,pri
 	dc.l frame<<24|((obj)&$FFFFFF)
 	dc.l subtype<<24|((mapaddr)&$FFFFFF)
 	dc.w make_art_tile(vram,pal,pri)
@@ -172,12 +172,12 @@ palptr macro ptr,lineno
 
 ; macro to declare sub-object data
 subObjData macro mappings,vram,pal,pri,height,width,prio,frame,collision
-      if upstring("mappings")<>"FALSE"
+    if upstring("mappings")<>"FALSE"
 	dc.l mappings
-      endif
-      if upstring("vram")<>"FALSE"
+    endif
+    if upstring("vram")<>"FALSE"
 	dc.w make_art_tile(vram,pal,pri)
-      endif
+    endif
 	dc.b (height/2),(width/2)
 	dc.w sprite_priority(prio)
 	dc.b frame,collision
@@ -194,18 +194,18 @@ subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,height,width,prio,
 
 ; macro to declare sub-object data
 subObjMainData macro address,render,routine,height,width,prio,vram,pal,pri,mappings,frame,collision
-      if upstring("address")<>"FALSE"
+    if upstring("address")<>"FALSE"
 	dc.l address
-      endif
+    endif
 	dc.b render,routine,(height/2),(width/2)
 	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
 	dc.l mappings
-      if ("frame"<>"")
+    if ("frame"<>"")
 	dc.b frame
-      endif
-      if ("collision"<>"")
+    endif
+    if ("collision"<>"")
 	dc.b collision
-      endif
+    endif
     endm
 ; ---------------------------------------------------------------------------
 
@@ -213,13 +213,13 @@ zoneAnimals macro first,second
 	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties), (Obj_Animal_Properties_second - Obj_Animal_Properties)
     endm
 
-objanimaldecl macro mappings, address, xvel, yvel, {INTLABEL}
+objanimaldecl macro mappings,address,xvel,yvel,{INTLABEL}
 Obj_Animal_Properties___LABEL__: label *
 	dc.l mappings, address
 	dc.w xvel, yvel
     endm
 
-objanimalending macro address, mappings, vram, xvel, yvel
+objanimalending macro address,mappings,vram,xvel,yvel
 	dc.l address, mappings
 	dc.w vram, xvel, yvel
 	dc.w 0	; even
@@ -446,11 +446,11 @@ QueueKosPlus macro data,ram,terminate
     else
 	lea	(ram).w,a2
     endif
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Queue_KosPlus).w
-      else
+    else
 	jmp	(Queue_KosPlus).w
-      endif
+    endif
     endm
 
 ; load Kosinski Plus Moduled art to VRAM
@@ -458,14 +458,14 @@ QueueKosPlusModule macro art,vram,terminate
 	lea	(art).l,a1
     if ((vram)<=3)
 	moveq	#tiles_to_bytes(vram),d2
-      else
+    else
 	move.w	#tiles_to_bytes(vram),d2
-      endif
-      if ("terminate"="0") || ("terminate"="")
+    endif
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Queue_KosPlus_Module).w
-      else
+    else
 	jmp	(Queue_KosPlus_Module).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -482,14 +482,14 @@ EniDecomp macro data,ram,vram,palette,pri,terminate
     endif
     if ((make_art_tile(vram,palette,pri))<=$7F)
 	moveq	#make_art_tile(vram,palette,pri),d0
-      else
+    else
 	move.w	#make_art_tile(vram,palette,pri),d0
-      endif
-      if ("terminate"="0") || ("terminate"="")
+    endif
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Eni_Decomp).w
-      else
+    else
 	jmp	(Eni_Decomp).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -499,17 +499,21 @@ EniDecomp macro data,ram,vram,palette,pri,terminate
 ; load DMA
 AddToDMAQueue macro art,vram,size,terminate
 		move.l	#dmaSource(art),d1
-		move.w	#tiles_to_bytes(vram),d2
-      if ((size/2)<=$7F)
+    if ((vram)<=3)
+	moveq	#tiles_to_bytes(vram),d2
+    else
+	move.w	#tiles_to_bytes(vram),d2
+    endif
+    if ((size/2)<=$7F)
 		moveq	#(size/2),d3
-      else
+    else
 		move.w	#(size/2),d3
-      endif
-      if ("terminate"="0") || ("terminate"="")
+    endif
+    if ("terminate"="0") || ("terminate"="")
 		jsr	(Add_To_DMA_Queue).w
-      else
+    else
 		jmp	(Add_To_DMA_Queue).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -517,13 +521,13 @@ AddToDMAQueue macro art,vram,size,terminate
 ; input: location to jump to if out of range, x-axis pos (x_pos(a0) by default)
 ; ---------------------------------------------------------------------------
 
-out_of_xrange macro exit, xpos
+out_of_xrange macro exit,xpos
 	moveq	#-$80,d0							; round down to nearest $80
-      if ("xpos"<>"")
+    if ("xpos"<>"")
 		and.w	xpos,d0							; get object position (if specified as not x_pos)
-      else
+    else
 		and.w	x_pos(a0),d0						; get object position
-      endif
+    endif
 	out_of_xrange2.ATTRIBUTE	exit
     endm
 
@@ -538,13 +542,13 @@ out_of_xrange2 macro exit
 ; input: location to jump to if out of range, x-axis pos (y_pos(a0) by default)
 ; ---------------------------------------------------------------------------
 
-out_of_yrange macro exit, ypos
+out_of_yrange macro exit,ypos
 	moveq	#-$80,d0							; round down to nearest $80
-      if ("ypos"<>"")
+    if ("ypos"<>"")
 		and.w	ypos,d0							; get object position (if specified as not y_pos)
-      else
+    else
 		and.w	y_pos(a0),d0						; get object position
-      endif
+    endif
 	out_of_yrange2.ATTRIBUTE	exit
     endm
 
@@ -565,9 +569,9 @@ respawn_delete macro terminate
 	bclr	#7,(a2)
 
 .delete
-      if ("terminate"="0") <> ("terminate"="")
+    if ("terminate"="0") <> ("terminate"="")
 	jmp	(Delete_Current_Sprite).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -575,9 +579,9 @@ respawn_delete macro terminate
 ; ---------------------------------------------------------------------------
 
 getobjectRAMslot macro address
-      if ("address"=="")
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
 	lsr.w	#6,d0								; divide by $40... even though SSTs are $4A bytes long in this game
@@ -585,87 +589,87 @@ getobjectRAMslot macro address
 	move.b	(address,d0.w),d0						; use a look-up table to get the right loop counter
     endm
 
-MoveSprite macro address, gravity, terminate
-      if ("address"=="")
+MoveSprite macro address,gravity,terminate
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	movem.w	x_vel(address),d0/d2						; load xy speed
 	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,x_pos(address)						; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
 	add.l	d2,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
-      if ("gravity"<>"")
+    if ("gravity"<>"")
 	addi.w	#gravity,y_vel(address)						; increase vertical speed (apply gravity)
 	else
 	addi.w	#$38,y_vel(address)						; increase vertical speed (apply gravity)
-      endif
-      if ("terminate"<>"")
+    endif
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-MoveSprite2 macro address, terminate
-      if ("address"=="")
+MoveSprite2 macro address,terminate
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	movem.w	x_vel(address),d0/d2						; load xy speed
 	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,x_pos(address)						; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
 	add.l	d2,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
-      if ("terminate"<>"")
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-MoveSpriteXOnly macro address, terminate
-      if ("address"=="")
+MoveSpriteXOnly macro address,terminate
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	move.w	x_vel(address),d0						; load x speed
 	ext.l	d0
 	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,x_pos(address)						; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-      if ("terminate"<>"")
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-MoveSpriteYOnly macro address, gravity, terminate
-      if ("address"=="")
+MoveSpriteYOnly macro address,gravity,terminate
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	move.w	y_vel(address),d0						; load y speed
 	ext.l	d0
 	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
-      if ("gravity"<>"")
+    if ("gravity"<>"")
 	addi.w	#gravity,y_vel(address)						; increase vertical speed (apply gravity)
 	else
 	addi.w	#$38,y_vel(address)						; increase vertical speed (apply gravity)
-      endif
-      if ("terminate"<>"")
+    endif
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-MoveSprite2YOnly macro address, terminate
-      if ("address"=="")
+MoveSprite2YOnly macro address,terminate
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	move.w	y_vel(address),d0						; load y speed
 	ext.l	d0
 	asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 	add.l	d0,y_pos(address)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
-      if ("terminate"<>"")
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-Add_SpriteToCollisionResponseList macro address, terminate
-      if ("address"=="")
+Add_SpriteToCollisionResponseList macro address,terminate
+    if ("address"=="")
 	fatal "Error! Empty value!"
-      endif
+    endif
 	lea	(Collision_response_list).w,address
 	move.w	(address),d0							; get list to d0
 	addq.b	#2,d0								; is list full? ($80)
@@ -674,31 +678,31 @@ Add_SpriteToCollisionResponseList macro address, terminate
 	move.w	a0,(address,d0.w)						; store RAM address in list
 
 .full
-      if ("terminate"<>"")
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-CreateNewSprite macro obj, terminate
+CreateNewSprite macro obj,terminate
 	jsr	(Create_New_Sprite).w
 	bne.s	.skip
 	move.l	#obj,address(a1)
 
 .skip
-      if ("terminate"<>"")
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
-CreateNewSprite3 macro obj, terminate
+CreateNewSprite3 macro obj,terminate
 	jsr	(Create_New_Sprite3).w
 	bne.s	.skip
 	move.l	#obj,address(a1)
 
 .skip
-      if ("terminate"<>"")
+    if ("terminate"<>"")
 	rts
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1111,20 +1115,20 @@ tribyte macro val
 ; ---------------------------------------------------------------------------
 
 ; macro to define a palette script pointer
-palscriptptr macro header, data
+palscriptptr macro header,data
 	dc.w data-header, 0
 	dc.l header
 ._headpos :=	header
     endm
 
 ; macro to define a palette script header
-palscripthdr macro palette, entries, value
+palscripthdr macro palette,entries,value
 	dc.w (palette)&$FFFF
 	dc.b entries-1, value
     endm
 
 ; macro to define a palette script data
-palscriptdata macro frames, data
+palscriptdata macro frames,data
 .framec :=	frames-1
 	shift
 	dc.w ALLARGS
@@ -1132,7 +1136,7 @@ palscriptdata macro frames, data
     endm
 
 ; macro to define a palette script data from an external file
-palscriptfile macro frames, data
+palscriptfile macro frames,data
 .framec :=	frames-1
 	shift
 	binclude ALLARGS
@@ -1160,70 +1164,70 @@ palscriptrun macro header
 ; input: track, terminate routine, branch or jump, move operand size
 ; ---------------------------------------------------------------------------
 
-music macro track, terminate, byte
+music macro track,terminate,byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(track),d0
     else
 	move.w	#(track),d0
     endif
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Play_Music).w
-      else
+    else
 	jmp	(Play_Music).w
-      endif
+    endif
     endm
 
-sfx macro track, terminate, byte
+sfx macro track,terminate,byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(track),d0
     else
 	move.w	#(track),d0
     endif
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Play_SFX).w
-      else
+    else
 	jmp	(Play_SFX).w
-      endif
+    endif
     endm
 
-sfxcont macro track, wait, terminate, byte
+sfxcont macro track,wait,terminate,byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(track),d0
     else
 	move.w	#(track),d0
     endif
 	moveq	#signextendB(wait),d1
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Play_SFX_Continuous).w
-      else
+    else
 	jmp	(Play_SFX_Continuous).w
-      endif
+    endif
     endm
 
-tempo macro speed, terminate, byte
+tempo macro speed,terminate,byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(speed),d0
     else
 	move.w	#(speed),d0
     endif
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Change_Music_Tempo).w
-      else
+    else
 	jmp	(Change_Music_Tempo).w
-      endif
+    endif
     endm
 
-sample macro id, terminate, byte
+sample macro id,terminate,byte
     if ("byte"="0") || ("byte"="")
 	moveq	#signextendB(id),d0
     else
 	move.w	#(id),d0
     endif
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Play_Sample).w
-      else
+    else
 	jmp	(Play_Sample).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1346,11 +1350,11 @@ copyTilemap macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM).w
-      else
+    else
 	jmp	(Plane_Map_To_VRAM).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1362,16 +1366,16 @@ copyTilemap2 macro loc,address,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
-      if ((address)<=$7F)
+    if ((address)<=$7F)
 	moveq	#(address),d3
-      else
+    else
 	move.w	#(address),d3
-      endif
-      if ("terminate"="0") || ("terminate"="")
+    endif
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_Add_VRAM).w
-      else
+    else
 	jmp	(Plane_Map_To_Add_VRAM).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1383,11 +1387,11 @@ copyTilemap3	 macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM_3).w
-      else
+    else
 	jmp	(Plane_Map_To_VRAM_3).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1398,16 +1402,16 @@ copyTilemap3	 macro loc,width,height,terminate
 copyTilemapToRAM macro width,height,row,terminate
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
-      if ((row)<=$7F)
+    if ((row)<=$7F)
 	moveq	#row,d3
-      else
+    else
 	move.w	#row,d3
-      endif
-      if ("terminate"="0") || ("terminate"="")
+    endif
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_RAM).w
-      else
+    else
 	jmp	(Plane_Map_To_RAM).w
-      endif
+    endif
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1419,11 +1423,11 @@ clearTilemap macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
-      if ("terminate"="0") || ("terminate"="")
+    if ("terminate"="0") || ("terminate"="")
 	jsr	(Clear_Plane_Map).w
-      else
+    else
 	jmp	(Clear_Plane_Map).w
-      endif
+    endif
     endm
 ; ---------------------------------------------------------------------------
 
