@@ -459,7 +459,7 @@ Touch_ChkHurt_Bounce_Projectile:
 Touch_Hurt:
 		tst.b	invulnerability_timer(a0)					; is the player invulnerable?
 		bne.s	Touch_ChkHurt_Return						; if so, branch
-		movea.w	a1,a2
+		movea.w	a1,a2								; load current object to a2
 
 ; continue straight to HurtCharacter
 ; ---------------------------------------------------------------------------

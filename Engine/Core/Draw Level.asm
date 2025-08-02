@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 VInt_DrawLevel:
-		lea	(VDP_data_port).l,a6
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 
 .main
 		lea	(Plane_buffer).w,a0

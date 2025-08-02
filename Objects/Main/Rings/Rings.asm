@@ -385,7 +385,6 @@ ObjDat3_BouncingRing:		subObjMainData \
 					setBit(render_flags.static_mappings) | \
 					setBit(render_flags.on_screen), \
 				0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
-
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:

@@ -6,8 +6,8 @@
 
 VInt:
 		movem.l	d0-a6,-(sp)										; save all the registers to the stack
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6									; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5							; load VDP control address to a5
 
 		; check
 		tst.b	(V_int_routine).w
@@ -241,8 +241,8 @@ VInt_Level:
 		stopZ802
 		jsr	(Poll_Controllers).w
 		startZ802
-		tst.b	(Game_paused).w
-		bne.s	VInt_Level_NoNegativeFlash
+		tst.b	(Game_paused).w										; is the game paused?
+		bne.s	VInt_Level_NoNegativeFlash								; if yes, branch
 		tst.b	(Hyper_Sonic_flash_timer).w
 		beq.s	VInt_Level_NoFlash
 
@@ -376,7 +376,7 @@ HInt:
 		beq.w	HInt_Done
 		clr.b	(H_int_flag).w
 		movem.l	a0-a1,-(sp)
-		lea	(VDP_data_port).l,a1
+		lea	(VDP_data_port).l,a1									; load VDP data address to a1
 		move.w	#$8A00+223,VDP_control_port-VDP_data_port(a1)
 		lea	(Water_palette).w,a0
 		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_data_port(a1)
@@ -386,6 +386,8 @@ HInt:
 	endr
 
 		movem.l	(sp)+,a0-a1
+
+		; check
 		tst.b	(Do_Updates_in_H_int).w
 		beq.s	HInt_Done
 		clr.b	(Do_Updates_in_H_int).w

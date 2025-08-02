@@ -271,10 +271,10 @@ HurtCharacter_Directly:
 		bne.s	.return								; if yes, branch
 
 		; hurt character
-		movea.w	a0,a2
-		movea.w	a1,a0
-		bsr.w	HurtCharacter
-		movea.w	a2,a0
+		movea.w	a0,a2								; load current object to a2
+		movea.w	a1,a0								; load player to a0
+		bsr.w	HurtCharacter							; "
+		movea.w	a2,a0								; return current object to a0
 
 .return
 		rts
