@@ -21,9 +21,11 @@ Obj_FireShield:
 		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_FireShield),Art_Address(a0)			; used by PLCLoad_Shields
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#high_priority_bit,(Player_1+art_tile).w
-		beq.s	.nothighpriority
-		bset	#high_priority_bit,art_tile(a0)
+
+		; check priority
+		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
+		beq.s	.nothighpriority						; if not, branch
+		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
@@ -110,9 +112,11 @@ Obj_LightningShield:
 		move.l	#DPLC_LightningShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_LightningShield),Art_Address(a0)		; used by PLCLoad_Shields
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#high_priority_bit,(Player_1+art_tile).w
-		beq.s	.nothighpriority
-		bset	#high_priority_bit,art_tile(a0)
+
+		; check priority
+		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
+		beq.s	.nothighpriority						; if not, branch
+		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
@@ -286,9 +290,11 @@ Obj_BubbleShield:
 		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_BubbleShield),Art_Address(a0)			; used by PLCLoad_Shields
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#high_priority_bit,(Player_1+art_tile).w
-		beq.s	.nothighpriority
-		bset	#high_priority_bit,art_tile(a0)
+
+		; check priority
+		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
+		beq.s	.nothighpriority						; if not, branch
+		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
@@ -354,9 +360,11 @@ Obj_InstaShield:
 		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
 		move.l	#dmaSource(ArtUnc_InstaShield),Art_Address(a0)			; used by PLCLoad_Shields
 		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
-		btst	#high_priority_bit,(Player_1+art_tile).w
-		beq.s	.nothighpriority
-		bset	#high_priority_bit,art_tile(a0)
+
+		; check priority
+		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
+		beq.s	.nothighpriority						; if not, branch
+		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1

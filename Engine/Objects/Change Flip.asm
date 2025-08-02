@@ -71,7 +71,7 @@ Change_FlipXWithVelocity2:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipXUseParent:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 		bclr	#render_flags.x_flip,render_flags(a0)
 		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
@@ -83,7 +83,7 @@ Change_FlipXUseParent:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipYUseParent:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 		bclr	#render_flags.y_flip,render_flags(a0)
 		btst	#render_flags.y_flip,render_flags(a1)
 		beq.s	.notflipy
@@ -106,7 +106,7 @@ Change_VelocityWithFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Change_VelocityWithFlipXUseParent:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
 		neg.w	d0

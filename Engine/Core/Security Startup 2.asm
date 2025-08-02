@@ -60,9 +60,9 @@ Game_Program:
 
 .loop
 		moveq	#$7C,d0								; limit Game Mode value to $7C max
-		and.b	(Game_mode).w,d0						; load Game Mode
-		movea.l	Game_Modes(pc,d0.w),a0
-		jsr	(a0)
+		and.b	(Game_mode).w,d0						; get Game Mode to d0
+		movea.l	Game_Modes(pc,d0.w),a0						; load Game Mode to a0
+		jsr	(a0)								; jump to current Game Mode
 		bra.s	.loop
 
 ; ---------------------------------------------------------------------------

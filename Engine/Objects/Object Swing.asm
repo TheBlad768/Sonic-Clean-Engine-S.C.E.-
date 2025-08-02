@@ -119,7 +119,7 @@ Swing_UpAndDown_Slow:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_ChildPosition:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -137,7 +137,7 @@ Refresh_ChildPosition:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_X_Position:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -150,7 +150,7 @@ Refresh_Child_X_Position:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_Y_Position:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	y_pos(a1),d0
@@ -163,7 +163,7 @@ Refresh_Child_Y_Position:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_ChildPositionAdjusted:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -195,7 +195,7 @@ Refresh_ChildPositionAdjusted:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_X_PositionAdjusted:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -215,7 +215,7 @@ Refresh_Child_X_PositionAdjusted:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_Y_PositionAdjusted:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	y_pos(a1),d0
@@ -235,7 +235,7 @@ Refresh_Child_Y_PositionAdjusted:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_ChildPositionAdjusted_Animate:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -271,7 +271,7 @@ Refresh_ChildPositionAdjusted_Animate:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_X_PositionAdjusted_Animate:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -293,7 +293,7 @@ Refresh_Child_X_PositionAdjusted_Animate:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_Y_PositionAdjusted_Animate:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	y_pos(a1),d0
@@ -315,7 +315,7 @@ Refresh_Child_Y_PositionAdjusted_Animate:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_ChildPositionAdjusted_Animate2:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
 		move.w	x_pos(a1),d0
@@ -351,7 +351,7 @@ Refresh_ChildPositionAdjusted_Animate2:
 ; =============== S U B R O U T I N E =======================================
 
 sub_7675C:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
 		bclr	#render_flags.x_flip,render_flags(a0)

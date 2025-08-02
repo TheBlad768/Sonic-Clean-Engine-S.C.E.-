@@ -25,10 +25,12 @@ Obj_RobotnikHead3Init:
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#AniRaw_RobotnikHead,objoff_30(a0)
-		movea.w	parent3(a0),a1
-		btst	#high_priority_bit,art_tile(a1)
-		beq.s	.nothighpriority
-		bset	#high_priority_bit,art_tile(a0)
+
+		; check
+		movea.w	parent3(a0),a1							; a1=parent object
+		btst	#high_priority_bit,art_tile(a1)					; is parent object has high priority?
+		beq.s	.nothighpriority						; if not, branch
+		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
 		rts
@@ -38,11 +40,13 @@ Obj_RobotnikHead3Main:
 		cmpi.b	#PlayerID_Hurt,(Player_1+routine).w				; is Sonic falling back from getting hurt?
 		bhs.s	Obj_RobotnikHead3_Laugh						; if yes, branch
 		jsr	(Animate_Raw).w
-		movea.w	parent3(a0),a1
-		btst	#status.npc.defeated,status(a1)
-		bne.s	.defeated
-		btst	#status.npc.touch,status(a1)
-		beq.s	.return
+
+		; check
+		movea.w	parent3(a0),a1							; a1=parent object
+		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		bne.s	.defeated							; if yes, branch
+		btst	#status.npc.touch,status(a1)					; is player hit boss?
+		beq.s	.return								; if not, branch
 		move.b	#2,mapping_frame(a0)
 
 .return
@@ -58,9 +62,9 @@ Obj_RobotnikHeadEnd:
 ; ---------------------------------------------------------------------------
 
 Obj_RobotnikHead3End:
-		movea.w	parent3(a0),a1
-		btst	#status.npc.defeated,status(a1)
-		bne.s	Obj_RobotnikHeadEnd
+		movea.w	parent3(a0),a1							; a1=parent object
+		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		bne.s	Obj_RobotnikHeadEnd						; if yes, branch
 		lea	AniRaw_RobotnikHead(pc),a1
 		jmp	(Animate_RawNoSST).w
 ; ---------------------------------------------------------------------------
@@ -82,7 +86,7 @@ Obj_RobotnikHead4:
 		move.b	routine(a0),d0
 		move.w	RobotnikHead4_Index(pc,d0.w),d1
 		jsr	RobotnikHead4_Index(pc,d1.w)
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#5,objoff_38(a1)
 		bne.s	loc_67CFE
 		jmp	(Draw_Sprite).w
@@ -111,7 +115,7 @@ Obj_RobotnikShipFlame:
 		move.l	#RobotnikShipFlame_Main,address(a0)
 
 RobotnikShipFlame_Main:
-		movea.w	parent3(a0),a1
+		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#4,objoff_38(a1)
 		bne.s	loc_67CFE
 		jsr	(Refresh_ChildPositionAdjusted).w

@@ -152,7 +152,7 @@ Obj_TitleCard:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_TitleCardRedBanner:
-		movea.w	parent2(a0),a1
+		movea.w	parent2(a0),a1							; a1=parent object
 		move.w	objoff_32(a1),d0
 		beq.s	.loc_2D90A
 		tst.b	render_flags(a0)

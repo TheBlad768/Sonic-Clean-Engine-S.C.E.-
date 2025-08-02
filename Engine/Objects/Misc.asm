@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Misc subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -305,7 +308,7 @@ EnemyDefeated:
 ; =============== S U B R O U T I N E =======================================
 
 EnemyDefeat_Score:
-		bset	#status.npc.defeated,status(a0)
+		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		clr.b	collision_flags(a0)
 		moveq	#0,d0
 		move.w	(Chain_bonus_counter).w,d0
