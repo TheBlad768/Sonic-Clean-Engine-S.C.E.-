@@ -250,7 +250,7 @@
 		include "Data/Objects Data.asm"
 
 ; ---------------------------------------------------------------------------
-; Level Select screen subroutines
+; Level Select screen Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Screens/Level Select/Level Select.asm"
@@ -370,7 +370,7 @@
 		include "Sound/Engine/MegaPCM.asm"
 
 ; ---------------------------------------------------------------------------
-; Clone sound driver subroutines
+; Clone sound driver Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Sound/Engine/Sonic 2 Clone Driver v2.asm"
@@ -378,7 +378,7 @@
 	if MSUMode
 
 ; ---------------------------------------------------------------------------
-; MegaCD Driver
+; MegaCD Driver Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Sound/MSU/MSU.asm"
