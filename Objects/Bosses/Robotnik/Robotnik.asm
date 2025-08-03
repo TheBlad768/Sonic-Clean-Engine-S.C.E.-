@@ -55,7 +55,7 @@ Obj_RobotnikHead3Main:
 
 .defeated
 		move.b	#4,routine(a0)
-		move.b	#5,mapping_frame(a0)
+		move.b	#5,mapping_frame(a0)						; Robotnik frame
 
 Obj_RobotnikHeadEnd:
 		rts
@@ -86,6 +86,8 @@ Obj_RobotnikHead4:
 		move.b	routine(a0),d0
 		move.w	RobotnikHead4_Index(pc,d0.w),d1
 		jsr	RobotnikHead4_Index(pc,d1.w)
+
+		; check
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#5,objoff_38(a1)
 		bne.s	loc_67CFE

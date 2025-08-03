@@ -280,7 +280,7 @@ loc_1D850:
 		move.l	#Obj_MonitorContents.waitdel,address(a0)
 
 		; give powerup
-		movea.w	parent(a0),a1							; a1=character
+		lea	(Player_1).w,a1							; a1=character
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		add.w	d0,d0
