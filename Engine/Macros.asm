@@ -1079,11 +1079,11 @@ _KosPlus_LoopUnroll := 3
 
 _KosPlus_ReadBit macro
 	dbf	d2,.skip
-	moveq	#7,d2									; we have 8 new bits, but will use one up below.
-	move.b	(a0)+,d0								; get desc field low-byte.
+	moveq	#7,d2									; we have 8 new bits, but will use one up below
+	move.b	(a0)+,d0								; get desc field low-byte
 
 .skip
-	add.b	d0,d0									; get a bit from the bitstream.
+	add.b	d0,d0									; get a bit from the bitstream
     endm
 ; ---------------------------------------------------------------------------
 
