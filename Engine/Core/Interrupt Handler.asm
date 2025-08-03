@@ -36,7 +36,7 @@ VInt:
 		jsr	VInt_Table(pc,d0.w)
 
 VInt_Music:
-		SMPS_UpdateSoundDriver										; update SMPS	; warning: a5-a6 will be overwritten
+		SMPS_UpdateSoundDriver										; update SMPS ; warning: a5-a6 will be overwritten
 
 VInt_Done:
 		jsr	(Random_Number).w
