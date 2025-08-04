@@ -96,7 +96,7 @@ Obj_Spikebonker_Control:
 		movea.w	parent4(a0),a1							; spikeball
 		move.b	objoff_3C(a1),d0						; angle
 		bne.s	.loc_91B08
-		movea.w	parent3(a0),a2							; spikebonker (main)
+		movea.w	parent3(a0),a2							; a2=parent object (spikebonker)
 		btst	#3,objoff_38(a2)						; check attack flag
 		bne.s	.loc_91B14
 
@@ -153,7 +153,7 @@ Obj_Spikebonker_Control:
 
 .loc_91B56
 		move.l	#.main,address(a0)
-		movea.w	parent3(a0),a1							; spikebonker (main)
+		movea.w	parent3(a0),a1							; a1=parent object (spikebonker)
 		bclr	#3,objoff_38(a1)						; clear attack flag
 		rts
 
@@ -168,8 +168,8 @@ Obj_Spikebonker_SpikeBall:
 		; init
 		lea	ObjDat3_Spikebonker_SpikeBall(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		movea.w	parent3(a0),a1							; spikebonker (main)
-		move.w	a0,parent4(a1)							; spikeball
+		movea.w	parent3(a0),a1							; a1=parent object (spikebonker)
+		move.w	a0,parent4(a1)							; save spikeball address to parent4
 		move.l	#.main,address(a0)
 
 .main

@@ -331,7 +331,7 @@ Touch_Enemy:
 		bne.s	.bossnotdefeated
 	endif
 
-		bset	#status.npc.defeated,status(a1)
+		bset	#status.npc.defeated,status(a1)					; set "boss defeated" flag
 
 .bossnotdefeated
 		rts
@@ -350,7 +350,7 @@ Touch_EnemyNormal:
 		bclr	d0,(a2)								; turn off this slot (SetUp_ObjAttributesSlotted)
 
 .notDPLC
-		bset	#status.npc.defeated,status(a1)
+		bset	#status.npc.defeated,status(a1)					; set "boss defeated" flag
 		moveq	#0,d0
 		move.w	(Chain_bonus_counter).w,d0
 		addq.w	#2,(Chain_bonus_counter).w					; add 2 to item bonus counter
@@ -459,7 +459,7 @@ Touch_ChkHurt_Bounce_Projectile:
 Touch_Hurt:
 		tst.b	invulnerability_timer(a0)					; is the player invulnerable?
 		bne.s	Touch_ChkHurt_Return						; if so, branch
-		movea.w	a1,a2
+		movea.w	a1,a2								; load current object to a2
 
 ; continue straight to HurtCharacter
 ; ---------------------------------------------------------------------------
@@ -560,7 +560,7 @@ Kill_Character:
 		move.b	#AniIDSonAni_Death,anim(a0)
 		move.l	priority(a0),(Debug_saved_priority).w				; save priority and art_tile
 		clr.w	priority(a0)
-		bset	#high_priority_bit,art_tile(a0)
+		bset	#high_priority_bit,art_tile(a0)					; high priority
 		jsr	(Play_SFX).w
 
 .dontdie

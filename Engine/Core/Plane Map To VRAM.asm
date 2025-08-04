@@ -6,7 +6,7 @@
 
 Clear_DisplayData:
 		stopZ80
-		lea	(VDP_control_port).l,a5
+		lea	(VDP_control_port).l,a5						; load VDP control address to a5
 		dmaFillVRAM 0,0,$10000							; clear VRAM
 		startZ80
 		clearRAM Sprite_table_buffer, Sprite_table_buffer_end			; clear sprite table buffer
@@ -60,8 +60,8 @@ Plane_Map_To_VRAM:
 		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4				; row increment value
 
 .main
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .loop2
 		move.w	d1,d3
@@ -108,8 +108,8 @@ Plane_Map_To_Add_VRAM:
 		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4
 
 .main
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .loop2
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
@@ -138,8 +138,8 @@ Clear_Plane_Map:
 		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4				; row increment value
 
 .main
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .loop
 		move.w	d1,d3
@@ -198,8 +198,8 @@ Copy_Map_Line_To_VRAM:
 		add.w	d2,d0
 		swap	d0
 		moveq	#bytesToXcnt(320,8),d3
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 		disableInts
 		bsr.s	RAM_Map_Data_Copy
 		enableInts
@@ -220,8 +220,8 @@ RAM_Map_Data_Copy:
 ; =============== S U B R O U T I N E =======================================
 
 RAM_Map_Data_To_VDP:
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .main
 		moveq	#bytesToXcnt(320,8),d1
@@ -239,8 +239,8 @@ RAM_Map_Data_To_VDP:
 ; =============== S U B R O U T I N E =======================================
 
 ClearVRAMArea:
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .main
 		move.l	d0,VDP_control_port-VDP_control_port(a5)

@@ -8,19 +8,23 @@ Find_SonicObject:
 		lea	(Player_1).w,a1				; a1=character
 
 Find_OtherObject:
+
+		; check xpos
 		moveq	#0,d0					; d0 = 0 if other object is left of calling object, 2 if right of it
-		move.w	x_pos(a0),d2
-		sub.w	x_pos(a1),d2
-		bpl.s	.left
-		neg.w	d2
-		addq.w	#2,d0
+		move.w	x_pos(a0),d2				; load object x position to d2
+		sub.w	x_pos(a1),d2				; subtract player x position from d2
+		bpl.s	.left					; branch, if player is left of object
+		neg.w	d2					; absolute distance
+		addq.w	#2,d0					; set d0 = 2 (player is right)
 
 .left
+
+		; check ypos
 		moveq	#0,d1					; d1 = 0 if other object is above calling object, 2 if below it
-		move.w	y_pos(a0),d3
-		sub.w	y_pos(a1),d3
-		bpl.s	.up
-		neg.w	d3
+		move.w	y_pos(a0),d3				; load object y position to d3
+		sub.w	y_pos(a1),d3				; subtract player y position from d3
+		bpl.s	.up					; branch, if player is above object
+		neg.w	d3					; absolute distance
 		addq.w	#2,d1
 
 .up

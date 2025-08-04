@@ -1,3 +1,6 @@
+; ---------------------------------------------------------------------------
+; Misc subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -273,10 +276,10 @@ HurtCharacter_Directly:
 		bne.s	.return								; if yes, branch
 
 		; hurt character
-		movea.w	a0,a2
-		movea.w	a1,a0
-		bsr.w	HurtCharacter
-		movea.w	a2,a0
+		movea.w	a0,a2								; load current object to a2
+		movea.w	a1,a0								; load player to a0
+		bsr.w	HurtCharacter							; "
+		movea.w	a2,a0								; return current object to a0
 
 .return
 		rts
@@ -307,7 +310,7 @@ EnemyDefeated:
 ; =============== S U B R O U T I N E =======================================
 
 EnemyDefeat_Score:
-		bset	#status.npc.defeated,status(a0)
+		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		clr.b	collision_flags(a0)
 		moveq	#0,d0
 		move.w	(Chain_bonus_counter).w,d0

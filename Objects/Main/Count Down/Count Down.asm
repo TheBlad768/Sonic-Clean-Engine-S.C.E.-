@@ -83,7 +83,7 @@ AirCountdown_ReduceAir:
 		st	(Deform_lock).w
 
 .notp1
-		bset	#high_priority_bit,art_tile(a2)
+		bset	#high_priority_bit,art_tile(a2)					; high priority
 
 locret_1857A:
 		rts

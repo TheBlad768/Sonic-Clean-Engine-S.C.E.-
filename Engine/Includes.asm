@@ -250,7 +250,7 @@
 		include "Data/Objects Data.asm"
 
 ; ---------------------------------------------------------------------------
-; Level Select screen subroutines
+; Level Select screen Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Screens/Level Select/Level Select.asm"

@@ -28,8 +28,8 @@ HUD_AddToScore:
 ; =============== S U B R O U T I N E =======================================
 
 UpdateHUD:
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6							; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5					; load VDP control address to a5
 
 	if GameDebug
 		tst.w	(Debug_placement_mode).w						; is debug mode on?
@@ -110,7 +110,7 @@ UpdateHUD_TimeOver:
 		lea	(Player_1).w,a0								; a0=character
 		cmpi.b	#PlayerID_Death,routine(a0)						; has player just died?
 		bhs.s	.finish									; if yes, branch
-		movea.w	a0,a2
+		movea.w	a0,a2									; load player to a0
 		bsr.w	Kill_Character
 
 .finish
@@ -164,8 +164,8 @@ HUDDebug:
 		bsr.w	DrawTwoDigitNumber
 
 .chkbonus
-		tst.b	(Game_paused).w
-		bne.s	.return
+		tst.b	(Game_paused).w								; is the game paused?
+		bne.s	.return									; if yes, branch
 		lea	(Timer+4).w,a1
 		addq.b	#1,-(a1)								; increment 1/60s counter
 		cmpi.b	#60,(a1)								; check if passed 60
@@ -204,8 +204,8 @@ HUD_DrawZeroRings:
 ; =============== S U B R O U T I N E =======================================
 
 HUD_DrawInitial:
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6							; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5					; load VDP control address to a5
 		locVRAM	tiles_to_bytes(ArtTile_HUD+$18),VDP_control_port-VDP_control_port(a5)
 		lea	HUD_Initial_Parts(pc),a2
 		moveq	#(HUD_Initial_Parts_end-HUD_Initial_Parts)-1,d2

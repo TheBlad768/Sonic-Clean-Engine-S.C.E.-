@@ -68,7 +68,7 @@ Sprite_CheckDelete:
 		bclr	#7,(a2)
 
 .delete
-		bset	#status.npc.defeated,status(a0)
+		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		move.l	#Delete_Current_Sprite,address(a0)
 		rts
 
@@ -100,7 +100,7 @@ Sprite_CheckDelete2:
 		bclr	#7,(a2)
 
 .delete
-		bset	#4,objoff_38(a0)
+		bset	#4,objoff_38(a0)						; set "delete child object" flag
 		move.l	#Delete_Current_Sprite,address(a0)
 
 .return
@@ -162,9 +162,9 @@ Sprite_ChildCheckDeleteXY:
 
 Sprite_ChildCheckDeleteY:
 		out_of_yrange.w	Go_Delete_Sprite
-		movea.w	parent3(a0),a1
-		btst	#status.npc.defeated,status(a1)
-		bne.w	Go_Delete_Sprite
+		movea.w	parent3(a0),a1							; a1=parent object
+		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -174,9 +174,9 @@ Sprite_ChildCheckDeleteXY_NoDraw:
 
 Sprite_ChildCheckDeleteY_NoDraw:
 		out_of_yrange.w	Go_Delete_Sprite
-		movea.w	parent3(a0),a1
-		btst	#status.npc.defeated,status(a1)
-		bne.w	Go_Delete_Sprite
+		movea.w	parent3(a0),a1							; a1=parent object
+		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		bne.w	Go_Delete_Sprite						; if yes, branch
 
 .return
 		rts
@@ -209,9 +209,9 @@ Sprite_ChildCheckDeleteTouchXY:
 
 Sprite_ChildCheckDeleteTouchY:
 		out_of_yrange.w	Go_Delete_Sprite
-		movea.w	parent3(a0),a1
-		btst	#status.npc.defeated,status(a1)
-		bne.w	Go_Delete_Sprite
+		movea.w	parent3(a0),a1							; a1=parent object
+		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.w	Draw_And_Touch_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -229,7 +229,7 @@ Go_Delete_SpriteSlotted:
 		bclr	#7,(a2)
 
 Go_Delete_SpriteSlotted2:
-		bset	#status.npc.defeated,status(a0)
+		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 
 Go_Delete_SpriteSlotted3:
 		move.l	#Delete_Current_Sprite,address(a0)

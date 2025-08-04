@@ -50,6 +50,8 @@ Obj_Invisible_HurtBlock:
 		addq.w	#1,d1
 		lsl.w	#3,d1
 		move.b	d1,height_pixels(a0)
+
+		; check
 		btst	#status.npc.x_flip,status(a0)					; is it flipx?
 		beq.s	loc_1F448							; if not, branch
 		move.l	#loc_1F4C4,address(a0)						; set side hurt

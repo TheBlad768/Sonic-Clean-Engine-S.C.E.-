@@ -23,16 +23,16 @@ Delete_Referenced_Sprite:
 ; =============== S U B R O U T I N E =======================================
 
 Go_Delete_Sprite_3:
-		bset	#4,objoff_38(a0)
+		bset	#4,objoff_38(a0)						; set "delete child object" flag
 
 Go_Delete_Sprite:
 		move.l	#Delete_Current_Sprite,address(a0)
-		bset	#status.npc.defeated,status(a0)
+		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Go_Delete_Sprite_2:
 		move.l	#Delete_Current_Sprite,address(a0)
-		bset	#4,objoff_38(a0)
+		bset	#4,objoff_38(a0)						; set "delete child object" flag
 		rts

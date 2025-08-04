@@ -11,8 +11,8 @@
 
 Load_PlaneText:
 		disableIntsSave
-		lea	(VDP_data_port).l,a6
-		lea	VDP_control_port-VDP_data_port(a6),a5
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .skipvdp
 		move.l	#vdpCommDelta(planeLoc(64,0,1)),d2
