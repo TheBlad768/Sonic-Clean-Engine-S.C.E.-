@@ -364,7 +364,7 @@
 		include "Data/Uncompressed Data.asm"
 
 ; ---------------------------------------------------------------------------
-; Flamewing sound driver subroutines
+; Flamewing sound driver Subroutine
 ; ---------------------------------------------------------------------------
 
 		include "Sound/Flamedriver.asm"
