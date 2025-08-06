@@ -119,7 +119,7 @@ theld macro press,player
     endm
 
 ; ---------------------------------------------------------------------------
-; set a VRAM address via the VDP control port.
+; set a VRAM address via the VDP control port
 ; input: 16-bit VRAM address, control port (default is (VDP_control_port).l)
 ; ---------------------------------------------------------------------------
 
