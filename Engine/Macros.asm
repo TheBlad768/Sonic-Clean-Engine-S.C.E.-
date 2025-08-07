@@ -127,6 +127,15 @@ dmaFillVRAM macro byte,addr,length
     endm
 
 ; ---------------------------------------------------------------------------
+; set a VRAM address via the VDP control port
+; input: 16-bit VRAM address, control port (default is (VDP_control_port).l)
+; ---------------------------------------------------------------------------
+
+locVRAM macro loc,controlport=(VDP_control_port).l
+	move.l	#vdpCalc(loc),controlport
+    endm
+
+; ---------------------------------------------------------------------------
 ; Macro to check button presses
 ; Arguments:
 ; 1 - buttons to check
@@ -154,15 +163,6 @@ theld macro press,player
 		move.b	(Ctrl_1_held).w,d0
 	endif
 	andi.b	#(press),d0
-    endm
-
-; ---------------------------------------------------------------------------
-; set a VRAM address via the VDP control port
-; input: 16-bit VRAM address, control port (default is (VDP_control_port).l)
-; ---------------------------------------------------------------------------
-
-locVRAM macro loc,controlport=(VDP_control_port).l
-	move.l	#vdpCalc(loc),controlport
     endm
 
 ; ---------------------------------------------------------------------------
