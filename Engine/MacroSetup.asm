@@ -1,7 +1,11 @@
+; ===========================================================================
+; Macros setup
+; ===========================================================================
+
 	padding off		; we don't want AS padding out dc.b instructions
 	listing purecode	; want listing file, but only the final code in expanded macros
 	supmode on		; we don't need warnings about privileged instructions
-	page	0		; don't want form feeds
+	page 0			; don't want form feeds
 
 notZ80 function cpu,(cpu<>128)&&(cpu<>32988)
 
@@ -84,7 +88,7 @@ evenRAM macro
 ; lets you easily check what address a location in this disassembly assembles to
 trace macro optionalMessageWithoutQuotes
 	if MOMPASS=1
-		if ("ALLARGS"<>"")
+		ifnb ALLARGS
 			message "#\{tracenum/1.0}: line=\{MOMLINE/1.0} PC=$\{(*)&$FFFFFFFF} msg=ALLARGS"
 		else
 			message "#\{tracenum/1.0}: line=\{MOMLINE/1.0} PC=$\{(*)&$FFFFFFFF}"
@@ -144,6 +148,6 @@ incbin macro
     endm
 
 ; dcb from asm68k compiler
-dcb macro fill, byte
+dcb macro fill,byte
 	dc.ATTRIBUTE [fill]byte
     endm

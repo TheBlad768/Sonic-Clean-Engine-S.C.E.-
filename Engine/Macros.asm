@@ -38,17 +38,55 @@ bytes_word_to_long function byte1,byte2,word,((((byte1)<<24)&$FF000000)|(((byte2
 
 ; function to convert four separate bytes into a long
 bytes_to_long function byte1,byte2,byte3,byte4,(((byte1)<<24)&$FF000000)|(((byte2)<<16)&$FF0000)|(((byte3)<<8)&$FF00)|((byte4)&$FF)
-; ---------------------------------------------------------------------------
 
-; values for the type argument
-VRAM = %100001
-CRAM = %101011
-VSRAM = %100101
+; calculates initial loop counter value for a dbf loop
+; that writes n bytes total at x bytes per iteration
+bytesToXcnt function n,x,n/x-1
 
-; values for the rwd argument
-READ = %001100
-WRITE = %000111
-DMA = %100111
+; calculates initial loop counter value for a dbf loop
+; that writes n bytes total at 4 bytes per iteration
+bytesToLcnt function n,bytesToXcnt(n,4)
+
+; calculates initial loop counter value for a dbf loop
+; that writes n bytes total at 2 bytes per iteration
+bytesToWcnt function n,bytesToXcnt(n,2)
+
+; calculates initial loop counter value for a normal loop
+; that writes n bytes total at x bytes per iteration
+bytesTo2Xcnt function n,x,n/x
+
+; calculates initial loop counter value for a normal loop
+; that writes n bytes total at 4 bytes per iteration
+bytesTo2Lcnt function n,bytesTo2Xcnt(n,4)
+
+; calculates initial loop counter value for a normal loop
+; that writes n bytes total at 2 bytes per iteration
+bytesTo2Wcnt function n,bytesTo2Xcnt(n,2)
+
+; macros to convert from tile index to art tiles, block mapping or VRAM address
+sprite_priority function x,((x&7)<<7)
+make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
+make_block_tile function addr,flx,fly,pal,pri,((pri&1)<<15)|((pal&3)<<13)|((fly&1)<<12)|((flx&1)<<11)|(addr&tile_mask)
+make_block_tile_pair function addr,flx,fly,pal,pri,((make_block_tile(addr,flx,fly,pal,pri)<<16)|make_block_tile(addr,flx,fly,pal,pri))
+tiles_to_bytes function addr,((addr&$7FF)<<5)
+
+; function to calculate the location of a tile in plane mappings
+planeLoc function width,col,line,(((width * line) + col) * 2)
+
+; function to calculate the location of a tile in plane mappings with a width of 40 cells
+planeLocH32 function col,line,(($40 * line) + (2 * col))
+
+; function to calculate the location of a tile in plane mappings with a width of 40 cells
+planeLocH28 function col,line,(($50 * line) + (2 * col))
+
+; function to calculate the location of a tile in plane mappings with a width of 64 cells
+planeLocH40 function col,line,(($80 * line) + (2 * col))
+
+; function to calculate the location of a tile in plane mappings with a width of 128 cells
+planeLocH80 function col,line,(($100 * line) + (2 * col))
+
+; function to make a little-endian 16-bit pointer for the Z80 sound driver
+z80_ptr function x,(x)<<8&$FF00|(x)>>8&$7F|$80
 ; ---------------------------------------------------------------------------
 
 ; tells the VDP to copy a region of 68k memory to VRAM or CRAM or VSRAM
@@ -124,7 +162,7 @@ theld macro press,player
 ; ---------------------------------------------------------------------------
 
 locVRAM macro loc,controlport=(VDP_control_port).l
-	move.l	#$40000000|vdpCommDelta(loc),controlport
+	move.l	#vdpCalc(loc),controlport
     endm
 
 ; ---------------------------------------------------------------------------
@@ -254,31 +292,6 @@ titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
 	dc.b frame,(width/2)								; mapping frame, width
 	dc.w exit									; place in exit queue
     endm
-; ---------------------------------------------------------------------------
-
-; calculates initial loop counter value for a dbf loop
-; that writes n bytes total at x bytes per iteration
-bytesToXcnt function n,x,n/x-1
-
-; calculates initial loop counter value for a dbf loop
-; that writes n bytes total at 4 bytes per iteration
-bytesToLcnt function n,bytesToXcnt(n,4)
-
-; calculates initial loop counter value for a dbf loop
-; that writes n bytes total at 2 bytes per iteration
-bytesToWcnt function n,bytesToXcnt(n,2)
-
-; calculates initial loop counter value for a normal loop
-; that writes n bytes total at x bytes per iteration
-bytesTo2Xcnt function n,x,n/x
-
-; calculates initial loop counter value for a normal loop
-; that writes n bytes total at 4 bytes per iteration
-bytesTo2Lcnt function n,bytesTo2Xcnt(n,4)
-
-; calculates initial loop counter value for a normal loop
-; that writes n bytes total at 2 bytes per iteration
-bytesTo2Wcnt function n,bytesTo2Xcnt(n,2)
 ; ---------------------------------------------------------------------------
 
 ; fills a region of 68k RAM with 0
@@ -739,12 +752,6 @@ RingLayoutBoundary macro
     endm
 
 ; ---------------------------------------------------------------------------
-; function to make a little-endian 16-bit pointer for the Z80 sound driver
-; ---------------------------------------------------------------------------
-
-z80_ptr function x,(x)<<8&$FF00|(x)>>8&$7F|$80
-
-; ---------------------------------------------------------------------------
 ; macro to declare a little-endian 16-bit pointer for the Z80 sound driver
 ; ---------------------------------------------------------------------------
 
@@ -1046,29 +1053,6 @@ jmi macro loc
 
 .nojump
     endm
-; ---------------------------------------------------------------------------
-
-; macros to convert from tile index to art tiles, block mapping or VRAM address
-sprite_priority function x,((x&7)<<7)
-make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
-make_block_tile function addr,flx,fly,pal,pri,((pri&1)<<15)|((pal&3)<<13)|((fly&1)<<12)|((flx&1)<<11)|(addr&tile_mask)
-make_block_tile_pair function addr,flx,fly,pal,pri,((make_block_tile(addr,flx,fly,pal,pri)<<16)|make_block_tile(addr,flx,fly,pal,pri))
-tiles_to_bytes function addr,((addr&$7FF)<<5)
-
-; function to calculate the location of a tile in plane mappings
-planeLoc function width,col,line,(((width * line) + col) * 2)
-
-; function to calculate the location of a tile in plane mappings with a width of 40 cells
-planeLocH32 function col,line,(($40 * line) + (2 * col))
-
-; function to calculate the location of a tile in plane mappings with a width of 40 cells
-planeLocH28 function col,line,(($50 * line) + (2 * col))
-
-; function to calculate the location of a tile in plane mappings with a width of 64 cells
-planeLocH40 function col,line,(($80 * line) + (2 * col))
-
-; function to calculate the location of a tile in plane mappings with a width of 128 cells
-planeLocH80 function col,line,(($100 * line) + (2 * col))
 ; ---------------------------------------------------------------------------
 
 _KosPlus_LoopUnroll := 3
