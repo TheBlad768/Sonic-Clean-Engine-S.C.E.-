@@ -3,9 +3,9 @@
 ; ---------------------------------------------------------------------------
 
 ; Elemental Shield DPLC variables
-LastLoadedDPLC				= objoff_34
-Art_Address				= objoff_38
-DPLC_Address				= objoff_3C
+LastLoadedDPLC				= objoff_34	; .b
+Art_Address				= objoff_38	; .l
+DPLC_Address				= objoff_3C	; .w
 
 ; ---------------------------------------------------------------------------
 ; Fire Shield
