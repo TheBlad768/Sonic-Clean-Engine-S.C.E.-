@@ -307,14 +307,15 @@ bitUp:								equ 0
  nextenum	objoff_31,objoff_32,objoff_33,objoff_34,objoff_35,objoff_36,objoff_37
  nextenum	objoff_38,objoff_39,objoff_3A,objoff_3B,objoff_3C,objoff_3D,objoff_3E
  nextenum	objoff_3F,objoff_40,objoff_41,objoff_42,objoff_43,objoff_44,objoff_45
- nextenum	objoff_46,objoff_47,objoff_48,objoff_49
+ nextenum	objoff_46,objoff_47,objoff_48,objoff_49,objoff_4A,objoff_4B,objoff_4C
+ nextenum	objoff_4D,objoff_4E,objoff_4F
 
 ; ---------------------------------------------------------------------------
 ; property of all objects
 ; ---------------------------------------------------------------------------
 
 object_size_bits =						6
-object_size =							$4A						; the size of an object's status table entry
+object_size =							$50						; the size of an object's status table entry
 next_object =							object_size
 
 ; ---------------------------------------------------------------------------
@@ -377,7 +378,7 @@ child_dy =							objoff_43					; byte ; Y offset of child relative to parent
 parent4 =							objoff_44					; word
 parent3 =							objoff_46					; word ; parent of child objects
 parent2 =							objoff_48					; word ; several objects use this instead
-respawn_addr =							objoff_48					; word ; the address of this object's entry in the respawn table
+respawn_addr =							objoff_4E					; word ; the address of this object's entry in the respawn table
 
 ; ---------------------------------------------------------------------------
 ; Conventions specific to Sonic/Tails/Knuckles
@@ -487,6 +488,9 @@ sub8_mapframe							= objoff_41
 sub9_x_pos							= objoff_42
 sub9_y_pos							= objoff_44
 sub9_mapframe							= objoff_47
+subA_x_pos							= objoff_48
+subA_y_pos							= objoff_4A
+subA_mapframe							= objoff_4D
 
 next_subspr							= 6						; size
 
