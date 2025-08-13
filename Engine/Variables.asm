@@ -8,7 +8,7 @@ RAM_start:						= *
 Chunk_table:						ds.b $100*$80					; chunk (128x128) definitions, $80 bytes per definition
 Chunk_table_end						= *
 
-; object variables
+; object variables (110 objects)
 Object_RAM:						= *
 Player_1:						ds.b object_size				; main character in 1 player mode
 							ds.b object_size				; Tails in a Sonic and Tails game
