@@ -320,8 +320,16 @@ LevResults_GetDecimalScore:
 .found
 		lea	(DecimalScoreRAM2).w,a2
 
-		addi.w	#0,d0								; clear carry bit for extend
-;		move	#0,ccr								; "
+		; we need to clear the extend bit for abcd
+		; otherwise, we will get incorrect results
+
+		; clear x-bit of the ccr (fast)
+		addi.w	#0,d0
+
+		; clear x-bit of the ccr (slow)
+;		andi	#~( \
+;			setBit(ccr_x_bit) \
+;		),ccr
 
 	rept 3	; 3 bytes
 		abcd	-(a1),-(a2)

@@ -127,12 +127,12 @@ popr macro op
     endm
 
 ; nop rept
-nops macro fill
+nop macro fill
       if ("fill"="0") || ("fill"="")
-		nop
+		!nop
       else
 	rept fill
-		nop
+		!nop
 	endr
       endif
     endm

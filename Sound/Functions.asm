@@ -32,7 +32,7 @@ SndDrvInit:
 
 .notpal
 		SMPS_resetZ80a						; reset Z80
-		nops 4							; wait 16 cycles
+		nop	4						; wait 16 cycles
 		SMPS_resetZ80						; release reset
 		SMPS_startZ80
 		rts
