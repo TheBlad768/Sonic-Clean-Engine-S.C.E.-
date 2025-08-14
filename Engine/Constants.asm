@@ -256,7 +256,7 @@ button_start_mask:						equ setBit(button_start)			; $80
 ; ---------------------------------------------------------------------------
 
 btnABCS:							equ %11110000					; A, B, C or Start ($F0)
-btnStart:							equ %10000000					; Start button	($80)
+btnStart:							equ %10000000					; Start button ($80)
 btnABC:								equ %01110000					; A, B or C ($70)
 btnAC:								equ %01100000					; A or C ($60)
 btnAB:								equ %01010000					; A or B ($50)
@@ -278,7 +278,7 @@ btnUL:								equ %00000101					; Up or Left ($05)
 btnL:								equ %00000100					; Left ($04)
 btnUD:								equ %00000011					; Up or Down ($03)
 btnDn:								equ %00000010					; Down ($02)
-btnUp:								equ %00000001					; Up	($01)
+btnUp:								equ %00000001					; Up ($01)
 
 ; ---------------------------------------------------------------------------
 ; Joypad bits
@@ -292,6 +292,16 @@ bitR:								equ 3
 bitL:								equ 2
 bitDn:								equ 1
 bitUp:								equ 0
+
+; ---------------------------------------------------------------------------
+; Condition Code Register (CCR) bits
+; ---------------------------------------------------------------------------
+
+ccr_x_bit							= 4						; extend ($10)
+ccr_n_bit							= 3						; negative ($08)
+ccr_z_bit							= 2						; zero ($04)
+ccr_v_bit							= 1						; overflow ($02)
+ccr_c_bit							= 0						; carry ($01)
 
 ; ---------------------------------------------------------------------------
 ; Unknown or inconsistently used offsets that are not applicable to Sonic
