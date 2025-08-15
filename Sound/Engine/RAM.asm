@@ -218,3 +218,7 @@ SMPS_RAM ENDSTRUCT
     if MOMPASS=1
 	message "Sonic 2 Clone Driver v2 RAM size is $\{SMPS_RAM.len} bytes!"
     endif
+
+    if SMPS_RAM.len>(Snd_driver_RAM_end-Snd_driver_RAM)
+	fatal "Sonic 2 Clone Driver v2 RAM overflow!"
+    endif

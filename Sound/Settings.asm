@@ -78,7 +78,7 @@ Play_Sample			= SMPS_PlayDACSample
 mus_FadeOut			= mus_Fade
 mus_StopSFX			= sfx_Stop
 
-Clone_Driver_RAM		= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
+Clone_Driver_RAM		= (-(Snd_driver_RAM&$80000000)<<1)|Snd_driver_RAM
 
 ; ---SOUND ID BOUNDARIES---
 MusID__First			= mus__First
