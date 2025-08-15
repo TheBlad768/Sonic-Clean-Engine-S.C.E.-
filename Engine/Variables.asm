@@ -141,8 +141,8 @@ Plane_buffer:						ds.w $240					; used by level drawing routines
 Plane_buffer_end
 
 ; sound variables
-Snd_driver_RAM:					ds.b $400					; start of RAM for the sound driver data
-Snd_driver_RAM_end						= *
+Snd_driver_RAM:						ds.b $400					; start of RAM for the sound driver data
+Snd_driver_RAM_end					= *
 
 ; misc variables
 Game_mode:						ds.b 1
