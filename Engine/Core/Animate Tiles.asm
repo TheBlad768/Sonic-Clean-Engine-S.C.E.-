@@ -15,6 +15,10 @@ Animate_Tiles:
 		movea.l	(a0)+,a1
 		movea.l	(a0),a2								; get PLC scripts
 		jmp	(a1)
+; ---------------------------------------------------------------------------
+
+AnimateTiles_NULL:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -23,11 +27,7 @@ AnimateTiles_DoAniPLC:
 
 AnimateTiles_DoAniPLC_GetNumber:
 		move.w	(a2)+,d6							; get number of scripts in list
-		bpl.s	AnimateTiles_DoAniPLC_Part2					; if there are any, continue
-
-AnimateTiles_NULL:
-		rts
-; ---------------------------------------------------------------------------
+		bmi.s	AnimateTiles_NULL					; if no scripts, return
 
 AnimateTiles_DoAniPLC_Part2:
 

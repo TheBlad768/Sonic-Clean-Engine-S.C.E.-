@@ -23,6 +23,10 @@ Animate_Palette:
 		movea.l	(a0)+,a1
 		movea.l	(a0),a2								; get palette scripts
 		jmp	(a1)
+; ---------------------------------------------------------------------------
+
+AnimatePalette_NULL:
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -31,11 +35,7 @@ AnimatePalette_DoAniPal:
 
 AnimatePalette_DoAniPal_GetNumber:
 		move.w	(a2)+,d6							; get number of scripts in list
-		bpl.s	AnimatePalette_DoAniPal_Part2					; if there are any, continue
-
-AnimatePalette_NULL:
-		rts
-; ---------------------------------------------------------------------------
+		bmi.s	AnimatePalette_NULL					; if no scripts, return
 
 AnimatePalette_DoAniPal_Part2:
 
