@@ -35,7 +35,7 @@ AnimatePalette_DoAniPal:
 
 AnimatePalette_DoAniPal_GetNumber:
 		move.w	(a2)+,d6							; get number of scripts in list
-		bmi.s	AnimatePalette_NULL					; if no scripts, return
+		bmi.s	AnimatePalette_NULL						; if no scripts, return
 
 AnimatePalette_DoAniPal_Part2:
 
