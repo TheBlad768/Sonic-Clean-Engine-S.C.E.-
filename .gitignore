@@ -12,8 +12,8 @@ S3CE.lst
 S3CE.debug.lst
 
 # Generated RAM assembler files
-Engine/_RAM.asm
-Engine/_RAM.debug.asm
+Engine/_RAM.lst
+Engine/_RAM.debug.lst
 
 # Personal to-do notes
 to-do.txt
