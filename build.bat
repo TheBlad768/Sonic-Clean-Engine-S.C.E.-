@@ -72,9 +72,9 @@ IF ERRORLEVEL 1 (
     echo Failed to generate debug information for S3CE.gen
     pause & exit /b 1
 )
-"%AS_MSGPATH%\convsym.exe" S3CE.lst "Engine\_RAM.asm" -in as_lst -out asm -range FF0000 FFFFFF
+"%AS_MSGPATH%\convsym.exe" S3CE.lst "Engine\_RAM.lst" -in as_lst -out asm -range FF0000 FFFFFF
 IF ERRORLEVEL 1 (
-    echo Failed to generate debug information for _RAM.asm
+    echo Failed to generate RAM listing for _RAM.lst
     pause & exit /b 1
 )
 

@@ -28,7 +28,7 @@ rm -f S3CE.h
 
 # Generate debug information
 ${AS_MSGPATH}/convsym S3CE.lst S3CE.gen -input as_lst -range 0 FFFFFF -exclude -filter \"z[A-Z].+\" -a
-${AS_MSGPATH}/convsym S3CE.lst "Engine/_RAM.asm" -in as_lst -out asm -range FF0000 FFFFFF
+${AS_MSGPATH}/convsym S3CE.lst "Engine/_RAM.lst" -in as_lst -out asm -range FF0000 FFFFFF
 
 # Make ROM padding (commented out as in the original)
 #${AS_MSGPATH}/rompad S3CE.gen 255 0
