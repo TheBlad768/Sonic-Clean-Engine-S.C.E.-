@@ -42,11 +42,21 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .tbonus	dc.w 5000, 5000, 1000, 500, 400, 300, 100, 10					; time bonus
+.tbonus_end
 ; ---------------------------------------------------------------------------
 
 .nottb
-		divu.w	#30,d0								; divide time by 30
-		moveq	#7,d1
+
+		; using magic numbers is very dangerous
+		; if you change the maximum timer, you will most likely have to revert
+		; to the standard division by 30
+
+		; divide time by 30
+		mulu.w	#ceil(65536,30),d0						; here we will use 'magic number'
+		swap	d0								; get the result
+
+		; check
+		moveq	#((.tbonus_end-.tbonus)/2)-1,d1
 		cmp.w	d1,d0								; if result is above 7, make it 7
 		blo.s	.gettb
 		move.w	d1,d0
