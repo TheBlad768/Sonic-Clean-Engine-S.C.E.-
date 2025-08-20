@@ -83,6 +83,11 @@ Load_Rings_Main:
 		bls.s	.prev
 		move.l	a1,(Ring_start_addr_ROM).w
 		move.w	a2,(Ring_start_addr_RAM).w
+
+	ifdef __DEBUG__	; RaiseError is only available in DEBUG builds
+		jsr	(Load_Rings_RaiseError).l							; raise an error if there is ring status table overflow
+	endif
+
 		movea.l	(Ring_end_addr_ROM).w,a2
 		addi.w	#320+16,d4									; advance by a screen
 		bra.s	.check3

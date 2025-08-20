@@ -169,7 +169,7 @@ VInt_Fade:
 Do_ControllerPal:
 		stopZ80
 		stopZ802
-		jsr	(Poll_Controllers).w
+		bsr.w	Poll_Controllers
 		startZ802
 		tst.b	(Water_full_screen_flag).w
 		bne.s	.water
@@ -195,7 +195,7 @@ Do_ControllerPal:
 VInt_LevelSelect:
 		stopZ80
 		stopZ802
-		jsr	(Poll_Controllers).w
+		bsr.w	Poll_Controllers
 		startZ802
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
@@ -224,7 +224,7 @@ VInt_Sega:
 		bne.s	.skip											; run the following code once every 16 frames
 		stopZ80
 		stopZ802
-		jsr	(Poll_Controllers).w
+		bsr.w	Poll_Controllers
 		startZ802
 		startZ80
 
@@ -247,7 +247,7 @@ VInt_Sega:
 VInt_Level:
 		stopZ80
 		stopZ802
-		jsr	(Poll_Controllers).w
+		bsr.w	Poll_Controllers
 		startZ802
 		tst.b	(Game_paused).w										; is the game paused?
 		bne.s	VInt_Level_NoNegativeFlash								; if yes, branch

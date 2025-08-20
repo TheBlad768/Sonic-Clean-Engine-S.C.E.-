@@ -107,6 +107,8 @@ roundFloatToInteger function float,INT(float+0.5)
 min function a,b,b!((a!b)&(-(a<b)))
 max function a,b,a!((a!b)&(-(a<b)))
 chkop function op,ref,(substr(lowstring(op),0,strlen(ref))<>ref)
+floor function a,b,a/b
+ceil function a,b,(a+b-1)/b
 
 ; push registers to the stack
 pushr macro op

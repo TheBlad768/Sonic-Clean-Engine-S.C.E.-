@@ -58,13 +58,9 @@ Render_Sprites_LevelLoop:
 Render_Sprites_ObjLoop:
 		movea.w	(a4)+,a0							; a0=object
 
-		; debug
-		assert.l	address(a0),ne						; raise an error if there is no object address here
-		assert.l	mappings(a0),ne						; raise an error if there is no mappings address here
-
-		; check
-		tst.l	address(a0)							; is this object slot occupied?
-		beq.w	Render_Sprites_NextObj						; if not, check next one
+	ifdef __DEBUG__	; assert is only available in DEBUG builds
+		jsr	(Render_Sprites_Assert).l						; raise an error if there is no object or mappings address here
+	endif
 
 		; clear on-screen flag
 		andi.b	#signextendB( \

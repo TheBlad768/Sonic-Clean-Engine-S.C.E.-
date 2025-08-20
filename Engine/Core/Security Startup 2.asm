@@ -55,7 +55,7 @@ Game_Program:
 		jsr	(Init_DMA_Queue).w
 		jsr	(Init_VDP).w
 		jsr	(SoundDriverLoad).w
-		jsr	(Init_Controllers).w
+		bsr.s	Init_Controllers
 		move.b	#GameModeID_LevelSelectScreen,(Game_mode).w			; set screen mode to Level Select (SCE)
 
 .loop
