@@ -1592,33 +1592,33 @@ levselstr macro str
 	; codepage for level select
 	save
 	codepage LEVELSCREEN
-	CHARSET ' ', 43
-	CHARSET '0','9', 1
-	CHARSET 'A','Z', 17
-	CHARSET 'a','z', 17
-	CHARSET '*', 11
-	CHARSET '@', 12
-	CHARSET ':', 13
-	CHARSET '-', 14
-	CHARSET '/', 15
-	CHARSET '.', 16
+	charset ' ', 43
+	charset '0','9', 1
+	charset 'A','Z', 17
+	charset 'a','z', 17
+	charset '*', 11
+	charset '@', 12
+	charset ':', 13
+	charset '-', 14
+	charset '/', 15
+	charset '.', 16
 	restore
 
 	; codepage for HUD
 	save
 	codepage HUD
-	CHARSET ' ',$FF
-	CHARSET '0',0
-	CHARSET '1',2
-	CHARSET '2',4
-	CHARSET '3',6
-	CHARSET '4',8
-	CHARSET '5',$A
-	CHARSET '6',$C
-	CHARSET '7',$E
-	CHARSET '8',$10
-	CHARSET '9',$12
-	CHARSET '*',$14
-	CHARSET ':',$16
-	CHARSET 'E',$18
+	charset ' ',$FF
+	charset '0',0
+	charset '1',2
+	charset '2',4
+	charset '3',6
+	charset '4',8
+	charset '5',$A
+	charset '6',$C
+	charset '7',$E
+	charset '8',$10
+	charset '9',$12
+	charset '*',$14
+	charset ':',$16
+	charset 'E',$18
 	restore
