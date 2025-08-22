@@ -23,7 +23,7 @@ Create_New_Sprite3:
 		sub.w	a0,d0
 		lsr.w	#object_size_bits,d0					; divide by $40... even though SSTs are $4A bytes long in this game
 		move.b	.table(pc,d0.w),d0					; use a look-up table to get the right loop counter
-		bmi.s	.found
+		bmi.s	.done
 
 		; find slot
 		lea	-next_object(a0),a1					; load current object to a1
@@ -33,7 +33,7 @@ Create_New_Sprite3:
 		tst.l	address(a1)						; is object RAM slot empty?
 		dbeq	d0,.loop						; if not, branch
 
-.found
+.done
 		rts
 ; ---------------------------------------------------------------------------
 
