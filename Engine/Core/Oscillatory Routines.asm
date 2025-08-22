@@ -55,23 +55,34 @@ ChangeRingFrame:
 ; =============== S U B R O U T I N E =======================================
 
 Osc_Data:
-		dc.w %0000000001111101							; oscillation direction bitfield ; ($7D = set bit 0($01) + bit 2($04) + bit 3($08) + bit 4($10) + bit 5($20) + bit 6($40)
-		dc.w $80, 0								; bit F (bit is not set) ; baseline values
-		dc.w $80, 0								; bit E (bit is not set)
-		dc.w $80, 0								; bit D (bit is not set)
-		dc.w $80, 0								; bit C (bit is not set)
-		dc.w $80, 0								; bit B (bit is not set)
-		dc.w $80, 0								; bit A (bit is not set)
-		dc.w $80, 0								; bit 9 (bit is not set)
-		dc.w $80, 0								; bit 8 (bit is not set)
-		dc.w $80, 0								; bit 7 (bit is not set)
-		dc.w $3848, $EE								; bit 6 (bit is set)
-		dc.w $2080, $B4								; bit 5 (bit is set)
-		dc.w $3080,$10E								; bit 4 (bit is set)
-		dc.w $5080,$1C2								; bit 3 (bit is set)
-		dc.w $7080,$276								; bit 2 (bit is set)
-		dc.w $80, 0								; bit 1 (bit is not set)
-		dc.w $4000, $FE								; bit 0 (bit is set)
+
+		; oscillation direction bitfield
+		; set to initial state
+		dc.w \
+			setBit(0) | \
+			setBit(2) | \
+			setBit(3) | \
+			setBit(4) | \
+			setBit(5) | \
+			setBit(6)
+
+		; baseline values
+		dc.w $80, 0								; bit F
+		dc.w $80, 0								; bit E
+		dc.w $80, 0								; bit D
+		dc.w $80, 0								; bit C
+		dc.w $80, 0								; bit B
+		dc.w $80, 0								; bit A
+		dc.w $80, 0								; bit 9
+		dc.w $80, 0								; bit 8
+		dc.w $80, 0								; bit 7
+		dc.w $3848, $EE								; bit 6
+		dc.w $2080, $B4								; bit 5
+		dc.w $3080,$10E								; bit 4
+		dc.w $5080,$1C2								; bit 3
+		dc.w $7080,$276								; bit 2
+		dc.w $80, 0								; bit 1
+		dc.w $4000, $FE								; bit 0
 Osc_Data_end
 ; ---------------------------------------------------------------------------
 
@@ -135,12 +146,12 @@ OscillateNumDo:
 ; ---------------------------------------------------------------------------
 
 Osc_Data2:										; frequency, amplitude
-		dc.w 2, $10								; bit $F
-		dc.w 2, $18								; bit $E
-		dc.w 2, $20								; bit $D
-		dc.w 2, $30								; bit $C
-		dc.w 4, $20								; bit $B
-		dc.w 8, 8								; bit $A
+		dc.w 2, $10								; bit F
+		dc.w 2, $18								; bit E
+		dc.w 2, $20								; bit D
+		dc.w 2, $30								; bit C
+		dc.w 4, $20								; bit B
+		dc.w 8, 8								; bit A
 		dc.w 8, $40								; bit 9
 		dc.w 4, $40								; bit 8
 		dc.w 2, $38								; bit 7
