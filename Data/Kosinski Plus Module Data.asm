@@ -60,6 +60,8 @@ ArtKosPM_StarPostStars3:		binclude "Objects/Main/StarPost/KosinskiPM Art/StarPos
 ; Kosinski Plus Module compressed Title Card graphics
 ; ===========================================================================
 
+ArtKosPM_TitleCardRedAct:		binclude "Objects/Main/Title Card/KosinskiPM Art/Title Card Red ACT.kospm"
+	even
 ArtKosPM_TitleCardNum1:			binclude "Objects/Main/Title Card/KosinskiPM Art/Title Card Number 1.kospm"
 	even
 ArtKosPM_TitleCardNum2:			binclude "Objects/Main/Title Card/KosinskiPM Art/Title Card Number 2.kospm"
@@ -67,10 +69,6 @@ ArtKosPM_TitleCardNum2:			binclude "Objects/Main/Title Card/KosinskiPM Art/Title
 ArtKosPM_TitleCardNum3:			binclude "Objects/Main/Title Card/KosinskiPM Art/Title Card Number 3.kospm"
 	even
 ArtKosPM_TitleCardNum4:			binclude "Objects/Main/Title Card/KosinskiPM Art/Title Card Number 4.kospm"
-	even
-ArtKosPM_TitleCardRedAct:		binclude "Objects/Main/Title Card/KosinskiPM Art/Title Card Red ACT.kospm"
-	even
-ArtKosPM_DEZTitleCard:			binclude "Objects/Main/Title Card/KosinskiPM Art/Levels/DEZ - Title Card.kospm"
 	even
 
 ; ===========================================================================

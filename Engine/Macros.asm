@@ -1403,7 +1403,7 @@ copyTilemap2 macro loc,address,width,height,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap3	 macro loc,width,height,terminate
+copyTilemap3 macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
@@ -1585,6 +1585,46 @@ dScroll_Data macro pixel,size,velocity,plane
     endm
 ; ---------------------------------------------------------------------------
 
+; macro for defining title card letters in conjunction with the remapped character set
+titlecardLetters macro opt,str
+	save
+	codepage TITLECARD
+.llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"					; letter lookup string
+.ignore := " ZONE"									; set to initial state
+.used := 0
+    irpc char,.ignore
+.used := .used|setBit(strstr(.llookup,"char"))
+    endm
+    if opt
+	; not sort letters (S2 style)
+	irpc char,str
+	    if ~~(.used & setBit(strstr(.llookup,"char")))				; has the letter been used already?
+.used := .used|setBit(strstr(.llookup,"char"))						; if not, mark it as used
+		if strstr(.ignore,"char") < 0
+		    dc.b upstring("char")						; output letter code
+		endif
+	    endif
+	endm
+    else
+	; letters in alphabetical order (S3K style)
+	irpc char,str
+	    if ~~(.used & setBit(strstr(.llookup,"char")))				; has the letter been used already?
+.used := .used|setBit(strstr(.llookup,"char"))						; if not, mark it as used
+	    endif
+	endm
+	irpc char,.llookup
+	    if .used & setBit(strstr(.llookup,"char"))
+		if strstr(.ignore,"char") < 0
+		    dc.b upstring("char")						; output letter code
+		endif
+	    endif
+	endm
+    endif
+	dc.b -1	; end marker
+	restore
+    endm
+; ---------------------------------------------------------------------------
+
 ; macro for generating standard strings
 standardstr macro str
 	save
@@ -1600,6 +1640,7 @@ levselstr macro str
 	dc.b strlen(str)-1, str
 	restore
     endm
+; ---------------------------------------------------------------------------
 
 	; codepage for level select
 	save
@@ -1614,6 +1655,19 @@ levselstr macro str
 	charset '-', 14
 	charset '/', 15
 	charset '.', 16
+	restore
+
+	; codepage for title card
+	save
+	codepage TITLECARD
+	charset ' ', 0
+	charset 'A','Z', 1
+	charset 'a','z', 1
+	charset '.', 27
+	charset '(', 28
+	charset ')', 29
+	charset '0','9', 30
+	charset '!', 40
 	restore
 
 	; codepage for HUD

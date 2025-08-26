@@ -25,31 +25,12 @@ Obj_TitleCard:
 		move.w	#tiles_to_bytes($53D),d2
 		jsr	(Queue_KosPlus_Module).w
 
-		; load zone name art
-		moveq	#0,d0
-		move.b	(Current_zone).w,d0						; otherwise, just use current zone
-		add.w	d0,d0								; multiply by 4
-		add.w	d0,d0
-		movea.l	.levelgfx(pc,d0.w),a1
-		move.w	#tiles_to_bytes($54D),d2
-		jsr	(Queue_KosPlus_Module).w
-
 		; next
 		move.w	#1*60+30,objoff_2E(a0)						; set wait value
 		clr.w	objoff_32(a0)
 		st	objoff_48(a0)
 		move.l	#.create,address(a0)
 		rts
-
-; ---------------------------------------------------------------------------
-; The letters for the name of the zone
-; Exception: ENOZ/ZONE. These letters are already in VRAM
-; ---------------------------------------------------------------------------
-
-.levelgfx
-		dc.l ArtKosPM_DEZTitleCard						; DEZ
-
-		zonewarning .levelgfx,4
 ; ---------------------------------------------------------------------------
 
 .create
@@ -227,6 +208,105 @@ Obj_TitleCardAct:
 ;		movea.w	parent2(a0),a1							; remove a number of the act, if not needed
 ;		subq.w	#1,objoff_30(a1)
 ;		jmp	(Delete_Current_Sprite).w
+
+; ---------------------------------------------------------------------------
+; Title Card load letter to VRAM
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+TitleCard_LoadLetter:
+
+.decomp	= 0
+
+		lea	VDP_data_port-VDP_control_port(a5),a6				; load VDP data address to a6
+		locVRAM	tiles_to_bytes($54D),VDP_control_port-VDP_control_port(a5)
+
+	if .decomp
+		lea	(ArtKosP_TitleCardLargeText).l,a0
+		lea	(RAM_start).l,a1
+		lea	(a1),a3
+		jsr	(KosPlus_Decomp).w
+		lea	(a3),a2
+	else
+		lea	(ArtUnc_TitleCardLargeText).l,a2
+	endif
+
+		; load zone name art
+		moveq	#0,d0
+		move.b	(Current_zone).w,d0						; otherwise, just use current zone
+		add.w	d0,d0								; multiply by 2
+		lea	TitleCardLetters_Index(pc),a1
+		adda.w	(a1,d0.w),a1
+
+.find
+		moveq	#0,d0
+		move.b	(a1)+,d0
+		bmi.s	.exit								; if zero, exit
+		subq.b	#1,d0								; -1
+		add.w	d0,d0								; multiply by 4
+		add.w	d0,d0
+		movem.w	.letters(pc,d0.w),d0-d1							; get id letter and size
+		lsl.w	#5,d0								; multiply by $20
+		lea	(a2,d0.w),a4
+
+.copy
+
+	rept 8*3
+		move.l	(a4)+,VDP_data_port-VDP_data_port(a6)
+	endr
+
+		dbf	d1,.copy
+
+		; next
+		bra.s	.find
+; ---------------------------------------------------------------------------
+
+.exit
+		rts
+; ---------------------------------------------------------------------------
+
+.letters
+		dc.w 0, 2-1		; A (16x24)
+		dc.w 6, 2-1		; B (16x24)
+		dc.w $C, 2-1		; C (16x24)
+		dc.w $12, 2-1		; D (16x24)
+		dc.w $18, 2-1		; E (16x24)
+		dc.w $1E, 2-1		; F (16x24)
+		dc.w $24, 2-1		; G (16x24)
+		dc.w $2A, 2-1		; H (16x24)
+		dc.w $30, 1-1		; I (8x24)
+		dc.w $33, 1-1		; J (8x24)
+		dc.w $36, 2-1		; K (16x24)
+		dc.w $3C, 1-1		; L (8x24)
+		dc.w $3F, 3-1		; M (24x24)
+		dc.w $48, 2-1		; N (16x24)
+		dc.w $4E, 3-1		; O (24x24)
+		dc.w $57, 2-1		; P (16x24)
+		dc.w $5D, 3-1		; Q (24x24)
+		dc.w $66, 2-1		; R (16x24)
+		dc.w $6C, 2-1		; S (16x24)
+		dc.w $72, 2-1		; T (16x24)
+		dc.w $78, 2-1		; U (16x24)
+		dc.w $7E, 2-1		; V (16x24)
+		dc.w $84, 3-1		; W (24x24)
+		dc.w $8D, 2-1		; X (16x24)
+		dc.w $93, 2-1		; Y (16x24)
+		dc.w $99, 2-1		; Z (16x24)
+		dc.w $9F, 1-1		; . (8x24)
+		dc.w $A2, 2-1		; ( (16x24)
+		dc.w $A8, 2-1		; ) (16x24)
+		dc.w $4E, 3-1		; 0 (24x24)
+		dc.w $AE, 1-1		; 1 (8x24)
+		dc.w $B1, 2-1		; 2 (16x24)
+		dc.w $B7, 2-1		; 3 (16x24)
+		dc.w $BD, 2-1		; 4 (16x24)
+		dc.w $C3, 2-1		; 5 (16x24)
+		dc.w $C9, 3-1		; 6 (24x24)
+		dc.w $D2, 2-1		; 7 (16x24)
+		dc.w $D8, 2-1		; 8 (16x24)
+		dc.w $DE, 3-1		; 9 (24x24)
+		dc.w $E7, 1-1		; ! (8x24)
 ; ---------------------------------------------------------------------------
 
 ObjArray_TtlCard: titlecardresultsheader
@@ -242,4 +322,5 @@ ObjArray_TtlCardBonus: titlecardresultsheader
 ObjArray_TtlCardBonus_end
 ; ---------------------------------------------------------------------------
 
+		include "Objects/Main/Title Card/Text Data/VRAM - Text.asm"
 		include "Objects/Main/Title Card/Object Data/Map - Title Card.asm"
