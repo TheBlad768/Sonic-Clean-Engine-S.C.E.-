@@ -1410,7 +1410,7 @@ copyTilemap2 macro loc,address,width,height,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap3	 macro loc,width,height,terminate
+copyTilemap3 macro loc,width,height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(width,8),d1
 	moveq	#bytesToXcnt(height,8),d2
