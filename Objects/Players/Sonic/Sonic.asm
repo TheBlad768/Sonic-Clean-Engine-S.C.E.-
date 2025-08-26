@@ -2548,10 +2548,15 @@ loc_126DC:
 		add.w	d2,d2
 
 loc_1270A:
-		lea	SonAni_Run(pc),a1						; use running animation
+
+		; check
+		lea	(SonAni_Run).l,a1						; use running animation
 		cmpi.w	#$600,d2
 		bhs.s	loc_12724
-		lea	SonAni_Walk(pc),a1						; use walking animation
+
+.sani		:= SonAni_Walk-SonAni_Run						; Macro AS hack: if you use subtraction directly in lea it will slow down the assembly several times. So we will use :=/set
+
+		lea	(.sani)(a1),a1							; use walking animation
 		add.b	d0,d0
 
 loc_12724:
@@ -2909,10 +2914,15 @@ loc_12A2A:
 		bpl.w	SAnim_Delay
 		mvabs.w	ground_vel(a0),d2
 		add.w	(Camera_H_scroll_shift).w,d2
-		lea	SonAni_Roll2(pc),a1						; use roll 2 animation
+
+		; check
+		lea	(SonAni_Roll2).l,a1						; use roll 2 animation
 		cmpi.w	#$600,d2
 		bhs.s	loc_12A5E
-		lea	SonAni_Roll(pc),a1						; use roll animation
+
+.sani		:= SonAni_Roll-SonAni_Roll2						; Macro AS hack: if you use subtraction directly in lea it will slow down the assembly several times. So we will use :=/set
+
+		lea	(.sani)(a1),a1							; use roll animation
 
 loc_12A5E:
 		neg.w	d2
@@ -2942,7 +2952,7 @@ loc_12A82:
 loc_12A8A:
 		lsr.w	#6,d2
 		move.b	d2,anim_frame_timer(a0)
-		lea	SonAni_Push(pc),a1						; use push animation
+		lea	(SonAni_Push).l,a1						; use push animation
 		bra.w	SAnim_Do2
 
 ; =============== S U B R O U T I N E =======================================
