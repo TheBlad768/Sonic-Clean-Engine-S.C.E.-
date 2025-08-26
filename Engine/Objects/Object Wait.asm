@@ -5,8 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Wait:
-		subq.w	#1,objoff_2E(a0)
-		bpl.s	ObjCheckFloorDist_DoRoutine.return
+		subq.w	#1,wait_timer(a0)						; subtract 1
+		bpl.s	Obj_WaitRun.return						; if timer has not ended, branch
 
 Obj_Jump:
 		movea.l	objoff_34(a0),a1
@@ -14,9 +14,20 @@ Obj_Jump:
 
 ; =============== S U B R O U T I N E =======================================
 
+Obj_WaitRun:
+		tst.w wait_timer(a0)							; is timer over?
+		bmi.s	.return								; if yes, branch
+		subq.w	#1,wait_timer(a0)						; subtract 1
+		addq.w	#4,sp								; don't run the code after the call to this routine
+
+.return
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
 ObjCheckFloorDist_DoRoutine:
-		tst.w	y_vel(a0)				; is object falling down?
-		bmi.s	.return					; if not, branch
+		tst.w	y_vel(a0)							; is object falling down?
+		bmi.s	.return								; if not, branch
 		bsr.w	ObjCheckFloorDist
 		tst.w	d1
 		bmi.s	.jump
@@ -34,8 +45,8 @@ ObjCheckFloorDist_DoRoutine:
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckCeilingDist_DoRoutine:
-		tst.w	y_vel(a0)				; is object falling upwards?
-		bmi.s	.return					; if not, branch
+		tst.w	y_vel(a0)							; is object falling upwards?
+		bmi.s	.return								; if not, branch
 		bsr.w	ObjCheckCeilingDist
 		tst.w	d1
 		bmi.s	.jump

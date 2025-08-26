@@ -17,6 +17,13 @@ ArtUnc_AirCountDown:			binclude "Objects/Main/Count Down/Uncompressed Art/Air Co
 	even
 
 ; ===========================================================================
+; Uncompressed Title Card graphics
+; ===========================================================================
+
+ArtUnc_TitleCardLargeText:		bincludeEntry "Objects/Main/Title Card/Uncompressed Art/Large Text.unc"
+	even
+
+; ===========================================================================
 ; Animated uncompressed graphics
 ; ===========================================================================
 
