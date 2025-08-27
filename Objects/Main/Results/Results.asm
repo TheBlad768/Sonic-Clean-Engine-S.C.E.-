@@ -334,7 +334,7 @@ LevResults_GetDecimalScore:
 		; otherwise, we will get incorrect results
 
 		; clear x-bit of the ccr (fast)
-		addi.w	#0,d0
+		sub.w	d1,d1								; d1 is not used here, so we can safely clear it
 
 		; clear x-bit of the ccr (slow)
 ;		andi	#~( \
