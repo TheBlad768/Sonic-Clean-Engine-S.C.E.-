@@ -1590,16 +1590,16 @@ titlecardLetters macro opt,str
 	save
 	codepage TITLECARD
 .llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"					; letter lookup string
-.ignore := " ZONE"									; set to initial state
-.used := 0
+.ignore := " ZONE0"									; set to initial state
+.used := ""										; string to store already used characters
     irpc char,.ignore
-.used := .used|setBit(strstr(.llookup,"char"))
+.used := .used + "char"									; mark ignored characters as used
     endm
     if opt
 	; not sort letters (S2 style)
 	irpc char,str
-	    if ~~(.used & setBit(strstr(.llookup,"char")))				; has the letter been used already?
-.used := .used|setBit(strstr(.llookup,"char"))						; if not, mark it as used
+	    if strstr(.used,"char") < 0
+.used := .used + "char"									; mark as used
 		if strstr(.ignore,"char") < 0
 		    dc.b upstring("char")						; output letter code
 		endif
@@ -1608,12 +1608,12 @@ titlecardLetters macro opt,str
     else
 	; letters in alphabetical order (S3K style)
 	irpc char,str
-	    if ~~(.used & setBit(strstr(.llookup,"char")))				; has the letter been used already?
-.used := .used|setBit(strstr(.llookup,"char"))						; if not, mark it as used
+	    if strstr(.used,"char") < 0
+.used := .used + "char"									; mark as used
 	    endif
 	endm
 	irpc char,.llookup
-	    if .used & setBit(strstr(.llookup,"char"))
+	    if strstr(.used,"char") >= 0
 		if strstr(.ignore,"char") < 0
 		    dc.b upstring("char")						; output letter code
 		endif
