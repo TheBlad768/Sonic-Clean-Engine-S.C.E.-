@@ -136,6 +136,18 @@ locVRAM macro loc,controlport=(VDP_control_port).l
     endm
 
 ; ---------------------------------------------------------------------------
+; calc VDP address
+; input: 16-bit VRAM address (default is d0)
+; ---------------------------------------------------------------------------
+
+CalcVRAM macro reg=d0
+	lsl.l	#2,reg
+	lsr.w	#2,reg
+	ori.w	#vdpComm(0,VRAM,WRITE)>>16,reg
+	swap	reg
+    endm
+
+; ---------------------------------------------------------------------------
 ; Macro to check button presses
 ; Arguments:
 ; 1 - buttons to check
@@ -1632,6 +1644,25 @@ titlecardLetters macro opt,str
     endm
 ; ---------------------------------------------------------------------------
 
+; macro for title card letters from a string
+creditsletters macro str
+	save
+	codepage CREDITSCREEN3
+.narrow := "IJL.1!"
+.wide := "MOQW069"
+    irpc char,str
+	if strstr(.narrow,"char") >= 0
+	    dc.w 'char', 1-1								; narrow (8x24)
+	elseif strstr(.wide,"char") >= 0
+	    dc.w 'char', 3-1								; wide (24x24)
+	else
+	    dc.w 'char', 2-1								; normal (16x24)
+	endif
+    endm
+	restore
+    endm
+; ---------------------------------------------------------------------------
+
 ; macro for generating standard strings
 standardstr macro str
 	save
@@ -1675,6 +1706,19 @@ levselstr macro str
 	charset ')', 29
 	charset '0','9', 30
 	charset '!', 40
+	restore
+
+	; codepage for credits
+	save
+	codepage CREDITSCREEN3
+	charset 'A',0
+	charset 'B',"\6\xC\x12\x18\x1E\x24\x2A\x30\x33\x36\x3C\x3F\x48\x4E\x57\x5D\x66\x6C\x72\x78\x7E\x84\x8D\x93\x99"
+	charset '.', $9F
+	charset '(', $A2
+	charset ')', $A8
+	charset '0', $4E
+	charset '1',"\xAE\xB1\xB7\xBD\xC3\xC9\xD2\xD8\xDE"
+	charset '!', $E7
 	restore
 
 	; codepage for HUD
