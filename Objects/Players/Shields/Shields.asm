@@ -3,9 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 ; Elemental Shield DPLC variables
-LastLoadedDPLC				= objoff_34	; .b
-Art_Address				= objoff_38	; .l
-DPLC_Address				= objoff_3C	; .w
+shield_prev_frame			= objoff_34	; .b
+shield_art_address			= objoff_38	; .l
+shield_dplc_address			= objoff_3C	; .w
+shield_vram_art				= objoff_40	; .w ; address of art in VRAM (same as art_tile * $20)
 
 ; ---------------------------------------------------------------------------
 ; Fire Shield
@@ -18,9 +19,9 @@ Obj_FireShield:
 		; init
 		movem.l	ObjDat_FireShield(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.l	#DPLC_FireShield,DPLC_Address(a0)				; used by PLCLoad_Shields
-		move.l	#dmaSource(ArtUnc_FireShield),Art_Address(a0)			; used by PLCLoad_Shields
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
+		move.l	#DPLC_FireShield,shield_dplc_address(a0)			; used by PLCLoad_Shields
+		move.l	#dmaSource(ArtUnc_FireShield),shield_art_address(a0)		; used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),shield_vram_art(a0)		; used by PLCLoad_Shields
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -29,7 +30,7 @@ Obj_FireShield:
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)						; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		st	shield_prev_frame(a0)						; reset shield_prev_frame (used by PLCLoad_Shields)
 
 .main
 		lea	(Player_1).w,a2							; a2=character
@@ -109,9 +110,9 @@ Obj_LightningShield:
 		; init
 		movem.l	ObjDat_LightningShield(pc),d0-d3				; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.l	#DPLC_LightningShield,DPLC_Address(a0)				; used by PLCLoad_Shields
-		move.l	#dmaSource(ArtUnc_LightningShield),Art_Address(a0)		; used by PLCLoad_Shields
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
+		move.l	#DPLC_LightningShield,shield_dplc_address(a0)			; used by PLCLoad_Shields
+		move.l	#dmaSource(ArtUnc_LightningShield),shield_art_address(a0)	; used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),shield_vram_art(a0)		; used by PLCLoad_Shields
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -120,7 +121,7 @@ Obj_LightningShield:
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)						; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		st	shield_prev_frame(a0)						; reset shield_prev_frame (used by PLCLoad_Shields)
 
 .main
 		lea	(Player_1).w,a2							; a2=character
@@ -287,9 +288,9 @@ Obj_BubbleShield:
 		; init
 		movem.l	ObjDat_BubbleShield(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.l	#DPLC_BubbleShield,DPLC_Address(a0)				; used by PLCLoad_Shields
-		move.l	#dmaSource(ArtUnc_BubbleShield),Art_Address(a0)			; used by PLCLoad_Shields
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
+		move.l	#DPLC_BubbleShield,shield_dplc_address(a0)			; used by PLCLoad_Shields
+		move.l	#dmaSource(ArtUnc_BubbleShield),shield_art_address(a0)		; used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),shield_vram_art(a0)		; used by PLCLoad_Shields
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -298,7 +299,7 @@ Obj_BubbleShield:
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)						; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		st	shield_prev_frame(a0)						; reset shield_prev_frame (used by PLCLoad_Shields)
 		lea	(Player_1).w,a1							; a1=character
 		jsr	(Player_ResetAirTimer).l
 
@@ -357,9 +358,9 @@ Obj_InstaShield:
 		; init
 		movem.l	ObjDat_InstaShield(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.l	#DPLC_InstaShield,DPLC_Address(a0)				; used by PLCLoad_Shields
-		move.l	#dmaSource(ArtUnc_InstaShield),Art_Address(a0)			; used by PLCLoad_Shields
-		move.w	#tiles_to_bytes(ArtTile_Shield),vram_art(a0)			; used by PLCLoad_Shields
+		move.l	#DPLC_InstaShield,shield_dplc_address(a0)			; used by PLCLoad_Shields
+		move.l	#dmaSource(ArtUnc_InstaShield),shield_art_address(a0)		; used by PLCLoad_Shields
+		move.w	#tiles_to_bytes(ArtTile_Shield),shield_vram_art(a0)		; used by PLCLoad_Shields
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -368,7 +369,7 @@ Obj_InstaShield:
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	LastLoadedDPLC(a0)						; reset LastLoadedDPLC (used by PLCLoad_Shields)
+		st	shield_prev_frame(a0)						; reset shield_prev_frame (used by PLCLoad_Shields)
 
 .main
 		lea	(Player_1).w,a2							; a2=character
@@ -418,19 +419,19 @@ Obj_InstaShield:
 PLCLoad_Shields:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0
-		cmp.b	LastLoadedDPLC(a0),d0
+		cmp.b	shield_prev_frame(a0),d0
 		beq.s	.return
-		move.b	d0,LastLoadedDPLC(a0)
+		move.b	d0,shield_prev_frame(a0)
 
 		; load
 		add.w	d0,d0
-		movea.l	DPLC_Address(a0),a2
+		movea.l	shield_dplc_address(a0),a2
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d5
 		subq.w	#1,d5
 		bmi.s	.return
-		move.w	vram_art(a0),d4
-		move.l	Art_Address(a0),d6
+		move.w	shield_vram_art(a0),d4
+		move.l	shield_art_address(a0),d6
 
 .readentry
 		moveq	#0,d1
