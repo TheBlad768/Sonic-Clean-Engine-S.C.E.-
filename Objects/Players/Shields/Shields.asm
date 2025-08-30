@@ -7,6 +7,7 @@ shield_prev_frame			= objoff_34	; .b
 shield_art_address			= objoff_38	; .l
 shield_dplc_address			= objoff_3C	; .w
 shield_vram_art				= objoff_40	; .w ; address of art in VRAM (same as art_tile * $20)
+shield_parent				= objoff_42	; .w
 
 ; ---------------------------------------------------------------------------
 ; Fire Shield
