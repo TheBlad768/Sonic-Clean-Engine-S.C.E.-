@@ -6,6 +6,8 @@
 dashdust_prev_frame			= objoff_34	; .b
 dashdust_dust_timer			= objoff_36	; .b
 dashdust_tails				= objoff_38	; .b
+dashdust_vram_art			= objoff_40	; .w ; address of art in VRAM (same as art_tile * $20)
+dashdust_parent				= objoff_42	; .w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -14,7 +16,7 @@ Obj_DashDust:
 		; init
 		movem.l	ObjDat_DashDust(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.l	#words_to_long(tiles_to_bytes(ArtTile_DashDust),Player_1),vram_art(a0)
+		move.l	#words_to_long(tiles_to_bytes(ArtTile_DashDust),Player_1),dashdust_vram_art(a0)
 
 		; check Tails
 		cmpa.w	#Dust,a0
@@ -202,7 +204,7 @@ SplashDrown_Load_DPLC:
 		move.w	(a2)+,d5
 		subq.w	#1,d5
 		bmi.s	.return
-		move.w	vram_art(a0),d4
+		move.w	dashdust_vram_art(a0),d4
 
 .readentry
 		moveq	#0,d1

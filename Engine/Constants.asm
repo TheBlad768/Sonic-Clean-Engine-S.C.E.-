@@ -381,7 +381,6 @@ count =								objoff_39					; byte
 ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
 ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 routine_secondary =						objoff_3C					; byte ; used by monitors for this purpose at least
-vram_art =							objoff_40					; word ; address of art in VRAM (same as art_tile * $20)
 parent =							objoff_42					; word ; address of the object that owns or spawned this one, if applicable
 child_dx =							objoff_42					; byte ; X offset of child relative to parent
 child_dy =							objoff_43					; byte ; Y offset of child relative to parent
