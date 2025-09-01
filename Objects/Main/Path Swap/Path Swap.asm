@@ -8,7 +8,7 @@ Obj_PathSwap:
 
 		; init
 		move.l	#Map_PathSwap,mappings(a0)
-		move.w	#make_art_tile(ArtTile_Ring,1,0),art_tile(a0)
+		move.w	#make_art_tile(ArtTile_Ring,1,FALSE),art_tile(a0)
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(128/2,128/2,priority_5),height_pixels(a0)	; set height, width and priority
 

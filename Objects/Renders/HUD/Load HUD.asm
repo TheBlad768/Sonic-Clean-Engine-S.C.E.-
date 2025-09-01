@@ -52,7 +52,7 @@ Render_HUD:
 .draw
 		move.w	HUD_RAM.xpos-HUD_RAM(a1),d0					; xpos
 		move.w	HUD_RAM.ypos-HUD_RAM(a1),d1					; ypos
-		move.w	#make_art_tile(ArtTile_HUD,0,1),d5				; VRAM
+		move.w	#make_art_tile(ArtTile_HUD,0,TRUE),d5				; VRAM
 		lea	Map_HUD(pc),a1
 		adda.w	(a1,d4.w),a1
 		move.w	(a1)+,d4

@@ -393,7 +393,7 @@ ObjDat_AirCountdown:		subObjMainData \
 				Obj_AirCountdown.countdown, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.on_screen), \
-				0, 32, 32, 1, $348, 0, 0, Map_Bubbler
+				0, 32, 32, 1, $348, 0, FALSE, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Count Down/Object Data/Anim - Air Countdown.asm"

@@ -219,7 +219,7 @@ Load_StarPost_Stars:
 .create
 		move.l	#Obj_StarPost_Stars,address(a1)
 		move.l	#Map_StarPostStars,mappings(a1)
-		move.w	#make_art_tile(ArtTile_StarPost+8,0,0),art_tile(a1)
+		move.w	#make_art_tile(ArtTile_StarPost+8,0,FALSE),art_tile(a1)
 		move.b	#setBit(render_flags.level),render_flags(a1)			; use screen coordinates
 		move.w	priority(a0),priority(a1)
 		move.w	#bytes_to_word(16/2,16/2),height_pixels(a1)			; set height and width
@@ -354,7 +354,7 @@ ObjDat_StarPost:	subObjMainData \
 				Obj_StarPost.main, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.multi_sprite), \
-				0, 80, 16, 5, ArtTile_StarPost+8, 0, 0, Map_StarPost
+				0, 80, 16, 5, ArtTile_StarPost+8, 0, FALSE, Map_StarPost
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/StarPost/Object Data/Map - StarPost.asm"
