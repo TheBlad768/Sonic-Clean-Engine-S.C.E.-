@@ -8,7 +8,7 @@ Obj_Spring:
 
 		; init
 		move.l	#Map_Spring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,0),art_tile(a0)	; set red
+		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,FALSE),art_tile(a0)	; set red
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
 		move.w	x_pos(a0),objoff_32(a0)
@@ -31,7 +31,7 @@ Obj_Spring:
 		; down diag								; 8
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
-		move.w	#make_art_tile($468,0,0),art_tile(a0)				; set diagonal
+		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)				; set diagonal
 		bset	#status.npc.y_flip,status(a0)
 		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
@@ -40,7 +40,7 @@ Obj_Spring:
 Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
-		move.w	#make_art_tile($468,0,0),art_tile(a0)				; set diagonal
+		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)				; set diagonal
 		move.l	#Obj_Spring_UpDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ Spring_UpDiag:
 Spring_Horizontal:
 		move.b	#2,anim(a0)
 		move.b	#3,mapping_frame(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$1C,0,0),art_tile(a0)	; set yellow
+		move.w	#make_art_tile(ArtTile_SpikesSprings+$1C,0,FALSE),art_tile(a0)	; set yellow
 		move.b	#16/2,width_pixels(a0)
 		move.l	#Obj_Spring_Horizontal,address(a0)
 		bra.s	Spring_Common

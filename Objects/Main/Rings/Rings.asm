@@ -371,20 +371,20 @@ ObjDat_Ring:			subObjMainData \
 				Sprite_OnScreen_Test_Collision, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.static_mappings), \
-				0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+				0, 16, 16, 2, ArtTile_Ring, 1, TRUE, Map_Ring_10+2
 
 ObjDat_Ring2:			subObjMainData \
 				Obj_Attracted_Ring.main, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.static_mappings), \
-				0, 16, 16, 2, ArtTile_Ring, 1, 1, Map_Ring_10+2
+				0, 16, 16, 2, ArtTile_Ring, 1, TRUE, Map_Ring_10+2
 
 ObjDat3_BouncingRing:		subObjMainData \
 				FALSE, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.static_mappings) | \
 					setBit(render_flags.on_screen), \
-				0, 16, 16, 3, ArtTile_Ring, 1, 1, Map_Ring_10+2
+				0, 16, 16, 3, ArtTile_Ring, 1, TRUE, Map_Ring_10+2
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:

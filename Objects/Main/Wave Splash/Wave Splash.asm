@@ -77,7 +77,7 @@ ObjDat_WaveSplash:	subObjMainData \
 			Obj_WaveSplash.main, \
 				setBit(render_flags.level) | \
 				setBit(render_flags.multi_sprite), \
-			0, 24, 256, 0, $300, 0, 1, Map_WaveSplash
+			0, 24, 256, 0, $300, 0, TRUE, Map_WaveSplash
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Main/Wave Splash/Object Data/Map - Wave Splash.asm"

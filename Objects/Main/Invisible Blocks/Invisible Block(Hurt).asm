@@ -34,7 +34,7 @@ Obj_Invisible_HurtBlock:
 		; set priority and art_tile
 		move.l	#words_to_long( \
 		priority_4, \
-			make_art_tile(ArtTile_Monitors,0,1) \
+			make_art_tile(ArtTile_Monitors,0,TRUE) \
 		),priority(a0)
 
 		bset	#status.npc.no_balancing,status(a0)				; disable player's balance animation

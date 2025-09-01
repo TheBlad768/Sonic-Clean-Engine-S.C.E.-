@@ -259,7 +259,7 @@ Obj_DashDust_SkidDust:
 ObjDat_DashDust:	subObjMainData \
 			Obj_DashDust.main, \
 				setBit(render_flags.level), \
-			0, 32, 32, 1, ArtTile_DashDust, 0, 0, Map_DashDust
+			0, 32, 32, 1, ArtTile_DashDust, 0, FALSE, Map_DashDust
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"

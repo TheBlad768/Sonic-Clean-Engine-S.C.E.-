@@ -665,28 +665,28 @@ byte_18A1B:
 ObjDat_FireShield:		subObjMainData \
 				Obj_FireShield.main, \
 					setBit(render_flags.level), \
-				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_FireShield
+				0, 48, 48, 1, ArtTile_Shield, 0, FALSE, Map_FireShield
 
 ObjDat_LightningShield:		subObjMainData \
 				Obj_LightningShield.main, \
 					setBit(render_flags.level), \
-				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_LightningShield
+				0, 48, 48, 1, ArtTile_Shield, 0, FALSE, Map_LightningShield
 
 ObjDat_BubbleShield:		subObjMainData \
 				Obj_BubbleShield.main, \
 					setBit(render_flags.level), \
-				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_BubbleShield
+				0, 48, 48, 1, ArtTile_Shield, 0, FALSE, Map_BubbleShield
 
 ObjDat_InstaShield:		subObjMainData \
 				Obj_InstaShield.main, \
 					setBit(render_flags.level), \
-				0, 48, 48, 1, ArtTile_Shield, 0, 0, Map_InstaShield
+				0, 48, 48, 1, ArtTile_Shield, 0, FALSE, Map_InstaShield
 
 ObjDat_Invincibility:		subObjMainData \
 				Obj_188E8, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.multi_sprite), \
-				0, 32, 32, 1, ArtTile_Shield, 0, 0, Map_Invincibility
+				0, 32, 32, 1, ArtTile_Shield, 0, FALSE, Map_Invincibility
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Shields/Object Data/Anim - Fire Shield.asm"

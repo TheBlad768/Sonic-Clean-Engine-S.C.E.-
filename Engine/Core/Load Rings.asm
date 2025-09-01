@@ -335,21 +335,21 @@ Render_Rings:
 CMap_Ring:
 
 		; frame1
-		dc.w make_art_tile(ArtTile_Ring,1,0)
+		dc.w make_art_tile(ArtTile_Ring,1,FALSE)
 
 CMap_Ring_Spark:
 
 		; frame2
-		dc.w make_art_tile(ArtTile_Ring_Sparks,1,0)
+		dc.w make_art_tile(ArtTile_Ring_Sparks,1,FALSE)
 
 		; frame3
-		dc.w flip_x+flip_y+make_art_tile(ArtTile_Ring_Sparks,1,0)
+		dc.w flip_x+flip_y+make_art_tile(ArtTile_Ring_Sparks,1,FALSE)
 
 		; frame4
-		dc.w flip_x+make_art_tile(ArtTile_Ring_Sparks,1,0)
+		dc.w flip_x+make_art_tile(ArtTile_Ring_Sparks,1,FALSE)
 
 		; frame5
-		dc.w flip_y+make_art_tile(ArtTile_Ring_Sparks,1,0)
+		dc.w flip_y+make_art_tile(ArtTile_Ring_Sparks,1,FALSE)
 
 CMap_Ring_end
 
