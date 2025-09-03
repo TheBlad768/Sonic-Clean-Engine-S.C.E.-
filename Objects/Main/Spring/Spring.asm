@@ -31,7 +31,7 @@ Obj_Spring:
 		; down diag								; 8
 		move.b	#4,anim(a0)
 		move.b	#$A,mapping_frame(a0)
-		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)				; set diagonal
+		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)			; set diagonal
 		bset	#status.npc.y_flip,status(a0)
 		move.l	#Obj_Spring_DownDiag,address(a0)
 		bra.s	Spring_Common
@@ -40,7 +40,7 @@ Obj_Spring:
 Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
-		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)				; set diagonal
+		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)			; set diagonal
 		move.l	#Obj_Spring_UpDiag,address(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
