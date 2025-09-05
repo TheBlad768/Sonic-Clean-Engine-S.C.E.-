@@ -107,9 +107,9 @@ PLCKosPlusM_Count:						= 32						; the greater the queues, the more RAM is used
 ; V-Int routines
 ; ---------------------------------------------------------------------------
 
-offset :=	VInt_Table
-ptrsize :=	1
-idstart :=	0
+offset := VInt_Table
+ptrsize := 1
+idstart := 0
 
 VintID_Lag =							id(ptr_VInt_Lag)				; 0
 VintID_Main =							id(ptr_VInt_Main)				; 2
@@ -123,9 +123,9 @@ VintID_LevelSelect =						id(ptr_VInt_LevelSelect)			; C
 ; Game mode routines
 ; ---------------------------------------------------------------------------
 
-offset :=	Game_Modes
-ptrsize :=	1
-idstart :=	0
+offset := Game_Modes
+ptrsize := 1
+idstart := 0
 
 GameModeID_LevelSelectScreen =					id(GameMode_LevelSelectScreen)			; 0
 GameModeID_LevelScreen =					id(GameMode_LevelScreen)			; 4
@@ -145,9 +145,9 @@ PlayerID_Knuckles						equ 2
 ; Player routines (Sonic)
 ; ---------------------------------------------------------------------------
 
-offset :=	Sonic_Index
-ptrsize :=	1
-idstart :=	0
+offset := Sonic_Index
+ptrsize := 1
+idstart := 0
 
 PlayerID_Init =							id(ptr_Sonic_Init)				; 0
 PlayerID_Control =						id(ptr_Sonic_Control)				; 2
@@ -161,9 +161,9 @@ PlayerID_Drown =						id(ptr_Sonic_Drown)				; C
 ; palette IDs
 ; ---------------------------------------------------------------------------
 
-offset :=	PalPointers
-ptrsize :=	8
-idstart :=	0
+offset := PalPointers
+ptrsize := 8
+idstart := 0
 
 ; Main
 PalID_Sonic =							id(PalPtr_Sonic)				; 0
@@ -177,9 +177,9 @@ PalID_WaterDEZ =						id(PalPtr_WaterDEZ)				; 3
 ; Sonic animation IDs
 ; ---------------------------------------------------------------------------
 
-offset :=	AniSonic
-ptrsize :=	2
-idstart :=	0
+offset := AniSonic
+ptrsize := 2
+idstart := 0
 
 AniIDSonAni_Walk =						id(ptr_SonAni_Walk)				; 00
 AniIDSonAni_Run =						id(ptr_SonAni_Run)				; 01
