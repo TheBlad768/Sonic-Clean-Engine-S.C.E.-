@@ -16,7 +16,7 @@ animal_ground_pointer				= objoff_34	; .l
 		; note: you must also load the corresponding art in the PLCs
 
 Obj_Animal_ZoneAnimals:
-		zoneAnimals.b Flicky, Chicken	; DEZ
+		zoneanimals.b Flicky, Chicken	; DEZ
 
 		zonewarning Obj_Animal_ZoneAnimals,(1*2)
 
