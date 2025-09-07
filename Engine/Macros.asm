@@ -276,7 +276,7 @@ subObjMainData macro address=FALSE,render,routine,height,width,prio,vram,pal,pri
     endm
 ; ---------------------------------------------------------------------------
 
-zoneAnimals macro first,second
+zoneanimals macro first,second
 	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties), (Obj_Animal_Properties_second - Obj_Animal_Properties)
     endm
 
