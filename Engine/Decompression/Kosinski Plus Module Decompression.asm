@@ -13,11 +13,12 @@
 
 Queue_KosPlus:
 		move.w	(KosPlus_decomp_queue_count).w,d0
+		addq.w	#1,(KosPlus_decomp_queue_count).w
 		lsl.w	#3,d0											; multiply by 8
 		lea	(KosPlus_decomp_queue).w,a3
-		move.l	a1,(a3,d0.w)										; store source
-		move.l	a2,4(a3,d0.w)										; store destination
-		addq.w	#1,(KosPlus_decomp_queue_count).w
+		adda.w	d0,a3
+		move.l	a1,(a3)+										; store source
+		move.l	a2,(a3)+										; store destination
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -77,7 +78,6 @@ Process_KosPlus_Module_Queue:
 		add.w	d3,d0
 		add.w	d3,d0
 		move.w	d0,(KosPlus_module_destination).w							; set new destination
-		move.l	(KosPlus_module_queue).w,d0
 		move.l	(KosPlus_decomp_queue).w,(KosPlus_module_queue).w					; set new source
 		move.l	#dmaSource(KosPlus_decomp_buffer),d1
 		disableIntsSave
