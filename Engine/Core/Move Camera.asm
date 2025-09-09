@@ -137,37 +137,37 @@ Camera_Extended:
 		bpl.s	.PosInertia
 		neg.w	d0
 
-.PosInertia:
+.PosInertia
 		cmpi.w	#$600,d0							; are we going at max regular speed?
 		blo.s	.ResetPan							; if not, branch
 		tst.w	ground_vel(a0)							; are we moving right?
 		bpl.s	.MovingRight							; if so, branch
 
-.MovingLeft:
+.MovingLeft
 		addq.w	#2,d1								; pan the camera to the right
 		cmpi.w	#(320/2)+64,d1							; has it panned far enough?
 		blo.s	.SetPanVal							; if not, branch
 		move.w	#(320/2)+64,d1							; cap the camera's position
 		bra.s	.SetPanVal
 
-.MovingRight:
+.MovingRight
 		subq.w	#2,d1								; pan the camera to the left
 		cmpi.w	#(320/2)-64,d1							; has it panned far enough
 		bhs.s	.SetPanVal							; if not, branch
 		move.w	#(320/2)-64,d1							; cap the camera's position
 		bra.s	.SetPanVal
 
-.ResetPan:
+.ResetPan
 		cmpi.w	#320/2,d1							; has the camera panned back to the middle?
 		beq.s	.SetPanVal							; if so, branch
 		bhs.s	.ResetLeft							; if it's panning back left
 		addq.w	#2,d1								; pan back to the right
 		bra.s	.SetPanVal
 
-.ResetLeft:
+.ResetLeft
 		subq.w	#2,d1								; pan back to the left
 
-.SetPanVal:
+.SetPanVal
 		move.w	d1,Camera_X_center-Camera_X_pos(a1)				; update camera X center position
 		rts
 
