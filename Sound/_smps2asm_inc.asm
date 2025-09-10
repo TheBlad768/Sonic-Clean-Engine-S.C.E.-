@@ -351,7 +351,7 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 		dc.b	0
 	else
 		if (MOMPASS==1) && (SonicDriverVer<3) && (SourceDriver>=3) && (mod<>0)
-			message "This track header specifies a frequency envelope, but this driver does not support them."			
+			message "This track header specifies a frequency envelope, but this driver does not support them."
 		endif
 		dc.b	mod
 	endif
