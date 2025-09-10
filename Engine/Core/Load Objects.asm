@@ -180,9 +180,8 @@ loc_1B8F2:
 		move.l	a0,(Object_load_addr_front).w
 		move.w	a3,(Object_respawn_index_front).w
 
-	ifdef __DEBUG__	; RaiseError is only available in DEBUG builds
-		jsr	(Load_Objects_RaiseError).l							; raise an error if there is ring status table overflow
-	endif
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Load_Objects_RaiseError).l						; raise an error if there is ring status table overflow
 
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3

@@ -138,6 +138,16 @@ _eh_align_offset	equ	$80
 	supmode on				; bypass warnings on privileged instructions
 
 ; ---------------------------------------------------------------
+; One-liner to insert instructions in DEBUG builds
+; ---------------------------------------------------------------
+
+ifdebug:	macro
+	ifdef __DEBUG__
+		ALLARGS
+	endif
+    endm
+
+; ---------------------------------------------------------------
 ; Creates assertions for debugging
 ; ---------------------------------------------------------------
 ; EXAMPLES:
@@ -582,7 +592,7 @@ __FSTRING_PushArgument: macro OPERAND,DEST
 		move.ATTRIBUTE	d6,DEST
 	case "d7"
 		move.ATTRIBUTE	d7,DEST
-	
+
 	case "a0"
 		move.ATTRIBUTE	a0,DEST
 	case "a1"
@@ -712,7 +722,7 @@ __FSTRING_GenerateDecodedString:	macro string, addnewline
 		endif
 
 		; Retrive expression in brakets following % char
-    	.__endpos:	set		strstr(substr(string,.__pos+1,0),">")+.__pos+1 
+    	.__endpos:	set		strstr(substr(string,.__pos+1,0),">")+.__pos+1
 		if (.__endpos<=.__pos) ; Fix bizzare AS bug as stsstr() fails to check the last character of string
 			.__endpos:	set		strlen(string)-1
 		endif
@@ -770,25 +780,25 @@ __FSTRING_GenerateDecodedString:	macro string, addnewline
 
 ; ---------------------------------------------------------------
 ; MIT License
-; 
+;
 ; Copyright (c) 2016-2024 Vladikcomper
-; 
+;
 ; Permission is hereby granted, free of charge, to any person
 ; obtaining a copy ; of this software and associated
-; documentation files (the "Software"), to deal in the Software 
+; documentation files (the "Software"), to deal in the Software
 ; without restriction, including without limitation the rights
 ; to use, copy, modify, merge, publish, distribute, sublicense,
 ; and/or sell copies of the Software, and to permit persons to
 ; whom the Software is furnished to do so, subject to the
 ; following conditions:
-; 
+;
 ; The above copyright notice and this permission notice shall be
 ; included in all copies or substantial portions of the Software.
-; 
+;
 ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 ; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
 ; OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 ; HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 ; WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 ; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
