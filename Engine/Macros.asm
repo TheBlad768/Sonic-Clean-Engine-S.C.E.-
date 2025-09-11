@@ -218,12 +218,13 @@ levartptrs macro \
 	rings2, \
 	palette, \
 	wpalette, \
-	music
+	music, \
+	water=FALSE
 
 	dc.l (palette)<<24|((art1)&$FFFFFF),art2
 	dc.l (wpalette)<<24|((map16x16r)&$FFFFFF),map16x161,map16x162
 	dc.l (music)<<24|((map128x128r)&$FFFFFF),map128x1281,map128x1282
-	dc.l layoutr,layout1,layout2
+	dc.l (water)<<24|((layoutr)&$FFFFFF),layout1,layout2
 	dc.l solidr,solid1,solid2
 	dc.l objectsr,objects1,objects2
 	dc.l ringsr,rings1,rings2
@@ -273,6 +274,11 @@ subObjMainData macro address=FALSE,render,routine,height,width,prio,vram,pal,pri
     ifnb collision
 	dc.b collision
     endif
+    endm
+
+; macro to declare DPLC data
+DPLCEntry macro art, mappings
+	dc.l dmaSource(art), mappings
     endm
 ; ---------------------------------------------------------------------------
 
@@ -1210,11 +1216,11 @@ mappingsTableEntry macro ptr
 spriteHeader macro {INTLABEL}
 __LABEL__ label *
 	if SonicMappingsVer=1
-		dc.b ((__LABEL___End - __LABEL___Begin) / 5)
+		dc.b ((__LABEL___end - __LABEL___Begin) / 5)
 	elseif SonicMappingsVer=2
-		dc.w ((__LABEL___End - __LABEL___Begin) / 8)
+		dc.w ((__LABEL___end - __LABEL___Begin) / 8)
 	else
-		dc.w ((__LABEL___End - __LABEL___Begin) / 6)
+		dc.w ((__LABEL___end - __LABEL___Begin) / 6)
 	endif
 __LABEL___Begin label *
     endm
@@ -1260,11 +1266,11 @@ spritePiece2P macro xpos,ypos,width,height,tile,xflip,yflip,pal,pri,tile2,xflip2
 dplcHeader macro {INTLABEL}
 __LABEL__ label *
 	if SonicDplcVer=1
-		dc.b ((__LABEL___End - __LABEL___Begin) / 2)
+		dc.b ((__LABEL___end - __LABEL___Begin) / 2)
 	elseif SonicDplcVer=3
-		dc.w (((__LABEL___End - __LABEL___Begin) / 2)-1)
+		dc.w (((__LABEL___end - __LABEL___Begin) / 2)-1)
 	else
-		dc.w ((__LABEL___End - __LABEL___Begin) / 2)
+		dc.w ((__LABEL___end - __LABEL___Begin) / 2)
 	endif
 __LABEL___Begin label *
     endm

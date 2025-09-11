@@ -354,7 +354,7 @@ ObjDat_SignpostStub:		subObjData Map_SignpostStub, $492, 0, FALSE, 16, 8, 6, 0, 
 ObjDat_SignpostSparkle:		subObjData Map_Ring, ArtTile_Ring, 1, FALSE, 16, 16, 5, 4, 0
 
 ; dplc
-PLCPtr_EndSigns:		dc.l dmaSource(ArtUnc_EndSigns), DPLC_EndSigns
+PLCPtr_EndSigns:		DPLCEntry ArtUnc_EndSigns, DPLC_EndSigns
 
 Child6_EndSign:
 		dc.w 1-1
