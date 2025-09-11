@@ -278,6 +278,7 @@ Level_data_addr_RAM:					= *
 .128x128RAM						ds.l 1
 .128x128Data1						ds.l 1
 .128x128Data2						ds.l 1
+.WaterFlag						= *
 .LayoutRAM						ds.l 1
 .LayoutData1						ds.l 1
 .LayoutData2						ds.l 1

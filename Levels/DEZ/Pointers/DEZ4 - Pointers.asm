@@ -29,7 +29,7 @@
 		; Solid pointer, 1st data, 2nd data
 		; Objects pointer, 1st data, 2nd data
 		; Rings pointer, 1st data, 2nd data
-		; Palette, Water palette, Music
+		; Palette, Water palette, Music, Water flag (disabled by default)
 		levartptrs \
 		DEZ_8x8_KosPM, \
 		0, \
