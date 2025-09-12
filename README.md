@@ -19,15 +19,17 @@
 
 ## Disclaimer
 
-Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. All code is provided “as is”. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty. Commercial usage is expressly prohibited.
+Heavily modified and improved Sonic 3 & Knuckles engine. Free use. You use it at your own risk. All code is provided “as is”.
+
+Sonic Clean Engine (S.C.E.) uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty. Commercial usage is expressly prohibited.
 
 ## Additional links
 
-#### If you are interested in the source code with the Z80 Sound Driver:
+#### If you are interested in the Sonic Clean Engine (S.C.E.) with the Z80 Sound Driver:
 
 - [Sonic-Clean-Engine-S.C.E.-Flamedriver-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/flamedriver)
 
-#### Extended source code:
+#### Sonic Clean Engine (S.C.E.) Extended version:
 
 - [Sonic-Clean-Engine-S.C.E.-Extended-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-)
 
@@ -160,13 +162,13 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 - [Telegram channel](http://t.me/theblad768channel)
 - [Red Miso Studios Discord](https://discords.com/servers/redmisostudios)
 
-## These projects are based on this source code
+## These projects are based on the Sonic Clean Engine (S.C.E.)
 
 - Sonic 3 Rebuilt by TomatoWave_0
 - [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
 - [Sonic 3 & Knuckles: Epilogue](https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source)
 - TishaProject (2019)
-- Sonic Virtual Adventure (2017) (Cancelled) — In the past I made this source code specifically for this project (:
+- Sonic Virtual Adventure (2017) (Cancelled) — In the past I made the Sonic Clean Engine (S.C.E.) specifically for this project (:
 
 ## Check out the Sonic Retro Disassemblies
 
