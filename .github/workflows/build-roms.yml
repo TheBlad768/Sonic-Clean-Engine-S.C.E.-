@@ -9,6 +9,7 @@ on:
     paths-ignore:
     - '.github/workflows/**'
     - 'README.md'
+    - 'LICENSE'
     - '_CD/**'
     - 'Engine/_examples/**'
     - 'Projects/**'

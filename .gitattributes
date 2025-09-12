@@ -9,7 +9,6 @@
 *.lst text
 *.pal binary
 *.eni binary
-*.nem binary
 *.kos binary
 *.kosm binary
 *.kosp binary
