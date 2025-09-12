@@ -11,23 +11,49 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/TheBlad768/Sonic-Clean-Engine-S.C.E.-/total?style=flat-square)
 
-## Disclaimer
-
-Cleaned up and optimized the source code of Sonic 3 & Knuckles. Free use. You use it at your own risk. All code is provided “as is”. This source code uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty. Commercial usage is expressly prohibited.
-
 # Download
 
 - [Current version](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/archive/refs/heads/flamedriver.zip)
 - [Releases](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/releases)
 - [ROMs](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/actions)
 
+## Disclaimer
+
+Heavily modified and improved Sonic 3 & Knuckles engine. Free use. You use it at your own risk. All code is provided “as is”.
+
+Sonic Clean Engine (S.C.E.) uses software from other authors. Check their licenses before using it. You assume any and all responsibility for using this content responsibly. I claims no responsibility or warranty. Commercial usage is expressly prohibited.
+
+## Features
+
+- Cleaned up and optimized disassembly of Sonic 3 & Knuckles.
+
+    - There are no hardcoded things as there were in the original Sonic 3 & Knuckles. Complete freedom in your work.
+
+- Changed level layout format. Now there are two bytes for chunk IDs.
+
+    - This will allow you to create more chunks for levels because there will be no one-byte limit here. This will allow you to port levels even from Sonic CD.
+
+- All current level settings in one file. No more searching through the entire Sonic disassembly to replace chunks, layout, palette, music, and other things. Just open [Pointer.asm](Levels/DEZ/Pointers) located in each level folder.
+
+- Various sound drivers. There is a Z80 Sound Flamedriver and an M68K Sound Driver. It all depends on your tasks.
+
+- Many original subroutines have been replaced with faster equivalents. These new subroutines do not break compatibility with the original Sonic 3 & Knuckles. Therefore, there is no need to worry about this.
+
+    - Updated Ultra DMA Queue subroutines and compression algorithms(Kosinski Plus, Kosinski Plus Module, Updated Enigma) have optimized S3K's performance very well.
+
+- I rewrote the code of all the screens, objects, and other things to get maximum performance.
+
+    - Poorly written object code can significantly reduce game performance, regardless of whether other subroutines have been optimized very well. All code has been rewritten in S3K style. If you are familiar with Sonic 3 & Knuckles disassembly, you will have no problems with the S1S3/SCE code.
+
+- The size of the object slots is now 0x50 bytes. Additional free bytes will facilitate work on complex objects.
+
 ## Additional links
 
-#### If you are interested in the source code with the Sonic 2 Clone Driver v2 (Mega PCM 2.0 version):
+#### If you are interested in the Sonic Clean Engine (S.C.E.) with the Sonic 2 Clone Driver v2 (Mega PCM 2.0 version):
 
 - [Sonic-Clean-Engine-S.C.E.-Clone-Driver-v2-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-/tree/Clone-Driver-v2)
 
-#### Extended source code:
+#### Sonic Clean Engine (S.C.E.) Extended version:
 
 - [Sonic-Clean-Engine-S.C.E.-Extended-](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-Extended-)
 
@@ -160,13 +186,13 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 - [Telegram channel](http://t.me/theblad768channel)
 - [Red Miso Studios Discord](https://discords.com/servers/redmisostudios)
 
-## These projects are based on this source code
+## These projects are based on the Sonic Clean Engine (S.C.E.)
 
 - Sonic 3 Rebuilt by TomatoWave_0
 - [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
 - [Sonic 3 & Knuckles: Epilogue](https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source)
 - TishaProject (2019)
-- Sonic Virtual Adventure (2017) (Cancelled) — In the past I made this source code specifically for this project (:
+- Sonic Virtual Adventure (2017) (Cancelled) — In the past I made the Sonic Clean Engine (S.C.E.) specifically for this project (:
 
 ## Check out the Sonic Retro Disassemblies
 
