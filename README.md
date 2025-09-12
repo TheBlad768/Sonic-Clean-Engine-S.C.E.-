@@ -134,8 +134,7 @@ Example of correct code:
 - [SSRG](https://sonicresearch.org/community/index.php?threads/guide-to-common-as-assembler-errors.7201/)
 
 > [!WARNING]\
-> Please always specify the jump sizes for instructions. Macro Assembler AS may display random and misleading errors if the jump size is not specified.
-> You will try to fix something that wasn’t actually broken, but these errors are caused only because you didn’t specify the jump size in the instruction.
+> Please always specify the jump sizes for instructions. Macro Assembler AS may display random and misleading errors if the jump size is not specified. You will try to fix something that wasn’t actually broken, but these errors are caused only because you didn’t specify the jump size in the instruction.
 
 ### Macro Assembler AS Passes
 
