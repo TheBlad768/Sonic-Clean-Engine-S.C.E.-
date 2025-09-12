@@ -168,7 +168,7 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 - TishaProject (2019)
 - Sonic Virtual Adventure (2017) (Cancelled) — In the past I made this source code specifically for this project (:
 
-## Check out the Sonic Retro source code
+## Check out the Sonic Retro Disassemblies
 
 - [s1disasm](https://github.com/sonicretro/s1disasm)
 - [s2disasm](https://github.com/sonicretro/s2disasm)
