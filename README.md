@@ -21,7 +21,7 @@
 
 Heavily modified and improved Sonic 3 & Knuckles engine.
 
-Please read the [license](https://github.com/TheBlad768/Sonic-Clean-Engine-S.C.E.-?tab=License-1-ov-file#) before using this project.
+Please read the [license](LICENSE) before using this project.
 
 ## Features
 
