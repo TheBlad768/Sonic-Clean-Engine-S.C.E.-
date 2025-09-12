@@ -3,17 +3,16 @@ name: Build S3CE ROMs
 on:
   push:
     branches:
-    - Clone-Driver-v2
-    - flamedriver
+      - Clone-Driver-v2
+      - flamedriver
 
     paths-ignore:
-    - '.github/workflows/**'
-    - 'README.md'
-    - 'LICENSE'
-    - '_CD/**'
-    - 'Engine/_examples/**'
-    - 'Projects/**'
-    - 'Utilities/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '_CD/**'
+      - 'Engine/_examples/**'
+      - 'Projects/**'
+      - 'Utilities/**'
 
 jobs:
   build:
@@ -25,16 +24,22 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set branch variable
-        shell: powershell
+        shell: pwsh
         run: |
           $branch = $env:GITHUB_REF -replace 'refs/heads/', ''
           echo "BRANCH_NAME=$branch" >> $env:GITHUB_ENV
 
       - name: Run build.bat
-        run: cmd /c build.bat
+        shell: cmd
+        run: |
+          cd /d %GITHUB_WORKSPACE%
+          build.bat
 
       - name: Run build_debug.bat
-        run: cmd /c build_debug.bat
+        shell: cmd
+        run: |
+          cd /d %GITHUB_WORKSPACE%
+          build_debug.bat
 
       - name: Upload ROMs
         uses: actions/upload-artifact@v4
