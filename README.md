@@ -45,7 +45,7 @@ Please read the [license](LICENSE) before using this project.
 
 - The size of the object slots is now 0x50 bytes. Additional free bytes will facilitate work on complex objects;
 
-- Various sound drivers. There is a Z80 Sound Flamedriver and an M68K Sound Driver. It all depends on your tasks.
+- Various sound drivers. There is a Z80 Sound Flamedriver and an M68K Sonic 2 Clone Driver v2 (Mega PCM 2.0 version). It all depends on your tasks.
 
 ## Additional links
 
