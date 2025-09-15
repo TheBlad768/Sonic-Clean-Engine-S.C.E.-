@@ -191,11 +191,27 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 
 ## These projects are based on the Sonic Clean Engine (S.C.E.)
 
-- Sonic 3 Rebuilt by TomatoWave_0
-- [Sonic The Hedgehog in Hellfire Saga](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
-- [Sonic 3 & Knuckles: Epilogue](https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source)
-- TishaProject (2019)
-- Sonic Virtual Adventure (2017) (Cancelled) — In the past I made the Sonic Clean Engine (S.C.E.) specifically for this project (:
+#### Sonic 3 Rebuilt by TomatoWave_0
+
+![Rebuilt](https://i.imgur.com/GgXGebt.png)
+
+#### [Sonic The Hedgehog in Hellfire Saga (2023)](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
+
+![Hellfire](https://i.imgur.com/GRyUeZD.png)
+
+#### [Sonic 3 & Knuckles: Epilogue (2021)](https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source)
+
+![Epilogue](https://i.imgur.com/bawDZSn.png)
+
+#### TishaProject (2019)
+
+![Tisha](https://i.imgur.com/fV2d77k.png)
+
+#### Sonic Virtual Adventure (2017) (Cancelled)
+
+- In the past I made the Sonic Clean Engine (S.C.E.) specifically for this project (:
+
+![SVA](https://i.imgur.com/2S9MEIj.png)
 
 ## Check out the Sonic Retro Disassemblies
 
