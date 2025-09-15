@@ -44,24 +44,24 @@ bytes_to_long function byte1,byte2,byte3,byte4,(((byte1)<<24)&$FF000000)|(((byte
 bytesToXcnt function n,x,n/x-1
 
 ; calculates initial loop counter value for a dbf loop
-; that writes n bytes total at 4 bytes per iteration
-bytesToLcnt function n,bytesToXcnt(n,4)
-
-; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 2 bytes per iteration
 bytesToWcnt function n,bytesToXcnt(n,2)
+
+; calculates initial loop counter value for a dbf loop
+; that writes n bytes total at 4 bytes per iteration
+bytesToLcnt function n,bytesToXcnt(n,4)
 
 ; calculates initial loop counter value for a normal loop
 ; that writes n bytes total at x bytes per iteration
 bytesTo2Xcnt function n,x,n/x
 
 ; calculates initial loop counter value for a normal loop
-; that writes n bytes total at 4 bytes per iteration
-bytesTo2Lcnt function n,bytesTo2Xcnt(n,4)
-
-; calculates initial loop counter value for a normal loop
 ; that writes n bytes total at 2 bytes per iteration
 bytesTo2Wcnt function n,bytesTo2Xcnt(n,2)
+
+; calculates initial loop counter value for a normal loop
+; that writes n bytes total at 4 bytes per iteration
+bytesTo2Lcnt function n,bytesTo2Xcnt(n,4)
 
 ; macros to convert from tile index to art tiles, block mapping or VRAM address
 sprite_priority function x,((x&7)<<7)
