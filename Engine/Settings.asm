@@ -14,4 +14,4 @@ OptimiseStopZ80:			= 2	; if 1, remove stopZ80 and startZ80, if 2, use only for c
 ChecksumCheck:				= 0	; if 1, enable checksum checking
 EnableSRAM:				= 0	; if 1, enable SRAM
 BackupSRAM:				= 0	; if 1, enable Backup SRAM
-AddressSRAM:				= 0	; 0 = odd+even; 2 = even only; 3 = odd only
+AddressSRAM:				= 0	; 0 = odd+even, 2 = even only, 3 = odd only
