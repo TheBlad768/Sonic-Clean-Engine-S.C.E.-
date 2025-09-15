@@ -33,7 +33,8 @@ Please read the [license](LICENSE) before using this project.
 
     - This will allow you to create more chunks for levels because there will be no one-byte limit here. This will allow you to port levels even from Sonic CD;
 
-- All current level settings in one file. No more searching through the entire Sonic disassembly to replace chunks, layout, palette, music, and other things. Just open [Pointer.asm](Levels/DEZ/Pointers) located in each level folder;
+- All current level settings in one file:
+    - No more searching through the entire Sonic disassembly to replace chunks, layout, palette, music, and other things. Just open [Pointer.asm](Levels/DEZ/Pointers) located in each level folder;
 
 - Many original subroutines have been replaced with faster equivalents. These new subroutines do not break compatibility with the original Sonic 3 & Knuckles. Therefore, there is no need to worry about this:
 
@@ -43,9 +44,11 @@ Please read the [license](LICENSE) before using this project.
 
     - Poorly written object code can significantly reduce game performance, regardless of whether other subroutines have been optimized very well. All code has been rewritten in S3K style. If you are familiar with Sonic 3 & Knuckles disassembly, you will have no problems with the S1S3/SCE code;
 
-- The size of the object slots is now 0x50 bytes. Additional free bytes will facilitate work on complex objects;
+- The size of the object slots is now 0x50 bytes:
+    - Additional free bytes will facilitate work on complex objects;
 
-- Various sound drivers. There are Z80 Sound Flamedriver and M68K Sonic 2 Clone Driver v2 (Mega PCM 2.0 version). It all depends on your tasks.
+- Various sound drivers:
+    - There are Z80 Sound Flamedriver and M68K Sonic 2 Clone Driver v2 (Mega PCM 2.0 version). It all depends on your tasks.
 
 ## Additional links
 
