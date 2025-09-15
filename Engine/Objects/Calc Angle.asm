@@ -3,10 +3,12 @@
 ; Based on https://codebase64.org/doku.php?id=base:8bit_atan2_8-bit_angle
 ; New version by Devon Artmeier
 ; ---------------------------------------------------------------------------
-; PARAMETERS:
-; d1.w - X value
-; d2.w - Y value
-; RETURNS:
+;
+; Inputs:
+; d1.w - x value
+; d2.w - y value
+;
+; Outputs:
 ; d0.b - 2-argument arctangent value (angle between (0,0) and (x,y))
 ; ---------------------------------------------------------------------------
 
