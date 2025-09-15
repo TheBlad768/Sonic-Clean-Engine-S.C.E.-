@@ -35,8 +35,6 @@ Please read the [license](LICENSE) before using this project.
 
 - All current level settings in one file. No more searching through the entire Sonic disassembly to replace chunks, layout, palette, music, and other things. Just open [Pointer.asm](Levels/DEZ/Pointers) located in each level folder;
 
-- Various sound drivers. There is a Z80 Sound Flamedriver and an M68K Sound Driver. It all depends on your tasks;
-
 - Many original subroutines have been replaced with faster equivalents. These new subroutines do not break compatibility with the original Sonic 3 & Knuckles. Therefore, there is no need to worry about this:
 
     - Updated Ultra DMA Queue subroutines and compression algorithms(Kosinski Plus, Kosinski Plus Module, Updated Enigma) have optimized S3K's performance very well;
@@ -45,7 +43,9 @@ Please read the [license](LICENSE) before using this project.
 
     - Poorly written object code can significantly reduce game performance, regardless of whether other subroutines have been optimized very well. All code has been rewritten in S3K style. If you are familiar with Sonic 3 & Knuckles disassembly, you will have no problems with the S1S3/SCE code;
 
-- The size of the object slots is now 0x50 bytes. Additional free bytes will facilitate work on complex objects.
+- The size of the object slots is now 0x50 bytes. Additional free bytes will facilitate work on complex objects;
+
+- Various sound drivers. There is a Z80 Sound Flamedriver and an M68K Sound Driver. It all depends on your tasks.
 
 ## Additional links
 
