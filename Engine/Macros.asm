@@ -1654,16 +1654,7 @@ levselstr macro str
 	save
 	codepage HUD
 	charset ' ',$FF
-	charset '0',0
-	charset '1',2
-	charset '2',4
-	charset '3',6
-	charset '4',8
-	charset '5',$A
-	charset '6',$C
-	charset '7',$E
-	charset '8',$10
-	charset '9',$12
+	charset '0',"\0\2\4\6\8\xA\xC\xE\x10\x12"
 	charset '*',$14
 	charset ':',$16
 	charset 'E',$18
