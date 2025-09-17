@@ -68,11 +68,11 @@ loc_1B7D8:
 Load_Objects_Main:
 		moveq	#-$80,d0
 		move.w	(Camera_Y_pos).w,d1
-		add.w	d0,d1										; subtract $80
+		add.w	d0,d1								; subtract $80
 		and.w	d0,d1
 		move.w	d1,(Camera_Y_pos_coarse_back).w
 		move.w	(Camera_X_pos).w,d1
-		add.w	d0,d1										; subtract $80
+		add.w	d0,d1								; subtract $80
 		and.w	d0,d1
 		move.w	d1,(Camera_X_pos_coarse_back).w
 		movea.l	(Object_index_addr).w,a4
@@ -181,7 +181,7 @@ loc_1B8F2:
 		move.w	a3,(Object_respawn_index_front).w
 
 		; RaiseError is only available in DEBUG builds
-		ifdebug	jsr	(Load_Objects_RaiseError).l						; raise an error if there is ring status table overflow
+		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is ring status table overflow
 
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3
@@ -297,9 +297,9 @@ loc_1B9A4:
 		bmi.s	loc_1B9FA
 
 .find
-		lea	next_object(a1),a1								; goto next object RAM slot
-		tst.l	address(a1)									; is object RAM slot empty?
-		dbeq	d0,.find									; if not, branch
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
 		bne.s	loc_1B9FA
 
 loc_1B9F2:
@@ -364,9 +364,9 @@ loc_1BA64:
 		bmi.s	.return
 
 .find
-		lea	next_object(a1),a1								; goto next object RAM slot
-		tst.l	address(a1)									; is object RAM slot empty?
-		dbeq	d0,.find									; if not, branch
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
 
 .return
 		rts
@@ -425,9 +425,9 @@ Create_New_Sprite4:
 		bmi.s	.notfree
 
 .find
-		lea	next_object(a1),a1								; goto next object RAM slot
-		tst.l	address(a1)									; is object RAM slot empty?
-		dbeq	d0,.find									; if not, branch
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
 
 .notfree
 		rts

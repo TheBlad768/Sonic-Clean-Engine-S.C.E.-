@@ -8,7 +8,7 @@ Random_Number:
 		move.l	(RNG_seed).w,d1
 		tst.w	d1
 		bne.s	.notreset
-		move.l	#$2A6D365B,d1	; reset seed if needed
+		move.l	#$2A6D365B,d1							; reset seed if needed
 
 .notreset
 

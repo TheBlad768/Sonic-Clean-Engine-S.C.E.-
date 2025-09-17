@@ -24,30 +24,30 @@ Load_Rings_Init:
 		move.w	(Camera_X_pos).w,d4
 		subq.w	#8,d4
 		bhi.s	.check
-		moveq	#1,d4										; no negative values allowed
+		moveq	#1,d4								; no negative values allowed
 		bra.s	.check
 ; ---------------------------------------------------------------------------
 
 .next
-		addq.w	#4,a1										; load next ring
-		addq.w	#2,a2										; load next ring status
+		addq.w	#4,a1								; load next ring
+		addq.w	#2,a2								; load next ring status
 
 .check
-		cmp.w	(a1),d4										; is the X pos of the ring < camera X pos?
-		bhi.s	.next										; if it is, check next ring
-		move.l	a1,(Ring_start_addr_ROM).w							; set start addresses
+		cmp.w	(a1),d4								; is the X pos of the ring < camera X pos?
+		bhi.s	.next								; if it is, check next ring
+		move.l	a1,(Ring_start_addr_ROM).w					; set start addresses
 		move.w	a2,(Ring_start_addr_RAM).w
-		addi.w	#320+16,d4									; advance by a screen
+		addi.w	#320+16,d4							; advance by a screen
 		bra.s	.check2
 ; ---------------------------------------------------------------------------
 
 .next2
-		addq.w	#4,a1										; load next ring
+		addq.w	#4,a1								; load next ring
 
 .check2
-		cmp.w	(a1),d4										; is the X pos of the ring < camera X + 336?
-		bhi.s	.next2										; if it is, check next ring
-		move.l	a1,(Ring_end_addr_ROM).w							; set end addresses
+		cmp.w	(a1),d4								; is the X pos of the ring < camera X + 336?
+		bhi.s	.next2								; if it is, check next ring
+		move.l	a1,(Ring_end_addr_ROM).w					; set end addresses
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -60,13 +60,13 @@ Load_Rings_Main:
 		move.w	(Camera_X_pos).w,d4
 		subq.w	#8,d4
 		bhi.s	.check
-		moveq	#1,d4										; no negative values allowed
+		moveq	#1,d4								; no negative values allowed
 		bra.s	.check
 ; ---------------------------------------------------------------------------
 
 .next
-		addq.w	#4,a1										; load next ring
-		addq.w	#2,a2										; load next ring status
+		addq.w	#4,a1								; load next ring
+		addq.w	#2,a2								; load next ring status
 
 .check
 		cmp.w	(a1),d4
@@ -75,8 +75,8 @@ Load_Rings_Main:
 ; ---------------------------------------------------------------------------
 
 .prev
-		subq.w	#4,a1										; load previous ring
-		subq.w	#2,a2										; load previous ring status
+		subq.w	#4,a1								; load previous ring
+		subq.w	#2,a2								; load previous ring status
 
 .check2
 		cmp.w	-4(a1),d4
@@ -85,15 +85,15 @@ Load_Rings_Main:
 		move.w	a2,(Ring_start_addr_RAM).w
 
 		; RaiseError is only available in DEBUG builds
-		ifdebug	jsr	(Load_Rings_RaiseError).l						; raise an error if there is ring status table overflow
+		ifdebug	jsr	(Load_Rings_RaiseError).l				; raise an error if there is ring status table overflow
 
 		movea.l	(Ring_end_addr_ROM).w,a2
-		addi.w	#320+16,d4									; advance by a screen
+		addi.w	#320+16,d4							; advance by a screen
 		bra.s	.check3
 ; ---------------------------------------------------------------------------
 
 .next2
-		addq.w	#4,a2										; load next ring
+		addq.w	#4,a2								; load next ring
 
 .check3
 		cmp.w	(a2),d4
@@ -102,7 +102,7 @@ Load_Rings_Main:
 ; ---------------------------------------------------------------------------
 
 .prev2
-		subq.w	#4,a2										; load previous ring
+		subq.w	#4,a2								; load previous ring
 
 .check4
 		cmp.w	-4(a2),d4
@@ -115,30 +115,30 @@ Load_Rings_Main:
 sub_E994:
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
-		subq.w	#1,d1										; are any rings currently being consumed?
-		blo.s	.return										; if not, branch
+		subq.w	#1,d1								; are any rings currently being consumed?
+		blo.s	.return								; if not, branch
 
 .find
-		move.w	(a2)+,d0									; is there a ring in this slot?
-		beq.s	.find										; if not, branch
-		movea.w	d0,a1										; load ring address
+		move.w	(a2)+,d0							; is there a ring in this slot?
+		beq.s	.find								; if not, branch
+		movea.w	d0,a1								; load ring address
 
 		; wait
-		subq.b	#1,(a1)										; decrement timer
-		bne.s	.next										; if it's not 0 yet, branch
-		addq.b	#6,(a1)										; reset timer
+		subq.b	#1,(a1)								; decrement timer
+		bne.s	.next								; if it's not 0 yet, branch
+		addq.b	#6,(a1)								; reset timer
 
 		; frame
-		addq.b	#1,1(a1)									; increment frame
-		cmpi.b	#(CMap_Ring_end-CMap_Ring)/2,1(a1)						; is it destruction time yet?
-		bne.s	.next										; if not, branch
-		move.w	#-1,(a1)									; destroy ring
+		addq.b	#1,1(a1)							; increment frame
+		cmpi.b	#(CMap_Ring_end-CMap_Ring)/2,1(a1)				; is it destruction time yet?
+		bne.s	.next								; if not, branch
+		move.w	#-1,(a1)							; destroy ring
 
-		clr.w	-2(a2)										; clear ring entry
-		subq.w	#1,(Ring_consumption_table).w							; subtract count
+		clr.w	-2(a2)								; clear ring entry
+		subq.w	#1,(Ring_consumption_table).w					; subtract count
 
 .next
-		dbf	d1,.find									; repeat for all rings in table
+		dbf	d1,.find							; repeat for all rings in table
 
 .return
 		rts
@@ -153,8 +153,8 @@ Test_Ring_Collisions:
 		cmpa.l	a1,a2
 		beq.s	sub_E994.return
 		movea.w	(Ring_start_addr_RAM).w,a4
-		btst	#status_secondary.lightning_shield,status_secondary(a0)				; does Sonic have a Lightning Shield?
-		beq.s	Test_Ring_Collisions_NoAttraction						; if not, branch
+		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
+		beq.s	Test_Ring_Collisions_NoAttraction				; if not, branch
 		moveq	#-64,d2
 		add.w	x_pos(a0),d2
 		moveq	#-64,d3
@@ -174,8 +174,8 @@ Test_Ring_Collisions_NoAttraction:
 		move.b	y_radius(a0),d5
 		subq.b	#3,d5
 		sub.w	d5,d3
-		cmpi.b	#AniIDSonAni_Duck,anim(a0)							; is player ducking?
-		bne.s	.notduck									; if not, branch
+		cmpi.b	#AniIDSonAni_Duck,anim(a0)					; is player ducking?
+		bne.s	.notduck							; if not, branch
 		addi.w	#$C,d3
 		moveq	#$A,d5
 
@@ -216,8 +216,8 @@ loc_EAB8:
 		bhi.s	loc_EADA
 
 loc_EABE:
-		btst	#status_secondary.lightning_shield,status_secondary(a0)				; does Sonic have a Lightning Shield?
-		bne.s	Test_Ring_Collisions_AttractRing						; if yes, branch
+		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
+		bne.s	Test_Ring_Collisions_AttractRing				; if yes, branch
 
 loc_EAC6:
 		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/2),(a4)
@@ -240,19 +240,19 @@ loc_EADA:
 ; =============== S U B R O U T I N E =======================================
 
 Test_Ring_Collisions_AttractRing:
-		lea	(a1),a3										; save ROM address
+		lea	(a1),a3								; save ROM address
 		bsr.w	Create_New_Sprite
 		bne.s	.notfree
 		move.l	#Obj_Attracted_Ring,address(a1)
-		move.w	(a3),x_pos(a1)									; copy xpos
-		move.w	2(a3),y_pos(a1)									; copy ypos
-		move.w	a4,objoff_30(a1)								; save ring RAM address
-		move.w	#-1,(a4)									; set not draw flag
+		move.w	(a3),x_pos(a1)							; copy xpos
+		move.w	2(a3),y_pos(a1)							; copy ypos
+		move.w	a4,objoff_30(a1)						; save ring RAM address
+		move.w	#-1,(a4)							; set not draw flag
 		rts
 ; ---------------------------------------------------------------------------
 
 .notfree
-		lea	(a3),a1										; return ROM address
+		lea	(a3),a1								; return ROM address
 		bra.s	loc_EAC6
 
 ; ---------------------------------------------------------------------------
@@ -262,9 +262,9 @@ Test_Ring_Collisions_AttractRing:
 ; =============== S U B R O U T I N E =======================================
 
 GiveRing:
-		addq.w	#1,(Ring_count).w								; add 1 to rings
-		ori.b	#1,(Update_HUD_ring_count).w							; update the rings counter
-		sfx	sfx_RingRight,1									; play ring sound
+		addq.w	#1,(Ring_count).w						; add 1 to rings
+		ori.b	#1,(Update_HUD_ring_count).w					; update the rings counter
+		sfx	sfx_RingRight,1							; play ring sound
 
 ; ---------------------------------------------------------------------------
 ; Add ring to player
@@ -273,9 +273,9 @@ GiveRing:
 ; =============== S U B R O U T I N E =======================================
 
 AddRings:
-		add.w	d0,(Ring_count).w								; add to rings
-		ori.b	#1,(Update_HUD_ring_count).w							; update the rings counter
-		sfx	sfx_RingRight,1									; play ring sound
+		add.w	d0,(Ring_count).w						; add to rings
+		ori.b	#1,(Update_HUD_ring_count).w					; update the rings counter
+		sfx	sfx_RingRight,1							; play ring sound
 
 ; ---------------------------------------------------------------------------
 ; Render rings
@@ -286,37 +286,37 @@ AddRings:
 Render_Rings:
 		movea.l	(Ring_start_addr_ROM).w,a0
 		move.l	(Ring_end_addr_ROM).w,d2
-		sub.l	a0,d2										; are there any rings on-screen?
-		beq.s	.return										; if not, branch
+		sub.l	a0,d2								; are there any rings on-screen?
+		beq.s	.return								; if not, branch
 		movea.w	(Ring_start_addr_RAM).w,a4
-		move.w	4(a3),d4									; Camera_Y_pos_copy
+		move.w	4(a3),d4							; Camera_Y_pos_copy
 		move.w	#256-16,d5
 		move.w	(Screen_Y_wrap_value).w,d3
 
 .loop
-		tst.w	(a4)+										; has this ring been consumed?
-		bmi.s	.next										; if it has, branch
-		move.w	2(a0),d1									; get ring ypos
-		sub.w	d4,d1										; subtract camera ypos
+		tst.w	(a4)+								; has this ring been consumed?
+		bmi.s	.next								; if it has, branch
+		move.w	2(a0),d1							; get ring ypos
+		sub.w	d4,d1								; subtract camera ypos
 		addq.w	#8,d1
 		and.w	d3,d1
 		cmp.w	d5,d1
 		bhs.s	.next
-		move.w	(a0),d0										; get ring xpos
-		sub.w	(a3),d0										; subtract camera xpos
+		move.w	(a0),d0								; get ring xpos
+		sub.w	(a3),d0								; subtract camera xpos
 		move.b	-1(a4),d6
-		add.w	d6,d6										; multiply by 2
-		addi.w	#128-16,d1									; add ypos
-		move.w	d1,(a6)+									; set ypos
-		move.b	#5,(a6)										; set size of the sprite
-		addq.w	#2,a6										; skip link parameter
-		move.w	CMap_Ring(pc,d6.w),(a6)+							; VRAM
-		addi.w	#128-8,d0									; add xpos
-		move.w	d0,(a6)+									; set xpos
-		subq.w	#1,d7										; subtract sprite count
+		add.w	d6,d6								; multiply by 2
+		addi.w	#128-16,d1							; add ypos
+		move.w	d1,(a6)+							; set ypos
+		move.b	#5,(a6)								; set size of the sprite
+		addq.w	#2,a6								; skip link parameter
+		move.w	CMap_Ring(pc,d6.w),(a6)+					; VRAM
+		addi.w	#128-8,d0							; add xpos
+		move.w	d0,(a6)+							; set xpos
+		subq.w	#1,d7								; subtract sprite count
 
 .next
-		addq.w	#4,a0										; next
+		addq.w	#4,a0								; next
 		subq.w	#4,d2
 		bne.s	.loop
 
@@ -357,16 +357,16 @@ CMap_Ring_end
 Clear_SpriteRingMem:
 
 		; objects
-		lea	(Dynamic_object_RAM-next_object).w,a1						; start address for object RAM
+		lea	(Dynamic_object_RAM-next_object).w,a1				; start address for object RAM
 		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d1
 
 .findos
-		lea	next_object(a1),a1								; next object slot
-		tst.l	address(a1)									; is object RAM slot empty?
-		beq.s	.nextos										; if yes, branch
-		move.w	respawn_addr(a1),d0								; get address in respawn table
-		beq.s	.nextos										; if it's zero, it isn't remembered
-		movea.w	d0,a2										; load address into a2
+		lea	next_object(a1),a1						; next object slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		beq.s	.nextos								; if yes, branch
+		move.w	respawn_addr(a1),d0						; get address in respawn table
+		beq.s	.nextos								; if it's zero, it isn't remembered
+		movea.w	d0,a2								; load address into a2
 		bclr	#7,(a2)
 
 .nextos
