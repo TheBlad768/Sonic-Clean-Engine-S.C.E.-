@@ -7,9 +7,9 @@
 Test_Checksum:
 		movea.w	#EndOfHeader,a0							; start checking bytes after the header ($200)
 		move.l	(ROMEndLoc).w,d1						; stop at end of ROM
-		sub.l	a0,d1									; subtract start address to get size
-		lsr.l	#6,d1										; divide by 64 (32 words)
-		moveq	#0,d0									; initialize checksum
+		sub.l	a0,d1								; subtract start address to get size
+		lsr.l	#6,d1								; divide by 64 (32 words)
+		moveq	#0,d0								; initialize checksum
 
 .loop
 
