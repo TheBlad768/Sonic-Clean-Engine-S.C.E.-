@@ -186,7 +186,7 @@ Do_ControllerPal:
 
 .skipwater
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,(224<<2),VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
 		rts
@@ -204,7 +204,7 @@ VInt_LevelSelect:
 		startZ802
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,(224<<2),VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 		dma68kToVDP (LevelSelect_buffer2),VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size,VRAM	; foreground buffer to VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
@@ -306,7 +306,7 @@ VInt_Level_NoNegativeFlash:
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
 
 VInt_Level_Cont:
-		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,(224<<2),VRAM
+		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
 		bsr.s	VInt_SpecialFunction
