@@ -76,6 +76,8 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 - To convert SMPS music to asm format you can use [smps2asm](https://forums.sonicretro.org/index.php?threads/smps2asm-and-improved-s-k-driver.26876).
 
+- For counting instruction cycles you can use [68kCounter](https://68kcounter.grahambates.com).
+
 ## Current issues
 
 1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus** at all. You can only open uncompressed graphics.
