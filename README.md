@@ -78,6 +78,8 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 - For counting instruction cycles you can use [68kCounter](https://68kcounter.grahambates.com).
 
+- Recommended emulators for debugging: [BizHawk](https://github.com/TASEmulators/BizHawk/releases), [BlastEm](https://www.retrodev.com/blastem/nightlies/), [ClownMDEmu](https://github.com/Clownacy/clownmdemu-frontend/releases), [Exodus](https://www.exodusemulator.com/downloads/current-release), [Regen](https://segaretro.org/Regen).
+
 ## Current issues
 
 1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus** at all. You can only open uncompressed graphics.
