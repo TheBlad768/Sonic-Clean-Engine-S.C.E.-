@@ -36,7 +36,6 @@ VInt:
 		jsr	VInt_Table(pc,d0.w)
 
 VInt_Done:
-		jsr	(Random_Number).w
 		addq.l	#1,(V_int_run_count).w
 		movem.l	(sp)+,d0-a6							; return saved registers from the stack
 		rte
