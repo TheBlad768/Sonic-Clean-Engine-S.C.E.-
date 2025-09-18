@@ -78,7 +78,7 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 - For counting instruction cycles you can use [68kCounter](https://68kcounter.grahambates.com).
 
-- Recommended emulators for debugging: [BizHawk](https://github.com/TASEmulators/BizHawk/releases), [BlastEm](https://www.retrodev.com/blastem/nightlies/), [ClownMDEmu](https://github.com/Clownacy/clownmdemu-frontend/releases), [Exodus](https://www.exodusemulator.com/downloads/current-release), [Regen](https://segaretro.org/Regen).
+- Recommended emulators for debugging: [BizHawk](https://github.com/TASEmulators/BizHawk/releases), [BlastEm](https://www.retrodev.com/blastem/nightlies/), [ClownMDEmu](https://github.com/Clownacy/clownmdemu-frontend/releases), [Exodus](https://www.exodusemulator.com/downloads/current-release), [Gens KMod](https://segaretro.org/Gens_KMod), [Regen](https://segaretro.org/Regen).
 
 ## Current issues
 
