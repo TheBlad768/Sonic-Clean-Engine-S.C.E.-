@@ -168,6 +168,7 @@ LevelScreen:
 		jsr	(Process_KosPlus_Queue).w
 		jsr	(Wait_VSync).w
 		addq.w	#1,(Level_frame_counter).w
+		jsr	(Random_Number).w
 		jsr	(Special_Events).w
 		jsr	(Load_Objects).w
 		jsr	(Process_Sprites).w

@@ -39,7 +39,6 @@ VInt_Music:
 		SMPS_UpdateSoundDriver							; update SMPS ; warning: a5-a6 will be overwritten
 
 VInt_Done:
-		jsr	(Random_Number).w
 		addq.l	#1,(V_int_run_count).w
 		movem.l	(sp)+,d0-a6							; return saved registers from the stack
 		rte
