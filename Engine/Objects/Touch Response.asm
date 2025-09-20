@@ -316,18 +316,18 @@ Touch_Enemy:
 .checkhurtenemy
 
 		; boss related? could be special enemies in general
-		tst.b	boss_hitcount2(a1)
+		tst.b	boss_hitcount(a1)
 		beq.s	Touch_EnemyNormal
 		neg.w	x_vel(a0)							; bounce player directly off boss
 		neg.w	y_vel(a0)
 		neg.w	ground_vel(a0)
-		move.b	collision_flags(a1),boss_backup_collision(a1)			; save current collision
+		move.b	collision_flags(a1),boss_saved_collision(a1)			; save current collision
 		clr.b	collision_flags(a1)
 
 	if BossDebug
-		clr.b	boss_hitcount2(a1)
+		clr.b	boss_hitcount(a1)
 	else
-		subq.b	#1,boss_hitcount2(a1)
+		subq.b	#1,boss_hitcount(a1)
 		bne.s	.bossnotdefeated
 	endif
 
