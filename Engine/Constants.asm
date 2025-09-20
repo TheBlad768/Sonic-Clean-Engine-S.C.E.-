@@ -489,7 +489,7 @@ spindash_counter =						spin_dash_counter				; word
 restart_countdown =						spin_dash_counter				; word
 
 ; boss
-boss_invulnerable_time =					objoff_1D					; byte ; flash time
+boss_invulnerable_time =					boss_invulnerability_timer			; byte ; flash time
 boss_hitcount2 =						boss_hitcount					; byte ; usage varies, bosses use it as a hit counter
 
 ; ---------------------------------------------------------------------------
