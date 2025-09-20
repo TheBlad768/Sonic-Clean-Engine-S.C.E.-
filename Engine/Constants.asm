@@ -333,8 +333,7 @@ next_object =							object_size
 ; Universally followed object conventions
 ; ---------------------------------------------------------------------------
 
-id =								objoff_00					; long
-address =							id						; long
+address =							objoff_00					; long
 render_flags =							objoff_04					; bitfield ; refer to SCHG for details
 height_pixels =							objoff_06					; byte ; height / 2
 width_pixels =							objoff_07					; byte ; width / 2
@@ -415,7 +414,7 @@ tilt =								objoff_3B					; byte ; angle on ground
 stick_to_convex =						objoff_3C					; byte ; used to make character stick to convex surfaces such as the rotating discs in CNZ
 spin_dash_flag =						objoff_3D					; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
 spin_dash_counter =						objoff_3E					; word
-restart_timer =							objoff_3E					; word
+restart_timer =							spin_dash_counter				; word
 jumping =							objoff_40					; byte
 interact =							objoff_42					; word ; RAM address of the last object the character stood on
 default_y_radius =						objoff_44					; byte ; default value of y_radius
@@ -427,15 +426,17 @@ lrb_solid_bit =							objoff_47					; byte ; the bit to check for left/right/bot
 ; Conventions followed by some/most bosses
 ; ---------------------------------------------------------------------------
 
-boss_invulnerable_time =					objoff_1D					; byte ; flash time
-boss_backup_collision =						objoff_25					; byte ; restore boss collision after hit
-boss_hitcount2 =						objoff_29					; byte ; usage varies, bosses use it as a hit counter
+boss_invulnerability_timer =					objoff_1D					; byte ; flash time
+boss_saved_collision =						objoff_25					; byte ; restore boss collision after hit
+boss_saved_mus =						objoff_26					; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects
+boss_hitcount =							objoff_29					; byte ; usage varies, bosses use it as a hit counter
 
 ; ---------------------------------------------------------------------------
 ; Object variables
 ; Alias from Sonic 1 (GitHub)
 ; ---------------------------------------------------------------------------
 
+; universal
 obId =								address						; long
 obRender =							render_flags					; byte ; bitfield for x/y flip, display mode
 obRoutine =							routine						; byte ; routine number
@@ -465,6 +466,31 @@ obParent4 =							parent4						; word ; parent of child objects
 obParent3 =							parent3						; word ; parent of child objects
 obParent2 =							parent2						; word ; parent of child objects
 obRespawnNo =							respawn_addr					; word ; the address of this object's entry in the respawn table
+
+; ---------------------------------------------------------------------------
+; Object variables
+; Alias from Sonic 2 (GitHub)
+; ---------------------------------------------------------------------------
+
+; universal
+id =								address						; long
+anim_frame_duration =						anim_frame_timer				; byte
+respawn_index =							respawn_addr					; word ; the address of this object's entry in the respawn table
+
+; player
+inertia =							ground_vel					; word ; overall velocity along ground, not updated when in the air
+flip_turned =							flip_type					; byte ; bit 7 set means flipping is inverted, lower bits control flipping type
+obj_control =							object_control					; byte ; bit 0 set means character can jump out, bit 7 set means he can't
+invulnerable_time =						invulnerability_timer				; byte ; decremented every frame
+invincibility_time =						invincibility_timer				; byte ; decremented every 8 frames
+speedshoes_time =						speed_shoes_timer				; byte ; decremented every 8 frames
+spindash_flag =							spin_dash_flag					; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
+spindash_counter =						spin_dash_counter				; word
+restart_countdown =						spin_dash_counter				; word
+
+; boss
+boss_invulnerable_time =					objoff_1D					; byte ; flash time
+boss_hitcount2 =						boss_hitcount					; byte ; usage varies, bosses use it as a hit counter
 
 ; ---------------------------------------------------------------------------
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
@@ -862,6 +888,7 @@ v_ram_start							= RAM_start					; alias from Sonic 1 (GitHub)
 
 ; object variables
 v_player							= Player_1					; alias from Sonic 1 (GitHub)
+MainCharacter							= Player_1					; alias from Sonic 2 (GitHub)
 
 ; scroll variables
 v_hscrolltablebuffer						= H_scroll_buffer				; alias from Sonic 1 (GitHub)
@@ -893,14 +920,24 @@ SonicControl							= Ctrl_1_logical				; alias from Sonic 1 (Vladikcomper)
 v_jpadhold2							= Ctrl_1_held_logical				; alias from Sonic 1 (GitHub)
 v_jpadpress2							= Ctrl_1_pressed_logical			; alias from Sonic 1 (GitHub)
 Joypad								= Ctrl_1					; alias from Sonic 1 (Vladikcomper)
-Ctrl_1_hold							= Ctrl_1_held					; alias from Sonic 2 (GitHub)
 v_jpadhold1							= Ctrl_1_held					; alias from Sonic 1 (GitHub)
 v_jpadpress1							= Ctrl_1_pressed				; alias from Sonic 1 (GitHub)
-Ctrl_1_press							= Ctrl_1_pressed				; alias from Sonic 2 (GitHub)
-Ctrl_2_hold							= Ctrl_2_held					; alias from Sonic 2 (GitHub)
 v_jpad2hold1							= Ctrl_2_held					; alias from Sonic 1 (GitHub)
 v_jpad2press1							= Ctrl_2_pressed				; alias from Sonic 1 (GitHub)
+Ctrl_1_Logical							= Ctrl_1_logical				; alias from Sonic 2 (GitHub)
+Ctrl_1_Held_Logical						= Ctrl_1_held_logical				; alias from Sonic 2 (GitHub)
+Ctrl_1_Press_Logical						= Ctrl_1_pressed_logical			; alias from Sonic 2 (GitHub)
+Ctrl_2_Logical							= Ctrl_2_logical				; alias from Sonic 2 (GitHub)
+Ctrl_2_Held_Logical						= Ctrl_2_held_logical				; alias from Sonic 2 (GitHub)
+Ctrl_2_Press_Logical						= Ctrl_2_pressed_logical			; alias from Sonic 2 (GitHub)
+Ctrl_1_hold							= Ctrl_1_held					; alias from Sonic 2 (GitHub)
+Ctrl_1_Held							= Ctrl_1_held					; alias from Sonic 2 (GitHub)
+Ctrl_1_press							= Ctrl_1_pressed				; alias from Sonic 2 (GitHub)
+Ctrl_1_Press							= Ctrl_1_pressed				; alias from Sonic 2 (GitHub)
+Ctrl_2_hold							= Ctrl_2_held					; alias from Sonic 2 (GitHub)
+Ctrl_2_Held							= Ctrl_2_held					; alias from Sonic 2 (GitHub)
 Ctrl_2_press							= Ctrl_2_pressed				; alias from Sonic 2 (GitHub)
+Ctrl_2_Press							= Ctrl_2_pressed				; alias from Sonic 2 (GitHub)
 v_vdp_buffer1							= VDP_reg_1_command				; alias from Sonic 1 (GitHub)
 v_demolength							= Demo_timer					; alias from Sonic 1 (GitHub)
 v_scrposy_dup							= V_scroll_value				; alias from Sonic 1 (GitHub)
