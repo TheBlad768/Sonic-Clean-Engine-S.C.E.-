@@ -492,7 +492,7 @@ Obj_EggCapsule_Animals:
 		move.w	objoff_3E(a0),y_vel(a0)
 
 		; check Sonic
-		jsr	(Find_SonicTails).w
+		jsr	(Find_SonicObject).w
 		move.w	#-$200,d1							; left
 		tst.b	(Level_results_flag).w
 		beq.s	.setxvel

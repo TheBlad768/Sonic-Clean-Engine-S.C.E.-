@@ -2,7 +2,7 @@
 ; Constants
 ; ===========================================================================
 
-Ref_Checksum_String						= 'S3CE'
+Ref_Checksum_String =						'S3CE'
 
 ; ---------------------------------------------------------------------------
 ; VDP addresses
@@ -94,14 +94,15 @@ Security_Addr =							Security_addr
 ; Level Misc
 ; ---------------------------------------------------------------------------
 
-RingTable_Count:						= 512						; the maximum rings on the level. Even numbers only
-ObjectTable_Count:						= 768						; the maximum objects on the level. Even numbers only
+RingTable_Count =						512						; the maximum rings on the level. Even numbers only
+ObjectTable_Count =						768						; the maximum objects on the level. Even numbers only
+ChaosEmer_Count =						7						; chaos emeralds
 
 ; ---------------------------------------------------------------------------
 ; PLC queues
 ; ---------------------------------------------------------------------------
 
-PLCKosPlusM_Count:						= 32						; the greater the queues, the more RAM is used for the buffer. Even numbers only
+PLCKosPlusM_Count =						32						; the greater the queues, the more RAM is used for the buffer. Even numbers only
 
 ; ---------------------------------------------------------------------------
 ; V-Int routines
@@ -137,9 +138,9 @@ GameModeID_TitleCard =						setBit(GameModeFlag_TitleCard)			; flag mask
 ; Player IDs
 ; ---------------------------------------------------------------------------
 
-PlayerID_Sonic							equ 0
-PlayerID_Tails							equ 1
-PlayerID_Knuckles						equ 2
+PlayerID_Sonic =						0
+PlayerID_Tails =						1
+PlayerID_Knuckles =						2
 
 ; ---------------------------------------------------------------------------
 ; Player routines (Sonic)
@@ -222,86 +223,86 @@ AniIDSonAni_Carry2 =						id(ptr_SonAni_Carry2)				; 23
 ; Levels
 ; ---------------------------------------------------------------------------
 
-LevelID_DEZ:							equ 0						; Death Egg
-LevelID_NULL:							equ $FF						; NULL
+LevelID_DEZ =							0						; Death Egg
+LevelID_NULL =							$FF						; NULL
 
 ; ---------------------------------------------------------------------------
 ; Buttons bit numbers
 ; ---------------------------------------------------------------------------
 
-button_up:							equ 0
-button_down:							equ 1
-button_left:							equ 2
-button_right:							equ 3
-button_B:							equ 4
-button_C:							equ 5
-button_A:							equ 6
-button_start:							equ 7
+button_up =							0
+button_down =							1
+button_left =							2
+button_right =							3
+button_B =							4
+button_C =							5
+button_A =							6
+button_start =							7
 
 ; ---------------------------------------------------------------------------
 ; Buttons masks (1 << x == pow(2, x))
 ; ---------------------------------------------------------------------------
 
-button_up_mask:							equ setBit(button_up)				; $01
-button_down_mask:						equ setBit(button_down)				; $02
-button_left_mask:						equ setBit(button_left)				; $04
-button_right_mask:						equ setBit(button_right)			; $08
-button_B_mask:							equ setBit(button_B)				; $10
-button_C_mask:							equ setBit(button_C)				; $20
-button_A_mask:							equ setBit(button_A)				; $40
-button_start_mask:						equ setBit(button_start)			; $80
+button_up_mask =						setBit(button_up)				; $01
+button_down_mask =						setBit(button_down)				; $02
+button_left_mask =						setBit(button_left)				; $04
+button_right_mask =						setBit(button_right)				; $08
+button_B_mask =							setBit(button_B)				; $10
+button_C_mask =							setBit(button_C)				; $20
+button_A_mask =							setBit(button_A)				; $40
+button_start_mask =						setBit(button_start)				; $80
 
 ; ---------------------------------------------------------------------------
 ; Joypad input
 ; ---------------------------------------------------------------------------
 
-btnABCS:							equ %11110000					; A, B, C or Start ($F0)
-btnStart:							equ %10000000					; Start button ($80)
-btnABC:								equ %01110000					; A, B or C ($70)
-btnAC:								equ %01100000					; A or C ($60)
-btnAB:								equ %01010000					; A or B ($50)
-btnA:								equ %01000000					; A ($40)
-btnBC:								equ %00110000					; B or C ($30)
-btnC:								equ %00100000					; C ($20)
-btnB:								equ %00010000					; B ($10)
-btnDir:								equ %00001111					; Any direction ($0F)
-btnDLR:								equ %00001110					; Down, Left or Right ($0E)
-btnULR:								equ %00001101					; Up, Left or Right ($0D)
-btnLR:								equ %00001100					; Left or Right ($0C)
-btnUDR:								equ %00001011					; Up, Down or Right ($0B)
-btnDR:								equ %00001010					; Down or Right ($0A)
-btnUR:								equ %00001001					; Down or Right ($09)
-btnR:								equ %00001000					; Right ($08)
-btnUDL:								equ %00000111					; Up, Down or Left ($07)
-btnDL:								equ %00000110					; Down or Left ($06)
-btnUL:								equ %00000101					; Up or Left ($05)
-btnL:								equ %00000100					; Left ($04)
-btnUD:								equ %00000011					; Up or Down ($03)
-btnDn:								equ %00000010					; Down ($02)
-btnUp:								equ %00000001					; Up ($01)
+btnABCS =							%11110000					; A, B, C or Start ($F0)
+btnStart =							%10000000					; Start button ($80)
+btnABC =							%01110000					; A, B or C ($70)
+btnAC =								%01100000					; A or C ($60)
+btnAB =								%01010000					; A or B ($50)
+btnA =								%01000000					; A ($40)
+btnBC =								%00110000					; B or C ($30)
+btnC =								%00100000					; C ($20)
+btnB =								%00010000					; B ($10)
+btnDir =							%00001111					; Any direction ($0F)
+btnDLR =							%00001110					; Down, Left or Right ($0E)
+btnULR =							%00001101					; Up, Left or Right ($0D)
+btnLR =								%00001100					; Left or Right ($0C)
+btnUDR =							%00001011					; Up, Down or Right ($0B)
+btnDR =								%00001010					; Down or Right ($0A)
+btnUR =								%00001001					; Down or Right ($09)
+btnR =								%00001000					; Right ($08)
+btnUDL =							%00000111					; Up, Down or Left ($07)
+btnDL =								%00000110					; Down or Left ($06)
+btnUL =								%00000101					; Up or Left ($05)
+btnL =								%00000100					; Left ($04)
+btnUD =								%00000011					; Up or Down ($03)
+btnDn =								%00000010					; Down ($02)
+btnUp =								%00000001					; Up ($01)
 
 ; ---------------------------------------------------------------------------
 ; Joypad bits
 ; ---------------------------------------------------------------------------
 
-bitStart:							equ 7
-bitA:								equ 6
-bitC:								equ 5
-bitB:								equ 4
-bitR:								equ 3
-bitL:								equ 2
-bitDn:								equ 1
-bitUp:								equ 0
+bitStart =							7
+bitA =								6
+bitC =								5
+bitB =								4
+bitR =								3
+bitL =								2
+bitDn =								1
+bitUp =								0
 
 ; ---------------------------------------------------------------------------
 ; Condition Code Register (CCR) bits
 ; ---------------------------------------------------------------------------
 
-ccr_x_bit							= 4						; extend ($10)
-ccr_n_bit							= 3						; negative ($08)
-ccr_z_bit							= 2						; zero ($04)
-ccr_v_bit							= 1						; overflow ($02)
-ccr_c_bit							= 0						; carry ($01)
+ccr_x_bit =							4						; extend ($10)
+ccr_n_bit =							3						; negative ($08)
+ccr_z_bit =							2						; zero ($04)
+ccr_v_bit =							1						; overflow ($02)
+ccr_c_bit =							0						; carry ($01)
 
 ; ---------------------------------------------------------------------------
 ; Unknown or inconsistently used offsets that are not applicable to Sonic
@@ -496,512 +497,518 @@ boss_hitcount2 =						boss_hitcount					; byte ; usage varies, bosses use it as 
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
 ; ---------------------------------------------------------------------------
 
-mainspr_childsprites						= objoff_16					; word ; amount of child sprites
+mainspr_childsprites =						objoff_16					; word ; amount of child sprites
 
-subspr_data							= objoff_18
-sub2_x_pos							= objoff_18
-sub2_y_pos							= objoff_1A
-sub2_mapframe							= objoff_1D
-sub3_x_pos							= objoff_1E
-sub3_y_pos							= objoff_20
-sub3_mapframe							= objoff_23
-sub4_x_pos							= objoff_24
-sub4_y_pos							= objoff_26
-sub4_mapframe							= objoff_29
-sub5_x_pos							= objoff_2A
-sub5_y_pos							= objoff_2C
-sub5_mapframe							= objoff_2F
-sub6_x_pos							= objoff_30
-sub6_y_pos							= objoff_32
-sub6_mapframe							= objoff_35
-sub7_x_pos							= objoff_36
-sub7_y_pos							= objoff_38
-sub7_mapframe							= objoff_3B
-sub8_x_pos							= objoff_3C
-sub8_y_pos							= objoff_3E
-sub8_mapframe							= objoff_41
-sub9_x_pos							= objoff_42
-sub9_y_pos							= objoff_44
-sub9_mapframe							= objoff_47
-subA_x_pos							= objoff_48
-subA_y_pos							= objoff_4A
-subA_mapframe							= objoff_4D
+subspr_data =							objoff_18
+sub2_x_pos =							objoff_18
+sub2_y_pos =							objoff_1A
+sub2_mapframe =							objoff_1D
+sub3_x_pos =							objoff_1E
+sub3_y_pos =							objoff_20
+sub3_mapframe =							objoff_23
+sub4_x_pos =							objoff_24
+sub4_y_pos =							objoff_26
+sub4_mapframe =							objoff_29
+sub5_x_pos =							objoff_2A
+sub5_y_pos =							objoff_2C
+sub5_mapframe =							objoff_2F
+sub6_x_pos =							objoff_30
+sub6_y_pos =							objoff_32
+sub6_mapframe =							objoff_35
+sub7_x_pos =							objoff_36
+sub7_y_pos =							objoff_38
+sub7_mapframe =							objoff_3B
+sub8_x_pos =							objoff_3C
+sub8_y_pos =							objoff_3E
+sub8_mapframe =							objoff_41
+sub9_x_pos =							objoff_42
+sub9_y_pos =							objoff_44
+sub9_mapframe =							objoff_47
+subA_x_pos =							objoff_48
+subA_y_pos =							objoff_4A
+subA_mapframe =							objoff_4D
 
-next_subspr							= 6						; size
+next_subspr =							6						; size
 
 ; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
 ; bitfield with the following meaning:
 ; ---------------------------------------------------------------------------
 
-p1_standing_bit							= 3
-p2_standing_bit							= p1_standing_bit + 1
-p1_standing							= setBit(p1_standing_bit)
-p2_standing							= setBit(p2_standing_bit)
-pushing_bit_delta						= 2
-p1_pushing_bit							= p1_standing_bit + pushing_bit_delta
-p2_pushing_bit							= p1_pushing_bit + 1
-p1_pushing							= setBit(p1_pushing_bit)
-p2_pushing							= setBit(p2_pushing_bit)
-standing_mask							= p1_standing|p2_standing
-pushing_mask							= p1_pushing|p2_pushing
+p1_standing_bit =						3
+p2_standing_bit =						p1_standing_bit + 1
+p1_standing =							setBit(p1_standing_bit)
+p2_standing =							setBit(p2_standing_bit)
+pushing_bit_delta =						2
+p1_pushing_bit =						p1_standing_bit + pushing_bit_delta
+p2_pushing_bit =						p1_pushing_bit + 1
+p1_pushing =							setBit(p1_pushing_bit)
+p2_pushing =							setBit(p2_pushing_bit)
+standing_mask =							p1_standing|p2_standing
+pushing_mask =							p1_pushing|p2_pushing
 
 ; ---------------------------------------------------------------------------
 ; The high word of d6 after a SolidObject call is a bitfield
 ; with the following meaning:
 ; ---------------------------------------------------------------------------
 
-p1_touch_side_bit						= 0
-p2_touch_side_bit						= p1_touch_side_bit + 1
-p1_touch_side							= setBit(p1_touch_side_bit)
-p2_touch_side							= setBit(p2_touch_side_bit)
-touch_side_mask							= p1_touch_side|p2_touch_side
-p1_touch_bottom_bit						= p1_touch_side_bit + pushing_bit_delta
-p2_touch_bottom_bit						= p1_touch_bottom_bit + 1
-p1_touch_bottom							= setBit(p1_touch_bottom_bit)
-p2_touch_bottom							= setBit(p2_touch_bottom_bit)
-touch_bottom_mask						= p1_touch_bottom|p2_touch_bottom
-p1_touch_top_bit						= p1_touch_bottom_bit + pushing_bit_delta
-p2_touch_top_bit						= p1_touch_top_bit + 1
-p1_touch_top							= setBit(p1_touch_top_bit)
-p2_touch_top							= setBit(p2_touch_top_bit)
-touch_top_mask							= p1_touch_top|p2_touch_top
+p1_touch_side_bit =						0
+p2_touch_side_bit =						p1_touch_side_bit + 1
+p1_touch_side =							setBit(p1_touch_side_bit)
+p2_touch_side =							setBit(p2_touch_side_bit)
+touch_side_mask =						p1_touch_side|p2_touch_side
+p1_touch_bottom_bit =						p1_touch_side_bit + pushing_bit_delta
+p2_touch_bottom_bit =						p1_touch_bottom_bit + 1
+p1_touch_bottom =						setBit(p1_touch_bottom_bit)
+p2_touch_bottom =						setBit(p2_touch_bottom_bit)
+touch_bottom_mask =						p1_touch_bottom|p2_touch_bottom
+p1_touch_top_bit =						p1_touch_bottom_bit + pushing_bit_delta
+p2_touch_top_bit =						p1_touch_top_bit + 1
+p1_touch_top =							setBit(p1_touch_top_bit)
+p2_touch_top =							setBit(p2_touch_top_bit)
+touch_top_mask =						p1_touch_top|p2_touch_top
 
 ; ---------------------------------------------------------------------------
 ; Sprite priority
 ; ---------------------------------------------------------------------------
 
-priority_0							= sprite_priority(0)				; high priority
-priority_1							= sprite_priority(1)
-priority_2							= sprite_priority(2)
-priority_3							= sprite_priority(3)
-priority_4							= sprite_priority(4)
-priority_5							= sprite_priority(5)
-priority_6							= sprite_priority(6)
-priority_7							= sprite_priority(7)				; low priority
+priority_0 =							sprite_priority(0)				; high priority
+priority_1 =							sprite_priority(1)
+priority_2 =							sprite_priority(2)
+priority_3 =							sprite_priority(3)
+priority_4 =							sprite_priority(4)
+priority_5 =							sprite_priority(5)
+priority_6 =							sprite_priority(6)
+priority_7 =							sprite_priority(7)				; low priority
 
 ; ---------------------------------------------------------------------------
 ; Sprite render screen bits
 ; ---------------------------------------------------------------------------
 
-render_flags.x_flip						= 0						; sprite mirrored horizontally
-render_flags.y_flip						= 1						; sprite mirrored vertically
-render_flags.level						= 2						; move with level
+render_flags.x_flip =						0						; sprite mirrored horizontally
+render_flags.y_flip =						1						; sprite mirrored vertically
+render_flags.level =						2						; move with level
 
-render_flags.static_mappings					= 5						; mappings pointer points directly to a lone sprite piece instead of a list of sprites
-render_flags.multi_sprite					= 6						; object SST holds metadata for multiple sprites
-render_flags.on_screen						= 7						; object is on-screen and was rendered on the previous frame
+render_flags.static_mappings =					5						; mappings pointer points directly to a lone sprite piece instead of a list of sprites
+render_flags.multi_sprite =					6						; object SST holds metadata for multiple sprites
+render_flags.on_screen =					7						; object is on-screen and was rendered on the previous frame
 
 ; ---------------------------------------------------------------------------
 ; Player status variables
 ; ---------------------------------------------------------------------------
 
-status.player.x_flip						= render_flags.x_flip				; facing left
-status.player.in_air						= 1						; airborne
-status.player.rolling						= 2						; spinning, i.e. jumping or rolling
-status.player.on_object						= 3						; stood on an object rather than the level
+status.player.x_flip =						render_flags.x_flip				; facing left
+status.player.in_air =						1						; airborne
+status.player.rolling =						2						; spinning, i.e. jumping or rolling
+status.player.on_object =					3						; stood on an object rather than the level
 
-status.player.pushing						= 5						; pressing against an object
-status.player.underwater					= 6						; submersed
-status.player.prevent_tails_respawn				= 7						; prevents AI Tails from respawning
+status.player.pushing =						5						; pressing against an object
+status.player.underwater =					6						; submersed
+status.player.prevent_tails_respawn =				7						; prevents AI Tails from respawning
 
 ; ---------------------------------------------------------------------------
 ; Player status secondary variables
 ; ---------------------------------------------------------------------------
 
-status_secondary.shield						= 0
-status_secondary.invincible					= 1
-status_secondary.speed_shoes					= 2
+status_secondary.shield =					0
+status_secondary.invincible =					1
+status_secondary.speed_shoes =					2
 
-status_secondary.fire_shield					= 4
-status_secondary.lightning_shield				= 5
-status_secondary.bubble_shield					= 6
-status_secondary.sliding					= 7
+status_secondary.fire_shield =					4
+status_secondary.lightning_shield =				5
+status_secondary.bubble_shield =				6
+status_secondary.sliding =					7
 
 ; ---------------------------------------------------------------------------
 ; Player shield reaction variables
 ; ---------------------------------------------------------------------------
 
-shield_reaction.shield						= 0
-shield_reaction.invincible					= 1
-shield_reaction.speed_shoes					= 2
-shield_reaction.all_shields					= 3
-shield_reaction.fire_shield					= 4
-shield_reaction.lightning_shield				= 5
-shield_reaction.bubble_shield					= 6
+shield_reaction.shield =					0
+shield_reaction.invincible =					1
+shield_reaction.speed_shoes =					2
+shield_reaction.all_shields =					3
+shield_reaction.fire_shield =					4
+shield_reaction.lightning_shield =				5
+shield_reaction.bubble_shield =					6
 
 ; ---------------------------------------------------------------------------
 ; Object status variables
 ; ---------------------------------------------------------------------------
 
-status.npc.x_flip						= render_flags.x_flip				; facing right ; used by Animate_Sprite
-status.npc.y_flip						= render_flags.y_flip				; facing up ; used by Animate_Sprite
-status.npc.dplc_slot						= 2						; set if DPLC is used ; used by SetUp_ObjAttributesSlotted
-status.npc.p1_standing						= 3						; stood on by player 1
-status.npc.p2_standing						= 4						; stood on by player 2
-status.npc.p1_pushing						= 5						; pushed by player 1
-status.npc.p2_pushing						= 6						; pushed by player 2
-status.npc.no_balancing						= 7						; prevents player from performing their balancing animation whilst stood upon this object
+status.npc.x_flip =						render_flags.x_flip				; facing right ; used by Animate_Sprite
+status.npc.y_flip =						render_flags.y_flip				; facing up ; used by Animate_Sprite
+status.npc.dplc_slot =						2						; set if DPLC is used ; used by SetUp_ObjAttributesSlotted
+status.npc.p1_standing =					3						; stood on by player 1
+status.npc.p2_standing =					4						; stood on by player 2
+status.npc.p1_pushing =						5						; pushed by player 1
+status.npc.p2_pushing =						6						; pushed by player 2
+status.npc.no_balancing =					7						; prevents player from performing their balancing animation whilst stood upon this object
 
 ; bosses
-status.npc.touch						= 6						; set if a player hit the boss
-status.npc.defeated						= 7						; set if a player defeated the enemy or boss
+status.npc.touch =						6						; set if a player hit the boss
+status.npc.defeated =						7						; set if a player defeated the enemy or boss
 
 ; ---------------------------------------------------------------------------
 ; Object collision variables
 ; ---------------------------------------------------------------------------
 
-collision_flags.npc.touch					= (0<<6)
-collision_flags.npc.item					= (1<<6)
-collision_flags.npc.hurt					= (2<<6)
-collision_flags.npc.special					= (3<<6)
+collision_flags.npc.touch =					(0<<6)
+collision_flags.npc.item =					(1<<6)
+collision_flags.npc.hurt =					(2<<6)
+collision_flags.npc.special =					(3<<6)
 
-collision_flags.npc.size_mask					= $3F
-collision_flags.npc.type_mask					= $C0
+collision_flags.npc.size_mask =					$3F
+collision_flags.npc.type_mask =					$C0
 
 ; ---------------------------------------------------------------------------
 ; Water wind tunnels variables
 ; ---------------------------------------------------------------------------
 
-WindTunnel_holding_flag.player_1				= 0
-WindTunnel_holding_flag.player_2				= 1
+WindTunnel_holding_flag.player_1 =				0
+WindTunnel_holding_flag.player_2 =				1
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
 ; ---------------------------------------------------------------------------
 
-ArtTile_VRAM_Start						= 0
-ArtTile_SpikesSprings						= $484
-ArtTile_Monitors						= $4AC
-ArtTile_Explosion						= $5A0
-ArtTile_StarPost						= $5E4
-ArtTile_Sonic							= $680
-ArtTile_Ring							= $6BC
-ArtTile_Ring_Sparks						= ArtTile_Ring+4
-ArtTile_HUD							= $6C4
-ArtTile_Shield							= $79C
-ArtTile_Shield_Sparks						= ArtTile_Shield+$1F
-ArtTile_DashDust						= $7E0
+ArtTile_VRAM_Start =						0
+ArtTile_SpikesSprings =						$484
+ArtTile_Monitors =						$4AC
+ArtTile_Explosion =						$5A0
+ArtTile_StarPost =						$5E4
+ArtTile_Sonic =							$680
+ArtTile_Ring =							$6BC
+ArtTile_Ring_Sparks =						ArtTile_Ring+4
+ArtTile_HUD =							$6C4
+ArtTile_Shield =						$79C
+ArtTile_Shield_Sparks =						ArtTile_Shield+$1F
+ArtTile_DashDust =						$7E0
 
 ; ---------------------------------------------------------------------------
 ; Values for the type and rwd argument
 ; ---------------------------------------------------------------------------
 
-VRAM = %100001
-CRAM = %101011
-VSRAM = %100101
+VRAM =								%100001
+CRAM =								%101011
+VSRAM =								%100101
 
-READ = %001100
-WRITE = %000111
-DMA = %100111
+READ =								%001100
+WRITE =								%000111
+DMA =								%100111
 
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses
 ; VRAM Reserved regions
 ; ---------------------------------------------------------------------------
 
-VRAM_Plane_A_Name_Table						= $C000						; extends until $CFFF
-VRAM_Plane_W_Name_Table						= $C000						; extends until $CFFF
-VRAM_Plane_B_Name_Table						= $E000						; extends until $EFFF
-VRAM_Plane_Table_Size						= $1000						; 64 cells x 32 cells x 2 bytes per cell
-VRAM_Sprite_Attribute_Table					= $F800						; extends until $FA7F
-VRAM_Sprite_Attribute_Table_Size				= $280						; 640 bytes
-VRAM_Horiz_Scroll_Table						= $F000						; extends until $FF7F
-VRAM_Horiz_Scroll_Table_Size					= 224*2*2					; 224 lines * 2 bytes per entry * 2 PNTs
+VRAM_Plane_A_Name_Table =					$C000						; extends until $CFFF
+VRAM_Plane_W_Name_Table =					VRAM_Plane_A_Name_Table				; extends until $CFFF
+VRAM_Plane_B_Name_Table =					$E000						; extends until $EFFF
+VRAM_Tile_Size =						8*8/2						; 8x8 size
+VRAM_Plane_Table_Size =						(512/8)*(256/8)*2				; 64 cells x 32 cells x 2 bytes per cell
+VRAM_Sprite_Attribute_Table =					$F800						; extends until $FA7F
+VRAM_Sprite_Attribute_Table_Size =				$280						; 640 bytes
+VRAM_Horiz_Scroll_Table =					$F000						; extends until $FF7F
+VRAM_Horiz_Scroll_Table_Size =					224*2*2						; 224 lines * 2 bytes per entry * 2 PNTs
 
-; ---------------------------------------------------------------------------
-; VRAM data
-; ---------------------------------------------------------------------------
-
-vram_fg:							= VRAM_Plane_A_Name_Table			; foreground namespace
-vram_window:							= VRAM_Plane_W_Name_Table			; window namespace
-vram_bg:							= VRAM_Plane_B_Name_Table			; background namespace
-vram_hscroll:							= VRAM_Horiz_Scroll_Table			; horizontal scroll table
-vram_sprites:							= VRAM_Sprite_Attribute_Table			; sprite table
+; alias from Sonic 1 (GitHub)
+vram_fg =							VRAM_Plane_A_Name_Table				; foreground namespace
+vram_window =							VRAM_Plane_W_Name_Table				; window namespace
+vram_bg =							VRAM_Plane_B_Name_Table				; background namespace
+vram_hscroll =							VRAM_Horiz_Scroll_Table				; horizontal scroll table
+vram_sprites =							VRAM_Sprite_Attribute_Table			; sprite table
+tile_size =							VRAM_Tile_Size					; 8x8 size
+plane_size_64x32 =						VRAM_Plane_Table_Size				; 64 cells x 32 cells x 2 bytes per cell
 
 ; ---------------------------------------------------------------------------
 ; Colours
 ; ---------------------------------------------------------------------------
 
-cBlack:								equ 0						; colour black
-cWhite:								equ $EEE					; colour white
-cBlue:								equ $E00					; colour blue
-cGreen:								equ $E0						; colour green
-cRed:								equ $E						; colour red
-cYellow:							equ cGreen+cRed					; colour yellow
-cAqua:								equ cGreen+cBlue				; colour aqua
-cMagenta:							equ cBlue+cRed					; colour magenta
+cBlack =							0						; colour black
+cWhite =							$EEE						; colour white
+cBlue =								$E00						; colour blue
+cGreen =							$E0						; colour green
+cRed =								$E						; colour red
+cYellow =							cGreen+cRed					; colour yellow
+cAqua =								cGreen+cBlue					; colour aqua
+cMagenta =							cBlue+cRed					; colour magenta
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff
 ; ---------------------------------------------------------------------------
 
-flip_x								= (1<<11)
-flip_y								= (1<<12)
-flip_bit_x							= 3
-flip_bit_y							= 4
-palette_bit_0							= 5
-palette_bit_1							= 6
-palette_line0							= (0<<13)
-palette_line_0							= (0<<13)
-palette_line1							= (1<<13)
-palette_line_1							= (1<<13)
-palette_line2							= (2<<13)
-palette_line_2							= (2<<13)
-palette_line3							= (3<<13)
-palette_line_3							= (3<<13)
-palette_line_size						= 16*2						; 16 word entries
-high_priority_bit						= 7
-high_priority							= setBit(15)
-palette_mask							= $6000
-tile_size							= 8*8/2
-plane_size_64x32						= 64*32*2
-tile_mask							= $7FF
-nontile_mask							= $F800
-drawing_mask							= $7FFF
+flip_x =							(1<<11)
+flip_y =							(1<<12)
+flip_bit_x =							3
+flip_bit_y =							4
+palette_bit_0 =							5
+palette_bit_1 =							6
+palette_line0 =							(0<<13)
+palette_line_0 =						(0<<13)
+palette_line1 =							(1<<13)
+palette_line_1 =						(1<<13)
+palette_line2 =							(2<<13)
+palette_line_2 =						(2<<13)
+palette_line3 =							(3<<13)
+palette_line_3 =						(3<<13)
+palette_line_size =						16*2						; 16 word entries
+high_priority_bit =						7
+high_priority =							setBit(15)
+palette_mask =							$6000
+tile_mask =							$7FF
+nontile_mask =							$F800
+drawing_mask =							$7FFF
 
 ; ---------------------------------------------------------------------------
 ; Animation flags
 ; ---------------------------------------------------------------------------
 
-afEnd								= $FF						; return to beginning of animation
-afBack								= $FE						; go back (specified number) bytes
-afChange							= $FD						; run specified animation
-afRoutine							= $FC						; increment routine counter and continue load next anim bytes
-afReset								= $FB						; move offscreen for remove(Using the Sprite_OnScreen_Test, etc...)
+afEnd =								$FF						; return to beginning of animation
+afBack =							$FE						; go back (specified number) bytes
+afChange =							$FD						; run specified animation
+afRoutine =							$FC						; increment routine counter and continue load next anim bytes
+afReset =							$FB						; move offscreen for remove(Using the Sprite_OnScreen_Test, etc...)
 
 ; ---------------------------------------------------------------------------
 ; Animation Raw flags
 ; ---------------------------------------------------------------------------
 
-arfIndex							= $FF						; go to animate raw index
-arfEnd								= $FE						; return to beginning of animation
-arfChange							= $FC						; run specified animation (specified offset)
-arfJump								= $FA						; jump from $34(a0) address
+arfIndex =							$FF						; go to animate raw index
+arfEnd =							$FE						; return to beginning of animation
+arfChange =							$FC						; run specified animation (specified offset)
+arfJump =							$FA						; jump from $34(a0) address
 
 ; ---------------------------------------------------------------------------
 ; Subroutine constants
 ; ---------------------------------------------------------------------------
 
 ; main
-JoypadInit							= Init_Controllers				; alias from Sonic 1/2 (Hivebrain/GitHub)
-ReadJoypads							= Poll_Controllers				; alias from Sonic 1/2 (Hivebrain/GitHub)
-Joypad_Read							= Poll_Controller				; alias from Sonic 2 (GitHub)
-VDPSetupGame							= Init_VDP					; alias from Sonic 1/2 (Hivebrain/GitHub)
-InitDMAQueue							= Init_DMA_Queue				; alias from Sonic 2 (GitHub)
-ProcessDMAQueue							= Process_DMA_Queue				; alias from Sonic 1/2 (Hivebrain/GitHub)
-QueueDMATransfer						= Add_To_DMA_Queue				; alias from Sonic 1/2 (Hivebrain/GitHub)
-ClearScreen							= Clear_DisplayData				; alias from Sonic 1/2 (Hivebrain/GitHub)
-ShowVDPGraphics							= Plane_Map_To_VRAM				; alias from Sonic 1 (Hivebrain)
-PlaneMapToVRAM							= Plane_Map_To_VRAM				; alias from Sonic 2 (GitHub)
-TilemapToVRAM							= Plane_Map_To_VRAM				; alias from Sonic 1 (GitHub)
-PlaneMapToVRAM2							= Plane_Map_To_VRAM_2				; alias from Sonic 2 (GitHub)
-PlaneMapToVRAM3							= Plane_Map_To_VRAM_3				; alias from Sonic 2 (GitHub)
-EniDec								= Eni_Decomp					; alias from Sonic 1/2 (Hivebrain/GitHub)
-KosPlusDec							= KosPlus_Decomp				; alias from Sonic 1/2 (Hivebrain/GitHub)
-Pal_FadeTo							= Pal_FadeFromBlack				; alias from Sonic 1 (Hivebrain)
-PaletteFadeIn							= Pal_FadeFromBlack				; alias from Sonic 1 (GitHub)
-Pal_FadeIn							= Pal_FromBlack					; alias from Sonic 1 (Hivebrain)
-FadeIn_FromBlack						= Pal_FromBlack					; alias from Sonic 1 (GitHub)
-Pal_FadeFrom							= Pal_FadeToBlack				; alias from Sonic 1 (Hivebrain)
-PaletteFadeOut							= Pal_FadeToBlack				; alias from Sonic 1 (GitHub)
-Pal_FadeOut							= Pal_ToBlack					; alias from Sonic 1 (Hivebrain)
-FadeOut_ToBlack							= Pal_ToBlack					; alias from Sonic 1 (GitHub)
-Pal_FromBlackWhite						= Pal_FadeFromWhite				; alias from S3K Disassembly (2011)
-PalLoad1							= LoadPalette					; alias from Sonic 1 (Hivebrain)
-PalLoad_Fade							= LoadPalette					; alias from Sonic 1 (GitHub)
-PalLoad_ForFade							= LoadPalette					; alias from Sonic 2 (GitHub)
-PalLoad2							= LoadPalette_Immediate				; alias from Sonic 1 (Hivebrain)
-PalLoad								= LoadPalette_Immediate				; alias from Sonic 1 (GitHub)
-PalLoad_Now							= LoadPalette_Immediate				; alias from Sonic 2 (GitHub)
-PalLoad3_Water							= LoadPalette2					; alias from Sonic 1 (Hivebrain)
-PalLoad_Fade_Water						= LoadPalette2					; alias from Sonic 1 (GitHub)
-PalLoad_Water_Now						= LoadPalette2					; alias from Sonic 2 (GitHub)
-PalLoad4_Water							= LoadPalette2_Immediate			; alias from Sonic 1 (Hivebrain)
-PalLoad_Water							= LoadPalette2_Immediate			; alias from Sonic 1 (GitHub)
-PalLoad_Water_ForFade						= LoadPalette2_Immediate			; alias from Sonic 2 (GitHub)
-DelayProgram							= Wait_VSync					; alias from Sonic 1 (Hivebrain)
-WaitForVBla							= Wait_VSync					; alias from Sonic 1 (GitHub)
-WaitForVint							= Wait_VSync					; alias from Sonic 2 (GitHub)
-RandomNumber							= Random_Number					; alias from Sonic 1/2 (Hivebrain/GitHub)
-CalcAngle							= GetArcTan					; alias from Sonic 1/2 (Hivebrain/GitHub)
-CalcSine							= GetSineCosine					; alias from Sonic 1/2 (Hivebrain/GitHub)
-PauseGame							= Pause_Game					; alias from Sonic 1/2 (Hivebrain/GitHub)
+JoypadInit =							Init_Controllers				; alias from Sonic 1/2 (Hivebrain/GitHub)
+ReadJoypads =							Poll_Controllers				; alias from Sonic 1/2 (Hivebrain/GitHub)
+Joypad_Read =							Poll_Controller					; alias from Sonic 2 (GitHub)
+VDPSetupGame =							Init_VDP					; alias from Sonic 1/2 (Hivebrain/GitHub)
+InitDMAQueue =							Init_DMA_Queue					; alias from Sonic 2 (GitHub)
+ProcessDMAQueue =						Process_DMA_Queue				; alias from Sonic 1/2 (Hivebrain/GitHub)
+QueueDMATransfer =						Add_To_DMA_Queue				; alias from Sonic 1/2 (Hivebrain/GitHub)
+ClearScreen =							Clear_DisplayData				; alias from Sonic 1/2 (Hivebrain/GitHub)
+ShowVDPGraphics =						Plane_Map_To_VRAM				; alias from Sonic 1 (Hivebrain)
+PlaneMapToVRAM =						Plane_Map_To_VRAM				; alias from Sonic 2 (GitHub)
+TilemapToVRAM =							Plane_Map_To_VRAM				; alias from Sonic 1 (GitHub)
+PlaneMapToVRAM2 =						Plane_Map_To_VRAM_2				; alias from Sonic 2 (GitHub)
+PlaneMapToVRAM3 =						Plane_Map_To_VRAM_3				; alias from Sonic 2 (GitHub)
+EniDec =							Eni_Decomp					; alias from Sonic 1/2 (Hivebrain/GitHub)
+KosPlusDec =							KosPlus_Decomp					; alias from Sonic 1/2 (Hivebrain/GitHub)
+Pal_FadeTo =							Pal_FadeFromBlack				; alias from Sonic 1 (Hivebrain)
+PaletteFadeIn =							Pal_FadeFromBlack				; alias from Sonic 1 (GitHub)
+Pal_FadeIn =							Pal_FromBlack					; alias from Sonic 1 (Hivebrain)
+FadeIn_FromBlack =						Pal_FromBlack					; alias from Sonic 1 (GitHub)
+Pal_FadeFrom =							Pal_FadeToBlack					; alias from Sonic 1 (Hivebrain)
+PaletteFadeOut =						Pal_FadeToBlack					; alias from Sonic 1 (GitHub)
+Pal_FadeOut =							Pal_ToBlack					; alias from Sonic 1 (Hivebrain)
+FadeOut_ToBlack =						Pal_ToBlack					; alias from Sonic 1 (GitHub)
+Pal_FromBlackWhite =						Pal_FadeFromWhite				; alias from S3K Disassembly (2011)
+PalLoad1 =							LoadPalette					; alias from Sonic 1 (Hivebrain)
+PalLoad_Fade =							LoadPalette					; alias from Sonic 1 (GitHub)
+PalLoad_ForFade =						LoadPalette					; alias from Sonic 2 (GitHub)
+PalLoad2 =							LoadPalette_Immediate				; alias from Sonic 1 (Hivebrain)
+PalLoad =							LoadPalette_Immediate				; alias from Sonic 1 (GitHub)
+PalLoad_Now =							LoadPalette_Immediate				; alias from Sonic 2 (GitHub)
+PalLoad3_Water =						LoadPalette2					; alias from Sonic 1 (Hivebrain)
+PalLoad_Fade_Water =						LoadPalette2					; alias from Sonic 1 (GitHub)
+PalLoad_Water_Now =						LoadPalette2					; alias from Sonic 2 (GitHub)
+PalLoad4_Water =						LoadPalette2_Immediate				; alias from Sonic 1 (Hivebrain)
+PalLoad_Water =							LoadPalette2_Immediate				; alias from Sonic 1 (GitHub)
+PalLoad_Water_ForFade =						LoadPalette2_Immediate				; alias from Sonic 2 (GitHub)
+DelayProgram =							Wait_VSync					; alias from Sonic 1 (Hivebrain)
+WaitForVBla =							Wait_VSync					; alias from Sonic 1 (GitHub)
+WaitForVint =							Wait_VSync					; alias from Sonic 2 (GitHub)
+RandomNumber =							Random_Number					; alias from Sonic 1/2 (Hivebrain/GitHub)
+CalcAngle =							GetArcTan					; alias from Sonic 1/2 (Hivebrain/GitHub)
+CalcSine =							GetSineCosine					; alias from Sonic 1/2 (Hivebrain/GitHub)
+PauseGame =							Pause_Game					; alias from Sonic 1/2 (Hivebrain/GitHub)
 
 ; objects
-RunObjects							= Process_Sprites				; alias from Sonic 2 (GitHub)
-ObjectsLoad							= Process_Sprites				; alias from Sonic 1 (Hivebrain)
-ExecuteObjects							= Process_Sprites				; alias from Sonic 1 (GitHub)
-BuildSprites							= Render_Sprites				; alias from Sonic 1/2 (Hivebrain/GitHub)
-AddPoints							= HUD_AddToScore				; alias from Sonic 1/2 (Hivebrain/GitHub)
-AnimateSprite							= Animate_Sprite				; alias from Sonic 1/2 (Hivebrain/GitHub)
-ObjectFall							= MoveSprite					; alias from Sonic 1 (Hivebrain)
-ObjectMoveAndFall						= MoveSprite					; alias from Sonic 2 (GitHub)
-SpeedToPos							= MoveSprite2					; alias from Sonic 1 (Hivebrain)
-ObjectMove							= MoveSprite2					; alias from Sonic 2 (GitHub)
-DisplaySprite							= Draw_Sprite					; alias from Sonic 1/2 (Hivebrain/GitHub)
-DeleteObject							= Delete_Current_Sprite				; alias from Sonic 1/2 (Hivebrain/GitHub)
-DeleteChild							= Delete_Referenced_Sprite			; alias from Sonic 1 (GitHub)
-DeleteObject2							= Delete_Referenced_Sprite			; alias from Sonic 1/2 (Hivebrain/GitHub)
-SingleObjLoad							= Create_New_Sprite				; alias from Sonic 1 (Hivebrain)
-AllocateObject							= Create_New_Sprite				; alias from Sonic 2/3K (GitHub)
-FindFreeObj							= Create_New_Sprite				; alias from Sonic 1 (GitHub)
-SingleObjLoad2							= Create_New_Sprite3				; alias from Sonic 1 (Hivebrain)
-FindNextFreeObj							= Create_New_Sprite3				; alias from Sonic 1 (GitHub)
-AllocateObjectAfterCurrent					= Create_New_Sprite3				; alias from Sonic 2/3K (GitHub)
-Find_Sonic							= Find_SonicObject				; alias for SCE
-Find_SonicTails							= Find_SonicObject				; alias from Sonic 3K (GitHub)
-Find_SonicTails8Way						= Find_Sonic8Way				; alias from Sonic 3K (GitHub)
-Shot_ObjectInSonic						= Shot_Object					; alias for SCE
-MarkObjGone							= Sprite_OnScreen_Test				; alias from Sonic 1/2 (Hivebrain/GitHub)
-RememberState							= Sprite_OnScreen_Test				; alias from Sonic 1 (GitHub)
-MarkObjGone_Collision						= Sprite_CheckDeleteTouch3			; alias for SCE
-RememberState_Collision						= Sprite_CheckDeleteTouch3			; alias for SCE
-Sprite_OnScreen_Test_Collision					= Sprite_CheckDeleteTouch3			; alias for SCE
-ObjHitFloor							= ObjCheckFloorDist				; alias from Sonic 1 (Hivebrain)
-ObjFloorDist							= ObjCheckFloorDist				; alias from Sonic 1 (GitHub)
-ObjHitFloor2							= ObjCheckFloorDist2				; alias from Sonic 1 (Hivebrain)
-ObjFloorDist2							= ObjCheckFloorDist2				; alias from Sonic 1 (GitHub)
-ObjHitWallRight							= ObjCheckRightWallDist				; alias from Sonic 1 (GitHub)
-ObjHitCeiling							= ObjCheckCeilingDist				; alias from Sonic 1 (GitHub)
-ObjHitWallLeft							= ObjCheckLeftWallDist				; alias from Sonic 1 (GitHub)
-ObjHitFloor_DoRoutine						= ObjCheckFloorDist_DoRoutine			; alias from Sonic 3K (GitHub)
-ObjHitFloor2_DoRoutine						= ObjCheckFloorDist2_DoRoutine			; alias from Sonic 3K (GitHub)
-ObjHitCeiling_DoRoutine						= ObjCheckCeilingDist_DoRoutine			; alias from Sonic 3K (GitHub)
-ObjHitWall_DoRoutine						= ObjCheckRightWallDist_DoRoutine		; alias from Sonic 3K (GitHub)
-ObjHitWall2_DoRoutine						= ObjCheckLeftWallDist_DoRoutine		; alias from Sonic 3K (GitHub)
-SolidObject							= SolidObjectFull				; alias from Sonic 1/2 (Hivebrain/GitHub)
-SolidObject_Always						= SolidObjectFull2				; alias from Sonic 2 (GitHub)
-CollectRing							= GiveRing					; alias from Sonic 1/2 (Hivebrain/GitHub)
-ReactToItem							= TouchResponse					; alias from Sonic 1 (GitHub)
-HurtSonic							= HurtCharacter					; alias from Sonic 1 (Hivebrain/GitHub)
-KillSonic							= Kill_Character				; alias from Sonic 1 (Hivebrain/GitHub)
-Lamp_StoreInfo							= Save_StarPost_Settings			; alias from Sonic 1 (GitHub)
-Lamp_LoadInfo							= Load_StarPost_Settings			; alias from Sonic 1 (GitHub)
+RunObjects =							Process_Sprites					; alias from Sonic 2 (GitHub)
+ObjectsLoad =							Process_Sprites					; alias from Sonic 1 (Hivebrain)
+ExecuteObjects =						Process_Sprites					; alias from Sonic 1 (GitHub)
+BuildSprites =							Render_Sprites					; alias from Sonic 1/2 (Hivebrain/GitHub)
+AddPoints =							HUD_AddToScore					; alias from Sonic 1/2 (Hivebrain/GitHub)
+AnimateSprite =							Animate_Sprite					; alias from Sonic 1/2 (Hivebrain/GitHub)
+ObjectFall =							MoveSprite					; alias from Sonic 1 (Hivebrain)
+ObjectMoveAndFall =						MoveSprite					; alias from Sonic 2 (GitHub)
+SpeedToPos =							MoveSprite2					; alias from Sonic 1 (Hivebrain)
+ObjectMove =							MoveSprite2					; alias from Sonic 2 (GitHub)
+DisplaySprite =							Draw_Sprite					; alias from Sonic 1/2 (Hivebrain/GitHub)
+DeleteObject =							Delete_Current_Sprite				; alias from Sonic 1/2 (Hivebrain/GitHub)
+DeleteChild =							Delete_Referenced_Sprite			; alias from Sonic 1 (GitHub)
+DeleteObject2 =							Delete_Referenced_Sprite			; alias from Sonic 1/2 (Hivebrain/GitHub)
+SingleObjLoad =							Create_New_Sprite				; alias from Sonic 1 (Hivebrain)
+AllocateObject =						Create_New_Sprite				; alias from Sonic 2/3K (GitHub)
+FindFreeObj =							Create_New_Sprite				; alias from Sonic 1 (GitHub)
+SingleObjLoad2 =						Create_New_Sprite3				; alias from Sonic 1 (Hivebrain)
+FindNextFreeObj =						Create_New_Sprite3				; alias from Sonic 1 (GitHub)
+AllocateObjectAfterCurrent =					Create_New_Sprite3				; alias from Sonic 2/3K (GitHub)
+Find_Sonic =							Find_SonicObject				; alias for SCE
+Find_SonicTails =							Find_SonicObject				; alias from Sonic 3K (GitHub)
+Find_SonicTails8Way =					Find_Sonic8Way				; alias from Sonic 3K (GitHub)
+Obj_GetOrientationToPlayer =					Find_SonicObject				; alias from Sonic 2 (GitHub)
+Shot_ObjectInSonic =						Shot_Object					; alias for SCE
+MarkObjGone =							Sprite_OnScreen_Test				; alias from Sonic 1/2 (Hivebrain/GitHub)
+RememberState =							Sprite_OnScreen_Test				; alias from Sonic 1 (GitHub)
+MarkObjGone_Collision =						Sprite_CheckDeleteTouch3			; alias for SCE
+RememberState_Collision =					Sprite_CheckDeleteTouch3			; alias for SCE
+Sprite_OnScreen_Test_Collision =				Sprite_CheckDeleteTouch3			; alias for SCE
+ObjHitFloor =							ObjCheckFloorDist				; alias from Sonic 1 (Hivebrain)
+ObjFloorDist =							ObjCheckFloorDist				; alias from Sonic 1 (GitHub)
+ObjHitFloor2 =							ObjCheckFloorDist2				; alias from Sonic 1 (Hivebrain)
+ObjFloorDist2 =							ObjCheckFloorDist2				; alias from Sonic 1 (GitHub)
+ObjHitWallRight =						ObjCheckRightWallDist				; alias from Sonic 1 (GitHub)
+ObjHitCeiling =							ObjCheckCeilingDist				; alias from Sonic 1 (GitHub)
+ObjHitWallLeft =						ObjCheckLeftWallDist				; alias from Sonic 1 (GitHub)
+ObjHitFloor_DoRoutine =						ObjCheckFloorDist_DoRoutine			; alias from Sonic 3K (GitHub)
+ObjHitFloor2_DoRoutine =					ObjCheckFloorDist2_DoRoutine			; alias from Sonic 3K (GitHub)
+ObjHitCeiling_DoRoutine =					ObjCheckCeilingDist_DoRoutine			; alias from Sonic 3K (GitHub)
+ObjHitWall_DoRoutine =						ObjCheckRightWallDist_DoRoutine			; alias from Sonic 3K (GitHub)
+ObjHitWall2_DoRoutine =						ObjCheckLeftWallDist_DoRoutine			; alias from Sonic 3K (GitHub)
+SolidObject =							SolidObjectFull					; alias from Sonic 1/2 (Hivebrain/GitHub)
+SolidObject_Always =						SolidObjectFull2				; alias from Sonic 2 (GitHub)
+CollectRing =							GiveRing					; alias from Sonic 1/2 (Hivebrain/GitHub)
+ReactToItem =							TouchResponse					; alias from Sonic 1 (GitHub)
+HurtSonic =							HurtCharacter					; alias from Sonic 1 (Hivebrain/GitHub)
+KillSonic =							Kill_Character					; alias from Sonic 1 (Hivebrain/GitHub)
+Lamp_StoreInfo =						Save_StarPost_Settings				; alias from Sonic 1 (GitHub)
+Lamp_LoadInfo =							Load_StarPost_Settings				; alias from Sonic 1 (GitHub)
 
 ; ---------------------------------------------------------------------------
 ; RAM constants
 ; ---------------------------------------------------------------------------
 
 ; RAM variables
-v_ram_start							= RAM_start					; alias from Sonic 1 (GitHub)
+v_ram_start =							RAM_start					; alias from Sonic 1 (GitHub)
 
 ; object variables
-v_player							= Player_1					; alias from Sonic 1 (GitHub)
-MainCharacter							= Player_1					; alias from Sonic 2 (GitHub)
+v_player =							Player_1					; alias from Sonic 1 (GitHub)
+MainCharacter =							Player_1					; alias from Sonic 2 (GitHub)
 
 ; scroll variables
-v_hscrolltablebuffer						= H_scroll_buffer				; alias from Sonic 1 (GitHub)
-Horiz_Scroll_Buf						= H_scroll_buffer				; alias from Sonic 2 (GitHub)
-v_hscrolltablebuffer_end					= H_scroll_buffer_end				; alias from Sonic 1 (GitHub)
-HScroll_table							= H_scroll_table				; alias from Sonic 3K (GitHub)
+v_hscrolltablebuffer =						H_scroll_buffer					; alias from Sonic 1 (GitHub)
+Horiz_Scroll_Buf =						H_scroll_buffer					; alias from Sonic 2 (GitHub)
+v_hscrolltablebuffer_end =					H_scroll_buffer_end				; alias from Sonic 1 (GitHub)
+HScroll_table =							H_scroll_table					; alias from Sonic 3K (GitHub)
 
 ; table variables
-v_tracksonic							= Pos_table					; alias from Sonic 1 (GitHub)
+v_tracksonic =							Pos_table					; alias from Sonic 1 (GitHub)
 
 ; DMA variables
-VDP_Command_Buffer						= DMA_queue					; alias from Sonic 2 (GitHub)
-VDP_Command_Buffer_Slot						= DMA_queue_slot				; alias from Sonic 2 (GitHub)
+VDP_Command_Buffer =						DMA_queue					; alias from Sonic 2 (GitHub)
+VDP_Command_Buffer_Slot =					DMA_queue_slot					; alias from Sonic 2 (GitHub)
 
 ; camera variables
-v_screenposx							= Camera_X_pos					; alias from Sonic 1 (GitHub)
-v_screenposy							= Camera_Y_pos					; alias from Sonic 1 (GitHub)
-v_trackpos							= Pos_table_index				; alias from Sonic 1 (GitHub)
-v_trackbyte							= Pos_table_index+1				; alias from Sonic 1 (GitHub)
-v_lookshift							= Distance_from_top				; alias from Sonic 1 (GitHub)
-Screen_shake_flag						= Screen_shaking_flag				; alias from Sonic 3K (GitHub)
-Screen_shake_offset						= Screen_shaking_offset				; alias from Sonic 3K (GitHub)
-Screen_shake_last_offset					= Screen_shaking_last_offset			; alias from Sonic 3K (GitHub)
+v_screenposx =							Camera_X_pos					; alias from Sonic 1 (GitHub)
+v_screenposy =							Camera_Y_pos					; alias from Sonic 1 (GitHub)
+v_limitbtm1 =							Camera_target_max_Y_pos				; alias from Sonic 1 (GitHub)
+v_limitbtm2 =							Camera_max_Y_pos				; alias from Sonic 1 (GitHub)
+f_bgscrollvert =						Camera_max_Y_pos_changing			; alias from Sonic 1 (GitHub)
+v_trackpos =							Pos_table_index					; alias from Sonic 1 (GitHub)
+v_trackbyte =							Pos_table_index+1				; alias from Sonic 1 (GitHub)
+v_lookshift =							Distance_from_top				; alias from Sonic 1 (GitHub)
+Screen_shake_flag =						Screen_shaking_flag				; alias from Sonic 3K (GitHub)
+Screen_shake_offset =						Screen_shaking_offset				; alias from Sonic 3K (GitHub)
+Screen_shake_last_offset =					Screen_shaking_last_offset			; alias from Sonic 3K (GitHub)
 
 ; misc variables
-v_gamemode							= Game_mode					; alias from Sonic 1 (GitHub)
-v_vbla_routine							= V_int_routine					; alias from Sonic 1 (GitHub)
-SonicControl							= Ctrl_1_logical				; alias from Sonic 1 (Vladikcomper)
-v_jpadhold2							= Ctrl_1_held_logical				; alias from Sonic 1 (GitHub)
-v_jpadpress2							= Ctrl_1_pressed_logical			; alias from Sonic 1 (GitHub)
-Joypad								= Ctrl_1					; alias from Sonic 1 (Vladikcomper)
-v_jpadhold1							= Ctrl_1_held					; alias from Sonic 1 (GitHub)
-v_jpadpress1							= Ctrl_1_pressed				; alias from Sonic 1 (GitHub)
-v_jpad2hold1							= Ctrl_2_held					; alias from Sonic 1 (GitHub)
-v_jpad2press1							= Ctrl_2_pressed				; alias from Sonic 1 (GitHub)
-Ctrl_1_Logical							= Ctrl_1_logical				; alias from Sonic 2 (GitHub)
-Ctrl_1_Held_Logical						= Ctrl_1_held_logical				; alias from Sonic 2 (GitHub)
-Ctrl_1_Press_Logical						= Ctrl_1_pressed_logical			; alias from Sonic 2 (GitHub)
-Ctrl_2_Logical							= Ctrl_2_logical				; alias from Sonic 2 (GitHub)
-Ctrl_2_Held_Logical						= Ctrl_2_held_logical				; alias from Sonic 2 (GitHub)
-Ctrl_2_Press_Logical						= Ctrl_2_pressed_logical			; alias from Sonic 2 (GitHub)
-Ctrl_1_hold							= Ctrl_1_held					; alias from Sonic 2 (GitHub)
-Ctrl_1_Held							= Ctrl_1_held					; alias from Sonic 2 (GitHub)
-Ctrl_1_press							= Ctrl_1_pressed				; alias from Sonic 2 (GitHub)
-Ctrl_1_Press							= Ctrl_1_pressed				; alias from Sonic 2 (GitHub)
-Ctrl_2_hold							= Ctrl_2_held					; alias from Sonic 2 (GitHub)
-Ctrl_2_Held							= Ctrl_2_held					; alias from Sonic 2 (GitHub)
-Ctrl_2_press							= Ctrl_2_pressed				; alias from Sonic 2 (GitHub)
-Ctrl_2_Press							= Ctrl_2_pressed				; alias from Sonic 2 (GitHub)
-v_vdp_buffer1							= VDP_reg_1_command				; alias from Sonic 1 (GitHub)
-v_demolength							= Demo_timer					; alias from Sonic 1 (GitHub)
-v_scrposy_dup							= V_scroll_value				; alias from Sonic 1 (GitHub)
-v_scrposy_vdp							= V_scroll_value_FG				; alias from Sonic 1 (GitHub)
-v_bgscrposy_vdp							= V_scroll_value_BG				; alias from Sonic 1 (GitHub)
-v_scrposx_dup							= H_scroll_value				; alias from Sonic 1 (GitHub)
-v_scrposx_vdp							= H_scroll_value_FG				; alias from Sonic 1 (GitHub)
-v_bgscrposx_vdp							= H_scroll_value_BG				; alias from Sonic 1 (GitHub)
-v_hbla_hreg							= H_int_counter_command				; alias from Sonic 1 (GitHub)
-v_hbla_line							= H_int_counter					; alias from Sonic 1 (GitHub)
-v_random							= RNG_seed					; alias from Sonic 1 (GitHub)
-v_pfade_start							= Palette_fade_index				; alias from Sonic 1 (GitHub)
-v_pfade_size							= Palette_fade_count				; alias from Sonic 1 (GitHub)
+v_gamemode =							Game_mode					; alias from Sonic 1 (GitHub)
+v_vbla_routine =						V_int_routine					; alias from Sonic 1 (GitHub)
+SonicControl =							Ctrl_1_logical					; alias from Sonic 1 (Vladikcomper)
+v_jpadhold2 =							Ctrl_1_held_logical				; alias from Sonic 1 (GitHub)
+v_jpadpress2 =							Ctrl_1_pressed_logical				; alias from Sonic 1 (GitHub)
+Joypad =							Ctrl_1						; alias from Sonic 1 (Vladikcomper)
+v_jpadhold1 =							Ctrl_1_held					; alias from Sonic 1 (GitHub)
+v_jpadpress1 =							Ctrl_1_pressed					; alias from Sonic 1 (GitHub)
+v_jpad2hold1 =							Ctrl_2_held					; alias from Sonic 1 (GitHub)
+v_jpad2press1 =							Ctrl_2_pressed					; alias from Sonic 1 (GitHub)
+Ctrl_1_Logical =						Ctrl_1_logical					; alias from Sonic 2 (GitHub)
+Ctrl_1_Held_Logical =						Ctrl_1_held_logical				; alias from Sonic 2 (GitHub)
+Ctrl_1_Press_Logical =						Ctrl_1_pressed_logical				; alias from Sonic 2 (GitHub)
+Ctrl_2_Logical =						Ctrl_2_logical					; alias from Sonic 2 (GitHub)
+Ctrl_2_Held_Logical =						Ctrl_2_held_logical				; alias from Sonic 2 (GitHub)
+Ctrl_2_Press_Logical =						Ctrl_2_pressed_logical				; alias from Sonic 2 (GitHub)
+Ctrl_1_hold =							Ctrl_1_held					; alias from Sonic 2 (GitHub)
+Ctrl_1_Held =							Ctrl_1_held					; alias from Sonic 2 (GitHub)
+Ctrl_1_press =							Ctrl_1_pressed					; alias from Sonic 2 (GitHub)
+Ctrl_1_Press =							Ctrl_1_pressed					; alias from Sonic 2 (GitHub)
+Ctrl_2_hold =							Ctrl_2_held					; alias from Sonic 2 (GitHub)
+Ctrl_2_Held =							Ctrl_2_held					; alias from Sonic 2 (GitHub)
+Ctrl_2_press =							Ctrl_2_pressed					; alias from Sonic 2 (GitHub)
+Ctrl_2_Press =							Ctrl_2_pressed					; alias from Sonic 2 (GitHub)
+v_vdp_buffer1 =							VDP_reg_1_command				; alias from Sonic 1 (GitHub)
+v_demolength =							Demo_timer					; alias from Sonic 1 (GitHub)
+v_scrposy_dup =							V_scroll_value					; alias from Sonic 1 (GitHub)
+v_scrposy_vdp =							V_scroll_value_FG				; alias from Sonic 1 (GitHub)
+v_bgscrposy_vdp =						V_scroll_value_BG				; alias from Sonic 1 (GitHub)
+v_scrposx_dup =							H_scroll_value					; alias from Sonic 1 (GitHub)
+v_scrposx_vdp =							H_scroll_value_FG				; alias from Sonic 1 (GitHub)
+v_bgscrposx_vdp =						H_scroll_value_BG				; alias from Sonic 1 (GitHub)
+v_hbla_hreg =							H_int_counter_command				; alias from Sonic 1 (GitHub)
+v_hbla_line =							H_int_counter					; alias from Sonic 1 (GitHub)
+v_random =							RNG_seed					; alias from Sonic 1 (GitHub)
+v_pfade_start =							Palette_fade_index				; alias from Sonic 1 (GitHub)
+v_pfade_size =							Palette_fade_count				; alias from Sonic 1 (GitHub)
 
 ; lag variables
-f_hbla_pal							= H_int_flag					; alias from Sonic 1 (GitHub)
-Hint_flag							= H_int_flag					; alias from Sonic 2 (GitHub)
-f_doupdatesinhblank						= Do_Updates_in_H_int				; alias from Sonic 1 (GitHub)
-f_lockctrl							= Ctrl_1_locked					; alias from Sonic 1 (GitHub)
-v_framecount							= Level_frame_counter				; alias from Sonic 1 (GitHub)
-v_framebyte							= Level_frame_counter+1				; alias from Sonic 1 (GitHub)
-f_pause								= Game_paused					; alias from Sonic 1 (GitHub)
-f_restart							= Restart_level_flag				; alias from Sonic 1 (GitHub)
-v_spritecount							= Sprites_drawn					; alias from Sonic 1 (GitHub)
-v_sonspeedmax							= Max_speed					; alias from Sonic 1 (GitHub)
-Sonic_top_speed							= Max_speed					; alias from Sonic 2 (GitHub)
-v_sonspeedacc							= Acceleration					; alias from Sonic 1 (GitHub)
-Sonic_acceleration						= Acceleration					; alias from Sonic 2 (GitHub)
-v_sonspeeddec							= Deceleration					; alias from Sonic 1 (GitHub)
-Sonic_deceleration						= Deceleration					; alias from Sonic 2 (GitHub)
-v_sonframenum							= Player_prev_frame				; alias from Sonic 1 (GitHub)
-Sonic_LastLoadedDPLC						= Player_prev_frame				; alias from Sonic 2 (GitHub)
-f_lockscreen							= Boss_flag
+f_hbla_pal =							H_int_flag					; alias from Sonic 1 (GitHub)
+Hint_flag =							H_int_flag					; alias from Sonic 2 (GitHub)
+f_doupdatesinhblank =						Do_Updates_in_H_int				; alias from Sonic 1 (GitHub)
+f_lockctrl =							Ctrl_1_locked					; alias from Sonic 1 (GitHub)
+v_framecount =							Level_frame_counter				; alias from Sonic 1 (GitHub)
+v_framebyte =							Level_frame_counter+1				; alias from Sonic 1 (GitHub)
+f_pause =							Game_paused					; alias from Sonic 1 (GitHub)
+f_restart =							Restart_level_flag				; alias from Sonic 1 (GitHub)
+v_spritecount =							Sprites_drawn					; alias from Sonic 1 (GitHub)
+v_sonspeedmax =							Max_speed					; alias from Sonic 1 (GitHub)
+Sonic_top_speed =						Max_speed					; alias from Sonic 2 (GitHub)
+v_sonspeedacc =							Acceleration					; alias from Sonic 1 (GitHub)
+Sonic_acceleration =						Acceleration					; alias from Sonic 2 (GitHub)
+v_sonspeeddec =							Deceleration					; alias from Sonic 1 (GitHub)
+Sonic_deceleration =						Deceleration					; alias from Sonic 2 (GitHub)
+v_sonframenum =							Player_prev_frame				; alias from Sonic 1 (GitHub)
+Sonic_LastLoadedDPLC =						Player_prev_frame				; alias from Sonic 2 (GitHub)
+f_lockscreen =							Boss_flag
 
 ; water variables
-Water_Level_1							= Water_level					; alias from Sonic 2 (GitHub)
-Water_Level_2							= Mean_water_level				; alias from Sonic 2 (GitHub)
-Water_Level_3							= Target_water_level				; alias from Sonic 2 (GitHub)
-Water_on							= Water_speed					; alias from Sonic 2 (GitHub)
-Water_move							= Water_full_screen_flag			; alias from Sonic 2 (GitHub)
-Water_fullscreen_flag						= Water_full_screen_flag			; alias from Sonic 2 (GitHub)
+Water_Level_1 =							Water_level					; alias from Sonic 2 (GitHub)
+Water_Level_2 =							Mean_water_level				; alias from Sonic 2 (GitHub)
+Water_Level_3 =							Target_water_level				; alias from Sonic 2 (GitHub)
+Water_on =							Water_speed					; alias from Sonic 2 (GitHub)
+Water_move =							Water_full_screen_flag				; alias from Sonic 2 (GitHub)
+Water_fullscreen_flag =						Water_full_screen_flag				; alias from Sonic 2 (GitHub)
 
 ; water variables
-v_pal_water_dup							= Target_water_palette				; alias from Sonic 1 (GitHub)
-v_pal_water							= Water_palette					; alias from Sonic 1 (GitHub)
-v_pal_dry							= Normal_palette				; alias from Sonic 1 (GitHub)
-v_pal_dry_dup							= Target_palette				; alias from Sonic 1 (GitHub)
+v_pal_water_dup =						Target_water_palette				; alias from Sonic 1 (GitHub)
+v_pal_water =							Water_palette					; alias from Sonic 1 (GitHub)
+v_pal_dry =							Normal_palette					; alias from Sonic 1 (GitHub)
+v_pal_dry_dup =							Target_palette					; alias from Sonic 1 (GitHub)
+v_palette_water_fading =					Target_water_palette				; alias from Sonic 1 (GitHub)
+v_palette_water =						Water_palette					; alias from Sonic 1 (GitHub)
+v_palette =							Normal_palette					; alias from Sonic 1 (GitHub)
+v_palette_fading =						Target_palette					; alias from Sonic 1 (GitHub)
 
 ; main variables
-v_vbla_count							= V_int_run_count				; alias from Sonic 1 (GitHub)
-v_vbla_word							= V_int_run_count+2				; alias from Sonic 1 (GitHub)
-v_vbla_byte							= V_int_run_count+3				; alias from Sonic 1 (GitHub)
-Vint_runcount							= V_int_run_count				; alias from Sonic 2 (GitHub)
-v_zone								= Current_zone					; alias from Sonic 1 (GitHub)
-v_act								= Current_act					; alias from Sonic 1 (GitHub)
-Last_star_pole_hit						= Last_star_post_hit				; alias from Sonic 2 (GitHub)
-f_timeover							= Time_over_flag				; alias from Sonic 1 (GitHub)
-v_score								= Score						; alias from Sonic 1 (GitHub)
-f_ringcount							= Update_HUD_ring_count				; alias from Sonic 1 (GitHub)
-f_timecount							= Update_HUD_timer				; alias from Sonic 1 (GitHub)
-f_scorecount							= Update_HUD_score				; alias from Sonic 1 (GitHub)
-v_rings								= Ring_count					; alias from Sonic 1 (GitHub)
-v_ringbyte							= Ring_count+1					; alias from Sonic 1 (GitHub)
-v_time								= Timer						; alias from Sonic 1 (GitHub)
-v_timemin							= Timer_minute					; alias from Sonic 1 (GitHub)
-v_timesec							= Timer_second					; alias from Sonic 1 (GitHub)
-v_timecent							= Timer_frame					; alias from Sonic 1 (GitHub)
+v_vbla_count =							V_int_run_count					; alias from Sonic 1 (GitHub)
+v_vbla_word =							V_int_run_count+2				; alias from Sonic 1 (GitHub)
+v_vbla_byte =							V_int_run_count+3				; alias from Sonic 1 (GitHub)
+Vint_runcount =							V_int_run_count					; alias from Sonic 2 (GitHub)
+v_zone =							Current_zone					; alias from Sonic 1 (GitHub)
+v_act =								Current_act					; alias from Sonic 1 (GitHub)
+Last_star_pole_hit =						Last_star_post_hit				; alias from Sonic 2 (GitHub)
+f_timeover =							Time_over_flag					; alias from Sonic 1 (GitHub)
+v_score =							Score						; alias from Sonic 1 (GitHub)
+f_ringcount =							Update_HUD_ring_count				; alias from Sonic 1 (GitHub)
+f_timecount =							Update_HUD_timer				; alias from Sonic 1 (GitHub)
+f_scorecount =							Update_HUD_score				; alias from Sonic 1 (GitHub)
+v_rings =							Ring_count					; alias from Sonic 1 (GitHub)
+v_ringbyte =							Ring_count+1					; alias from Sonic 1 (GitHub)
+v_time =							Timer						; alias from Sonic 1 (GitHub)
+v_timemin =							Timer_minute					; alias from Sonic 1 (GitHub)
+v_timesec =							Timer_second					; alias from Sonic 1 (GitHub)
+v_timecent =							Timer_frame					; alias from Sonic 1 (GitHub)
