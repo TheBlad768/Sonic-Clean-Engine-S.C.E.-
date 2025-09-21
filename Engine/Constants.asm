@@ -452,6 +452,7 @@ obVelX =							x_vel						; word ; x-axis velocity (2 bytes)
 obVelY =							y_vel						; word ; y-axis velocity (2 bytes)
 obInertia =							ground_vel					; word ; potential speed (2 bytes)
 obAnim =							anim						; byte ; current animation
+obPrevAni =							prev_anim					; byte ; previous animation
 obNextAni =							next_anim					; byte ; next animation
 obFrame =							mapping_frame					; byte ; current frame displayed
 obAniFrame =							anim_frame					; byte
