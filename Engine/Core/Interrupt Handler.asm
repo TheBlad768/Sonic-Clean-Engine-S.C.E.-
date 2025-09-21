@@ -73,7 +73,6 @@ VInt_Lag_Main:
 VInt_Lag_Level:
 		tst.b	(Water_flag).w
 		beq.s	VInt_Lag_NoWater
-		move.w	VDP_control_port-VDP_control_port(a5),d0
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
@@ -102,7 +101,6 @@ VInt_Lag_Water_Cont:
 ; ---------------------------------------------------------------------------
 
 VInt_Lag_NoWater:
-		move.w	VDP_control_port-VDP_control_port(a5),d0
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
