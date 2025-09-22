@@ -3,85 +3,85 @@
 ; ---------------------------------------------------------------------------
 
 DPLC_DashSplashDrown:
-		dc.w word_18F1E-DPLC_DashSplashDrown
-		dc.w word_18F20-DPLC_DashSplashDrown
-		dc.w word_18F24-DPLC_DashSplashDrown
-		dc.w word_18F28-DPLC_DashSplashDrown
-		dc.w word_18F2C-DPLC_DashSplashDrown
-		dc.w word_18F30-DPLC_DashSplashDrown
-		dc.w word_18F34-DPLC_DashSplashDrown
-		dc.w word_18F38-DPLC_DashSplashDrown
-		dc.w word_18F3C-DPLC_DashSplashDrown
-		dc.w word_18F40-DPLC_DashSplashDrown
-		dc.w word_18F44-DPLC_DashSplashDrown
-		dc.w word_18F48-DPLC_DashSplashDrown
-		dc.w word_18F4C-DPLC_DashSplashDrown
-		dc.w word_18F50-DPLC_DashSplashDrown
-		dc.w word_18F54-DPLC_DashSplashDrown
-		dc.w word_18F58-DPLC_DashSplashDrown
-		dc.w word_18F5C-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F60-DPLC_DashSplashDrown
-		dc.w word_18F62-DPLC_DashSplashDrown
-		dc.w word_18F66-DPLC_DashSplashDrown
-		dc.w word_18F6A-DPLC_DashSplashDrown
-		dc.w word_18F6E-DPLC_DashSplashDrown
-		dc.w word_18F72-DPLC_DashSplashDrown
-		dc.w word_18F76-DPLC_DashSplashDrown
-		dc.w word_18F7A-DPLC_DashSplashDrown
-		dc.w word_18F7E-DPLC_DashSplashDrown
-		dc.w word_18F82-DPLC_DashSplashDrown
-word_18F1E:	dc.w 0
-word_18F20:	dc.w 1
-		dc.w $5000
-word_18F24:	dc.w 1
-		dc.w $F006
-word_18F28:	dc.w 1
-		dc.w $F016
-word_18F2C:	dc.w 1
-		dc.w $F026
-word_18F30:	dc.w 1
-		dc.w $F036
-word_18F34:	dc.w 1
-		dc.w $B046
-word_18F38:	dc.w 1
-		dc.w $7052
-word_18F3C:	dc.w 1
-		dc.w $305A
-word_18F40:	dc.w 1
-		dc.w $305E
-word_18F44:	dc.w 1
-		dc.w $7062
-word_18F48:	dc.w 1
-		dc.w $706A
-word_18F4C:	dc.w 1
-		dc.w $7072
-word_18F50:	dc.w 1
-		dc.w $B07A
-word_18F54:	dc.w 1
-		dc.w $B086
-word_18F58:	dc.w 1
-		dc.w $B092
-word_18F5C:	dc.w 1
-		dc.w $B09E
-word_18F60:	dc.w 0
-word_18F62:	dc.w 1
-		dc.w $F0AA
-word_18F66:	dc.w 1
-		dc.w $B000
-word_18F6A:	dc.w 1
-		dc.w $F00C
-word_18F6E:	dc.w 1
-		dc.w $F01C
-word_18F72:	dc.w 1
-		dc.w $F02C
-word_18F76:	dc.w 1
-		dc.w $F03C
-word_18F7A:	dc.w 1
-		dc.w $F04C
-word_18F7E:	dc.w 1
-		dc.w $F05C
-word_18F82:	dc.w 1
-		dc.w $F06C
+DPLC_DashSplashDrown_0: 	dc.w DPLC_DashSplashDrown_3C-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_2: 	dc.w DPLC_DashSplashDrown_3E-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_4: 	dc.w DPLC_DashSplashDrown_42-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_6: 	dc.w DPLC_DashSplashDrown_46-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_8: 	dc.w DPLC_DashSplashDrown_4A-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_A: 	dc.w DPLC_DashSplashDrown_4E-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_C: 	dc.w DPLC_DashSplashDrown_52-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_E: 	dc.w DPLC_DashSplashDrown_56-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_10: 	dc.w DPLC_DashSplashDrown_5A-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_12: 	dc.w DPLC_DashSplashDrown_5E-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_14: 	dc.w DPLC_DashSplashDrown_62-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_16: 	dc.w DPLC_DashSplashDrown_66-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_18: 	dc.w DPLC_DashSplashDrown_6A-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_1A: 	dc.w DPLC_DashSplashDrown_6E-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_1C: 	dc.w DPLC_DashSplashDrown_72-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_1E: 	dc.w DPLC_DashSplashDrown_76-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_20: 	dc.w DPLC_DashSplashDrown_7A-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_22: 	dc.w DPLC_DashSplashDrown_3C-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_24: 	dc.w DPLC_DashSplashDrown_3C-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_26: 	dc.w DPLC_DashSplashDrown_3C-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_28: 	dc.w DPLC_DashSplashDrown_3C-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_2A: 	dc.w DPLC_DashSplashDrown_86-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_2C: 	dc.w DPLC_DashSplashDrown_8A-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_2E: 	dc.w DPLC_DashSplashDrown_8E-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_30: 	dc.w DPLC_DashSplashDrown_92-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_32: 	dc.w DPLC_DashSplashDrown_96-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_34: 	dc.w DPLC_DashSplashDrown_9A-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_36: 	dc.w DPLC_DashSplashDrown_9E-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_38: 	dc.w DPLC_DashSplashDrown_A2-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_3A: 	dc.w DPLC_DashSplashDrown_A6-DPLC_DashSplashDrown
+DPLC_DashSplashDrown_3C: 	dc.b $FF, $FF
+DPLC_DashSplashDrown_3E: 	dc.b $0, $0
+	dc.b $0, $5
+DPLC_DashSplashDrown_42: 	dc.b $0, $0
+	dc.b $0, $6F
+DPLC_DashSplashDrown_46: 	dc.b $0, $0
+	dc.b $1, $6F
+DPLC_DashSplashDrown_4A: 	dc.b $0, $0
+	dc.b $2, $6F
+DPLC_DashSplashDrown_4E: 	dc.b $0, $0
+	dc.b $3, $6F
+DPLC_DashSplashDrown_52: 	dc.b $0, $0
+	dc.b $4, $6B
+DPLC_DashSplashDrown_56: 	dc.b $0, $0
+	dc.b $5, $27
+DPLC_DashSplashDrown_5A: 	dc.b $0, $0
+	dc.b $5, $A3
+DPLC_DashSplashDrown_5E: 	dc.b $0, $0
+	dc.b $5, $E3
+DPLC_DashSplashDrown_62: 	dc.b $0, $0
+	dc.b $6, $27
+DPLC_DashSplashDrown_66: 	dc.b $0, $0
+	dc.b $6, $A7
+DPLC_DashSplashDrown_6A: 	dc.b $0, $0
+	dc.b $7, $27
+DPLC_DashSplashDrown_6E: 	dc.b $0, $0
+	dc.b $7, $AB
+DPLC_DashSplashDrown_72: 	dc.b $0, $0
+	dc.b $8, $6B
+DPLC_DashSplashDrown_76: 	dc.b $0, $0
+	dc.b $9, $2B
+DPLC_DashSplashDrown_7A: 	dc.b $0, $0
+	dc.b $9, $EB
+DPLC_DashSplashDrown_86: 	dc.b $0, $0
+	dc.b $A, $AF
+DPLC_DashSplashDrown_8A: 	dc.b $0, $0
+	dc.b $0, $B
+DPLC_DashSplashDrown_8E: 	dc.b $0, $0
+	dc.b $0, $CF
+DPLC_DashSplashDrown_92: 	dc.b $0, $0
+	dc.b $1, $CF
+DPLC_DashSplashDrown_96: 	dc.b $0, $0
+	dc.b $2, $CF
+DPLC_DashSplashDrown_9A: 	dc.b $0, $0
+	dc.b $3, $CF
+DPLC_DashSplashDrown_9E: 	dc.b $0, $0
+	dc.b $4, $CF
+DPLC_DashSplashDrown_A2: 	dc.b $0, $0
+	dc.b $5, $CF
+DPLC_DashSplashDrown_A6: 	dc.b $0, $0
+	dc.b $6, $CF
+	even

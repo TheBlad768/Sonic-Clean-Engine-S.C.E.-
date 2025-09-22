@@ -3,19 +3,18 @@
 ; ---------------------------------------------------------------------------
 
 DPLC_InstaShield:
-		dc.w word_1A164-DPLC_InstaShield
-		dc.w word_1A164-DPLC_InstaShield
-		dc.w word_1A164-DPLC_InstaShield
-		dc.w word_1A16A-DPLC_InstaShield
-		dc.w word_1A16A-DPLC_InstaShield
-		dc.w word_1A16A-DPLC_InstaShield
-		dc.w word_1A16A-DPLC_InstaShield
-		dc.w word_1A16A-DPLC_InstaShield
-word_1A164:
-		dc.w 2
-		dc.w $F000
-		dc.w $6010
-word_1A16A:
-		dc.w 2
-		dc.w $F017
-		dc.w $C027
+DPLC_InstaShield_0: 	dc.w DPLC_InstaShield_10-DPLC_InstaShield
+DPLC_InstaShield_2: 	dc.w DPLC_InstaShield_10-DPLC_InstaShield
+DPLC_InstaShield_4: 	dc.w DPLC_InstaShield_10-DPLC_InstaShield
+DPLC_InstaShield_6: 	dc.w DPLC_InstaShield_16-DPLC_InstaShield
+DPLC_InstaShield_8: 	dc.w DPLC_InstaShield_16-DPLC_InstaShield
+DPLC_InstaShield_A: 	dc.w DPLC_InstaShield_16-DPLC_InstaShield
+DPLC_InstaShield_C: 	dc.w DPLC_InstaShield_16-DPLC_InstaShield
+DPLC_InstaShield_E: 	dc.w DPLC_InstaShield_16-DPLC_InstaShield
+DPLC_InstaShield_10: 	dc.b $0, $1
+	dc.b $0, $F
+	dc.b $1, $6
+DPLC_InstaShield_16: 	dc.b $0, $1
+	dc.b $1, $7F
+	dc.b $2, $7C
+	even

@@ -3,11 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 ; Dynamic object variables
-dashdust_prev_frame			= objoff_34	; .b
 dashdust_dust_timer			= objoff_36	; .b
 dashdust_tails				= objoff_38	; .b
-dashdust_vram_art			= objoff_40	; .w ; address of art in VRAM (same as art_tile * $20)
-dashdust_parent				= objoff_42	; .w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -16,7 +13,7 @@ Obj_DashDust:
 		; init
 		movem.l	ObjDat_DashDust(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.l	#words_to_long(tiles_to_bytes(ArtTile_DashDust),Player_1),dashdust_vram_art(a0)
+		move.w	#Player_1,parent(a0)
 
 		; check Tails
 		cmpa.w	#Dust,a0
@@ -42,7 +39,7 @@ Obj_DashDust:
 
 ; =============== S U B R O U T I N E =======================================
 
-.fromground										; 3 (LBZ1 only)
+		; fromground								; 3 (LBZ1 only)
 		tst.b	prev_anim(a0)
 		bne.s	.anim
 		move.w	x_pos(a2),x_pos(a0)
@@ -52,8 +49,10 @@ Obj_DashDust:
 .anim
 		lea	Ani_DashSplashDrown(pc),a1
 		jsr	(Animate_Sprite).w
-		move.l	#dmaSource(ArtUnc_SplashDrown),d6
-		bsr.w	SplashDrown_Load_DPLC
+
+		; draw
+		lea	PLCPtr_SplashDrown(pc),a2
+		jsr	(Perform_DPLC).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -108,7 +107,10 @@ Obj_DashDust:
 		; check reset frame
 		tst.b	anim(a0)							; changed by Animate_Sprite
 		beq.s	.reset
-		bsr.w	DashDust_Load_DPLC
+
+		; draw
+		lea	PLCPtr_DashDust(pc),a2
+		jsr	(Perform_DPLC).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -145,16 +147,16 @@ DashDust_CheckSkid:
 
 		; wait
 		subq.b	#1,dashdust_dust_timer(a0)					; decrement timer
-		bpl.s	DashDust_Load_DPLC						; if time remains, branch
+		bpl.s	.dplc								; if time remains, branch
 		addq.b	#3+1,dashdust_dust_timer(a0)					; reset timer to 3+1 frames
 
 		; check
 		btst	#status.player.underwater,status(a2)				; is player underwater?
-		bne.s	DashDust_Load_DPLC						; if yes, branch
+		bne.s	.dplc								; if yes, branch
 
 		; create dust clouds
 		jsr	(Create_New_Sprite).w
-		bne.s	DashDust_Load_DPLC
+		bne.s	.dplc
 		move.l	#Obj_DashDust_SkidDust,address(a1)
 		move.w	x_pos(a2),x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
@@ -178,53 +180,12 @@ DashDust_CheckSkid:
 		move.w	parent(a0),parent(a1)
 		andi.w	#drawing_mask,art_tile(a1)
 		tst.w	art_tile(a2)
-		bpl.s	DashDust_Load_DPLC
+		bpl.s	.dplc
 		ori.w	#high_priority,art_tile(a1)
 
-; ---------------------------------------------------------------------------
-; Dash Dust (DPLC)
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-DashDust_Load_DPLC:
-		move.l	#dmaSource(ArtUnc_DashDust),d6
-
-SplashDrown_Load_DPLC:
-		moveq	#0,d0
-		move.b	mapping_frame(a0),d0
-		cmp.b	dashdust_prev_frame(a0),d0
-		beq.s	.return
-		move.b	d0,dashdust_prev_frame(a0)
-
-		; load
-		add.w	d0,d0
-		lea	DPLC_DashSplashDrown(pc),a2
-		adda.w	(a2,d0.w),a2
-		move.w	(a2)+,d5
-		subq.w	#1,d5
-		bmi.s	.return
-		move.w	dashdust_vram_art(a0),d4
-
-.readentry
-		moveq	#0,d1
-		move.w	(a2)+,d1
-		move.w	d1,d3
-		move.w	d3,-(sp)
-		move.b	(sp)+,d3
-		andi.w	#$F0,d3
-		addi.w	#$10,d3
-		andi.w	#$FFF,d1
-		lsl.l	#4,d1
-		add.l	d6,d1
-		move.w	d4,d2
-		add.w	d3,d4
-		add.w	d3,d4
-		jsr	(Add_To_DMA_Queue).w
-		dbf	d5,.readentry
-
-.return
-		rts
+.dplc
+		lea	PLCPtr_DashDust(pc),a2
+		jmp	(Perform_DPLC).w
 
 ; ---------------------------------------------------------------------------
 ; Dash Dust (Skid dust)
@@ -246,7 +207,10 @@ Obj_DashDust_SkidDust:
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	.delete
-		bsr.s	DashDust_Load_DPLC
+
+		; draw
+		lea	PLCPtr_DashDust(pc),a2
+		jsr	(Perform_DPLC).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -260,6 +224,10 @@ ObjDat_DashDust:	subObjMainData \
 			Obj_DashDust.main, \
 				setBit(render_flags.level), \
 			0, 32, 32, 1, ArtTile_DashDust, 0, FALSE, Map_DashDust
+
+; dplc
+PLCPtr_DashDust:	DPLCEntry ArtUnc_DashDust, DPLC_DashSplashDrown
+PLCPtr_SplashDrown:	DPLCEntry ArtUnc_SplashDrown, DPLC_DashSplashDrown
 ; ---------------------------------------------------------------------------
 
 		include "Objects/Players/Spin Dust/Object Data/Anim - Dash Splash Drown.asm"
