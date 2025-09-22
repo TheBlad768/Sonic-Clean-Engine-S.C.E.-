@@ -378,6 +378,7 @@ wait_timer =							objoff_2E					; word
 aniraw =							objoff_30					; long
 jump =								objoff_34					; long
 count =								objoff_39					; byte
+ros_prev_frame =						objoff_3A					; byte
 ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
 ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 routine_secondary =						objoff_3C					; byte ; used by monitors for this purpose at least

@@ -1397,44 +1397,6 @@ clearTilemap macro loc,width,height,terminate
 	jmp	(Clear_Plane_Map).w
     endif
     endm
-; ---------------------------------------------------------------------------
-
-LoadArtUnc macro offset,size,vram
-	lea	(VDP_data_port).l,a6							; load VDP data address to a6
-	lea	VDP_control_port-VDP_data_port(a6),a5					; load VDP control address to a5
-	locVRAM	vram,VDP_control_port-VDP_control_port(a5)
-	lea	(offset).l,a0
-	moveq	#(size>>5)-1,d0
-
-.load
-
-	rept 8
-		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
-	endr
-
-	dbf	d0,.load
-    endm
-; ---------------------------------------------------------------------------
-
-LoadMapUnc macro offset,size,arg,loc,width,height
-	lea	(offset).l,a0
-	move.w	#arg,d0
-	move.w	#((size)>>4),d1
-
-.load
-
-	rept 4
-		move.l	(a0)+,(a1)
-		add.w	d0,(a1)+
-		add.w	d0,(a1)+
-	endr
-
-	dbf	d1,.load
-	locVRAM	loc,d0
-	moveq	#bytesToXcnt(((width)+7),8),d1
-	moveq	#bytesToXcnt(((height)+7),8),d2
-	jsr	(Plane_Map_To_VRAM).w
-    endm
 
 ; ---------------------------------------------------------------------------
 ; macro for a pattern load request list header
