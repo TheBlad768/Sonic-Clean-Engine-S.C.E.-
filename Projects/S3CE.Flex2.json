@@ -29,7 +29,8 @@
                         "path": "../Objects/Players/Sonic/Object Data/DPLC - Sonic.asm",
                         "label": ""
                     },
-                    "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c"
+                    "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c",
+                    "expanded": true
                 }
             ],
             "isDirectory": true,
@@ -40,7 +41,7 @@
             "name": "Shields",
             "children": [
                 {
-                    "format": "Sonic 3&K Player.js",
+                    "format": "Sonic 3&K Object.js",
                     "name": "Fire Shield",
                     "palettes": [
                         {
@@ -62,10 +63,11 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Fire Shield.asm",
                         "label": ""
                     },
-                    "uuid": "4b0ca86f-7aa1-4e9d-a6fe-53662e690e3c"
+                    "uuid": "4b0ca86f-7aa1-4e9d-a6fe-53662e690e3c",
+                    "expanded": true
                 },
                 {
-                    "format": "Sonic 3&K Player.js",
+                    "format": "Sonic 3&K Object.js",
                     "name": "Lightning Shield",
                     "palettes": [
                         {
@@ -87,10 +89,11 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Lightning Shield.asm",
                         "label": ""
                     },
-                    "uuid": "0ca86f7a-a1ce-4de6-be53-662e690e3c9e"
+                    "uuid": "0ca86f7a-a1ce-4de6-be53-662e690e3c9e",
+                    "expanded": true
                 },
                 {
-                    "format": "Sonic 3&K Player.js",
+                    "format": "Sonic 3&K Object.js",
                     "name": "Bubble Shield",
                     "palettes": [
                         {
@@ -112,10 +115,11 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Bubble Shield.asm",
                         "label": ""
                     },
-                    "uuid": "a86f7aa1-ce9d-46fe-9366-2e690e3c9e23"
+                    "uuid": "a86f7aa1-ce9d-46fe-9366-2e690e3c9e23",
+                    "expanded": true
                 },
                 {
-                    "format": "Sonic 3&K Player.js",
+                    "format": "Sonic 3&K Object.js",
                     "name": "Insta-Shield",
                     "palettes": [
                         {
@@ -137,10 +141,11 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Insta-Shield.asm",
                         "label": ""
                     },
-                    "uuid": "7aa1ce9d-e6fe-4366-ae69-0e3c9e238fec"
+                    "uuid": "7aa1ce9d-e6fe-4366-ae69-0e3c9e238fec",
+                    "expanded": true
                 },
                 {
-                    "format": "Sonic 3&K Player.js",
+                    "format": "Sonic 3&K Object.js",
                     "name": "Invincibility",
                     "palettes": [
                         {
@@ -162,12 +167,70 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "a1ce9de6-fe53-462e-a90e-3c9e238fec23"
+                    "uuid": "a1ce9de6-fe53-462e-a90e-3c9e238fec23",
+                    "expanded": true
                 }
             ],
             "isDirectory": true,
             "expanded": false,
             "uuid": "499f9354-79d5-45e0-8c81-a3deadd21e06"
+        },
+        {
+            "name": "Spin Dust",
+            "children": [
+                {
+                    "format": "Sonic 3&K Object.js",
+                    "name": "Dash Dust",
+                    "palettes": [
+                        {
+                            "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "../Objects/Players/Spin Dust/Uncompressed Art/Dash Dust.unc",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "../Objects/Players/Spin Dust/Object Data/Map - Dash Dust.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "../Objects/Players/Spin Dust/Object Data/DPLC - Dash Splash Drown.asm",
+                        "label": ""
+                    },
+                    "uuid": "6739e8b4-5086-4019-9350-2f4e7223aa4b"
+                },
+                {
+                    "format": "Sonic 3&K Object.js",
+                    "name": "Splash Drown",
+                    "palettes": [
+                        {
+                            "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
+                            "length": 1
+                        }
+                    ],
+                    "art": {
+                        "path": "../Objects/Players/Spin Dust/Uncompressed Art/Splash Drown.unc",
+                        "compression": "Uncompressed",
+                        "offset": 0
+                    },
+                    "mappings": {
+                        "path": "../Objects/Players/Spin Dust/Object Data/Map - Dash Dust.asm",
+                        "label": ""
+                    },
+                    "dplcs": {
+                        "enabled": true,
+                        "path": "../Objects/Players/Spin Dust/Object Data/DPLC - Dash Splash Drown.asm",
+                        "label": ""
+                    },
+                    "uuid": "39e8b450-8600-49d3-902f-4e7223aa4ba4"
+                }
+            ],
+            "isDirectory": true,
+            "expanded": false
         },
         {
             "name": "Robotnik",
