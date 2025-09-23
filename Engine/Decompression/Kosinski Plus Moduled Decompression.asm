@@ -17,6 +17,10 @@ Queue_KosPlus:
 		lsl.w	#3,d0											; multiply by 8
 		lea	(KosPlus_decomp_queue).w,a3
 		adda.w	d0,a3
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Queue_KosPlus_RaiseError).l							; raise an error if there is kosinski plus buffer overflow
+
 		move.l	a1,(a3)+										; store source
 		move.l	a2,(a3)+										; store destination
 		rts
@@ -108,7 +112,7 @@ Process_KosPlus_Module_Queue:
 		bra.s	Process_KosPlus_Module_Queue_Init
 
 ; ---------------------------------------------------------------------------
-; Adds pattern load requests to the Kosinski Plus Module decompression queue
+; Adds pattern load requests to the Kosinski Plus Moduled decompression queue
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -148,6 +152,10 @@ Queue_KosPlus_Module:
 		addq.w	#6,a2											; otherwise, check next slot
 		tst.l	(a2)
 		bne.s	.findFreeSlot
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Queue_KosPlus_Module_RaiseError).l						; raise an error if there is kosinski plus moduled buffer overflow
+
 		move.l	a1,(a2)+										; store source address
 		move.w	d2,(a2)+										; store destination VRAM address
 		rts
@@ -249,7 +257,7 @@ Backup_KosPlus_Registers:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Clears the Kosinski Plus Module decompression queue and its associated variables
+; Clears the Kosinski Plus Moduled decompression queue and its associated variables
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================

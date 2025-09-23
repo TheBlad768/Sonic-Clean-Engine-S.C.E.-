@@ -38,7 +38,7 @@
 
 		include "Engine/Decompression/Enigma Decompression.asm"
 		include "Engine/Decompression/Kosinski Plus Decompression.asm"
-		include "Engine/Decompression/Kosinski Plus Module Decompression.asm"
+		include "Engine/Decompression/Kosinski Plus Moduled Decompression.asm"
 
 ; ---------------------------------------------------------------------------
 ; Flamedriver - Functions Subroutine

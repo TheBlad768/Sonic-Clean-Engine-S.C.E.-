@@ -94,15 +94,15 @@ Security_Addr =							Security_addr
 ; Level Misc
 ; ---------------------------------------------------------------------------
 
-RingTable_Count =						512						; the maximum rings on the level. Even numbers only
-ObjectTable_Count =						768						; the maximum objects on the level. Even numbers only
-ChaosEmer_Count =						7						; chaos emeralds
+RingsTable_Size =						512						; maximum rings on the level (affects RAM, even numbers only)
+ObjectsTable_Size =						768						; maximum objects on the level (affects RAM, even numbers only)
 
 ; ---------------------------------------------------------------------------
 ; PLC queues
 ; ---------------------------------------------------------------------------
 
-PLCKosPlusM_Count =						32						; the greater the queues, the more RAM is used for the buffer. Even numbers only
+PLCKosPlus_Queues =						4						; maximum kosinski plus queues
+PLCKosPlusM_Queues =						32						; maximum kosinski plus module queues
 
 ; ---------------------------------------------------------------------------
 ; V-Int routines
