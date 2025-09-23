@@ -51,11 +51,13 @@ LoadPLC_Raw_KosPlus:
 ; =============== S U B R O U T I N E =======================================
 
 Process_KosPlus_Module_Queue:
+
+		; check
 		tst.w	(KosPlus_modules_left).w
 		beq.s	.Done
 		bmi.s	.DecompressionStarted
-		cmpi.w	#(KosPlus_decomp_queue_end-KosPlus_decomp_queue)/8,(KosPlus_decomp_queue_count).w
-		bhs.s	.Done											; branch if the Kosinski Plus decompression queue is full
+
+		; set
 		movea.l	(KosPlus_module_queue).w,a1
 		lea	(KosPlus_decomp_buffer).w,a2
 		bsr.s	Queue_KosPlus										; add current module to decompression queue
