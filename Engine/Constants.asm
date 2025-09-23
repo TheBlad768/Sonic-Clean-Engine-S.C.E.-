@@ -101,8 +101,8 @@ ObjectsTable_Size =						768						; maximum objects on the level (affects RAM, e
 ; PLC queues
 ; ---------------------------------------------------------------------------
 
-PLCKosPlus_Queues =						4						; maximum kosinski plus queues
-PLCKosPlusM_Queues =						32						; maximum kosinski plus module queues
+PLCKosPlus_Queues =						4						; maximum kosinski plus queues (affects RAM)
+PLCKosPlusM_Queues =						32						; maximum kosinski plus module queues (affects RAM)
 
 ; ---------------------------------------------------------------------------
 ; V-Int routines
