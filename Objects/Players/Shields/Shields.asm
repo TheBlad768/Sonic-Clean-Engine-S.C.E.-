@@ -610,7 +610,7 @@ byte_18A1B:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_FireShield:		subObjMainData \
 				Obj_FireShield.main, \
 					setBit(render_flags.level), \
@@ -644,6 +644,7 @@ PLCPtr_BubbleShield:		DPLCEntry ArtUnc_BubbleShield, DPLC_BubbleShield
 PLCPtr_InstaShield:		DPLCEntry ArtUnc_InstaShield, DPLC_InstaShield
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Players/Shields/Object Data/Anim - Fire Shield.asm"
 		include "Objects/Players/Shields/Object Data/Anim - Lightning Shield.asm"
 		include "Objects/Players/Shields/Object Data/Anim - Bubble Shield.asm"

@@ -58,4 +58,5 @@ Child6_SpriteMask2:
 		dc.l Obj_SpriteMask2
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Sprite Mask/Object Data/Map - Sprite Mask.asm"

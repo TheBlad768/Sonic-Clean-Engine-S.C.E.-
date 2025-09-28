@@ -393,5 +393,6 @@ Monitor_Give_Invincibility:
 		rts
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Monitor/Object Data/Anim - Monitor.asm"
 		include "Objects/Main/Monitor/Object Data/Map - Monitor.asm"

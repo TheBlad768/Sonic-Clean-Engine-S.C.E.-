@@ -349,7 +349,7 @@ loc_2D5C0:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_StarPost:	subObjMainData \
 				Obj_StarPost.main, \
 					setBit(render_flags.level) | \
@@ -357,6 +357,7 @@ ObjDat_StarPost:	subObjMainData \
 				0, 80, 16, 5, ArtTile_StarPost+8, 0, FALSE, Map_StarPost
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/StarPost/Object Data/Map - StarPost.asm"
 		include "Objects/Main/StarPost/Object Data/Map - StarPost Stars.asm"
 		include "Objects/Main/StarPost/Object Data/Map - Enemy Points.asm"

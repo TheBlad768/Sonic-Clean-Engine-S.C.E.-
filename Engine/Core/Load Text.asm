@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Display 8x8 text on the plan
+; Display 8x8 text on the plane
 ;
 ; Inputs:
 ; d1 = plane address
@@ -77,7 +77,7 @@ Load_PlaneText:
 		; calc center position
 		moveq	#0,d0
 		move.b	(a1)+,d0							; get text size (second byte parameter)
-		moveq	#40,d4								; max 40 characters
+		moveq	#320/8,d4							; max 40 characters
 		sub.w	d0,d4
 		lsr.w	d4								; even value
 		add.w	d4,d4

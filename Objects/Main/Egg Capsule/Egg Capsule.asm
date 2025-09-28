@@ -680,7 +680,7 @@ EggCapsule_Animals_Load:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_EggCapsule:			subObjData Map_EggCapsule, $494, 0, TRUE, 64, 64, 4, 0, 0
 ObjDat_EggCapsule_Button:		subObjData FALSE, FALSE, 0, FALSE, 16, 32, 4, 5, 0
 ObjDat3_EggCapsule_Propeller:		subObjData FALSE, FALSE, 0, FALSE, 8, 40, 4, 6, 0
@@ -743,4 +743,5 @@ PLC_EggCapsule: plrlistheader
 PLC_EggCapsule_end
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Egg Capsule/Object Data/Map - Egg Capsule.asm"

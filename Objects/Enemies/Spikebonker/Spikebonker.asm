@@ -213,7 +213,7 @@ Obj_Spikebonker_SpikeBall:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_Spikebonker:			subObjData Map_Spikebonker, $500, 0, TRUE, 40, 40, 5, 0, $1A|collision_flags.npc.touch
 ObjDat3_Spikebonker_SpikeBall:		subObjData FALSE, FALSE, 0, FALSE, 32, 32, 4, 1, $1A|collision_flags.npc.hurt
 
@@ -226,4 +226,5 @@ ChildObjDat_Spikebonker_Spike:
 		dc.l Obj_Spikebonker_SpikeBall
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Enemies/Spikebonker/Object Data/Map - Spikebonker.asm"

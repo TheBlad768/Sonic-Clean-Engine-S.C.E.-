@@ -237,7 +237,7 @@ Obj_BossExplosionOffset:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_BossExplosion1:	subObjData Map_BossExplosion, $500, 0, TRUE, 24, 24, 0, 0, 0
 ObjDat_BossExplosion2:	subObjData Map_BossExplosion, $4D2, 0, TRUE, 24, 24, 0, 0, 0
 
@@ -272,4 +272,5 @@ AniRaw_BossExplosion:
 	even
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Explosion/Object Data/Map - Boss Explosion.asm"

@@ -181,7 +181,7 @@ loc_1B8F2:
 		move.w	a3,(Object_respawn_index_front).w
 
 		; RaiseError is only available in DEBUG builds
-		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is ring status table overflow
+		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is object respawn table overflow
 
 		movea.l	(Object_load_addr_back).w,a0
 		movea.w	(Object_respawn_index_back).w,a3

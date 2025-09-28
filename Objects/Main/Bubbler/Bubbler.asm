@@ -263,7 +263,7 @@ sub_2FBA8:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_Bubbler:		subObjMainData \
 			Obj_Bubbler.main, \
 				setBit(render_flags.level) | \
@@ -271,5 +271,6 @@ ObjDat_Bubbler:		subObjMainData \
 			0, 32, 32, 1, $348, 0, FALSE, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Bubbler/Object Data/Anim - Bubbler.asm"
 		include "Objects/Main/Bubbler/Object Data/Map - Bubbler.asm"

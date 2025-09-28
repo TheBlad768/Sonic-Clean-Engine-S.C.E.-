@@ -409,6 +409,7 @@ Obj_Animal_Jump:
 		rts
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Animals/Object Data/Map - Animals 1.asm"
 		include "Objects/Main/Animals/Object Data/Map - Animals 2.asm"
 		include "Objects/Main/Animals/Object Data/Map - Animals 3.asm"

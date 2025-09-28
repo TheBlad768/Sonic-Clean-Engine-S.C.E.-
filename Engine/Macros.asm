@@ -1459,21 +1459,38 @@ offsetTableEntry macro ptr
 	dc.ATTRIBUTE ptr-current_offset_table
     endm
 
-ptrTableEntry macro loc,{GLOBALSYMBOLS}
-ptr_loc:	dc.ATTRIBUTE loc-current_offset_table
+ptrTableEntry macro loc
+ptr_loc:	label *
+	dc.ATTRIBUTE loc-current_offset_table
     endm
 
 offsetEntry macro ptr
 	dc.ATTRIBUTE ptr-*
     endm
 
-GameModeEntry macro ptr,{GLOBALSYMBOLS}
-GameMode_ptr:	dc.l ptr
+GameModeEntry macro ptr
+GameMode_ptr:	label *
+	dc.l ptr
     endm
 
-bincludeEntry macro {INTLABEL},{GLOBALSYMBOLS}
-__LABEL__:	binclude ALLARGS
-__LABEL___end
+incfile macro name,path
+	name:	label *
+    if substr(lowstring("ATTRIBUTE"),0,1)="b"
+	binclude path
+    elseif substr(lowstring("ATTRIBUTE"),0,1)="i"
+	include path
+    else
+	fatal "incfile: attribute must start with b or i"
+    endif
+    if substr(lowstring("ATTRIBUTE"),1,1)="o"
+	ObjectLayoutBoundary
+    elseif substr(lowstring("ATTRIBUTE"),1,1)="r"
+	RingLayoutBoundary
+    endif
+    if strstr(lowstring("ATTRIBUTE"),"e") >= 0
+	name_end:	label *
+    endif
+    even
     endm
 ; ---------------------------------------------------------------------------
 
@@ -1490,7 +1507,7 @@ dScroll_Data macro pixel,size,velocity,plane
 	elseif upstring("plane")="BG"
 		dc.w (H_scroll_buffer+2)+(pixel<<2)
 	else
-		fatal "Error! Non-existent plan."
+		fatal "Error! Non-existent plane."
 	endif
     endm
 ; ---------------------------------------------------------------------------

@@ -88,9 +88,6 @@ GetArcTan:
 		dc.b %10111111							; -x, -y, |x|<|y|
 ; ---------------------------------------------------------------------------
 
-WordShiftTable:		binclude "Data/Misc/Angle/WordShift.bin"
-	even
-LogarithmTable:		binclude "Data/Misc/Angle/Logarithmic.bin"		; log base 2
-	even
-ArcTanTable:		binclude "Data/Misc/Angle/Arctan.bin"			; 2-argument
-	even
+		incfile.b	WordShiftTable, "Data/Misc/Angle/WordShift.bin"
+		incfile.b	LogarithmTable, "Data/Misc/Angle/Logarithmic.bin"	; log base 2
+		incfile.b	ArcTanTable, "Data/Misc/Angle/Arctan.bin"		; 2-argument

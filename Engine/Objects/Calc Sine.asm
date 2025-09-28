@@ -15,5 +15,4 @@ GetSineCosine:
 		rts
 ; ---------------------------------------------------------------------------
 
-SineTable:	binclude "Data/Misc/Sine.bin"
-	even
+		incfile.b	SineTable, "Data/Misc/Sine.bin"

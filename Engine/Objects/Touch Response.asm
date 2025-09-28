@@ -25,13 +25,13 @@ TouchResponse:
 		; by this point, we're focussing purely on the Insta-Shield
 		cmpi.b	#1,double_jump_flag(a0)						; is the Insta-Shield currently in its 'attacking' mode?
 		bne.s	.Touch_NoInstaShield						; if not, branch
-		bset	#status_secondary.invincible,status_secondary(a0)				; make the player invincible
-		moveq	#-24,d2								; subtract width of Insta-Shield
+		bset	#status_secondary.invincible,status_secondary(a0)		; make the player invincible
+		moveq	#-(48/2),d2							; subtract width of Insta-Shield
 		add.w	x_pos(a0),d2							; get player's x_pos
-		moveq	#-24,d3								; subtract height of Insta-Shield
+		moveq	#-(48/2),d3							; subtract height of Insta-Shield
 		add.w	y_pos(a0),d3							; get player's y_pos
-		moveq	#48,d4								; player's width
-		moveq	#48,d5								; player's height
+		moveq	#96/2,d4							; player's width
+		moveq	#96/2,d5							; player's height
 		bsr.s	.Touch_Process
 		bclr	#status_secondary.invincible,status_secondary(a0)		; make the player vulnerable again
 
@@ -43,27 +43,29 @@ TouchResponse:
 .Touch_NoInstaShield
 		move.w	x_pos(a0),d2							; get player's x_pos
 		move.w	y_pos(a0),d3							; get player's y_pos
-		subq.w	#8,d2
+		subq.w	#16/2,d2
 		moveq	#0,d5
-		move.b	y_radius(a0),d5							; load Sonic's height
-		subq.b	#3,d5
+		move.b	y_radius(a0),d5							; load player's height
+		subq.b	#6/2,d5
 		sub.w	d5,d3
 		cmpi.b	#AniIDSonAni_Duck,anim(a0)					; is player ducking?
 		bne.s	.Touch_NotDuck							; if not, branch
-		addi.w	#$C,d3
-		moveq	#$A,d5
+		addi.w	#24/2,d3							; fix player's y_pos
+		moveq	#20/2,d5							; set player's height
 
 .Touch_NotDuck
-		moveq	#$10,d4								; player's collision width
-		add.w	d5,d5
+		moveq	#32/2,d4							; player's collision width
+		add.w	d5,d5								; double player's height value
 
 .Touch_Process
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6							; get number of objects queued
-		beq.s	locret_FF1C							; if there are none, return
+		beq.s	Touch_Return							; if there are none, return
 
 Touch_Loop:
 		movea.w	(a4)+,a1							; get address of first object's RAM
+		tst.b	render_flags(a1)						; is the object visible on the screen?
+		bpl.s	Touch_NextObj							; if not, branch
 		move.b	collision_flags(a1),d0						; get its collision flags
 		bne.s	Touch_Width							; if it actually has collision, branch
 
@@ -72,7 +74,7 @@ Touch_NextObj:
 		bne.s	Touch_Loop							; if there are still objects left, loop
 		moveq	#0,d0
 
-locret_FF1C:
+Touch_Return:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -123,22 +125,22 @@ Touch_Height:
 ; ---------------------------------------------------------------------------
 
 Touch_Sizes:
-		dc.b 8/2, 8/2		; 00
-		dc.b 40/2, 40/2		; 01
-		dc.b 24/2, 40/2		; 02
-		dc.b 40/2, 24/2		; 03
-		dc.b 8/2, 32/2		; 04
-		dc.b 24/2, 36/2		; 05
-		dc.b 32/2, 32/2		; 06
-		dc.b 12/2, 12/2		; 07
-		dc.b 48/2, 24/2		; 08
-		dc.b 24/2, 32/2		; 09
-		dc.b 32/2, 16/2		; 0A
-		dc.b 16/2, 16/2		; 0B
-		dc.b 40/2, 32/2		; 0C
-		dc.b 40/2, 16/2		; 0D
-		dc.b 28/2, 28/2		; 0E
-		dc.b 48/2, 48/2		; 0F
+		dc.b 8/2, 8/2		; 0
+		dc.b 40/2, 40/2		; 1
+		dc.b 24/2, 40/2		; 2
+		dc.b 40/2, 24/2		; 3
+		dc.b 8/2, 32/2		; 4
+		dc.b 24/2, 36/2		; 5
+		dc.b 32/2, 32/2		; 6
+		dc.b 12/2, 12/2		; 7
+		dc.b 48/2, 24/2		; 8
+		dc.b 24/2, 32/2		; 9
+		dc.b 32/2, 16/2		; A
+		dc.b 16/2, 16/2		; B
+		dc.b 40/2, 32/2		; C
+		dc.b 40/2, 16/2		; D
+		dc.b 28/2, 28/2		; E
+		dc.b 48/2, 48/2		; F
 		dc.b 80/2, 32/2		; 10
 		dc.b 32/2, 48/2		; 11
 		dc.b 16/2, 32/2		; 12
@@ -623,6 +625,8 @@ ShieldTouchResponse:
 
 ShieldTouch_Loop:
 		movea.w	(a4)+,a1							; get address of first object's RAM
+		tst.b	render_flags(a1)						; is the object visible on the screen?
+		bpl.s	ShieldTouch_NextObj						; if not, branch
 		moveq	#signextendB($C0),d0						; get its collision flags
 		and.b	collision_flags(a1),d0						; get only collision type bits
 		cmpi.b	#$80,d0								; is only the high bit set ("harmful")?
