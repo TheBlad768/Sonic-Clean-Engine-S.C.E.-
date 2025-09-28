@@ -27,7 +27,7 @@ LevelScreen:
 		move.l	#VInt,(V_int_addr).w
 		move.l	#HInt,(H_int_addr).w
 		jsr	(Clear_DisplayData).w
-		jsr	(TitleCard_LoadLetter).l
+		jsr	(TitleCard_LoadLetters).l
 		enableInts
 		tst.b	(Last_star_post_hit).w
 		beq.s	.notstarpost									; if no starpost was set, branch

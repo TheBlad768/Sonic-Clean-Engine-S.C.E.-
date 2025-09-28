@@ -143,9 +143,15 @@ sub_E994:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Subroutine to react to ring collision
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Test_Ring_Collisions:
+
+		; check timer
 		cmpi.b	#90,invulnerability_timer(a0)
 		bhs.s	sub_E994.return
 		movea.l	(Ring_start_addr_ROM).w,a1
@@ -153,73 +159,81 @@ Test_Ring_Collisions:
 		cmpa.l	a1,a2
 		beq.s	sub_E994.return
 		movea.w	(Ring_start_addr_RAM).w,a4
+
+		; check
 		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
-		beq.s	Test_Ring_Collisions_NoAttraction				; if not, branch
-		moveq	#-64,d2
+		beq.s	.noattraction				; if not, branch
+
+		; lightning shield
+		moveq	#-(128/2),d2
 		add.w	x_pos(a0),d2
-		moveq	#-64,d3
+		moveq	#-(128/2),d3
 		add.w	y_pos(a0),d3
-		moveq	#6,d1
-		moveq	#$C,d6
-		move.w	#$80,d4
-		move.w	#$80,d5
-		bra.s	Test_Ring_Collisions_NextRing
+		moveq	#12/2,d1							; set ring's height and width
+		moveq	#24/2,d6							; set ring's height and width * 2
+		move.w	#256/2,d4							; player's width
+		move.w	#256/2,d5							; player's height
+		bra.s	.nextring
 ; ---------------------------------------------------------------------------
 
-Test_Ring_Collisions_NoAttraction:
-		move.w	x_pos(a0),d2
-		move.w	y_pos(a0),d3
-		subq.w	#8,d2
+.noattraction
+
+		; normal
+		move.w	x_pos(a0),d2							; get player's x_pos
+		move.w	y_pos(a0),d3							; get player's y_pos
+		subq.w	#16/2,d2
 		moveq	#0,d5
-		move.b	y_radius(a0),d5
-		subq.b	#3,d5
+		move.b	y_radius(a0),d5							; load player's height
+		subq.b	#6/2,d5
 		sub.w	d5,d3
 		cmpi.b	#AniIDSonAni_Duck,anim(a0)					; is player ducking?
 		bne.s	.notduck							; if not, branch
-		addi.w	#$C,d3
-		moveq	#$A,d5
+		addi.w	#24/2,d3							; fix player's y_pos
+		moveq	#20/2,d5							; set player's height
 
 .notduck
-		moveq	#6,d1
-		moveq	#$C,d6
-		moveq	#$10,d4
-		add.w	d5,d5
+		moveq	#12/2,d1							; set ring's height and width
+		moveq	#24/2,d6							; set ring's height and width * 2
+		moveq	#32/2,d4							; player's collision width
+		add.w	d5,d5								; double player's height value
 
-Test_Ring_Collisions_NextRing:
-		tst.w	(a4)
-		bne.s	loc_EADA
-		move.w	(a1),d0
-		sub.w	d1,d0
-		sub.w	d2,d0
-		bhs.s	loc_EAA0
-		add.w	d6,d0
-		blo.s	loc_EAA6
-		bra.s	loc_EADA
+.nextring
+		tst.w	(a4)								; has this ring been consumed?
+		bne.s	.next								; if it has, branch
+
+		; check
+		move.w	(a1),d0								; get ring's x_pos
+		sub.w	d1,d0								; subtract ring's width
+		sub.w	d2,d0								; subtract player's left collision boundary
+		bhs.s	.checkrightside							; if player's left side is to the left of the ring, branch
+		add.w	d6,d0								; add ring's width*2 (now at right of ring)
+		blo.s	.checkheight							; if carry, branch (player is within the right's boundaries)
+		bra.s	.next								; if not, loop and check next right
 ; ---------------------------------------------------------------------------
 
-loc_EAA0:
-		cmp.w	d4,d0
-		bhi.s	loc_EADA
+.checkrightside
+		cmp.w	d4,d0								; is player's right side to the left of the ring?
+		bhi.s	.next								; if so, loop and check next ring
 
-loc_EAA6:
-		move.w	2(a1),d0
-		sub.w	d1,d0
-		sub.w	d3,d0
-		bhs.s	loc_EAB8
-		add.w	d6,d0
-		blo.s	loc_EABE
-		bra.s	loc_EADA
+.checkheight
+		move.w	2(a1),d0							; get ring's y_pos
+		sub.w	d1,d0								; subtract ring's height
+		sub.w	d3,d0								; subtract player's bottom collision boundary
+		bhs.s	.checktop							; if bottom of player is under the ring, branch
+		add.w	d6,d0								; add ring's height*2 (now at top of ring)
+		blo.s	.check								; if carry, branch (player is within the ring's boundaries)
+		bra.s	.next								; if not, loop and check next ring
 ; ---------------------------------------------------------------------------
 
-loc_EAB8:
-		cmp.w	d5,d0
-		bhi.s	loc_EADA
+.checktop
+		cmp.w	d5,d0								; is top of player under the ring?
+		bhi.s	.next								; if so, loop and check next ring
 
-loc_EABE:
+.check
 		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
 		bne.s	Test_Ring_Collisions_AttractRing				; if yes, branch
 
-loc_EAC6:
+.consume
 		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/2),(a4)
 		bsr.s	GiveRing
 		lea	(Ring_consumption_list).w,a3
@@ -230,11 +244,11 @@ loc_EAC6:
 		move.w	a4,-(a3)
 		addq.w	#1,(Ring_consumption_table).w
 
-loc_EADA:
+.next
 		addq.w	#4,a1
 		addq.w	#2,a4
 		cmpa.l	a1,a2
-		bne.s	Test_Ring_Collisions_NextRing
+		bne.s	.nextring
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -253,7 +267,7 @@ Test_Ring_Collisions_AttractRing:
 
 .notfree
 		lea	(a3),a1								; return ROM address
-		bra.s	loc_EAC6
+		bra.s	Test_Ring_Collisions.consume
 
 ; ---------------------------------------------------------------------------
 ; Give ring to player

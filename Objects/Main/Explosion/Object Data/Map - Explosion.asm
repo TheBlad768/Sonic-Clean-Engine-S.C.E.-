@@ -8,7 +8,7 @@ Map_Explosion:
 		dc.w word_1E772-Map_Explosion
 		dc.w word_1E77A-Map_Explosion
 		dc.w word_1E782-Map_Explosion
-		dc.w word_1E78A-Map_Explosion	; extra (s2)
+		dc.w word_1E78A-Map_Explosion	; extra (Sonic 2)
 		dc.w word_1E792-Map_Explosion
 word_1E762:
 		dc.w 1

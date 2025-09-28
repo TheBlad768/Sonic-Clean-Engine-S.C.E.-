@@ -62,4 +62,5 @@ Obj_Invisible_SolidBlock:
 		jmp	(Delete_Current_Sprite).w
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Invisible Blocks/Object Data/Map - Invisible Block.asm"

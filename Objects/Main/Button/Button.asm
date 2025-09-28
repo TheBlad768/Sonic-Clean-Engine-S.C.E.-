@@ -118,8 +118,9 @@ Button_Alternate:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_Button:		subObjMainData Obj_Button.main, setBit(render_flags.level), 0, 24, 32, 4, $47E, 0, FALSE, Map_Button
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Button/Object Data/Map - Button.asm"

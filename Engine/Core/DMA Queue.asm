@@ -209,6 +209,10 @@ QueueStaticDMA macro src,length,dest
 		disableInts										; Mask off interrupts
 	endif ; UseVIntSafeDMA==1
 	movea.w	(DMA_queue_slot).w,a1
+
+	; RaiseError is only available in DEBUG builds
+	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is object respawn table overflow
+
 	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer
 	move.b	#(dmaLength(length)>>8)&$FF,DMAEntry.SizeH(a1)						; Write top byte of size/2
@@ -240,6 +244,10 @@ Add_To_DMA_Queue:
 		disableInts										; Mask off interrupts
 	endif ; UseVIntSafeDMA==1
 	movea.w	(DMA_queue_slot).w,a1
+
+	; RaiseError is only available in DEBUG builds
+	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is object respawn table overflow
+
 	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer
 

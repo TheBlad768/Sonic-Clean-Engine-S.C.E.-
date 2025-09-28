@@ -573,13 +573,12 @@ loc_236E2:
 		sfx	sfx_Spring,1
 ; ---------------------------------------------------------------------------
 
-; data
-ObjSpring_SlopeData_DiagUp:	binclude "Objects/Main/Spring/Object Data/Heightmap1.bin"
-	even
-ObjSpring_SlopeData_DiagDown:	binclude "Objects/Main/Spring/Object Data/Heightmap2.bin"
-	even
+		; data
+		incfile.b	ObjSpring_SlopeData_DiagUp, "Objects/Main/Spring/Object Data/Heightmap1.bin"
+		incfile.b	ObjSpring_SlopeData_DiagDown, "Objects/Main/Spring/Object Data/Heightmap2.bin"
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Spring/Object Data/Anim - Spring.asm"
 		include "Objects/Main/Spring/Object Data/Map - Spring(Red).asm"
 		include "Objects/Main/Spring/Object Data/Map - Spring(Yellow).asm"

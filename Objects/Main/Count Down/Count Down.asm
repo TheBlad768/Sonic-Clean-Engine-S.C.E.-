@@ -383,12 +383,11 @@ Player_ResetAirTimer:
 
 ; =============== S U B R O U T I N E =======================================
 
-AirCountdown_WobbleData:	binclude "Objects/Main/Count Down/Object Data/Wobble Data.bin"
-	even
+		incfile.b	AirCountdown_WobbleData, "Objects/Main/Count Down/Object Data/Wobble Data.bin"
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_AirCountdown:		subObjMainData \
 				Obj_AirCountdown.countdown, \
 					setBit(render_flags.level) | \
@@ -396,4 +395,5 @@ ObjDat_AirCountdown:		subObjMainData \
 				0, 32, 32, 1, $348, 0, FALSE, Map_Bubbler
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Count Down/Object Data/Anim - Air Countdown.asm"

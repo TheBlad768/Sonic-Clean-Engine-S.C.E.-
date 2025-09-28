@@ -72,7 +72,7 @@ Obj_WaveSplash:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_WaveSplash:	subObjMainData \
 			Obj_WaveSplash.main, \
 				setBit(render_flags.level) | \
@@ -80,4 +80,5 @@ ObjDat_WaveSplash:	subObjMainData \
 			0, 24, 256, 0, $300, 0, TRUE, Map_WaveSplash
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Wave Splash/Object Data/Map - Wave Splash.asm"

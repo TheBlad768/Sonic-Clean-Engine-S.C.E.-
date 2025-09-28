@@ -366,7 +366,7 @@ Obj_Attracted_Ring:
 
 ; =============== S U B R O U T I N E =======================================
 
-; mapping
+; init
 ObjDat_Ring:			subObjMainData \
 				Sprite_OnScreen_Test_Collision, \
 					setBit(render_flags.level) | \
@@ -460,4 +460,5 @@ Rings_WaterVelocity:
 		dc.w $32, $FA		; 32
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Rings/Object Data/Map - Rings.asm"

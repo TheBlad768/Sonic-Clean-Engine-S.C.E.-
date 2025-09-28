@@ -210,12 +210,12 @@ Obj_TitleCardAct:
 ;		jmp	(Delete_Current_Sprite).w
 
 ; ---------------------------------------------------------------------------
-; Title Card load letter to VRAM
+; Title Card load letters to VRAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-TitleCard_LoadLetter:
+TitleCard_LoadLetters:
 
 .decomp	= 0
 
@@ -283,5 +283,6 @@ ObjArray_TtlCardBonus: titlecardresultsheader
 ObjArray_TtlCardBonus_end
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Title Card/Text Data/VRAM - Text.asm"
 		include "Objects/Main/Title Card/Object Data/Map - Title Card.asm"

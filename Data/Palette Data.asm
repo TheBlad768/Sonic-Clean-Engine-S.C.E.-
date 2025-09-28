@@ -2,22 +2,33 @@
 ; Palette Main data
 ; ===========================================================================
 
-Pal_Sonic:		bincludeEntry "Objects/Players/Sonic/Palettes/Sonic.pal"
-	even
-Pal_WaterSonic:		bincludeEntry "Objects/Players/Sonic/Palettes/Water Sonic.pal"
-	even
-Pal_LevelSelect:	bincludeEntry "Screens/Level Select/Palettes/1.pal"
-	even
-Pal_DEZ:		bincludeEntry "Levels/DEZ/Palettes/Death Egg Zone.pal"
-	even
-Pal_WaterDEZ:		bincludeEntry "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
-	even
+;		Attribute	| Filename	| Folder
+
+		incfile.be	Pal_Sonic, "Objects/Players/Sonic/Palettes/Sonic.pal"
+		incfile.be	Pal_WaterSonic, "Objects/Players/Sonic/Palettes/Water Sonic.pal"
+
+; ===========================================================================
+; Palette Level Select screen data
+; ===========================================================================
+
+;		Attribute	| Filename	| Folder
+
+		incfile.b	Pal_LevelSelect, "Screens/Level Select/Palettes/1.pal"
+
+; ===========================================================================
+; Palette Level screen data
+; ===========================================================================
+
+;		Attribute	| Filename	| Folder
+
+		incfile.be	Pal_DEZ, "Levels/DEZ/Palettes/Death Egg Zone.pal"
+		incfile.be	Pal_WaterDEZ, "Levels/DEZ/Palettes/Water Death Egg Zone.pal"
 
 ; ===========================================================================
 ; Animated palette Level screen data
 ; ===========================================================================
 
-AnPal_PalDEZ12_1:	bincludeEntry "Levels/DEZ/Palettes/Animated/Palettes/1.pal"
-	even
-AnPal_PalDEZ12_2:	bincludeEntry "Levels/DEZ/Palettes/Animated/Palettes/2.pal"
-	even
+;		Attribute	| Filename	| Folder
+
+		incfile.b	AnPal_PalDEZ12_1, "Levels/DEZ/Palettes/Animated/Palettes/1.pal"
+		incfile.b	AnPal_PalDEZ12_2, "Levels/DEZ/Palettes/Animated/Palettes/2.pal"

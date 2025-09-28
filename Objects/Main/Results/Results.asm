@@ -371,4 +371,5 @@ ObjArray_LevResults: titlecardresultsheader
 ObjArray_LevResults_end
 ; ---------------------------------------------------------------------------
 
+		; mappings
 		include "Objects/Main/Results/Object Data/Map - Results.asm"
