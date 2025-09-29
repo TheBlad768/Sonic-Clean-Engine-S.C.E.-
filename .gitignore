@@ -24,5 +24,8 @@ to-do.txt
 # Temporary assembly files
 *.[ph]
 
+# Backup files
+*.bak
+
 # Cached DLL files in SonLVL INI Files directory
 Projects/SonLVL INI Files/dllcache/*
