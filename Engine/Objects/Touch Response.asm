@@ -613,12 +613,12 @@ ShieldTouchResponse:
 
 		and.b	status_secondary(a0),d0
 		beq.s	ShieldTouch_Return
-		moveq	#-24,d2								; subtract width of shield
+		moveq	#-(48/2),d2								; subtract width of shield
 		add.w	x_pos(a0),d2							; get player's x_pos
-		moveq	#-24,d3								; subtract height of shield
+		moveq	#-(48/2),d3								; subtract height of shield
 		add.w	y_pos(a0),d3							; get player's y_pos
-		moveq	#48,d4								; player's width
-		moveq	#48,d5								; player's height
+		moveq	#96/2,d4								; player's width
+		moveq	#96/2,d5								; player's height
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6							; get number of objects queued
 		beq.s	ShieldTouch_Return						; if there are none, return
