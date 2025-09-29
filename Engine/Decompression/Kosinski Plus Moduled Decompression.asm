@@ -227,7 +227,7 @@ Process_KosPlus_Queue:
 		movem.l	(KosPlus_decomp_stored_registers+(2*6)).w,a0-a1/a5
 		move.l	(KosPlus_decomp_bookmark).w,-(sp)
 		move.w	(KosPlus_decomp_stored_SR).w,-(sp)
-		rte
+		rtr												; restore ccr
 ; ---------------------------------------------------------------------------
 
 .Main

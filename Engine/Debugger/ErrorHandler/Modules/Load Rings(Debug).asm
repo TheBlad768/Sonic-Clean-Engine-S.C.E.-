@@ -7,8 +7,12 @@
 Load_Rings_RaiseError:
 
 		; check
+		cmpa.w	#Ring_status_table,a2
+		blo.s	.error
 		cmpa.w	#Ring_status_table_end,a2
 		blo.w	.return
+
+.error
 
 		; debug
 		RaiseError "Ring status table overflow", .console

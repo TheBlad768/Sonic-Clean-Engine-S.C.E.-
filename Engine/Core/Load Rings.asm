@@ -37,6 +37,10 @@ Load_Rings_Init:
 		bhi.s	.next								; if it is, check next ring
 		move.l	a1,(Ring_start_addr_ROM).w					; set start addresses
 		move.w	a2,(Ring_start_addr_RAM).w
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Load_Rings_RaiseError).l				; raise an error if there is ring status table overflow
+
 		addi.w	#320+16,d4							; advance by a screen
 		bra.s	.check2
 ; ---------------------------------------------------------------------------

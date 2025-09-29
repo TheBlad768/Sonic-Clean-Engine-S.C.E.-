@@ -7,8 +7,12 @@
 Load_Objects_RaiseError:
 
 		; check
+		cmpa.w	#Object_respawn_table,a3
+		blo.s	.error
 		cmpa.w	#Object_respawn_table_end,a3
 		blo.w	.return
+
+.error
 
 		; debug
 		RaiseError "Object respawn table overflow", .console
