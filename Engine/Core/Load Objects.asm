@@ -44,6 +44,10 @@ loc_1B7A2:
 loc_1B7AC:
 		move.l	a0,(Object_load_addr_front).w
 		move.w	a3,(Object_respawn_index_front).w
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is object respawn table overflow
+
 		lea	(Object_respawn_table).w,a3
 		movea.l	(Object_load_addr_back).w,a0
 		subi.w	#$80,d6
@@ -158,6 +162,10 @@ loc_1B8BC:
 loc_1B8C8:
 		move.l	a0,(Object_load_addr_front).w
 		move.w	a3,(Object_respawn_index_front).w
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is object respawn table overflow
+
 		bra.s	loc_1B91A
 ; ---------------------------------------------------------------------------
 
