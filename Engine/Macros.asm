@@ -1489,6 +1489,11 @@ incfile macro name,path
     endif
     if strstr(lowstring("ATTRIBUTE"),"e") >= 0
 	name_end:	label *
+	if strstr(lowstring("ATTRIBUTE"),"d") >= 0
+	    if (((name)+((name_end-name))-1)>>17)<>((name)>>17)
+		fatal "DMA crosses a 128kB boundary. You should either split the DMA manually or align the source adequately."
+	    endif
+	endif
     endif
     even
     endm
