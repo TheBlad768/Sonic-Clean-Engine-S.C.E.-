@@ -245,7 +245,7 @@ Test_Ring_Collisions:
 .find
 
 		; RaiseError is only available in DEBUG builds
-		ifdebug	jsr	(Test_Ring_Collisions_Consume).l			; raise an error if there is ring consumption list overflow
+		ifdebug	jsr	(Test_Ring_Collisions_Consume_RaiseError).l		; raise an error if there is ring consumption list overflow
 
 		tst.w	(a3)+
 		bne.s	.find
