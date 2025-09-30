@@ -170,14 +170,9 @@ Queue_KosPlus_Module:
 
 Process_KosPlus_Module_Queue_Init:
 		move.w	(a1)+,d3										; get uncompressed size
-		cmpi.w	#$A000,d3
-		bne.s	.Gotsize
-		move.w	#$8000,d3										; $A000 means $8000 for some reason
-
-.Gotsize
-		lsr.w	d3
 		move.w	d3,d0
-		rol.w	#5,d0
+		lsr.w	d3											; division by 2
+		rol.w	#4,d0
 		andi.w	#$1F,d0											; get number of complete modules
 		move.w	d0,(KosPlus_modules_left).w
 		andi.w	#$7FF,d3										; get size of last module in words
