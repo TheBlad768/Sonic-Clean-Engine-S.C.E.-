@@ -28,7 +28,7 @@ Load_Rings_RaiseError:
 
 ; =============== S U B R O U T I N E =======================================
 
-Test_Ring_Collisions_Consume:
+Test_Ring_Collisions_Consume_RaiseError:
 
 		; check
 		cmpa.w	#Ring_consumption_list_end,a3
