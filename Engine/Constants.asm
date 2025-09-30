@@ -95,6 +95,7 @@ Security_Addr =							Security_addr
 ; ---------------------------------------------------------------------------
 
 RingsTable_Size =						512						; maximum rings on the level (affects RAM, even numbers only)
+RingsList_Size =						63						; maximum rings being consumed at once (affects RAM)
 ObjectsTable_Size =						768						; maximum objects on the level (affects RAM, even numbers only)
 
 ; ---------------------------------------------------------------------------

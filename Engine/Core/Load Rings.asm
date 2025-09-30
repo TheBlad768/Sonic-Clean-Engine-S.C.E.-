@@ -243,6 +243,10 @@ Test_Ring_Collisions:
 		lea	(Ring_consumption_list).w,a3
 
 .find
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Test_Ring_Collisions_Consume).l			; raise an error if there is ring consumption list overflow
+
 		tst.w	(a3)+
 		bne.s	.find
 		move.w	a4,-(a3)

@@ -25,3 +25,23 @@ Load_Rings_RaiseError:
 
 .return
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Test_Ring_Collisions_Consume:
+
+		; check
+		cmpa.w	#Ring_consumption_list_end,a3
+		blo.w	.return
+
+		; debug
+		RaiseError "Ring consumption list overflow", .console
+
+.console
+		Console.WriteLine "It seems you have collected too many%<endl>rings at once!%<endl>"
+		Console.WriteLine "%<pal1>Ring list current: %<.l a3>"
+		Console.WriteLine "%<pal1>Ring list start:   %<pal2>%<.l #Ring_consumption_list>"
+		Console.WriteLine "%<pal1>Ring list end:     %<pal2>%<.l #Ring_consumption_list_end>"
+
+.return
+		rts
