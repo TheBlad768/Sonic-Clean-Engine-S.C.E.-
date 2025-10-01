@@ -251,8 +251,8 @@ Restore_LevelMusic:
 		move.b	(a2),d0
 		move.w	d0,(Current_music).w
 		btst	#status_secondary.invincible,(Player_1+status_secondary).w
-		beq.s	.play
-		moveq	#signextendB(mus_Invincible),d0					; if invincible, play invincibility music
+		beq.s	.play								; branch if Sonic is not invincible
+		moveq	#signextendB(mus_Invincible),d0					; prepare to play invincibility music
 
 .play
 		bra.w	Play_Music							; play music
