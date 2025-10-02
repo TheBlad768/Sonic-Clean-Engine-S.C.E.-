@@ -24,7 +24,7 @@ Test_Checksum:
 		beq.s	.exit								; if they match, branch
 
 		; failed
-		move.l	#vdpComm($0000,CRAM,WRITE),(VDP_control_port).l			; set VDP to CRAM write
+		move.l	#vdpComm(0,CRAM,WRITE),(VDP_control_port).l			; set VDP to CRAM write
 		moveq	#bytesToXcnt(64,2),d7
 
 .fill

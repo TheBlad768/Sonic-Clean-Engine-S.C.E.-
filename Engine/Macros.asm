@@ -148,36 +148,6 @@ CalcVRAM macro reg=d0
     endm
 
 ; ---------------------------------------------------------------------------
-; Macro to check button presses
-; Arguments:
-; 1 - buttons to check
-; ---------------------------------------------------------------------------
-
-tpress macro press,player
-	if player=2
-		move.b	(Ctrl_2_pressed).w,d0
-	else
-		move.b	(Ctrl_1_pressed).w,d0
-	endif
-	andi.b	#(press),d0
-    endm
-
-; ---------------------------------------------------------------------------
-; Macro to check if buttons are held
-; Arguments:
-; 1 - buttons to check
-; ---------------------------------------------------------------------------
-
-theld macro press,player
-	if player=2
-		move.b	(Ctrl_2_held).w,d0
-	else
-		move.b	(Ctrl_1_held).w,d0
-	endif
-	andi.b	#(press),d0
-    endm
-
-; ---------------------------------------------------------------------------
 ; macro for a debug object list header
 ; must be on the same line as a label that has a corresponding _end label later
 ; ---------------------------------------------------------------------------
@@ -277,24 +247,24 @@ subObjMainData macro address=FALSE,render,routine,height,width,prio,vram,pal,pri
     endm
 
 ; macro to declare DPLC data
-DPLCEntry macro art, mappings
-	dc.l dmaSource(art), mappings
+DPLCEntry macro art,mappings
+	dc.l dmaSource(art),mappings
     endm
 ; ---------------------------------------------------------------------------
 
 zoneanimals macro first,second
-	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties), (Obj_Animal_Properties_second - Obj_Animal_Properties)
+	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties),(Obj_Animal_Properties_second - Obj_Animal_Properties)
     endm
 
 objanimaldecl macro mappings,address,xvel,yvel,{INTLABEL}
 Obj_Animal_Properties___LABEL__: label *
-	dc.l mappings, address
-	dc.w xvel, yvel
+	dc.l mappings,address
+	dc.w xvel,yvel
     endm
 
 objanimalending macro address,mappings,vram,xvel,yvel
-	dc.l address, mappings
-	dc.w vram, xvel, yvel
+	dc.l address,mappings
+	dc.w vram,xvel,yvel
 	dc.w 0	; even
     endm
 ; ---------------------------------------------------------------------------
@@ -565,21 +535,21 @@ EniDecomp macro data,ram,vram,palette,pri,terminate
 
 ; load DMA
 AddToDMAQueue macro art,vram,size,terminate
-		move.l	#dmaSource(art),d1
+	move.l	#dmaSource(art),d1
     if ((vram)<=3)
 	moveq	#tiles_to_bytes(vram),d2
     else
 	move.w	#tiles_to_bytes(vram),d2
     endif
     if ((size/2)<=$7F)
-		moveq	#(size/2),d3
+	moveq	#(size/2),d3
     else
-		move.w	#(size/2),d3
+	move.w	#(size/2),d3
     endif
     if ("terminate"="0") || ("terminate"="")
-		jsr	(Add_To_DMA_Queue).w
+	jsr	(Add_To_DMA_Queue).w
     else
-		jmp	(Add_To_DMA_Queue).w
+	jmp	(Add_To_DMA_Queue).w
     endif
     endm
 
@@ -591,9 +561,9 @@ AddToDMAQueue macro art,vram,size,terminate
 out_of_xrange macro exit,xpos
 	moveq	#-$80,d0								; round down to nearest $80
     ifnb xpos
-		and.w	xpos,d0								; get object position (if specified as not x_pos)
+	and.w	xpos,d0								; get object position (if specified as not x_pos)
     else
-		and.w	x_pos(a0),d0							; get object position
+	and.w	x_pos(a0),d0							; get object position
     endif
 	out_of_xrange2.ATTRIBUTE	exit
     endm
@@ -612,9 +582,9 @@ out_of_xrange2 macro exit
 out_of_yrange macro exit,ypos
 	moveq	#-$80,d0								; round down to nearest $80
     ifnb ypos
-		and.w	ypos,d0								; get object position (if specified as not y_pos)
+	and.w	ypos,d0								; get object position (if specified as not y_pos)
     else
-		and.w	y_pos(a0),d0							; get object position
+	and.w	y_pos(a0),d0							; get object position
     endif
 	out_of_yrange2.ATTRIBUTE	exit
     endm
@@ -1129,7 +1099,7 @@ zoneanimdeclanonid := zoneanimdeclanonid + 1
 start:
 	dc.l (duration&$FF)<<24|dmaSource(artaddr)
 	dc.w tiles_to_bytes(vramaddr)
-	dc.b numentries, numvramtiles
+	dc.b numentries,numvramtiles
 zoneanimcount := zoneanimcount + 1
     endm
 
@@ -1138,7 +1108,7 @@ zoneanimdeclanonid := zoneanimdeclanonid + 1
 start:
 	dc.l (duration&$FF)<<24|paladdr
 	dc.w ((palram)&$FFFF)
-	dc.b numentries, numcolors
+	dc.b numentries,numcolors
 zoneanimcount := zoneanimcount + 1
     endm
 ; ---------------------------------------------------------------------------
@@ -1154,7 +1124,7 @@ tribyte macro val
 
 ; macro to define a palette script pointer
 palscriptptr macro header,data
-	dc.w data-header, 0
+	dc.w data-header,0
 	dc.l header
 ._headpos := header
     endm
@@ -1162,7 +1132,7 @@ palscriptptr macro header,data
 ; macro to define a palette script header
 palscripthdr macro palette,entries,value
 	dc.w (palette)&$FFFF
-	dc.b entries-1, value
+	dc.b entries-1,value
     endm
 
 ; macro to define a palette script data
@@ -1188,7 +1158,7 @@ palscriptrept macro header
 
 ; macro to define loop from start for x number of times, then initialize with new header
 palscriptloop macro header
-	dc.w -4, header-._headpos
+	dc.w -4,header-._headpos
 ._headpos := header
     endm
 
@@ -1502,11 +1472,11 @@ incfile macro name,path
 dScroll_Header macro {INTLABEL}
 __LABEL__ label *
 	dc.w (((__LABEL___end - __LABEL__Scroll) / 6) - 1)
-__LABEL__Scroll:
+__LABEL__Scroll
     endm
 
 dScroll_Data macro pixel,size,velocity,plane
-	dc.w velocity, size
+	dc.w velocity,size
 	if upstring("plane")="FG"
 		dc.w H_scroll_buffer+(pixel<<2)
 	elseif upstring("plane")="BG"
