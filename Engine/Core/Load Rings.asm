@@ -284,9 +284,7 @@ Test_Ring_Collisions_AttractRing:
 ; =============== S U B R O U T I N E =======================================
 
 GiveRing:
-		addq.w	#1,(Ring_count).w						; add 1 to rings
-		ori.b	#1,(Update_HUD_ring_count).w					; update the rings counter
-		sfx	sfx_RingRight,1							; play ring sound
+		moveq	#1,d0								; add 1 ring
 
 ; ---------------------------------------------------------------------------
 ; Add ring to player
