@@ -239,7 +239,8 @@ Test_Ring_Collisions:
 
 .consume
 		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/2),(a4)
-		bsr.s	GiveRing
+		moveq	#1,d0								; add 1 ring
+		bsr.s	AddRings
 		lea	(Ring_consumption_list).w,a3
 
 .find
@@ -276,17 +277,6 @@ Test_Ring_Collisions_AttractRing:
 .notfree
 		lea	(a3),a1								; return ROM address
 		bra.s	Test_Ring_Collisions.consume
-
-; ---------------------------------------------------------------------------
-; Give ring to player
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-GiveRing:
-		addq.w	#1,(Ring_count).w						; add 1 to rings
-		ori.b	#1,(Update_HUD_ring_count).w					; update the rings counter
-		sfx	sfx_RingRight,1							; play ring sound
 
 ; ---------------------------------------------------------------------------
 ; Add ring to player
