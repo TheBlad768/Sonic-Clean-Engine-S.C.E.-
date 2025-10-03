@@ -23,8 +23,7 @@ Obj_Ring_Collect:
 		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#.sparkle,address(a0)
 		move.w	#priority_1,priority(a0)
-		moveq	#1,d0								; add 1 ring
-		jsr	(AddRings).w
+		jsr	(GiveRing).w
 
 .sparkle
 
