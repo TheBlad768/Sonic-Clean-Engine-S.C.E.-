@@ -882,7 +882,6 @@ ObjHitWall_DoRoutine =						ObjCheckRightWallDist_DoRoutine			; alias from Sonic
 ObjHitWall2_DoRoutine =						ObjCheckLeftWallDist_DoRoutine			; alias from Sonic 3K (GitHub)
 SolidObject =							SolidObjectFull					; alias from Sonic 1/2 (Hivebrain/GitHub)
 SolidObject_Always =						SolidObjectFull2				; alias from Sonic 2 (GitHub)
-CollectRing =							GiveRing					; alias from Sonic 1/2 (Hivebrain/GitHub)
 ReactToItem =							TouchResponse					; alias from Sonic 1 (GitHub)
 HurtSonic =							HurtCharacter					; alias from Sonic 1 (Hivebrain/GitHub)
 KillSonic =							Kill_Character					; alias from Sonic 1 (Hivebrain/GitHub)
