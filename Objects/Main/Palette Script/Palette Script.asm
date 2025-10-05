@@ -14,7 +14,7 @@ Obj_SmoothPalette:
 		; wait
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
-	        move.w	objoff_3A(a0),objoff_2E(a0)
+		move.w	objoff_3A(a0),objoff_2E(a0)
 		movea.w	objoff_30(a0),a1						; palette RAM
 		movea.l	objoff_32(a0),a2						; palette pointer
 		move.w	objoff_36(a0),d0						; palette size
@@ -42,7 +42,7 @@ Obj_SmoothPalette2:
 		; wait
 		subq.w	#1,objoff_2E(a0)
 		bpl.s	.return
-	        move.w	objoff_3A(a0),objoff_2E(a0)
+		move.w	objoff_3A(a0),objoff_2E(a0)
 		movea.l	objoff_30(a0),a3
 		move.w	(a3)+,d6							; loop count
 

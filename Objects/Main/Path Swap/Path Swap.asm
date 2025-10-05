@@ -78,7 +78,7 @@ sub_1CDDA:
 		bne.s	loc_1CE6C
 		cmp.w	x_pos(a1),d1
 		bhi.s	locret_1CE6A
-		move.b	#1,-1(a2)
+		st	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
 		move.w	objoff_32(a0),d4
@@ -187,7 +187,7 @@ sub_1CF42:
 		bne.s	loc_1CFD4
 		cmp.w	y_pos(a1),d1
 		bhi.s	locret_1CFD2
-		move.b	#1,-1(a2)
+		st	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
 		move.w	objoff_32(a0),d4
