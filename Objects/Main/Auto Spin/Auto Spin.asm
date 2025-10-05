@@ -78,7 +78,7 @@ sub_1E8C6:
 		bne.s	AutoSpin_MainX_Alt
 		cmp.w	x_pos(a1),d1
 		bhi.s	locret_1E942
-		move.b	#1,-1(a2)
+		st	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
 		move.w	objoff_32(a0),d4
@@ -197,8 +197,8 @@ sub_1EA14:
 		tst.b	(a2)+
 		bne.w	AutoSpin_MainY_Alt
 		cmp.w	y_pos(a1),d1
-		bhi.w	locret_1EAAE
-		move.b	#1,-1(a2)
+		bhi.s	locret_1EAAE
+		st	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
 		move.w	objoff_32(a0),d4
