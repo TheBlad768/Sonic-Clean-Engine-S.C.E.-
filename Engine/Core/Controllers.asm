@@ -88,7 +88,7 @@ Detect_Controller:
 
 .skip
 		lsr.b	d1								; check bytes (each bit)
-		bne.s	.loop					; next bytes
+		bne.s	.loop								; next bytes
 
 		; check
 		cmpi.w	#$D,d0								; has joypad been found?
