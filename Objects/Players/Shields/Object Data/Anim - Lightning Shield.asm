@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Animation script - Lightning shield
+; Animation script - Lightning Shield
 ; ---------------------------------------------------------------------------
 
 Ani_LightningShield: offsetTable

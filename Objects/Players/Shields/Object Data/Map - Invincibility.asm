@@ -1,3 +1,7 @@
+; ---------------------------------------------------------------------------
+; Sprite mappings - Invincibility
+; ---------------------------------------------------------------------------
+
 Map_Invincibility:
 Map_Invincibility_0: 	dc.w 0
 Map_Invincibility_2: 	dc.w Map_Invincibility_12-Map_Invincibility
