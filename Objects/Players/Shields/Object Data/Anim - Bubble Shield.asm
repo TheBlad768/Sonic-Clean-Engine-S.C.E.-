@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Animation script - Bubble shield
+; Animation script - Bubble Shield
 ; ---------------------------------------------------------------------------
 
 Ani_BubbleShield: offsetTable

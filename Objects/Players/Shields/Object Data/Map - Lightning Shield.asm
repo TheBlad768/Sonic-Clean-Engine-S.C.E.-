@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Sprite mappings - lightning shield
+; Sprite mappings - Lightning Shield
 ; ---------------------------------------------------------------------------
 
 Map_LightningShield:

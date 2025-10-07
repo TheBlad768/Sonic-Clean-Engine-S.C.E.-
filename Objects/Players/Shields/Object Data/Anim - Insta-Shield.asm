@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Animation script - Insta shield
+; Animation script - Insta Shield
 ; ---------------------------------------------------------------------------
 
 Ani_InstaShield: offsetTable
