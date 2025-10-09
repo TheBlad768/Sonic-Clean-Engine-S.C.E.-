@@ -7,8 +7,7 @@
 Get_LevelSizeStart:
 
 		; get level size
-		lea	(Level_data_addr_RAM.xstart).w,a1
-		movem.l	(a1)+,d0-d1
+		movem.l	(Level_data_addr_RAM.xstart).w,d0-d1
 		movem.l	d0-d1,(Camera_target_min_X_pos).w
 		movem.l	d0-d1,(Camera_min_X_pos).w
 
