@@ -138,6 +138,7 @@ sub_E994:
 		bne.s	.next								; if not, branch
 		move.w	#-1,(a1)							; destroy ring
 
+		; clear slot
 		clr.w	-2(a2)								; clear ring entry
 		subq.w	#1,(Ring_consumption_table).w					; subtract count
 
@@ -387,7 +388,7 @@ Clear_SpriteRingMem:
 		move.w	respawn_addr(a1),d0						; get address in respawn table
 		beq.s	.nextos								; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .nextos
 		dbf	d1,.findos
@@ -395,17 +396,21 @@ Clear_SpriteRingMem:
 		; rings
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
-		subq.w	#1,d1
-		blo.s	.return
+		subq.w	#1,d1								; are any rings currently being consumed?
+		blo.s	.return								; if not, branch
 
 .find
-		move.w	(a2)+,d0
-		beq.s	.find
-		movea.w	d0,a1
-		move.w	#-1,(a1)
+		move.w	(a2)+,d0							; is there a ring in this slot?
+		beq.s	.find								; if not, branch
+		movea.w	d0,a1								; load ring address
+		move.w	#-1,(a1)							; destroy ring
+
+		; clear slot
 		clr.w	-2(a2)
 		subq.w	#1,(Ring_consumption_table).w
-		dbf	d1,.find
+
+		; next
+		dbf	d1,.find							; repeat for all rings in table
 
 .return
 		rts

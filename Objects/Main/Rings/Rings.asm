@@ -353,13 +353,13 @@ Obj_Attracted_Ring:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	.offscreen2							; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .offscreen2
-		move.w	objoff_30(a0),d0						; load ring RAM address
-		beq.s	.delete
-		movea.w	d0,a2
-		clr.w	(a2)
+		move.w	objoff_30(a0),d0						; get ring address
+		beq.s	.delete								; if it's zero, branch
+		movea.w	d0,a2								; load address into a2
+		clr.w	(a2)								; clear slot
 
 .delete
 		jmp	(Delete_Current_Sprite).w

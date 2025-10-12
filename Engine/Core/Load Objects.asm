@@ -278,7 +278,9 @@ loc_1B9A4:
 		blo.s	loc_1B9F2
 		cmp.w	d4,d1
 		bhi.s	loc_1B9F2
-		bset	#7,(a3)
+
+		; set
+		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	-2(a0),x_pos(a1)
 		move.w	(a0),d1
 		move.w	d1,d2
@@ -348,7 +350,7 @@ loc_1BA62:
 		and.w	d5,d1
 
 loc_1BA64:
-		bset	#7,(a3)
+		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	d7,x_pos(a1)
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2
@@ -409,7 +411,7 @@ loc_1BAB4:
 		and.w	d5,d1
 
 loc_1BAB6:
-		bset	#7,(a3)
+		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	d7,x_pos(a1)
 		move.w	d1,y_pos(a1)
 		rol.w	#3,d2

@@ -25,7 +25,7 @@ Sprite_CheckDeleteTouch3:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	.delete								; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
 		bra.w	Delete_Current_Sprite
@@ -65,10 +65,10 @@ Sprite_CheckDelete:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	.delete								; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
-		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
+		bset	#status.npc.defeated,status(a0)					; set "defeated" flag
 		move.l	#Delete_Current_Sprite,address(a0)
 		rts
 
@@ -97,7 +97,7 @@ Sprite_CheckDelete2:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	.delete								; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
 		bset	#4,objoff_38(a0)						; set "delete child object" flag
@@ -131,7 +131,7 @@ Sprite_CheckDelete3:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	.delete								; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
 		move.l	#Delete_Current_Sprite,address(a0)
@@ -163,7 +163,7 @@ Sprite_ChildCheckDeleteXY:
 Sprite_ChildCheckDeleteY:
 		out_of_yrange.w	Go_Delete_Sprite
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is object defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.w	Draw_Sprite
 
@@ -175,7 +175,7 @@ Sprite_ChildCheckDeleteXY_NoDraw:
 Sprite_ChildCheckDeleteY_NoDraw:
 		out_of_yrange.w	Go_Delete_Sprite
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is object defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 
 .return
@@ -210,7 +210,7 @@ Sprite_ChildCheckDeleteTouchXY:
 Sprite_ChildCheckDeleteTouchY:
 		out_of_yrange.w	Go_Delete_Sprite
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is object defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.w	Draw_And_Touch_Sprite
 
@@ -226,10 +226,10 @@ Go_Delete_SpriteSlotted:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	Go_Delete_SpriteSlotted2					; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 Go_Delete_SpriteSlotted2:
-		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
+		bset	#status.npc.defeated,status(a0)					; set "defeated" flag
 
 Go_Delete_SpriteSlotted3:
 		move.l	#Delete_Current_Sprite,address(a0)
@@ -269,7 +269,7 @@ Obj_WaitOffscreen:
 		move.l	#Map_Offscreen,mappings(a0)
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
-		move.l	(sp)+,objoff_34(a0)						; save address after bsr/jsr
+		move.l	(sp)+,objoff_34(a0)						; save address after bsr/jsr from stack
 		move.l	#.main,address(a0)
 
 .main
