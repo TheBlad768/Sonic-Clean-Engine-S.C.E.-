@@ -128,7 +128,7 @@ loc_2FB5C:
 		move.w	respawn_addr(a0),d0						; get address in respawn table
 		beq.s	Bubbler_Delete							; if it's zero, it isn't remembered
 		movea.w	d0,a2								; load address into a2
-		bclr	#7,(a2)
+		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 Bubbler_Delete:
 		jmp	(Delete_Current_Sprite).w

@@ -664,11 +664,16 @@ collision_flags.npc.size_mask =					$3F
 collision_flags.npc.type_mask =					$C0
 
 ; ---------------------------------------------------------------------------
+; Object respawn variables
+; ---------------------------------------------------------------------------
+
+respawn_addr.state =						7						; remember object state
+
+; ---------------------------------------------------------------------------
 ; Water wind tunnels variables
 ; ---------------------------------------------------------------------------
 
 WindTunnel_holding_flag.player_1 =				0
-WindTunnel_holding_flag.player_2 =				1
 
 ; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
