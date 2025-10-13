@@ -58,13 +58,15 @@ Obj_StarPost:
 		and.b	subtype(a0),d2
 		cmp.b	d2,d1
 		bhs.s	.taken
+
+		; check debug mode
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
 		bne.s	.return								; if yes, branch
 
 		; check xpos
 		move.w	(Player_1+x_pos).w,d0
 		sub.w	x_pos(a0),d0
-		addi.w	#8,d0
+		addq.w	#8,d0
 		cmpi.w	#16,d0
 		bhs.s	.return
 
@@ -115,7 +117,7 @@ Obj_StarPost:
 		moveq	#1,d0
 		btst	#2,(Level_frame_counter+1).w
 		beq.s	.cdraw
-		addq.b	#1,d0
+		moveq	#2,d0
 
 .cdraw
 		move.b	d0,sub2_mapframe(a0)
@@ -137,6 +139,8 @@ Obj_StarPost:
 		add.w	y_pos(a0),d0
 		subi.w	#20,d0
 		move.w	d0,sub2_y_pos(a0)
+
+		; draw
 		jmp	(Sprite_CheckDelete).w
 
 ; ---------------------------------------------------------------------------
@@ -334,7 +338,7 @@ loc_2D58C:
 		addq.b	#1,objoff_23(a0)
 		moveq	#6,d0
 		and.b	objoff_23(a0),d0
-		lsr.w	d0
+		lsr.b	d0
 		cmpi.b	#3,d0
 		bne.s	loc_2D5B6
 		moveq	#1,d0
