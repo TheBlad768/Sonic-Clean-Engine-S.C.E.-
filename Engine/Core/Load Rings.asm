@@ -167,7 +167,7 @@ Test_Ring_Collisions:
 
 		; check
 		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
-		beq.s	.noattraction				; if not, branch
+		beq.s	.noattraction							; if not, branch
 
 		; lightning shield
 		moveq	#-(128/2),d2
