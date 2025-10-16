@@ -3643,7 +3643,7 @@ cfChanFMCommand:
 ; FM Universal Voice Bank
 ; ---------------------------------------------------------------------------
     if SMPS_EnableUniversalVoiceBank
-	include "Sound/FM Universal Voice Bank.asm"
+UniVoiceBank:	include "Sound/FM Universal Voice Bank.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; PSG volume envelopes 'include's and pointers
