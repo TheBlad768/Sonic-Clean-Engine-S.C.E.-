@@ -1479,7 +1479,7 @@ Sonic_LightningShield:
 ; ---------------------------------------------------------------------------
 
 Sonic_BubbleShield:
-		btst	#status_secondary.bubble_shield,status_secondary(a0)		; does Sonic have a Bubble Shield
+		btst	#status_secondary.bubble_shield,status_secondary(a0)		; does Sonic have a Bubble Shield?
 		beq.s	Sonic_InstaShield						; if not, branch
 		move.b	#1,(Shield+anim).w
 		move.b	#1,double_jump_flag(a0)
