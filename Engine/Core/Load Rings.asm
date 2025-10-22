@@ -206,6 +206,9 @@ Test_Ring_Collisions:
 		tst.w	(a4)								; has this ring been consumed?
 		bne.s	.next								; if it has, branch
 
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Test_Ring_Collisions_RaiseError).l			; raise an error if there is ring is corrupted
+
 		; check
 		move.w	(a1),d0								; get ring's x_pos
 		sub.w	d1,d0								; subtract ring's width

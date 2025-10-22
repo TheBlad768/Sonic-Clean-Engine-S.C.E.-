@@ -19,7 +19,7 @@ Load_Objects_RaiseError:
 
 .console
 		Console.WriteLine "It looks like you added too many%<endl>objects!%<endl>"
-		Console.WriteLine "%<pal1>Object table current: %<.l a2>"
+		Console.WriteLine "%<pal1>Object table current: %<pal2>%<.l a2>"
 		Console.WriteLine "%<pal1>Object table start:   %<pal2>%<.l #Object_respawn_table>"
 		Console.WriteLine "%<pal1>Object table end:     %<pal2>%<.l #Object_respawn_table_end>"
 
