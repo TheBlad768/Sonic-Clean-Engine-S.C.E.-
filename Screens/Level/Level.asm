@@ -123,6 +123,8 @@ LevelScreen:
 		move.w	d0,(Ctrl_1).w
 		move.b	d0,(HUD_RAM.status).w								; clear HUD flag
 		move.b	d0,(Update_HUD_timer).w								; clear time counter update flag
+
+		; check
 		tst.b	(Last_star_post_hit).w								; are you starting from a starpost?
 		bne.s	.starpost									; if yes, branch
 		move.w	d0,(Ring_count).w								; clear rings
