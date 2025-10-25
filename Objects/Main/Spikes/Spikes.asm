@@ -42,7 +42,7 @@ Obj_Spikes:
 		; set priority and art_tile
 		move.l	#words_to_long( \
 		priority_4, \
-			make_art_tile(ArtTile_SpikesSprings+8,0,FALSE) \
+			make_art_tile(ArtTile_SpikesSprings,0,FALSE) \
 		),priority(a0)
 
 		lsr.w	d0
@@ -50,7 +50,6 @@ Obj_Spikes:
 		cmpi.b	#4,d0
 		blo.s	loc_23FE8
 		move.l	#sub_240E2,address(a0)						; sideways
-		move.w	#make_art_tile(ArtTile_SpikesSprings,0,FALSE),art_tile(a0)
 
 loc_23FE8:
 		move.b	status(a0),d0
@@ -85,6 +84,8 @@ sub_24090:										; face up or down
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).w
+
+		; check standing
 		moveq	#standing_mask,d6
 		and.b	status(a0),d6							; is Sonic or Tails standing on the object?
 		beq.s	.draw								; if not, branch
@@ -112,6 +113,8 @@ sub_240E2:										; sideways
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).w
 		swap	d6
+
+		; check side
 		andi.w	#touch_side_mask,d6						; are Sonic or Tails pushing against the side?
 		beq.s	.draw								; if not, branch
 		move.b	d6,d0
@@ -139,6 +142,8 @@ sub_2413E:
 		move.w	x_pos(a0),d4
 		jsr	(SolidObjectFull).w
 		swap	d6
+
+		; check bottom
 		andi.w	#touch_bottom_mask,d6						; are Sonic or Tails touching the bottom?
 		beq.s	.draw								; if not, branch
 		move.b	d6,d0
