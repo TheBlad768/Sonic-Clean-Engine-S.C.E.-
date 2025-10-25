@@ -8,7 +8,7 @@ Obj_Spring:
 
 		; init
 		move.l	#Map_Spring,mappings(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$10,0,FALSE),art_tile(a0)	; set red
+		move.w	#make_art_tile(ArtTile_SpikesSprings,0,FALSE),art_tile(a0)	; set red
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
 		move.w	x_pos(a0),objoff_32(a0)
@@ -48,7 +48,6 @@ Spring_UpDiag:
 Spring_Horizontal:
 		move.b	#2,anim(a0)
 		move.b	#3,mapping_frame(a0)
-		move.w	#make_art_tile(ArtTile_SpikesSprings+$1C,0,FALSE),art_tile(a0)	; set yellow
 		move.b	#16/2,width_pixels(a0)
 		move.l	#Obj_Spring_Horizontal,address(a0)
 		bra.s	Spring_Common
@@ -99,6 +98,8 @@ Obj_Spring_Up:
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2.check).w
+
+		; check player 1 standing
 		btst	#p1_standing_bit,status(a0)
 		beq.s	.anim
 		bsr.s	sub_22F98
@@ -117,6 +118,8 @@ Obj_Spring_Up_NoSolid:
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectTop.check).w
+
+		; check player 1 standing
 		btst	#p1_standing_bit,status(a0)
 		beq.s	.anim
 		bsr.s	sub_22F98
@@ -143,6 +146,8 @@ sub_22F98:
 		clr.b	spin_dash_flag(a1)
 		move.b	#AniIDSonAni_Spring,anim(a1)
 		move.b	#PlayerID_Control,routine(a1)
+
+		; check
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_23020
@@ -188,6 +193,8 @@ Obj_Spring_Horizontal:
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2.check).w
 		swap	d6
+
+		; check player 1 side
 		andi.w	#p1_touch_side,d6
 		beq.s	loc_23092
 		move.b	status(a0),d1
@@ -331,7 +338,9 @@ Obj_Spring_Down:
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFull2.check).w
-		cmpi.w	#-2,d4
+
+		; check player 1 standing
+		cmpi.w	#-2,d4								; check bottom collision
 		bne.s	loc_2334C
 		bsr.s	sub_233CA
 
@@ -406,6 +415,8 @@ Obj_Spring_UpDiag:
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFullSloped_Spring.check).w
+
+		; check player 1 standing
 		btst	#p1_standing_bit,status(a0)
 		beq.s	loc_234B8
 		bsr.s	sub_234E6
@@ -503,7 +514,9 @@ Obj_Spring_DownDiag:
 		lea	(Player_1).w,a1							; a1=character
 		moveq	#p1_standing_bit,d6
 		jsr	(SolidObjectFullSloped_Spring.check).w
-		cmpi.w	#-2,d4
+
+		; check player 1 standing
+		cmpi.w	#-2,d4								; check bottom collision
 		bne.s	loc_235F8
 		bsr.s	sub_23624
 
@@ -538,6 +551,8 @@ loc_23660:
 		bclr	#status.player.on_object,status(a1)
 		clr.b	jumping(a1)
 		move.b	#PlayerID_Control,routine(a1)
+
+		; check
 		move.b	subtype(a0),d0
 		btst	#0,d0
 		beq.s	loc_236BA

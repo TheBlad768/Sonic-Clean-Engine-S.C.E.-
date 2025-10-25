@@ -358,7 +358,7 @@ ObjDat_StarPost:	subObjMainData \
 				Obj_StarPost.main, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.multi_sprite), \
-				0, 80, 16, 5, ArtTile_StarPost+8, 0, FALSE, Map_StarPost
+				0, 80, 16, 5, ArtTile_StarPost, 0, FALSE, Map_StarPost
 ; ---------------------------------------------------------------------------
 
 		; mappings

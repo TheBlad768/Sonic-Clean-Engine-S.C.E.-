@@ -16,30 +16,30 @@ Map_Spring2:
 		dc.w word_238EA-Map_Spring2	; Diagonal Spring
 word_237AC:
 		dc.w 2
-		dc.b $F8, $C, $20, 0, $FF, $F0
-		dc.b 0, 4, 0, 4, $FF, $F8
+		dc.b $F8, $C, $20, $10, $FF, $F0
+		dc.b 0, 4, 0, $14, $FF, $F8
 word_237BA:
 		dc.w 1
-		dc.b 0, $C, $20, 0, $FF, $F0
+		dc.b 0, $C, $20, $10, $FF, $F0
 word_237C2:
 		dc.w 2
-		dc.b $E8, $C, $20, 0, $FF, $F0
-		dc.b $F0, 6, 0, 6, $FF, $F8
+		dc.b $E8, $C, $20, $10, $FF, $F0
+		dc.b $F0, 6, 0, $16, $FF, $F8
 word_237F4:
 		dc.w 2
-		dc.b $F0, 3, $20, 0, 0, 0
-		dc.b $F8, 1, 0, 4, $FF, $F8
+		dc.b $F0, 3, $20, $1C, 0, 0
+		dc.b $F8, 1, 0, $20, $FF, $F8
 word_23802:
 		dc.w 1
-		dc.b $F0, 3, $20, 0, $FF, $F8
+		dc.b $F0, 3, $20, $1C, $FF, $F8
 word_2380A:
 		dc.w 2
-		dc.b $F0, 3, $20, 0, 0, $10
-		dc.b $F8, 9, 0, 6, $FF, $F8
+		dc.b $F0, 3, $20, $1C, 0, $10
+		dc.b $F8, 9, 0, $22, $FF, $F8
 word_23826:
 		dc.w 2
-		dc.b 0, $C, $30, 0, $FF, $F0
-		dc.b $F8, 4, $10, 4, $FF, $F8
+		dc.b 0, $C, $30, $10, $FF, $F0
+		dc.b $F8, 4, $10, $14, $FF, $F8
 word_2389C:
 		dc.w 4
 		dc.b $F1, 8, $20, $A, $FF, $EB
