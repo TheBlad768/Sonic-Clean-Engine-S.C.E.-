@@ -279,7 +279,7 @@ loc_2D50A:
 		move.w	objoff_34(a0),d2
 		andi.w	#$3E0,d2
 		lsr.w	#5,d2
-		moveq	#2,d5
+		moveq	#3-1,d5
 		moveq	#0,d4
 		cmpi.w	#16,d2
 		ble.s	loc_2D53A
