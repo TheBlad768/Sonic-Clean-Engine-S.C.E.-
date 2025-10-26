@@ -332,7 +332,7 @@ Render_Rings:
 		add.w	d6,d6								; multiply by 2
 		addi.w	#128-16,d1							; add ypos
 		move.w	d1,(a6)+							; set ypos
-		move.b	#5,(a6)								; set size of the sprite
+		move.b	#5,(a6)								; set size of the sprite tile
 		addq.w	#2,a6								; skip link parameter
 		move.w	CMap_Ring(pc,d6.w),(a6)+					; VRAM
 		addi.w	#128-8,d0							; add xpos
