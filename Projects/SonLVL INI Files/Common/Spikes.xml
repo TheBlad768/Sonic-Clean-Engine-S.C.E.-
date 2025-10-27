@@ -2,7 +2,7 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Spikes" Image="img1">
   <Images>
     <ImageFromMappings id="img1">
-      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" offset="-256" compression="KosinskiPlusM" />
+      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" compression="KosinskiPlusM" />
       <MapFile type="ASM" filename="../../Objects/Main/Spikes/Object Data/Map - Spikes.asm" frame="0" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="img2">
@@ -10,15 +10,15 @@
       <MapFile type="ASM" filename="../../Objects/Main/Spikes/Object Data/Map - Spikes.asm" frame="1" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="img3">
-      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" offset="-256" compression="KosinskiPlusM" />
+      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" compression="KosinskiPlusM" />
       <MapFile type="ASM" filename="../../Objects/Main/Spikes/Object Data/Map - Spikes.asm" frame="2" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="img4">
-      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" offset="-256" compression="KosinskiPlusM" />
+      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" compression="KosinskiPlusM" />
       <MapFile type="ASM" filename="../../Objects/Main/Spikes/Object Data/Map - Spikes.asm" frame="3" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="img5">
-      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" offset="-256" compression="KosinskiPlusM" />
+      <ArtFile filename="../../Objects/Main/Spikes/KosinskiPM Art/SpikesSprings.kospm" compression="KosinskiPlusM" />
       <MapFile type="ASM" filename="../../Objects/Main/Spikes/Object Data/Map - Spikes.asm" frame="4" startpal="0" />
     </ImageFromMappings>
     <ImageFromMappings id="img6">
