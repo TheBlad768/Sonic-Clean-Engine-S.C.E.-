@@ -63,11 +63,12 @@ DEZ1_Deform:
 		move.w	(Level_frame_counter).w,d0					; 100% to d0 ($1000)
 		asr.w	d0								; get 50% ($800)
 		move.w	d0,d1								; save 50% speed star 1
-		asr.w	d0								; get 25% ($400)
+		swap	d0
+		asr.w	d1								; get 25% ($400)
+		move.w	d1,d0
 
 	rept 16/2
-		move.w	d1,(a1)+							; set 50% speed star 1
-		move.w	d0,(a1)+							; set 25% speed star 2
+		move.l	d0,(a1)+							; set 50% speed star 1 and 25% speed star 2
 	endr
 
 		rts

@@ -34,7 +34,7 @@ KosPlus_decomp_buffer:					ds.b $1000					; each module in a KosPlusM archive is
 
 ; scroll variables
 H_scroll_buffer:					ds.l 224					; horizontal scroll table is built up here and then DMAed to VRAM
-H_scroll_table:						ds.b 512					; offsets for background scroll positions, used by ApplyDeformation
+H_scroll_table:						ds.w 256					; offsets for background scroll positions, used by ApplyDeformation
 H_scroll_buffer_end					= *
 V_scroll_buffer:					ds.l 320/16					; vertical scroll buffer used in various levels(320 pixels for MD1, 512 pixels for MD2)
 V_scroll_buffer_end					= *
