@@ -195,27 +195,82 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 
 ## These projects are based on the Sonic Clean Engine (S.C.E.)
 
-#### Sonic 3 Rebuilt by TomatoWave_0
+<details>
+<summary><b>Sonic Vania (2025 Demo)</b> by JvneTh</summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2025/1212" target="_blank">SHC Page</a>
+  <br><br>
+  <img src="https://i.imgur.com/rLUkT3j.png" style="max-width:100%;">
+</p>
+</details>
 
-![Rebuilt](https://i.imgur.com/GgXGebt.png)
+<details>
+<summary><b>Sonic 3 Rebuilt</b> by TomatoWave_0</summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2025/1224" target="_blank">SHC Page</a>
+  <br><br>
+  <img src="https://i.imgur.com/GgXGebt.png" style="max-width:100%;">
+</p>
+</details>
 
-#### [Sonic The Hedgehog in Hellfire Saga (2023)](https://github.com/TheBlad768/Hellfire-Saga-Public-Source)
+<details>
+<summary><b>Sonic The Hedgehog in Hellfire Saga (2023)</b></summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2023/916" target="_blank">SHC Page</a> &nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/TheBlad768/Hellfire-Saga-Public-Source" target="_blank">Source</a>
+  <br><br>
+  <img src="https://i.imgur.com/GRyUeZD.png" style="max-width:100%;">
+</p>
+</details>
 
-![Hellfire](https://i.imgur.com/GRyUeZD.png)
+<details>
+<summary><b>Sonic 3 & Knuckles: Epilogue (2021)</b></summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2021/477" target="_blank">SHC Page</a> &nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source" target="_blank">Source</a>
+  <br><br>
+  <img src="https://i.imgur.com/bawDZSn.png" style="max-width:100%;">
+</p>
+</details>
 
-#### [Sonic 3 & Knuckles: Epilogue (2021)](https://github.com/TheBlad768/Sonic-3-Knuckles-Epilogue-Public-Source)
+<details>
+<summary><b>TishaProject (2019)</b></summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2019/50" target="_blank">SHC Page</a>
+  <br><br>
+  <img src="https://i.imgur.com/fV2d77k.png" style="max-width:100%;">
+</p>
+</details>
 
-![Epilogue](https://i.imgur.com/bawDZSn.png)
+<details>
+<summary><b>Sonic Virtual Adventure (2017)</b> Cancelled</summary>
+  <br>
+  In the past I made the Sonic Clean Engine (S.C.E.) specifically for this project (:
+  <br><br>
+<p align="center">
+  <img src="https://i.imgur.com/2S9MEIj.png" style="max-width:100%;">
+</p>
+</details>
 
-#### TishaProject (2019)
+#### Mini projects
 
-![Tisha](https://i.imgur.com/fV2d77k.png)
+<details>
+<summary><b>Sonic With A Pogo Stick</b> by RobiWanKenobi</summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2025/1358" target="_blank">SHC Page</a>
+  <br><br>
+  <img src="https://i.imgur.com/iJzZzI0.png" style="max-width:100%;">
+</p>
+</details>
 
-#### Sonic Virtual Adventure (2017) (Cancelled)
-
-- In the past I made the Sonic Clean Engine (S.C.E.) specifically for this project (:
-
-![SVA](https://i.imgur.com/2S9MEIj.png)
+<details>
+<summary><b>Sunky MD</b> by RobiWanKenobi</summary>
+<p align="center">
+  <a href="https://shc.zone/entries/contest2025/1336" target="_blank">SHC Page</a>
+  <br><br>
+  <img src="https://i.imgur.com/M9CwAkX.png" style="max-width:100%;">
+</p>
+</details>
 
 ## Check out the Sonic Retro Disassemblies
 
