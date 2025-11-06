@@ -1891,14 +1891,14 @@ Player_DoLevelCollision:
 		beq.w	Player_HitCeilingAndWalls
 		cmpi.b	#$C0,d0
 		beq.w	loc_12102
-		bsr.w	CheckLeftWallDist
+		jsr	(CheckLeftWallDist).w
 		tst.w	d1
 		bpl.s	loc_11F44
 		sub.w	d1,x_pos(a0)
 		clr.w	x_vel(a0)							; stop Sonic since he hit a wall
 
 loc_11F44:
-		bsr.w	CheckRightWallDist
+		jsr	(CheckRightWallDist).w
 		tst.w	d1
 		bpl.s	loc_11F56
 		add.w	d1,x_pos(a0)
@@ -1989,7 +1989,7 @@ ChooseChkFloorEdge:
 ; ---------------------------------------------------------------------------
 
 Player_HitLeftWall:
-		bsr.w	CheckLeftWallDist
+		jsr	(CheckLeftWallDist).w
 		tst.w	d1
 		bpl.s	Player_HitCeiling						; branch if distance is positive (not inside wall)
 		sub.w	d1,x_pos(a0)
@@ -2018,7 +2018,7 @@ locret_12052:
 ; ---------------------------------------------------------------------------
 
 loc_12054:
-		bsr.w	CheckRightWallDist
+		jsr	(CheckRightWallDist).w
 		tst.w	d1
 		bpl.s	locret_12066
 		add.w	d1,x_pos(a0)
@@ -2051,14 +2051,14 @@ loc_12084:
 ; ---------------------------------------------------------------------------
 
 Player_HitCeilingAndWalls:
-		bsr.w	CheckLeftWallDist
+		jsr	(CheckLeftWallDist).w
 		tst.w	d1
 		bpl.s	loc_120B0
 		sub.w	d1,x_pos(a0)
 		clr.w	x_vel(a0)							; stop Sonic since he hit a wall
 
 loc_120B0:
-		bsr.w	CheckRightWallDist
+		jsr	(CheckRightWallDist).w
 		tst.w	d1
 		bpl.s	loc_120C2
 		add.w	d1,x_pos(a0)
@@ -2095,7 +2095,7 @@ locret_12100:
 ; ---------------------------------------------------------------------------
 
 loc_12102:
-		bsr.w	CheckRightWallDist
+		jsr	(CheckRightWallDist).w
 		tst.w	d1
 		bpl.s	loc_1211A
 		add.w	d1,x_pos(a0)
