@@ -211,7 +211,7 @@ QueueStaticDMA macro src,length,dest
 	movea.w	(DMA_queue_slot).w,a1
 
 	; RaiseError is only available in DEBUG builds
-	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is object respawn table overflow
+	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is DMA queue slot overflow
 
 	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer
@@ -246,7 +246,7 @@ Add_To_DMA_Queue:
 	movea.w	(DMA_queue_slot).w,a1
 
 	; RaiseError is only available in DEBUG builds
-	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is object respawn table overflow
+	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is DMA queue slot overflow
 
 	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer
