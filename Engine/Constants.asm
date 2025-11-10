@@ -106,22 +106,6 @@ PLCKosPlus_Queues =						4						; maximum kosinski plus queues (affects RAM)
 PLCKosPlusM_Queues =						32						; maximum kosinski plus module queues (affects RAM)
 
 ; ---------------------------------------------------------------------------
-; V-Int routines
-; ---------------------------------------------------------------------------
-
-offset := VInt_Table
-ptrsize := 1
-idstart := 0
-
-VintID_Lag =							id(ptr_VInt_Lag)				; 0
-VintID_Main =							id(ptr_VInt_Main)				; 2
-VintID_Sega =							id(ptr_VInt_Sega)				; 4
-VintID_Menu =							id(ptr_VInt_Menu)				; 6
-VintID_Level =							id(ptr_VInt_Level)				; 8
-VintID_Fade =							id(ptr_VInt_Fade)				; A
-VintID_LevelSelect =						id(ptr_VInt_LevelSelect)			; C
-
-; ---------------------------------------------------------------------------
 ; Game mode routines
 ; ---------------------------------------------------------------------------
 
@@ -933,7 +917,6 @@ Screen_shake_last_offset =					Screen_shaking_last_offset			; alias from Sonic 3
 
 ; misc variables
 v_gamemode =							Game_mode					; alias from Sonic 1 (GitHub)
-v_vbla_routine =						V_int_routine					; alias from Sonic 1 (GitHub)
 SonicControl =							Ctrl_1_logical					; alias from Sonic 1 (Vladikcomper)
 v_jpadhold2 =							Ctrl_1_held_logical				; alias from Sonic 1 (GitHub)
 v_jpadpress2 =							Ctrl_1_pressed_logical				; alias from Sonic 1 (GitHub)

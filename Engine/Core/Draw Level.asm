@@ -9,28 +9,30 @@ VInt_DrawLevel:
 
 .main
 		lea	(Plane_buffer).w,a0
-		bsr.s	VInt_DrawLevel_2
+		bsr.s	.find
+
+		; extra
 		move.l	(Plane_buffer_2_addr).w,d0
-		beq.s	VInt_DrawLevel_Return
+		beq.s	.return
 		movea.l	d0,a0
 
-VInt_DrawLevel_2:
+.find
 		move.w	(a0),d0
-		beq.s	VInt_DrawLevel_Done
+		beq.s	.done
 		clr.w	(a0)+
 		move.w	(a0)+,d1
-		bmi.s	VInt_DrawLevel_Col
+		bmi.s	.col
 		move.w	#$8F02,d2							; VRAM increment at 2 bytes (horizontal level write)
 		move.w	#$80,d3
-		bra.s	VInt_DrawLevel_Draw
+		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
-VInt_DrawLevel_Col:
+.col
 		move.w	#$8F80,d2							; VRAM increment at $80 bytes (vertical level write)
 		moveq	#2,d3
 		andi.w	#$7FFF,d1
 
-VInt_DrawLevel_Draw:
+.draw
 		move.w	d2,VDP_control_port-VDP_data_port(a6)
 		move.w	d0,d2
 		move.w	d1,d4
@@ -39,13 +41,13 @@ VInt_DrawLevel_Draw:
 		add.w	d3,d0
 		move.w	d4,d1
 		bsr.s	VInt_VRAMWrite
-		bra.s	VInt_DrawLevel_2
+		bra.s	.find
 ; ---------------------------------------------------------------------------
 
-VInt_DrawLevel_Done:
+.done
 		move.w	#$8F02,VDP_control_port-VDP_data_port(a6)			; VRAM increment at 2 bytes
 
-VInt_DrawLevel_Return:
+.return
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -68,7 +70,7 @@ VInt_VRAMWrite:
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
 		dbf	d1,.copy
 
-VInt_VRAMWrite_Return:
+.return
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -84,7 +86,7 @@ Draw_TileColumn:
 		move.w	d0,(a5)
 		move.w	d2,d3
 		sub.w	d0,d2
-		beq.s	VInt_VRAMWrite_Return
+		beq.s	VInt_VRAMWrite.return
 		tst.b	d2
 		bpl.s	.check
 		neg.w	d2
@@ -103,7 +105,7 @@ Draw_TileColumn:
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
-		beq.s	VInt_VRAMWrite_Return						; if not, branch
+		beq.s	VInt_VRAMWrite.return						; if not, branch
 
 		; update 2
 		addi.w	#16,d0
@@ -122,7 +124,7 @@ Draw_TileColumn2:
 		move.w	d0,(a5)
 		move.w	d2,d3
 		sub.w	d0,d2
-		beq.s	VInt_VRAMWrite_Return
+		beq.s	VInt_VRAMWrite.return
 		tst.b	d2
 		bpl.s	.check
 		neg.w	d2
@@ -142,7 +144,7 @@ Draw_TileColumn2:
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
-		beq.s	VInt_VRAMWrite_Return						; if not, branch
+		beq.s	VInt_VRAMWrite.return						; if not, branch
 
 		; update 2
 		addi.w	#16,d0

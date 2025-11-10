@@ -29,17 +29,23 @@ Pal_FillBlack:
 Pal_FadeFromBlack:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
 		bsr.s	Pal_FillBlack
-		moveq	#$15,d4
+		moveq	#$16-1,d4
+
+		; set
+		move.l	(V_int_ptr).w,-(sp)						; save current VInt pointer
+		move.l	#VInt_Fade,(V_int_ptr).w					; set new VInt pointer
 
 .nextframe
 		move.w	d4,-(sp)
-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_KosPlus_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromBlack
 		bsr.w	Process_KosPlus_Module_Queue
 		move.w	(sp)+,d4
 		dbf	d4,.nextframe
+
+		; restore
+		move.l	(sp)+,(V_int_ptr).w						; restore previous VInt pointer
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -116,17 +122,23 @@ Pal_AddColor:
 
 Pal_FadeToBlack:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
-		moveq	#$15,d4
+		moveq	#$16-1,d4
+
+		; set
+		move.l	(V_int_ptr).w,-(sp)						; save current VInt pointer
+		move.l	#VInt_Fade,(V_int_ptr).w					; set new VInt pointer
 
 .nextframe
 		move.w	d4,-(sp)
-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_KosPlus_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToBlack
 		bsr.w	Process_KosPlus_Module_Queue
 		move.w	(sp)+,d4
 		dbf	d4,.nextframe
+
+		; restore
+		move.l	(sp)+,(V_int_ptr).w						; restore previous VInt pointer
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -215,17 +227,23 @@ Pal_FillWhite:
 Pal_FadeFromWhite:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
 		bsr.s	Pal_FillWhite
-		moveq	#$15,d4
+		moveq	#$16-1,d4
+
+		; set
+		move.l	(V_int_ptr).w,-(sp)						; save current VInt pointer
+		move.l	#VInt_Fade,(V_int_ptr).w					; set new VInt pointer
 
 .nextframe
 		move.w	d4,-(sp)
-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_KosPlus_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_FromWhite
 		bsr.w	Process_KosPlus_Module_Queue
 		move.w	(sp)+,d4
 		dbf	d4,.nextframe
+
+		; restore
+		move.l	(sp)+,(V_int_ptr).w						; restore previous VInt pointer
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -305,17 +323,23 @@ Pal_DecColor2:
 
 Pal_FadeToWhite:
 		move.w	#bytes_to_word((palette_line_0>>8),64-1),(Palette_fade_info).w	; set fade info and fade count
-		moveq	#$15,d4
+		moveq	#$16-1,d4
+
+		; set
+		move.l	(V_int_ptr).w,-(sp)						; save current VInt pointer
+		move.l	#VInt_Fade,(V_int_ptr).w					; set new VInt pointer
 
 .nextframe
 		move.w	d4,-(sp)
-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_KosPlus_Queue
 		bsr.w	Wait_VSync
 		bsr.s	Pal_ToWhite
 		bsr.w	Process_KosPlus_Module_Queue
 		move.w	(sp)+,d4
 		dbf	d4,.nextframe
+
+		; restore
+		move.l	(sp)+,(V_int_ptr).w						; restore previous VInt pointer
 		rts
 
 ; =============== S U B R O U T I N E =======================================

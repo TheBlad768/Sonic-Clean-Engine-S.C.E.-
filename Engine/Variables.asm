@@ -147,7 +147,9 @@ Snd_driver_RAM_end					= *
 
 ; misc variables
 Game_mode:						ds.b 1
-V_int_routine:						ds.b 1
+							ds.b 1				; even
+V_int_flag:						= *
+V_int_ptr:						ds.l 1
 Ctrl_1_logical:						= *
 Ctrl_1_held_logical:					ds.b 1
 Ctrl_1_pressed_logical:					ds.b 1
