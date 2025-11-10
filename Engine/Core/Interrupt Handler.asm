@@ -176,6 +176,7 @@ Do_ControllerPal:
 		bne.s	.water
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	.skipwater
+; ---------------------------------------------------------------------------
 
 .water
 		dma68kToVDP Water_palette,0,$80,CRAM
@@ -294,6 +295,7 @@ VInt_Level_NoNegativeFlash:
 		bne.s	.water
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	.skipwater
+; ---------------------------------------------------------------------------
 
 .water
 		dma68kToVDP Water_palette,0,$80,CRAM
