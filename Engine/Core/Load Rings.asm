@@ -56,7 +56,7 @@ Load_Rings_Init:
 ; ---------------------------------------------------------------------------
 
 Load_Rings_Main:
-		bsr.s	sub_E994
+		bsr.s	Consumption_Rings
 
 		; update ring start and end addresses
 		movea.l	(Ring_start_addr_ROM).w,a1
@@ -116,7 +116,7 @@ Load_Rings_Main:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_E994:
+Consumption_Rings:
 		lea	(Ring_consumption_table).w,a2
 		move.w	(a2)+,d1
 		subq.w	#1,d1								; are any rings currently being consumed?
@@ -158,11 +158,11 @@ Test_Ring_Collisions:
 
 		; check timer
 		cmpi.b	#90,invulnerability_timer(a0)
-		bhs.s	sub_E994.return
+		bhs.s	Consumption_Rings.return
 		movea.l	(Ring_start_addr_ROM).w,a1
 		movea.l	(Ring_end_addr_ROM).w,a2
 		cmpa.l	a1,a2
-		beq.s	sub_E994.return
+		beq.s	Consumption_Rings.return
 		movea.w	(Ring_start_addr_RAM).w,a4
 
 		; check

@@ -19,8 +19,10 @@ LoadLevelLoadBlock:
 		move.w	d4,d2								; return art size for the starting position
 		bsr.w	Queue_KosPlus_Module
 
+		; set
+		move.l	#VInt_Fade,(V_int_ptr).w					; set VInt pointer
+
 .waitplc
-		move.b	#VintID_Fade,(V_int_routine).w
 		bsr.w	Process_KosPlus_Queue
 		bsr.w	Wait_VSync
 		bsr.w	Process_KosPlus_Module_Queue

@@ -10,7 +10,7 @@ VInt:
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 		; check
-		tst.b	(V_int_routine).w
+		tst.b	(V_int_flag).w
 		beq.s	VInt_Lag_Main
 
 .wait
@@ -30,27 +30,23 @@ VInt:
 		dbf	d0,*								; otherwise, waste a bit of time here
 
 .notpal
-		moveq	#$7E,d0								; limit VInt routine value to $7E max
-		and.b	(V_int_routine).w,d0						; get VInt routine to d0
-		clr.b	(V_int_routine).w						; clear VInt routine
+
+		; VInt flag shared VInt pointer RAM
+		; VInt flag must be cleared before checking the pointer
+
+		sf	(V_int_flag).w							; clear VInt flag
 		st	(H_int_flag).w							; allow H Interrupt code to run
-		move.w	VInt_Table(pc,d0.w),d0
-		jsr	VInt_Table(pc,d0.w)
+
+		; check
+		move.l	(V_int_ptr).w,d0						; load VInt pointer to d0
+		beq.s	VInt_Done							; if zero, branch
+		movea.l	d0,a0
+		jsr	(a0)								; jump to current VInt pointer
 
 VInt_Done:
 		addq.l	#1,(V_int_run_count).w
 		movem.l	(sp)+,d0-a6							; return saved registers from the stack
 		rte
-; ---------------------------------------------------------------------------
-
-VInt_Table: offsetTable
-		ptrTableEntry.w VInt_Lag						; 0
-		ptrTableEntry.w VInt_Main						; 2
-		ptrTableEntry.w VInt_Sega						; 4
-		ptrTableEntry.w VInt_Menu						; 6
-		ptrTableEntry.w VInt_Level						; 8
-		ptrTableEntry.w VInt_Fade						; A
-		ptrTableEntry.w VInt_LevelSelect					; C
 
 ; ---------------------------------------------------------------------------
 ; Lag
@@ -59,7 +55,7 @@ VInt_Table: offsetTable
 ; =============== S U B R O U T I N E =======================================
 
 VInt_Lag:
-		addq.w	#4,sp
+		addq.w	#4,sp								; do not execute "VInt_Done" twice
 
 VInt_Lag_Main:
 		addq.w	#1,(Lag_frame_count).w
@@ -71,6 +67,8 @@ VInt_Lag_Main:
 		bne.s	VInt_Done							; if not, return from V-int
 
 VInt_Lag_Level:
+
+		; check water
 		tst.b	(Water_flag).w
 		beq.s	VInt_Lag_NoWater
 
@@ -97,7 +95,7 @@ VInt_Lag_FullyUnderwater:
 VInt_Lag_Water_Cont:
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
 		startZ80
-		bra.w	VInt_Done
+		bra.s	VInt_Done
 ; ---------------------------------------------------------------------------
 
 VInt_Lag_NoWater:
@@ -175,6 +173,7 @@ Do_ControllerPal:
 		bne.s	.water
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	.skipwater
+; ---------------------------------------------------------------------------
 
 .water
 		dma68kToVDP Water_palette,0,$80,CRAM
@@ -293,6 +292,7 @@ VInt_Level_NoNegativeFlash:
 		bne.s	.water
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		bra.s	.skipwater
+; ---------------------------------------------------------------------------
 
 .water
 		dma68kToVDP Water_palette,0,$80,CRAM
@@ -381,9 +381,13 @@ VInt_SpecialFunction:
 
 HInt:
 		disableInts
-		tst.b	(H_int_flag).w
-		beq.s	HInt_Done
-		clr.b	(H_int_flag).w
+
+		; check
+		tst.b	(H_int_flag).w							; is the HInt flag set?
+		beq.s	HInt_Done							; if not, branch
+		sf	(H_int_flag).w							; clear HInt flag
+
+		; set
 		movem.l	a0-a1,-(sp)
 		lea	(VDP_data_port).l,a1						; load VDP data address to a1
 		move.w	#$8A00+223,VDP_control_port-VDP_data_port(a1)
@@ -397,9 +401,11 @@ HInt:
 		movem.l	(sp)+,a0-a1
 
 		; check
-		tst.b	(Do_Updates_in_H_int).w
-		beq.s	HInt_Done
-		clr.b	(Do_Updates_in_H_int).w
+		tst.b	(Do_Updates_in_H_int).w						; is the HInt do updates flag set?
+		beq.s	HInt_Done							; if not, branch
+		sf	(Do_Updates_in_H_int).w						; clear HInt do updates flag
+
+		; update
 		movem.l	d0-a6,-(sp)							; move all the registers to the stack
 		bsr.w	Do_Updates
 		movem.l	(sp)+,d0-a6							; load saved registers from the stack

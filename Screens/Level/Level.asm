@@ -85,10 +85,12 @@ LevelScreen:
 		move.b	(a1),d0
 		move.w	d0,(Current_music).w
 		jsr	(Play_Music).w									; play music
+
+		; set
+		move.l	#VInt_Fade,(V_int_ptr).w							; set VInt pointer
 		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)+address).w			; load title card object
 
 .wait
-		move.b	#VintID_Fade,(V_int_routine).w
 		jsr	(Process_KosPlus_Queue).w
 		jsr	(Wait_VSync).w
 		jsr	(Process_Sprites).w
@@ -161,12 +163,12 @@ LevelScreen:
 		move.w	d0,(Palette_fade_timer).w							; time for Pal_FromBlack
 		move.w	d0,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w				; time for Title Card
 		move.w	#$7F00,(Ctrl_1).w
+		move.l	#VInt_Level,(V_int_ptr).w							; set VInt pointer
 		andi.b	#$7F,(Last_star_post_hit).w
 		bclr	#GameModeFlag_TitleCard,(Game_mode).w						; subtract $80 from mode to end pre-level stuff
 
 .loop
 		jsr	(Pause_Game).w
-		move.b	#VintID_Level,(V_int_routine).w
 		jsr	(Process_KosPlus_Queue).w
 		jsr	(Wait_VSync).w
 		addq.w	#1,(Level_frame_counter).w
@@ -174,6 +176,8 @@ LevelScreen:
 		jsr	(Special_Events).w
 		jsr	(Load_Objects).w
 		jsr	(Process_Sprites).w
+
+		; check restart
 		tst.b	(Restart_level_flag).w
 		bne.w	LevelScreen
 		jsr	(DeformBgLayer).w

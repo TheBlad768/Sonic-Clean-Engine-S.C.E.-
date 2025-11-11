@@ -11,9 +11,11 @@ DeformBgLayer:
 		tst.b	(Scroll_lock).w
 		bne.s	.events
 		lea	(Player_1).w,a0							; a0=character
+
+		; check scroll force flag
 		tst.b	(Scroll_force_positions).w
 		beq.s	.notsforce
-		clr.b	(Scroll_force_positions).w
+		sf	(Scroll_force_positions).w					; clear scroll force flag
 		clr.w	(H_scroll_frame_offset).w
 		lea	(Scroll_forced_X_pos-x_pos).w,a0				; is now a player address
 
@@ -149,6 +151,7 @@ Camera_Extended:
 		blo.s	.SetPanVal							; if not, branch
 		move.w	#(320/2)+64,d1							; cap the camera's position
 		bra.s	.SetPanVal
+; ---------------------------------------------------------------------------
 
 .MovingRight
 		subq.w	#2,d1								; pan the camera to the left
@@ -156,6 +159,7 @@ Camera_Extended:
 		bhs.s	.SetPanVal							; if not, branch
 		move.w	#(320/2)-64,d1							; cap the camera's position
 		bra.s	.SetPanVal
+; ---------------------------------------------------------------------------
 
 .ResetPan
 		cmpi.w	#320/2,d1							; has the camera panned back to the middle?
@@ -163,6 +167,7 @@ Camera_Extended:
 		bhs.s	.ResetLeft							; if it's panning back left
 		addq.w	#2,d1								; pan back to the right
 		bra.s	.SetPanVal
+; ---------------------------------------------------------------------------
 
 .ResetLeft
 		subq.w	#2,d1								; pan back to the left

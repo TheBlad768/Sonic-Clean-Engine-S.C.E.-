@@ -151,12 +151,12 @@ Render_Sprites_NextLevel2:
 		neg.w	d6
 		move.b	d6,(Sprites_drawn).w
 
-		; sprite mask
+		; sprite masking
 		tst.b	(Spritemask_flag).w
 		beq.s	locret_1AE56
 		cmpi.b	#PlayerID_Death,(Player_1+routine).w				; has Sonic just died?
 		bhs.s	loc_1AE34							; if yes, branch
-		clr.b	(Spritemask_flag).w
+		sf	(Spritemask_flag).w						; clear sprite masking flag
 
 loc_1AE34:
 		lea	(Sprite_table_buffer-4).w,a0

@@ -83,7 +83,7 @@ CheckLevelForWater:
 		move.w	d0,(Water_level).w
 		move.w	d0,(Mean_water_level).w
 		move.w	d0,(Target_water_level).w
-		clr.b	(Water_flag).w							; disable water
+		sf	(Water_flag).w							; disable water
 		rts
 ; ---------------------------------------------------------------------------
 
