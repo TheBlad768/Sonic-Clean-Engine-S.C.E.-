@@ -367,12 +367,12 @@ ros_prev_frame =						objoff_3A					; byte
 ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
 ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 routine_secondary =						objoff_3C					; byte ; used by monitors for this purpose at least
-parent =							objoff_42					; word ; address of the object that owns or spawned this one, if applicable
-child_dx =							objoff_42					; byte ; X offset of child relative to parent
-child_dy =							objoff_43					; byte ; Y offset of child relative to parent
-parent4 =							objoff_44					; word
-parent3 =							objoff_46					; word ; parent of child objects
-parent2 =							objoff_48					; word ; several objects use this instead
+parent =							objoff_48					; word ; address of the object that owns or spawned this one, if applicable
+child_dx =							objoff_48					; byte ; X offset of child relative to parent
+child_dy =							objoff_49					; byte ; Y offset of child relative to parent
+parent4 =							objoff_4A					; word
+parent3 =							objoff_4C					; word ; parent of child objects
+parent2 =							objoff_4E					; word ; several objects use this instead
 respawn_addr =							objoff_4E					; word ; the address of this object's entry in the respawn table
 
 ; ---------------------------------------------------------------------------

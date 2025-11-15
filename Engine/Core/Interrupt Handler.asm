@@ -9,7 +9,7 @@ VInt:
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
-		; check
+		; check lag
 		tst.b	(V_int_flag).w
 		beq.s	VInt_Lag_Main
 

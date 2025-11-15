@@ -50,7 +50,7 @@ Level_Setup:
 
 ; =============== S U B R O U T I N E =======================================
 
-Screen_Events:
+Level_Events:
 		move.w	(Camera_X_pos).w,(Camera_X_pos_copy).w
 		move.w	(Camera_Y_pos).w,(Camera_Y_pos_copy).w
 		lea	(Plane_buffer).w,a0

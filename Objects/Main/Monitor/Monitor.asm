@@ -60,8 +60,8 @@ Obj_Monitor:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_MonitorFall:
-		move.b	routine_secondary(a0),d0
-		beq.s	Obj_MonitorFallUpsideUp.return
+		tst.b	routine_secondary(a0)						; player hit the monitor from below?
+		beq.s	Obj_MonitorFallUpsideUp.return					; if not, return
 		btst	#render_flags.y_flip,render_flags(a0)				; is monitor upside down?
 		bne.s	Obj_MonitorFallUpsideDown					; if so, branch
 
