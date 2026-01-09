@@ -692,8 +692,14 @@ DMA =								%100111
 ; Screen sizes
 ; ---------------------------------------------------------------------------
 
-screen_width =							320
-screen_height =							224
+tile_width =							8
+tile_height =							8
+block_width =							tile_width*2
+block_height =							tile_height*2
+chunk_width =							block_width*8
+chunk_height =							block_height*8
+screen_width =							tile_width*40					; H40 mode
+screen_height =							tile_height*28					; V28 mode
 
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses
