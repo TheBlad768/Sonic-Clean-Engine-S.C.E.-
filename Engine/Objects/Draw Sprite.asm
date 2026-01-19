@@ -25,16 +25,16 @@ Draw_Sprite:
 ; ---------------------------------------------------------------------------
 
 .next
-		cmpa.w	#(Sprite_table_input_end-$80),a1				; is last sprite table?
-		beq.s	.return								; if so, return
-		lea	$80(a1),a1							; next sprite table
-		bra.s	.find								; back
+		lea	$80(a1),a1							; load next priority level
+		cmpa.w	#Sprite_table_input_end,a1					; is sprite table end?
+		bne.s	.find								; if not, check next priority level
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Child_Draw_Sprite:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.s	Draw_Sprite
 
@@ -42,7 +42,7 @@ Child_Draw_Sprite:
 
 Child_DrawTouch_Sprite:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.s	Draw_And_Touch_Sprite
 
@@ -50,7 +50,7 @@ Child_DrawTouch_Sprite:
 
 Child_CheckParent:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 		rts
 
@@ -58,7 +58,7 @@ Child_CheckParent:
 
 Child_AddToTouchList:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.w	Go_Delete_Sprite						; if yes, branch
 		bra.w	Add_SpriteToCollisionResponseList
 
@@ -66,7 +66,7 @@ Child_AddToTouchList:
 
 Child_Remember_Draw_Sprite:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.s	.delete								; if yes, branch
 		bra.s	Draw_Sprite
 ; ---------------------------------------------------------------------------
@@ -89,7 +89,7 @@ Child_DrawTouch_Sprite2:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#4,objoff_38(a1)						; is delete child object flag set?
 		bne.w	Go_Delete_Sprite_2						; if yes, branch
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.s	.draw								; if yes, branch
 		bsr.w	Add_SpriteToCollisionResponseList
 
@@ -100,7 +100,7 @@ Child_DrawTouch_Sprite2:
 
 Child_Draw_Sprite_FlickerMove:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.s	.flicker							; if yes, branch
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
@@ -124,7 +124,7 @@ Child_Draw_Sprite2_FlickerMove:
 
 Child_DrawTouch_Sprite_FlickerMove:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.s	Child_Draw_Sprite_FlickerMove.flicker				; if yes, branch
 
 .draw
@@ -136,7 +136,7 @@ Child_DrawTouch_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#4,objoff_38(a1)						; is delete child object flag set?
 		bne.s	Child_Draw_Sprite_FlickerMove.flicker				; if yes, branch
-		btst	#status.npc.defeated,status(a1)					; is boss defeated?
+		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		beq.s	Child_DrawTouch_Sprite_FlickerMove.draw				; if not, branch
 		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		bra.w	Draw_Sprite

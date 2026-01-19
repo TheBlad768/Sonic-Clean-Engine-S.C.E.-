@@ -83,7 +83,7 @@ Obj_Animal:
 .main
 		tst.b	render_flags(a0)						; object visible on the screen?
 		bpl.s	.delete								; if not, branch
-		MoveSprite a0
+		MoveSprite
 		tst.w	y_vel(a0)
 		bmi.s	.draw
 		jsr	(ObjCheckFloorDist).w
@@ -104,7 +104,7 @@ Obj_Animal:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_Walk:
-		MoveSprite a0
+		MoveSprite
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.notfloor
@@ -123,7 +123,7 @@ Obj_Animal_Walk:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_Fly:
-		MoveSprite a0, $18
+		MoveSprite , $18
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
@@ -200,7 +200,7 @@ Obj_Animal_FlickyWait:
 		move.l	#.fly,address(a0)
 
 .fly
-		MoveSprite a0, $18
+		MoveSprite , $18
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
@@ -233,7 +233,7 @@ Obj_Animal_FlickyJump:
 		move.l	#.jump,address(a0)
 
 .jump
-		MoveSprite a0, $18
+		MoveSprite , $18
 		bsr.w	Obj_Animal_Jump
 		jsr	(Find_SonicObject).w
 		jsr	(Change_FlipX2).w
@@ -257,7 +257,7 @@ Obj_Animal_RabbitWait:
 		move.l	#.walk,address(a0)
 
 .walk
-		MoveSprite a0
+		MoveSprite
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.chkdel
@@ -274,7 +274,7 @@ Obj_Animal_RabbitWait:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Animal_DoubleBounce:
-		MoveSprite a0
+		MoveSprite
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.chkdel
@@ -305,7 +305,7 @@ Obj_Animal_LandJump:
 		move.l	#.jump,address(a0)
 
 .jump
-		MoveSprite a0
+		MoveSprite
 		bsr.w	Obj_Animal_Jump
 		jsr	(Find_SonicObject).w
 		jsr	(Change_FlipX2).w
@@ -322,7 +322,7 @@ Obj_Animal_SingleBounce:
 		move.l	#.bounce,address(a0)
 
 .bounce
-		MoveSprite a0
+		MoveSprite
 		move.b	#1,mapping_frame(a0)
 		tst.w	y_vel(a0)
 		bmi.s	.chkdel
@@ -347,7 +347,7 @@ Obj_Animal_FlyBounce:
 		move.l	#.bounce,address(a0)
 
 .bounce
-		MoveSprite a0, $18
+		MoveSprite , $18
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w

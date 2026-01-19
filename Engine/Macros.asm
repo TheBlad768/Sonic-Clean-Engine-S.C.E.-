@@ -85,6 +85,13 @@ planeLocH40 function col,line,(($80 * line) + (2 * col))
 ; function to calculate the location of a tile in plane mappings with a width of 128 cells
 planeLocH80 function col,line,(($100 * line) + (2 * col))
 
+; the VDP's sprite coordinates place the top-left pixel of the screen at $80,$80,
+; these constants are to help deobfuscate that
+spriteScreenPositionX function pos,sprite_left_boundary+pos
+spriteScreenPositionY function pos,sprite_top_boundary+pos
+spriteScreenPositionXCentered function pos,spriteScreenPositionX(screen_width/2+(pos))
+spriteScreenPositionYCentered function pos,spriteScreenPositionY(screen_height/2+(pos))
+
 ; function to make a little-endian 16-bit pointer for the Z80 sound driver
 z80_ptr function x,(x)<<8&$FF00|(x)>>8&$7F|$80
 ; ---------------------------------------------------------------------------
@@ -626,7 +633,7 @@ getobjectRAMslot macro address
 	move.b	(address,d0.w),d0							; use a look-up table to get the right loop counter
     endm
 
-MoveSprite macro address,gravity,terminate
+MoveSprite macro address=a0,gravity,terminate
     ifb address
 	fatal "Error! Empty value!"
     endif
@@ -645,7 +652,7 @@ MoveSprite macro address,gravity,terminate
     endif
     endm
 
-MoveSprite2 macro address,terminate
+MoveSprite2 macro address=a0,terminate
     ifb address
 	fatal "Error! Empty value!"
     endif
@@ -659,7 +666,7 @@ MoveSprite2 macro address,terminate
     endif
     endm
 
-MoveSpriteXOnly macro address,terminate
+MoveSpriteXOnly macro address=a0,terminate
     ifb address
 	fatal "Error! Empty value!"
     endif
@@ -672,7 +679,7 @@ MoveSpriteXOnly macro address,terminate
     endif
     endm
 
-MoveSpriteYOnly macro address,gravity,terminate
+MoveSpriteYOnly macro address=a0,gravity,terminate
     ifb address
 	fatal "Error! Empty value!"
     endif
@@ -690,7 +697,7 @@ MoveSpriteYOnly macro address,gravity,terminate
     endif
     endm
 
-MoveSprite2YOnly macro address,terminate
+MoveSprite2YOnly macro address=a0,terminate
     ifb address
 	fatal "Error! Empty value!"
     endif

@@ -670,8 +670,9 @@ ArtTile_Explosion =						$5A0
 ArtTile_StarPost =						$5E4
 ArtTile_Sonic =							$680
 ArtTile_Ring =							$6BC
-ArtTile_Ring_Sparks =						ArtTile_Ring+4
-ArtTile_HUD =							$6C4
+ArtTile_Ring_Spill =						ArtTile_Ring+4
+ArtTile_Ring_Sparks =						ArtTile_Ring+8
+ArtTile_HUD =							$6C8
 ArtTile_Shield =						$79C
 ArtTile_Shield_Sparks =						ArtTile_Shield+$1F
 ArtTile_DashDust =						$7E0
@@ -700,6 +701,16 @@ chunk_width =							block_width*8
 chunk_height =							block_height*8
 screen_width =							tile_width*40					; H40 mode
 screen_height =							tile_height*28					; V28 mode
+gameplay_plane_width =						tile_width*64					; 64x32 plane size
+gameplay_plane_height =						tile_height*32					; 64x32 plane size
+
+; ---------------------------------------------------------------------------
+; The VDP's sprite coordinates place the top-left pixel of the screen at $80,$80,
+; these constants are to help deobfuscate that
+; ---------------------------------------------------------------------------
+
+sprite_left_boundary =						$80
+sprite_top_boundary =						$80
 
 ; ---------------------------------------------------------------------------
 ; VRAM and tile art base addresses

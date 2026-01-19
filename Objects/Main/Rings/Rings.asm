@@ -21,9 +21,18 @@ Obj_Ring_Collect:
 		; init
 		move.l	#Map_Ring,mappings(a0)
 		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
+
+		; set priority and art_tile
+		move.l	#words_to_long( \
+		priority_1, \
+			make_art_tile(ArtTile_Ring,1,TRUE) \
+		),priority(a0)
+
+		; next
 		move.l	#.sparkle,address(a0)
-		move.w	#priority_1,priority(a0)
 		jsr	(GiveRing).w
+		move.b	#5,anim_frame_timer(a0)
+		move.b	#1,mapping_frame(a0)
 
 .sparkle
 
@@ -120,7 +129,7 @@ Obj_Bouncing_Ring:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Bouncing_Ring_Normal:
-		MoveSprite2 a0
+		MoveSprite2
 
 		; check speed
 		moveq	#$18,d1								; normal speed
@@ -330,7 +339,7 @@ Obj_Attracted_Ring:
 
 .applymovementy
 		add.w	d1,y_vel(a0)
-		MoveSprite2 a0
+		MoveSprite2
 
 		; check shield
 		btst	#status_secondary.lightning_shield,(Player_1+status_secondary).w	; does player still have a lightning shield?
@@ -384,7 +393,7 @@ ObjDat3_BouncingRing:		subObjMainData \
 					setBit(render_flags.level) | \
 					setBit(render_flags.static_mappings) | \
 					setBit(render_flags.on_screen), \
-				0, 16, 16, 3, ArtTile_Ring, 1, TRUE, Map_Ring_10+2
+				0, 16, 16, 3, ArtTile_Ring_Spill, 1, TRUE, Map_Ring_10+2
 ; ---------------------------------------------------------------------------
 
 Rings_Velocity:

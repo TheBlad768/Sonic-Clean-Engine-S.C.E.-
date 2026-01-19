@@ -40,10 +40,24 @@ ChangeRingFrame:
 		move.b	(Ring_spill_anim_counter).w,d0
 		add.w	(Ring_spill_anim_accum).w,d0
 		move.w	d0,(Ring_spill_anim_accum).w
-		rol.w	#7,d0
-		andi.w	#3,d0
+		rol.w	#8,d0
+		andi.w	#7,d0
 		move.b	d0,(Ring_spill_anim_frame).w
 		subq.b	#1,(Ring_spill_anim_counter).w
+
+		; dynamic ring graphics
+		moveq	#0,d1
+		move.b	(Ring_spill_anim_frame).w,d1
+		lsl.w	#6,d1								; multiply by $40
+		addi.l	#dmaSource(ArtUnc_Ring),d1					; get next frame
+		move.w	#tiles_to_bytes(ArtTile_Ring_Spill),d2				; load art destination
+
+		; size of art (in words) ; we only need one frame
+		moveq	#tiles_to_bytes( \
+		dmaLength(4) \
+		),d3
+
+		bsr.w	Add_To_DMA_Queue
 
 .syncend
 		rts
