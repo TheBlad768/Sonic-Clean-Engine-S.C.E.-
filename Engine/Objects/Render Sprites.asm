@@ -133,8 +133,8 @@ Render_Sprites_NextLevel:
 
 Render_Sprites_NextLevel2:
 		lea	$80(a5),a5							; load next priority level
-		cmpa.w	#Sprite_table_input_end,a5
-		blo.w	Render_Sprites_LevelLoop
+		cmpa.w	#Sprite_table_input_end,a5					; is sprite table end?
+		bne.w	Render_Sprites_LevelLoop					; if not, check next priority level
 
 		; finish
 		move.w	d7,d6

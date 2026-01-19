@@ -96,8 +96,7 @@ Obj_EndSign:
 		jsr	(CreateChild6_Simple).w
 
 .skip
-		moveq	#$C,d1
-		jsr	(MoveSprite_CustomGravity).w					; move downward
+		MoveSprite , $C								; move downward
 		bsr.w	EndSign_CheckWall
 		jsr	(Animate_Raw).w
 		moveq	#80,d0

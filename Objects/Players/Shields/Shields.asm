@@ -248,7 +248,7 @@ Obj_LightningShield_Create_Spark:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_LightningShield_Spark:
-		MoveSprite a0, $18
+		MoveSprite , $18
 		lea	Ani_LightningShield(pc),a1
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)							; changed by Animate_Sprite

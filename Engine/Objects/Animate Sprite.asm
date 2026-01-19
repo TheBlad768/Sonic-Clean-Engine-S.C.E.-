@@ -412,7 +412,7 @@ Animate_MultiSprite:
 		or.b	d1,d0
 		move.b	d0,-1(a2)							; (2nd byte) anim_frame and anim_timer
 		move.b	d5,-2(a2)							; (1st byte) anim_ID (both nybbles)
-		addq.w	#next_subspr,a3							; mapping_frame of next subobject
+		addq.w	#next_subspr,a3							; mapping_frame of next subsprite
 		dbf	d6,.loop
 
 .return

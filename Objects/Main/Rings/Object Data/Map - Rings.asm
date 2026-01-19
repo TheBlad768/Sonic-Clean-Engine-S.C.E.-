@@ -13,14 +13,14 @@ Map_Ring_10:
 		dc.b $F8, 5, 0, 0, $FF, $F8
 Map_Ring_30:
 		dc.w 1
-		dc.b $F8, 5, 0, 4, $FF, $F8
+		dc.b $F8, 5, 0, 8, $FF, $F8
 Map_Ring_38:
 		dc.w 1
-		dc.b $F8, 5, $18, 4, $FF, $F8
+		dc.b $F8, 5, $18, 8, $FF, $F8
 Map_Ring_40:
 		dc.w 1
-		dc.b $F8, 5, 8, 4, $FF, $F8
+		dc.b $F8, 5, 8, 8, $FF, $F8
 Map_Ring_48:
 		dc.w 1
-		dc.b $F8, 5, $10, 4, $FF, $F8
+		dc.b $F8, 5, $10, 8, $FF, $F8
 	even

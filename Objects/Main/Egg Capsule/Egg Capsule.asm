@@ -482,7 +482,7 @@ Obj_EggCapsule_Animals:
 .jump
 
 		; Obj_Animal_Fly
-		MoveSprite a0, $20
+		MoveSprite , $20
 		tst.w	y_vel(a0)
 		bmi.s	.anim
 		jsr	(ObjCheckFloorDist).w
@@ -583,7 +583,7 @@ Obj_EggCapsule_Animals_Flipped:
 		move.w	d6,y_vel(a0)
 
 .xyvel
-		MoveSprite2 a0
+		MoveSprite2
 
 		; check xvel
 		bclr	#render_flags.x_flip,render_flags(a0)

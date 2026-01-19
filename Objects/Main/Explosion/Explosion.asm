@@ -134,7 +134,7 @@ Obj_EnemyScore:
 		move.w	#-$300,y_vel(a0)
 
 .main
-		MoveSprite2YOnly a0
+		MoveSprite2YOnly
 		addi.w	#$18,y_vel(a0)
 		bpl.s	Obj_TensionBridge_Explosion.delete
 		jmp	(Draw_Sprite).w
