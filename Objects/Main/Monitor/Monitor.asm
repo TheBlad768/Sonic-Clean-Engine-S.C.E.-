@@ -280,7 +280,7 @@ loc_1D850:
 		move.l	#Obj_MonitorContents.waitdel,address(a0)
 
 		; give powerup
-		lea	(Player_1).w,a1							; a1=character
+		lea	(Player_1).w,a2							; a2=character
 		moveq	#0,d0
 		move.b	anim(a0),d0
 		add.w	d0,d0
@@ -309,6 +309,7 @@ loc_1D850:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Eggman:									; 12
+		movea.w	a2,a1								; load player to a1
 		jmp	Touch_ChkHurt3(pc)
 ; ---------------------------------------------------------------------------
 
@@ -318,8 +319,8 @@ Monitor_Give_Rings:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_SpeedShoes:
-		bset	#status_secondary.speed_shoes,status_secondary(a1)
-		move.b	#(20*60)/8,speed_shoes_timer(a1)
+		bset	#status_secondary.speed_shoes,status_secondary(a2)
+		move.b	#(20*60)/8,speed_shoes_timer(a2)
 
 		; set player speed
 		lea	(Max_speed).w,a4
@@ -337,10 +338,10 @@ Monitor_Give_Fire_Shield:
 			setBit(status_secondary.fire_shield) | \
 			setBit(status_secondary.lightning_shield) | \
 			setBit(status_secondary.bubble_shield) \
-		),status_secondary(a1)
+		),status_secondary(a2)
 
-		bset	#status_secondary.shield,status_secondary(a1)
-		bset	#status_secondary.fire_shield,status_secondary(a1)
+		bset	#status_secondary.shield,status_secondary(a2)
+		bset	#status_secondary.fire_shield,status_secondary(a2)
 		move.l	#Obj_FireShield,(Shield+address).w
 		sfx	sfx_FireShield,1
 ; ---------------------------------------------------------------------------
@@ -353,10 +354,10 @@ Monitor_Give_Lightning_Shield:
 			setBit(status_secondary.fire_shield) | \
 			setBit(status_secondary.lightning_shield) | \
 			setBit(status_secondary.bubble_shield) \
-		),status_secondary(a1)
+		),status_secondary(a2)
 
-		bset	#status_secondary.shield,status_secondary(a1)
-		bset	#status_secondary.lightning_shield,status_secondary(a1)
+		bset	#status_secondary.shield,status_secondary(a2)
+		bset	#status_secondary.lightning_shield,status_secondary(a2)
 		move.l	#Obj_LightningShield,(Shield+address).w
 		sfx	sfx_LightningShield,1
 ; ---------------------------------------------------------------------------
@@ -369,22 +370,22 @@ Monitor_Give_Bubble_Shield:
 			setBit(status_secondary.fire_shield) | \
 			setBit(status_secondary.lightning_shield) | \
 			setBit(status_secondary.bubble_shield) \
-		),status_secondary(a1)
+		),status_secondary(a2)
 
-		bset	#status_secondary.shield,status_secondary(a1)
-		bset	#status_secondary.bubble_shield,status_secondary(a1)
+		bset	#status_secondary.shield,status_secondary(a2)
+		bset	#status_secondary.bubble_shield,status_secondary(a2)
 		move.l	#Obj_BubbleShield,(Shield+address).w
 		sfx	sfx_BubbleShield,1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
-		bset	#status_secondary.invincible,status_secondary(a1)
-		move.b	#(20*60)/8,invincibility_timer(a1)
+		bset	#status_secondary.invincible,status_secondary(a2)
+		move.b	#(20*60)/8,invincibility_timer(a2)
 		tst.b	(Music_results_flag).w						; don't change music if level is end
 		bne.s	.skipmusic
 		tst.b	(Boss_flag).w
 		bne.s	.skipmusic
-		cmpi.b	#12,air_left(a1)
+		cmpi.b	#12,air_left(a2)
 		bls.s	.skipmusic
 		music	mus_Invincible							; if invincible, play invincibility music
 
