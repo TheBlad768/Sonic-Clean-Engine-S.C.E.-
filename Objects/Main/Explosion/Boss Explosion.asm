@@ -7,9 +7,9 @@
 Obj_BossExplosionSpecial:
 		move.w	#2,objoff_2E(a0)						; wait
 		move.w	(Camera_X_pos).w,d0
-		addi.w	#320/2,d0
+		addi.w	#screen_width/2,d0
 		move.w	d0,x_pos(a0)
-		moveq	#224/2,d0
+		moveq	#screen_height/2,d0
 		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
 		move.b	#2,subtype(a0)

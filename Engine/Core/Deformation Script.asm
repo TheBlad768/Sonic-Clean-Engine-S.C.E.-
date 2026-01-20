@@ -64,7 +64,7 @@ PlainDeformation:
 		swap	d0
 		move.w	(Camera_X_pos_BG_copy).w,d0
 		neg.w	d0
-		moveq	#bytesToXcnt(224,8),d1
+		moveq	#bytesToXcnt(screen_height,8),d1
 
 .loop
 
@@ -88,7 +88,7 @@ PlainDeformation_Flipped:
 		swap	d0
 		move.w	(Camera_X_pos_copy).w,d0
 		neg.w	d0
-		moveq	#bytesToXcnt(224,8),d1
+		moveq	#bytesToXcnt(screen_height,8),d1
 
 .loop
 
@@ -141,7 +141,7 @@ FGScroll_Deformation:
 		move.w	(a1),d0	; Camera_H_scroll_shift+2
 		neg.w	d0
 		lea	(H_scroll_buffer).w,a1
-		moveq	#bytesToXcnt(224,8),d1
+		moveq	#bytesToXcnt(screen_height,8),d1
 
 .loop
 
@@ -158,7 +158,7 @@ FGScroll_Deformation:
 ; =============== S U B R O U T I N E =======================================
 
 ApplyDeformation:
-		move.w	#224-1,d1
+		move.w	#screen_height-1,d1
 
 ApplyDeformation3:
 		lea	(H_scroll_buffer).w,a1
@@ -259,7 +259,7 @@ ApplyDeformation2:
 ; =============== S U B R O U T I N E =======================================
 
 ApplyTitleDeformation:
-		move.w	#224-1,d1
+		move.w	#screen_height-1,d1
 
 ApplyTitleDeformation3:
 		lea	(H_scroll_buffer).w,a1
@@ -364,7 +364,7 @@ ApplyTitleDeformation2:
 ; =============== S U B R O U T I N E =======================================
 
 ApplyFGDeformation:
-		move.w	#224-1,d1
+		move.w	#screen_height-1,d1
 
 ApplyFGDeformation3:
 		lea	(H_scroll_buffer).w,a1

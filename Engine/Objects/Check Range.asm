@@ -266,12 +266,12 @@ Chk_OffScreen:
 		move.w	x_pos(a0),d0							; get object x-position
 		sub.w	(Camera_X_pos).w,d0						; subtract screen x-position
 		bmi.s	.offscreen
-		cmpi.w	#320,d0								; is object on the screen?
+		cmpi.w	#screen_width,d0								; is object on the screen?
 		bge.s	.offscreen							; if not, branch
 		move.w	y_pos(a0),d0							; get object y-position
 		sub.w	(Camera_Y_pos).w,d0						; subtract screen y-position
 		bmi.s	.offscreen
-		cmpi.w	#224,d0								; is object on the screen?
+		cmpi.w	#screen_height,d0								; is object on the screen?
 		bge.s	.offscreen							; if not, branch
 
 		; onscreen
@@ -294,12 +294,12 @@ Chk_WidthOffScreen:
 		bmi.s	.offscreen
 		add.w	d1,d1
 		sub.w	d1,d0
-		cmpi.w	#320,d0								; is object on the screen?
+		cmpi.w	#screen_width,d0								; is object on the screen?
 		bge.s	.offscreen							; if not, branch
 		move.w	y_pos(a0),d0							; get object y-position
 		sub.w	(Camera_Y_pos).w,d0						; subtract screen y-position
 		bmi.s	.offscreen
-		cmpi.w	#224,d0								; is object on the screen?
+		cmpi.w	#screen_height,d0								; is object on the screen?
 		bge.s	.offscreen							; if not, branch
 
 		; onscreen
@@ -320,7 +320,7 @@ Check_CameraXBoundary:
 		tst.w	x_vel(a0)
 		beq.s	.return
 		bmi.s	.left
-		addi.w	#320-16,d0
+		addi.w	#screen_width-block_width,d0
 		cmp.w	x_pos(a0),d0
 		bhi.s	.return
 		clr.w	x_vel(a0)
@@ -330,7 +330,7 @@ Check_CameraXBoundary:
 ; ---------------------------------------------------------------------------
 
 .left
-		addi.w	#16,d0
+		addi.w	#block_width,d0
 		cmp.w	x_pos(a0),d0
 		blo.s	.return2
 		clr.w	x_vel(a0)

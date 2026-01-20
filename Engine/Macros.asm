@@ -1291,10 +1291,10 @@ gotoROM macro
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap macro loc,width,height,terminate
+copyTilemap macro loc,twidth,theight,terminate
 	locVRAM	loc,d0
-	moveq	#bytesToXcnt(((width)+7),8),d1
-	moveq	#bytesToXcnt(((height)+7),8),d2
+	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
+	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM).w
     else
@@ -1307,10 +1307,10 @@ copyTilemap macro loc,width,height,terminate
 ; input: destination, VRAM shift, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap2 macro loc,address,width,height,terminate
+copyTilemap2 macro loc,address,twidth,theight,terminate
 	locVRAM	loc,d0
-	moveq	#bytesToXcnt(((width)+7),8),d1
-	moveq	#bytesToXcnt(((height)+7),8),d2
+	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
+	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
     if ((address)<=$7F)
 	moveq	#(address),d3
     else
@@ -1328,10 +1328,10 @@ copyTilemap2 macro loc,address,width,height,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap3 macro loc,width,height,terminate
+copyTilemap3 macro loc,twidth,theight,terminate
 	locVRAM	loc,d0
-	moveq	#bytesToXcnt(((width)+7),8),d1
-	moveq	#bytesToXcnt(((height)+7),8),d2
+	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
+	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_VRAM_3).w
     else
@@ -1344,9 +1344,9 @@ copyTilemap3 macro loc,width,height,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemapToRAM macro width,height,row,terminate
-	moveq	#bytesToXcnt(((width)+7),8),d1
-	moveq	#bytesToXcnt(((height)+7),8),d2
+copyTilemapToRAM macro twidth,theight,row,terminate
+	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
+	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
     if ((row)<=$7F)
 	moveq	#row,d3
     else
@@ -1364,10 +1364,10 @@ copyTilemapToRAM macro width,height,row,terminate
 ; input: source, destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-clearTilemap macro loc,width,height,terminate
+clearTilemap macro loc,twidth,theight,terminate
 	locVRAM	loc,d0
-	moveq	#bytesToXcnt(((width)+7),8),d1
-	moveq	#bytesToXcnt(((height)+7),8),d2
+	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
+	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Clear_Plane_Map).w
     else

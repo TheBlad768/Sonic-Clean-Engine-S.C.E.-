@@ -81,7 +81,7 @@ Render_Sprites_ObjLoop:
 		bmi.s	Render_Sprites_NextObj						; if it is, branch
 		move.w	d0,d3
 		sub.w	d2,d3
-		cmpi.w	#320,d3								; is the object left edge to the right of the screen?
+		cmpi.w	#screen_width,d3								; is the object left edge to the right of the screen?
 		bge.s	Render_Sprites_NextObj						; if it is, branch
 		addi.w	#128,d0
 		sub.w	4(a3),d1
@@ -90,7 +90,7 @@ Render_Sprites_ObjLoop:
 		and.w	(Screen_Y_wrap_value).w,d1
 		move.w	d2,d3
 		add.w	d2,d2
-		addi.w	#224,d2
+		addi.w	#screen_height,d2
 		cmp.w	d2,d1
 		bhs.s	Render_Sprites_NextObj						; if the object is below the screen
 		addi.w	#128,d1
@@ -190,7 +190,7 @@ Render_Sprites_MultiDraw:
 		bmi.w	Render_Sprites_NextObj
 		move.w	d0,d3
 		sub.w	d2,d3
-		cmpi.w	#320,d3
+		cmpi.w	#screen_width,d3
 		bge.w	Render_Sprites_NextObj
 		addi.w	#128,d0
 
@@ -202,7 +202,7 @@ Render_Sprites_MultiDraw:
 		bmi.w	Render_Sprites_NextObj
 		move.w	d1,d3
 		sub.w	d2,d3
-		cmpi.w	#224,d3
+		cmpi.w	#screen_height,d3
 		bge.w	Render_Sprites_NextObj
 		addi.w	#128,d1
 		bra.s	loc_1AEE4
@@ -217,7 +217,7 @@ loc_1AEA2:
 		bmi.w	Render_Sprites_NextObj
 		move.w	d0,d3
 		sub.w	d2,d3
-		cmpi.w	#320,d3
+		cmpi.w	#screen_width,d3
 		bge.w	Render_Sprites_NextObj
 		addi.w	#128,d0
 		sub.w	4(a3),d1
@@ -226,7 +226,7 @@ loc_1AEA2:
 		and.w	(Screen_Y_wrap_value).w,d1
 		move.w	d2,d3
 		add.w	d2,d2
-		addi.w	#224,d2
+		addi.w	#screen_height,d2
 		cmp.w	d2,d1
 		bhs.w	Render_Sprites_NextObj
 		addi.w	#128,d1
@@ -303,7 +303,7 @@ loc_1AF76:
 		add.w	d1,d2
 		move.w	d2,(a6)+
 		move.b	(a1)+,(a6)+
-		addq.w	#1,a6
+		addq.w	#1,a6								; skip link parameter
 		move.w	(a1)+,d2
 		add.w	d5,d2
 		move.w	d2,(a6)+
@@ -331,7 +331,7 @@ loc_1AFA2:
 		move.w	d2,(a6)+
 		move.b	(a1)+,d6
 		move.b	d6,(a6)+
-		addq.w	#1,a6
+		addq.w	#1,a6								; skip link parameter
 		move.w	(a1)+,d2
 		add.w	d5,d2
 		eori.w	#flip_x,d2
@@ -370,7 +370,7 @@ loc_1AFE8:
 		move.w	d2,(a6)+
 		move.b	(a1)+,d6
 		move.b	d6,(a6)+
-		addq.w	#1,a6
+		addq.w	#1,a6								; skip link parameter
 		move.w	(a1)+,d2
 		add.w	d5,d2
 		eori.w	#flip_x+flip_y,d2
@@ -439,11 +439,11 @@ loc_1B07A:
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B0BA
-		cmpi.w	#224+128,d2
+		cmpi.w	#screen_height+128,d2
 		bhs.s	loc_1B0BA
 		move.w	d2,(a6)+
 		move.b	(a1)+,(a6)+
-		addq.w	#1,a6
+		addq.w	#1,a6								; skip link parameter
 		move.w	(a1)+,d2
 		add.w	d5,d2
 		move.w	d2,(a6)+
@@ -451,7 +451,7 @@ loc_1B07A:
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B0B2
-		cmpi.w	#320+128,d2
+		cmpi.w	#screen_width+128,d2
 		bhs.s	loc_1B0B2
 		move.w	d2,(a6)+
 		subq.w	#1,d7
@@ -481,12 +481,12 @@ loc_1B0C6:
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B114
-		cmpi.w	#224+128,d2
+		cmpi.w	#screen_height+128,d2
 		bhs.s	loc_1B114
 		move.w	d2,(a6)+
 		move.b	(a1)+,d6
 		move.b	d6,(a6)+
-		addq.w	#1,a6
+		addq.w	#1,a6								; skip link parameter
 		move.w	(a1)+,d2
 		add.w	d5,d2
 		eori.w	#flip_x,d2
@@ -498,7 +498,7 @@ loc_1B0C6:
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B10C
-		cmpi.w	#320+128,d2
+		cmpi.w	#screen_width+128,d2
 		bhs.s	loc_1B10C
 		move.w	d2,(a6)+
 		subq.w	#1,d7
@@ -535,12 +535,12 @@ loc_1B12C:
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B184
-		cmpi.w	#224+128,d2
+		cmpi.w	#screen_height+128,d2
 		bhs.s	loc_1B184
 		move.w	d2,(a6)+
 		move.b	(a1)+,d6
 		move.b	d6,(a6)+
-		addq.w	#1,a6
+		addq.w	#1,a6								; skip link parameter
 		move.w	(a1)+,d2
 		add.w	d5,d2
 		eori.w	#flip_x+flip_y,d2
@@ -552,7 +552,7 @@ loc_1B12C:
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B17C
-		cmpi.w	#320+128,d2
+		cmpi.w	#screen_width+128,d2
 		bhs.s	loc_1B17C
 		move.w	d2,(a6)+
 		subq.w	#1,d7
@@ -590,7 +590,7 @@ loc_1B19C:
 		add.w	d1,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B1EC
-		cmpi.w	#224+128,d2
+		cmpi.w	#screen_height+128,d2
 		bhs.s	loc_1B1EC
 		move.w	d2,(a6)+
 		addq.w	#2,a6
@@ -602,7 +602,7 @@ loc_1B19C:
 		add.w	d0,d2
 		cmpi.w	#-32+128,d2
 		bls.s	loc_1B1E4
-		cmpi.w	#320+128,d2
+		cmpi.w	#screen_width+128,d2
 		bhs.s	loc_1B1E4
 		move.w	d2,(a6)+
 		subq.w	#1,d7

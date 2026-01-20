@@ -46,7 +46,7 @@ Obj_EggCapsule:
 
 		; set xypos
 		move.w	(Camera_X_pos).w,d0
-		addi.w	#320/2,d0
+		addi.w	#screen_width/2,d0
 		move.w	d0,x_pos(a0)
 		moveq	#128/2,d0
 		add.w	(Camera_Y_pos).w,d0
@@ -136,7 +136,7 @@ Obj_EggCapsule:
 		bmi.s	.left
 
 		; check right side
-		addi.w	#320-48,d0
+		addi.w	#screen_width-48,d0
 		cmp.w	x_pos(a0),d0
 		blo.s	.chgx
 		bra.s	.setx

@@ -314,7 +314,7 @@ EndSign_CheckWall:
 		bmi.s	.leftside
 
 		; check right side
-		addi.w	#320-24,d0
+		addi.w	#screen_width-24,d0
 		cmp.w	x_pos(a0),d0
 		blo.s	.negx
 

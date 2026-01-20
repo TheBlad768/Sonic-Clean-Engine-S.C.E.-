@@ -38,7 +38,7 @@ DEZ1_Resize:
 		bne.s	.return
 		move.l	#Obj_EndSignControl,address(a1)
 		move.w	(Camera_X_pos).w,d2
-		addi.w	#320/2,d2
+		addi.w	#screen_width/2,d2
 		move.w	d2,x_pos(a1)
 
 .return

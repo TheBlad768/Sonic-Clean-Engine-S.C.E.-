@@ -1232,7 +1232,7 @@ Player_LevelBound:
 		cmp.w	d1,d0								; has Sonic/Knux touched the left boundary?
 		bhi.s	Player_Boundary_Sides						; if yes, branch
 		move.w	(Camera_max_X_pos).w,d0
-		addi.w	#320-24,d0
+		addi.w	#screen_width-24,d0
 		cmp.w	d1,d0
 		blo.s	Player_Boundary_Sides
 
@@ -1244,7 +1244,7 @@ Player_Boundary_CheckBottom:
 		move.w	(Camera_max_Y_pos).w,d0
 		cmp.w	(Camera_target_max_Y_pos).w,d0
 		blt.s	locret_11720
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	y_pos(a0),d0							; has Sonic/Knux touched the bottom boundary?
 		blt.s	Player_Boundary_Bottom						; if yes, branch
 
@@ -2278,7 +2278,7 @@ sub_12318:
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_12336
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	y_pos(a0),d0
 		blt.s	loc_1238A
 		bra.s	loc_12344
