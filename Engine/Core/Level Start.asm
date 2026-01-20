@@ -12,7 +12,7 @@ Get_LevelSizeStart:
 		movem.l	d0-d1,(Camera_min_X_pos).w
 
 		; set
-		move.w	#(224/2)-16,(Distance_from_top).w
+		move.w	#(screen_height/2)-16,(Distance_from_top).w
 
 	if ExtendedCamera
 		move.w	#screen_width/2,(Camera_X_center).w
