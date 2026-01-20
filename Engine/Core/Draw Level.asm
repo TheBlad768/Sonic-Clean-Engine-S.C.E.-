@@ -299,7 +299,7 @@ Draw_BG2:
 		; update camera y scroll
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
-		moveq	#0,d1		; Camera_X_pos_BG_copy
+		moveq	#0,d1								; Camera_X_pos_BG_copy
 		moveq	#gameplay_plane_width/block_width,d6
 
 ; ---------------------------------------------------------------------------
@@ -569,7 +569,7 @@ Refresh_PlaneDirectVScroll:
 		cmp.w	d2,d0
 		bmi.s	.refresh
 		add.w	(a4)+,d2
-		addq.w	#4,a5		; next
+		addq.w	#4,a5								; next
 		bra.s	.find
 ; ---------------------------------------------------------------------------
 
