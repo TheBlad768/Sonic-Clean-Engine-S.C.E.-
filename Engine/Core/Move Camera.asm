@@ -80,7 +80,7 @@ loc_1C0D6:
 		blt.s	loc_1C0E8
 		bge.s	loc_1C0FC
 	else
-		subi.w	#(320/2)-16,d0							; is the player less than 144 pixels from the screen edge?
+		subi.w	#(screen_width/2)-16,d0							; is the player less than 144 pixels from the screen edge?
 		blt.s	loc_1C0E8							; if he is, scroll left
 		subi.w	#16,d0								; is the player more than 159 pixels from the screen edge?
 		bge.s	loc_1C0FC							; if he is, scroll right
@@ -147,22 +147,22 @@ Camera_Extended:
 
 .MovingLeft
 		addq.w	#2,d1								; pan the camera to the right
-		cmpi.w	#(320/2)+64,d1							; has it panned far enough?
+		cmpi.w	#(screen_width/2)+64,d1							; has it panned far enough?
 		blo.s	.SetPanVal							; if not, branch
-		move.w	#(320/2)+64,d1							; cap the camera's position
+		move.w	#(screen_width/2)+64,d1							; cap the camera's position
 		bra.s	.SetPanVal
 ; ---------------------------------------------------------------------------
 
 .MovingRight
 		subq.w	#2,d1								; pan the camera to the left
-		cmpi.w	#(320/2)-64,d1							; has it panned far enough
+		cmpi.w	#(screen_width/2)-64,d1							; has it panned far enough
 		bhs.s	.SetPanVal							; if not, branch
-		move.w	#(320/2)-64,d1							; cap the camera's position
+		move.w	#(screen_width/2)-64,d1							; cap the camera's position
 		bra.s	.SetPanVal
 ; ---------------------------------------------------------------------------
 
 .ResetPan
-		cmpi.w	#320/2,d1							; has the camera panned back to the middle?
+		cmpi.w	#screen_width/2,d1							; has the camera panned back to the middle?
 		beq.s	.SetPanVal							; if so, branch
 		bhs.s	.ResetLeft							; if it's panning back left
 		addq.w	#2,d1								; pan back to the right
@@ -236,7 +236,7 @@ loc_1C16E:
 ; ---------------------------------------------------------------------------
 
 loc_1C172:
-		cmpi.w	#(224/2)-16,d3							; is the camera bias normal?
+		cmpi.w	#(screen_height/2)-block_height,d3							; is the camera bias normal?
 		bne.s	loc_1C19E							; if not, branch
 		tst.b	(Fast_V_scroll_flag).w
 		bne.s	loc_1C1B0

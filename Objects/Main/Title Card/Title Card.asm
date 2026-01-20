@@ -158,7 +158,7 @@ Obj_TitleCardRedBanner:
 		st	objoff_34(a1)
 
 .loc_2D920
-		move.b	#224/2,height_pixels(a0)
+		move.b	#screen_height/2,height_pixels(a0)
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================

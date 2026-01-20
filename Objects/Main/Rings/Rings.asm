@@ -181,7 +181,7 @@ Obj_Bouncing_Ring_Normal:
 		tst.b	(Ring_spill_anim_counter).w
 		beq.s	.delete
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	y_pos(a0),d0
 		blo.s	.delete
 
@@ -262,7 +262,7 @@ Obj_Bouncing_Ring_TestGravity:
 		tst.b	(Ring_spill_anim_counter).w
 		beq.s	.delete
 		move.w	(Camera_max_Y_pos).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	y_pos(a0),d0
 		blo.s	.delete
 

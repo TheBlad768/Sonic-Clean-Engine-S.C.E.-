@@ -91,11 +91,11 @@ Draw_TileColumn:
 		bpl.s	.check
 		neg.w	d2
 		move.w	d3,d0
-		addi.w	#320+16,d0
+		addi.w	#screen_width+block_width,d0
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#16,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_width,d2								; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -108,7 +108,7 @@ Draw_TileColumn:
 		beq.s	VInt_VRAMWrite.return						; if not, branch
 
 		; update 2
-		addi.w	#16,d0
+		addi.w	#block_width,d0
 		bra.s	Setup_TileColumnDraw
 
 ; ---------------------------------------------------------------------------
@@ -129,12 +129,12 @@ Draw_TileColumn2:
 		bpl.s	.check
 		neg.w	d2
 		move.w	d3,d0
-		addi.w	#320+16,d0
+		addi.w	#screen_width+block_width,d0
 		swap	d1
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#16,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_width,d2								; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -147,7 +147,7 @@ Draw_TileColumn2:
 		beq.s	VInt_VRAMWrite.return						; if not, branch
 
 		; update 2
-		addi.w	#16,d0
+		addi.w	#block_width,d0
 
 Setup_TileColumnDraw:
 		move.w	d1,d2
@@ -160,7 +160,7 @@ Setup_TileColumnDraw:
 		asr.w	d1
 		and.w	(Layout_row_index_mask).w,d1
 		andi.w	#$F,d4
-		moveq	#256/16,d5
+		moveq	#gameplay_plane_height/block_height,d5
 		sub.w	d4,d5
 		move.w	d5,d4
 		sub.w	d6,d5
@@ -295,10 +295,12 @@ Get_LevelChunkColumn:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_BG2:
+
+		; update camera y scroll
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		moveq	#0,d1		; Camera_X_pos_BG_copy
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 
 ; ---------------------------------------------------------------------------
 ; Draw tile row
@@ -318,12 +320,12 @@ Draw_TileRow:
 		bpl.s	.check
 		neg.w	d2
 		move.w	d3,d0
-		addi.w	#224+16,d0
+		addi.w	#screen_height+block_height,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#16,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_height,d2								; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -336,7 +338,7 @@ Draw_TileRow:
 		beq.s	Get_LevelChunkColumn.return					; if not, branch
 
 		; update 2
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		bra.s	Setup_TileRowDraw
 
@@ -358,13 +360,13 @@ Draw_TileRow2:
 		bpl.s	.check
 		neg.w	d2
 		move.w	d3,d0
-		addi.w	#224+16,d0
+		addi.w	#screen_height+block_height,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		swap	d1
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#16,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_height,d2								; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -377,7 +379,7 @@ Draw_TileRow2:
 		beq.w	Get_LevelChunkColumn.return					; if not, branch
 
 		; update 2
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 
 Setup_TileRowDraw:
@@ -392,7 +394,7 @@ Setup_TileRowDraw:
 		add.w	d3,d3
 		andi.w	#$7C,d3
 		andi.w	#$1F,d4
-		moveq	#512/16,d5
+		moveq	#gameplay_plane_width/block_width,d5
 		sub.w	d4,d5
 		move.w	d5,d4
 		sub.w	d6,d5
@@ -512,15 +514,15 @@ Get_ChunkRow:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFull:
-		moveq	#bytesToXcnt(256,16),d2
+		moveq	#bytesToXcnt(gameplay_plane_height,block_height),d2
 
 .refresh
 		movem.l	d0-d2/a0,-(sp)
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/a0
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		dbf	d2,.refresh
 		rts
 
@@ -532,7 +534,7 @@ Refresh_PlaneFull:
 
 Refresh_PlaneTileDeform:
 		move.w	(a4)+,d2
-		moveq	#bytesToXcnt(256,16),d3
+		moveq	#bytesToXcnt(gameplay_plane_height,block_height),d3
 
 .find
 		cmp.w	d2,d0
@@ -544,12 +546,12 @@ Refresh_PlaneTileDeform:
 
 .refresh
 		move.w	(a5),d1
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		dbf	d3,.find
 		rts
 
@@ -561,7 +563,7 @@ Refresh_PlaneTileDeform:
 
 Refresh_PlaneDirectVScroll:
 		move.w	(a4)+,d2
-		moveq	#bytesToXcnt(512,16),d3
+		moveq	#bytesToXcnt(gameplay_plane_width,block_width),d3
 
 .find
 		cmp.w	d2,d0
@@ -573,12 +575,12 @@ Refresh_PlaneDirectVScroll:
 
 .refresh
 		move.w	(a5),d1
-		moveq	#256/16,d6
+		moveq	#gameplay_plane_height/block_height,d6
 		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		dbf	d3,.find
 		rts
 
@@ -589,12 +591,12 @@ Refresh_PlaneDirectVScroll:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFullDirect_BG:
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		bra.s	Refresh_PlaneDirect2_BG
 ; ---------------------------------------------------------------------------
 
 Refresh_PlaneScreenDirect_BG:
-		moveq	#(320+16)/16,d6
+		moveq	#(screen_width+block_width)/block_width,d6
 
 Refresh_PlaneDirect2_BG:
 		move.w	(Camera_Y_pos_BG_copy).w,d0
@@ -602,14 +604,14 @@ Refresh_PlaneDirect2_BG:
 
 Refresh_PlaneDirect_BG:
 		disableInts
-		moveq	#bytesToXcnt(256,16),d2
+		moveq	#bytesToXcnt(gameplay_plane_height,block_height),d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)						; redraws the entire plane in one go during 68k execution
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		dbf	d2,.refresh
 		enableInts
 		rts
@@ -621,12 +623,12 @@ Refresh_PlaneDirect_BG:
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_PlaneFullDirect:
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		bra.s	Refresh_PlaneDirect2
 ; ---------------------------------------------------------------------------
 
 Refresh_PlaneScreenDirect:
-		moveq	#(320+16)/16,d6
+		moveq	#(screen_width+block_width)/block_width,d6
 
 Refresh_PlaneDirect2:
 		move.w	(Camera_Y_pos_copy).w,d0
@@ -634,14 +636,14 @@ Refresh_PlaneDirect2:
 
 Refresh_PlaneDirect:
 		disableInts
-		moveq	#bytesToXcnt((224+16),16),d2
+		moveq	#bytesToXcnt((screen_height+block_height),block_height),d2
 
 .refresh
 		movem.l	d0-d2/d6/a0,-(sp)						; redraws the entire plane in one go during 68k execution
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
-		addi.w	#16,d0
+		addi.w	#block_height,d0
 		dbf	d2,.refresh
 		enableInts
 		rts
@@ -653,15 +655,19 @@ Refresh_PlaneDirect:
 ; =============== S U B R O U T I N E =======================================
 
 DrawTilesAsYouMove:
+
+		; update camera x scroll
 		lea	(Camera_X_pos_copy).w,a6
 		lea	(Camera_X_pos_rounded).w,a5
 		move.w	(Camera_Y_pos_copy).w,d1
-		moveq	#(224+16)/16,d6
+		moveq	#(screen_height+block_height)/block_height,d6
 		bsr.w	Draw_TileColumn
+
+		; update camera y scroll
 		lea	(Camera_Y_pos_copy).w,a6
 		lea	(Camera_Y_pos_rounded).w,a5
 		move.w	(Camera_X_pos_copy).w,d1
-		moveq	#(320+16)/16,d6
+		moveq	#(screen_width+block_width)/block_width,d6
 		bra.w	Draw_TileRow
 
 ; ---------------------------------------------------------------------------
@@ -671,15 +677,19 @@ DrawTilesAsYouMove:
 ; =============== S U B R O U T I N E =======================================
 
 DrawBGAsYouMove:
+
+		; update camera x scroll
 		lea	(Camera_X_pos_BG_copy).w,a6
 		lea	(Camera_X_pos_BG_rounded).w,a5
 		move.w	(Camera_Y_pos_BG_copy).w,d1
-		moveq	#(224+16)/16,d6
+		moveq	#(screen_height+block_height)/block_height,d6
 		bsr.w	Draw_TileColumn
+
+		; update camera y scroll
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		move.w	(Camera_X_pos_BG_copy).w,d1
-		moveq	#(320+16)/16,d6
+		moveq	#(screen_width+block_width)/block_width,d6
 		bra.w	Draw_TileRow
 
 ; ---------------------------------------------------------------------------
@@ -689,12 +699,16 @@ DrawBGAsYouMove:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_FG:
-		movem.l	d5/a4-a5,-(sp)
+
+		; update camera y scroll
+		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_Y_pos_copy).w,a6
 		bsr.w	Get_DeformDrawPosVert
 		lea	(Camera_Y_pos_rounded).w,a5
 		bsr.w	Draw_TileRow2
-		movem.l	(sp)+,d5/a4/a6
+		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
+
+		; update camera x scroll
 		move.w	(Camera_Y_pos_rounded).w,d6
 		bra.s	Draw_BGNoVert
 
@@ -705,16 +719,20 @@ Draw_FG:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_BG:
-		movem.l	d5/a4-a5,-(sp)
+
+		; update camera y scroll
+		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		bsr.s	Get_DeformDrawPosVert
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		bsr.w	Draw_TileRow2
-		movem.l	(sp)+,d5/a4/a6
+		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
+
+		; update camera x scroll
 		move.w	(Camera_Y_pos_BG_rounded).w,d6
 		tst.w	(Camera_Y_pos_BG_copy).w
 		bpl.s	Draw_BGNoVert
-		moveq	#-16,d6								; set align (16 pixels)
+		moveq	#-block_height,d6								; set align (16 pixels)
 		and.w	(Camera_Y_pos_BG_copy).w,d6
 
 Draw_BGNoVert:
@@ -723,7 +741,7 @@ Draw_BGNoVert:
 .find
 		sub.w	(a4)+,d6
 		bmi.s	.found
-		moveq	#-16,d0								; set align (16 pixels)
+		moveq	#-block_width,d0								; set align (16 pixels)
 		and.w	(a6)+,d0
 		move.w	d0,(a6)+
 		subq.w	#1,d5								; next
@@ -733,19 +751,19 @@ Draw_BGNoVert:
 .found
 		neg.w	d6
 		lsr.w	#4,d6
-		moveq	#(224+16)/16,d4
+		moveq	#(screen_height+block_height)/block_height,d4
 		sub.w	d6,d4
 		bhs.s	.loop
 		moveq	#0,d4
-		moveq	#(224+16)/16,d6
+		moveq	#(screen_height+block_height)/block_height,d6
 
 .loop
-		movem.w	d1/d4-d6,-(sp)
+		movem.w	d1/d4-d6,-(sp)							; save the registers to the stack
 		movem.l	a4/a6,-(sp)
 		lea	2(a6),a5
 		bsr.w	Draw_TileColumn
 		movem.l	(sp)+,a4/a6
-		movem.w	(sp)+,d1/d4-d6
+		movem.w	(sp)+,d1/d4-d6							; return saved registers from the stack
 		addq.w	#4,a6
 		tst.w	d4
 		beq.s	.loop2
@@ -765,7 +783,7 @@ Draw_BGNoVert:
 .loop2
 		subq.w	#1,d5								; next
 		beq.s	Get_DeformDrawPosVert.return
-		moveq	#-16,d0								; set align (16 pixels)
+		moveq	#-block_width,d0								; set align (16 pixels)
 		and.w	(a6)+,d0
 		move.w	d0,(a6)+
 		bra.s	.loop2
@@ -780,7 +798,7 @@ Get_DeformDrawPosVert:
 		move.w	(a4)+,d2
 		move.w	(a6),d0
 		bsr.s	.find
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 
 .find
 		cmp.w	d2,d0
@@ -804,14 +822,18 @@ Get_DeformDrawPosVert:
 ; =============== S U B R O U T I N E =======================================
 
 DrawTilesVDeform:
-		movem.l	d5/a4-a5,-(sp)
+
+		; update camera x scroll
+		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_X_pos_copy).w,a6
 		bsr.w	Get_XDeformRange
 		lea	(Camera_X_pos_rounded).w,a5
 		bsr.w	Draw_TileColumn2
-		movem.l	(sp)+,d5/a4/a6
+		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
+
+		; update camera y scroll
 		move.w	(Camera_X_pos_rounded).w,d6
-		bra.s	DrawTilesVDeform2.main
+		bra.s	DrawTilesVDeform2NoHorz
 
 ; ---------------------------------------------------------------------------
 ; Draw VScroll background
@@ -820,15 +842,19 @@ DrawTilesVDeform:
 ; =============== S U B R O U T I N E =======================================
 
 DrawTilesVDeform2:
-		movem.l	d5/a4-a5,-(sp)
+
+		; update camera x scroll
+		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_X_pos_BG_copy).w,a6
 		bsr.s	Get_XDeformRange
 		lea	(Camera_X_pos_BG_rounded).w,a5
 		bsr.w	Draw_TileColumn2
-		movem.l	(sp)+,d5/a4/a6
+		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
+
+		; update camera y scroll
 		move.w	(Camera_X_pos_BG_rounded).w,d6
 
-.main
+DrawTilesVDeform2NoHorz:
 		move.w	d6,d1
 
 .find
@@ -844,19 +870,19 @@ DrawTilesVDeform2:
 .found
 		neg.w	d6
 		lsr.w	#4,d6
-		moveq	#(320+16)/16,d4
+		moveq	#(screen_width+block_width)/block_width,d4
 		sub.w	d6,d4
 		bhs.s	.loop
 		moveq	#0,d4
-		moveq	#(320+16)/16,d6
+		moveq	#(screen_width+block_width)/block_width,d6
 
 .loop
-		movem.w	d1/d4-d6,-(sp)
+		movem.w	d1/d4-d6,-(sp)							; save the registers to the stack
 		movem.l	a4/a6,-(sp)
 		lea	2(a6),a5
 		bsr.w	Draw_TileRow
 		movem.l	(sp)+,a4/a6
-		movem.w	(sp)+,d1/d4-d6
+		movem.w	(sp)+,d1/d4-d6							; return saved registers from the stack
 		addq.w	#4,a6
 		tst.w	d4
 		beq.s	.loop2
@@ -891,7 +917,7 @@ Get_XDeformRange:
 		move.w	(a4)+,d2
 		move.w	(a6),d0
 		bsr.s	.find
-		addi.w	#320,d0
+		addi.w	#screen_width,d0
 
 .find
 		cmp.w	d2,d0
@@ -915,9 +941,11 @@ Get_XDeformRange:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneVertBottomUp:
-		movem.w	d1-d2,-(sp)
+		movem.w	d1-d2,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneVertSingleBottomUp
-		movem.w	(sp)+,d1-d2
+		movem.w	(sp)+,d1-d2							; return saved registers from the stack
+
+		; check draw delayed rowcount
 		bpl.s	Draw_PlaneVertSingleBottomUp
 		rts
 
@@ -930,18 +958,18 @@ Draw_PlaneVertBottomUp:
 Draw_PlaneVertSingleBottomUp:
 		and.w	(Camera_Y_pos_mask).w,d2
 		move.w	d2,d3
-		addi.w	#224+16,d3
+		addi.w	#screen_height+block_height,d3
 		and.w	(Camera_Y_pos_mask).w,d3
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d2,d0
 		blo.s	.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		bsr.w	Setup_TileRowDraw
 
 .next
-		subi.w	#16,(Draw_delayed_position).w
+		subi.w	#block_height,(Draw_delayed_position).w
 		subq.w	#1,(Draw_delayed_rowcount).w
 		rts
 
@@ -954,18 +982,18 @@ Draw_PlaneVertSingleBottomUp:
 Draw_PlaneVertTopDown:
 		and.w	(Camera_Y_pos_mask).w,d2
 		move.w	d2,d3
-		addi.w	#224+16,d3
+		addi.w	#screen_height+block_height,d3
 		and.w	(Camera_Y_pos_mask).w,d3
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d2,d0
 		blo.s	.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		bsr.w	Setup_TileRowDraw
 
 .next
-		addi.w	#16,(Draw_delayed_position).w
+		addi.w	#block_height,(Draw_delayed_position).w
 		subq.w	#1,(Draw_delayed_rowcount).w
 		rts
 
@@ -976,9 +1004,11 @@ Draw_PlaneVertTopDown:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneHorzRightToLeft:
-		movem.w	d1-d2,-(sp)
+		movem.w	d1-d2,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneHorzSingleRightToLeft
-		movem.w	(sp)+,d1-d2
+		movem.w	(sp)+,d1-d2							; return saved registers from the stack
+
+		; check draw delayed rowcount
 		bpl.s	Draw_PlaneHorzSingleRightToLeft
 		rts
 
@@ -991,18 +1021,18 @@ Draw_PlaneHorzRightToLeft:
 Draw_PlaneHorzSingleRightToLeft:
 		andi.w	#-16,d2								; align (16 pixels)
 		move.w	d2,d3
-		addi.w	#512-16,d3
+		addi.w	#gameplay_plane_width-block_width,d3
 		andi.w	#-16,d3								; align (16 pixels)
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d2,d0
 		blo.s	.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#256/16,d6
+		moveq	#gameplay_plane_height/block_height,d6
 		bsr.w	Setup_TileColumnDraw
 
 .next
-		subi.w	#16,(Draw_delayed_position).w
+		subi.w	#block_width,(Draw_delayed_position).w
 		subq.w	#1,(Draw_delayed_rowcount).w
 		rts
 
@@ -1013,9 +1043,11 @@ Draw_PlaneHorzSingleRightToLeft:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneHorzLeftToRight:
-		movem.w	d1-d2,-(sp)
+		movem.w	d1-d2,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneHorzSingleLeftToRight
-		movem.w	(sp)+,d1-d2
+		movem.w	(sp)+,d1-d2							; return saved registers from the stack
+
+		; check draw delayed rowcount
 		bpl.s	Draw_PlaneHorzSingleLeftToRight
 		rts
 
@@ -1028,18 +1060,18 @@ Draw_PlaneHorzLeftToRight:
 Draw_PlaneHorzSingleLeftToRight:
 		andi.w	#-16,d2								; align (16 pixels)
 		move.w	d2,d3
-		addi.w	#512-16,d3
+		addi.w	#gameplay_plane_width-block_width,d3
 		andi.w	#-16,d3								; align (16 pixels)
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d2,d0
 		blo.s	.next
 		cmp.w	d3,d0
 		bhi.s	.next
-		moveq	#256/16,d6
+		moveq	#gameplay_plane_height/block_height,d6
 		bsr.w	Setup_TileColumnDraw
 
 .next
-		addi.w	#16,(Draw_delayed_position).w
+		addi.w	#block_width,(Draw_delayed_position).w
 		subq.w	#1,(Draw_delayed_rowcount).w
 		rts
 
@@ -1050,9 +1082,11 @@ Draw_PlaneHorzSingleLeftToRight:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneVertBottomUpComplex:
-		movem.l	d1/a4-a5,-(sp)
+		movem.l	d1/a4-a5,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneVertSingleBottomUpComplex
-		movem.l	(sp)+,d1/a4-a5
+		movem.l	(sp)+,d1/a4-a5							; return saved registers from the stack
+
+		; check draw delayed rowcount
 		bpl.s	Draw_PlaneVertSingleBottomUpComplex
 		rts
 
@@ -1065,7 +1099,7 @@ Draw_PlaneVertBottomUpComplex:
 Draw_PlaneVertSingleBottomUpComplex:
 		and.w	(Camera_Y_pos_mask).w,d1
 		move.w	d1,d2
-		addi.w	#224+16,d2
+		addi.w	#screen_height+block_height,d2
 		and.w	(Camera_Y_pos_mask).w,d2
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d1,d0
@@ -1080,11 +1114,11 @@ Draw_PlaneVertSingleBottomUpComplex:
 
 		; refresh
 		move.w	(a5),d1
-		moveq	#512/16,d6
+		moveq	#gameplay_plane_width/block_width,d6
 		bsr.w	Setup_TileRowDraw
 
 .next
-		subi.w	#16,(Draw_delayed_position).w
+		subi.w	#block_height,(Draw_delayed_position).w
 		subq.w	#1,(Draw_delayed_rowcount).w
 		rts
 
