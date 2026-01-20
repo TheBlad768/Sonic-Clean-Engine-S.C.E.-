@@ -81,7 +81,7 @@ Render_Sprites_ObjLoop:
 		bmi.s	Render_Sprites_NextObj						; if it is, branch
 		move.w	d0,d3
 		sub.w	d2,d3
-		cmpi.w	#screen_width,d3								; is the object left edge to the right of the screen?
+		cmpi.w	#screen_width,d3						; is the object left edge to the right of the screen?
 		bge.s	Render_Sprites_NextObj						; if it is, branch
 		addi.w	#128,d0
 		sub.w	4(a3),d1
