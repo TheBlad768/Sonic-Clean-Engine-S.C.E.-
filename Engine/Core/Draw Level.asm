@@ -95,7 +95,7 @@ Draw_TileColumn:
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#block_width,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_width,d2							; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -134,7 +134,7 @@ Draw_TileColumn2:
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#block_width,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_width,d2							; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -325,7 +325,7 @@ Draw_TileRow:
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#block_height,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_height,d2						; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -366,7 +366,7 @@ Draw_TileRow2:
 
 .check
 		andi.w	#$30,d2
-		cmpi.w	#block_height,d2								; the camera scrolls more than 16 pixels?
+		cmpi.w	#block_height,d2						; the camera scrolls more than 16 pixels?
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
@@ -732,7 +732,7 @@ Draw_BG:
 		move.w	(Camera_Y_pos_BG_rounded).w,d6
 		tst.w	(Camera_Y_pos_BG_copy).w
 		bpl.s	Draw_BGNoVert
-		moveq	#-block_height,d6								; set align (16 pixels)
+		moveq	#-block_height,d6						; set align (16 pixels)
 		and.w	(Camera_Y_pos_BG_copy).w,d6
 
 Draw_BGNoVert:
@@ -741,7 +741,7 @@ Draw_BGNoVert:
 .find
 		sub.w	(a4)+,d6
 		bmi.s	.found
-		moveq	#-block_width,d0								; set align (16 pixels)
+		moveq	#-block_width,d0						; set align (16 pixels)
 		and.w	(a6)+,d0
 		move.w	d0,(a6)+
 		subq.w	#1,d5								; next
@@ -783,7 +783,7 @@ Draw_BGNoVert:
 .loop2
 		subq.w	#1,d5								; next
 		beq.s	Get_DeformDrawPosVert.return
-		moveq	#-block_width,d0								; set align (16 pixels)
+		moveq	#-block_width,d0						; set align (16 pixels)
 		and.w	(a6)+,d0
 		move.w	d0,(a6)+
 		bra.s	.loop2

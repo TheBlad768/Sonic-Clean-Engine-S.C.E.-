@@ -41,7 +41,7 @@ Load_Rings_Init:
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Load_Rings_RaiseError).l				; raise an error if there is ring status table overflow
 
-		addi.w	#screen_width+block_width,d4							; advance by a screen
+		addi.w	#screen_width+block_width,d4					; advance by a screen
 		bra.s	.check2
 ; ---------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ Load_Rings_Main:
 		ifdebug	jsr	(Load_Rings_RaiseError).l				; raise an error if there is ring status table overflow
 
 		movea.l	(Ring_end_addr_ROM).w,a2
-		addi.w	#screen_width+block_width,d4							; advance by a screen
+		addi.w	#screen_width+block_width,d4					; advance by a screen
 		bra.s	.check3
 ; ---------------------------------------------------------------------------
 

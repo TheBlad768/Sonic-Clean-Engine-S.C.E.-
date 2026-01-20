@@ -39,7 +39,7 @@ Get_LevelSizeStart:
 		move.w	d0,(Player_1+y_pos).w						; set Sonic's position on y-axis
 
 .skipstartpos
-		subi.w	#screen_width/2,d1							; is Sonic more than 160px from left edge?
+		subi.w	#screen_width/2,d1						; is Sonic more than 160px from left edge?
 		bhs.s	.withinleft							; if yes, branch
 		moveq	#0,d1
 
@@ -51,7 +51,7 @@ Get_LevelSizeStart:
 
 .withinright
 		move.w	d1,(Camera_X_pos).w						; set horizontal screen position
-		subi.w	#(screen_height/2)-16,d0							; is Sonic within 96px of upper edge?
+		subi.w	#(screen_height/2)-16,d0					; is Sonic within 96px of upper edge?
 		bhs.s	.withintop							; if yes, branch
 		moveq	#0,d0
 
