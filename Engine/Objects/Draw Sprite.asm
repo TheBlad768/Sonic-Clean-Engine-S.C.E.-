@@ -32,6 +32,12 @@ Draw_Sprite:
 
 ; =============== S U B R O U T I N E =======================================
 
+Draw_Sprite_2:
+		movea.w	priority(a0),a1							; set sprite priority to a1
+		bra.s	Draw_Sprite.find
+
+; =============== S U B R O U T I N E =======================================
+
 Child_Draw_Sprite:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?

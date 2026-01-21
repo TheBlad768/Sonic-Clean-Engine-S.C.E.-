@@ -710,6 +710,15 @@ MoveSprite2YOnly macro address=a0,terminate
     endif
     endm
 
+Draw_Sprite macro prio=0,terminate
+	lea	(Sprite_table_input+sprite_priority(prio)).w,a1
+    if ("terminate"="0") || ("terminate"="")
+	jsr	(Draw_Sprite.find).w
+    else
+	jmp	(Draw_Sprite.find).w
+    endif
+    endm
+
 Add_SpriteToCollisionResponseList macro address,terminate
     ifb address
 	fatal "Error! Empty value!"
