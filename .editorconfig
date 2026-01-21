@@ -1,0 +1,13 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.asm]
+indent_style = tab
+indent_size = 8
+
+[*.bat]
+end_of_line = crlf
