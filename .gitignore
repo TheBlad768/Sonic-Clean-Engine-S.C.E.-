@@ -8,6 +8,8 @@ desktop.ini
 *.gen
 
 # Generated listing files
+S1S3.lst
+S1S3.debug.lst
 S3CE.lst
 S3CE.debug.lst
 
