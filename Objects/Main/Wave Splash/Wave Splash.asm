@@ -67,8 +67,7 @@ Obj_WaveSplash:
 		move.b	mapping_frame(a0),1(a2)
 
 		; draw
-		lea	(Sprite_table_input+priority_0).w,a1
-		jmp	(Draw_Sprite.find).w
+		Draw_Sprite ,1
 
 ; =============== S U B R O U T I N E =======================================
 
