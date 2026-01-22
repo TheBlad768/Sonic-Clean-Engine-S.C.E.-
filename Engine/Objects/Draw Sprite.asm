@@ -85,7 +85,7 @@ Child_Remember_Draw_Sprite:
 
 Child_Draw_Sprite2:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#4,objoff_38(a1)						; is delete child object flag set?
+		btst	#4,state_flags(a1)						; is delete child object flag set?
 		bne.w	Go_Delete_Sprite_2						; if yes, branch
 		bra.w	Draw_Sprite
 
@@ -93,7 +93,7 @@ Child_Draw_Sprite2:
 
 Child_DrawTouch_Sprite2:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#4,objoff_38(a1)						; is delete child object flag set?
+		btst	#4,state_flags(a1)						; is delete child object flag set?
 		bne.w	Go_Delete_Sprite_2						; if yes, branch
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.s	.draw								; if yes, branch
@@ -122,7 +122,7 @@ Child_Draw_Sprite_FlickerMove:
 
 Child_Draw_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#4,objoff_38(a1)						; is delete child object flag set?
+		btst	#4,state_flags(a1)						; is delete child object flag set?
 		bne.s	Child_Draw_Sprite_FlickerMove.flicker				; if yes, branch
 		bra.w	Draw_Sprite
 
@@ -140,7 +140,7 @@ Child_DrawTouch_Sprite_FlickerMove:
 
 Child_DrawTouch_Sprite2_FlickerMove:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#4,objoff_38(a1)						; is delete child object flag set?
+		btst	#4,state_flags(a1)						; is delete child object flag set?
 		bne.s	Child_Draw_Sprite_FlickerMove.flicker				; if yes, branch
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		beq.s	Child_DrawTouch_Sprite_FlickerMove.draw				; if not, branch
@@ -151,6 +151,6 @@ Child_DrawTouch_Sprite2_FlickerMove:
 
 Child_DrawTouch_Sprite2_FlickerMove2:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#4,objoff_38(a1)						; is delete child object flag set?
+		btst	#4,state_flags(a1)						; is delete child object flag set?
 		bne.s	Child_Draw_Sprite_FlickerMove.flicker				; if yes, branch
 		bra.s	Child_DrawTouch_Sprite_FlickerMove.draw

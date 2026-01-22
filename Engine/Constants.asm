@@ -360,16 +360,24 @@ collision_property =						objoff_29					; byte ; usage varies, bosses use it as 
 shield_reaction =						objoff_2B					; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
 subtype =							objoff_2C					; byte
 wait_timer =							objoff_2E					; word
-aniraw =							objoff_30					; long
-jump =								objoff_34					; long
+aniraw_ptr =							objoff_30					; long
+jump_ptr =							objoff_34					; long
+state_flags =							objoff_38					; byte
 count =								objoff_39					; byte
+circular_radius =						objoff_3A					; word
+circular_angle =						objoff_3C					; byte
 ros_prev_frame =						objoff_3A					; byte
 ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
 ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 routine_secondary =						objoff_3C					; byte ; used by monitors for this purpose at least
-parent =							objoff_48					; word ; address of the object that owns or spawned this one, if applicable
+scaling_frame =							objoff_20					; byte
+scaling_art_tile =						objoff_3A					; word
+scaling_scale_factor =						objoff_40					; byte
+scaling_scale_prev_factor =					objoff_41					; byte
+scaling_art_address =						objoff_42					; long
 child_dx =							objoff_48					; byte ; X offset of child relative to parent
 child_dy =							objoff_49					; byte ; Y offset of child relative to parent
+parent =							objoff_48					; word ; address of the object that owns or spawned this one, if applicable
 parent4 =							objoff_4A					; word
 parent3 =							objoff_4C					; word ; parent of child objects
 parent2 =							objoff_4E					; word ; several objects use this instead
@@ -413,6 +421,7 @@ lrb_solid_bit =							objoff_47					; byte ; the bit to check for left/right/bot
 ; Conventions followed by some/most bosses
 ; ---------------------------------------------------------------------------
 
+boss_saved_player =						objoff_1C					; byte ; save player RAM address
 boss_invulnerability_timer =					objoff_1D					; byte ; flash time
 boss_saved_collision =						objoff_25					; byte ; restore boss collision after hit
 boss_saved_mus =						objoff_26					; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects

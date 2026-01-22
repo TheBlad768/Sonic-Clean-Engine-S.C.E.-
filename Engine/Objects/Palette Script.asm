@@ -88,9 +88,9 @@ locret_85A00:
 
 Run_PalRotationScript2:
 		tst.b	(Palette_rotation_disable).w
-		bne.s	locret_85A58
+		bne.s	.return
 		subq.b	#1,objoff_3A(a0)
-		bpl.s	locret_85A58
+		bpl.s	.return
 		movea.l	(a1)+,a3							; address of Palette animation data
 		move.w	(a1)+,d0							; number of colors to replace
 		moveq	#2,d1
@@ -111,7 +111,7 @@ Run_PalRotationScript2:
 		move.w	(a3)+,(a2)+
 		dbf	d0,.loop
 
-locret_85A58:
+.return
 		rts
 
 ; ---------------------------------------------------------------------------

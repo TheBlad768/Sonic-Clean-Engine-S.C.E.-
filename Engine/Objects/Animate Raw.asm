@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipX:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTAdjustFlipX:
 		subq.b	#1,anim_frame_timer(a0)
@@ -30,7 +30,7 @@ Animate_RawNoSSTAdjustFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipY:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTAdjustFlipY:
 		subq.b	#1,anim_frame_timer(a0)
@@ -55,7 +55,7 @@ Animate_RawNoSSTAdjustFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSST:
 		subq.b	#1,anim_frame_timer(a0)
@@ -86,7 +86,7 @@ Animate_RawNoSST:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ Animate_RawNoSST:
 		move.b	2(a1,d0.w),d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)						; set new animation pointer
+		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)
@@ -105,7 +105,7 @@ Animate_RawNoSST:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawCheckResult:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTCheckResult:
 		subq.b	#1,anim_frame_timer(a0)
@@ -143,7 +143,7 @@ Animate_RawNoSSTCheckResult:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
 		moveq	#-1,d2								; end flag
 		rts
@@ -153,7 +153,7 @@ Animate_RawNoSSTCheckResult:
 		move.b	(a2)+,d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)						; set new animation pointer
+		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)
@@ -165,7 +165,7 @@ Animate_RawNoSSTCheckResult:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipX:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTMultiDelayFlipX:
 		subq.b	#1,anim_frame_timer(a0)
@@ -194,7 +194,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelay:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTMultiDelay:
 		subq.b	#1,anim_frame_timer(a0)
@@ -229,7 +229,7 @@ Animate_RawNoSSTMultiDelay:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
 		moveq	#-1,d2								; end flag
 		rts
@@ -239,7 +239,7 @@ Animate_RawNoSSTMultiDelay:
 		move.b	1(a1,d0.w),d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)						; set new animation pointer
+		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)
@@ -251,7 +251,7 @@ Animate_RawNoSSTMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipY:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTMultiDelayFlipY:
 		subq.b	#1,anim_frame_timer(a0)
@@ -280,7 +280,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw2MultiDelay:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_Raw2NoSSTMultiDelay:
 		subq.b	#1,anim_frame_timer(a0)
@@ -318,7 +318,7 @@ Animate_Raw2NoSSTMultiDelay:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
 		moveq	#-1,d2								; end flag
 		rts
@@ -328,7 +328,7 @@ Animate_Raw2NoSSTMultiDelay:
 		move.b	(a2)+,d1
 		ext.w	d1
 		adda.w	d1,a1
-		move.l	a1,objoff_30(a0)						; set new animation pointer
+		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)
@@ -340,10 +340,10 @@ Animate_Raw2NoSSTMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetFaster:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTGetFaster:
-		bset	#5,objoff_38(a0)
+		bset	#5,state_flags(a0)
 		bne.s	.main
 		move.b	(a1),objoff_2E(a0)
 		clr.b	objoff_2F(a0)
@@ -389,9 +389,9 @@ Animate_RawNoSSTGetFaster:
 		blo.s	.end
 
 		; jump to custom code
-		bclr	#5,objoff_38(a0)
+		bclr	#5,state_flags(a0)
 		clr.b	objoff_2F(a0)
-		movea.l	objoff_34(a0),a2
+		movea.l	jump_ptr(a0),a2
 		jsr	(a2)
 
 .end
@@ -401,10 +401,10 @@ Animate_RawNoSSTGetFaster:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetSlower:
-		movea.l	objoff_30(a0),a1
+		movea.l	aniraw_ptr(a0),a1
 
 Animate_RawNoSSTGetSlower:
-		bset	#5,objoff_38(a0)
+		bset	#5,state_flags(a0)
 		bne.s	.main
 		clr.w	objoff_2E(a0)
 
@@ -440,9 +440,9 @@ Animate_RawNoSSTGetSlower:
 		blo.s	.return
 
 		; jump to custom code
-		bclr	#5,objoff_38(a0)
+		bclr	#5,state_flags(a0)
 		clr.b	objoff_2F(a0)
-		movea.l	objoff_34(a0),a2
+		movea.l	jump_ptr(a0),a2
 		jmp	(a2)
 
 ; =============== S U B R O U T I N E =======================================
@@ -469,14 +469,14 @@ Animate_ExternalPlayerSprite:
 .custom
 		bsr.w	Sonic_Load_PLC
 
-		; custom code
-		movea.l	objoff_34(a0),a1
+		; jump to custom code
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
 Set_Raw_Animation:
-		move.l	a1,objoff_30(a0)
+		move.l	a1,aniraw_ptr(a0)
 		clr.b	anim_frame(a0)
 		clr.b	anim_frame_timer(a0)
 		rts

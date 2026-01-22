@@ -50,9 +50,9 @@ CreateChild2_Complex:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)			; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,address(a1)
-		move.l	(a2)+,objoff_3E(a1)
-		move.l	(a2)+,objoff_30(a1)
-		move.l	(a2)+,objoff_34(a1)
+		move.l	(a2)+,objoff_3E(a1)				; used by SetUp_ObjAttributes
+		move.l	(a2)+,aniraw_ptr(a1)				; used by Animate_Raw
+		move.l	(a2)+,jump_ptr(a1)				; used by Obj_Wait
 		move.b	d2,subtype(a1)
 		move.w	x_pos(a0),d0
 		move.b	(a2)+,d1
@@ -150,9 +150,9 @@ CreateChild5_ComplexAdjusted:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.l	(a2)+,address(a1)
-		move.l	(a2)+,objoff_3E(a1)
-		move.l	(a2)+,objoff_30(a1)
-		move.l	(a2)+,objoff_34(a1)
+		move.l	(a2)+,objoff_3E(a1)				; used by SetUp_ObjAttributes
+		move.l	(a2)+,aniraw_ptr(a1)				; used by Animate_Raw
+		move.l	(a2)+,jump_ptr(a1)				; used by Obj_Wait
 		move.b	d2,subtype(a1)
 		move.w	x_pos(a0),d0
 		move.b	(a2)+,d1

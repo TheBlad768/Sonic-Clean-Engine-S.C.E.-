@@ -58,7 +58,7 @@ SetUp_ObjAttributesSlotted:
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
 		move.b	(a1)+,collision_flags(a0)					; collision number
-		st	objoff_3A(a0)							; reset DPLC frame (used by Perform_DPLC)
+		st	ros_prev_frame(a0)							; reset DPLC frame (used by Perform_DPLC)
 
 		; set
 		moveq	#2,d0
@@ -72,9 +72,9 @@ SetUp_ObjAttributesSlotted:
 Perform_DPLC:
 		moveq	#0,d0
 		move.b	mapping_frame(a0),d0						; get the frame number
-		cmp.b	objoff_3A(a0),d0						; if frame number remains the same as before, don't do anything
+		cmp.b	ros_prev_frame(a0),d0						; if frame number remains the same as before, don't do anything
 		beq.s	.return
-		move.b	d0,objoff_3A(a0)
+		move.b	d0,ros_prev_frame(a0)
 
 		; load
 		add.w	d0,d0
@@ -494,49 +494,53 @@ Play_SFX_Continuous:
 ; =============== S U B R O U T I N E =======================================
 
 Wait_NewDelay:
-		subq.w	#1,objoff_2E(a0)
+		subq.w	#1,wait_timer(a0)
 		bmi.s	.end
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 .end
 		bclr	#render_flags.on_screen,render_flags(a0)
-		move.w	#(2*60)-1,objoff_2E(a0)
-		movea.l	objoff_34(a0),a1
+		move.w	#(2*60)-1,wait_timer(a0)
+
+		; jump
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
 Wait_FadeToLevelMusic:
-		subq.w	#1,objoff_2E(a0)
+		subq.w	#1,wait_timer(a0)
 		bmi.s	.end
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
 
 .end
 		bclr	#render_flags.on_screen,render_flags(a0)
-		move.w	#(2*60)-1,objoff_2E(a0)
+		move.w	#(2*60)-1,wait_timer(a0)
 		bsr.w	Create_New_Sprite
 		bne.s	.notfree
 		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
 
 .notfree
-		movea.l	objoff_34(a0),a1
+
+		; jump
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
 Player_IntroRightMove:
 		move.w	#bytes_to_word(btnR,btnR),d0					; set right move
-		tst.w	objoff_2E(a0)
+		tst.w	wait_timer(a0)
 		beq.s	.notjump
-		subq.w	#1,objoff_2E(a0)
+		subq.w	#1,wait_timer(a0)
 		move.w	#bytes_to_word(btnA+btnR,btnR),d0				; keep jumping
 
 .notjump
 		btst	#status.player.pushing,status(a1)				; player hitting a solid?
 		beq.s	.notpush							; if not, branch
-		move.w	#$1F,objoff_2E(a0)
+		move.w	#$1F,wait_timer(a0)
 		move.w	#bytes_to_word(btnA+btnR,btnA+btnR),d0				; set player jump
 
 .notpush
@@ -549,7 +553,7 @@ BossDefeated_StopTimer:
 		clr.b	(Update_HUD_timer).w
 
 BossDefeated:
-		move.w	#$40-1,objoff_2E(a0)
+		move.w	#$40-1,wait_timer(a0)
 
 BossDefeated_NoTime:
 		bclr	#render_flags.on_screen,render_flags(a0)

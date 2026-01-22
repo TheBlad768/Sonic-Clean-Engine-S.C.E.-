@@ -100,7 +100,7 @@ Sprite_CheckDelete2:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
-		bset	#4,objoff_38(a0)						; set "delete child object" flag
+		bset	#4,state_flags(a0)						; set "delete child object" flag
 		move.l	#Delete_Current_Sprite,address(a0)
 
 .return
@@ -269,7 +269,7 @@ Obj_WaitOffscreen:
 		move.l	#Map_Offscreen,mappings(a0)
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
-		move.l	(sp)+,objoff_34(a0)						; save address after bsr/jsr from stack
+		move.l	(sp)+,jump_ptr(a0)						; save address after bsr/jsr from stack
 		move.l	#.main,address(a0)
 
 .main
@@ -279,7 +279,7 @@ Obj_WaitOffscreen:
 ; ---------------------------------------------------------------------------
 
 .restore
-		move.l	objoff_34(a0),address(a0)					; restore normal object operation when onscreen
+		move.l	jump_ptr(a0),address(a0)					; restore normal object operation when onscreen
 		rts
 ; ---------------------------------------------------------------------------
 

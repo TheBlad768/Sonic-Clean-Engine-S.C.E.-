@@ -48,7 +48,7 @@ sub_85C7E:
 		bhi.s	Init_BossArena3.return
 
 		; jump
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -58,7 +58,7 @@ Init_BossArena:
 
 Init_BossArena2:
 		music	mus_FadeOut							; fade out music
-		move.w	#2*60,objoff_2E(a0)
+		move.w	#2*60,wait_timer(a0)
 
 Init_BossArena3:
 		move.w	(Camera_min_Y_pos).w,(Camera_stored_min_Y_pos).w
@@ -76,7 +76,7 @@ Init_BossArena3:
 Load_BossArena:
 		btst	#0,objoff_27(a0)
 		bne.s	loc_85CC6
-		subq.w	#1,objoff_2E(a0)
+		subq.w	#1,wait_timer(a0)
 		bpl.s	loc_85CC6
 		move.b	objoff_26(a0),d0
 		move.b	d0,(Current_music+1).w
@@ -140,7 +140,7 @@ loc_85D48:
 		clr.w	objoff_26(a0)
 
 		; jump
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
