@@ -7,6 +7,7 @@ on:
       - flamedriver
 
     paths-ignore:
+      - '.editorconfig'
       - '.gitattributes'
       - '.gitignore'
       - 'README.md'
