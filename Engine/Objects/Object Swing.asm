@@ -9,7 +9,7 @@ Swing_Setup1:
 		move.w	d0,objoff_3E(a0)
 		move.w	d0,y_vel(a0)
 		move.w	#$10,objoff_40(a0)
-		bclr	#0,objoff_38(a0)
+		bclr	#0,state_flags(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -19,7 +19,7 @@ Swing_Setup2:
 		move.w	d0,objoff_3A(a0)
 		move.w	d0,x_vel(a0)
 		move.w	#$20,objoff_3C(a0)
-		bclr	#3,objoff_38(a0)
+		bclr	#3,state_flags(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -28,9 +28,7 @@ Swing_UpAndDown_Count:
 		bsr.s	Swing_UpAndDown
 		tst.w	d3
 		beq.s	.return
-		move.b	objoff_39(a0),d2
-		subq.b	#1,d2
-		move.b	d2,objoff_39(a0)
+		subq.b	#1,count(a0)
 		bmi.s	.end
 		moveq	#0,d0
 
@@ -49,14 +47,14 @@ Swing_UpAndDown:
 		move.w	y_vel(a0),d1							; velocity
 		move.w	objoff_3E(a0),d2						; maximum acceleration before "swinging"
 		moveq	#0,d3
-		btst	#0,objoff_38(a0)
+		btst	#0,state_flags(a0)
 		bne.s	.check
 		neg.w	d0								; apply upward acceleration
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
 		bgt.s	.set
-		bset	#0,objoff_38(a0)
+		bset	#0,state_flags(a0)
 		neg.w	d0
 		neg.w	d2
 		moveq	#1,d3
@@ -65,7 +63,7 @@ Swing_UpAndDown:
 		add.w	d0,d1								; apply downward acceleration
 		cmp.w	d2,d1
 		blt.s	.set
-		bclr	#0,objoff_38(a0)
+		bclr	#0,state_flags(a0)
 		neg.w	d0
 		add.w	d0,d1
 		moveq	#1,d3
@@ -81,14 +79,14 @@ Swing_LeftAndRight:
 		move.w	x_vel(a0),d1
 		move.w	objoff_3A(a0),d2
 		moveq	#0,d3
-		btst	#3,objoff_38(a0)
+		btst	#3,state_flags(a0)
 		bne.s	.check
 		neg.w	d0
 		add.w	d0,d1
 		neg.w	d2
 		cmp.w	d2,d1
 		bgt.s	.set
-		bset	#3,objoff_38(a0)
+		bset	#3,state_flags(a0)
 		neg.w	d0
 		neg.w	d2
 		moveq	#1,d3
@@ -97,7 +95,7 @@ Swing_LeftAndRight:
 		add.w	d0,d1
 		cmp.w	d2,d1
 		blt.s	.set
-		bclr	#3,objoff_38(a0)
+		bclr	#3,state_flags(a0)
 		neg.w	d0
 		add.w	d0,d1
 		moveq	#1,d3

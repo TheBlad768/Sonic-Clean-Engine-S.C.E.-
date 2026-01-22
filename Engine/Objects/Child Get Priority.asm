@@ -65,9 +65,9 @@ Child_SyncDraw:
 		movea.w	parent3(a0),a1							; a1=parent object
 
 .skipp
-		btst	#6,objoff_38(a1)
+		btst	#6,state_flags(a1)
 		bne.s	.setflag
-		bclr	#6,objoff_38(a0)
+		bclr	#6,state_flags(a0)
 		bset	#high_priority_bit,art_tile(a0)					; high priority
 		btst	#high_priority_bit,art_tile(a1)					; is parent object has high priority?
 		bne.s	.highpriority							; if yes, branch
@@ -78,7 +78,7 @@ Child_SyncDraw:
 ; ---------------------------------------------------------------------------
 
 .setflag
-		bset	#6,objoff_38(a0)
+		bset	#6,state_flags(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================

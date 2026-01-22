@@ -9,7 +9,9 @@ Obj_Wait:
 		bpl.s	Obj_WaitRun.return						; if timer has not ended, branch
 
 Obj_Jump:
-		movea.l	objoff_34(a0),a1
+
+		; jump
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -39,7 +41,9 @@ ObjCheckFloorDist_DoRoutine:
 
 .jump
 		add.w	d1,y_pos(a0)
-		movea.l	objoff_34(a0),a1
+
+		; jump
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -58,7 +62,9 @@ ObjCheckCeilingDist_DoRoutine:
 
 .jump
 		sub.w	d1,y_pos(a0)
-		movea.l	objoff_34(a0),a1
+
+		; jump
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -75,14 +81,16 @@ ObjCheckFloorDist2_DoRoutine:
 		cmpi.w	#12,d1
 		bge.s	.jump
 		add.w	d1,y_pos(a0)
-		moveq	#0,d0
+		moveq	#0,d0								; set flag to 0
 		rts
 ; ---------------------------------------------------------------------------
 
 .jump
-		movea.l	objoff_34(a0),a1
+
+		; jump
+		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
-		moveq	#1,d0
+		moveq	#1,d0								; set flag to 1
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -91,10 +99,10 @@ ObjCheckRightWallDist_DoRoutine:
 		bsr.w	ObjCheckRightWallDist
 		tst.w	d1
 		bpl.s	ObjCheckCeilingDist_DoRoutine.return
+		add.w	d1,x_pos(a0)
 
 		; jump
-		add.w	d1,x_pos(a0)
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
@@ -103,8 +111,8 @@ ObjCheckLeftWallDist_DoRoutine:
 		bsr.w	ObjCheckLeftWallDist
 		tst.w	d1
 		bpl.s	ObjCheckCeilingDist_DoRoutine.return
+		add.w	d1,x_pos(a0)
 
 		; jump
-		add.w	d1,x_pos(a0)
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		jmp	(a1)

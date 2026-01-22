@@ -5,9 +5,9 @@
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_Circular:
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		bsr.w	GetSineCosine
-		move.w	objoff_3A(a0),d2
+		move.w	circular_radius(a0),d2						; get radius to d2
 		move.w	d2,d3
 		muls.w	d0,d2
 		swap	d2
@@ -31,7 +31,7 @@ MoveSprite_Circular:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_CircularSimple:
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		bsr.w	GetSineCosine
 		swap	d0
 		clr.w	d0
@@ -51,7 +51,7 @@ MoveSprite_CircularSimple:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_CircularSimpleCheckFlip:
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		bsr.w	GetSineCosine
 		swap	d0
 		clr.w	d0
@@ -76,7 +76,7 @@ MoveSprite_CircularSimpleCheckFlip:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_CircularSimpleOffset:
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		bsr.w	GetSineCosine
 		swap	d0
 		clr.w	d0
@@ -107,7 +107,7 @@ MoveSprite_CircularSimpleOffset:
 
 MoveSprite_CircularLookup:
 		moveq	#0,d0
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		move.w	d0,d1
 		andi.w	#$3F,d0
 		lsr.w	#5,d1
@@ -145,7 +145,7 @@ MoveSprite_CircularLookup:
 
 MoveSprite_AtAngleLookup:
 		moveq	#0,d0
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		move.w	d0,d1
 		andi.w	#$3F,d0
 		lsr.w	#5,d1
@@ -209,7 +209,7 @@ AtAngle_80_BF:
 
 MoveSprite_AngleYLookup:
 		moveq	#0,d0
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		move.w	d0,d1
 		andi.w	#$3F,d0
 		lsr.w	#5,d1
@@ -353,7 +353,7 @@ loc_862A0:
 
 MoveSprite_AngleXLookupOffset:
 		moveq	#0,d0
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		move.b	d0,d1
 		rol.b	#3,d1
 		andi.w	#6,d1
@@ -416,7 +416,7 @@ loc_84E6C:
 
 MoveSprite_AngleXLookupOffset2:
 		moveq	#0,d0
-		move.b	objoff_3C(a0),d0
+		move.b	circular_angle(a0),d0
 		move.b	d0,d1
 		rol.b	#3,d1
 		andi.w	#6,d1
