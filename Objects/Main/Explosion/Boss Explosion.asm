@@ -120,7 +120,7 @@ locret_83EC0:
 ; ---------------------------------------------------------------------------
 
 loc_83EC2:
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w
 
 ; ----------------------------------------------------------------------------
 ; Normal boss explosions control
@@ -207,7 +207,7 @@ Obj_BossExplosion1:
 
 loc_83F52:
 		move.l	#Obj_BossExplosionAnim,address(a0)
-		move.l	#Go_Delete_Sprite,jump_ptr(a0)
+		move.l	#Go_Delete_Object,jump_ptr(a0)
 		sfx	sfx_Explode
 
 Obj_BossExplosionAnim:
@@ -227,7 +227,7 @@ Obj_BossExplosionOffset:
 		lea	ObjDat_BossExplosion1(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
-		move.l	#Go_Delete_Sprite,jump_ptr(a0)
+		move.l	#Go_Delete_Object,jump_ptr(a0)
 		sfx	sfx_Explode
 
 .main

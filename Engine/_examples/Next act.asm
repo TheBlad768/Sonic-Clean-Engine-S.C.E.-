@@ -34,7 +34,7 @@ DEZ1_Resize:
 		move.b	d0,(Boss_flag).w
 
 		; create signpost
-		jsr	(Create_New_Sprite).w
+		jsr	(Create_New_Object).w
 		bne.s	.return
 		move.l	#Obj_EndSignControl,address(a1)
 		move.w	(Camera_X_pos).w,d2

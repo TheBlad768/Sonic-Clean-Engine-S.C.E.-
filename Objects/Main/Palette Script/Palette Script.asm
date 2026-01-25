@@ -24,7 +24,7 @@ Obj_SmoothPalette:
 		subq.b	#1,objoff_39(a0)
 		bpl.s	.return
 		clr.b	(Palette_rotation_disable).w
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w
 ; ---------------------------------------------------------------------------
 
 .return
@@ -57,7 +57,7 @@ Obj_SmoothPalette2:
 		subq.b	#1,objoff_39(a0)
 		bpl.s	.return
 		clr.b	(Palette_rotation_disable).w
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w
 ; ---------------------------------------------------------------------------
 
 .return
@@ -103,7 +103,7 @@ Obj_FadeSelectedToBlack:
 		subq.b	#1,objoff_39(a0)
 		bpl.s	Obj_SmoothPalette2.return
 		clr.b	(Palette_rotation_disable).w
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Fade selected from black (Object)
@@ -138,7 +138,7 @@ Obj_FadeSelectedFromBlack:
 		subq.b	#1,objoff_39(a0)
 		bpl.s	Obj_FadeToWhite.return
 		clr.b	(Palette_rotation_disable).w
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -176,7 +176,7 @@ Obj_FadeToWhite:
 
 .delete
 		clr.b	(Palette_rotation_disable).w
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -205,4 +205,4 @@ Obj_FadeFromWhite:
 		subq.b	#1,objoff_39(a0)
 		bpl.s	Obj_FadeToWhite.return
 		clr.b	(Palette_rotation_disable).w
-		jmp	(Go_Delete_Sprite).w
+		jmp	(Go_Delete_Object).w

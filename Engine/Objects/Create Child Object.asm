@@ -10,7 +10,7 @@ CreateChild1_Normal:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)					; parent RAM address into objoff_46
 		move.l	mappings(a0),mappings(a1)
@@ -44,7 +44,7 @@ CreateChild2_Complex:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)					; parent RAM address into objoff_46
 		move.l	mappings(a0),mappings(a1)
@@ -83,7 +83,7 @@ CreateChild3_NormalRepeated:
 
 .loop
 		lea	(a2),a3						; save ROM address to a3
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -118,7 +118,7 @@ CreateChild4_LinkListRepeated:
 		movea.w	a0,a3						; creates a linked object list. Previous object address is in objoff_46, while next object in list is at objoff_44
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a3,parent3(a1)
 		move.w	a1,parent4(a3)
@@ -144,7 +144,7 @@ CreateChild5_ComplexAdjusted:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -194,7 +194,7 @@ CreateChild6_Simple:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -218,7 +218,7 @@ CreateChild7_Normal2:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -255,7 +255,7 @@ CreateChild8_TreeListRepeated2:
 		movea.w	a0,a3						; creates a linked object list like routine 4, but they only chain themselves one way. All maintain the calling object as their parent
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a3,parent3(a1)
 		move.w	a0,parent4(a1)
@@ -282,7 +282,7 @@ CreateChild9_TreeList:
 		movea.w	a0,a3						; same as routine 8, but creates seperate objects in a list rather than repeating the same object
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a3,parent3(a1)
 		move.w	a0,parent4(a1)
@@ -308,7 +308,7 @@ CreateChild10_NormalAdjusted:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -348,7 +348,7 @@ CreateChild11_Simple:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite3
+		bsr.w	Create_New_Object_3
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -372,7 +372,7 @@ CreateChild12_Simple:
 		bmi.s	.return						; skip if no objects in list
 
 .loop
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	.return
 		move.w	a0,parent3(a1)
 		move.l	mappings(a0),mappings(a1)

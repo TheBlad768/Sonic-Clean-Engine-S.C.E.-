@@ -267,7 +267,7 @@ Test_Ring_Collisions:
 
 Test_Ring_Collisions_AttractRing:
 		lea	(a1),a3								; save ROM address
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	.notfree
 		move.l	#Obj_Attracted_Ring,address(a1)
 		move.w	(a3),x_pos(a1)							; copy xpos

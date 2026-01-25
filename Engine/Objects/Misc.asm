@@ -225,7 +225,7 @@ Obj_Song_Fade_Transition:
 		move.b	subtype(a0),d0
 		move.b	d0,(Current_music+1).w
 		bsr.w	Play_Music							; play music
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -241,7 +241,7 @@ Obj_Song_Fade_ToLevelMusic:
 		tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_fadeout_counter).w
 		bne.s	.return
 		bsr.s	Restore_LevelMusic
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -417,7 +417,7 @@ Load_LevelResults:
 		bhs.s	.return								; if yes, branch
 		bsr.s	Set_PlayerEndingPose
 		clr.b	(End_of_level_flag).w
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	.return
 		move.l	#Obj_LevelResults,address(a1)
 
@@ -518,7 +518,7 @@ Wait_FadeToLevelMusic:
 .end
 		bclr	#render_flags.on_screen,render_flags(a0)
 		move.w	#(2*60)-1,wait_timer(a0)
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	.notfree
 		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
 

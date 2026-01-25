@@ -7,7 +7,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-Create_New_Sprite:
+Create_New_Object:
 		lea	(Dynamic_object_RAM-next_object).w,a1			; start address for object RAM
 		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d0
 
@@ -19,7 +19,7 @@ Create_New_Sprite:
 
 ; =============== S U B R O U T I N E =======================================
 
-Create_New_Sprite3:
+Create_New_Object_3:
 		move.w	#Dynamic_object_RAM_end,d0
 		sub.w	a0,d0
 		lsr.w	#object_size_bits,d0					; divide by $40... even though SSTs are $4A bytes long in this game

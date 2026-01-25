@@ -100,8 +100,8 @@ RobotnikHead4_Index: offsetTable
 		offsetTableEntry.w Obj_RobotnikHead3End					; 4
 ; ---------------------------------------------------------------------------
 
-loc_67CFE:
-		jmp	(Delete_Current_Sprite).w
+.delete
+		jmp	(Delete_Current_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Robotnik ship flame

@@ -64,7 +64,7 @@ loc_2FABA:
 		move.w	d0,objoff_38(a0)
 
 		; create bubbles
-		jsr	(Create_New_Sprite3).w
+		jsr	(Create_New_Object_3).w
 		bne.s	loc_2FB34
 		move.l	#Obj_Bubbler_Bubbles,address(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -131,7 +131,7 @@ loc_2FB5C:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 Bubbler_Delete:
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Bubbler (Object)

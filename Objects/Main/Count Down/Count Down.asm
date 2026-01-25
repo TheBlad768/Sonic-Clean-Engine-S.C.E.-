@@ -112,7 +112,7 @@ AirCountdown_MakeItem:
 		move.w	d0,objoff_3E(a0)
 
 		; create bubbles
-		jsr	(Create_New_Sprite).w
+		jsr	(Create_New_Object).w
 		bne.s	locret_1858E
 		move.l	#Obj_AirCountdown_Bubbles,address(a1)
 		move.l	mappings(a0),mappings(a1)
@@ -262,7 +262,7 @@ AirCountdown_Display:
 ; ---------------------------------------------------------------------------
 
 AirCountdown_Delete:
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 

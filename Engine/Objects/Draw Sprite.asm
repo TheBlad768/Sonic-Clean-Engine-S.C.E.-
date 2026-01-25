@@ -41,7 +41,7 @@ Draw_Sprite_2:
 Child_Draw_Sprite:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 		bra.s	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -49,7 +49,7 @@ Child_Draw_Sprite:
 Child_DrawTouch_Sprite:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 		bra.s	Draw_And_Touch_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -57,7 +57,7 @@ Child_DrawTouch_Sprite:
 Child_CheckParent:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -65,7 +65,7 @@ Child_CheckParent:
 Child_AddToTouchList:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 		bra.w	Add_SpriteToCollisionResponseList
 
 ; =============== S U B R O U T I N E =======================================
@@ -79,14 +79,14 @@ Child_Remember_Draw_Sprite:
 
 .delete
 		bsr.w	Remove_From_TrackingSlot
-		bra.w	Go_Delete_Sprite
+		bra.w	Go_Delete_Object
 
 ; =============== S U B R O U T I N E =======================================
 
 Child_Draw_Sprite2:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#4,state_flags(a1)						; is delete child object flag set?
-		bne.w	Go_Delete_Sprite_2						; if yes, branch
+		bne.w	Go_Delete_Object_2						; if yes, branch
 		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -94,7 +94,7 @@ Child_Draw_Sprite2:
 Child_DrawTouch_Sprite2:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#4,state_flags(a1)						; is delete child object flag set?
-		bne.w	Go_Delete_Sprite_2						; if yes, branch
+		bne.w	Go_Delete_Object_2						; if yes, branch
 		btst	#status.npc.defeated,status(a1)					; is boss/enemy defeated?
 		bne.s	.draw								; if yes, branch
 		bsr.w	Add_SpriteToCollisionResponseList
