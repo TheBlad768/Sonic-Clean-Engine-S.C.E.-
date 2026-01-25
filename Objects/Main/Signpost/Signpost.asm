@@ -8,7 +8,7 @@ Obj_EndSignControl:
 		move.l	#Obj_Wait,address(a0)
 		st	(Level_results_flag).w						; end of level is in effect
 		move.w	#(2*60)-1,objoff_2E(a0)
-		move.l	#Obj_EndSignControlDoSign,objoff_34(a0)
+		move.l	#Obj_EndSignControlDoSign,jump_ptr(a0)
 
 .return
 		rts
@@ -205,7 +205,7 @@ Obj_SignpostSparkle:
 		move.w	x_pos(a0),objoff_3A(a0)
 		move.w	#$1000,x_vel(a0)
 		move.w	#32,objoff_2E(a0)
-		move.l	#Go_Delete_Sprite,objoff_34(a0)
+		move.l	#Go_Delete_Sprite,jump_ptr(a0)
 
 .main
 		move.w	#$400,d0							; right
