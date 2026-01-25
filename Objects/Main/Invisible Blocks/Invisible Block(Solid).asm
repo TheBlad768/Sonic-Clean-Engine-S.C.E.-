@@ -59,7 +59,7 @@ Obj_Invisible_SolidBlock:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 ; ---------------------------------------------------------------------------
 
 		; mappings

@@ -614,7 +614,7 @@ respawn_delete macro terminate
 
 .delete
     if ("terminate"="0") <> ("terminate"="")
-	jmp	(Delete_Current_Sprite).w
+	jmp	(Delete_Current_Object).w
     endif
     endm
 
@@ -629,7 +629,7 @@ getobjectRAMslot macro address
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
 	lsr.w	#6,d0									; divide by $40... even though SSTs are $4A bytes long in this game
-	lea	(Create_New_Sprite3.table).w,address
+	lea	(Create_New_Object_3.table).w,address
 	move.b	(address,d0.w),d0							; use a look-up table to get the right loop counter
     endm
 
@@ -737,7 +737,7 @@ Add_SpriteToCollisionResponseList macro address,terminate
     endm
 
 CreateNewSprite macro obj,terminate
-	jsr	(Create_New_Sprite).w
+	jsr	(Create_New_Object).w
 	bne.s	.skip
 	move.l	#obj,address(a1)
 
@@ -748,7 +748,7 @@ CreateNewSprite macro obj,terminate
     endm
 
 CreateNewSprite3 macro obj,terminate
-	jsr	(Create_New_Sprite3).w
+	jsr	(Create_New_Object_3).w
 	bne.s	.skip
 	move.l	#obj,address(a1)
 

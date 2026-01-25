@@ -126,7 +126,7 @@ loc_1B864:
 		movea.w	(Object_respawn_index_back).w,a3
 		subi.w	#$80,d6
 		blo.s	loc_1B8A8
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	loc_1B8A8
 
 loc_1B892:
@@ -174,7 +174,7 @@ loc_1B8D2:
 		movea.l	(Object_load_addr_front).w,a0
 		movea.w	(Object_respawn_index_front).w,a3
 		addi.w	#$280,d6
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	loc_1B8F2
 
 loc_1B8E8:
@@ -257,7 +257,7 @@ loc_1B978:
 		bhi.w	loc_1B9FA
 
 loc_1B982:
-		bsr.w	Create_New_Sprite
+		bsr.w	Create_New_Object
 		bne.s	loc_1B9FA
 		move.w	d3,d4
 		addi.w	#$80,d4
@@ -302,7 +302,7 @@ loc_1B9A4:
 		move.b	3(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
 
-		; Create_New_Sprite4
+		; Create_New_Object_4
 		subq.w	#1,d0
 		bmi.s	loc_1B9FA
 
@@ -369,7 +369,7 @@ loc_1BA64:
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 
-		; Create_New_Sprite4
+		; Create_New_Object_4
 		subq.w	#1,d0
 		bmi.s	.return
 
@@ -430,7 +430,7 @@ loc_1BAB6:
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 
-Create_New_Sprite4:
+Create_New_Object_4:
 		subq.w	#1,d0
 		bmi.s	.notfree
 

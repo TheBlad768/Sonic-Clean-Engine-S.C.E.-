@@ -217,7 +217,7 @@ Load_StarPost_Settings:
 Load_StarPost_Stars:
 		moveq	#4-1,d1
 		moveq	#0,d2
-		jsr	(Create_New_Sprite3).w
+		jsr	(Create_New_Object_3).w
 		bne.s	.return
 
 .create
@@ -239,7 +239,7 @@ Load_StarPost_Stars:
 		move.l	#words_to_long(-$400,0),x_vel(a1)
 		move.w	d2,objoff_34(a1)
 		addi.w	#256/4,d2
-		jsr	(Create_New_Sprite4).w						; find next free object slot
+		jsr	(Create_New_Object_4).w						; find next free object slot
 		dbne	d1,.create
 
 .return
@@ -349,7 +349,7 @@ loc_2D5B6:
 ; ---------------------------------------------------------------------------
 
 loc_2D5C0:
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 

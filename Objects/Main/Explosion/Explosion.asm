@@ -7,7 +7,7 @@
 Obj_Explosion:
 
 		; create animal
-		jsr	(Create_New_Sprite).w
+		jsr	(Create_New_Object).w
 		bne.s	.skipanimal
 		move.l	#Obj_Animal,address(a1)
 		move.w	x_pos(a0),x_pos(a1)
@@ -118,7 +118,7 @@ Obj_TensionBridge_Explosion:
 ; ---------------------------------------------------------------------------
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Enemy score (Object)

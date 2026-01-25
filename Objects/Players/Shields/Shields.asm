@@ -67,7 +67,7 @@ Obj_FireShield:
 ; ---------------------------------------------------------------------------
 
 .destroyunderwater
-		jsr	(Create_New_Sprite).w						; set up for a new object
+		jsr	(Create_New_Object).w						; set up for a new object
 		bne.s	.destroy							; if that can't happen, branch
 		move.l	#Obj_FireShield_Dissipate,address(a1)				; create dissipate object
 		move.w	x_pos(a0),x_pos(a1)						; put it at shields' x_pos
@@ -222,7 +222,7 @@ Obj_LightningShield_Create_Spark:
 .part2											; skip anim
 		lea	SparkVelocities(pc),a2
 		moveq	#4-1,d1
-		jsr	(Create_New_Sprite).w						; find free object slot
+		jsr	(Create_New_Object).w						; find free object slot
 		bne.s	.return								; if one can't be found, return
 
 .loop
@@ -235,7 +235,7 @@ Obj_LightningShield_Create_Spark:
 		move.l	#bytes_word_to_long(16/2,16/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)							; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
-		jsr	(Create_New_Sprite4).w						; find next free object slot
+		jsr	(Create_New_Object_4).w						; find next free object slot
 		dbne	d1,.loop
 
 .return
@@ -257,7 +257,7 @@ Obj_LightningShield_Spark:
 ; ---------------------------------------------------------------------------
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -480,7 +480,7 @@ Obj_Invincibility:
 ; ---------------------------------------------------------------------------
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 

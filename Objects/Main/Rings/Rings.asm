@@ -51,7 +51,7 @@ Obj_Ring_Collect:
 ; ---------------------------------------------------------------------------
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Bouncing ring (Object)
@@ -193,7 +193,7 @@ Obj_Bouncing_Ring_Normal:
 ; ---------------------------------------------------------------------------
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -274,7 +274,7 @@ Obj_Bouncing_Ring_TestGravity:
 ; ---------------------------------------------------------------------------
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Attracted ring (Object)
@@ -371,7 +371,7 @@ Obj_Attracted_Ring:
 		clr.w	(a2)								; clear slot
 
 .delete
-		jmp	(Delete_Current_Sprite).w
+		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
 

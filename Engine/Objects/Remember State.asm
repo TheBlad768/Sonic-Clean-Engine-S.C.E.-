@@ -28,7 +28,7 @@ Sprite_CheckDeleteTouch3:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -69,7 +69,7 @@ Sprite_CheckDelete:
 
 .delete
 		bset	#status.npc.defeated,status(a0)					; set "defeated" flag
-		move.l	#Delete_Current_Sprite,address(a0)
+		move.l	#Delete_Current_Object,address(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -101,7 +101,7 @@ Sprite_CheckDelete2:
 
 .delete
 		bset	#4,state_flags(a0)						; set "delete child object" flag
-		move.l	#Delete_Current_Sprite,address(a0)
+		move.l	#Delete_Current_Object,address(a0)
 
 .return
 		rts
@@ -134,49 +134,49 @@ Sprite_CheckDelete3:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
-		move.l	#Delete_Current_Sprite,address(a0)
+		move.l	#Delete_Current_Object,address(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDeleteXY:
-		out_of_xrange.w	Go_Delete_Sprite
+		out_of_xrange.w	Go_Delete_Object
 
 Sprite_CheckDeleteY:
-		out_of_yrange.w	Go_Delete_Sprite
+		out_of_yrange.w	Go_Delete_Object
 		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDeleteXY_NoDraw:
-		out_of_xrange.w	Go_Delete_Sprite
+		out_of_xrange.w	Go_Delete_Object
 
 Sprite_CheckDeleteY_NoDraw:
-		out_of_yrange.w	Go_Delete_Sprite
+		out_of_yrange.w	Go_Delete_Object
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_ChildCheckDeleteXY:
-		out_of_xrange.w	Go_Delete_Sprite
+		out_of_xrange.w	Go_Delete_Object
 
 Sprite_ChildCheckDeleteY:
-		out_of_yrange.w	Go_Delete_Sprite
+		out_of_yrange.w	Go_Delete_Object
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is object defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 		bra.w	Draw_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_ChildCheckDeleteXY_NoDraw:
-		out_of_xrange.w	Go_Delete_Sprite
+		out_of_xrange.w	Go_Delete_Object
 
 Sprite_ChildCheckDeleteY_NoDraw:
-		out_of_yrange.w	Go_Delete_Sprite
+		out_of_yrange.w	Go_Delete_Object
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is object defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 
 .return
 		rts
@@ -185,8 +185,8 @@ Sprite_ChildCheckDeleteY_NoDraw:
 
 Obj_FlickerMove:
 		bsr.w	MoveSprite
-		out_of_xrange.w	Go_Delete_Sprite_3
-		out_of_yrange.w	Go_Delete_Sprite_3
+		out_of_xrange.w	Go_Delete_Object_3
+		out_of_yrange.w	Go_Delete_Object_3
 		move.b	(V_int_run_count+3).w,d0
 		add.b	d7,d0								; d7 - object count (Process_Sprites)
 		andi.b	#1,d0
@@ -196,22 +196,22 @@ Obj_FlickerMove:
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_CheckDeleteTouchXY:
-		out_of_xrange.w	Go_Delete_Sprite
+		out_of_xrange.w	Go_Delete_Object
 
 Sprite_CheckDeleteTouchY:
-		out_of_yrange.w	Go_Delete_Sprite
+		out_of_yrange.w	Go_Delete_Object
 		bra.w	Draw_And_Touch_Sprite
 
 ; =============== S U B R O U T I N E =======================================
 
 Sprite_ChildCheckDeleteTouchXY:
-		out_of_xrange.w	Go_Delete_Sprite
+		out_of_xrange.w	Go_Delete_Object
 
 Sprite_ChildCheckDeleteTouchY:
-		out_of_yrange.w	Go_Delete_Sprite
+		out_of_yrange.w	Go_Delete_Object
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#status.npc.defeated,status(a1)					; is object defeated?
-		bne.w	Go_Delete_Sprite						; if yes, branch
+		bne.w	Go_Delete_Object						; if yes, branch
 		bra.w	Draw_And_Touch_Sprite
 
 ; =============== S U B R O U T I N E =======================================
@@ -232,7 +232,7 @@ Go_Delete_SpriteSlotted2:
 		bset	#status.npc.defeated,status(a0)					; set "defeated" flag
 
 Go_Delete_SpriteSlotted3:
-		move.l	#Delete_Current_Sprite,address(a0)
+		move.l	#Delete_Current_Object,address(a0)
 
 Remove_From_TrackingSlot:
 		move.b	ros_bit(a0),d0							; slot bit

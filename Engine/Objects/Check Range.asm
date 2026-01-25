@@ -444,7 +444,7 @@ Obj_IncLevEndXGradual:
 
 .end
 		move.w	(Camera_stored_max_X_pos).w,(Camera_max_X_pos).w
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -463,7 +463,7 @@ Obj_DecLevStartXGradual:
 
 .end
 		move.w	(Camera_stored_min_X_pos).w,(Camera_min_X_pos).w
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -482,7 +482,7 @@ Obj_IncLevEndYGradual:
 
 .end
 		move.w	(Camera_stored_max_Y_pos).w,(Camera_max_Y_pos).w
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -501,7 +501,7 @@ Obj_DecLevStartYGradual:
 
 .end
 		move.w	(Camera_stored_min_Y_pos).w,(Camera_min_Y_pos).w
-		bra.w	Delete_Current_Sprite
+		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 

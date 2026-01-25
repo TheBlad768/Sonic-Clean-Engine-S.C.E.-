@@ -160,7 +160,7 @@ Debug_Mode:
 .createitem
 		btst	#button_C,(Ctrl_1_pressed).w					; is button C pressed?
 		beq.s	.backtonormal							; if not, branch
-		jsr	(Create_New_Sprite).w
+		jsr	(Create_New_Object).w
 		bne.s	.backtonormal
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
