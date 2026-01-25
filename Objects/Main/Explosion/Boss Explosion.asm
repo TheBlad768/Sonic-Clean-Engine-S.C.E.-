@@ -33,7 +33,7 @@ Obj_CreateBossExplosion:
 		lea	CreateBossExpRoutineSet(pc,d0.w),a1
 		movea.l	(a1)+,a2
 		move.l	a2,address(a0)
-		move.l	(a1)+,objoff_34(a0)
+		move.l	(a1)+,jump_ptr(a0)
 		jmp	(a2)
 ; ---------------------------------------------------------------------------
 
@@ -207,7 +207,7 @@ Obj_BossExplosion1:
 
 loc_83F52:
 		move.l	#Obj_BossExplosionAnim,address(a0)
-		move.l	#Go_Delete_Sprite,objoff_34(a0)
+		move.l	#Go_Delete_Sprite,jump_ptr(a0)
 		sfx	sfx_Explode
 
 Obj_BossExplosionAnim:
@@ -227,7 +227,7 @@ Obj_BossExplosionOffset:
 		lea	ObjDat_BossExplosion1(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
-		move.l	#Go_Delete_Sprite,objoff_34(a0)
+		move.l	#Go_Delete_Sprite,jump_ptr(a0)
 		sfx	sfx_Explode
 
 .main

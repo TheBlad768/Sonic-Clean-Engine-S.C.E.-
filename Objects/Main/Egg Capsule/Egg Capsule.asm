@@ -32,7 +32,7 @@ Obj_EggCapsule:
 		; check
 		btst	#render_flags.y_flip,render_flags(a0)				; is egg capsule flipped?
 		bne.s	.flipy								; if yes, branch
-		move.l	#.normal,objoff_34(a0)
+		move.l	#.normal,jump_ptr(a0)
 
 		; create object
 		lea	Child1_EggCapsule_Button(pc),a2
@@ -51,7 +51,7 @@ Obj_EggCapsule:
 		moveq	#128/2,d0
 		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
-		move.l	#.flipped,objoff_34(a0)
+		move.l	#.flipped,jump_ptr(a0)
 		move.w	#1,objoff_3A(a0)
 		jsr	(Swing_Setup1).w
 
@@ -87,7 +87,7 @@ Obj_EggCapsule:
 .normal
 		btst	#1,objoff_38(a0)						; is button pressed?
 		beq.s	.return								; if not, branch
-		move.l	#.sonicendpose,objoff_34(a0)
+		move.l	#.Sonicendpose,jump_ptr(a0)
 
 .open
 		move.b	#1,mapping_frame(a0)						; set empty egg capsule frame
@@ -176,7 +176,7 @@ Obj_EggCapsule:
 		move.b	(Current_zone).w,d0
 		add.w	d0,d0
 		add.w	d0,d0
-		move.l	.subindex(pc,d0.w),objoff_34(a0)
+		move.l	.subindex(pc,d0.w),jump_ptr(a0)
 		bsr.w	.open
 
 .swing
@@ -257,7 +257,7 @@ Check_SonicEndPose:
 		bne.s	.return								; if yes, branch
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	.return								; if yes, branch
-		move.l	d0,objoff_34(a0)						; set routine
+		move.l	d0,jump_ptr(a0)						; set routine
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Sprite).w
 		bne.s	.return
@@ -280,7 +280,7 @@ Check_SonicEndPose_MGZ:
 		tst.b	render_flags(a1)						; player visible on the screen?
 		bpl.s	.return								; if not, branch
 		move.w	#-$100,x_vel(a0)						; left move
-		move.l	d0,objoff_34(a0)						; set routine
+		move.l	d0,jump_ptr(a0)						; set routine
 		jsr	(Create_New_Sprite).w
 		bne.s	.return
 		move.l	#Obj_LevelResults,address(a1)
