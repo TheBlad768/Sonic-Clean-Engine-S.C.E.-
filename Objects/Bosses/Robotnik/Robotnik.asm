@@ -26,7 +26,7 @@ Obj_RobotnikHead3Init:
 		; init
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#AniRaw_RobotnikHead,objoff_30(a0)
+		move.l	#AniRaw_RobotnikHead,aniraw_ptr(a0)
 
 		; check
 		movea.w	parent3(a0),a1							; a1=parent object
@@ -124,7 +124,7 @@ Obj_RobotnikShipFlame:
 
 RobotnikShipFlame_Main:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#4,objoff_38(a1)
+		btst	#4,state_flags(a1)
 		bne.s	Obj_RobotnikHead4.delete
 		jsr	(Refresh_ChildPositionAdjusted).w
 		btst	#0,(V_int_run_count+3).w
