@@ -2,7 +2,7 @@
 ; Spikes (Object)
 ; ---------------------------------------------------------------------------
 
-; Dynamic object variables
+; dynamic object variables
 spikes_base_x_pos		= objoff_30	; original x-position
 spikes_base_y_pos		= objoff_32	; original y-position
 spikes_retract_offset		= objoff_34	; actual position relative to base position

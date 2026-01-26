@@ -2,6 +2,8 @@
 ; Bubbler (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Bubbler:
@@ -137,6 +139,8 @@ Bubbler_Delete:
 ; Bubbler (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Bubbler_Bubbles:
@@ -157,7 +161,7 @@ Obj_Bubbler_Bubbles:
 .animate
 		lea	Ani_Bubbler(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
+		tst.b	routine(a0)							; changed by Animate_Sprite
 		beq.s	.rskip
 		clr.b	routine(a0)
 		move.l	#.chkwater,address(a0)
@@ -179,7 +183,7 @@ Obj_Bubbler_Bubbles:
 Bubbler_Bubbles_Display:
 		lea	Ani_Bubbler(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
+		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	Bubbler_Delete
 		tst.b	render_flags(a0)						; object visible on the screen?
 		bpl.s	Bubbler_Delete							; if not, branch

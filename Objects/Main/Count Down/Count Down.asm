@@ -2,6 +2,8 @@
 ; Small bubbles from Sonic's face while underwater
 ; ----------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AirCountdown:
@@ -183,6 +185,8 @@ loc_18676:
 ; Small bubbles from Sonic's face while underwater (Bubbles)
 ; ----------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AirCountdown_Bubbles:
@@ -201,7 +205,7 @@ Obj_AirCountdown_Bubbles:
 .animate
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
+		tst.b	routine(a0)							; changed by Animate_Sprite
 		beq.s	.chkwater
 		clr.b	routine(a0)
 		move.l	#.chkwater,address(a0)
@@ -255,7 +259,7 @@ AirCountdown_Display:
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
+		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	AirCountdown_Delete
 		bsr.w	AirCountdown_Load_Art
 		jmp	(Draw_Sprite).w
@@ -280,7 +284,7 @@ AirCountdown_AirLeft:
 AirCountdown_Display2:
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
+		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	AirCountdown_Delete
 		bsr.s	AirCountdown_Load_Art
 		tst.b	render_flags(a0)						; object visible on the screen?
@@ -295,7 +299,7 @@ AirCountdown_DisplayNumber:
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
-		tst.b	routine(a0)
+		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	AirCountdown_Delete
 		jmp	(Draw_Sprite).w
 

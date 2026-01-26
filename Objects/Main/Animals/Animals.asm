@@ -2,7 +2,7 @@
 ; Animal (Object)
 ; ---------------------------------------------------------------------------
 
-; Dynamic object variables
+; dynamic object variables
 animal_ground_x_vel				= objoff_30	; .w
 animal_ground_y_vel				= objoff_32	; .w
 animal_ground_pointer				= objoff_34	; .l

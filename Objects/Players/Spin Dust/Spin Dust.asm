@@ -2,7 +2,7 @@
 ; Dash Dust (Object)
 ; ---------------------------------------------------------------------------
 
-; Dynamic object variables
+; dynamic object variables
 dashdust_dust_timer			= objoff_36	; .b
 dashdust_tails				= objoff_38	; .b
 
