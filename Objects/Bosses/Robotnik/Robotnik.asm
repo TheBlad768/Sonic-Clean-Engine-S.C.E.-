@@ -90,18 +90,18 @@ Obj_RobotnikHead4:
 		; check
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#5,objoff_38(a1)
-		bne.s	loc_67CFE
+		bne.s	.delete
 		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.delete
+		jmp	(Delete_Current_Object).w
 ; ---------------------------------------------------------------------------
 
 RobotnikHead4_Index: offsetTable
 		offsetTableEntry.w Obj_RobotnikHead3Init				; 0
 		offsetTableEntry.w Obj_RobotnikHead3Main				; 2
 		offsetTableEntry.w Obj_RobotnikHead3End					; 4
-; ---------------------------------------------------------------------------
-
-.delete
-		jmp	(Delete_Current_Object).w
 
 ; ---------------------------------------------------------------------------
 ; Robotnik ship flame
@@ -119,7 +119,7 @@ Obj_RobotnikShipFlame:
 RobotnikShipFlame_Main:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#4,objoff_38(a1)
-		bne.s	loc_67CFE
+		bne.s	Obj_RobotnikHead4.delete
 		jsr	(Refresh_ChildPositionAdjusted).w
 		btst	#0,(V_int_run_count+3).w
 		bne.s	Obj_RobotnikHeadEnd
