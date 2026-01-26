@@ -112,7 +112,7 @@ Obj_EggCapsule:
 
 ; =============== S U B R O U T I N E =======================================
 
-.sonicendpose
+.Sonicendpose
 		tst.b	(Boss_flag).w							; boss is defeated?
 		bne.s	.return								; if not, branch
 		move.l	#.tailsendpose,d0

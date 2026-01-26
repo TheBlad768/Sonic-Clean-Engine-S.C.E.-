@@ -2,6 +2,8 @@
 ; Spikebonker (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker:
@@ -28,7 +30,7 @@ Obj_Spikebonker:
 		add.w	d1,d1
 		subq.w	#1,d1
 		move.w	d1,objoff_3A(a0)
-		move.l	#.changeside,jump(a0)
+		move.l	#.changeside,jump_ptr(a0)
 		moveq	#$40,d0
 		move.w	d0,objoff_3E(a0)
 		move.w	d0,y_vel(a0)
@@ -116,7 +118,7 @@ Obj_Spikebonker_Control:
 .notflipx
 		move.w	d0,x_vel(a0)
 		move.w	#$1F,wait_timer(a0)
-		move.l	#.loc_91B68,jump(a0)
+		move.l	#.loc_91B68,jump_ptr(a0)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
@@ -147,7 +149,7 @@ Obj_Spikebonker_Control:
 		move.l	#.loc_91B3E,address(a0)
 		neg.w	x_vel(a0)
 		move.w	#$1F,wait_timer(a0)
-		move.l	#.loc_91B56,jump(a0)
+		move.l	#.loc_91B56,jump_ptr(a0)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
