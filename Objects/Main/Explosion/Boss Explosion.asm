@@ -86,7 +86,7 @@ Obj_BossExpControl1:
 		move.b	count(a0),d0
 		bmi.s	loc_83E7E							; if negative, explosions are constantly created every three frames
 		subq.b	#1,d0
-		move.b	d0,count(a0)						; otherwise, continue making explosions until timer runs out
+		move.b	d0,count(a0)							; otherwise, continue making explosions until timer runs out
 		beq.s	loc_83EC2
 
 loc_83E7E:
@@ -133,7 +133,7 @@ loc_83EC2:
 Obj_NormalExpControl:
 
 		; wait
-		subq.b	#1,count(a0)						; same as above, but uses regular explosions (no animals of course)
+		subq.b	#1,count(a0)							; same as above, but uses regular explosions (no animals of course)
 		beq.s	loc_83EC2
 		move.w	#2,wait_timer(a0)						; wait
 
