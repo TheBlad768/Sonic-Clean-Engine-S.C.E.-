@@ -2,6 +2,8 @@
 ; Smooth Palette (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_SmoothPalette:
@@ -29,6 +31,12 @@ Obj_SmoothPalette:
 
 .return
 		rts
+
+; ---------------------------------------------------------------------------
+; Smooth Palette 2 (Object)
+; ---------------------------------------------------------------------------
+
+; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -75,6 +83,8 @@ Child6_SmoothPalette2:
 ; Fade selected to black (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FadeSelectedToBlack:
@@ -109,6 +119,8 @@ Obj_FadeSelectedToBlack:
 ; Fade selected from black (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FadeSelectedFromBlack:
@@ -139,6 +151,12 @@ Obj_FadeSelectedFromBlack:
 		bpl.s	Obj_FadeToWhite.return
 		clr.b	(Palette_rotation_disable).w
 		jmp	(Go_Delete_Object).w
+
+; ---------------------------------------------------------------------------
+; Fade selected to white (Object)
+; ---------------------------------------------------------------------------
+
+; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -177,6 +195,12 @@ Obj_FadeToWhite:
 .delete
 		clr.b	(Palette_rotation_disable).w
 		jmp	(Go_Delete_Object).w
+
+; ---------------------------------------------------------------------------
+; Fade selected from white (Object)
+; ---------------------------------------------------------------------------
+
+; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 

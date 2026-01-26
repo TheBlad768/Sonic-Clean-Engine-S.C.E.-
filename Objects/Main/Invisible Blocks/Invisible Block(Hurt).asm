@@ -4,6 +4,8 @@
 ; Set flipX to Left/Right hurt
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invisible_ShockBlock:
@@ -14,6 +16,8 @@ Obj_Invisible_ShockBlock:
 ; Invisible horizontal lava block (Object)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invisible_LavaBlock:
@@ -22,6 +26,8 @@ Obj_Invisible_LavaBlock:
 ; ---------------------------------------------------------------------------
 ; Invisible horizontal hurt block (Object)
 ; ---------------------------------------------------------------------------
+
+; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 

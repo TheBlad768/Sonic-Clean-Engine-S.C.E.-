@@ -4,6 +4,8 @@
 ; Set flipX to Left/Right kill
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invisible_KillBlock:

@@ -3,6 +3,8 @@
 ; set flipx to horizontal range
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; levels list (subtype)
 ; $00	= $000 (DEZ1)
 ; $01	= $001 (DEZ2)
