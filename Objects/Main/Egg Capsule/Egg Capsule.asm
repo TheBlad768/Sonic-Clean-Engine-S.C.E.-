@@ -64,7 +64,7 @@ Obj_EggCapsule:
 		jsr	(CreateChild1_Normal).w
 
 .main
-		movea.l	objoff_34(a0),a1
+		movea.l	jump_ptr(a0),a1
 		move.w	x_pos(a0),-(sp)
 		jsr	(a1)
 
