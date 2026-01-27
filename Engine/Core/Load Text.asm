@@ -16,10 +16,10 @@ Load_PlaneText:
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .skipvdp
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d2
+		move.l	#vdpCommDelta(planeLoc(64,0,1)),d2				; row increment value
 
 .setpos
-		move.l	d1,VDP_control_port-VDP_control_port(a5)
+		move.l	d1,VDP_control_port-VDP_control_port(a5)			; set plane address
 
 .loop
 		moveq	#0,d0
@@ -27,7 +27,7 @@ Load_PlaneText:
 		bmi.s	.options							; if minus, branch
 		add.w	d3,d0								; VRAM shift
 		move.w	d0,VDP_data_port-VDP_data_port(a6)
-		bra.s	.loop
+		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
 
 .exit
@@ -52,23 +52,23 @@ Load_PlaneText:
 
 		; set palette line
 		subi.b	#$F2,d0
-		andi.w	#3,d0
-		ror.w	#3,d0
-		andi.w	#$9FFF,d3
-		or.w	d0,d3
-		bra.s	.loop
+		andi.w	#3,d0								; only 4 lines of the palette
+		ror.w	#3,d0								; get palette line
+		andi.w	#~(palette_mask),d3						; remove palette line from VRAM shift
+		or.w	d0,d3								; set new VRAM shift
+		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
 
 .nextline
 		andi.w	#$1F,d0
 		addq.w	#1,d0
-		swap	d2
-		mulu.w	d2,d0
-		swap	d2
-		swap	d0
-		clr.w	d0
-		add.l	d0,d1
-		bra.s	.setpos
+		swap	d2								; get word from long
+		mulu.w	d2,d0								; multiply by the next line
+		swap	d2								; get long from word
+		swap	d0								; "
+		clr.w	d0								; "
+		add.l	d0,d1								; add calculated position
+		bra.s	.setpos								; next character
 ; ---------------------------------------------------------------------------
 
 .calcxpos
@@ -86,8 +86,8 @@ Load_PlaneText:
 		swap	d4
 		clr.w	d4
 		add.l	d4,d5
-		move.l	d5,VDP_control_port-VDP_control_port(a5)
-		bra.s	.loop
+		move.l	d5,VDP_control_port-VDP_control_port(a5)			; set plane address
+		bra.s	.loop								; next character
 
 ; ---------------------------------------------------------------------------
 ; Display text on the plane
@@ -131,7 +131,7 @@ Load_PlaneText_Advanced:
 
 .row
 		move.w	d2,d5								; copy vertical character size to d5
-		move.l	d1,VDP_control_port-VDP_control_port(a5)
+		move.l	d1,VDP_control_port-VDP_control_port(a5)			; set plane address
 
 .column
 		move.w	d0,VDP_data_port-VDP_data_port(a6)

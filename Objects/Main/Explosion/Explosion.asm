@@ -25,7 +25,7 @@ Obj_Explosion:
 		move.l	#.main,address(a0)
 		move.l	#Map_Explosion,mappings(a0)
 		move.w	art_tile(a0),d0
-		andi.w	#$8000,d0
+		andi.w	#high_priority,d0
 		ori.w	#ArtTile_Explosion,d0						; VRAM
 		move.w	d0,art_tile(a0)
 		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
