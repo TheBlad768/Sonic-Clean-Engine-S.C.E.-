@@ -22,8 +22,8 @@ Load_PlaneText:
 
 .loop
 		moveq	#0,d0
-		move.b	(a1)+,d0
-		bmi.s	.options
+		move.b	(a1)+,d0							; get character to d0
+		bmi.s	.options							; if minus, branch
 		add.w	d3,d0								; VRAM shift
 		move.w	d0,VDP_data_port-VDP_data_port(a6)
 		bra.s	.loop
@@ -35,11 +35,11 @@ Load_PlaneText:
 ; ---------------------------------------------------------------------------
 
 .options
-		cmpi.b	#-1,d0								; if $FF(-1) flag, stop loading letters
+		cmpi.b	#-1,d0								; if $FF(-1) flag, stop loading characters
 		beq.s	.exit
-		cmpi.b	#-2,d0								; if $FE(-2) flag, calc pos loading letters
+		cmpi.b	#-2,d0								; if $FE(-2) flag, calc pos loading characters
 		beq.s	.calcxpos
-		cmpi.b	#$A0,d0								; if $80-$9F flag, load letters to the next line
+		cmpi.b	#$A0,d0								; if $80-$9F flag, load characters to the next line
 		blo.s	.nextline
 
 		; check palette line
@@ -86,3 +86,63 @@ Load_PlaneText:
 		add.l	d4,d5
 		move.l	d5,VDP_control_port-VDP_control_port(a5)
 		bra.s	.loop
+
+; ---------------------------------------------------------------------------
+; Display text on the plane
+;
+; Inputs:
+; d1 = plane address
+; d2 = horizontal and vertical character size (size/8-1)
+; d3 = VRAM shift
+; a1 = source address
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Load_PlaneText_2:
+		disableIntsSave
+		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
+		move.w	#$8F80,VDP_control_port-VDP_control_port(a5)			; VRAM increment at $80 bytes (vertical write)
+
+		; get character size
+		move.w	d2,d6								; copy vertical character size to d6
+		addq.w	#1,d6								; dbf fix
+		swap	d2								; get horizontal character size
+		move.w	d2,d5								; copy horizontal character size to d5
+		addq.w	#1,d5								; dbf fix
+		mulu.w	d5,d6								; multiply the total number of tiles
+
+.loop
+		moveq	#0,d0
+		move.b	(a1)+,d0							; get character to d0
+		bmi.s	.exit								; if $FF(-1) flag, stop loading characters
+
+		; get character tile
+		mulu.w	d6,d0								; multiply the total number of tiles
+		add.w	d3,d0								; VRAM shift
+
+		; get character size
+		move.w	d2,d4								; copy horizontal character size to d4
+		swap	d2								; get vertical character size
+
+.row
+		move.w	d2,d5								; copy vertical character size to d5
+		move.l	d1,VDP_control_port-VDP_control_port(a5)
+
+.column
+		move.w	d0,VDP_data_port-VDP_data_port(a6)
+		addq.w	#1,d0								; next character tile
+		dbf	d5,.column							; check vertical character size end
+		addi.l	#vdpCommDelta(planeLoc(64,1,0)),d1				; next row
+		dbf	d4,.row								; check horizontal character size end
+		swap	d2								; get horizontal character size
+		bra.s	.loop								; next character
+; ---------------------------------------------------------------------------
+
+.exit
+
+		; exit
+		move.w	#$8F02,VDP_control_port-VDP_control_port(a5)			; VRAM increment at 2 bytes (draw tiles horizontally)
+		enableIntsSave
+		rts
