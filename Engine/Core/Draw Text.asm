@@ -74,18 +74,18 @@ Draw_PlaneText:
 .calcxpos
 
 		; get position
-		move.l	d1,d5
+		move.l	d1,d5								; copy plane address to d5
 
 		; calc center position
 		moveq	#0,d0
 		move.b	(a1)+,d0							; get text size (second byte parameter)
 		moveq	#screen_width/8,d4						; max 40 characters
-		sub.w	d0,d4
-		lsr.w	d4								; even value
-		add.w	d4,d4
-		swap	d4
-		clr.w	d4
-		add.l	d4,d5
+		sub.w	d0,d4								; subtract the number of characters from the screen width
+		lsr.w	d4								; get even values only
+		add.w	d4,d4								; multiply by 2
+		swap	d4								; get long from word
+		clr.w	d4								; "
+		add.l	d4,d5								; add calculated position
 		move.l	d5,VDP_control_port-VDP_control_port(a5)			; set plane address
 		bra.s	.loop								; next character
 
@@ -157,9 +157,8 @@ Draw_PlaneText_Advanced:
 		mulu.w	#$80,d0								; multiply by the next line
 		swap	d0								; get long from word
 		clr.w	d0								; "
-		move.l	(sp),d1								; get old plane address from stack
-		add.l	d0,d1								; add calculated position
-		move.l	d1,(sp)								; save new plane address to stack
+		add.l	d0,(sp)								; add calculated position to stack
+		move.l	(sp),d1								; get new plane address from stack
 		swap	d2								; get horizontal character size
 		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
