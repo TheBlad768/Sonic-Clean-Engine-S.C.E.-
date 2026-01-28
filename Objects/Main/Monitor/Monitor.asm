@@ -347,7 +347,7 @@ Monitor_Give_Fire_Shield:
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.fire_shield,status_secondary(a2)
 		move.l	#Obj_FireShield,(Shield+address).w
-		sfx	sfx_FireShield,1
+		sfx	sfx_FireShield, 1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Lightning_Shield:
@@ -363,7 +363,7 @@ Monitor_Give_Lightning_Shield:
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.lightning_shield,status_secondary(a2)
 		move.l	#Obj_LightningShield,(Shield+address).w
-		sfx	sfx_LightningShield,1
+		sfx	sfx_LightningShield, 1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Bubble_Shield:
@@ -379,7 +379,7 @@ Monitor_Give_Bubble_Shield:
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.bubble_shield,status_secondary(a2)
 		move.l	#Obj_BubbleShield,(Shield+address).w
-		sfx	sfx_BubbleShield,1
+		sfx	sfx_BubbleShield, 1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
