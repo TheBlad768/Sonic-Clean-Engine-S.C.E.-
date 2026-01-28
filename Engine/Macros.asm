@@ -517,17 +517,17 @@ QueueKosPlusModule macro art,vram,terminate
 ; ---------------------------------------------------------------------------
 
 ; load Enigma data to RAM
-EniDecomp macro data,ram,vram,palette,pri,terminate
+EniDecomp macro data,ram,vram,pal,pri,terminate
 	lea	(data).l,a0
     if ((ram)&$8000)=0
 	lea	(ram).l,a1
     else
 	lea	(ram).w,a1
     endif
-    if ((make_art_tile(vram,palette,pri))<=$7F)
-	moveq	#make_art_tile(vram,palette,pri),d0
+    if ((make_art_tile(vram,pal,pri))<=$7F)
+	moveq	#make_art_tile(vram,pal,pri),d0
     else
-	move.w	#make_art_tile(vram,palette,pri),d0
+	move.w	#make_art_tile(vram,pal,pri),d0
     endif
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Eni_Decomp).w
@@ -736,7 +736,7 @@ Add_SpriteToCollisionResponseList macro address,terminate
     endif
     endm
 
-CreateNewSprite macro obj,terminate
+CreateNewObject macro obj,terminate
 	jsr	(Create_New_Object).w
 	bne.s	.skip
 	move.l	#obj,address(a1)
@@ -747,7 +747,7 @@ CreateNewSprite macro obj,terminate
     endif
     endm
 
-CreateNewSprite3 macro obj,terminate
+CreateNewObject3 macro obj,terminate
 	jsr	(Create_New_Object_3).w
 	bne.s	.skip
 	move.l	#obj,address(a1)
@@ -755,6 +755,59 @@ CreateNewSprite3 macro obj,terminate
 .skip
     ifnb terminate
 	rts
+    endif
+    endm
+
+CreateNewObject4 macro obj,terminate
+	jsr	(Create_New_Object_4).w
+	bne.s	.skip
+	move.l	#obj,address(a1)
+
+.skip
+    ifnb terminate
+	rts
+    endif
+    endm
+
+; ---------------------------------------------------------------------------
+; macro to display text on the plane
+; ---------------------------------------------------------------------------
+
+DrawPlaneText macro source,loc,vram,pal,pri,terminate
+    ifnb source
+	lea	source(pc),a1
+    endif
+	locVRAM	loc,d1
+    if ((make_art_tile(vram,pal,pri))<=$7F)
+	moveq	#make_art_tile(vram,pal,pri),d3
+    else
+	move.w	#make_art_tile(vram,pal,pri),d3
+    endif
+    if ("terminate"="0") || ("terminate"="")
+	jsr	(Draw_PlaneText).w
+    else
+	jmp	(Draw_PlaneText).w
+    endif
+    endm
+
+DrawPlaneTextAdvanced macro source,loc,twidth,theight,vram,pal,pri,terminate
+    ifnb source
+	lea	source(pc),a1
+    endif
+	locVRAM	loc,d1
+	move.l	#words_to_long( \
+	    bytesToXcnt(((twidth)+(tile_width-1)),tile_width), \
+	    bytesToXcnt(((theight)+(tile_height-1)),tile_height) \
+	),d2
+    if ((make_art_tile(vram,pal,pri))<=$7F)
+	moveq	#make_art_tile(vram,pal,pri),d3
+    else
+	move.w	#make_art_tile(vram,pal,pri),d3
+    endif
+    if ("terminate"="0") || ("terminate"="")
+	jsr	(Draw_PlaneText_Advanced).w
+    else
+	jmp	(Draw_PlaneText_Advanced).w
     endif
     endm
 

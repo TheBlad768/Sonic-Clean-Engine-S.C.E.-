@@ -2,7 +2,7 @@
 ; Palette pointers
 ; ===========================================================================
 
-PalPointers:				; palette address, RAM address, colours
+PalPointers:				; palette address, RAM address
 
 ; Main
 PalPtr_Sonic:				palptr Pal_Sonic, 0				; 0 - Sonic

@@ -587,7 +587,7 @@ loc_236D0:
 		move.b	#$F,lrb_solid_bit(a1)
 
 loc_236E2:
-		sfx	sfx_Spring,1
+		sfx	sfx_Spring, 1
 ; ---------------------------------------------------------------------------
 
 		; data
