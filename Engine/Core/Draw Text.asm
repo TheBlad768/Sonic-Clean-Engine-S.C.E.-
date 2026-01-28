@@ -26,7 +26,7 @@ Draw_PlaneText:
 		move.b	(a1)+,d0							; get character to d0
 		bmi.s	.options							; if minus, branch
 		add.w	d3,d0								; VRAM shift
-		move.w	d0,VDP_data_port-VDP_data_port(a6)
+		move.w	d0,VDP_data_port-VDP_data_port(a6)				; draw tile to plane
 		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
 
@@ -134,7 +134,7 @@ Draw_PlaneText_Advanced:
 		move.l	d1,VDP_control_port-VDP_control_port(a5)			; set plane address
 
 .column
-		move.w	d0,VDP_data_port-VDP_data_port(a6)
+		move.w	d0,VDP_data_port-VDP_data_port(a6)				; draw tile to plane
 		addq.w	#1,d0								; next character tile
 		dbf	d5,.column							; check vertical character size end
 		addi.l	#vdpCommDelta(planeLoc(64,1,0)),d1				; next row
