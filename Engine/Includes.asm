@@ -89,10 +89,10 @@
 		include "Engine/Core/HUD Update.asm"
 
 ; ---------------------------------------------------------------------------
-; Load text on the plane module
+; Draw text on the plane module
 ; ---------------------------------------------------------------------------
 
-		include "Engine/Core/Load Text.asm"
+		include "Engine/Core/Draw Text.asm"
 
 ; ---------------------------------------------------------------------------
 ; Objects process modules

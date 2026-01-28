@@ -9,7 +9,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-Load_PlaneText:
+Draw_PlaneText:
 		disableIntsSave
 		movem.l	d4-d6,-(sp)							; save the registers to the stack
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
@@ -46,9 +46,9 @@ Load_PlaneText:
 
 		; check palette line
 		cmpi.b	#$F2,d0								; if $F2-$F5 flag, change palette line
-		blo.s	.loop
+		blo.s	.loop								; next character
 		cmpi.b	#$F5,d0
-		bhs.s	.loop
+		bhs.s	.loop								; next character
 
 		; set palette line
 		subi.b	#$F2,d0
@@ -60,8 +60,8 @@ Load_PlaneText:
 ; ---------------------------------------------------------------------------
 
 .nextline
-		andi.w	#$1F,d0
-		addq.w	#1,d0
+		andi.w	#$1F,d0								; get next line size
+		addq.w	#1,d0								; fix zero value
 		swap	d2								; get word from long
 		mulu.w	d2,d0								; multiply by the next line
 		swap	d2								; get long from word
@@ -101,7 +101,7 @@ Load_PlaneText:
 
 ; =============== S U B R O U T I N E =======================================
 
-Load_PlaneText_Advanced:
+Draw_PlaneText_Advanced:
 		disableIntsSave
 		movem.l	d1/d4-d6,-(sp)							; save the registers to the stack
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
@@ -148,8 +148,8 @@ Load_PlaneText_Advanced:
 		beq.s	.exit
 
 		; next line
-		andi.w	#$1F,d0
-		addq.w	#1,d0
+		andi.w	#$1F,d0								; get next line size
+		addq.w	#1,d0								; fix zero value
 		swap	d2								; get vertical character size
 		move.w	d2,d5								; copy horizontal character size to d5
 		addq.w	#1,d5								; dbf fix
@@ -157,9 +157,9 @@ Load_PlaneText_Advanced:
 		mulu.w	#$80,d0								; multiply by the next line
 		swap	d0								; get long from word
 		clr.w	d0								; "
-		move.l	(sp),d1								; get old position from stack
+		move.l	(sp),d1								; get old plane address from stack
 		add.l	d0,d1								; add calculated position
-		move.l	d1,(sp)								; save new position to stack
+		move.l	d1,(sp)								; save new plane address to stack
 		swap	d2								; get horizontal character size
 		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
