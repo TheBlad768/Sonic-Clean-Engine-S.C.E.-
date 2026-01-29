@@ -60,9 +60,9 @@ Pal_FromBlack:
 		adda.w	d0,a1
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour
+.nextcolor
 		bsr.s	Pal_AddColor
-		dbf	d0,.nextcolour
+		dbf	d0,.nextcolor
 
 		; check water
 		tst.b	(Water_flag).w							; does level have water?
@@ -77,9 +77,9 @@ Pal_FromBlack:
 		adda.w	d0,a1
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour2
+.nextcolor2
 		bsr.s	Pal_AddColor
-		dbf	d0,.nextcolour2
+		dbf	d0,.nextcolor2
 
 .notwater
 		rts
@@ -152,9 +152,9 @@ Pal_ToBlack:
 		adda.w	d0,a0
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour
+.nextcolor
 		bsr.s	Pal_DecColor
-		dbf	d0,.nextcolour
+		dbf	d0,.nextcolor
 
 		; check water
 		tst.b	(Water_flag).w							; does level have water?
@@ -167,9 +167,9 @@ Pal_ToBlack:
 		adda.w	d0,a0
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour2
+.nextcolor2
 		bsr.s	Pal_DecColor
-		dbf	d0,.nextcolour2
+		dbf	d0,.nextcolor2
 
 .notwater
 		rts
@@ -263,9 +263,9 @@ Pal_FromWhite:
 		adda.w	d0,a1
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour
+.nextcolor
 		bsr.s	Pal_DecColor2
-		dbf	d0,.nextcolour
+		dbf	d0,.nextcolor
 
 		; check water
 		tst.b	(Water_flag).w							; does level have water?
@@ -280,9 +280,9 @@ Pal_FromWhite:
 		adda.w	d0,a1
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour2
+.nextcolor2
 		bsr.s	Pal_DecColor2
-		dbf	d0,.nextcolour2
+		dbf	d0,.nextcolor2
 
 .notwater
 		rts
@@ -355,9 +355,9 @@ Pal_ToWhite:
 		adda.w	d0,a0
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour
+.nextcolor
 		bsr.s	Pal_AddColor2
-		dbf	d0,.nextcolour
+		dbf	d0,.nextcolor
 
 		; check water
 		tst.b	(Water_flag).w							; does level have water?
@@ -370,9 +370,9 @@ Pal_ToWhite:
 		adda.w	d0,a0
 		move.b	(Palette_fade_count).w,d0
 
-.nextcolour2
+.nextcolor2
 		bsr.s	Pal_AddColor2
-		dbf	d0,.nextcolour2
+		dbf	d0,.nextcolor2
 
 .notwater
 		rts
