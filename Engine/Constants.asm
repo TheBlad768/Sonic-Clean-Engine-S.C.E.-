@@ -359,9 +359,6 @@ collision_flags =						objoff_28					; byte ; TT SSSSSS ; TT = collision type, S
 collision_property =						objoff_29					; byte ; usage varies, bosses use it as a hit counter
 shield_reaction =						objoff_2B					; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
 subtype =							objoff_2C					; byte
-wait_timer =							objoff_2E					; word
-aniraw_ptr =							objoff_30					; long
-jump_ptr =							objoff_34					; long
 state_flags =							objoff_38					; byte
 count =								objoff_39					; byte
 circular_radius =						objoff_3A					; word
