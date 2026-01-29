@@ -410,6 +410,21 @@ top_solid_bit =							objoff_46					; byte ; the bit to check for top solidity (
 lrb_solid_bit =							objoff_47					; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
 
 ; ---------------------------------------------------------------------------
+; Conventions followed by animate raw subroutine
+; ---------------------------------------------------------------------------
+
+aniraw_frame_timer =						objoff_2E					; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
+aniraw_wait_timer =						objoff_2F					; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
+aniraw_ptr =							objoff_30					; long
+
+; ---------------------------------------------------------------------------
+; Conventions followed by object wait subroutine
+; ---------------------------------------------------------------------------
+
+wait_timer =							objoff_2E					; word
+jump_ptr =							objoff_34					; long
+
+; ---------------------------------------------------------------------------
 ; Conventions followed by some/most bosses
 ; ---------------------------------------------------------------------------
 
