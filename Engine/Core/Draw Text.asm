@@ -11,7 +11,7 @@
 
 Draw_PlaneText:
 		disableIntsSave
-		movem.l	d4-d6,-(sp)							; save the registers to the stack
+		movem.l	d2/d4-d5,-(sp)							; save the registers to the stack
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
@@ -31,7 +31,7 @@ Draw_PlaneText:
 ; ---------------------------------------------------------------------------
 
 .exit
-		movem.l	(sp)+,d4-d6							; return saved registers from the stack
+		movem.l	(sp)+,d2/d4-d5							; return saved registers from the stack
 		enableIntsSave
 		rts
 ; ---------------------------------------------------------------------------
