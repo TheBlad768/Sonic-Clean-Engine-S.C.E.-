@@ -740,17 +740,17 @@ tile_size =							VRAM_Tile_Size					; 8x8 size
 plane_size_64x32 =						VRAM_Plane_Table_Size				; 64 cells x 32 cells x 2 bytes per cell
 
 ; ---------------------------------------------------------------------------
-; Colours
+; Colors
 ; ---------------------------------------------------------------------------
 
-cBlack =							0						; colour black
-cWhite =							$EEE						; colour white
-cBlue =								$E00						; colour blue
-cGreen =							$E0						; colour green
-cRed =								$E						; colour red
-cYellow =							cGreen+cRed					; colour yellow
-cAqua =								cGreen+cBlue					; colour aqua
-cMagenta =							cBlue+cRed					; colour magenta
+cBlack =							0						; color black
+cWhite =							$EEE						; color white
+cBlue =								$E00						; color blue
+cGreen =							$E0						; color green
+cRed =								$E						; color red
+cYellow =							cGreen+cRed					; color yellow
+cAqua =								cGreen+cBlue					; color aqua
+cMagenta =							cBlue+cRed					; color magenta
 
 ; ---------------------------------------------------------------------------
 ; Art tile stuff

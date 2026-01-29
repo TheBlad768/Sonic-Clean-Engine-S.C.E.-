@@ -174,8 +174,8 @@ H_int_counter_command:					ds.b 1				; contains a command to write to VDP regist
 H_int_counter:						ds.b 1				; just the counter part of the command
 RNG_seed:						ds.l 1				; used by the random number generator
 Palette_fade_info:					= *				; both index and count (word)
-Palette_fade_index:					ds.b 1				; colour to start fading from
-Palette_fade_count:					ds.b 1				; the number of colours to fade
+Palette_fade_index:					ds.b 1				; color to start fading from
+Palette_fade_count:					ds.b 1				; the number of colors to fade
 
 ; lag variables
 Lag_frame_count:					ds.w 1				; more specifically, the number of times V-int routine 0 has run. Reset at the end of a normal frame
