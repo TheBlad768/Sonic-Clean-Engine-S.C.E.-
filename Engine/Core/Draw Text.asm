@@ -79,7 +79,7 @@ Draw_PlaneText:
 		; calc center position
 		moveq	#0,d0
 		move.b	(a1)+,d0							; get text size (second byte parameter)
-		moveq	#screen_width/8,d4						; max 40 characters
+		moveq	#screen_width/tile_width,d4					; max 40 characters
 		sub.w	d0,d4								; subtract the number of characters from the screen width
 		lsr.w	d4								; get even values only
 		add.w	d4,d4								; multiply by 2
@@ -143,9 +143,20 @@ Draw_PlaneText_Advanced:
 		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
 
+.exit
+
+		; exit
+		move.w	#$8F02,VDP_control_port-VDP_control_port(a5)			; VRAM increment at 2 bytes (draw tiles horizontally)
+		movem.l	(sp)+,d1/d4-d6							; return saved registers from the stack
+		enableIntsSave
+		rts
+; ---------------------------------------------------------------------------
+
 .options
 		cmpi.b	#-1,d0								; if $FF(-1) flag, stop loading characters
 		beq.s	.exit
+		cmpi.b	#-2,d0								; if $FE(-2) flag, calc position loading characters
+		beq.s	.calcxpos
 		cmpi.b	#$A0,d0								; if $80-$9F flag, load characters to the next line
 		blo.s	.nextline
 
@@ -164,11 +175,29 @@ Draw_PlaneText_Advanced:
 		bra.s	.loop								; next character
 ; ---------------------------------------------------------------------------
 
+.calcxpos
+
+		; calc center position
+		moveq	#0,d0
+		move.b	(a1)+,d0							; get text size (second byte parameter)
+		move.w	d2,d5								; copy horizontal character size to d5
+		addq.w	#1,d5								; dbf fix
+		moveq	#screen_width/tile_width,d4					; max 40 characters
+		mulu.w	d5,d0								; multiply by the horizontal character size
+		sub.w	d0,d4								; subtract the number of characters from the screen width
+		lsr.w	d4								; get even values only
+		add.w	d4,d4								; multiply by 2
+		swap	d4								; get long from word
+		clr.w	d4								; "
+		add.l	d4,d1								; add calculated position to d1
+		bra.s	.loop								; next character
+; ---------------------------------------------------------------------------
+
 .nextline
 		andi.w	#$1F,d0								; get next line size
 		addq.w	#1,d0								; fix zero value
 		swap	d2								; get vertical character size
-		move.w	d2,d5								; copy horizontal character size to d5
+		move.w	d2,d5								; copy vertical character size to d5
 		addq.w	#1,d5								; dbf fix
 		mulu.w	d5,d0								; multiply by the vertical character size
 		mulu.w	#$80,d0								; multiply by the next line
@@ -177,13 +206,4 @@ Draw_PlaneText_Advanced:
 		add.l	d0,(sp)								; add calculated position to stack
 		move.l	(sp),d1								; get new plane address from stack
 		swap	d2								; get horizontal character size
-		bra.s	.loop								; next character
-; ---------------------------------------------------------------------------
-
-.exit
-
-		; exit
-		move.w	#$8F02,VDP_control_port-VDP_control_port(a5)			; VRAM increment at 2 bytes (draw tiles horizontally)
-		movem.l	(sp)+,d1/d4-d6							; return saved registers from the stack
-		enableIntsSave
-		rts
+		bra.w	.loop								; next character
