@@ -180,9 +180,9 @@ Draw_PlaneText_Advanced:
 		; calc center position
 		moveq	#0,d0
 		move.b	(a1)+,d0							; get text size (second byte parameter)
+		moveq	#screen_width/tile_width,d4					; max 40 characters
 		move.w	d2,d5								; copy horizontal character size to d5
 		addq.w	#1,d5								; dbf fix
-		moveq	#screen_width/tile_width,d4					; max 40 characters
 		mulu.w	d5,d0								; multiply by the horizontal character size
 		sub.w	d0,d4								; subtract the number of characters from the screen width
 		lsr.w	d4								; get even values only
@@ -200,7 +200,7 @@ Draw_PlaneText_Advanced:
 		move.w	d2,d5								; copy vertical character size to d5
 		addq.w	#1,d5								; dbf fix
 		mulu.w	d5,d0								; multiply by the vertical character size
-		mulu.w	#$80,d0								; multiply by the next line
+		mulu.w	#(gameplay_plane_width/tile_width)*2,d0				; multiply by the next line
 		swap	d0								; get long from word
 		clr.w	d0								; "
 		add.l	d0,(sp)								; add calculated position to stack
