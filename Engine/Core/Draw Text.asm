@@ -146,8 +146,25 @@ Draw_PlaneText_Advanced:
 .options
 		cmpi.b	#-1,d0								; if $FF(-1) flag, stop loading characters
 		beq.s	.exit
+		cmpi.b	#$A0,d0								; if $80-$9F flag, load characters to the next line
+		blo.s	.nextline
 
-		; next line
+		; check palette line
+		cmpi.b	#$F2,d0								; if $F2-$F5 flag, change palette line
+		blo.s	.loop								; next character
+		cmpi.b	#$F5,d0
+		bhs.s	.loop								; next character
+
+		; set palette line
+		subi.b	#$F2,d0
+		andi.w	#3,d0								; only 4 lines of the palette
+		ror.w	#3,d0								; get palette line
+		andi.w	#~(palette_mask),d3						; remove palette line from VRAM shift
+		or.w	d0,d3								; set new VRAM shift
+		bra.s	.loop								; next character
+; ---------------------------------------------------------------------------
+
+.nextline
 		andi.w	#$1F,d0								; get next line size
 		addq.w	#1,d0								; fix zero value
 		swap	d2								; get vertical character size
