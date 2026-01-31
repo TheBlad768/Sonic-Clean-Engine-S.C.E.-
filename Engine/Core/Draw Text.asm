@@ -67,7 +67,7 @@ Draw_PlaneText:
 		swap	d2								; get long from word
 		swap	d0								; "
 		clr.w	d0								; "
-		add.l	d0,d1								; add calculated position
+		add.l	d0,d1								; add calculated position to d1
 		bra.s	.setpos								; next character
 ; ---------------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ Draw_PlaneText:
 		add.w	d4,d4								; multiply by 2
 		swap	d4								; get long from word
 		clr.w	d4								; "
-		add.l	d4,d5								; add calculated position
+		add.l	d4,d5								; add calculated position to d5
 		move.l	d5,VDP_control_port-VDP_control_port(a5)			; set plane address
 		bra.s	.loop								; next character
 
