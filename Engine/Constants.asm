@@ -675,6 +675,18 @@ respawn_addr.state =						7						; remember object state
 WindTunnel_holding_flag.player_1 =				0
 
 ; ---------------------------------------------------------------------------
+; Display text on the plane variables
+; ---------------------------------------------------------------------------
+
+draw_planetext.end =						$FF						; stop loading characters flag (1 byte)
+draw_planetext.calcxpos =					$FE						; calc center position flag (2 byte)
+draw_planetext.palette_line_0 =					$F2						; set palette line 0 flag (1 byte)
+draw_planetext.palette_line_1 =					$F3						; set palette line 1 flag (1 byte)
+draw_planetext.palette_line_2 =					$F4						; set palette line 2 flag (1 byte)
+draw_planetext.palette_line_3 =					$F5						; set palette line 3 flag (1 byte)
+draw_planetext.nextline =					$80						; next line on the plane flag (1 byte)
+
+; ---------------------------------------------------------------------------
 ; Universal (used on all standard levels)
 ; ---------------------------------------------------------------------------
 
