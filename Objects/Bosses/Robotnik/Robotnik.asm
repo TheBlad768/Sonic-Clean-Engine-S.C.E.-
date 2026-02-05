@@ -10,8 +10,8 @@ Obj_RobotnikHead3:
 		jsr	(Refresh_ChildPositionAdjusted).w
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	RobotnikHead3_Index(pc,d0.w),d1
-		jsr	RobotnikHead3_Index(pc,d1.w)
+		move.w	RobotnikHead3_Index(pc,d0.w),d0
+		jsr	RobotnikHead3_Index(pc,d0.w)
 		jmp	(Child_Draw_Sprite2).w
 ; ---------------------------------------------------------------------------
 
@@ -88,8 +88,8 @@ Obj_RobotnikHead4:
 		jsr	(Child_GetPriority).w
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		move.w	RobotnikHead4_Index(pc,d0.w),d1
-		jsr	RobotnikHead4_Index(pc,d1.w)
+		move.w	RobotnikHead4_Index(pc,d0.w),d0
+		jsr	RobotnikHead4_Index(pc,d0.w)
 
 		; check
 		movea.w	parent3(a0),a1							; a1=parent object
