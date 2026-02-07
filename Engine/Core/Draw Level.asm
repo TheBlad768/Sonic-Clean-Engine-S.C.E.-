@@ -540,7 +540,7 @@ Refresh_PlaneTileDeform:
 		cmp.w	d2,d0
 		bmi.s	.refresh
 		add.w	(a4)+,d2
-		addq.w	#4,a5		; next
+		addq.w	#4,a5								; next
 		bra.s	.find
 ; ---------------------------------------------------------------------------
 
@@ -654,7 +654,7 @@ Refresh_PlaneDirect:
 
 ; =============== S U B R O U T I N E =======================================
 
-DrawTilesAsYouMove:
+Draw_FGAsYouMove:
 
 		; update camera x scroll
 		lea	(Camera_X_pos_copy).w,a6
@@ -676,7 +676,7 @@ DrawTilesAsYouMove:
 
 ; =============== S U B R O U T I N E =======================================
 
-DrawBGAsYouMove:
+Draw_BGAsYouMove:
 
 		; update camera x scroll
 		lea	(Camera_X_pos_BG_copy).w,a6
@@ -821,7 +821,7 @@ Get_DeformDrawPosVert:
 
 ; =============== S U B R O U T I N E =======================================
 
-DrawTilesVDeform:
+Draw_FGVDeform:
 
 		; update camera x scroll
 		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
@@ -833,7 +833,7 @@ DrawTilesVDeform:
 
 		; update camera y scroll
 		move.w	(Camera_X_pos_rounded).w,d6
-		bra.s	DrawTilesVDeform2NoHorz
+		bra.s	Draw_BGVDeformNoHorz
 
 ; ---------------------------------------------------------------------------
 ; Draw VScroll background
@@ -841,7 +841,7 @@ DrawTilesVDeform:
 
 ; =============== S U B R O U T I N E =======================================
 
-DrawTilesVDeform2:
+Draw_BGVDeform:
 
 		; update camera x scroll
 		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
@@ -854,7 +854,7 @@ DrawTilesVDeform2:
 		; update camera y scroll
 		move.w	(Camera_X_pos_BG_rounded).w,d6
 
-DrawTilesVDeform2NoHorz:
+Draw_BGVDeformNoHorz:
 		move.w	d6,d1
 
 .find

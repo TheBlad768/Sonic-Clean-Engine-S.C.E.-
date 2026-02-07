@@ -2,7 +2,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-DEZ1_ScreenInit:
+DEZ1_ForegroundInit:
 
 		; copy layout to RAM
 		lea	(RAM_start+$7000).l,a1					; your free layout buffer address
