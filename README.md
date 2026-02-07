@@ -135,7 +135,7 @@ Now you can use a Python script to create Title Card mappings [S3TCG](https://gi
 
 Example of problematic code:
 
-```
+```asm
 		beq	sub_1234	; and any other branch instructions
 		bsr	sub_1234
 		bra	sub_1234
@@ -147,7 +147,7 @@ Example of problematic code:
 
 Example of correct code:
 
-```
+```asm
 		beq.s	sub_1234	; and any other branch instructions
 		bsr.s	sub_1234
 		bra.s	sub_1234
