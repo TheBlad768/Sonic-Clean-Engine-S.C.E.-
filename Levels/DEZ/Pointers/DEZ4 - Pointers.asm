@@ -12,9 +12,9 @@
 		dc.l AniPalette_DEZ							; Animate palette scripts
 
 		; Level setup
-		dc.l DEZ1_ScreenInit							; Screen init
+		dc.l DEZ1_ForegroundInit						; Foreground init
 		dc.l DEZ1_BackgroundInit						; Background init
-		dc.l DEZ1_ScreenEvent							; Screen event
+		dc.l DEZ1_ForegroundEvent						; Foreground event
 		dc.l DEZ1_BackgroundEvent						; Background event
 
 		; Animate tiles

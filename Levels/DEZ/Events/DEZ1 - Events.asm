@@ -4,7 +4,7 @@
 
 ; =============== S U B R O U T I N E =======================================
 
-DEZ1_ScreenInit:
+DEZ1_ForegroundInit:
 
 		; update FG
 		jsr	(Reset_TileOffsetPositionActual).w
@@ -12,10 +12,10 @@ DEZ1_ScreenInit:
 
 ; =============== S U B R O U T I N E =======================================
 
-DEZ1_ScreenEvent:
+DEZ1_ForegroundEvent:
 		move.w	(Screen_shaking_offset).w,d0					; shake foreground
 		add.w	d0,(Camera_Y_pos_copy).w
-		jmp	(DrawTilesAsYouMove).w
+		jmp	(Draw_FGAsYouMove).w
 
 ; =============== S U B R O U T I N E =======================================
 
