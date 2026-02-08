@@ -140,6 +140,28 @@ nop macro fill
       endif
     endm
 
+; similar function as rsset from asm68k compiler
+dsset macro addr
+current_offset_rom := *
+	phase addr
+    endm
+
+; similar function as rsreset from asm68k compiler
+dsreset macro
+	dephase
+	!org current_offset_rom
+    endm
+
+; alias rsset from asm68k compiler
+rsset macro addr
+	dsset
+    endm
+
+; alias rsreset from asm68k compiler
+rsreset macro
+	dsreset
+    endm
+
 ; alias ds as rs from asm68k compiler
 rs macro
 	ds.ATTRIBUTE ALLARGS

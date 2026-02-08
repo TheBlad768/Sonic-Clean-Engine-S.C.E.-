@@ -2,8 +2,8 @@
 ; RAM variables
 ; ===========================================================================
 
-; RAM variables - General
-	phase	ramaddr($FFFF0000)							; pretend we're in the RAM
+	dsset ramaddr($FFFF0000)							; pretend we're in the RAM
+
 RAM_start:						= *
 Chunk_table:						ds.b $100*$80			; chunk (128x128) definitions, $80 bytes per definition
 Chunk_table_end						= *
@@ -455,5 +455,4 @@ H_int_addr:						ds.l 1
 		message "The current RAM available $\{0-*} bytes."
 	endif
 
-	dephase		; stop pretending
-	!org 0		; reset the program counter
+	dsreset		; stop pretending and reset the program counter
