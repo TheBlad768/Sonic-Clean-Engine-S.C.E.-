@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 
 ; Constants
-LevelSelect_Offset:			= *
 LevelSelect_VRAM:			= 0
 
 ; Variables
@@ -19,14 +18,15 @@ LevelSelect_MaxSoundNumber:		= (sfx__Last-sfx__First)
 LevelSelect_MaxSampleNumber:		= (dac__Last-dac__First)
 
 ; RAM
-	phase ramaddr(RAM_start)
+
+	dsset ramaddr(RAM_start)							; pretend we're in the RAM
 
 LevelSelect_buffer:			ds.b $1000					; foreground buffer (copy)
 LevelSelect_buffer2:			ds.b $1000					; foreground buffer (main)
 
-	dephase
+	dsreset										; stop pretending and reset the program counter
 
-	phase ramaddr(Object_load_addr_front)
+	dsset ramaddr(Object_load_addr_front)						; pretend we're in the RAM
 
 LevelSelect_music_count:		ds.w 1
 LevelSelect_sound_count:		ds.w 1
@@ -36,8 +36,7 @@ LevelSelect_saved_act:			ds.w 1
 LevelSelect_vertical_count:		ds.w 1
 LevelSelect_horizontal_count:		ds.w $10
 
-	dephase
-	!org	LevelSelect_Offset
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
