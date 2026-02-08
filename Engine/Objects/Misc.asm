@@ -58,7 +58,7 @@ SetUp_ObjAttributesSlotted:
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
 		move.b	(a1)+,collision_flags(a0)					; collision number
-		st	ros_prev_frame(a0)							; reset DPLC frame (used by Perform_DPLC)
+		st	ros_prev_frame(a0)						; reset DPLC frame (used by Perform_DPLC)
 
 		; set
 		moveq	#2,d0
@@ -202,7 +202,7 @@ Go_CheckPlayerRelease:
 		lea	(Player_1).w,a1							; a1=character
 		btst	#status.player.on_object,status(a1)
 		beq.s	.notp1
-		movea.w	interact(a1),a0
+		movea.w	interact(a1),a0							; a0=object
 		bsr.w	CheckPlayerReleaseFromObj
 
 .notp1
@@ -286,9 +286,11 @@ HurtCharacter_Directly:
 
 EnemyDefeated:
 		bsr.s	EnemyDefeat_Score
-		movea.w	parent4(a0),a1
-		tst.w	y_vel(a1)
-		bmi.s	.bouncedown
+		movea.w	parent4(a0),a1							; a1=character
+		tst.w	y_vel(a1)							; is Sonic moving vertically?
+		bmi.s	.bouncedown							; if moving upwards, branch
+
+		; check
 		move.w	y_pos(a1),d0
 		cmp.w	y_pos(a0),d0
 		bhs.s	.bounceup
@@ -332,7 +334,7 @@ EnemyDefeat_Score:
 
 ; =============== S U B R O U T I N E =======================================
 
-HurtCharacter_WithoutDamage:
+HurtCharacter_NoDamage:
 		lea	(Player_1).w,a1							; a1=character
 		move.b	#PlayerID_Hurt,routine(a1)					; hit animation
 		bclr	#status.player.on_object,status(a1)
@@ -358,6 +360,8 @@ LaunchCharacter:
 ; =============== S U B R O U T I N E =======================================
 
 Check_PlayerAttack:
+
+		; check
 		btst	#status_secondary.invincible,status_secondary(a1)		; is character invincible?
 		bne.s	.hit								; if so, branch
 		cmpi.b	#AniIDSonAni_SpinDash,anim(a1)					; is player in their spin dash animation?
@@ -417,6 +421,8 @@ Load_LevelResults:
 		bhs.s	.return								; if yes, branch
 		bsr.s	Set_PlayerEndingPose
 		clr.b	(End_of_level_flag).w
+
+		; create
 		bsr.w	Create_New_Object
 		bne.s	.return
 		move.l	#Obj_LevelResults,address(a1)
@@ -518,6 +524,8 @@ Wait_FadeToLevelMusic:
 .end
 		bclr	#render_flags.on_screen,render_flags(a0)
 		move.w	#(2*60)-1,wait_timer(a0)
+
+		; create
 		bsr.w	Create_New_Object
 		bne.s	.notfree
 		move.l	#Obj_Song_Fade_ToLevelMusic,address(a1)
