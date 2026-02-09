@@ -7,17 +7,17 @@
 LoadLevelLoadBlock:
 
 		; load primary level art
-		movea.l	(Level_data_addr_RAM.8x8Data1).w,a1
+		movea.l	(Level_data_addr_RAM.8x8Data1).w,a1				; get primary level art to a1
 		move.w	(a1),d4								; save art size
 		moveq	#tiles_to_bytes(0),d2						; VRAM
-		bsr.w	Queue_KosPlus_Module
+		bsr.w	Queue_KosPlus_Module						; decompress and send data to VRAM
 
 		; load secondary level art
-		move.l	(Level_data_addr_RAM.8x8Data2).w,d0
-		beq.s	.waitplc
-		movea.l	d0,a1
-		move.w	d4,d2								; return art size for the starting position
-		bsr.w	Queue_KosPlus_Module
+		move.l	(Level_data_addr_RAM.8x8Data2).w,d0				; get secondary level art to d0
+		beq.s	.waitplc							; if zero, branch
+		movea.l	d0,a1								; load secondary level art to a1
+		move.w	d4,d2								; load art size for the starting position
+		bsr.w	Queue_KosPlus_Module						; decompress and send data to VRAM
 
 		; set
 		move.l	#VInt_Fade,(V_int_ptr).w					; set VInt pointer
@@ -32,7 +32,7 @@ LoadLevelLoadBlock:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Clear switches RAM
+; Clear level switches RAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -71,7 +71,7 @@ Reset_LevelData:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Solids:
-		movea.l	(Level_data_addr_RAM.SolidRAM).w,a1
+		movea.l	(Level_data_addr_RAM.SolidRAM).w,a1				; get solid pointer to a1
 
 Load_Solids2:
 		move.l	a1,(Primary_collision_addr).w
@@ -87,7 +87,9 @@ Load_Solids2:
 ; =============== S U B R O U T I N E =======================================
 
 LoadLevelLoadBlock2:
-		movea.l	(Level_data_addr_RAM.PLC1).w,a5
+
+		; load art
+		movea.l	(Level_data_addr_RAM.PLC1).w,a5					; get plc1 pointer to a5
 		bsr.w	LoadPLC_Raw_KosPlusM
 
 .skipPLC
@@ -99,17 +101,17 @@ LoadLevelLoadBlock2:
 .finddata
 
 		; load primary data
-		move.l	(a2)+,d0
-		beq.s	.nextdata
-		movea.l	d0,a0
-		movea.l	-8(a2),a1							; load address
-		bsr.w	KosPlus_Decomp
+		move.l	(a2)+,d0							; get primary data to d0
+		beq.s	.nextdata							; if zero, branch
+		movea.l	d0,a0								; load primary data to a0
+		movea.l	-8(a2),a1							; load destination (in RAM) address to a1
+		bsr.w	KosPlus_Decomp							; decompress and send data to destination (in RAM)
 
 		; load secondary data
-		move.l	(a2),d0
-		beq.s	.nextdata
-		movea.l	d0,a0
-		bsr.w	KosPlus_Decomp
+		move.l	(a2),d0								; get secondary data to d0
+		beq.s	.nextdata							; if zero, branch
+		movea.l	d0,a0								; load secondary data to a0
+		bsr.w	KosPlus_Decomp							; decompress and send data to destination (in RAM)
 
 .nextdata
 		addq.w	#4*2,a2								; next
@@ -118,7 +120,7 @@ LoadLevelLoadBlock2:
 		; load level palette
 		lea	(Level_data_addr_RAM.Palette).w,a2				; level palette
 		moveq	#0,d0
-		move.b	(a2),d0
+		move.b	(a2),d0								; get level palette id
 		bsr.w	LoadPalette							; load palette
 
 ; ---------------------------------------------------------------------------
@@ -128,7 +130,7 @@ LoadLevelLoadBlock2:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Level:
-		movea.l	(Level_data_addr_RAM.LayoutRAM).w,a1
+		movea.l	(Level_data_addr_RAM.LayoutRAM).w,a1				; get layout pointer to a1
 
 Load_Level2:
 		move.l	a1,(Level_layout_addr_ROM).w					; save to addr
@@ -143,6 +145,8 @@ Load_Level2:
 ; =============== S U B R O U T I N E =======================================
 
 LoadLevelPointer:
+
+		; calc level
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 
@@ -152,6 +156,7 @@ LoadLevelPointer:
 		lsr.w	#6,d0
 		mulu.w	#(Level_data_addr_RAM_end-Level_data_addr_RAM),d0
 	else
+
 		if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$A2
 			fatal "Warning! The buffer size is different! Your buffer is $\{Level_data_addr_RAM_end-Level_data_addr_RAM}, but it's not $A2"
 		endif
