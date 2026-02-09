@@ -30,12 +30,14 @@ Process_Objects:
 ; =============== S U B R O U T I N E =======================================
 
 .freezeobject
+
+		; check
 		cmpi.b	#PlayerID_Drown,routine(a0)					; has Sonic just drown?
-		beq.s	Process_Objects.skip						; if yes, branch
+		beq.s	.skip								; if yes, branch
 
 		; run the first objects normally
 		moveq	#bytesToXcnt(Dynamic_object_RAM-Object_RAM,object_size),d7
-		bsr.s	Process_Objects.loop
+		bsr.s	.loop
 
 		; all objects in this range are paused
 		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d7
@@ -43,7 +45,7 @@ Process_Objects:
 
 		; run the last objects normally
 		moveq	#bytesToXcnt(Object_RAM_end-Dynamic_object_RAM_end,object_size),d7
-		bra.s	Process_Objects.loop
+		bra.s	.loop
 ; ---------------------------------------------------------------------------
 
 .freezeobject_loop
