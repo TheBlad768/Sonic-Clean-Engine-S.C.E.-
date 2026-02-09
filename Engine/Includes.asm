@@ -98,7 +98,7 @@
 ; Objects process modules
 ; ---------------------------------------------------------------------------
 
-		include "Engine/Objects/Process Sprites.asm"
+		include "Engine/Objects/Process Objects.asm"
 		include "Engine/Objects/Render Sprites.asm"
 
 ; ---------------------------------------------------------------------------
