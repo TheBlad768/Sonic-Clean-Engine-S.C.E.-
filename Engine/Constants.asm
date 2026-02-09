@@ -871,9 +871,9 @@ CalcSine =							GetSineCosine					; alias from Sonic 1/2 (Hivebrain/GitHub)
 PauseGame =							Pause_Game					; alias from Sonic 1/2 (Hivebrain/GitHub)
 
 ; objects
-RunObjects =							Process_Sprites					; alias from Sonic 2 (GitHub)
-ObjectsLoad =							Process_Sprites					; alias from Sonic 1 (Hivebrain)
-ExecuteObjects =						Process_Sprites					; alias from Sonic 1 (GitHub)
+RunObjects =							Process_Objects					; alias from Sonic 2 (GitHub)
+ObjectsLoad =							Process_Objects					; alias from Sonic 1 (Hivebrain)
+ExecuteObjects =						Process_Objects					; alias from Sonic 1 (GitHub)
 BuildSprites =							Render_Sprites					; alias from Sonic 1/2 (Hivebrain/GitHub)
 AddPoints =							HUD_AddToScore					; alias from Sonic 1/2 (Hivebrain/GitHub)
 AnimateSprite =							Animate_Sprite					; alias from Sonic 1/2 (Hivebrain/GitHub)
