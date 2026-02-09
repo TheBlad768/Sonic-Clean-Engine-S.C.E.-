@@ -141,9 +141,9 @@ nop macro fill
     endm
 
 ; similar function as rsset from asm68k compiler
-dsset macro addr
+dsset macro
 current_offset_rom := *
-	phase addr
+	phase ALLARGS
     endm
 
 ; similar function as rsreset from asm68k compiler
@@ -153,8 +153,8 @@ dsreset macro
     endm
 
 ; alias rsset from asm68k compiler
-rsset macro addr
-	dsset
+rsset macro
+	dsset ALLARGS
     endm
 
 ; alias rsreset from asm68k compiler
