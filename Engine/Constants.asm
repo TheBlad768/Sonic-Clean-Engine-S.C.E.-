@@ -144,7 +144,7 @@ PlayerID_Restart =						id(ptr_Sonic_Restart)				; 8
 PlayerID_Drown =						id(ptr_Sonic_Drown)				; C
 
 ; ---------------------------------------------------------------------------
-; palette IDs
+; Palette IDs
 ; ---------------------------------------------------------------------------
 
 offset := PalPointers
