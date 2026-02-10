@@ -18,8 +18,8 @@ Animate_RawNoSSTAdjustFlipX:
 		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)						; next frame number
 		moveq	#0,d1
-		move.b	1(a1,d0.w),d1
-		bmi.s	Animate_RawNoSST.main
+		move.b	1(a1,d0.w),d1							; read mapping frame from script
+		bmi.s	Animate_RawNoSST.main						; if animation is complete, branch
 		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#render_flags.x_flip,render_flags(a0)				; change xflip
@@ -51,8 +51,8 @@ Animate_RawNoSSTAdjustFlipY:
 		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)						; next frame number
 		moveq	#0,d1
-		move.b	1(a1,d0.w),d1
-		bmi.s	Animate_RawNoSST.main
+		move.b	1(a1,d0.w),d1							; read mapping frame from script
+		bmi.s	Animate_RawNoSST.main						; if animation is complete, branch
 		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#render_flags.y_flip,render_flags(a0)				; change yflip
@@ -84,8 +84,8 @@ Animate_RawNoSST:
 		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)						; next frame number
 		moveq	#0,d1
-		move.b	1(a1,d0.w),d1
-		bmi.s	.main
+		move.b	1(a1,d0.w),d1							; read mapping frame from script
+		bmi.s	.main								; if animation is complete, branch
 		move.b	(a1),anim_frame_timer(a0)					; set anim frame timer
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 
@@ -143,7 +143,7 @@ Animate_RawNoSSTCheckResult:
 		move.b	d0,anim_frame(a0)						; next frame number
 		lea	1(a1,d0.w),a2
 		moveq	#0,d1
-		move.b	(a2)+,d1
+		move.b	(a2)+,d1							; read mapping frame from script
 		cmpi.b	#-1,d1								; is raw index flag?
 		beq.s	.main								; if yes, branch
 		move.b	(a1),anim_frame_timer(a0)					; set anim frame timer
@@ -173,6 +173,8 @@ Animate_RawNoSSTCheckResult:
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
 		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
+
+		; exit
 		moveq	#-1,d2								; end flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -187,6 +189,8 @@ Animate_RawNoSSTCheckResult:
 		move.b	1(a1),mapping_frame(a0)						; set mapping frame
 		move.b	(a1),anim_frame_timer(a0)					; set anim frame timer
 		clr.b	anim_frame(a0)							; reset anim frame
+
+		; exit
 		moveq	#-1,d2								; end flag
 		rts
 
@@ -210,8 +214,8 @@ Animate_RawNoSSTMultiDelayFlipX:
 		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)						; next frame number
 		moveq	#0,d1
-		move.b	(a1,d0.w),d1
-		bmi.s	Animate_RawNoSSTMultiDelay.main
+		move.b	(a1,d0.w),d1							; read mapping frame from script
+		bmi.s	Animate_RawNoSSTMultiDelay.main					; if animation is complete, branch
 		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#render_flags.x_flip,render_flags(a0)				; change xflip
@@ -247,8 +251,8 @@ Animate_RawNoSSTMultiDelay:
 		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)						; next frame number
 		moveq	#0,d1
-		move.b	(a1,d0.w),d1
-		bmi.s	.main
+		move.b	(a1,d0.w),d1							; read mapping frame from script
+		bmi.s	.main								; if animation is complete, branch
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 		move.b	1(a1,d0.w),anim_frame_timer(a0)					; set anim frame timer
 		moveq	#1,d2								; next frame flag
@@ -312,8 +316,8 @@ Animate_RawNoSSTMultiDelayFlipY:
 		add.b	anim_frame(a0),d0
 		move.b	d0,anim_frame(a0)						; next frame number
 		moveq	#0,d1
-		move.b	(a1,d0.w),d1
-		bmi.s	Animate_RawNoSSTMultiDelay.main
+		move.b	(a1,d0.w),d1							; read mapping frame from script
+		bmi.s	Animate_RawNoSSTMultiDelay.main					; if animation is complete, branch
 		bclr	#6,d1								; $40?
 		beq.s	.skip
 		bchg	#render_flags.y_flip,render_flags(a0)				; change yflip
@@ -350,11 +354,11 @@ Animate_Raw2NoSSTMultiDelay:
 		move.b	d0,anim_frame(a0)						; next frame number
 		lea	(a1,d0.w),a2
 		moveq	#0,d1
-		move.b	(a2)+,d1
+		move.b	(a2)+,d1							; read mapping frame from script
 		cmpi.b	#-1,d1								; is raw index flag?
 		beq.s	.main								; if yes, branch
 		move.b	d1,mapping_frame(a0)						; set mapping frame
-		move.b	1(a1,d0.w),anim_frame_timer(a0)						; set anim frame timer
+		move.b	1(a1,d0.w),anim_frame_timer(a0)					; set anim frame timer
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -424,12 +428,12 @@ Animate_RawNoSSTGetFaster:
 		move.b	aniraw_frame_timer(a0),d2
 		moveq	#1,d0
 		add.b	anim_frame(a0),d0
-		move.b	2(a1,d0.w),d1
+		move.b	2(a1,d0.w),d1							; read mapping frame from script
 		bpl.s	.next
 
 		; check flags
 		moveq	#0,d0
-		move.b	2(a1),d1
+		move.b	2(a1),d1							; read mapping frame from script
 		tst.b	d2
 		beq.s	.run
 		subq.b	#1,d2
@@ -439,6 +443,8 @@ Animate_RawNoSSTGetFaster:
 		move.b	d0,anim_frame(a0)						; set anim frame
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 		move.b	d2,anim_frame_timer(a0)						; set anim frame timer
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -496,10 +502,10 @@ Animate_RawNoSSTGetSlower:
 		move.b	aniraw_frame_timer(a0),d2
 		moveq	#1,d0
 		add.b	anim_frame(a0),d0
-		move.b	1(a1,d0.w),d1
+		move.b	1(a1,d0.w),d1							; read mapping frame from script
 		bpl.s	.next
 		moveq	#0,d0
-		move.b	1(a1),d1
+		move.b	1(a1),d1							; read mapping frame from script
 		addq.b	#1,d2
 
 .next
@@ -546,7 +552,7 @@ Animate_ExternalPlayerSprite:
 		moveq	#2,d0
 		add.b	anim_frame(a1),d0
 		move.b	d0,anim_frame(a1)						; next frame number
-		move.b	1(a2,d0.w),d1
+		move.b	1(a2,d0.w),d1							; read mapping frame from script
 		beq.s	.custom								; if animation is complete, branch
 		move.b	d1,mapping_frame(a1)						; set mapping frame
 
