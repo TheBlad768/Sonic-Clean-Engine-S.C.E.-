@@ -6,32 +6,38 @@
 
 Animate_Sprite:
 		moveq	#0,d0
-		move.b	anim(a0),d0
-		cmp.b	prev_anim(a0),d0
-		beq.s	loc_1AC00
-		move.b	d0,prev_anim(a0)
-		clr.b	anim_frame(a0)
-		clr.b	anim_frame_timer(a0)
+		move.b	anim(a0),d0							; move animation number to d0
+		cmp.b	prev_anim(a0),d0						; is animation set to change?
+		beq.s	.main								; if not, branch
+		move.b	d0,prev_anim(a0)						; set prev anim to current current
+		clr.b	anim_frame(a0)							; reset animation
+		clr.b	anim_frame_timer(a0)						; reset frame duration
 
-loc_1AC00:
-		subq.b	#1,anim_frame_timer(a0)
-		bhs.s	locret_1AC36
-		add.w	d0,d0
-		adda.w	(a1,d0.w),a1
-		move.b	(a1),anim_frame_timer(a0)
+.main
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; subtract 1 from frame duration
+		bhs.s	.return								; if time remains, branch
+		add.w	d0,d0								; multiply by 2
+		adda.w	(a1,d0.w),a1							; calculate address of appropriate animation script
+		move.b	(a1),anim_frame_timer(a0)					; set frame duration
+
+		; run
 		moveq	#0,d1
-		move.b	anim_frame(a0),d1
-		move.b	1(a1,d1.w),d0
-		bmi.s	loc_1AC38
+		move.b	anim_frame(a0),d1						; load current frame number
+		move.b	1(a1,d1.w),d0							; read mapping frame from script
+		bmi.s	.chk_end_FF							; if animation is complete, branch
 
-loc_1AC1C:
-		move.b	d0,mapping_frame(a0)
+.next
+		move.b	d0,mapping_frame(a0)						; set mapping frame
 
+		; match the orientation dictated by the object
 		moveq	#signextendB( \
 			setBit(status.npc.x_flip) | \
 			setBit(status.npc.y_flip) \
 		),d1
 
+		; with the orientation used by the object engine
 		and.b	status(a0),d1
 
 		andi.b	#~( \
@@ -40,87 +46,93 @@ loc_1AC1C:
 		),render_flags(a0)
 
 		or.b	d1,render_flags(a0)
-		addq.b	#1,anim_frame(a0)
+		addq.b	#1,anim_frame(a0)						; next frame number
 
-locret_1AC36:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1AC38:
+.chk_end_FF
 		addq.b	#1,d0								; code FF - repeat animation from beginning
-		bne.s	loc_1AC48
-		clr.b	anim_frame(a0)
-		move.b	1(a1),d0
-		bra.s	loc_1AC1C
+		bne.s	.chk_end_FE
+		clr.b	anim_frame(a0)							; restart the animation
+		move.b	1(a1),d0							; read mapping frame
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-loc_1AC48:
+.chk_end_FE
 		addq.b	#1,d0								; code FE - repeat animation from earlier point
-		bne.s	loc_1AC5C
-		move.b	2(a1,d1.w),d0
-		sub.b	d0,anim_frame(a0)
+		bne.s	.chk_end_FD
+		move.b	2(a1,d1.w),d0							; read the next byte in the script
+		sub.b	d0,anim_frame(a0)						; jump back d0 bytes in the script
 		sub.b	d0,d1
-		move.b	1(a1,d1.w),d0
-		bra.s	loc_1AC1C
+		move.b	1(a1,d1.w),d0							; read mapping frame
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-loc_1AC5C:
+.chk_end_FD
 		addq.b	#1,d0								; code FD - start new animation
-		bne.s	loc_1AC68
-		move.b	2(a1,d1.w),anim(a0)
+		bne.s	.chk_end_FC
+		move.b	2(a1,d1.w),anim(a0)						; read next byte, run that animation
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1AC68:
+.chk_end_FC
 		addq.b	#1,d0								; code FC - increment routine counter
-		bne.s	loc_1AC7A
-		addq.b	#2,routine(a0)
-		clr.b	anim_frame_timer(a0)
-		addq.b	#1,anim_frame(a0)
+		bne.s	.chk_end_FB
+		addq.b	#2,routine(a0)							; jump to next routine
+		clr.b	anim_frame_timer(a0)						; reset frame duration
+		addq.b	#1,anim_frame(a0)						; next frame number
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1AC7A:
+.chk_end_FB
 		addq.b	#1,d0								; code FB - move offscreen
-		bne.s	locret_1AC86
+		bne.s	.return
 		move.w	#$7F00,x_pos(a0)						; delete object
 		rts
-; ---------------------------------------------------------------------------
 
-locret_1AC86:
-		rts
+; ---------------------------------------------------------------------------
+; Subroutine to animate a sprite using an animation script (multi-delay)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteIrregularDelay:
 		moveq	#0,d0
-		move.b	anim(a0),d0
-		cmp.b	prev_anim(a0),d0
-		beq.s	loc_1ACA0
-		move.b	d0,prev_anim(a0)
-		clr.b	anim_frame(a0)
-		clr.b	anim_frame_timer(a0)
+		move.b	anim(a0),d0							; move animation number to d0
+		cmp.b	prev_anim(a0),d0						; is animation set to change?
+		beq.s	.main								; if not, branch
+		move.b	d0,prev_anim(a0)						; set prev anim to current current
+		clr.b	anim_frame(a0)							; reset animation
+		clr.b	anim_frame_timer(a0)						; reset frame duration
 
-loc_1ACA0:
-		subq.b	#1,anim_frame_timer(a0)
-		bhs.s	locret_1ACDA
-		add.w	d0,d0
-		adda.w	(a1,d0.w),a1
+.main
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; subtract 1 from frame duration
+		bhs.s	.return								; if time remains, branch
+		add.w	d0,d0								; multiply by 2
+		adda.w	(a1,d0.w),a1							; calculate address of appropriate animation script
+
+		; run
 		moveq	#0,d1
-		move.b	anim_frame(a0),d1
-		add.w	d1,d1
-		move.b	(a1,d1.w),d0
-		bmi.s	loc_1ACDC
+		move.b	anim_frame(a0),d1						; load current frame number
+		add.w	d1,d1								; multiply by 2
+		move.b	(a1,d1.w),d0							; read mapping frame from script
+		bmi.s	.chk_end_FF							; if animation is complete, branch
 
-loc_1ACBA:
-		move.b	1(a1,d1.w),anim_frame_timer(a0)
-		move.b	d0,mapping_frame(a0)
+.next
+		move.b	1(a1,d1.w),anim_frame_timer(a0)					; set frame duration
+		move.b	d0,mapping_frame(a0)						; set mapping frame
 
+		; match the orientation dictated by the object
 		moveq	#signextendB( \
 			setBit(status.npc.x_flip) | \
 			setBit(status.npc.y_flip) \
 		),d1
 
+		; with the orientation used by the object engine
 		and.b	status(a0),d1
 
 		andi.b	#~( \
@@ -129,149 +141,179 @@ loc_1ACBA:
 		),render_flags(a0)
 
 		or.b	d1,render_flags(a0)
-		addq.b	#1,anim_frame(a0)
+		addq.b	#1,anim_frame(a0)						; next anim frame
 
-locret_1ACDA:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1ACDC:
+.chk_end_FF
 		addq.b	#1,d0								; code FF - repeat animation from beginning
-		bne.s	loc_1ACEA
+		bne.s	.chk_end_FE
 		moveq	#0,d1
-		move.b	d1,anim_frame(a0)
-		move.b	(a1),d0
-		bra.s	loc_1ACBA
+		move.b	d1,anim_frame(a0)						; restart the animation
+		move.b	(a1),d0								; read mapping frame
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-loc_1ACEA:
+.chk_end_FE
 		addq.b	#1,d0								; code FE - repeat animation from earlier point
-		bne.s	loc_1AD00
-		move.b	1(a1,d1.w),d0
-		sub.b	d0,anim_frame(a0)
-		add.w	d0,d0
+		bne.s	.chk_end_FD
+		move.b	1(a1,d1.w),d0							; read the next byte in the script
+		sub.b	d0,anim_frame(a0)						; jump back d0 bytes in the script
+		add.w	d0,d0								; multiply by 2
 		sub.b	d0,d1
-		move.b	(a1,d1.w),d0
-		bra.s	loc_1ACBA
+		move.b	(a1,d1.w),d0							; read mapping frame
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-loc_1AD00:
+.chk_end_FD
 		addq.b	#1,d0								; code FD - start new animation
-		bne.s	loc_1AD0C
-		move.b	1(a1,d1.w),anim(a0)
+		bne.s	.chk_end_FC
+		move.b	1(a1,d1.w),anim(a0)						; read next byte, run that animation
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1AD0C:
+.chk_end_FC
 		addq.b	#1,d0								; code FC - increment routine counter
-		bne.s	locret_1AD1E
-		addq.b	#2,routine(a0)
-		clr.b	anim_frame_timer(a0)
-		addq.b	#1,anim_frame(a0)
+		bne.s	.chk_end_FB
+		addq.b	#2,routine(a0)							; jump to next routine
+		clr.b	anim_frame_timer(a0)						; reset frame duration
+		addq.b	#1,anim_frame(a0)						; next frame number
 		rts
 ; ---------------------------------------------------------------------------
 
-locret_1AD1E:
+.chk_end_FB
+		addq.b	#1,d0								; code FB - move offscreen
+		bne.s	.return
+		move.w	#$7F00,x_pos(a0)						; delete object
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to animate a sprite using an animation script (check result)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-AnimateSprite_Checked:
+Animate_SpriteChecked:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
-		beq.s	AnimChk_Run							; if not, branch
+		beq.s	.main								; if not, branch
 		move.b	d0,prev_anim(a0)						; set previous animation to current animation
 		clr.b	anim_frame(a0)							; reset animation
 		clr.b	anim_frame_timer(a0)						; reset frame duration
 
-AnimChk_Run:
+.main
+
+		; wait
 		subq.b	#1,anim_frame_timer(a0)						; subtract 1 from frame duration
-		bpl.s	AnimChk_Wait							; if time remains, branch
-		add.w	d0,d0
+		bpl.s	.exit								; if time remains, branch
+		add.w	d0,d0								; multiply by 2
 		adda.w	(a1,d0.w),a1							; calculate address of appropriate animation script
-		move.b	(a1),anim_frame_timer(a0)					; load frame duration
+		move.b	(a1),anim_frame_timer(a0)					; set frame duration
+
+		; run
 		moveq	#0,d1
 		move.b	anim_frame(a0),d1						; load current frame number
-		move.b	1(a1,d1.w),d0							; read sprite number from script
-		bmi.s	AnimChk_End_FF							; if animation is complete, branch
+		move.b	1(a1,d1.w),d0							; read mapping frame from script
+		bmi.s	.chk_end_FF							; if animation is complete, branch
 
-AnimChk_Next:
-		move.b	d0,mapping_frame(a0)						; load sprite number
+.next
+		move.b	d0,mapping_frame(a0)						; set mapping frame
 		addq.b	#1,anim_frame(a0)						; next frame number
 
-AnimChk_Wait:
-		moveq	#0,d0								; return 0
+.exit
+		moveq	#0,d0								; wait flag
 		rts
 ; ---------------------------------------------------------------------------
 
-AnimChk_End_FF:
-		addq.b	#1,d0								; is the end flag = $FF?
-		bne.s	AnimChk_End_FE							; if not, branch
+.chk_end_FF
+		addq.b	#1,d0								; code FF - repeat animation from beginning
+		bne.s	.chk_end_FE
 		clr.b	anim_frame(a0)							; restart the animation
-		move.b	1(a1),d0							; read sprite number
-		bsr.s	AnimChk_Next
-		moveq	#1,d0								; return 1
+		move.b	1(a1),d0							; read mapping frame
+		bsr.s	.next
+
+		; exit
+		moveq	#1,d0								; end flag
 		rts
 ; ---------------------------------------------------------------------------
 
-AnimChk_End_FE:
-		addq.b	#1,d0								; is the end flag = $FE?
-		bne.s	AnimChk_End_FD							; if not, branch
+.chk_end_FE
+		addq.b	#1,d0								; code FE - repeat animation from earlier point
+		bne.s	.chk_end_FD
 		addq.b	#2,routine(a0)							; jump to next routine
-		clr.b	anim_frame_timer(a0)
-		addq.b	#1,anim_frame(a0)
-		moveq	#1,d0								; return 1
+		clr.b	anim_frame_timer(a0)						; reset frame duration
+		addq.b	#1,anim_frame(a0)						; next frame number
+
+		; exit
+		moveq	#1,d0								; end flag
 		rts
 ; ---------------------------------------------------------------------------
 
-AnimChk_End_FD:
-		addq.b	#1,d0								; is the end flag = $FD?
-		bne.s	AnimChk_End_FC							; if not, branch
+.chk_end_FD
+		addq.b	#1,d0								; code FD - increment routine counter
+		bne.s	.chk_end_FC
 		addq.b	#2,routine_secondary(a0)					; jump to next routine
-		moveq	#1,d0								; return 1
+
+		; exit
+		moveq	#1,d0								; end flag
 		rts
 ; ---------------------------------------------------------------------------
 
-AnimChk_End_FC:
-		addq.b	#1,d0								; is the end flag = $FC?
-		bne.s	AnimChk_End							; if not, branch
+.chk_end_FC
+		addq.b	#1,d0								; code FC - force frame duration
+		bne.s	.return
 		move.b	#1,anim_frame_timer(a0)						; force frame duration to 1
-		moveq	#1,d0								; return 1
 
-AnimChk_End:
+		; exit
+		moveq	#1,d0								; end flag
+
+.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to animate a sprite using an animation script (adjust flipxy)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-AnimateSprite_Reverse:
+Animate_SpriteAdjustFlipXY:
 		moveq	#0,d0
-		move.b	anim(a0),d0
-		cmp.b	prev_anim(a0),d0
-		beq.s	Anim_Run
-		move.b	d0,prev_anim(a0)
-		clr.b	anim_frame(a0)
-		clr.b	anim_frame_timer(a0)
+		move.b	anim(a0),d0							; move animation number to d0
+		cmp.b	prev_anim(a0),d0						; is animation set to change?
+		beq.s	.main								; if not, branch
+		move.b	d0,prev_anim(a0)						; set prev anim to current current
+		clr.b	anim_frame(a0)							; reset animation
+		clr.b	anim_frame_timer(a0)						; reset frame duration
 
-Anim_Run:
-		subq.b	#1,anim_frame_timer(a0)
-		bhs.s	Anim_Wait
-		add.w	d0,d0
-		adda.w	(a1,d0.w),a1
-		move.b	(a1),anim_frame_timer(a0)
+.main
+
+		; wait
+		subq.b	#1,anim_frame_timer(a0)						; subtract 1 from frame duration
+		bhs.s	.return								; if time remains, branch
+		add.w	d0,d0								; multiply by 2
+		adda.w	(a1,d0.w),a1							; calculate address of appropriate animation script
+		move.b	(a1),anim_frame_timer(a0)					; set frame duration
+
+		; run
 		moveq	#0,d1
-		move.b	anim_frame(a0),d1
-		move.b	1(a1,d1.w),d0
-		bmi.s	Anim_End_FF
+		move.b	anim_frame(a0),d1						; load current frame number
+		move.b	1(a1,d1.w),d0							; read mapping frame from script
+		bmi.s	.chk_end_FF							; if animation is complete, branch
 
-Anim_Next:
+.next
 		move.b	d0,d1
-		andi.b	#$1F,d0
-		move.b	d0,mapping_frame(a0)
+		andi.b	#$1F,d0								; clear sign bit (max 32 frames)
+		move.b	d0,mapping_frame(a0)						; set mapping frame
+
+		; match the orientation dictated by the object
 		move.b	status(a0),d0
 		rol.b	#3,d1
 		eor.b	d0,d1
 
+		; with the orientation used by the object engine
 		andi.b	#( \
 			setBit(status.npc.x_flip) | \
 			setBit(status.npc.y_flip) \
@@ -283,54 +325,50 @@ Anim_Next:
 		),render_flags(a0)
 
 		or.b	d1,render_flags(a0)
-		addq.b	#1,anim_frame(a0)
+		addq.b	#1,anim_frame(a0)						; next frame number
 
-Anim_Wait:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Anim_End_FF:
+.chk_end_FF
 		addq.b	#1,d0								; code FF - repeat animation from beginning
-		bne.s	Anim_End_FE
-		clr.b	anim_frame(a0)
-		move.b	1(a1),d0
-		bra.s	Anim_Next
+		bne.s	.chk_end_FE
+		clr.b	anim_frame(a0)							; restart the animation
+		move.b	1(a1),d0							; read mapping frame
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-Anim_End_FE:
+.chk_end_FE
 		addq.b	#1,d0								; code FE - repeat animation from earlier point
-		bne.s	Anim_End_FD
-		move.b	2(a1,d1.w),d0
-		sub.b	d0,anim_frame(a0)
+		bne.s	.chk_end_FD
+		move.b	2(a1,d1.w),d0							; read the next byte in the script
+		sub.b	d0,anim_frame(a0)						; jump back d0 bytes in the script
 		sub.b	d0,d1
-		move.b	1(a1,d1.w),d0
-		bra.s	Anim_Next
+		move.b	1(a1,d1.w),d0							; read mapping frame
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-Anim_End_FD:
+.chk_end_FD
 		addq.b	#1,d0								; code FD - start new animation
-		bne.s	Anim_End_FC
-		move.b	2(a1,d1.w),anim(a0)
+		bne.s	.chk_end_FC
+		move.b	2(a1,d1.w),anim(a0)						; read next byte, run that animation
 		rts
 ; ---------------------------------------------------------------------------
 
-Anim_End_FC:
+.chk_end_FC
 		addq.b	#1,d0								; code FC - Increment routine counter
-		bne.s	Anim_End_FB
-		addq.b	#2,routine(a0)
-		clr.b	anim_frame_timer(a0)
-		addq.b	#1,anim_frame(a0)
+		bne.s	.chk_end_FB
+		addq.b	#2,routine(a0)							; jump to next routine
+		clr.b	anim_frame_timer(a0)						; reset frame duration
+		addq.b	#1,anim_frame(a0)						; next frame number
 		rts
 ; ---------------------------------------------------------------------------
 
-Anim_End_FB:
+.chk_end_FB
 		addq.b	#1,d0								; code FB - move offscreen
-		bne.s	Anim_End
+		bne.s	.return
 		move.w	#$7F00,x_pos(a0)						; delete object
-		rts
-; ---------------------------------------------------------------------------
-
-Anim_End:
 		rts
 
 ; ---------------------------------------------------------------------------
