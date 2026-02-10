@@ -112,7 +112,7 @@ Set_IndexedVelocity:
 		move.b	subtype(a0),d1
 		add.w	d1,d1								; multiply by 2
 		add.w	d1,d0
-		move.l	Obj_VelocityIndex(pc,d0.w),x_vel(a0)
+		move.l	.index(pc,d0.w),x_vel(a0)
 		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.return
 		neg.w	x_vel(a0)
@@ -121,7 +121,7 @@ Set_IndexedVelocity:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_VelocityIndex:
+.index
 		dc.w -$100, -$100	; 0
 		dc.w $100, -$100	; 4
 		dc.w -$200, -$200	; 8
