@@ -11,12 +11,9 @@
 
 Draw_PlaneText:
 		disableIntsSave
-		movem.l	d2/d4-d5,-(sp)							; save the registers to the stack
+		movem.l	d4-d5,-(sp)							; save the registers to the stack
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
-
-.skipvdp
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d2				; row increment value
 
 .setpos
 		move.l	d1,VDP_control_port-VDP_control_port(a5)			; set plane address
@@ -31,7 +28,7 @@ Draw_PlaneText:
 ; ---------------------------------------------------------------------------
 
 .exit
-		movem.l	(sp)+,d2/d4-d5							; return saved registers from the stack
+		movem.l	(sp)+,d4-d5							; return saved registers from the stack
 		enableIntsSave
 		rts
 ; ---------------------------------------------------------------------------
@@ -62,9 +59,7 @@ Draw_PlaneText:
 .nextline
 		andi.w	#$1F,d0								; get next line size
 		addq.w	#1,d0								; fix zero value
-		swap	d2								; get word from long
-		mulu.w	d2,d0								; multiply by the next line
-		swap	d2								; get long from word
+		mulu.w	#(gameplay_plane_width/tile_width)*2,d0				; multiply by the next line
 		swap	d0								; "
 		clr.w	d0								; "
 		add.l	d0,d1								; add calculated position to d1
