@@ -83,8 +83,8 @@ Perform_DPLC:
 		adda.w	(a2,d0.w),a2							; apply offset to script
 		move.w	(a2)+,d5							; get number of DMA transactions
 		bmi.s	.return								; skip if zero queues
-		move.w	art_tile(a0),d4
-		andi.w	#$7FF,d4							; isolate tile location offset
+		move.w	art_tile(a0),d4							; get art tile to d4
+		andi.w	#tile_mask,d4							; isolate tile location offset
 		lsl.w	#5,d4								; convert to VRAM address
 		moveq	#0,d3
 
