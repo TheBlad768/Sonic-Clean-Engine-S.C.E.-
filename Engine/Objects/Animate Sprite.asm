@@ -98,7 +98,7 @@ Animate_Sprite:
 
 ; =============== S U B R O U T I N E =======================================
 
-Animate_SpriteIrregularDelay:
+Animate_SpriteMultiDelay:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
