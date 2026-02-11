@@ -210,8 +210,7 @@ levartptrs macro \
 
 palptr macro ptr,lineno
 	dc.l ptr
-	dc.w (Normal_palette+lineno*palette_line_size)&$FFFF
-	dc.w bytesToLcnt(ptr_end-ptr)
+	dc.w (Normal_palette+lineno*palette_line_size)&$FFFF,bytesToLcnt(ptr_end-ptr)
     endm
 ; ---------------------------------------------------------------------------
 
