@@ -326,7 +326,7 @@ VInt_Level_Cont:
 ; =============== S U B R O U T I N E =======================================
 
 Do_Updates:
-		jsr	(UpdateHUD).w
+		jsr	(HUD_Update).w
 		clr.w	(Lag_frame_count).w
 
 		; demo
