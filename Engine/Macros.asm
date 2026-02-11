@@ -1562,7 +1562,7 @@ titlecardLetters macro opt,opt2,str
 	codepage TITLECARD
 .llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"					; letter lookup string
     if opt2
-.ignore := " "									; set to initial state
+.ignore := " "										; set to initial state
     else
 .ignore := " ZONE0"									; set to initial state
     endif
