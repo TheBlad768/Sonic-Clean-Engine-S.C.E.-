@@ -10,6 +10,7 @@ on:
       - '.editorconfig'
       - '.gitattributes'
       - '.gitignore'
+      - 'CONTRIBUTING.md'
       - 'README.md'
       - 'LICENSE'
       - '_CD/**'
