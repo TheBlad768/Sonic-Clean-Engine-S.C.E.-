@@ -1557,11 +1557,15 @@ dScroll_Data macro pixel,size,velocity,plane
 ; ---------------------------------------------------------------------------
 
 ; macro for defining title card letters in conjunction with the remapped character set
-titlecardLetters macro opt,str
+titlecardLetters macro opt,opt2,str
 	save
 	codepage TITLECARD
 .llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"					; letter lookup string
+    if opt2
+.ignore := " "									; set to initial state
+    else
 .ignore := " ZONE0"									; set to initial state
+    endif
 .used := ""										; string to store already used characters
     irpc char,.ignore
 .used := .used + "char"									; mark ignored characters as used

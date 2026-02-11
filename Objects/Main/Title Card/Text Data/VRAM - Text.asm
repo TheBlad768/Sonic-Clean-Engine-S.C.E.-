@@ -8,5 +8,6 @@ TitleCardLetters_Index: offsetTable
 		zonewarning TitleCardLetters_Index,(1*2)
 
 ; find unique letters and load it to VRAM
-TitleCard_DEZ:		titlecardLetters FALSE, "DEATH EGG"
+TitleCard_ZONE:		titlecardLetters FALSE, TRUE, "ZONE"
+TitleCard_DEZ:		titlecardLetters FALSE, FALSE, "DEATH EGG"
 	even
