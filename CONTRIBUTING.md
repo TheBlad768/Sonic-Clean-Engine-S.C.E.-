@@ -1,4 +1,4 @@
-# SONIC-CLEAN-ENGINE-S.C.E.-
+# Contribution Guide
 
 Thank you for your interest in this project. If you want to help with development, fix bugs, or update code comments, your contributions are welcome.
 
