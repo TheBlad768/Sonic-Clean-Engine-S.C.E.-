@@ -1434,19 +1434,24 @@ clearTilemap macro loc,twidth,theight,terminate
 
 ; ---------------------------------------------------------------------------
 ; macro for a pattern load request list header
-; must be on the same line as a label that has a corresponding _end label later
 ; ---------------------------------------------------------------------------
 
+; macro for a pattern load request
 plrlistheader macro {INTLABEL}
 __LABEL__ label *
-	dc.w (((__LABEL___end - __LABEL__Plc) / 6) - 1)
-__LABEL__Plc:
+plrlistcount := 0
+plrlistcur := "__LABEL__"
+	dc.w plrlistcount___LABEL__							; number of pattern load request (-1)
     endm
 
-; macro for a pattern load request
 plreq macro toVRAMaddr,fromROMaddr
 	dc.l fromROMaddr
 	dc.w tiles_to_bytes(toVRAMaddr)
+plrlistcount := plrlistcount + 1
+    endm
+
+plrlistend macro
+plrlistcount_{"\{plrlistcur}"} = plrlistcount-1
     endm
 
 ; ---------------------------------------------------------------------------

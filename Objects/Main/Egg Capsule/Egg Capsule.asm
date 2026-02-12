@@ -752,7 +752,7 @@ Child1_EggCapsule_Animals:
 PLC_EggCapsule: plrlistheader
 		plreq $494, ArtKosPM_EggCapsule
 		plreq ArtTile_Explosion, ArtKosPM_Explosion
-PLC_EggCapsule_end
+		plrlistend
 ; ---------------------------------------------------------------------------
 
 		; mappings
