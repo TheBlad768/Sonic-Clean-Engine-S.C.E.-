@@ -1173,7 +1173,7 @@ zoneanimcount := zoneanimcount + 1
 ; macros for defining water transition
 watertransheader macro {INTLABEL}
 __LABEL__ label *
-	dc.w (((__LABEL___end - __LABEL__ - 2) / 2) - 1)					; number of entries in list minus one
+	dc.w (((__LABEL___end - __LABEL__ - 2) / 2) - 1)				; number of entries in list minus one
     endm
 ; ---------------------------------------------------------------------------
 
