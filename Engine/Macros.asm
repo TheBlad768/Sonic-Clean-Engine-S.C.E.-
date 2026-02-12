@@ -1150,20 +1150,11 @@ zoneanimcur := "__LABEL__"
 	dc.w zoneanimcount___LABEL__							; number of scripts for a zone (-1)
     endm
 
-watertransheader macro {INTLABEL}
-__LABEL__ label *
-; Number of entries in list minus one
-	dc.w (((__LABEL___end - __LABEL__ - 2) / 2) - 1)
-    endm
-
 zoneanimend macro
 zoneanimcount_{"\{zoneanimcur}"} = zoneanimcount-1
     endm
 
-zoneanimdeclanonid := 0
-
 zoneanimplcdecl macro duration,artaddr,vramaddr,numentries,numvramtiles
-zoneanimdeclanonid := zoneanimdeclanonid + 1
 start:
 	dc.l (duration&$FF)<<24|dmaSource(artaddr)
 	dc.w tiles_to_bytes(vramaddr)
@@ -1172,12 +1163,17 @@ zoneanimcount := zoneanimcount + 1
     endm
 
 zoneanimpaldecl macro duration,paladdr,palram,numentries,numcolors
-zoneanimdeclanonid := zoneanimdeclanonid + 1
 start:
 	dc.l (duration&$FF)<<24|paladdr
 	dc.w ((palram)&$FFFF)
 	dc.b numentries,numcolors
 zoneanimcount := zoneanimcount + 1
+    endm
+
+; macros for defining water transition
+watertransheader macro {INTLABEL}
+__LABEL__ label *
+	dc.w (((__LABEL___end - __LABEL__ - 2) / 2) - 1)					; number of entries in list minus one
     endm
 ; ---------------------------------------------------------------------------
 
