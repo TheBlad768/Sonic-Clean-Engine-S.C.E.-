@@ -76,7 +76,7 @@ Obj_WaitForParent:
 		btst	#5,state_flags(a1)
 		bne.s	CreateBossExplosion.delete
 		tst.l	address(a1)							; is object RAM slot empty?
-		beq.s	CreateBossExplosion.delete							; if yes, branch
+		beq.s	CreateBossExplosion.delete					; if yes, branch
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
 		jmp	(Obj_Wait).w
@@ -102,7 +102,7 @@ CreateBossExplosion:
 .calc
 		jsr	(Random_Number).w						; offset the explosion by a random amount capped by an effective range
 		moveq	#0,d1
-		move.b	objoff_3A(a0),d1					; x radius
+		move.b	objoff_3A(a0),d1						; x offset range
 		move.w	d1,d2
 		add.w	d2,d2
 		subq.w	#1,d2
@@ -111,7 +111,7 @@ CreateBossExplosion:
 		add.w	d0,x_pos(a1)
 		swap	d0
 		moveq	#0,d1
-		move.b	objoff_3B(a0),d1					; y radius
+		move.b	objoff_3B(a0),d1						; y offset range
 		move.w	d1,d2
 		add.w	d2,d2
 		subq.w	#1,d2
