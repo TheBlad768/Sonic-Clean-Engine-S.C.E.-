@@ -125,7 +125,7 @@ The assembler used here is Flamewing's modified version of The Macro Assembler A
 - https://github.com/Clownacy/asl-releases
 - https://github.com/flamewing/asl-releases
 
-## Why Macro Assembler AS?
+## Why The Macro Assembler AS?
 
 <details>
 <summary>Answer</summary>
