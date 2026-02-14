@@ -114,6 +114,12 @@ Now you can use a Python script to create Title Card mappings [S3TCG](https://gi
 
 - Unfortunately, not all programs support MapMacros, so I wanted to maintain compatibility with older programs. I don't want to just throw away **SonMapEd**. But there is support for MapMacros here, and you can use it if you want.
 
+# Tutorials
+
+Here you can find tutorials for SCE:
+
+- https://github.com/TheBlad768/S.C.E.-Tutorials-
+
 ## Assembler
 
 Sonic Clean Engine (S.C.E.) is designed for use with The Macro Assembler AS:
