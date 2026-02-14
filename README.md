@@ -116,7 +116,7 @@ Now you can use a Python script to create Title Card mappings [S3TCG](https://gi
 
 # Tutorials
 
-Here you can find tutorials for SCE:
+Here you can find tutorials for Sonic Clean Engine (S.C.E.):
 
 - https://github.com/TheBlad768/S.C.E.-Tutorials-
 
