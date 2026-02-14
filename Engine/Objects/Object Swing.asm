@@ -30,14 +30,14 @@ Swing_UpAndDown_Count:
 		beq.s	.return
 		subq.b	#1,count(a0)
 		bmi.s	.end
-		moveq	#0,d0
+		moveq	#0,d0								; set flag to 0
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
 .end
-		moveq	#1,d0
+		moveq	#1,d0								; set flag to 1
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -46,7 +46,7 @@ Swing_UpAndDown:
 		move.w	objoff_40(a0),d0						; acceleration
 		move.w	y_vel(a0),d1							; velocity
 		move.w	objoff_3E(a0),d2						; maximum acceleration before "swinging"
-		moveq	#0,d3
+		moveq	#0,d3								; set flag to 0
 		btst	#0,state_flags(a0)
 		bne.s	.check
 		neg.w	d0								; apply upward acceleration
@@ -57,7 +57,7 @@ Swing_UpAndDown:
 		bset	#0,state_flags(a0)
 		neg.w	d0
 		neg.w	d2
-		moveq	#1,d3
+		moveq	#1,d3								; set flag to 1
 
 .check
 		add.w	d0,d1								; apply downward acceleration
@@ -66,7 +66,7 @@ Swing_UpAndDown:
 		bclr	#0,state_flags(a0)
 		neg.w	d0
 		add.w	d0,d1
-		moveq	#1,d3
+		moveq	#1,d3								; set flag to 1
 
 .set
 		move.w	d1,y_vel(a0)
@@ -78,7 +78,7 @@ Swing_LeftAndRight:
 		move.w	objoff_3C(a0),d0
 		move.w	x_vel(a0),d1
 		move.w	objoff_3A(a0),d2
-		moveq	#0,d3
+		moveq	#0,d3								; set flag to 0
 		btst	#3,state_flags(a0)
 		bne.s	.check
 		neg.w	d0
@@ -89,7 +89,7 @@ Swing_LeftAndRight:
 		bset	#3,state_flags(a0)
 		neg.w	d0
 		neg.w	d2
-		moveq	#1,d3
+		moveq	#1,d3								; set flag to 1
 
 .check
 		add.w	d0,d1
@@ -98,7 +98,7 @@ Swing_LeftAndRight:
 		bclr	#3,state_flags(a0)
 		neg.w	d0
 		add.w	d0,d1
-		moveq	#1,d3
+		moveq	#1,d3								; set flag to 1
 
 .set
 		move.w	d1,x_vel(a0)
@@ -106,7 +106,7 @@ Swing_LeftAndRight:
 
 ; =============== S U B R O U T I N E =======================================
 
-Swing_UpAndDown_Slow:
+Swing_UpAndDown_Simple:
 		move.b	angle(a0),d0
 		addq.b	#2,angle(a0)
 		bsr.w	GetSineCosine

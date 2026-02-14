@@ -237,8 +237,12 @@ Touch_Monitor:
 .checkfall
 
 		; this check is responsible for S&K's monitors not falling if hit from below (but only in regular gravity. see below)
+
+	if ~~MonitorFall
 		btst	#status.npc.y_flip,status(a1)					; is the monitor upside down (different way of checking)?
 		beq.s	.checkdestroy							; if not, branch
+	endif
+
 		btst	#render_flags.y_flip,render_flags(a1)				; is the monitor upside down?
 		bne.s	.monitorupsidedown						; if so, branch
 		moveq	#-16,d0								; subtract height of monitor from it
