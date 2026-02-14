@@ -74,9 +74,9 @@ CreateBossExpParameterIndex:
 Obj_WaitForParent:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#5,state_flags(a1)
-		bne.s	loc_83EC2
+		bne.s	CreateBossExplosion.delete
 		tst.l	address(a1)							; is object RAM slot empty?
-		beq.s	loc_83EC2							; if yes, branch
+		beq.s	CreateBossExplosion.delete							; if yes, branch
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
 		jmp	(Obj_Wait).w
@@ -84,23 +84,25 @@ Obj_WaitForParent:
 
 Obj_BossExpControl1:
 		move.b	count(a0),d0
-		bmi.s	loc_83E7E							; if negative, explosions are constantly created every three frames
+		bmi.s	.setwait							; if negative, explosions are constantly created every three frames
 		subq.b	#1,d0
 		move.b	d0,count(a0)							; otherwise, continue making explosions until timer runs out
-		beq.s	loc_83EC2
+		beq.s	CreateBossExplosion.delete
 
-loc_83E7E:
+.setwait
 		move.w	#2,wait_timer(a0)						; wait
 
-sub_83E84:
+; =============== S U B R O U T I N E =======================================
+
+CreateBossExplosion:
 		lea	Child6_MakeBossExplosion1(pc),a2
 		jsr	(CreateChild6_Simple).w
-		bne.s	locret_83EC0
+		bne.s	.return
 
-loc_83E90:
+.calc
 		jsr	(Random_Number).w						; offset the explosion by a random amount capped by an effective range
 		moveq	#0,d1
-		move.b	objoff_3A(a0),d1
+		move.b	objoff_3A(a0),d1					; x radius
 		move.w	d1,d2
 		add.w	d2,d2
 		subq.w	#1,d2
@@ -109,7 +111,7 @@ loc_83E90:
 		add.w	d0,x_pos(a1)
 		swap	d0
 		moveq	#0,d1
-		move.b	objoff_3B(a0),d1
+		move.b	objoff_3B(a0),d1					; y radius
 		move.w	d1,d2
 		add.w	d2,d2
 		subq.w	#1,d2
@@ -117,11 +119,11 @@ loc_83E90:
 		sub.w	d1,d0
 		add.w	d0,y_pos(a1)
 
-locret_83EC0:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_83EC2:
+.delete
 		jmp	(Go_Delete_Object).w
 
 ; ----------------------------------------------------------------------------
@@ -134,15 +136,15 @@ Obj_NormalExpControl:
 
 		; wait
 		subq.b	#1,count(a0)							; same as above, but uses regular explosions (no animals of course)
-		beq.s	loc_83EC2
+		beq.s	CreateBossExplosion.delete
 		move.w	#2,wait_timer(a0)						; wait
 
 		; create
 		lea	Child6_MakeNormalExplosion(pc),a2
 		jsr	(CreateChild6_Simple).w
-		bne.s	locret_83EC0
+		bne.s	CreateBossExplosion.return
 		bset	#high_priority_bit,art_tile(a1)					; high priority
-		bra.s	loc_83E90
+		bra.s	CreateBossExplosion.calc
 
 ; ----------------------------------------------------------------------------
 ; Boss explosions control 2
@@ -154,14 +156,14 @@ Obj_BossExpControl2:
 
 		; wait
 		subq.b	#1,count(a0)
-		beq.s	loc_83EC2
+		beq.s	CreateBossExplosion.delete
 		move.w	#2,wait_timer(a0)						; wait
 
 		; create
 		lea	Child6_MakeBossExplosion2(pc),a2
 		jsr	(CreateChild6_Simple).w
-		bne.s	locret_83EC0
-		bra.s	loc_83E90
+		bne.s	CreateBossExplosion.return
+		bra.s	CreateBossExplosion.calc
 
 ; ----------------------------------------------------------------------------
 ; Boss explosions control offset
@@ -173,14 +175,14 @@ Obj_BossExpControlOff:
 
 		; wait
 		subq.b	#1,count(a0)
-		beq.s	loc_83EC2
+		beq.s	CreateBossExplosion.delete
 		move.w	#2,wait_timer(a0)						; wait
 
 		; create
 		lea	Child6_MakeBossExplosionOff(pc),a2
 		jsr	(CreateChild6_Simple).w
-		bne.s	locret_83EC0
-		bra.w	loc_83E90
+		bne.s	CreateBossExplosion.return
+		bra.w	CreateBossExplosion.calc
 
 ; ----------------------------------------------------------------------------
 ; Boss explosions 2
@@ -193,7 +195,7 @@ Obj_BossExplosion2:
 		; init
 		lea	ObjDat_BossExplosion2(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		bra.s	loc_83F52
+		bra.s	Obj_BossExplosion1.set
 
 ; ----------------------------------------------------------------------------
 ; Boss explosions 1
@@ -207,7 +209,7 @@ Obj_BossExplosion1:
 		lea	ObjDat_BossExplosion1(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 
-loc_83F52:
+.set
 		move.l	#Obj_BossExplosionAnim,address(a0)
 		move.l	#Go_Delete_Object,jump_ptr(a0)
 		sfx	sfx_Explode
