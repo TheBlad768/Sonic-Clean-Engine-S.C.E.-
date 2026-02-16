@@ -3,11 +3,11 @@
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
-animal_ground_x_vel				= objoff_30	; .w
-animal_ground_y_vel				= objoff_32	; .w
-animal_ground_pointer				= objoff_34	; .l
+animal_ground_x_vel		= objoff_30	; .w
+animal_ground_y_vel		= objoff_32	; .w
+animal_ground_pointer		= objoff_34	; .l
 
-;						= objoff_3E	; .w
+;				= objoff_3E	; .w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -74,7 +74,7 @@ Obj_Animal:
 		lea	Child6_EndSignScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	.draw
-		move.w	objoff_3E(a0),d0
+		move.w	objoff_3E(a0),d0						; get saved chain bonus counter
 		lsr.w	d0								; division by 2
 		move.b	d0,mapping_frame(a1)
 		bra.s	.draw

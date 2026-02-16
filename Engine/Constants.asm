@@ -361,8 +361,6 @@ shield_reaction =						objoff_2B					; byte ; bit 3 = bounces off shield, bit 4 
 subtype =							objoff_2C					; byte
 state_flags =							objoff_38					; byte
 count =								objoff_39					; byte
-circular_radius =						objoff_3A					; word
-circular_angle =						objoff_3C					; byte
 ros_prev_frame =						objoff_3A					; byte
 ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
 ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
@@ -374,6 +372,38 @@ parent4 =							objoff_4A					; word
 parent3 =							objoff_4C					; word ; parent of child objects
 parent2 =							objoff_4E					; word ; several objects use this instead
 respawn_addr =							objoff_4E					; word ; the address of this object's entry in the respawn table
+
+; ---------------------------------------------------------------------------
+; Conventions followed by animate raw subroutine
+; ---------------------------------------------------------------------------
+
+aniraw_frame_timer =						objoff_2E					; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
+aniraw_wait_timer =						objoff_2F					; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
+aniraw_ptr =							objoff_30					; long
+
+; ---------------------------------------------------------------------------
+; Conventions followed by object wait subroutine
+; ---------------------------------------------------------------------------
+
+wait_timer =							objoff_2E					; word
+jump_ptr =							objoff_34					; long
+
+; ---------------------------------------------------------------------------
+; Conventions followed by movesprite circular subroutine
+; ---------------------------------------------------------------------------
+
+circular_radius =						objoff_3A					; word ; used by MoveSprite_Circular
+circular_angle =						objoff_3C					; byte
+
+; ---------------------------------------------------------------------------
+; Conventions followed by art scaling subroutine
+; ---------------------------------------------------------------------------
+
+scaling_frame =							objoff_20					; byte
+scaling_art_tile =						objoff_3A					; word
+scaling_scale_factor =						objoff_40					; byte
+scaling_scale_prev_factor =					objoff_41					; byte
+scaling_art_address =						objoff_42					; long
 
 ; ---------------------------------------------------------------------------
 ; Conventions specific to Sonic/Tails/Knuckles
@@ -408,21 +438,6 @@ default_y_radius =						objoff_44					; byte ; default value of y_radius
 default_x_radius =						objoff_45					; byte ; default value of x_radius
 top_solid_bit =							objoff_46					; byte ; the bit to check for top solidity (either $C or $E)
 lrb_solid_bit =							objoff_47					; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
-
-; ---------------------------------------------------------------------------
-; Conventions followed by animate raw subroutine
-; ---------------------------------------------------------------------------
-
-aniraw_frame_timer =						objoff_2E					; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
-aniraw_wait_timer =						objoff_2F					; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
-aniraw_ptr =							objoff_30					; long
-
-; ---------------------------------------------------------------------------
-; Conventions followed by object wait subroutine
-; ---------------------------------------------------------------------------
-
-wait_timer =							objoff_2E					; word
-jump_ptr =							objoff_34					; long
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by some/most bosses
