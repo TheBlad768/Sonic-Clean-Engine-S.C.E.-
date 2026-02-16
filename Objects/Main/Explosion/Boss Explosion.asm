@@ -4,6 +4,16 @@
 
 ; dynamic object variables
 
+	dsset count									; pretend we're in the RAM
+
+bossexplosion			= *
+
+				ds.b 1							; skip count (1 byte)
+.xoffset			ds.b 1							; (1 byte)
+.yoffset			ds.b 1							; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_BossExplosionSpecial:
@@ -29,7 +39,7 @@ Obj_CreateBossExplosion:
 		move.b	subtype(a0),d0
 		add.b	d0,d0								; multiply by 2
 		lea	CreateBossExpParameterIndex(pc,d0.w),a1
-		move.w	(a1)+,objoff_3A(a0)
+		move.w	(a1)+,bossexplosion.xoffset(a0)
 		move.b	(a1)+,count(a0)
 		move.b	(a1)+,d0
 		lea	CreateBossExpRoutineSet(pc,d0.w),a1
@@ -102,7 +112,7 @@ CreateBossExplosion:
 .calc
 		jsr	(Random_Number).w						; offset the explosion by a random amount capped by an effective range
 		moveq	#0,d1
-		move.b	objoff_3A(a0),d1						; x offset range
+		move.b	bossexplosion.xoffset(a0),d1					; x offset range
 		move.w	d1,d2
 		add.w	d2,d2
 		subq.w	#1,d2
@@ -111,7 +121,7 @@ CreateBossExplosion:
 		add.w	d0,x_pos(a1)
 		swap	d0
 		moveq	#0,d1
-		move.b	objoff_3B(a0),d1						; y offset range
+		move.b	bossexplosion.yoffset(a0),d1					; y offset range
 		move.w	d1,d2
 		add.w	d2,d2
 		subq.w	#1,d2
