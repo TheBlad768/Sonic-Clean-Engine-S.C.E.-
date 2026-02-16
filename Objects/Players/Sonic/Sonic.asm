@@ -725,14 +725,14 @@ loc_11276:
 		move.b	#2*60,scroll_delay_counter(a0)
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_112A6
-		cmpi.w	#8,(a5)
+		cmpi.w	#tile_height,(a5)
 		beq.s	loc_112FC
 		subq.w	#2,(a5)
 		bra.s	loc_112FC
 ; ---------------------------------------------------------------------------
 
 loc_112A6:
-		cmpi.w	#$D8,(a5)
+		cmpi.w	#screen_height-tile_height,(a5)
 		beq.s	loc_112FC
 		addq.w	#2,(a5)
 		bra.s	loc_112FC
@@ -748,14 +748,14 @@ loc_112B0:
 		move.b	#2*60,scroll_delay_counter(a0)
 		tst.b	(Reverse_gravity_flag).w
 		bne.s	loc_112E0
-		cmpi.w	#$C8,(a5)
+		cmpi.w	#screen_height-(block_height+tile_height),(a5)
 		beq.s	loc_112FC
 		addq.w	#2,(a5)
 		bra.s	loc_112FC
 ; ---------------------------------------------------------------------------
 
 loc_112E0:
-		cmpi.w	#$18,(a5)
+		cmpi.w	#(block_height+tile_height),(a5)
 		beq.s	loc_112FC
 		subq.w	#2,(a5)
 		bra.s	loc_112FC
@@ -765,10 +765,10 @@ loc_112EA:
 		clr.b	scroll_delay_counter(a0)
 
 loc_112F0:
-		cmpi.w	#$60,(a5)
+		cmpi.w	#(screen_height/2)-block_height,(a5)
 		beq.s	loc_112FC
 		bhs.s	loc_112FA
-		addq.w	#4,(a5)
+		addq.w	#2+2,(a5)
 
 loc_112FA:
 		subq.w	#2,(a5)
@@ -1058,10 +1058,10 @@ loc_115B4:
 		neg.w	ground_vel(a0)
 
 loc_115C6:
-		cmpi.w	#$60,(a5)
+		cmpi.w	#(screen_height/2)-block_height,(a5)
 		beq.s	loc_115D2
 		bhs.s	loc_115D0
-		addq.w	#4,(a5)
+		addq.w	#2+2,(a5)
 
 loc_115D0:
 		subq.w	#2,(a5)
@@ -1176,7 +1176,7 @@ loc_1169E:
 		move.w	d0,x_vel(a0)
 
 Sonic_Jump_ResetScr:
-		cmpi.w	#$60,(a5)							; is screen in its default position?
+		cmpi.w	#(screen_height/2)-block_height,(a5)				; is screen in its default position?
 		beq.s	Sonic_JumpPeakDecelerate					; if yes, branch
 		bhs.s	loc_116AC							; depending on the sign of the difference
 		addq.w	#2+2,(a5)							; either add 2
@@ -1640,10 +1640,10 @@ loc_11D5E:
 	endif
 
 		addq.w	#4,sp
-		cmpi.w	#$60,(a5)
+		cmpi.w	#(screen_height/2)-block_height,(a5)
 		beq.s	loc_11D6C
 		bhs.s	loc_11D6A
-		addq.w	#4,(a5)
+		addq.w	#2+2,(a5)
 
 loc_11D6A:
 		subq.w	#2,(a5)
