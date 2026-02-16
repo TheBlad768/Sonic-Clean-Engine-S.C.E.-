@@ -102,7 +102,7 @@ Debug_Mode:
 		add.l	d1,d2
 		moveq	#0,d0
 		move.w	(Camera_target_max_Y_pos).w,d0
-		addi.w	#223,d0
+		addi.w	#screen_height-1,d0
 		swap	d0
 		cmp.l	d0,d2
 		blt.s	.notdown

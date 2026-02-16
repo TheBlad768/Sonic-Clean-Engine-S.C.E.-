@@ -15,13 +15,13 @@ Render_HUD:
 		bne.s	.right								; if 2, branch
 
 .init
-		move.w	#16,HUD_RAM.xpos-HUD_RAM(a1)
-		move.w	#$80+$80+8,HUD_RAM.ypos-HUD_RAM(a1)
+		move.w	#block_width,HUD_RAM.xpos-HUD_RAM(a1)
+		move.w	#spriteScreenPositionY(screen_height/2+(block_height+tile_height)),HUD_RAM.ypos-HUD_RAM(a1)
 		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)					; set 2
 
 .right
 		addq.w	#2,HUD_RAM.xpos-HUD_RAM(a1)
-		cmpi.w	#$80+16,HUD_RAM.xpos-HUD_RAM(a1)
+		cmpi.w	#spriteScreenPositionX(16),HUD_RAM.xpos-HUD_RAM(a1)
 		bne.s	.check
 		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)					; set 3
 
@@ -32,7 +32,7 @@ Render_HUD:
 
 .left
 		subq.w	#2,HUD_RAM.xpos-HUD_RAM(a1)
-		cmpi.w	#16,HUD_RAM.xpos-HUD_RAM(a1)
+		cmpi.w	#block_width,HUD_RAM.xpos-HUD_RAM(a1)
 		bhs.s	.process
 		clr.b	HUD_RAM.status-HUD_RAM(a1)
 

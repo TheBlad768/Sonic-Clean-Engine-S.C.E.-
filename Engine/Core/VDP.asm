@@ -32,7 +32,7 @@ Init_VDP:
 		lea	VDP_register_values(pc),a1
 		bsr.s	Load_VDP							; a6 now has a VDP control address do not overwrite this register
 		move.w	VDP_register_values+2(pc),(VDP_reg_1_command).w
-		move.w	#$8A00+223,(H_int_counter_command).w
+		move.w	#$8A00+(screen_height-1),(H_int_counter_command).w
 
 		; clear data
 		lea	VDP_data_port-VDP_data_port(a6),a5				; load VDP control address to a5

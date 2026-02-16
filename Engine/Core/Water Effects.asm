@@ -35,7 +35,7 @@ Handle_Onscreen_Water_Height:
 ; ---------------------------------------------------------------------------
 
 .check
-		cmpi.w	#224-1,d0
+		cmpi.w	#screen_height-1,d0
 		blo.s	.counter
 		moveq	#-1,d0								; set 256-1
 

@@ -390,7 +390,7 @@ HInt:
 		; set
 		movem.l	a0-a1,-(sp)
 		lea	(VDP_data_port).l,a1						; load VDP data address to a1
-		move.w	#$8A00+223,VDP_control_port-VDP_data_port(a1)
+		move.w	#$8A00+(screen_height-1),VDP_control_port-VDP_data_port(a1)
 		lea	(Water_palette).w,a0
 		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_data_port(a1)
 
