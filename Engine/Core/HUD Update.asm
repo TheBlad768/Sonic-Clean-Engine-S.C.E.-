@@ -419,7 +419,7 @@ DrawTwoDigitNumber:
 ; =============== S U B R O U T I N E =======================================
 
 Get_BCD:
-		movem.l	d0/d3/a1,-(sp)
+		movem.l	d0/d3/a1,-(sp)							; save the registers to the stack
 
 		; init
 		lea	.table(pc),a1
@@ -444,7 +444,7 @@ Get_BCD:
 		or.l	d3,d1
 
 		; exit
-		movem.l	(sp)+,d0/d3/a1
+		movem.l	(sp)+,d0/d3/a1							; return saved registers from the stack
 		rts
 ; ---------------------------------------------------------------------------
 
