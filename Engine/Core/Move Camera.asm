@@ -82,7 +82,7 @@ loc_1C0D6:
 	else
 		subi.w	#(screen_width/2)-16,d0						; is the player less than 144 pixels from the screen edge?
 		blt.s	loc_1C0E8							; if he is, scroll left
-		subi.w	#16,d0								; is the player more than 159 pixels from the screen edge?
+		subi.w	#block_width,d0							; is the player more than 159 pixels from the screen edge?
 		bge.s	loc_1C0FC							; if he is, scroll right
 	endif
 
@@ -93,9 +93,9 @@ locret_1C0E6:
 ; ---------------------------------------------------------------------------
 
 loc_1C0E8:
-		cmpi.w	#-24,d0
+		cmpi.w	#-(block_width+tile_width),d0
 		bgt.s	.skip
-		moveq	#-24,d0								; limit scrolling to 24 pixels per frame
+		moveq	#-(block_width+tile_width),d0					; limit scrolling to 24 pixels per frame
 
 .skip
 		add.w	(a1),d0								; get new camera position
@@ -106,9 +106,9 @@ loc_1C0E8:
 ; ---------------------------------------------------------------------------
 
 loc_1C0FC:
-		cmpi.w	#24,d0
+		cmpi.w	#(block_width+tile_width),d0
 		blo.s	.skip2
-		moveq	#24,d0
+		moveq	#(block_width+tile_width),d0
 
 .skip2
 		add.w	(a1),d0								; get new camera position
@@ -262,9 +262,9 @@ loc_1C19E:
 
 loc_1C1B0:
 		move.w	#bytes_to_word(24,0),d1						; if player is going too fast, cap camera movement to $18 pixels per frame
-		cmpi.w	#24,d0								; is player going down too fast?
+		cmpi.w	#(block_height+tile_height),d0					; is player going down too fast?
 		bgt.s	loc_1C1FA							; if so, move camera at capped speed
-		cmpi.w	#-24,d0								; is player going up too fast?
+		cmpi.w	#-(block_height+tile_height),d0					; is player going up too fast?
 		blt.s	loc_1C1D8							; if so, move camera at capped speed
 		bra.s	loc_1C1C8							; otherwise, move camera at player's speed
 ; ---------------------------------------------------------------------------
