@@ -148,6 +148,8 @@ Animate_RawNoSSTCheckResult:
 		beq.s	.main								; if yes, branch
 		move.b	(a1),anim_frame_timer(a0)					; set anim frame timer
 		move.b	d1,mapping_frame(a0)						; set mapping frame
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -223,6 +225,8 @@ Animate_RawNoSSTMultiDelayFlipX:
 .skip
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 		move.b	1(a1,d0.w),anim_frame_timer(a0)					; set anim frame timer
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -255,6 +259,8 @@ Animate_RawNoSSTMultiDelay:
 		bmi.s	.main								; if animation is complete, branch
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 		move.b	1(a1,d0.w),anim_frame_timer(a0)					; set anim frame timer
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -279,6 +285,8 @@ Animate_RawNoSSTMultiDelay:
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
 		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
+
+		; exit
 		moveq	#-1,d2								; end flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -293,6 +301,8 @@ Animate_RawNoSSTMultiDelay:
 		move.b	(a1),mapping_frame(a0)						; set mapping frame
 		move.b	1(a1),anim_frame_timer(a0)					; set anim frame timer
 		clr.b	anim_frame(a0)							; reset anim frame
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 
@@ -325,6 +335,8 @@ Animate_RawNoSSTMultiDelayFlipY:
 .skip
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 		move.b	1(a1,d0.w),anim_frame_timer(a0)					; set anim frame timer
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -359,6 +371,8 @@ Animate_Raw2NoSSTMultiDelay:
 		beq.s	.main								; if yes, branch
 		move.b	d1,mapping_frame(a0)						; set mapping frame
 		move.b	1(a1,d0.w),anim_frame_timer(a0)					; set anim frame timer
+
+		; exit
 		moveq	#1,d2								; next frame flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -384,6 +398,8 @@ Animate_Raw2NoSSTMultiDelay:
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
 		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
+
+		; exit
 		moveq	#-1,d2								; end flag
 		rts
 ; ---------------------------------------------------------------------------
@@ -398,6 +414,8 @@ Animate_Raw2NoSSTMultiDelay:
 		move.b	(a1),mapping_frame(a0)						; set mapping frame
 		move.b	1(a1),anim_frame_timer(a0)					; set anim frame timer
 		clr.b	anim_frame(a0)							; reset anim frame
+
+		; exit
 		moveq	#-1,d2								; end flag
 		rts
 
