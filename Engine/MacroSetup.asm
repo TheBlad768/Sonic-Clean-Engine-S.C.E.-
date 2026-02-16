@@ -106,6 +106,7 @@ signextendB function val,signextend(val,8)
 roundFloatToInteger function float,INT(float+0.5)
 min function a,b,b!((a!b)&(-(a<b)))
 max function a,b,a!((a!b)&(-(a<b)))
+signedToString function number,substr("-",0,-sgn(number))+"$\{abs(number)}"
 chkop function op,ref,(substr(lowstring(op),0,strlen(ref))<>ref)
 floor function a,b,a/b
 ceil function a,b,(a+b-1)/b
