@@ -6,9 +6,9 @@
 
 Swing_Setup1:
 		move.w	#$C0,d0
-		move.w	d0,objoff_3E(a0)
-		move.w	d0,y_vel(a0)
-		move.w	#$10,objoff_40(a0)
+		move.w	d0,objoff_3E(a0)						; set maximum acceleration before "swinging"
+		move.w	d0,y_vel(a0)							; set velocity
+		move.w	#$10,objoff_40(a0)						; acceleration
 		bclr	#0,state_flags(a0)						; clear up/down swing flag
 		rts
 
@@ -16,9 +16,9 @@ Swing_Setup1:
 
 Swing_Setup2:
 		move.w	#$200,d0
-		move.w	d0,objoff_3A(a0)
-		move.w	d0,x_vel(a0)
-		move.w	#$20,objoff_3C(a0)
+		move.w	d0,objoff_3A(a0)						; set maximum acceleration before "swinging"
+		move.w	d0,x_vel(a0)							; set velocity
+		move.w	#$20,objoff_3C(a0)						; acceleration
 		bclr	#3,state_flags(a0)						; clear left/right swing flag
 		rts
 
@@ -26,6 +26,8 @@ Swing_Setup2:
 
 Swing_UpAndDown_Count:
 		bsr.s	Swing_UpAndDown
+
+.check
 		tst.w	d3
 		beq.s	.return
 		subq.b	#1,count(a0)
@@ -39,6 +41,12 @@ Swing_UpAndDown_Count:
 .end
 		moveq	#1,d0								; set flag to 1
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+Swing_LeftAndRight_Count:
+		bsr.s	Swing_LeftAndRight
+		bra.s	Swing_UpAndDown_Count.check
 
 ; =============== S U B R O U T I N E =======================================
 
