@@ -114,7 +114,7 @@ CreateBossExplosion:
 		moveq	#0,d1
 		move.b	bossexplosion.xoffset(a0),d1					; x offset range
 		move.w	d1,d2
-		add.w	d2,d2
+		add.w	d2,d2								; multiply by 2
 		subq.w	#1,d2
 		and.w	d2,d0
 		sub.w	d1,d0
@@ -123,7 +123,7 @@ CreateBossExplosion:
 		moveq	#0,d1
 		move.b	bossexplosion.yoffset(a0),d1					; y offset range
 		move.w	d1,d2
-		add.w	d2,d2
+		add.w	d2,d2								; multiply by 2
 		subq.w	#1,d2
 		and.w	d2,d0
 		sub.w	d1,d0
