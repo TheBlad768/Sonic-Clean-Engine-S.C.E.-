@@ -4,6 +4,14 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+spikebonker			= *
+
+.delay				ds.w 1							; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker:
@@ -15,6 +23,9 @@ Obj_Spikebonker:
 		lea	ObjDat_Spikebonker(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		move.l	#.main,address(a0)
+		move.l	#.changeside,jump_ptr(a0)
+
+		; set xvel
 		moveq	#signextendB($80),d0
 		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
@@ -22,20 +33,25 @@ Obj_Spikebonker:
 
 .notflipx
 		move.w	d0,x_vel(a0)
+
+		; set wait
 		moveq	#0,d0
 		move.b	subtype(a0),d0
 		move.w	d0,d1
 		subq.w	#1,d0
 		move.w	d0,wait_timer(a0)
-		add.w	d1,d1
+		add.w	d1,d1								; multiply by 2
 		subq.w	#1,d1
-		move.w	d1,objoff_3A(a0)
-		move.l	#.changeside,jump_ptr(a0)
+		move.w	d1,spikebonker.delay(a0)
+
+		; swing setup
 		moveq	#$40,d0
 		move.w	d0,objoff_3E(a0)
 		move.w	d0,y_vel(a0)
 		move.w	#4,objoff_40(a0)
-		bclr	#0,state_flags(a0)						; clear swing flag
+		bclr	#0,state_flags(a0)						; clear up/down swing flag
+
+		; create
 		lea	ChildObjDat_Spikebonker_Control(pc),a2
 		jsr	(CreateChild1_Normal).w
 		jmp	(Sprite_CheckDeleteTouch).w
@@ -70,7 +86,7 @@ Obj_Spikebonker:
 .changeside
 		neg.w	x_vel(a0)
 		bchg	#render_flags.x_flip,render_flags(a0)
-		move.w	objoff_3A(a0),wait_timer(a0)
+		move.w	spikebonker.delay(a0),wait_timer(a0)
 		jmp	(Sprite_CheckDeleteTouch).w
 ; ---------------------------------------------------------------------------
 
@@ -91,14 +107,16 @@ Obj_Spikebonker:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker_Control:
-		lea	ChildObjDat_Spikebonker_Spike(pc),a2
-		jsr	(CreateChild6_Simple).w
 		move.l	#.main,address(a0)
+
+		; create spikeball
+		lea	ChildObjDat_Spikebonker_SpikeBall(pc),a2
+		jsr	(CreateChild6_Simple).w
 
 .main
 		jsr	(Refresh_ChildPositionAdjusted).w
-		movea.w	parent4(a0),a1							; spikeball
-		move.b	objoff_3C(a1),d0						; angle
+		movea.w	parent4(a0),a1							; a1=parent object (spikeball)
+		move.b	circular_angle(a1),d0						; angle
 		bne.s	.loc_91B08
 		movea.w	parent3(a0),a2							; a2=parent object (spikebonker)
 		btst	#3,state_flags(a2)						; check attack flag
@@ -106,7 +124,7 @@ Obj_Spikebonker_Control:
 
 .loc_91B08
 		subq.b	#8,d0
-		move.b	d0,objoff_3C(a1)
+		move.b	d0,circular_angle(a1)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
@@ -138,12 +156,12 @@ Obj_Spikebonker_Control:
 ; ---------------------------------------------------------------------------
 
 .loc_91B70
-		movea.w	parent4(a0),a1
-		move.b	objoff_3C(a1),d0						; angle
+		movea.w	parent4(a0),a1							; a1=parent object (spikeball)
+		move.b	circular_angle(a1),d0						; angle
 		cmpi.b	#$80,d0
 		beq.s	.loc_91B8A
 		subq.b	#8,d0
-		move.b	d0,objoff_3C(a1)
+		move.b	d0,circular_angle(a1)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
@@ -175,11 +193,11 @@ Obj_Spikebonker_SpikeBall:
 		lea	ObjDat3_Spikebonker_SpikeBall(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		movea.w	parent3(a0),a1							; a1=parent object (spikebonker)
-		move.w	a0,parent4(a1)							; save spikeball address to parent4
+		move.w	a0,parent4(a1)							; save spikeball address to parent4 (control)
 		move.l	#.main,address(a0)
 
 .main
-		move.b	objoff_3C(a0),d0						; angle
+		move.b	circular_angle(a0),d0						; angle
 		bsr.s	.findangle
 		move.w	#priority_4,d1							; high priority
 		addi.b	#$40,d0
@@ -200,7 +218,7 @@ Obj_Spikebonker_SpikeBall:
 		lea	.data(pc,d1.w),a1
 		cmp.b	(a1)+,d0
 		bls.s	.found
-		addq.w	#2,d1
+		addq.w	#2,d1								; next
 		bra.s	.find
 ; ---------------------------------------------------------------------------
 
@@ -227,7 +245,7 @@ ChildObjDat_Spikebonker_Control:
 		dc.w 1-1
 		dc.l Obj_Spikebonker_Control
 		dc.b 0, 20
-ChildObjDat_Spikebonker_Spike:
+ChildObjDat_Spikebonker_SpikeBall:
 		dc.w 1-1
 		dc.l Obj_Spikebonker_SpikeBall
 ; ---------------------------------------------------------------------------

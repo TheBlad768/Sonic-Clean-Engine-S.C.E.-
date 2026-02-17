@@ -9,7 +9,7 @@ Swing_Setup1:
 		move.w	d0,objoff_3E(a0)
 		move.w	d0,y_vel(a0)
 		move.w	#$10,objoff_40(a0)
-		bclr	#0,state_flags(a0)
+		bclr	#0,state_flags(a0)						; clear up/down swing flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -19,7 +19,7 @@ Swing_Setup2:
 		move.w	d0,objoff_3A(a0)
 		move.w	d0,x_vel(a0)
 		move.w	#$20,objoff_3C(a0)
-		bclr	#3,state_flags(a0)
+		bclr	#3,state_flags(a0)						; clear left/right swing flag
 		rts
 
 ; =============== S U B R O U T I N E =======================================
