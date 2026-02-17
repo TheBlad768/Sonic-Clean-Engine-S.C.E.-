@@ -361,9 +361,6 @@ shield_reaction =						objoff_2B					; byte ; bit 3 = bounces off shield, bit 4 
 subtype =							objoff_2C					; byte/word
 state_flags =							objoff_38					; byte
 count =								objoff_39					; byte
-ros_prev_frame =						objoff_3A					; byte
-ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
-ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 routine_secondary =						objoff_3C					; byte ; used by monitors for this purpose at least
 child_dx =							objoff_48					; byte ; X offset of child relative to parent
 child_dy =							objoff_49					; byte ; Y offset of child relative to parent
@@ -389,11 +386,28 @@ wait_timer =							objoff_2E					; word
 jump_ptr =							objoff_34					; long
 
 ; ---------------------------------------------------------------------------
+; Conventions followed by perform DPLC subroutine
+; ---------------------------------------------------------------------------
+
+ros_prev_frame =						objoff_3A					; byte
+ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
+ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
+
+; ---------------------------------------------------------------------------
 ; Conventions followed by movesprite circular subroutine
 ; ---------------------------------------------------------------------------
 
 circular_radius =						objoff_3A					; word ; used by MoveSprite_Circular
 circular_angle =						objoff_3C					; byte
+
+; ---------------------------------------------------------------------------
+; Conventions followed by swing subroutine
+; ---------------------------------------------------------------------------
+
+swing_xmax =							objoff_3A					; word
+swing_xacc =							objoff_3C					; word
+swing_ymax =							objoff_3E					; word
+swing_yacc =							objoff_40					; word
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by art scaling subroutine
