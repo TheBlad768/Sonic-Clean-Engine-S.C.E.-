@@ -346,7 +346,7 @@ prev_anim =							objoff_21					; byte ; when this isn't equal to anim the anima
 next_anim =							prev_anim					; byte ; when this isn't equal to anim the animation restarts
 anim_frame =							objoff_23					; byte
 anim_frame_timer =						objoff_24					; byte
-angle =								objoff_26					; byte ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
+angle =								objoff_26					; byte/word ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
 status =							objoff_2A					; bitfield ; refer to SCHG for details
 
 ; ---------------------------------------------------------------------------
@@ -358,7 +358,7 @@ y_pixel =							y_pos						; word ; y-coordinate for objects using screen positi
 collision_flags =						objoff_28					; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
 collision_property =						objoff_29					; byte ; usage varies, bosses use it as a hit counter
 shield_reaction =						objoff_2B					; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
-subtype =							objoff_2C					; byte
+subtype =							objoff_2C					; byte/word
 state_flags =							objoff_38					; byte
 count =								objoff_39					; byte
 ros_prev_frame =						objoff_3A					; byte
