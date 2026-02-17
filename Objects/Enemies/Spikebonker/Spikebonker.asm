@@ -46,9 +46,9 @@ Obj_Spikebonker:
 
 		; swing setup
 		moveq	#$40,d0
-		move.w	d0,objoff_3E(a0)
-		move.w	d0,y_vel(a0)
-		move.w	#4,objoff_40(a0)
+		move.w	d0,objoff_3E(a0)						; set maximum acceleration before "swinging"
+		move.w	d0,y_vel(a0)							; set velocity
+		move.w	#4,objoff_40(a0)						; acceleration
 		bclr	#0,state_flags(a0)						; clear up/down swing flag
 
 		; create
