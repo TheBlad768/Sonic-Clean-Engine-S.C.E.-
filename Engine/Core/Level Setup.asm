@@ -46,6 +46,9 @@ Level_Setup:
 .bskip
 		move.w	(Camera_Y_pos_copy).w,(V_scroll_value).w
 		move.w	(Camera_Y_pos_BG_copy).w,(V_scroll_value_BG).w
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(VInt_DrawLevel_RaiseError).l				; raise an error if there is plane buffer overflow
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -77,4 +80,7 @@ Level_Events:
 .bskip
 		move.w	(Camera_Y_pos_copy).w,(V_scroll_value).w
 		move.w	(Camera_Y_pos_BG_copy).w,(V_scroll_value_BG).w
+
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(VInt_DrawLevel_RaiseError).l				; raise an error if there is plane buffer overflow
 		rts
