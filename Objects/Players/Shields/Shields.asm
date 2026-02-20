@@ -6,6 +6,8 @@
 ; Fire Shield
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FireShield:
@@ -91,6 +93,8 @@ Obj_FireShield:
 ; ---------------------------------------------------------------------------
 ; Lightning Shield
 ; ---------------------------------------------------------------------------
+
+; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -245,6 +249,8 @@ Obj_LightningShield_Create_Spark:
 ; Lightning Shield (Spark)
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_LightningShield_Spark:
@@ -274,6 +280,8 @@ Obj_LightningShield_DestroyUnderwater2:
 ; ---------------------------------------------------------------------------
 ; Bubble Shield
 ; ---------------------------------------------------------------------------
+
+; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -345,6 +353,8 @@ Obj_BubbleShield:
 ; Insta Shield
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_InstaShield:
@@ -408,6 +418,21 @@ Obj_InstaShield:
 ; Invincibility
 ; ---------------------------------------------------------------------------
 
+; dynamic object variables
+
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+invincibility			= *
+
+.anim_ptr			ds.l 1							; (4 bytes)
+.offset				ds.b 1							; (1 byte)
+.offset2			ds.b 1							; (1 byte)
+.index				ds.b 1							; (1 byte)
+				ds.b 1							; (1 byte)
+.frame				ds.w 1							; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Invincibility:
@@ -419,80 +444,98 @@ Obj_Invincibility:
 
 		; init
 		moveq	#0,d2
-		lea	off_187DE-6(pc),a2
+		lea	Child_Invincibility_Index-6(pc),a2
 		lea	(a0),a1
 		moveq	#4-1,d1
 
 .loop
 		movem.l	ObjDat_Invincibility(pc),d0/d3-d5				; copy data to d0/d3-d5
 		movem.l	d0/d3-d5,address(a1)						; set data from d0/d3-d5 to current object
-		move.w	#2,mainspr_childsprites(a1)
-		move.b	d2,objoff_36(a1)
-		addq.w	#1,d2
-		move.l	(a2)+,objoff_30(a1)
-		move.w	(a2)+,objoff_34(a1)
+		move.w	#2,mainspr_childsprites(a1)					; set number of child sprites
+		move.b	d2,invincibility.index(a1)
+		move.l	(a2)+,invincibility.anim_ptr(a1)
+		move.w	(a2)+,invincibility.offset(a1)					; set offset 1 and offset 2
 		lea	next_object(a1),a1
+		addq.w	#1,d2
 		dbf	d1,.loop
 		move.l	#.main,address(a0)
-		move.b	#4,objoff_34(a0)
+		move.b	#4,invincibility.offset(a0)
 
 .main
+
+		; check
 		lea	(Player_1).w,a1							; a1=character
 		btst	#status_secondary.invincible,status_secondary(a1)		; should the player still have a invincible?
 		beq.s	.delete								; if not, delete
+
+		; set
 		move.w	x_pos(a1),d0
 		move.w	d0,x_pos(a0)
 		move.w	y_pos(a1),d1
 		move.w	d1,y_pos(a0)
 		lea	sub2_x_pos(a0),a2
-		lea	byte_189E0(pc),a3
+		lea	Invincibility_AnimData00(pc),a3					; load mapping frames
 		moveq	#0,d5
 
-.find
-		move.w	objoff_38(a0),d2
-		move.b	(a3,d2.w),d5
-		bpl.s	.found
-		clr.w	objoff_38(a0)
-		bra.s	.find
+.run
+		move.w	invincibility.frame(a0),d2					; load current frame number
+		move.b	(a3,d2.w),d5							; read mapping frame from script
+		bpl.s	.next								; if animation is not complete, branch
+
+		; repeat animation from beginning
+		clr.w	invincibility.frame(a0)						; restart the animation
+		bra.s	.run
 ; ---------------------------------------------------------------------------
 
-.found
-		addq.w	#1,objoff_38(a0)
-		lea	byte_189A0(pc),a6
-		move.b	objoff_34(a0),d6
-		bsr.w	sub_1898A
+.next
+		addq.w	#1,invincibility.frame(a0)					; next frame number
+		lea	Invincibility_XYOffsetData(pc),a6				; load x offset, y offset
+		move.b	invincibility.offset(a0),d6
+		bsr.w	Invincibility_GetXYOffset
 		move.w	d2,(a2)+							; sub2_x_pos
 		move.w	d3,(a2)+							; sub2_y_pos
 		move.w	d5,(a2)+							; sub2_mapframe
-		addi.w	#$20,d6
-		bsr.w	sub_1898A
+		addi.w	#2*$10,d6							; next
+		bsr.w	Invincibility_GetXYOffset
 		move.w	d2,(a2)+							; sub3_x_pos
 		move.w	d3,(a2)+							; sub3_y_pos
 		move.w	d5,(a2)+							; sub3_mapframe
-		moveq	#$12,d0
+
+		; check xflip
+		moveq	#2*9,d0
 		btst	#status.player.x_flip,status(a1)
-		beq.s	.notflip
+		beq.s	.notxflip
 		neg.w	d0
 
-.notflip
-		add.b	d0,objoff_34(a0)
+.notxflip
+		add.b	d0,invincibility.offset(a0)
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .delete
 		jmp	(Delete_Current_Object).w
 
+; ---------------------------------------------------------------------------
+; Invincibility (Child)
+; ---------------------------------------------------------------------------
+
+; dynamic object variables
+
 ; =============== S U B R O U T I N E =======================================
 
-Obj_188E8:
+Obj_Invincibility_Child:
+
+		; check
 		lea	(Player_1).w,a1							; a1=character
 		btst	#status_secondary.invincible,status_secondary(a1)		; should the player still have a invincible?
 		beq.s	Obj_Invincibility.delete					; if not, delete
+
+		; calc
 		lea	(Pos_table_index).w,a5
 		lea	(Pos_table).w,a6
 		moveq	#0,d1
-		move.b	objoff_36(a0),d1
-		add.b	d1,d1
+		move.b	invincibility.index(a0),d1
+		add.b	d1,d1								; multiply by 12
 		add.b	d1,d1
 		move.w	d1,d2
 		add.w	d1,d1
@@ -500,112 +543,119 @@ Obj_188E8:
 		move.w	(a5),d0
 		sub.b	d1,d0
 		lea	(a6,d0.w),a2
+
+		; set
 		move.w	(a2)+,d0
 		move.w	(a2)+,d1
 		move.w	d0,x_pos(a0)
 		move.w	d1,y_pos(a0)
 		lea	sub2_x_pos(a0),a2
-		movea.l	objoff_30(a0),a3
+		movea.l	invincibility.anim_ptr(a0),a3					; load mapping frames
+		moveq	#0,d5
 
-.find
-		move.w	objoff_38(a0),d2
-		move.b	(a3,d2.w),d5
-		bpl.s	.found
-		clr.w	objoff_38(a0)
-		bra.s	.find
+.run
+		move.w	invincibility.frame(a0),d2					; load current frame number
+		move.b	(a3,d2.w),d5							; read mapping frame from script
+		bpl.s	.next								; if animation is not complete, branch
+
+		; repeat animation from beginning
+		clr.w	invincibility.frame(a0)						; restart the animation
+		bra.s	.run
 ; ---------------------------------------------------------------------------
 
-.found
+.next
 		swap	d5
-		add.b	objoff_35(a0),d2
+		add.b	invincibility.offset2(a0),d2
 		move.b	(a3,d2.w),d5
-		addq.w	#1,objoff_38(a0)
-		lea	byte_189A0(pc),a6
-		move.b	objoff_34(a0),d6
-		bsr.s	sub_1898A
+		addq.w	#1,invincibility.frame(a0)					; next frame number
+		lea	Invincibility_XYOffsetData(pc),a6				; load x offset, y offset
+		move.b	invincibility.offset(a0),d6
+		bsr.s	Invincibility_GetXYOffset
 		move.w	d2,(a2)+							; sub2_x_pos
 		move.w	d3,(a2)+							; sub2_y_pos
 		move.w	d5,(a2)+							; sub2_mapframe
-		addi.w	#$20,d6
+		addi.w	#2*$10,d6							; next
 		swap	d5
-		bsr.s	sub_1898A
+		bsr.s	Invincibility_GetXYOffset
 		move.w	d2,(a2)+							; sub3_x_pos
 		move.w	d3,(a2)+							; sub3_y_pos
 		move.w	d5,(a2)+							; sub3_mapframe
-		moveq	#2,d0
+
+		; check xflip
+		moveq	#2*1,d0
 		btst	#status.player.x_flip,status(a1)
-		beq.s	.notflip
+		beq.s	.notxflip
 		neg.w	d0
 
-.notflip
-		add.b	d0,objoff_34(a0)
+.notxflip
+		add.b	d0,invincibility.offset(a0)
 		jmp	(Draw_Sprite).w
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_1898A:
+Invincibility_GetXYOffset:
 		andi.w	#$3E,d6
-		move.b	(a6,d6.w),d2
-		move.b	1(a6,d6.w),d3
-		ext.w	d2
-		ext.w	d3
-		add.w	d0,d2
-		add.w	d1,d3
+		move.b	(a6,d6.w),d2							; get x offset
+		move.b	1(a6,d6.w),d3							; get y offset
+		ext.w	d2								; sign extension
+		ext.w	d3								; sign extension
+		add.w	d0,d2								; add to xpos
+		add.w	d1,d3								; add to ypos
 		rts
 ; ---------------------------------------------------------------------------
 
-off_187DE:
-		dc.l byte_189ED		; 1
-		dc.b 0, $B
-		dc.l byte_18A02		; 2
-		dc.b $16, $D
-		dc.l byte_18A1B		; 3
-		dc.b $2C, $D
+Child_Invincibility_Index:
+		dc.l Invincibility_AnimData01						; 1 (animation script)
+		dc.b 0, 11								; offset 1, offset 2
+		dc.l Invincibility_AnimData02						; 2 (animation script)
+		dc.b 11*2, 13								; offset 1, offset 2
+		dc.l Invincibility_AnimData03						; 3 (animation script)
+		dc.b 22*2, 13								; offset 1, offset 2
 
-byte_189A0:
-		dc.b $F, 0
-		dc.b $F, 3
-		dc.b $E, 6
-		dc.b $D, 8
-		dc.b $B, $B
-		dc.b 8, $D
-		dc.b 6, $E
-		dc.b 3, $F
-		dc.b 0, $10
-		dc.b -4, $F
-		dc.b -7, $E
-		dc.b -9, $D
-		dc.b -$C, $B
-		dc.b -$E, 8
-		dc.b -$F, 6
-		dc.b -$10, 3
-		dc.b -$10, 0
-		dc.b -$10, -4
-		dc.b -$F, -7
-		dc.b -$E, -9
-		dc.b -$C, -$C
-		dc.b -9, -$E
-		dc.b -7, -$F
-		dc.b -4,-$10
-		dc.b -1,-$10
-		dc.b 3,-$10
-		dc.b 6, -$F
-		dc.b 8, -$E
-		dc.b $B, -$C
-		dc.b $D, -9
-		dc.b $E, -7
-		dc.b $F, -4
-byte_189E0:
+Invincibility_XYOffsetData:
+		dc.b 15, 0	; x offset, y offset
+		dc.b 15, 3
+		dc.b 14, 6
+		dc.b 13, 8
+		dc.b 11, 11
+		dc.b 8, 13
+		dc.b 6, 14
+		dc.b 3, 15
+		dc.b 0, 16
+		dc.b -4, 15
+		dc.b -7, 14
+		dc.b -9, 13
+		dc.b -12, 11
+		dc.b -14, 8
+		dc.b -15, 6
+		dc.b -16, 3
+		dc.b -16, 0
+		dc.b -16, -4
+		dc.b -15, -7
+		dc.b -14, -9
+		dc.b -12, -12
+		dc.b -9, -14
+		dc.b -7, -15
+		dc.b -4, -16
+		dc.b -1, -16
+		dc.b 3, -16
+		dc.b 6, -15
+		dc.b 8, -14
+		dc.b 11, -12
+		dc.b 13, -9
+		dc.b 14, -7
+		dc.b 15, -4
+Invincibility_AnimData00:
 		dc.b 8, 5, 7, 6, 6, 7, 5, 8, 6, 7, 7, 6, $FF
-byte_189ED:
-		dc.b 8, 7, 6, 5, 4, 3, 4, 5, 6, 7, $FF, 3, 4, 5, 6, 7, 8, 7, 6, 5
-		dc.b 4
-byte_18A02:
-		dc.b 8, 7, 6, 5, 4, 3, 2, 3, 4, 5, 6, 7, $FF, 2, 3, 4, 5, 6, 7, 8
-		dc.b 7, 6, 5, 4, 3
-byte_18A1B:
-		dc.b 7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, $FF, 1, 2, 3, 4, 5, 6, 7
-		dc.b 6, 5, 4, 3, 2
+Invincibility_AnimData01:
+		dc.b 8, 7, 6, 5, 4, 3, 4, 5, 6, 7, $FF
+		dc.b 3, 4, 5, 6, 7, 8, 7, 6, 5, 4
+Invincibility_AnimData02:
+		dc.b 8, 7, 6, 5, 4, 3, 2, 3, 4, 5, 6, 7, $FF
+		dc.b 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3
+Invincibility_AnimData03:
+		dc.b 7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, $FF
+		dc.b 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2
 	even
 
 ; =============== S U B R O U T I N E =======================================
@@ -632,7 +682,7 @@ ObjDat_InstaShield:		subObjMainData \
 				0, 48, 48, 1, ArtTile_Shield, 0, FALSE, Map_InstaShield
 
 ObjDat_Invincibility:		subObjMainData \
-				Obj_188E8, \
+				Obj_Invincibility_Child, \
 					setBit(render_flags.level) | \
 					setBit(render_flags.multi_sprite), \
 				0, 32, 32, 1, ArtTile_Shield, 0, FALSE, Map_Invincibility
