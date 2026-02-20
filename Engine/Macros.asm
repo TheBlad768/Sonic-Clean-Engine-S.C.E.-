@@ -1128,6 +1128,22 @@ jmi macro loc
 
 .nojump
     endm
+
+jsrb macro loc
+    if (loc)<$8000
+	jsr	(loc).w
+    else
+	jsr	(loc).l
+    endif
+    endm
+
+jmpb macro loc
+    if (loc)<$8000
+	jmp	(loc).w
+    else
+	jmp	(loc).l
+    endif
+    endm
 ; ---------------------------------------------------------------------------
 
 _KosPlus_LoopUnroll = 3
