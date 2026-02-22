@@ -482,6 +482,8 @@ HurtCharacter:
 		bmi.s	.bounce
 		tst.w	d0								; does Sonic have any rings?
 		beq.w	.norings							; if not, branch
+
+		; create
 		bsr.w	Create_New_Object
 		bne.s	.hasshield
 		move.l	#Obj_Bouncing_Ring,address(a1)					; load bouncing multi rings object
