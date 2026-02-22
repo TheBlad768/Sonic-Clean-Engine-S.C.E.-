@@ -22,8 +22,8 @@ Obj_FireShield:
 		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
-		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	ros_prev_frame(a0)						; reset objoff_3A (used by Perform_DPLC)
+		move.w	#1,anim(a0)							; clear anim and set prev anim to 1
+		st	ros_prev_frame(a0)						; reset DPLC prev frame (used by Perform_DPLC)
 
 .main
 		lea	(Player_1).w,a2							; a2=character
@@ -115,8 +115,8 @@ Obj_LightningShield:
 		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
-		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	ros_prev_frame(a0)						; reset objoff_3A (used by Perform_DPLC)
+		move.w	#1,anim(a0)							; clear anim and set prev anim to 1
+		st	ros_prev_frame(a0)						; reset DPLC prev frame (used by Perform_DPLC)
 
 .main
 		lea	(Player_1).w,a2							; a2=character
@@ -298,7 +298,7 @@ Obj_BubbleShield:
 
 .nothighpriority
 		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	ros_prev_frame(a0)						; reset objoff_3A (used by Perform_DPLC)
+		st	ros_prev_frame(a0)						; reset DPLC prev frame (used by Perform_DPLC)
 		lea	(Player_1).w,a1							; a1=character
 		jsr	(Player_ResetAirTimer).l
 
@@ -369,8 +369,8 @@ Obj_InstaShield:
 		bset	#high_priority_bit,art_tile(a0)					; high priority
 
 .nothighpriority
-		move.w	#1,anim(a0)							; clear anim and set prev_anim to 1
-		st	ros_prev_frame(a0)						; reset objoff_3A (used by Perform_DPLC)
+		move.w	#1,anim(a0)							; clear anim and set prev anim to 1
+		st	ros_prev_frame(a0)						; reset DPLC prev frame (used by Perform_DPLC)
 
 .main
 		lea	(Player_1).w,a2							; a2=character
