@@ -5,14 +5,22 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Wait:
+		tst.w wait_timer(a0)							; is timer over?
+		bmi.s	.jump								; if yes, branch
 		subq.w	#1,wait_timer(a0)						; subtract 1
-		bpl.s	Obj_WaitRun.return						; if timer has not ended, branch
+		bmi.s	.jump								; if timer has not ended, branch
+		rts
+; ---------------------------------------------------------------------------
 
-Obj_Jump:
+.jump
 
-		; jump
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Wait to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -24,6 +32,10 @@ Obj_WaitRun:
 
 .return
 		rts
+
+; ---------------------------------------------------------------------------
+; Check floor dist and jump to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -42,9 +54,13 @@ ObjCheckFloorDist_DoRoutine:
 .jump
 		add.w	d1,y_pos(a0)
 
-		; jump
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Check ceiling dist and jump to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -63,9 +79,13 @@ ObjCheckCeilingDist_DoRoutine:
 .jump
 		sub.w	d1,y_pos(a0)
 
-		; jump
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Check floor dist 2 and jump to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -87,32 +107,42 @@ ObjCheckFloorDist2_DoRoutine:
 
 .jump
 
-		; jump
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jsr	(a1)
 		moveq	#1,d0								; set flag to 1
+
+.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Check right wall dist and jump to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckRightWallDist_DoRoutine:
 		bsr.w	ObjCheckRightWallDist
 		tst.w	d1
-		bpl.s	ObjCheckCeilingDist_DoRoutine.return
+		bpl.s	ObjCheckFloorDist2_DoRoutine.return
 		add.w	d1,x_pos(a0)
 
-		; jump
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Check left wall dist and jump to subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckLeftWallDist_DoRoutine:
 		bsr.w	ObjCheckLeftWallDist
 		tst.w	d1
-		bpl.s	ObjCheckCeilingDist_DoRoutine.return
+		bpl.s	ObjCheckFloorDist2_DoRoutine.return
 		add.w	d1,x_pos(a0)
 
-		; jump
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
