@@ -322,13 +322,13 @@ EnemyDefeat_Score:
 		moveq	#6,d0
 
 .notreachedlimit
-		move.w	d0,objoff_3E(a0)
+		move.w	d0,bonus_counter(a0)
 		lea	Enemy_Points(pc),a2
 		move.w	(a2,d0.w),d0
 		cmpi.w	#16*2,(Chain_bonus_counter).w					; have 16 enemies been destroyed?
 		blo.s	.notreachedlimit2						; if not, branch
 		move.w	#1000,d0							; fix bonus to 10000
-		move.w	#10,objoff_3E(a0)
+		move.w	#10,bonus_counter(a0)
 
 .notreachedlimit2
 		move.l	#Obj_Explosion,address(a0)					; change object to explosion
