@@ -487,7 +487,6 @@ HurtCharacter:
 		move.l	#Obj_Bouncing_Ring,address(a1)					; load bouncing multi rings object
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		move.w	a0,objoff_3E(a1)
 
 .hasshield
 
