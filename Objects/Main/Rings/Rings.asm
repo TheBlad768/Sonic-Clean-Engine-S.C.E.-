@@ -76,7 +76,7 @@ Obj_Bouncing_Ring:
 		move.l	#Obj_Bouncing_Ring_TestGravity,d6
 
 .notgrav
-		move.w	(Ring_count).w,d5
+		move.w	(Ring_count).w,d5						; get ring count to d5
 		moveq	#32,d0								; max rings
 		cmp.w	d0,d5
 		blo.s	.notmax
@@ -129,8 +129,8 @@ Obj_Bouncing_Ring:
 .notfree
 		sfx	sfx_RingLoss							; play ring loss sound
 		st	(Ring_spill_anim_counter).w					; set time
-		clr.w	(Ring_count).w
-		move.b	#$80,(Update_HUD_ring_count).w
+		clr.w	(Ring_count).w							; clear rings
+		move.b	#$80,(Update_HUD_ring_count).w					; update ring counter
 
 		; check gravity
 		tst.b	(Reverse_gravity_flag).w
