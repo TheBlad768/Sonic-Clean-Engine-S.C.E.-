@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Subroutine to display a sprite/object, when a0 is the object RAM
+; Subroutine to display a sprite when a0 is the object RAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================

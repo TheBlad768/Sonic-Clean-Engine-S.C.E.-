@@ -374,12 +374,12 @@ ApplyFGDeformation3:
 ApplyFGDeformation2:
 		move.w	(a4)+,d2
 		smi	d4
-		bpl.s	loc_4F174
+		bpl.s	.loc_4F174
 		andi.w	#$7FFF,d2
 
-loc_4F174:
+.loc_4F174
 		sub.w	d2,d0
-		bmi.s	loc_4F186
+		bmi.s	.loc_4F186
 		addq.w	#2,a5
 		tst.b	d4
 		beq.s	ApplyFGDeformation2
@@ -389,82 +389,82 @@ loc_4F174:
 		bra.s	ApplyFGDeformation2
 ; ---------------------------------------------------------------------------
 
-loc_4F186:
+.loc_4F186
 		tst.b	d4
-		beq.s	loc_4F190
+		beq.s	.loc_4F190
 		add.w	d0,d2
 		add.w	d2,d2
 		adda.w	d2,a5
 
-loc_4F190:
+.loc_4F190
 		neg.w	d0
 		move.w	d1,d2
 		sub.w	d0,d2
-		bhs.s	loc_4F19C
+		bhs.s	.loc_4F19C
 		move.w	d1,d0
 		addq.w	#1,d0
 
-loc_4F19C:
+.loc_4F19C
 		neg.w	d3
 
-loc_4F19E:
+.loc_4F19E
 		subq.w	#1,d0
 
-loc_4F1A0:
+.loc_4F1A0
 		tst.b	d4
-		beq.s	loc_4F1C2
+		beq.s	.loc_4F1C2
 		lsr.w	d0								; division by 2
-		bhs.s	loc_4F1B2
+		bhs.s	.loc_4F1B2
 
-loc_4F1A8:
+.loc_4F1A8
 		swap	d3
 		move.w	(a5)+,d3
 		neg.w	d3
 		swap	d3
 		move.l	d3,(a1)+
 
-loc_4F1B2:
+.loc_4F1B2
 		swap	d3
 		move.w	(a5)+,d3
 		neg.w	d3
 		swap	d3
 		move.l	d3,(a1)+
-		dbf	d0,loc_4F1A8
-		bra.s	loc_4F1D6
+		dbf	d0,.loc_4F1A8
+		bra.s	.loc_4F1D6
 ; ---------------------------------------------------------------------------
 
-loc_4F1C2:
+.loc_4F1C2
 		swap	d3
 		move.w	(a5)+,d3
 		neg.w	d3
 		swap	d3
 		lsr.w	d0								; division by 2
-		bhs.s	loc_4F1D0
+		bhs.s	.loc_4F1D0
 
-loc_4F1CE:
+.loc_4F1CE
 		move.l	d3,(a1)+
 
-loc_4F1D0:
+.loc_4F1D0
 		move.l	d3,(a1)+
-		dbf	d0,loc_4F1CE
+		dbf	d0,.loc_4F1CE
 
-loc_4F1D6:
+.loc_4F1D6
 		tst.w	d2
-		bmi.s	locret_4F1EE
+		bmi.s	.locret_4F1EE
 		move.w	(a4)+,d0
 		smi	d4
-		bpl.s	loc_4F1E4
+		bpl.s	.loc_4F1E4
 		andi.w	#$7FFF,d0
 
-loc_4F1E4:
+.loc_4F1E4
 		move.w	d2,d1
 		sub.w	d0,d2
-		bpl.s	loc_4F19E
+		bpl.s	.loc_4F19E
 		move.w	d1,d0
-		bra.s	loc_4F1A0
+		bra.s	.loc_4F1A0
 ; ---------------------------------------------------------------------------
 
-locret_4F1EE:
+.locret_4F1EE
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -479,12 +479,12 @@ ApplyFGandBGDeformation:
 ApplyFGandBGDeformation2:
 		move.w	(a4)+,d3
 		smi	d7
-		bpl.s	loc_4F1FE
+		bpl.s	.loc_4F1FE
 		andi.w	#$7FFF,d3
 
-loc_4F1FE:
+.loc_4F1FE
 		sub.w	d3,d0
-		bmi.s	loc_4F210
+		bmi.s	.loc_4F210
 		addq.w	#2,a5
 		tst.b	d7
 		beq.s	ApplyFGandBGDeformation2
@@ -494,32 +494,32 @@ loc_4F1FE:
 		bra.s	ApplyFGandBGDeformation2
 ; ---------------------------------------------------------------------------
 
-loc_4F210:
+.loc_4F210
 		tst.b	d7
-		beq.s	loc_4F21A
+		beq.s	.loc_4F21A
 		add.w	d0,d3
 		add.w	d3,d3
 		adda.w	d3,a5
 
-loc_4F21A:
+.loc_4F21A
 		swap	d3
 		neg.w	d0
 		move.w	d1,d4
 		sub.w	d0,d4
-		bhs.s	loc_4F228
+		bhs.s	.loc_4F228
 		move.w	d1,d0
 		addq.w	#1,d0
 
-loc_4F228:
+.loc_4F228
 		subq.w	#1,d0
 
-loc_4F22A:
+.loc_4F22A
 		tst.b	d7
-		beq.s	loc_4F250
+		beq.s	.loc_4F250
 		lsr.w	d0								; division by 2
-		bhs.s	loc_4F23E
+		bhs.s	.loc_4F23E
 
-loc_4F232:
+.loc_4F232
 		move.w	(a2)+,d6
 		swap	d6
 		move.w	(a5)+,d6
@@ -527,55 +527,55 @@ loc_4F232:
 		add.w	(a6)+,d6
 		move.l	d6,(a1)+
 
-loc_4F23E:
+.loc_4F23E
 		move.w	(a2)+,d6
 		swap	d6
 		move.w	(a5)+,d6
 		neg.w	d6
 		add.w	(a6)+,d6
 		move.l	d6,(a1)+
-		dbf	d0,loc_4F232
-		bra.s	loc_4F270
+		dbf	d0,.loc_4F232
+		bra.s	.loc_4F270
 ; ---------------------------------------------------------------------------
 
-loc_4F250:
+.loc_4F250
 		move.w	(a5)+,d5
 		neg.w	d5
 		lsr.w	d0								; division by 2
-		bhs.s	loc_4F262
+		bhs.s	.loc_4F262
 
-loc_4F258:
+.loc_4F258
 		move.w	(a2)+,d6
 		swap	d6
 		move.w	(a6)+,d6
 		add.w	d5,d6
 		move.l	d6,(a1)+
 
-loc_4F262:
+.loc_4F262
 		move.w	(a2)+,d6
 		swap	d6
 		move.w	(a6)+,d6
 		add.w	d5,d6
 		move.l	d6,(a1)+
-		dbf	d0,loc_4F258
+		dbf	d0,.loc_4F258
 
-loc_4F270:
+.loc_4F270
 		tst.w	d4
-		bmi.s	loc_4F288
+		bmi.s	.loc_4F288
 		move.w	(a4)+,d0
 		smi	d7
-		bpl.s	loc_4F27E
+		bpl.s	.loc_4F27E
 		andi.w	#$7FFF,d0
 
-loc_4F27E:
+.loc_4F27E
 		move.w	d4,d5
 		sub.w	d0,d4
-		bpl.s	loc_4F228
+		bpl.s	.loc_4F228
 		move.w	d5,d0
-		bra.s	loc_4F22A
+		bra.s	.loc_4F22A
 ; ---------------------------------------------------------------------------
 
-loc_4F288:
+.loc_4F288
 		swap	d7
 		rts
 
@@ -589,44 +589,44 @@ Apply_FGVScroll2:
 		move.w	(Camera_X_pos_copy).w,d0
 		move.w	d0,d2
 		andi.w	#$F,d2
-		beq.s	loc_4F2A4
+		beq.s	.loc_4F2A4
 		addi.w	#$10,d0
 
-loc_4F2A4:
+.loc_4F2A4
 		lsr.w	#4,d0
 
-loc_4F2A6:
+.loc_4F2A6
 		addq.w	#2,a5
 		move.w	(a4)+,d2
 		lsr.w	#4,d2
 		sub.w	d2,d0
-		bpl.s	loc_4F2A6
+		bpl.s	.loc_4F2A6
 		neg.w	d0
-		moveq	#$13,d2
+		moveq	#(screen_width-16)/16,d2
 		sub.w	d0,d2
-		bhs.s	loc_4F2BA
-		moveq	#$14,d0
+		bhs.s	.loc_4F2BA
+		moveq	#screen_width/16,d0
 
-loc_4F2BA:
+.loc_4F2BA
 		subq.w	#1,d0
 
-loc_4F2BC:
+.loc_4F2BC
 		move.w	(a5)+,d3
 
-loc_4F2BE:
+.loc_4F2BE
 		move.w	d3,(a1)+
 		move.w	d1,(a1)+
-		dbf	d0,loc_4F2BE
+		dbf	d0,.loc_4F2BE
 		tst.w	d2
-		bmi.s	locret_4F2D8
+		bmi.s	.locret_4F2D8
 		move.w	(a4)+,d0
 		lsr.w	#4,d0
 		move.w	d2,d3
 		sub.w	d0,d2
-		bpl.s	loc_4F2BA
+		bpl.s	.loc_4F2BA
 		move.w	d3,d0
-		bra.s	loc_4F2BC
+		bra.s	.loc_4F2BC
 ; ---------------------------------------------------------------------------
 
-locret_4F2D8:
+.locret_4F2D8
 		rts

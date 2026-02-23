@@ -17,6 +17,10 @@ Child_GetPriority:
 		move.w	priority(a1),priority(a0)					; copy parent object priority
 		rts
 
+; ---------------------------------------------------------------------------
+; Get priority once subroutine
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Child_GetPriorityOnce:

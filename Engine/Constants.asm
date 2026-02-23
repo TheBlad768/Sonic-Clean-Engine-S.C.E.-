@@ -395,6 +395,12 @@ ros_bit =							objoff_3B					; byte ; the bit to be cleared when an object is d
 ros_addr =							objoff_3C					; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 
 ; ---------------------------------------------------------------------------
+; Conventions followed by create child object subroutine
+; ---------------------------------------------------------------------------
+
+setup_ptr =							objoff_3E					; long
+
+; ---------------------------------------------------------------------------
 ; Conventions followed by movesprite circular subroutine
 ; ---------------------------------------------------------------------------
 
