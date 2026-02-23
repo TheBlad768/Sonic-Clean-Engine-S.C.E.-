@@ -58,7 +58,7 @@ CreateChild2_Complex:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,address(a1)						; object address
-		move.l	(a2)+,objoff_3E(a1)						; object data (to be read by SetUp_ObjAttributes)
+		move.l	(a2)+,setup_ptr(a1)						; object data (to be read by SetUp_ObjAttributes)
 		move.l	(a2)+,aniraw_ptr(a1)						; raw animation pointer (used by Animate_Raw)
 		move.l	(a2)+,jump_ptr(a1)						; jump to custom code (used by Obj_Wait)
 		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -176,7 +176,7 @@ CreateChild5_ComplexAdjusted:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,address(a1)						; object address
-		move.l	(a2)+,objoff_3E(a1)						; object data (to be read by SetUp_ObjAttributes)
+		move.l	(a2)+,setup_ptr(a1)						; object data (to be read by SetUp_ObjAttributes)
 		move.l	(a2)+,aniraw_ptr(a1)						; raw animation pointer (used by Animate_Raw)
 		move.l	(a2)+,jump_ptr(a1)						; jump to custom code (used by Obj_Wait)
 		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -185,10 +185,10 @@ CreateChild5_ComplexAdjusted:
 		move.b	d1,child_dx(a1)							; child_dx has the x offset
 		ext.w	d1
 		btst	#render_flags.x_flip,render_flags(a0)				; check flipx
-		beq.s	.notxflip
+		beq.s	.notflipx
 		neg.w	d1
 
-.notxflip
+.notflipx
 		add.w	d1,d0
 		move.w	d0,x_pos(a1)							; apply offset to new position
 		move.w	y_pos(a0),d0
@@ -199,10 +199,10 @@ CreateChild5_ComplexAdjusted:
 		move.w	d0,y_pos(a1)							; apply offset to new position
 		move.l	(a2)+,x_vel(a1)							; set xy velocity
 		btst	#render_flags.x_flip,render_flags(a0)				; check flipx
-		beq.s	.notxflip2
+		beq.s	.notflipx2
 		neg.w	x_vel(a1)
 
-.notxflip2
+.notflipx2
 		addq.w	#2,d2								; add 2 to index
 		dbf	d6,.loop
 		moveq	#0,d0								; success
