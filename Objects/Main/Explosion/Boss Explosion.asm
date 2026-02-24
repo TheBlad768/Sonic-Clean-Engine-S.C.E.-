@@ -6,7 +6,7 @@
 
 	dsset count									; pretend we're in the RAM
 
-bossexplosion			= *
+bossexplosion =			*
 
 				ds.b 1							; skip count (1 byte)
 .xoffset			ds.b 1							; (1 byte)

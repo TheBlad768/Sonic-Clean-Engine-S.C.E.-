@@ -3,8 +3,15 @@
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
-dashdust_dust_timer			= objoff_36	; .b
-dashdust_tails				= objoff_38	; .b
+
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+dashdust =			*
+
+.timer				ds.b 1							; (1 byte)
+.tails_flag			ds.b 1							; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -18,7 +25,7 @@ Obj_DashDust:
 		; check Tails
 		cmpa.w	#Dust,a0
 		beq.s	.main
-		st	dashdust_tails(a0)						; Tails flag
+		st	dashdust.tails_flag(a0)						; Tails flag
 
 .main
 		movea.w	parent(a0),a2							; a2=character
@@ -88,7 +95,7 @@ Obj_DashDust:
 		neg.w	d1
 
 .notgrav
-		tst.b	dashdust_tails(a0)
+		tst.b	dashdust.tails_flag(a0)
 		beq.s	.skip
 		sub.w	d1,y_pos(a0)
 
@@ -139,16 +146,16 @@ DashDust_CheckSkid:
 
 .back
 		move.l	#Obj_DashDust.main,address(a0)					; back
-		clr.b	dashdust_dust_timer(a0)						; clear timer
+		clr.b	dashdust.timer(a0)						; clear timer
 		rts
 ; ---------------------------------------------------------------------------
 
 .create
 
 		; wait
-		subq.b	#1,dashdust_dust_timer(a0)					; decrement timer
+		subq.b	#1,dashdust.timer(a0)						; decrement timer
 		bpl.s	.dplc								; if time remains, branch
-		addq.b	#3+1,dashdust_dust_timer(a0)					; reset timer to 3+1 frames
+		addq.b	#3+1,dashdust.timer(a0)						; reset timer to 3+1 frames
 
 		; check
 		btst	#status.player.underwater,status(a2)				; is player underwater?
@@ -160,7 +167,7 @@ DashDust_CheckSkid:
 		move.l	#Obj_DashDust_SkidDust,address(a1)
 		move.w	x_pos(a2),x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
-		tst.b	dashdust_tails(a0)
+		tst.b	dashdust.tails_flag(a0)
 		beq.s	.skip
 		subq.w	#4,d1
 

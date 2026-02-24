@@ -239,7 +239,7 @@ ObjArray_TtlCardBonus_end
 
 TitleCard_LoadLetters:
 
-.decomp	= 0
+.decomp =	0
 
 		lea	VDP_data_port-VDP_control_port(a5),a6				; load VDP data address to a6
 

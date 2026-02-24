@@ -199,7 +199,7 @@ VInt_LevelSelect:
 		dma68kToVDP Normal_palette,0,$80,CRAM
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
-		dma68kToVDP (LevelSelect_buffer2),VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size,VRAM	; foreground buffer to VRAM
+		dma68kToVDP (LevelSelect.buffer2),VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size,VRAM	; foreground buffer to VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
 
