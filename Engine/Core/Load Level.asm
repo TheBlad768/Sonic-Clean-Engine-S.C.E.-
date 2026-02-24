@@ -150,7 +150,7 @@ LoadLevelPointer:
 		move.w	(Current_zone_and_act).w,d0
 		ror.b	#2,d0
 
-.mul		= 0
+.mul =	0
 
 	if .mul
 		lsr.w	#6,d0

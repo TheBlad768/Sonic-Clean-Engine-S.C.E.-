@@ -28,10 +28,10 @@ Swing_UpAndDown_Count:
 		bsr.s	Swing_UpAndDown
 
 .check
-		tst.w	d3
-		beq.s	.return
-		subq.b	#1,count(a0)
-		bmi.s	.end
+		tst.w	d3								; has the object finished swinging?
+		beq.s	.return								; if not, branch
+		subq.b	#1,count(a0)							; decrement count
+		bmi.s	.end								; if count has ended, branch
 		moveq	#0,d0								; set flag to 0
 
 .return

@@ -100,7 +100,7 @@ Obj_FireShield:
 
 Obj_LightningShield:
 
-.artsize	:= (ArtUnc_LightningShield_Sparks_end-ArtUnc_LightningShield_Sparks)&$FFFF
+.artsize :=	(ArtUnc_LightningShield_Sparks_end-ArtUnc_LightningShield_Sparks)&$FFFF
 
 		; load spark art
 		QueueStaticDMA ArtUnc_LightningShield_Sparks,.artsize,tiles_to_bytes(ArtTile_Shield_Sparks)
@@ -422,7 +422,7 @@ Obj_InstaShield:
 
 	dsset aniraw_ptr								; pretend we're in the RAM
 
-invincibility			= *
+invincibility =			*
 
 .anim_ptr			ds.l 1							; (4 bytes)
 .offset				ds.b 1							; (1 byte)
@@ -437,7 +437,7 @@ invincibility			= *
 
 Obj_Invincibility:
 
-.artsize	:= (ArtUnc_Invincibility_end-ArtUnc_Invincibility)&$FFFF
+.artsize :=	(ArtUnc_Invincibility_end-ArtUnc_Invincibility)&$FFFF
 
 		; load invincibility art
 		QueueStaticDMA ArtUnc_Invincibility,.artsize,tiles_to_bytes(ArtTile_Shield)
