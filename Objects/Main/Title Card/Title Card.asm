@@ -224,12 +224,12 @@ ObjArray_TtlCard: titlecardresultsheader
 	titlecardresultsobjdata	Obj_TitleCardElement, 252, 636, 128, 3, 72, 5		; 2
 	titlecardresultsobjdata	Obj_TitleCardAct, 260, 708, 160, 2, 56, 7		; 3
 	titlecardresultsobjdata	Obj_TitleCardRedBanner, 64, 96, 16-128, 1, 0, 1		; 4
-ObjArray_TtlCard_end
+	titlecardresultsend
 
 ObjArray_TtlCardBonus: titlecardresultsheader
 	titlecardresultsobjdata	Obj_TitleCardElement, 72, 264, 104, $13, 256, 1		; 1
 	titlecardresultsobjdata	Obj_TitleCardElement, 168, 360, 104, $14, 256, 1	; 2
-ObjArray_TtlCardBonus_end
+	titlecardresultsend
 
 ; ---------------------------------------------------------------------------
 ; Title Card load letters to VRAM

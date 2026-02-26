@@ -595,6 +595,6 @@ LevelSelect_MainText:
 
 		; scroll data
 
-LSScroll_Data: dScroll_Header
-		dScroll_Data 8, 8, -$100, FG	; start pos, size, velocity, plane
-LSScroll_Data_end
+LSScroll_Data: HScroll_Header
+		HScroll_Data 8, 8, -$100, FG	; start pos, size, velocity, plane
+		HScroll_End
