@@ -1573,7 +1573,7 @@ dScroll_Data macro pixel,size,velocity,plane
 ; ---------------------------------------------------------------------------
 
 ; macro for defining title card letters in conjunction with the remapped character set
-titlecardLetters macro opt,opt2,str
+titlecardVRAMLetters macro opt,opt2,str
 	save
 	codepage TITLECARD
 .llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"					; letter lookup string
@@ -1612,6 +1612,110 @@ titlecardLetters macro opt,opt2,str
 	endm
     endif
 	dc.b -1	; end marker
+	restore
+    endm
+
+; macro for generating title card letter mappings with the remapped character set
+titlecardMapLetters macro opt,pos,str
+	save
+	codepage TITLECARD
+.vram_start := $804D
+.narrow := "IJL.1!"
+.wide := "MOQW069"
+.llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"
+.ignore := " ZONE0"
+.used := ""
+    irpc char,.ignore
+.used := .used + "char"									; mark ignored characters as used
+    endm
+.collected := ""
+    if opt
+	; not sort letters (S2 style)
+	irpc char,str
+	    if strstr(.used,"char") < 0
+.used := .used + "char"									; mark as used
+		if strstr(.ignore,"char") < 0
+.collected := .collected + "char"
+		endif
+	    endif
+	endm
+    else
+	; letters in alphabetical order (S3K style)
+	irpc char,.llookup
+	    if strstr(str,"char") >= 0
+		if strstr(.used,"char") < 0
+.used := .used + "char"									; mark as used
+		    if strstr(.ignore,"char") < 0
+.collected := .collected + "char"
+		    endif
+		endif
+	    endif
+	endm
+    endif
+.total_width := 0
+.sprite_count := 0
+    irpc char,str
+	if "char" = " "
+.total_width := .total_width + 8
+	else
+.sprite_count := .sprite_count + 1
+	    if strstr(.narrow,"char") >= 0
+.total_width := .total_width + 8
+	    elseif strstr(.wide,"char") >= 0
+.total_width := .total_width + 24
+	    else
+.total_width := .total_width + 16
+	    endif
+	endif
+    endm
+	dc.w .sprite_count
+.current_x := pos - .total_width
+    irpc char,str
+.width := 16
+.size := 6
+	if strstr(.narrow,"char") >= 0
+.width := 8
+.size := 2
+	elseif strstr(.wide,"char") >= 0
+.width := 24
+.size := $A
+	endif
+	if "char" = " "
+.current_x := .current_x + 8
+	else
+	    if "char" = "Z"
+.vram_final := $8037
+	    elseif "char" = "O"
+.vram_final := $802E
+	    elseif "char" = "N"
+.vram_final := $8028
+	    elseif "char" = "E"
+.vram_final := $8022
+	    else
+.vram_final := .vram_start
+.found := 0
+		irpc c,.collected
+		    if .found = 0
+			if "c" = "char"
+.found := 1
+			else
+			    if strstr(.narrow,"c") >= 0
+.vram_final := .vram_final + 3
+			    elseif strstr(.wide,"c") >= 0
+.vram_final := .vram_final + 9
+			    else
+.vram_final := .vram_final + 6
+			    endif
+			endif
+		    endif
+		endm
+	    endif
+	    dc.b 0, .size
+	    dc.w .vram_final, .current_x
+.current_x := .current_x + .width
+	endif
+    endm
+	even
 	restore
     endm
 ; ---------------------------------------------------------------------------
