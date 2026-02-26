@@ -256,7 +256,7 @@ TitleCard_LoadLetters:
 		locVRAM	tiles_to_bytes($522),VDP_control_port-VDP_control_port(a5)
 
 		; load "ZONE" art
-		lea	TitleCard_ZONE(pc),a1
+		lea	VRAM_TitleCard_ZONE(pc),a1
 		bsr.s	.find
 
 		locVRAM	tiles_to_bytes($54D),VDP_control_port-VDP_control_port(a5)
@@ -265,7 +265,7 @@ TitleCard_LoadLetters:
 		moveq	#0,d0
 		move.b	(Current_zone).w,d0						; otherwise, just use current zone
 		add.w	d0,d0								; multiply by 2
-		lea	TitleCardLetters_Index(pc),a1
+		lea	TitleCardVRAMLetters_Index(pc),a1
 		adda.w	(a1,d0.w),a1
 
 .find
@@ -300,5 +300,6 @@ TitleCard_LoadLetters:
 ; ---------------------------------------------------------------------------
 
 		; mappings
-		include "Objects/Main/Title Card/Text Data/VRAM - Text.asm"
+		include "Objects/Main/Title Card/Text Data/VRAM - Text Data.asm"
 		include "Objects/Main/Title Card/Object Data/Map - Title Card.asm"
+		include "Objects/Main/Title Card/Text Data/Map - Text Data.asm"
