@@ -34,4 +34,4 @@ Debug_DEZ1: dbglistheader
 	dbglistobj Obj_StarPost, Map_StarPost, 1, 0, ArtTile_StarPost, 0, FALSE
 	dbglistobj Obj_EggCapsule, Map_EggCapsule, 1, 0, $43E, 0, FALSE
 	dbglistobj Obj_EggCapsule_Flying, Map_EggCapsule, 1, 0, $43E, 0, FALSE
-Debug_DEZ1_end
+	dbglistend

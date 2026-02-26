@@ -161,7 +161,9 @@ CalcVRAM macro reg=d0
 
 dbglistheader macro {INTLABEL}
 __LABEL__ label *
-	dc.w ((__LABEL___end - __LABEL__ - 2) / $A)
+dbglistcount := 0
+dbglistcur := "__LABEL__"
+	dc.w dbglistcount___LABEL__							; number of debug object list
     endm
 
 ; macro to define debug list object data
@@ -169,6 +171,11 @@ dbglistobj macro obj,mapaddr,subtype,frame,vram,pal,pri
 	dc.l frame<<24|((obj)&$FFFFFF)
 	dc.l subtype<<24|((mapaddr)&$FFFFFF)
 	dc.w make_art_tile(vram,pal,pri)
+dbglistcount := dbglistcount + 1
+    endm
+
+dbglistend macro
+dbglistcount_{"\{dbglistcur}"} = dbglistcount
     endm
 
 ; ---------------------------------------------------------------------------
@@ -277,7 +284,9 @@ objanimalending macro address,mappings,vram,xvel,yvel
 
 titlecardresultsheader macro {INTLABEL}
 __LABEL__ label *
-	dc.w ((__LABEL___end - __LABEL__) / $E)-1
+titlecardresultscount := 0
+titlecardresultscur := "__LABEL__"
+	dc.w titlecardresultscount___LABEL__							; number of titlecard and results object list (-1)
     endm
 
 titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
@@ -285,6 +294,11 @@ titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
 	dc.w 128+xdest,128+xpos,128+ypos						; x destination, xpos, ypos
 	dc.b frame,(width/2)								; mapping frame, width
 	dc.w exit									; place in exit queue
+titlecardresultscount := titlecardresultscount + 1
+    endm
+
+titlecardresultsend macro
+titlecardresultscount_{"\{titlecardresultscur}"} = titlecardresultscount-1
     endm
 ; ---------------------------------------------------------------------------
 
@@ -1554,13 +1568,14 @@ incfile macro name,path
     endm
 ; ---------------------------------------------------------------------------
 
-dScroll_Header macro {INTLABEL}
+HScroll_Header macro {INTLABEL}
 __LABEL__ label *
-	dc.w (((__LABEL___end - __LABEL__Scroll) / 6) - 1)
-__LABEL__Scroll
+hscrollcount := 0
+hscrollcur := "__LABEL__"
+	dc.w hscrollcount___LABEL__							; number of horizontal scroll list (-1)
     endm
 
-dScroll_Data macro pixel,size,velocity,plane
+HScroll_Data macro pixel,size,velocity,plane
 	dc.w velocity,size
 	if upstring("plane")="FG"
 		dc.w H_scroll_buffer+(pixel<<2)
@@ -1569,6 +1584,11 @@ dScroll_Data macro pixel,size,velocity,plane
 	else
 		fatal "Error! Non-existent plane."
 	endif
+hscrollcount := hscrollcount + 1
+    endm
+
+HScroll_End macro
+hscrollcount_{"\{hscrollcur}"} = hscrollcount-1
     endm
 ; ---------------------------------------------------------------------------
 
