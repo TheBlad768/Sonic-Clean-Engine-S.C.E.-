@@ -5,7 +5,7 @@
 Map_TitleCard:
 		dc.w 0						; null
 		dc.w Map_TitleCard_Banner-Map_TitleCard		; red banner
-		dc.w Map_TitleCard_Act-Map_TitleCard		; ACT
+		dc.w Map_TitleCard_ACT-Map_TitleCard		; ACT
 		dc.w Map_TitleCard_ZONE-Map_TitleCard		; ZONE
 
 .levels
@@ -31,7 +31,7 @@ Map_TitleCard_Banner:
 		dc.b $30, $F, $80, 0, 0, 0
 		dc.b $50, $F, $80, 0, $FF, $E0
 		dc.b $50, $F, $80, 0, 0, 0
-Map_TitleCard_Act:
+Map_TitleCard_ACT:
 		dc.w 2
 		dc.b $10, 9, $80, $1C, $FF, $E4
 		dc.b 0, $F, $80, $3D, $FF, $F5
