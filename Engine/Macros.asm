@@ -1636,7 +1636,7 @@ titlecardVRAMLetters macro opt,opt2,str
     endm
 
 ; macro for generating title card letter mappings with the remapped character set
-titlecardMapLetters macro opt,pos=((screen_width/2)-32),str
+titlecardMapLetters macro opt,pos=-32,str
 	save
 	codepage TITLECARD
 .vram_start := $804D
@@ -1689,7 +1689,7 @@ titlecardMapLetters macro opt,pos=((screen_width/2)-32),str
 	endif
     endm
 	dc.w .sprite_count
-.current_x := pos - .total_width
+.current_x := ((screen_width/2)pos) - .total_width
     irpc char,str
 .width := 16
 .size := 6
@@ -1705,7 +1705,7 @@ titlecardMapLetters macro opt,pos=((screen_width/2)-32),str
 	else
 	    if "char" = "Z"
 .vram_final := $8037
-	    elseif "char" = "O"
+	    elseif ("char" = "O") || ("char" = "0")
 .vram_final := $802E
 	    elseif "char" = "N"
 .vram_final := $8028
