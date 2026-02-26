@@ -412,7 +412,7 @@ setup_ptr =						objoff_3E			; long
 ; ---------------------------------------------------------------------------
 
 circular_radius =					objoff_3A			; word ; used by MoveSprite_Circular
-circular_angle =					objoff_3C			; byte
+circular_angle =					objoff_3C			; byte/word
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by swing subroutine
