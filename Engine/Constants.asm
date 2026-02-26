@@ -106,6 +106,13 @@ PLCKosPlus_Queues =					4				; maximum kosinski plus queues (affects RAM)
 PLCKosPlusM_Queues =					32				; maximum kosinski plus module queues (affects RAM)
 
 ; ---------------------------------------------------------------------------
+;  Title Card zone names
+; ---------------------------------------------------------------------------
+
+TitleCardName_ZONE =					"ZONE"
+TitleCardName_DEZ =					"DEATH EGG"
+
+; ---------------------------------------------------------------------------
 ; Game mode routines
 ; ---------------------------------------------------------------------------
 

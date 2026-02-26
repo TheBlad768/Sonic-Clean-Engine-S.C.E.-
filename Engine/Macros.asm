@@ -1616,7 +1616,7 @@ titlecardVRAMLetters macro opt,opt2,str
     endm
 
 ; macro for generating title card letter mappings with the remapped character set
-titlecardMapLetters macro opt,pos,str
+titlecardMapLetters macro opt,pos=((screen_width/2)-32),str
 	save
 	codepage TITLECARD
 .vram_start := $804D
