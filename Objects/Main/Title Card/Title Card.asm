@@ -275,7 +275,7 @@ TitleCard_LoadLetters:
 		subq.w	#1,d0								; dbf fix
 		add.w	d0,d0								; multiply by 4
 		add.w	d0,d0								; "
-		movem.w	.letters(pc,d0.w),d0-d1							; get id and size letter
+		movem.w	.letters(pc,d0.w),d0-d1						; get id and size letter
 		lsl.w	#5,d0								; multiply by $20
 		lea	(a2,d0.w),a4							; load art letter address to a4
 
