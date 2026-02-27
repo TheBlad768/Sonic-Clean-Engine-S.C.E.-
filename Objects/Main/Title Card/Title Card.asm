@@ -272,7 +272,7 @@ TitleCard_LoadLetters:
 		moveq	#0,d0
 		move.b	(a1)+,d0							; get letter to d0
 		bmi.s	.exit								; if minus, branch
-		subq.b	#1,d0								; dbf fix
+		subq.w	#1,d0								; dbf fix
 		add.w	d0,d0								; multiply by 4
 		add.w	d0,d0								; "
 		movem.w	.letters(pc,d0.w),d0-d1							; get id and size letter
