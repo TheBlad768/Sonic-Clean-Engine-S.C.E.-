@@ -55,10 +55,10 @@ loc_23FE8:
 		move.b	status(a0),d0
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.notgrav
-		eori.b	#2,d0
+		eori.b	#setBit(status.npc.y_flip),d0
 
 .notgrav
-		andi.b	#2,d0
+		andi.b	#setBit(status.npc.y_flip),d0
 		beq.s	loc_24002
 		move.l	#sub_2413E,address(a0)
 
