@@ -6,10 +6,8 @@
 
 	dsset aniraw_ptr								; pretend we're in the RAM
 
-dashdust =			*
-
-.timer				ds.b 1							; (1 byte)
-.tails_flag			ds.b 1							; (1 byte)
+dashdust.timer			ds.b 1							; (1 byte)
+dashdust.tails_flag		ds.b 1							; (1 byte)
 
 	dsreset										; stop pretending and reset the program counter
 

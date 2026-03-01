@@ -6,9 +6,7 @@
 
 	dsset aniraw_ptr								; pretend we're in the RAM
 
-spikebonker			= *
-
-.delay				ds.w 1							; (2 bytes)
+spikebonker.delay			ds.w 1						; (2 bytes)
 
 	dsreset										; stop pretending and reset the program counter
 
