@@ -4,13 +4,10 @@
 
 ; dynamic object variables
 
-	dsset count									; pretend we're in the RAM
+	dsset count+1									; pretend we're in the RAM
 
-bossexplosion =			*
-
-				ds.b 1							; skip count (1 byte)
-.xoffset			ds.b 1							; (1 byte)
-.yoffset			ds.b 1							; (1 byte)
+bossexplosion.xoffset			ds.b 1						; (1 byte)
+bossexplosion.yoffset			ds.b 1						; (1 byte)
 
 	dsreset										; stop pretending and reset the program counter
 
