@@ -11,28 +11,63 @@ Create_New_Object:
 		lea	(Dynamic_object_RAM-next_object).w,a1				; start address for object RAM
 		moveq	#bytesToXcnt(Dynamic_object_RAM_end-Dynamic_object_RAM,object_size),d0
 
-.loop
+.find
 		lea	next_object(a1),a1						; goto next object RAM slot
 		tst.l	address(a1)							; is object RAM slot empty?
-		dbeq	d0,.loop							; if not, branch
+		dbeq	d0,.find							; if not, branch
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to find a free object space using pre-calculated parameters
+;
+; Input:
+; d0 = maximum object slots to check
+; a1 = object address to start checking from
+;
+; Output:
+; a1 = free position in object RAM
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Create_New_Object_4:
+		subq.w	#1,d0
+		bmi.s	.done								; branch, if there are no free object slots here
+
+.find
+		lea	next_object(a1),a1						; goto next object RAM slot
+		tst.l	address(a1)							; is object RAM slot empty?
+		dbeq	d0,.find							; if not, branch
+
+.done
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to find a free object space starting from a specific object
+;
+; Input:
+; a0 = current object address
+;
+; Output:
+; a1 = free position in object RAM
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Create_New_Object_3:
 		move.w	#Dynamic_object_RAM_end,d0
 		sub.w	a0,d0
-		lsr.w	#object_size_bits,d0						; divide by $40... even though SSTs are $4A bytes long in this game
+		lsr.w	#object_size_bits,d0						; divide by $40... even though SSTs are $50 bytes long in this game
 		move.b	.table(pc,d0.w),d0						; use a look-up table to get the right loop counter
-		bmi.s	.done
+		bmi.s	.done								; branch, if there are no free object slots here
 
 		; find slot
 		lea	-next_object(a0),a1						; load current object to a1
 
-.loop
+.find
 		lea	next_object(a1),a1						; goto next object RAM slot
 		tst.l	address(a1)							; is object RAM slot empty?
-		dbeq	d0,.loop							; if not, branch
+		dbeq	d0,.find							; if not, branch
 
 .done
 		rts
