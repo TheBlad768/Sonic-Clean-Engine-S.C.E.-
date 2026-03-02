@@ -434,6 +434,15 @@ scaling_scale_prev_factor =				objoff_41			; byte
 scaling_art_address =					objoff_42			; long
 
 ; ---------------------------------------------------------------------------
+; Conventions followed by some/most bosses
+; ---------------------------------------------------------------------------
+
+boss_invulnerability_timer =				objoff_1D			; byte ; flash time
+boss_saved_collision =					objoff_25			; byte ; restore boss collision after hit
+boss_saved_mus =					objoff_26			; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects
+boss_hitcount =						objoff_29			; byte ; usage varies, bosses use it as a hit counter
+
+; ---------------------------------------------------------------------------
 ; Conventions specific to Sonic/Tails/Knuckles
 ; ---------------------------------------------------------------------------
 
@@ -466,15 +475,6 @@ default_y_radius =					objoff_44			; byte ; default value of y_radius
 default_x_radius =					objoff_45			; byte ; default value of x_radius
 top_solid_bit =						objoff_46			; byte ; the bit to check for top solidity (either $C or $E)
 lrb_solid_bit =						objoff_47			; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
-
-; ---------------------------------------------------------------------------
-; Conventions followed by some/most bosses
-; ---------------------------------------------------------------------------
-
-boss_invulnerability_timer =				objoff_1D			; byte ; flash time
-boss_saved_collision =					objoff_25			; byte ; restore boss collision after hit
-boss_saved_mus =					objoff_26			; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects
-boss_hitcount =						objoff_29			; byte ; usage varies, bosses use it as a hit counter
 
 ; ---------------------------------------------------------------------------
 ; Object variables
@@ -543,37 +543,50 @@ boss_hitcount2 =					boss_hitcount			; byte ; usage varies, bosses use it as a h
 ; ---------------------------------------------------------------------------
 
 mainspr_childsprites =					objoff_16			; word ; amount of child sprites
-
-subspr_data =						objoff_18
-sub2_x_pos =						objoff_18
-sub2_y_pos =						objoff_1A
-sub2_mapframe =						objoff_1D
-sub3_x_pos =						objoff_1E
-sub3_y_pos =						objoff_20
-sub3_mapframe =						objoff_23
-sub4_x_pos =						objoff_24
-sub4_y_pos =						objoff_26
-sub4_mapframe =						objoff_29
-sub5_x_pos =						objoff_2A
-sub5_y_pos =						objoff_2C
-sub5_mapframe =						objoff_2F
-sub6_x_pos =						objoff_30
-sub6_y_pos =						objoff_32
-sub6_mapframe =						objoff_35
-sub7_x_pos =						objoff_36
-sub7_y_pos =						objoff_38
-sub7_mapframe =						objoff_3B
-sub8_x_pos =						objoff_3C
-sub8_y_pos =						objoff_3E
-sub8_mapframe =						objoff_41
-sub9_x_pos =						objoff_42
-sub9_y_pos =						objoff_44
-sub9_mapframe =						objoff_47
-subA_x_pos =						objoff_48
-subA_y_pos =						objoff_4A
-subA_mapframe =						objoff_4D
-
 next_subspr =						6				; size
+
+
+	dsset x_vel									; pretend we're in the RAM
+
+subspr_data =						*
+sub2_x_pos						ds.w 1				; (2 bytes) ; x_vel
+sub2_y_pos						ds.w 1				; (2 bytes) ; y_vel
+							ds.b 1				; even ; boss_saved_player
+sub2_mapframe						ds.b 1				; (1 byte)
+sub3_x_pos						ds.w 1				; (2 bytes) ; y_radius and x_radius
+sub3_y_pos						ds.w 1				; (2 bytes) ; anim and prev_anim
+							ds.b 1				; even ; mapping_frame
+sub3_mapframe						ds.b 1				; (1 byte) ; anim_frame
+sub4_x_pos						ds.w 1				; (2 bytes) ; anim_frame_timer and boss_saved_collision
+sub4_y_pos						ds.w 1				; (2 bytes) ; angle
+							ds.b 1				; even ; collision_flags
+sub4_mapframe						ds.b 1				; (1 byte) ; collision_property
+sub5_x_pos						ds.w 1				; (2 bytes) ; status and shield_reaction
+sub5_y_pos						ds.w 1				; (2 bytes) ; subtype
+							ds.b 1				; even
+sub5_mapframe						ds.b 1				; (1 byte)
+sub6_x_pos						ds.w 1				; (2 bytes)
+sub6_y_pos						ds.w 1				; (2 bytes)
+							ds.b 1				; even
+sub6_mapframe						ds.b 1				; (1 byte)
+sub7_x_pos						ds.w 1				; (2 bytes)
+sub7_y_pos						ds.w 1				; (2 bytes)
+							ds.b 1				; even
+sub7_mapframe						ds.b 1				; (1 byte)
+sub8_x_pos						ds.w 1				; (2 bytes)
+sub8_y_pos						ds.w 1				; (2 bytes)
+							ds.b 1				; even
+sub8_mapframe						ds.b 1				; (1 byte)
+sub9_x_pos						ds.w 1				; (2 bytes)
+sub9_y_pos						ds.w 1				; (2 bytes)
+							ds.b 1				; even
+sub9_mapframe						ds.b 1				; (1 byte)
+subA_x_pos						ds.w 1				; (2 bytes)
+subA_y_pos						ds.w 1				; (2 bytes)
+							ds.b 1				; even
+subA_mapframe						ds.b 1				; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
