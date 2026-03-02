@@ -244,9 +244,9 @@ subObjSlotData macro slots,vram,pal,pri,offset,index,mappings,height,width,prio,
     endm
 
 ; macro to declare sub-object data
-subObjMainData macro address=FALSE,render,routine,height,width,prio,vram,pal,pri,mappings,frame,collision
-    if upstring("address")<>"FALSE"
-	dc.l address
+subObjMainData macro addr=FALSE,render,routine,height,width,prio,vram,pal,pri,mappings,frame,collision
+    if upstring("addr")<>"FALSE"
+	dc.l addr
     endif
 	dc.b render,routine,(height/2),(width/2)
 	dc.w sprite_priority(prio),make_art_tile(vram,pal,pri)
@@ -269,14 +269,14 @@ zoneanimals macro first,second
 	dc.ATTRIBUTE (Obj_Animal_Properties_first - Obj_Animal_Properties),(Obj_Animal_Properties_second - Obj_Animal_Properties)
     endm
 
-objanimaldecl macro mappings,address,xvel,yvel,{INTLABEL}
+objanimaldecl macro map,addr,xvel,yvel,{INTLABEL}
 Obj_Animal_Properties___LABEL__: label *
-	dc.l mappings,address
+	dc.l map,addr
 	dc.w xvel,yvel
     endm
 
-objanimalending macro address,mappings,vram,xvel,yvel
-	dc.l address,mappings
+objanimalending macro addr,map,vram,xvel,yvel
+	dc.l addr,map
 	dc.w vram,xvel,yvel
 	dc.w 0	; even
     endm
@@ -286,11 +286,11 @@ titlecardresultsheader macro {INTLABEL}
 __LABEL__ label *
 titlecardresultscount := 0
 titlecardresultscur := "__LABEL__"
-	dc.w titlecardresultscount___LABEL__							; number of titlecard and results object list (-1)
+	dc.w titlecardresultscount___LABEL__						; number of titlecard and results object list (-1)
     endm
 
-titlecardresultsobjdata macro address,xdest,xpos,ypos,frame,width,exit
-	dc.l address									; object address
+titlecardresultsobjdata macro addr,xdest,xpos,ypos,frame,width,exit
+	dc.l addr									; object address
 	dc.w 128+xdest,128+xpos,128+ypos						; x destination, xpos, ypos
 	dc.b frame,(width/2)								; mapping frame, width
 	dc.w exit									; place in exit queue
@@ -635,89 +635,89 @@ respawn_delete macro terminate
 ; macros for frequently used subroutines
 ; ---------------------------------------------------------------------------
 
-getobjectRAMslot macro address
-    ifb address
+getobjectRAMslot macro reg
+    ifb reg
 	fatal "Error! Empty value!"
     endif
 	move.w	#Dynamic_object_RAM_end,d0
 	sub.w	a0,d0
-	lsr.w	#6,d0									; divide by $40... even though SSTs are $4A bytes long in this game
-	lea	(Create_New_Object_3.table).w,address
-	move.b	(address,d0.w),d0							; use a look-up table to get the right loop counter
+	lsr.w	#6,d0									; divide by $40... even though SSTs are $50 bytes long in this game
+	lea	(Create_New_Object_3.table).w,reg
+	move.b	(reg,d0.w),d0								; use a look-up table to get the right loop counter
     endm
 
-MoveSprite macro address=a0,gravity,terminate
-    ifb address
+MoveSprite macro reg=a0,gravity,terminate
+    ifb reg
 	fatal "Error! Empty value!"
     endif
-	movem.w	x_vel(address),d0/d2							; load xy speed
+	movem.w	x_vel(reg),d0/d2							; load xy speed
 	asl.l	#8,d0									; shift velocity to line up with the middle 16 bits of the 32-bit position
 	asl.l	#8,d2									; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)							; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-	add.l	d2,y_pos(address)							; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	add.l	d0,x_pos(reg)								; add to x-axis position ; note this affects the subpixel position x_sub(reg) = 2+x_pos(reg)
+	add.l	d2,y_pos(reg)								; add to y-axis position ; note this affects the subpixel position y_sub(reg) = 2+y_pos(reg)
     ifnb gravity
-	addi.w	#gravity,y_vel(address)							; increase vertical speed (apply gravity)
+	addi.w	#gravity,y_vel(reg)							; increase vertical speed (apply gravity)
 	else
-	addi.w	#$38,y_vel(address)							; increase vertical speed (apply gravity)
+	addi.w	#$38,y_vel(reg)								; increase vertical speed (apply gravity)
     endif
     ifnb terminate
 	rts
     endif
     endm
 
-MoveSprite2 macro address=a0,terminate
-    ifb address
+MoveSprite2 macro reg=a0,terminate
+    ifb reg
 	fatal "Error! Empty value!"
     endif
-	movem.w	x_vel(address),d0/d2							; load xy speed
+	movem.w	x_vel(reg),d0/d2							; load xy speed
 	asl.l	#8,d0									; shift velocity to line up with the middle 16 bits of the 32-bit position
 	asl.l	#8,d2									; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)							; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
-	add.l	d2,y_pos(address)							; add to y-axis position ; note this affects the subpixel position y_sub(address) = 2+y_pos(address)
+	add.l	d0,x_pos(reg)								; add to x-axis position ; note this affects the subpixel position x_sub(reg) = 2+x_pos(reg)
+	add.l	d2,y_pos(reg)								; add to y-axis position ; note this affects the subpixel position y_sub(reg) = 2+y_pos(reg)
     ifnb terminate
 	rts
     endif
     endm
 
-MoveSpriteXOnly macro address=a0,terminate
-    ifb address
+MoveSpriteXOnly macro reg=a0,terminate
+    ifb reg
 	fatal "Error! Empty value!"
     endif
-	move.w	x_vel(address),d0							; load x speed
+	move.w	x_vel(reg),d0								; load x speed
 	ext.l	d0
 	asl.l	#8,d0									; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(address)							; add to x-axis position ; note this affects the subpixel position x_sub(address) = 2+x_pos(address)
+	add.l	d0,x_pos(reg)								; add to x-axis position ; note this affects the subpixel position x_sub(reg) = 2+x_pos(reg)
     ifnb terminate
 	rts
     endif
     endm
 
-MoveSpriteYOnly macro address=a0,gravity,terminate
-    ifb address
+MoveSpriteYOnly macro reg=a0,gravity,terminate
+    ifb reg
 	fatal "Error! Empty value!"
     endif
-	move.w	y_vel(address),d0							; load y speed
+	move.w	y_vel(reg),d0								; load y speed
 	ext.l	d0
 	asl.l	#8,d0									; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(address)							; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	add.l	d0,y_pos(reg)								; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
     ifnb gravity
-	addi.w	#gravity,y_vel(address)							; increase vertical speed (apply gravity)
+	addi.w	#gravity,y_vel(reg)							; increase vertical speed (apply gravity)
 	else
-	addi.w	#$38,y_vel(address)							; increase vertical speed (apply gravity)
+	addi.w	#$38,y_vel(reg)								; increase vertical speed (apply gravity)
     endif
     ifnb terminate
 	rts
     endif
     endm
 
-MoveSprite2YOnly macro address=a0,terminate
-    ifb address
+MoveSprite2YOnly macro reg=a0,terminate
+    ifb reg
 	fatal "Error! Empty value!"
     endif
-	move.w	y_vel(address),d0							; load y speed
+	move.w	y_vel(reg),d0								; load y speed
 	ext.l	d0
 	asl.l	#8,d0									; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(address)							; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	add.l	d0,y_pos(reg)								; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
     ifnb terminate
 	rts
     endif
@@ -732,16 +732,16 @@ Draw_Sprite macro prio=0,terminate
     endif
     endm
 
-Add_SpriteToCollisionResponseList macro address,terminate
-    ifb address
+Add_SpriteToCollisionResponseList macro reg,terminate
+    ifb reg
 	fatal "Error! Empty value!"
     endif
-	lea	(Collision_response_list).w,address
-	move.w	(address),d0								; get list to d0
+	lea	(Collision_response_list).w,reg
+	move.w	(reg),d0								; get list to d0
 	addq.b	#2,d0									; is list full? ($80)
 	bmi.s	.full									; if so, return
-	move.w	d0,(address)								; save list ($7E)
-	move.w	a0,(address,d0.w)							; store RAM address in list
+	move.w	d0,(reg)								; save list ($7E)
+	move.w	a0,(reg,d0.w)								; store RAM address in list
 
 .full
     ifnb terminate
@@ -749,34 +749,22 @@ Add_SpriteToCollisionResponseList macro address,terminate
     endif
     endm
 
-CreateNewObject macro obj,terminate
-	jsr	(Create_New_Object).w
-	bne.s	.skip
-	move.l	#obj,address(a1)
-
-.skip
-    ifnb terminate
-	rts
+Create_New_Object_4 macro addr,terminate
+	subq.w	#1,d0
+    ifnb addr
+	bmi.ATTRIBUTE	addr								; branch, if there are no free object slots here
+    else
+	bmi.ATTRIBUTE	.done								; branch, if there are no free object slots here
     endif
-    endm
 
-CreateNewObject3 macro obj,terminate
-	jsr	(Create_New_Object_3).w
-	bne.s	.skip
-	move.l	#obj,address(a1)
+.find
+	lea	next_object(a1),a1							; goto next object RAM slot
+	tst.l	address(a1)								; is object RAM slot empty?
+	dbeq	d0,.find								; if not, branch
 
-.skip
-    ifnb terminate
-	rts
+    ifb addr
+.done
     endif
-    endm
-
-CreateNewObject4 macro obj,terminate
-	jsr	(Create_New_Object_4).w
-	bne.s	.skip
-	move.l	#obj,address(a1)
-
-.skip
     ifnb terminate
 	rts
     endif
@@ -1394,14 +1382,14 @@ copyTilemap macro loc,twidth,theight,terminate
 ; input: destination, VRAM shift, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap2 macro loc,address,twidth,theight,terminate
+copyTilemap2 macro loc,vram,pal,pri,twidth,theight,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
-    if ((address)<=$7F)
-	moveq	#(address),d3
+    if ((make_art_tile(vram,pal,pri))<=$7F)
+	moveq	#make_art_tile(vram,pal,pri),d3
     else
-	move.w	#(address),d3
+	move.w	#make_art_tile(vram,pal,pri),d3
     endif
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_Add_VRAM).w
@@ -1435,9 +1423,9 @@ copyTilemapToRAM macro twidth,theight,row,terminate
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
     if ((row)<=$7F)
-	moveq	#row,d3
+	moveq	#(row),d3
     else
-	move.w	#row,d3
+	move.w	#(row),d3
     endif
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_RAM).w

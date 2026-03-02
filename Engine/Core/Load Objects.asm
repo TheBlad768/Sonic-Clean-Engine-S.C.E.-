@@ -295,21 +295,13 @@ loc_1B9A4:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		move.b	2(a0),d2
-		add.w	d2,d2
+		move.b	2(a0),d2							; get object id
+		add.w	d2,d2								; multiply by 4
 		add.w	d2,d2
 		move.l	(a4,d2.w),address(a1)
 		move.b	3(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
-
-		; Create_New_Object_4
-		subq.w	#1,d0
-		bmi.s	loc_1B9FA
-
-.find
-		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
-		dbeq	d0,.find							; if not, branch
+		Create_New_Object_4.s	loc_1B9FA
 		bne.s	loc_1B9FA
 
 loc_1B9F2:
@@ -362,24 +354,13 @@ loc_1BA64:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		move.b	(a0)+,d2
-		add.w	d2,d2
+		move.b	(a0)+,d2							; get object id
+		add.w	d2,d2								; multiply by 4
 		add.w	d2,d2
 		move.l	(a4,d2.w),address(a1)
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
-
-		; Create_New_Object_4
-		subq.w	#1,d0
-		bmi.s	.return
-
-.find
-		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
-		dbeq	d0,.find							; if not, branch
-
-.return
-		rts
+		Create_New_Object_4.s	, 1
 ; ---------------------------------------------------------------------------
 
 loc_1BA92:
@@ -423,24 +404,13 @@ loc_1BAB6:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		move.b	(a0)+,d2
-		add.w	d2,d2
+		move.b	(a0)+,d2							; get object id
+		add.w	d2,d2								; multiply by 4
 		add.w	d2,d2
 		move.l	(a4,d2.w),address(a1)
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
-
-Create_New_Object_4:
-		subq.w	#1,d0
-		bmi.s	.notfree
-
-.find
-		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
-		dbeq	d0,.find							; if not, branch
-
-.notfree
-		rts
+		Create_New_Object_4.s	, 1
 
 ; ---------------------------------------------------------------------------
 ; Changes the coarse back- and forward-camera edges to match new Camera_X value.
