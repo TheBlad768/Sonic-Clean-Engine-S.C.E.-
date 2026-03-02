@@ -170,8 +170,10 @@ Obj_MonitorSpawnIcon:
 		),status(a0)
 
 		clr.b	collision_flags(a0)
+
+		; create monitor icon
 		jsr	(Create_New_Object_3).w
-		bne.s	.skipiconcreation
+		bne.s	.skipexplosioncreation
 		move.l	#Obj_MonitorContents,address(a1)
 		move.b	render_flags(a0),render_flags(a1)
 		move.w	x_pos(a0),x_pos(a1)						; set icon's position
@@ -179,8 +181,8 @@ Obj_MonitorSpawnIcon:
 		move.b	anim(a0),anim(a1)
 		move.b	status(a0),status(a1)
 
-.skipiconcreation
-		jsr	(Create_New_Object_3).w
+		; create explosion
+		jsr	(Create_New_Object_4).w
 		bne.s	.skipexplosioncreation
 		move.l	#Obj_Explosion.skipanimal,address(a1)
 		move.w	x_pos(a0),x_pos(a1)						; set explosion's position
