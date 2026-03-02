@@ -136,7 +136,6 @@ loc_85D48:
 		and.b	objoff_27(a0),d0
 		cmpi.b	#7,d0
 		bne.s	Check_InTheirRange.return
-		clr.w	objoff_1C(a0)
 		clr.w	objoff_26(a0)
 
 		; jump
