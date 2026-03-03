@@ -5,10 +5,10 @@
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipX:
-		bclr	#render_flags.x_flip,render_flags(a0)
-		tst.w	d0
+		bclr	#render_flags.x_flip,render_flags(a0)				; clear x flip bit
+		tst.w	d0								; changed by Find_SonicObject
 		beq.s	.left
-		bset	#render_flags.x_flip,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)				; set x flip bit
 
 .left
 		rts
@@ -20,10 +20,10 @@ Change_FlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipX2:
-		bclr	#render_flags.x_flip,render_flags(a0)
-		tst.w	d0
+		bclr	#render_flags.x_flip,render_flags(a0)				; clear x flip bit
+		tst.w	d0								; changed by Find_SonicObject
 		bne.s	.right
-		bset	#render_flags.x_flip,render_flags(a0)
+		bset	#render_flags.x_flip,render_flags(a0)				; set x flip bit
 
 .right
 		rts
@@ -35,10 +35,10 @@ Change_FlipX2:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipY:
-		bclr	#render_flags.y_flip,render_flags(a0)
-		tst.w	d1
+		bclr	#render_flags.y_flip,render_flags(a0)				; clear y flip bit
+		tst.w	d1								; changed by Find_SonicObject
 		beq.s	.up
-		bset	#render_flags.y_flip,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)				; set y flip bit
 
 .up
 		rts
@@ -50,10 +50,10 @@ Change_FlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipY2:
-		bclr	#render_flags.y_flip,render_flags(a0)
-		tst.w	d1
+		bclr	#render_flags.y_flip,render_flags(a0)				; clear y flip bit
+		tst.w	d1								; changed by Find_SonicObject
 		bne.s	.down
-		bset	#render_flags.y_flip,render_flags(a0)
+		bset	#render_flags.y_flip,render_flags(a0)				; set y flip bit
 
 .down
 		rts
@@ -65,10 +65,10 @@ Change_FlipY2:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipXWithVelocity:
-		bclr	#render_flags.x_flip,render_flags(a0)
-		tst.w	x_vel(a0)
-		bmi.s	.left
-		bset	#render_flags.x_flip,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)				; clear x flip bit
+		tst.w	x_vel(a0)							; check x velocity
+		bmi.s	.left								; left move
+		bset	#render_flags.x_flip,render_flags(a0)				; set x flip bit
 
 .left
 		rts
@@ -80,10 +80,10 @@ Change_FlipXWithVelocity:
 ; =============== S U B R O U T I N E =======================================
 
 Change_FlipXWithVelocity2:
-		bclr	#render_flags.x_flip,render_flags(a0)
-		tst.w	x_vel(a0)
-		bpl.s	.right
-		bset	#render_flags.x_flip,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)				; clear x flip bit
+		tst.w	x_vel(a0)							; check x velocity
+		bpl.s	.right								; right move
+		bset	#render_flags.x_flip,render_flags(a0)				; set x flip bit
 
 .right
 		rts
@@ -96,10 +96,10 @@ Change_FlipXWithVelocity2:
 
 Change_FlipXUseParent:
 		movea.w	parent3(a0),a1							; a1=parent object
-		bclr	#render_flags.x_flip,render_flags(a0)
-		btst	#render_flags.x_flip,render_flags(a1)
-		beq.s	.notflipx
-		bset	#render_flags.x_flip,render_flags(a0)
+		bclr	#render_flags.x_flip,render_flags(a0)				; clear x flip bit
+		btst	#render_flags.x_flip,render_flags(a1)				; check parent's x flip bit
+		beq.s	.notflipx							; branch, if parent not x flipped
+		bset	#render_flags.x_flip,render_flags(a0)				; set x flip bit
 
 .notflipx
 		rts
@@ -112,10 +112,10 @@ Change_FlipXUseParent:
 
 Change_FlipYUseParent:
 		movea.w	parent3(a0),a1							; a1=parent object
-		bclr	#render_flags.y_flip,render_flags(a0)
-		btst	#render_flags.y_flip,render_flags(a1)
-		beq.s	.notflipy
-		bset	#render_flags.y_flip,render_flags(a0)
+		bclr	#render_flags.y_flip,render_flags(a0)				; clear y flip bit
+		btst	#render_flags.y_flip,render_flags(a1)				; check parent's y flip bit
+		beq.s	.notflipy							; branch, if parent not y flipped
+		bset	#render_flags.y_flip,render_flags(a0)				; set y flip bit
 
 .notflipy
 		rts
@@ -127,12 +127,12 @@ Change_FlipYUseParent:
 ; =============== S U B R O U T I N E =======================================
 
 Change_VelocityWithFlipX:
-		btst	#render_flags.x_flip,render_flags(a0)
-		beq.s	.notflipx
-		neg.w	d0
+		btst	#render_flags.x_flip,render_flags(a0)				; check object's x flip bit
+		beq.s	.notflipx							; branch, if object not x flipped
+		neg.w	d0								; reverse x velocity
 
 .notflipx
-		move.w	d0,x_vel(a0)
+		move.w	d0,x_vel(a0)							; set x velocity
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -143,12 +143,12 @@ Change_VelocityWithFlipX:
 
 Change_VelocityWithFlipXUseParent:
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#render_flags.x_flip,render_flags(a1)
-		beq.s	.notflipx
-		neg.w	d0
+		btst	#render_flags.x_flip,render_flags(a1)				; check parent's x flip bit
+		beq.s	.notflipx							; branch, if object not x flipped
+		neg.w	d0								; reverse x velocity
 
 .notflipx
-		move.w	d0,x_vel(a0)
+		move.w	d0,x_vel(a0)							; set x velocity
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -159,12 +159,12 @@ Change_VelocityWithFlipXUseParent:
 
 Set_VelocityXTrackSonic:
 		bsr.w	Find_SonicObject
-		bclr	#render_flags.x_flip,render_flags(a0)
-		tst.w	d0
+		bclr	#render_flags.x_flip,render_flags(a0)				; clear x flip bit
+		tst.w	d0								; changed by Find_SonicObject
 		beq.s	.setxv
-		neg.w	d4
-		bset	#render_flags.x_flip,render_flags(a0)
+		neg.w	d4								; reverse x velocity
+		bset	#render_flags.x_flip,render_flags(a0)				; set x flip bit
 
 .setxv
-		move.w	d4,x_vel(a0)
+		move.w	d4,x_vel(a0)							; set x velocity
 		rts
