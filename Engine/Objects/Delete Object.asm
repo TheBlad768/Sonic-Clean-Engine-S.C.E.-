@@ -11,14 +11,18 @@ Delete_Referenced_Object:
 		moveq	#0,d0
 
 	rept bytesTo2Lcnt(object_size)
-		move.l	d0,(a1)+
+		move.l	d0,(a1)+							; clear 4 bytes
 	endr
 
 	if object_size&2
-		move.w	d0,(a1)+
+		move.w	d0,(a1)+							; clear last 2 bytes
 	endif
 
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to delete parent and child object
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -29,6 +33,10 @@ Go_Delete_Object:
 		move.l	#Delete_Current_Object,address(a0)
 		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to delete parent and child object
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 

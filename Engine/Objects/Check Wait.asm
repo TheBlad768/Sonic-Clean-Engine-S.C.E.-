@@ -8,7 +8,7 @@ Obj_Wait:
 		tst.w wait_timer(a0)							; is timer over?
 		bmi.s	.jump								; if yes, branch
 		subq.w	#1,wait_timer(a0)						; subtract 1
-		bmi.s	.jump								; if timer has not ended, branch
+		bmi.s	.jump								; if timer has run out, branch
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -42,17 +42,17 @@ Obj_WaitRun:
 ObjCheckFloorDist_DoRoutine:
 		tst.w	y_vel(a0)							; is object falling down?
 		bmi.s	.return								; if not, branch
-		bsr.w	ObjCheckFloorDist
-		tst.w	d1
-		bmi.s	.jump
-		beq.s	.jump
+		bsr.w	ObjCheckFloorDist						; "
+		tst.w	d1								; is object in the ground?
+		bmi.s	.jump								; if so, branch
+		beq.s	.jump								; "
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
 .jump
-		add.w	d1,y_pos(a0)
+		add.w	d1,y_pos(a0)							; move object out of the ground
 
 		; jump to custom code
 		movea.l	jump_ptr(a0),a1
@@ -67,17 +67,17 @@ ObjCheckFloorDist_DoRoutine:
 ObjCheckCeilingDist_DoRoutine:
 		tst.w	y_vel(a0)							; is object falling upwards?
 		bmi.s	.return								; if not, branch
-		bsr.w	ObjCheckCeilingDist
-		tst.w	d1
-		bmi.s	.jump
-		beq.s	.jump
+		bsr.w	ObjCheckCeilingDist						; "
+		tst.w	d1								; is object in the ground (ceiling)?
+		bmi.s	.jump								; if so, branch
+		beq.s	.jump								; "
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
 .jump
-		sub.w	d1,y_pos(a0)
+		sub.w	d1,y_pos(a0)							; move object out of the ground
 
 		; jump to custom code
 		movea.l	jump_ptr(a0),a1
@@ -90,12 +90,16 @@ ObjCheckCeilingDist_DoRoutine:
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckFloorDist2_DoRoutine:
-		move.w	x_vel(a0),d3
-		ext.l	d3
-		asl.l	#8,d3
-		add.l	x_pos(a0),d3
-		swap	d3
-		bsr.w	ObjCheckFloorDist2
+
+		; move object
+		move.w	x_vel(a0),d3							; load x speed
+		ext.l	d3								; sign extension
+		asl.l	#8,d3								; shift velocity to line up with the middle 16 bits of the 32-bit position
+		add.l	x_pos(a0),d3							; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+
+		; check floor
+		swap	d3								; long to word
+		bsr.w	ObjCheckFloorDist2						; "
 		cmpi.w	#-1,d1
 		blt.s	.jump
 		cmpi.w	#12,d1
@@ -122,10 +126,10 @@ ObjCheckFloorDist2_DoRoutine:
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckRightWallDist_DoRoutine:
-		bsr.w	ObjCheckRightWallDist
-		tst.w	d1
-		bpl.s	ObjCheckFloorDist2_DoRoutine.return
-		add.w	d1,x_pos(a0)
+		bsr.w	ObjCheckRightWallDist						; "
+		tst.w	d1								; has the object hit a wall?
+		bpl.s	ObjCheckFloorDist2_DoRoutine.return				; if not, branch
+		add.w	d1,x_pos(a0)							; move object out of the wall
 
 		; jump to custom code
 		movea.l	jump_ptr(a0),a1
@@ -138,10 +142,10 @@ ObjCheckRightWallDist_DoRoutine:
 ; =============== S U B R O U T I N E =======================================
 
 ObjCheckLeftWallDist_DoRoutine:
-		bsr.w	ObjCheckLeftWallDist
-		tst.w	d1
-		bpl.s	ObjCheckFloorDist2_DoRoutine.return
-		add.w	d1,x_pos(a0)
+		bsr.w	ObjCheckLeftWallDist						; "
+		tst.w	d1								; has the object hit a wall?
+		bpl.s	ObjCheckFloorDist2_DoRoutine.return				; if not, branch
+		add.w	d1,x_pos(a0)							; move object out of the wall
 
 		; jump to custom code
 		movea.l	jump_ptr(a0),a1

@@ -94,9 +94,9 @@ Security_Addr =						Security_addr
 ; Level Misc
 ; ---------------------------------------------------------------------------
 
-RingsTable_Size =					512				; maximum rings on the level (affects RAM, even numbers only)
+RingsTable_Size =					512				; maximum rings on the level (affects RAM, even values only)
 RingsList_Size =					63				; maximum rings being consumed at once (affects RAM)
-ObjectsTable_Size =					768				; maximum objects on the level (affects RAM, even numbers only)
+ObjectsTable_Size =					768				; maximum objects on the level (affects RAM, even values only)
 
 ; ---------------------------------------------------------------------------
 ; PLC queues
@@ -318,7 +318,7 @@ ccr_c_bit =						0				; carry ($01)
 ; ---------------------------------------------------------------------------
 
 object_size_bits =					6
-object_size =						$50				; the size of an object's status table entry
+object_size =						$50				; the size of an object's status table entry (affects RAM, even values only)
 next_object =						object_size
 
 ; ---------------------------------------------------------------------------
@@ -424,6 +424,13 @@ swing_ymax =						objoff_3E			; word
 swing_yacc =						objoff_40			; word
 
 ; ---------------------------------------------------------------------------
+; Conventions followed by pal rotation script 2 subroutine
+; ---------------------------------------------------------------------------
+
+palrotation_frame_timer =				objoff_3A			; byte
+palrotation_frame =					objoff_3B			; byte
+
+; ---------------------------------------------------------------------------
 ; Conventions followed by art scaling subroutine
 ; ---------------------------------------------------------------------------
 
@@ -440,7 +447,9 @@ scaling_art_address =					objoff_42			; long
 boss_invulnerability_timer =				objoff_1D			; byte ; flash time
 boss_saved_collision =					objoff_25			; byte ; restore boss collision after hit
 boss_saved_mus =					objoff_26			; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects
+boss_state_flags =					objoff_27			; byte
 boss_hitcount =						objoff_29			; byte ; usage varies, bosses use it as a hit counter
+boss_x_boundary =					objoff_3A			; word
 
 ; ---------------------------------------------------------------------------
 ; Conventions specific to Sonic/Tails/Knuckles
@@ -723,6 +732,18 @@ collision_flags.npc.type_mask =				$C0
 ; ---------------------------------------------------------------------------
 
 respawn_addr.state =					7				; remember object state
+
+; ---------------------------------------------------------------------------
+; Boss boundary bit numbers
+; ---------------------------------------------------------------------------
+
+; functions (boss_state_flags)
+boss_music_bit =					0
+boss_lock_y_bit =					1
+boss_lock_x_bit =					2
+
+boss_side_x_bit =					6
+boss_side_y_bit =					7
 
 ; ---------------------------------------------------------------------------
 ; Water wind tunnels variables

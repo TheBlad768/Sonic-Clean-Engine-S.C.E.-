@@ -5,6 +5,8 @@
 ; =============== S U B R O U T I N E =======================================
 
 Run_PalRotationScript:
+
+		; check disable flag
 		tst.b	(Palette_rotation_disable).w
 		bne.w	locret_85A00
 		lea	(Palette_rotation_data).w,a1
@@ -87,24 +89,32 @@ locret_85A00:
 ; =============== S U B R O U T I N E =======================================
 
 Run_PalRotationScript2:
+
+		; check disable flag
 		tst.b	(Palette_rotation_disable).w
 		bne.s	.return
-		subq.b	#1,objoff_3A(a0)
-		bpl.s	.return
-		movea.l	(a1)+,a3							; address of Palette animation data
+
+		; wait
+		subq.b	#1,palrotation_frame_timer(a0)					; subtract 1 from frame duration
+		bpl.s	.return								; if time remains, branch
+
+		; run
+		movea.l	(a1)+,a3							; address of palette animation data
 		move.w	(a1)+,d0							; number of colors to replace
 		moveq	#2,d1
-		add.b	objoff_3B(a0),d1
+		add.b	palrotation_frame(a0),d1					; next frame number
 		moveq	#0,d2
-		move.b	(a1,d1.w),d2
-		bpl.s	.skip
+		move.b	(a1,d1.w),d2							; read frame from script
+		bpl.s	.skip								; if animation is not complete, branch
+
+		; repeat animation from beginning
 		moveq	#0,d1
 		move.b	(a1),d2
 
 .skip
-		move.b	d1,objoff_3B(a0)
-		move.b	1(a1,d1.w),objoff_3A(a0)
-		add.w	d2,d2
+		move.b	d1,palrotation_frame(a0)					; set frame
+		move.b	1(a1,d1.w),palrotation_frame_timer(a0)				; set frame duration
+		add.w	d2,d2								; multiply by 2
 		adda.w	(a3,d2.w),a3
 
 .loop
