@@ -1,146 +1,232 @@
 ; ---------------------------------------------------------------------------
-; Check range subroutine
+; Check camera boundary subroutine
 ; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Check_CameraBoundary:
+		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w				; lock min x to current camera position
+
+		; check y boundary
+		move.w	(Camera_target_max_Y_pos).w,d0
+		cmp.w	(Camera_max_Y_pos).w,d0						; has the camera reached this y limit?
+		blo.s	Check_CameraInRange.return					; if not, branch
+		move.w	d0,(Camera_min_Y_pos).w						; set top boundary
+
+		; check x boundary
+		move.w	boss_x_boundary(a0),d0						; load the x-axis boundary
+		cmp.w	(Camera_X_pos).w,d0						; has the camera crossed x boundary position?
+		bhi.s	Check_CameraInRange.return					; if not, branch
+
+		; jump to custom code
+		movea.l	jump_ptr(a0),a1
+		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Check camera range subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = pointer to boundary table
+;
+; Boundary Table:
+; +0: min y boundary
+; +2: max y boundary
+; +4: min x boundary
+; +6: max x boundary
+; +8:  y boundary (used to set boss_side_y_bit)
+; +10: y boundary (unused/padding)
+; +12: x boundary (used to set boss_side_x_bit)
+; +14: x boundary (unused/padding)
 
 ; =============== S U B R O U T I N E =======================================
 
 Check_CameraInRange:
+
+		; check xy camera position
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(a1)+,d0
-		blo.s	Check_CameraInRange_Fail
+		blo.s	.fail
 		cmp.w	(a1)+,d0
-		bhi.s	Check_CameraInRange_Fail
+		bhi.s	.fail
 		move.w	(Camera_X_pos).w,d1
 		cmp.w	(a1)+,d1
-		blo.s	Check_CameraInRange_Fail
+		blo.s	.fail
 		cmp.w	(a1)+,d1
-		bhi.s	Check_CameraInRange_Fail
-		bclr	#7,objoff_27(a0)
+		bhi.s	.fail
+
+		; set xy side bits
+		bclr	#boss_side_y_bit,boss_state_flags(a0)
 		cmp.w	(a1),d0
-		bls.s	.skip
-		bset	#7,objoff_27(a0)
+		bls.s	.check
+		bset	#boss_side_y_bit,boss_state_flags(a0)
 
-.skip
-		bclr	#6,objoff_27(a0)
+.check
+		bclr	#boss_side_x_bit,boss_state_flags(a0)
 		cmp.w	4(a1),d1
-		bls.s	.skip2
-		bset	#6,objoff_27(a0)
+		bls.s	.done
+		bset	#boss_side_x_bit,boss_state_flags(a0)
 
-.skip2
+.done
 		move.l	(sp),address(a0)
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-Check_CameraInRange_Fail:
+.fail
 		addq.w	#4,sp								; exit from current object
 		bra.w	Delete_Sprite_If_Not_In_Range
 
-; =============== S U B R O U T I N E =======================================
-
-sub_85C7E:
-		move.w	(Camera_X_pos).w,(Camera_min_X_pos).w
-		move.w	(Camera_target_max_Y_pos).w,d0
-		cmp.w	(Camera_max_Y_pos).w,d0
-		blo.s	Init_BossArena3.return
-		move.w	d0,(Camera_min_Y_pos).w
-		move.w	objoff_3A(a0),d0
-		cmp.w	(Camera_X_pos).w,d0
-		bhi.s	Init_BossArena3.return
-
-		; jump
-		movea.l	jump_ptr(a0),a1
-		jmp	(a1)
+; ---------------------------------------------------------------------------
+; Init camera boundary subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Init_BossArena:
-		st	(Boss_flag).w
+Init_CameraBoundary:
+		st	(Boss_flag).w							; set boss flag
 
-Init_BossArena2:
+Init_CameraBoundary_2:
 		music	mus_FadeOut							; fade out music
-		move.w	#2*60,wait_timer(a0)
+		move.w	#2*60,wait_timer(a0)						; set timer
 
-Init_BossArena3:
+Init_CameraBoundary_3:
+
+		; set xy-axis boundaries
 		move.w	(Camera_min_Y_pos).w,(Camera_stored_min_Y_pos).w
 		move.w	(Camera_target_max_Y_pos).w,(Camera_stored_max_Y_pos).w
 		move.w	(Camera_min_X_pos).w,(Camera_stored_min_X_pos).w
 		move.w	(Camera_max_X_pos).w,(Camera_stored_max_X_pos).w
 		move.l	(a1)+,(Camera_saved_min_Y_pos).w
 		move.l	(a1)+,(Camera_saved_min_X_pos).w
-
-.return
 		rts
+
+; ---------------------------------------------------------------------------
+; Check camera boundary subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Load_BossArena:
-		btst	#0,objoff_27(a0)
-		bne.s	loc_85CC6
-		subq.w	#1,wait_timer(a0)
-		bpl.s	loc_85CC6
-		move.b	objoff_26(a0),d0
+Check_CameraInBoundary:
+
+		; check music state
+		btst	#boss_music_bit,boss_state_flags(a0)				; has boss music started?
+		bne.s	.checky								; if yes, skip
+
+		; wait
+		subq.w	#1,wait_timer(a0)						; subtract 1
+		bpl.s	.checky								; if timer has run out, branch
+
+		; play music
+		move.b	boss_saved_mus(a0),d0
 		move.b	d0,(Current_music+1).w
 		bsr.w	Play_Music
-		bset	#0,objoff_27(a0)
+		bset	#boss_music_bit,boss_state_flags(a0)				; set music flag
 
-loc_85CC6:
-		btst	#1,objoff_27(a0)
-		bne.s	loc_85D06
-		move.w	(Camera_Y_pos).w,d0
-		tst.b	objoff_27(a0)
-		bmi.s	loc_85CE6
-		cmp.w	(Camera_saved_min_Y_pos).w,d0
-		bhs.s	loc_85CF2
-		move.w	d0,(Camera_min_Y_pos).w
-		bra.s	loc_85D06
+.checky
+
+		; check y camera state
+		btst	#boss_lock_y_bit,boss_state_flags(a0)				; is y-axis already locked?
+		bne.s	.checkx								; if yes, branch
+		move.w	(Camera_Y_pos).w,d0						; get camera y pos
+
+		; check y side bit
+		tst.b	boss_state_flags(a0)						; was 7 bit set?
+		bmi.s	.checkbottom							; if yes, branch
+
+		; check top
+		cmp.w	(Camera_saved_min_Y_pos).w,d0					; has camera reached top boundary?
+		bhs.s	.locky								; if yes, branch
+		move.w	d0,(Camera_min_Y_pos).w						; set top boundary
+		bra.s	.checkx
 ; ---------------------------------------------------------------------------
 
-loc_85CE6:
-		moveq	#$60,d1
+.checkbottom
+		moveq	#224-128,d1							; set bottom offset
 		add.w	(Camera_saved_max_Y_pos).w,d1
-		cmp.w	d1,d0
-		bhi.s	loc_85D06
+		cmp.w	d1,d0								; has camera reached bottom boundary?
+		bhi.s	.checkx								; if not, branch
 
-loc_85CF2:
-		bset	#1,objoff_27(a0)
+.locky
+
+		; set y-axis boundaries
+		bset	#boss_lock_y_bit,boss_state_flags(a0)
 		move.w	(Camera_saved_min_Y_pos).w,(Camera_min_Y_pos).w
 		move.w	(Camera_saved_max_Y_pos).w,d0
 		move.w	d0,(Camera_target_max_Y_pos).w
 
-loc_85D06:
-		btst	#2,objoff_27(a0)
-		bne.s	loc_85D48
-		move.w	(Camera_X_pos).w,d0
-		btst	#6,objoff_27(a0)
-		bne.s	loc_85D28
-		cmp.w	(Camera_saved_min_X_pos).w,d0
-		bhs.s	loc_85D36
-		move.w	d0,(Camera_min_X_pos).w
-		bra.s	loc_85D48
+.checkx
+
+		; check x camera state
+		btst	#boss_lock_x_bit,boss_state_flags(a0)				; is x-axis already locked?
+		bne.s	.checkdone							; if yes, branch
+		move.w	(Camera_X_pos).w,d0						; get camera x pos
+
+		; check x side bit
+		btst	#boss_side_x_bit,boss_state_flags(a0)
+		bne.s	.checkright
+
+		; check left
+		cmp.w	(Camera_saved_min_X_pos).w,d0					; has camera reached left boundary?
+		bhs.s	.lockx								; if yes, branch
+		move.w	d0,(Camera_min_X_pos).w						; set left boundary
+		bra.s	.checkdone
 ; ---------------------------------------------------------------------------
 
-loc_85D28:
-		cmp.w	(Camera_saved_max_X_pos).w,d0
-		bls.s	loc_85D36
-		move.w	d0,(Camera_max_X_pos).w
-		bra.s	loc_85D48
+.checkright
+		cmp.w	(Camera_saved_max_X_pos).w,d0					; has camera reached right boundary?
+		bls.s	.lockx								; if yes, branch
+		move.w	d0,(Camera_max_X_pos).w						; set right boundary
+		bra.s	.checkdone
 ; ---------------------------------------------------------------------------
 
-loc_85D36:
-		bset	#2,objoff_27(a0)
+.lockx
+
+		; set x-axis boundaries
+		bset	#boss_lock_x_bit,boss_state_flags(a0)				; set x-lock flag
 		move.w	(Camera_saved_min_X_pos).w,(Camera_min_X_pos).w
 		move.w	(Camera_saved_max_X_pos).w,(Camera_max_X_pos).w
 
-loc_85D48:
-		moveq	#7,d0
-		and.b	objoff_27(a0),d0
-		cmpi.b	#7,d0
-		bne.s	Check_InTheirRange.return
-		clr.w	objoff_26(a0)
+.checkdone
 
-		; jump
+		; check bits
+		moveq	#signextendB( \
+			setBit(boss_music_bit) | \
+			setBit(boss_lock_y_bit) | \
+			setBit(boss_lock_x_bit) \
+		),d0
+
+		and.b	boss_state_flags(a0),d0
+
+		cmpi.b	#signextendB( \
+			setBit(boss_music_bit) | \
+			setBit(boss_lock_y_bit) | \
+			setBit(boss_lock_x_bit) \
+		),d0
+
+		bne.s	Check_InTheirRange.return					; if bits are not set, branch
+
+		; clear
+		clr.w	boss_saved_mus(a0)						; clear boss_saved_mus and boss_state_flags
+
+		; jump to custom code
 		movea.l	jump_ptr(a0),a1
 		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Check in their range subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = parent object address
+; a2 = pointer to range table
+;
+; Range Table:
+; +0: min x range
+; +2: max x range
+; +4: min y range
+; +6: max y range
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -173,6 +259,20 @@ Check_InTheirRange:
 		moveq	#0,d0
 		rts
 
+; ---------------------------------------------------------------------------
+; Check in my range subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = player object address
+; a2 = pointer to range table
+;
+; Range Table:
+; +0: min x range
+; +2: max x range
+; +4: min y range
+; +6: max y range
+
 ; =============== S U B R O U T I N E =======================================
 
 Check_InMyRange:
@@ -201,6 +301,22 @@ Check_InMyRange:
 .fail
 		moveq	#0,d0
 		rts
+
+; ---------------------------------------------------------------------------
+; Check player in range subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = pointer to range table
+;
+; Output:
+; d0.l = Player_2 and Player_1
+;
+; Range Table:
+; +0: min x range
+; +2: max x range
+; +4: min y range
+; +6: max y range
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -236,9 +352,24 @@ Check_PlayerInRange:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Check player in range 2 subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = pointer to range table
+;
+; Boundary Table:
+; +0: min y boundary
+; +2: max y boundary
+; +4: min x boundary
+; +6: max x boundary
+
 ; =============== S U B R O U T I N E =======================================
 
 Check_PlayerInRange2:
+
+		; check xy player position
 		move.w	(Player_1+y_pos).w,d0
 		cmp.w	(a1)+,d0
 		blo.s	.fail
@@ -258,6 +389,10 @@ Check_PlayerInRange2:
 .fail
 		moveq	#0,d0
 		rts
+
+; ---------------------------------------------------------------------------
+; Check object off screen subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -281,6 +416,10 @@ Chk_OffScreen:
 .offscreen
 		moveq	#1,d0								; set flag to 1
 		rts
+
+; ---------------------------------------------------------------------------
+; Check object off screen with width subroutine
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -310,6 +449,10 @@ Chk_WidthOffScreen:
 		moveq	#1,d0								; set flag to 1
 		rts
 
+; ---------------------------------------------------------------------------
+; Check camera x boundary subroutine
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Check_CameraXBoundary:
@@ -337,6 +480,10 @@ Check_CameraXBoundary:
 .return2
 		rts
 
+; ---------------------------------------------------------------------------
+; Check camera x boundary 2 subroutine
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Check_CameraXBoundary2:
@@ -363,6 +510,20 @@ Check_CameraXBoundary2:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Camera resize max y from x position subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = pointer to camera resize table
+;
+; Resize Table:
+; +0: max y boundary
+; +2: camera x position or -1 for end marker
+; +4: max y boundary
+; +6: camera x position or -1 for end marker
+; etc...
+
 ; =============== S U B R O U T I N E =======================================
 
 Resize_MaxYFromX:
@@ -381,6 +542,20 @@ Resize_MaxYFromX:
 .skip
 		move.w	d1,(Camera_target_max_Y_pos).w
 		rts
+
+; ---------------------------------------------------------------------------
+; Water resize max y from x position subroutine
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = pointer to water resize table
+;
+; Resize Table:
+; +0: max y boundary
+; +2: camera x position or -1 for end marker
+; +4: max y boundary
+; +6: camera x position or -1 for end marker
+; etc...
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -401,6 +576,10 @@ WaterResize_MaxYFromX:
 		move.w	d1,(Target_water_level).w
 		rts
 
+; ---------------------------------------------------------------------------
+; Change act camera sizes subroutine
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Change_ActSizes:
@@ -411,9 +590,15 @@ Change_ActSizes:
 		movem.l	d0-d1,(Camera_min_X_pos).w
 		rts
 
+; ---------------------------------------------------------------------------
+; Change act camera sizes 2 subroutine
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Change_ActSizes2:
+
+		; get level size
 		lea	(Level_data_addr_RAM.xstart).w,a1
 		move.w	(a1)+,(Camera_stored_min_X_pos).w
 		move.w	(a1)+,(Camera_stored_max_X_pos).w
@@ -423,120 +608,5 @@ Change_ActSizes2:
 		move.w	d1,(Camera_target_max_Y_pos).w
 
 		; create change level size object
-		lea	Child7_ChangeLevSize(pc),a2
+		lea	(Child7_ChangeLevSize).l,a2
 		bra.w	CreateChild7_Normal2
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_IncLevEndXGradual:
-		move.w	(Camera_max_X_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		add.w	d1,d0
-		cmp.w	(Camera_stored_max_X_pos).w,d0
-		bhs.s	.end
-		move.w	d0,(Camera_max_X_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_max_X_pos).w,(Camera_max_X_pos).w
-		bra.w	Delete_Current_Object
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_DecLevStartXGradual:
-		move.w	(Camera_min_X_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		sub.w	d1,d0
-		cmp.w	(Camera_stored_min_X_pos).w,d0
-		ble.s	.end
-		move.w	d0,(Camera_min_X_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_min_X_pos).w,(Camera_min_X_pos).w
-		bra.w	Delete_Current_Object
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_IncLevEndYGradual:
-		move.w	(Camera_max_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$8000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		add.w	d1,d0
-		cmp.w	(Camera_stored_max_Y_pos).w,d0
-		bgt.s	.end
-		move.w	d0,(Camera_max_Y_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_max_Y_pos).w,(Camera_max_Y_pos).w
-		bra.w	Delete_Current_Object
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_DecLevStartYGradual:
-		move.w	(Camera_min_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
-		swap	d1
-		sub.w	d1,d0
-		cmp.w	(Camera_stored_min_Y_pos).w,d0
-		ble.s	.end
-		move.w	d0,(Camera_min_Y_pos).w
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		move.w	(Camera_stored_min_Y_pos).w,(Camera_min_Y_pos).w
-		bra.w	Delete_Current_Object
-
-; =============== S U B R O U T I N E =======================================
-
-Child6_IncLevX:
-		dc.w 1-1
-		dc.l Obj_IncLevEndXGradual
-Child6_DecLevX:
-		dc.w 1-1
-		dc.l Obj_DecLevStartXGradual
-Child6_IncLevY:
-		dc.w 1-1
-		dc.l Obj_IncLevEndYGradual
-Child6_DecLevY:
-		dc.w 1-1
-		dc.l Obj_DecLevStartYGradual
-Child6_DecIncLevX:
-		dc.w 2-1
-		dc.l Obj_DecLevStartXGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndXGradual
-		dc.b 0, 0
-Child1_ActLevelSize:
-		dc.w 3-1
-		dc.l Obj_IncLevEndXGradual
-		dc.b 0, 0
-		dc.l Obj_DecLevStartYGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndYGradual
-		dc.b 0, 0
-Child7_ChangeLevSize:
-		dc.w 4-1
-		dc.l Obj_DecLevStartYGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndYGradual
-		dc.b 0, 0
-		dc.l Obj_DecLevStartXGradual
-		dc.b 0, 0
-		dc.l Obj_IncLevEndXGradual
-		dc.b 0, 0
