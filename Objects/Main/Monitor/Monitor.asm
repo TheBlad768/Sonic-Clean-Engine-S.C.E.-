@@ -40,8 +40,10 @@ Obj_Monitor:
 		bsr.s	Obj_MonitorFall
 
 		; solid
-		moveq	#(28/2)+$B,d1							; monitor's width
-		moveq	#32/2,d2
+		moveq	#$B,d1
+		add.b	width_pixels(a0),d1						; monitor's width
+		moveq	#0,d2
+		move.b	height_pixels(a0),d2
 		move.w	d2,d3								; monitor's height
 		addq.w	#1,d3
 		move.w	x_pos(a0),d4
