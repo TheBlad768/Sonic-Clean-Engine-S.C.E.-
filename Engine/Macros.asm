@@ -298,7 +298,7 @@ titlecardresultscount := titlecardresultscount + 1
     endm
 
 titlecardresultsend macro
-titlecardresultscount_{"\{titlecardresultscur}"} = titlecardresultscount-1
+titlecardresultscount_{"\{titlecardresultscur}"} = titlecardresultscount - 1
     endm
 ; ---------------------------------------------------------------------------
 
@@ -1169,7 +1169,7 @@ zoneanimcur := "__LABEL__"
     endm
 
 zoneanimend macro
-zoneanimcount_{"\{zoneanimcur}"} = zoneanimcount-1
+zoneanimcount_{"\{zoneanimcur}"} = zoneanimcount - 1
     endm
 
 zoneanimplcdecl macro duration,artaddr,vramaddr,numentries,numvramtiles
@@ -1469,7 +1469,7 @@ plrlistcount := plrlistcount + 1
     endm
 
 plrlistend macro
-plrlistcount_{"\{plrlistcur}"} = plrlistcount-1
+plrlistcount_{"\{plrlistcur}"} = plrlistcount - 1
     endm
 
 ; ---------------------------------------------------------------------------
@@ -1576,7 +1576,7 @@ hscrollcount := hscrollcount + 1
     endm
 
 HScroll_End macro
-hscrollcount_{"\{hscrollcur}"} = hscrollcount-1
+hscrollcount_{"\{hscrollcur}"} = hscrollcount - 1
     endm
 ; ---------------------------------------------------------------------------
 
