@@ -88,6 +88,6 @@ GetArcTan:
 		dc.b %10111111								; -x, -y, |x|<|y|
 ; ---------------------------------------------------------------------------
 
-		incfile.b	WordShiftTable, "Data/Misc/Angle/WordShift.bin"
-		incfile.b	LogarithmTable, "Data/Misc/Angle/Logarithmic.bin"	; log base 2
-		incfile.b	ArcTanTable, "Data/Misc/Angle/Arctan.bin"		; 2-argument
+		incfile.ba	WordShiftTable, "Data/Misc/Angle/WordShift.bin"
+		incfile.ba	LogarithmTable, "Data/Misc/Angle/Logarithmic.bin"	; log base 2
+		incfile.ba	ArcTanTable, "Data/Misc/Angle/Arctan.bin"		; 2-argument

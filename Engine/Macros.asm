@@ -1531,28 +1531,31 @@ GameMode_ptr:	label *
     endm
 
 incfile macro name,path
+attr := lowstring("ATTRIBUTE")
 	name:	label *
-    if substr(lowstring("ATTRIBUTE"),0,1)="b"
+    if substr(attr,0,1)="b"
 	binclude path
-    elseif substr(lowstring("ATTRIBUTE"),0,1)="i"
+    elseif substr(attr,0,1)="i"
 	include path
     else
-	fatal "incfile: attribute must start with b or i"
+	fatal "incfile: attribute must start with 'b' or 'i', but it's '\{substr(attr,0,1)}'"
     endif
-    if substr(lowstring("ATTRIBUTE"),1,1)="o"
+    if substr(attr,1,1)="o"
 	ObjectLayoutBoundary
-    elseif substr(lowstring("ATTRIBUTE"),1,1)="r"
+    elseif substr(attr,1,1)="r"
 	RingLayoutBoundary
     endif
-    if strstr(lowstring("ATTRIBUTE"),"e") >= 0
+    if strstr(attr,"e") >= 0
 	name_end:	label *
-	if strstr(lowstring("ATTRIBUTE"),"d") >= 0
+	if strstr(attr,"d") >= 0
 	    if (((name)+((name_end-name))-1)>>17)<>((name)>>17)
 		fatal "DMA crosses a 128kB boundary. You should either split the DMA manually or align the source adequately."
 	    endif
 	endif
     endif
-    even
+    if strstr(attr,"a") >= 0
+	even
+    endif
     endm
 ; ---------------------------------------------------------------------------
 

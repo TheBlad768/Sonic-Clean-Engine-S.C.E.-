@@ -18,17 +18,17 @@ LevelLoadPointer:
 
 ;		Attribute	| Filename	| Folder
 
-		incfile.b	DEZ_8x8_KosPM, "Levels/DEZ/Tiles/Primary.kospm"
-		incfile.b	DEZ_16x16_Unc, "Levels/DEZ/Blocks/Primary.unc"
-		incfile.b	DEZ_128x128_KosP, "Levels/DEZ/Chunks/Primary.kosp"
+		incfile.ba	DEZ_8x8_KosPM, "Levels/DEZ/Tiles/Primary.kospm"
+		incfile.ba	DEZ_16x16_Unc, "Levels/DEZ/Blocks/Primary.unc"
+		incfile.ba	DEZ_128x128_KosP, "Levels/DEZ/Chunks/Primary.kosp"
 
 ; ===========================================================================
 ; Collision data
 ; ===========================================================================
 
-		incfile.b	AngleArray, "Data/Misc/Floor/Angle Map.bin"
-		incfile.b	HeightMaps, "Data/Misc/Floor/Height Maps.bin"
-		incfile.b	HeightMapsRot, "Data/Misc/Floor/Height Maps Rotated.bin"
+		incfile.ba	AngleArray, "Data/Misc/Floor/Angle Map.bin"
+		incfile.ba	HeightMaps, "Data/Misc/Floor/Height Maps.bin"
+		incfile.ba	HeightMapsRot, "Data/Misc/Floor/Height Maps Rotated.bin"
 
 ; ===========================================================================
 ; Level collision data
@@ -36,7 +36,7 @@ LevelLoadPointer:
 
 ;		Attribute	| Filename	| Folder
 
-		incfile.b	DEZ_Solid_Unc, "Levels/DEZ/Collision/1.unc"
+		incfile.ba	DEZ_Solid_Unc, "Levels/DEZ/Collision/1.unc"
 
 ; ===========================================================================
 ; Level layout data
@@ -44,10 +44,10 @@ LevelLoadPointer:
 
 ;		Attribute	| Filename	| Folder
 
-		incfile.b	DEZ1_Layout_Unc, "Levels/DEZ/Layout/1.unc"
-		incfile.b	DEZ2_Layout_Unc, "Levels/DEZ/Layout/2.unc"
-		incfile.b	DEZ3_Layout_Unc, "Levels/DEZ/Layout/3.unc"
-		incfile.b	DEZ4_Layout_Unc, "Levels/DEZ/Layout/4.unc"
+		incfile.ba	DEZ1_Layout_Unc, "Levels/DEZ/Layout/1.unc"
+		incfile.ba	DEZ2_Layout_Unc, "Levels/DEZ/Layout/2.unc"
+		incfile.ba	DEZ3_Layout_Unc, "Levels/DEZ/Layout/3.unc"
+		incfile.ba	DEZ4_Layout_Unc, "Levels/DEZ/Layout/4.unc"
 
 ; ===========================================================================
 ; Level objects data
@@ -58,10 +58,10 @@ LevelLoadPointer:
 
 ;		Attribute	| Filename	| Folder
 
-		incfile.bo	DEZ1_Objects_Unc, "Levels/DEZ/Object Pos/1.unc"
-		incfile.bo	DEZ2_Objects_Unc, "Levels/DEZ/Object Pos/2.unc"
-		incfile.bo	DEZ3_Objects_Unc, "Levels/DEZ/Object Pos/3.unc"
-		incfile.bo	DEZ4_Objects_Unc, "Levels/DEZ/Object Pos/4.unc"
+		incfile.boa	DEZ1_Objects_Unc, "Levels/DEZ/Object Pos/1.unc"
+		incfile.boa	DEZ2_Objects_Unc, "Levels/DEZ/Object Pos/2.unc"
+		incfile.boa	DEZ3_Objects_Unc, "Levels/DEZ/Object Pos/3.unc"
+		incfile.boa	DEZ4_Objects_Unc, "Levels/DEZ/Object Pos/4.unc"
 
 ; ===========================================================================
 ; Level rings data
@@ -72,7 +72,7 @@ LevelLoadPointer:
 
 ;		Attribute	| Filename	| Folder
 
-		incfile.br	DEZ1_Rings_Unc, "Levels/DEZ/Ring Pos/1.unc"
-		incfile.br	DEZ2_Rings_Unc, "Levels/DEZ/Ring Pos/2.unc"
-		incfile.br	DEZ3_Rings_Unc, "Levels/DEZ/Ring Pos/3.unc"
-		incfile.br	DEZ4_Rings_Unc, "Levels/DEZ/Ring Pos/4.unc"
+		incfile.bra	DEZ1_Rings_Unc, "Levels/DEZ/Ring Pos/1.unc"
+		incfile.bra	DEZ2_Rings_Unc, "Levels/DEZ/Ring Pos/2.unc"
+		incfile.bra	DEZ3_Rings_Unc, "Levels/DEZ/Ring Pos/3.unc"
+		incfile.bra	DEZ4_Rings_Unc, "Levels/DEZ/Ring Pos/4.unc"

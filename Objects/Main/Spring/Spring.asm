@@ -591,8 +591,8 @@ loc_236E2:
 ; ---------------------------------------------------------------------------
 
 		; data
-		incfile.b	ObjSpring_SlopeData_DiagUp, "Objects/Main/Spring/Object Data/Heightmap1.bin"
-		incfile.b	ObjSpring_SlopeData_DiagDown, "Objects/Main/Spring/Object Data/Heightmap2.bin"
+		incfile.ba	ObjSpring_SlopeData_DiagUp, "Objects/Main/Spring/Object Data/Heightmap1.bin"
+		incfile.ba	ObjSpring_SlopeData_DiagDown, "Objects/Main/Spring/Object Data/Heightmap2.bin"
 ; ---------------------------------------------------------------------------
 
 		; mappings
