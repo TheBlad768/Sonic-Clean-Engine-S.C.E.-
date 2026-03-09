@@ -15,4 +15,4 @@ GetSineCosine:
 		rts
 ; ---------------------------------------------------------------------------
 
-		incfile.b	SineTable, "Data/Misc/Sine.bin"
+		incfile.ba	SineTable, "Data/Misc/Sine.bin"

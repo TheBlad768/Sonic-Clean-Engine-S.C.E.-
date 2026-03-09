@@ -186,9 +186,9 @@ Child6_MakeRobotnikShipPieces:
 ; ---------------------------------------------------------------------------
 
 		; data
-		incfile.b	AngleLookup_1, "Objects/Bosses/Robotnik/Object Data/AngleLookup1.bin"
-		incfile.b	AngleLookup_2, "Objects/Bosses/Robotnik/Object Data/AngleLookup2.bin"
-		incfile.b	AngleLookup_3, "Objects/Bosses/Robotnik/Object Data/AngleLookup3.bin"
+		incfile.ba	AngleLookup_1, "Objects/Bosses/Robotnik/Object Data/AngleLookup1.bin"
+		incfile.ba	AngleLookup_2, "Objects/Bosses/Robotnik/Object Data/AngleLookup2.bin"
+		incfile.ba	AngleLookup_3, "Objects/Bosses/Robotnik/Object Data/AngleLookup3.bin"
 ; ---------------------------------------------------------------------------
 
 		; mappings

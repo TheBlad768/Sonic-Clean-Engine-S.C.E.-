@@ -387,7 +387,7 @@ Player_ResetAirTimer:
 
 ; =============== S U B R O U T I N E =======================================
 
-		incfile.b	AirCountdown_WobbleData, "Objects/Main/Count Down/Object Data/Wobble Data.bin"
+		incfile.ba	AirCountdown_WobbleData, "Objects/Main/Count Down/Object Data/Wobble Data.bin"
 
 ; =============== S U B R O U T I N E =======================================
 
