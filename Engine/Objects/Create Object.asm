@@ -3,6 +3,7 @@
 ;
 ; Output:
 ; a1 = free position in object RAM
+; d0 = current position in object RAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -21,11 +22,12 @@ Create_New_Object:
 ; Subroutine to find a free object space using pre-calculated parameters
 ;
 ; Input:
-; d0 = maximum object slots to check
 ; a1 = object address to start checking from
+; d0 = maximum object slots to check
 ;
 ; Output:
 ; a1 = free position in object RAM
+; d0 = current position in object RAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -46,7 +48,7 @@ Create_New_Object_4:
 ; Subroutine to find the current object space
 ;
 ; Output:
-; a1 = free position in object RAM
+; d0 = current position in object RAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -66,6 +68,7 @@ Find_Object_Slot:
 ;
 ; Output:
 ; a1 = free position in object RAM
+; d0 = current position in object RAM
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
