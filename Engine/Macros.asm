@@ -1680,7 +1680,7 @@ titlecardMapLetters macro opt,pos=-32,str
 	endif
     endm
 	dc.w .sprite_count
-.current_x := ((screen_width/2)pos) - .total_width
+.current_x := ((screen_width/2)+(pos)) - .total_width
     irpc char,str
 .width := 16
 .size := 6
