@@ -85,8 +85,8 @@ Obj_Bouncing_Ring:
 .notmax
 		subq.w	#1,d5								; fix dbf
 
-		; get RAM slot
-		getobjectRAMslot a2
+		; get current RAM slot in d0
+		getobjectSlot a2
 
 		; load ring data
 		movea.w	a0,a1								; load current object to a1
@@ -104,15 +104,6 @@ Obj_Bouncing_Ring:
 .create
 
 		; create bouncing ring object
-
-.find
-		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
-		dbeq	d0,.find							; if not, branch
-		bne.s	.notfree							; branch, if object RAM slot is not empty
-		subq.w	#1,d0								; dbeq didn't subtract sprite table so we'll do it ourselves
-
-		; load object
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 
@@ -123,10 +114,12 @@ Obj_Bouncing_Ring:
 		move.b	#7|collision_flags.npc.item,collision_flags(a1)
 		move.w	height_pixels(a1),y_radius(a1)					; set y_radius and x_radius
 		move.l	(a2)+,x_vel(a1)
-		tst.w	d0								; object RAM slots ended?
-		dbmi	d5,.create							; if not, loop
 
-.notfree
+		; create next object
+		jsr	(Create_New_Object_4).w						; find next free object slot
+		dbne	d5,.create
+
+		; next
 		sfx	sfx_RingLoss							; play ring loss sound
 		st	(Ring_spill_anim_counter).w					; set time
 		clr.w	(Ring_count).w							; clear rings
@@ -198,8 +191,7 @@ Obj_Bouncing_Ring_Normal:
 .main
 		move.w	(Level_repeat_offset).w,d0
 		sub.w	d0,x_pos(a0)
-		Add_SpriteToCollisionResponseList a1
-		jmp	(Draw_Sprite).w
+		jmp	(Draw_And_Touch_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .delete
@@ -279,8 +271,7 @@ Obj_Bouncing_Ring_TestGravity:
 .main
 		move.w	(Level_repeat_offset).w,d0
 		sub.w	d0,x_pos(a0)
-		Add_SpriteToCollisionResponseList a1
-		jmp	(Draw_Sprite).w
+		jmp	(Draw_And_Touch_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .delete
@@ -366,8 +357,7 @@ Obj_Attracted_Ring:
 
 .chkdel
 		out_of_xrange.s	.offscreen
-		Add_SpriteToCollisionResponseList a1
-		jmp	(Draw_Sprite).w
+		jmp	(Draw_And_Touch_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .offscreen

@@ -239,6 +239,8 @@ Obj_LightningShield_Create_Spark:
 		move.l	#bytes_word_to_long(16/2,16/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.b	d2,anim(a1)
 		move.l	(a2)+,x_vel(a1)							; (Spark) give x_vel and y_vel (unique to each of the four Sparks)
+
+		; create next object
 		jsr	(Create_New_Object_4).w						; find next free object slot
 		dbne	d1,.loop
 

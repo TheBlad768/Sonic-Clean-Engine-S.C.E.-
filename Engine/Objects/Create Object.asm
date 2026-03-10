@@ -43,6 +43,22 @@ Create_New_Object_4:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Subroutine to find the current object space
+;
+; Output:
+; a1 = free position in object RAM
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Find_Object_Slot:
+		move.w	#Dynamic_object_RAM_end,d0
+		sub.w	a0,d0
+		lsr.w	#object_size_bits,d0						; divide by $40... even though SSTs are $50 bytes long in this game
+		move.b	Create_New_Object_3.table(pc,d0.w),d0				; use a look-up table to get the right loop counter
+		rts
+
+; ---------------------------------------------------------------------------
 ; Subroutine to find a free object space starting from a specific object
 ;
 ; Input:
@@ -77,9 +93,16 @@ Create_New_Object_3:
 
 		set	.a,Dynamic_object_RAM
 		set	.b,Dynamic_object_RAM_end
-		set	.c,.b								; begin from bottom of array and decrease backwards
+		set	.c,.b-.a							; begin from bottom of array and decrease backwards
+		set	.d,.c/setBit(object_size_bits)
 
-		rept (.b-.a)/setBit(object_size_bits)					; repeat for all slots, minus exception
+		if (.c#setBit(object_size_bits))<>0					; modulo division
+			set	.d,.d+1
+		endif
+
+		set	.c,.b
+
+		rept .d									; repeat for all slots, minus exception
 			set	.c,.c-setBit(object_size_bits)				; address for previous $40 (also skip last part)
 			dc.b (.b-.c-1)/object_size-1					; write possible slots according to object_size division + hack + dbf hack
 		endr
