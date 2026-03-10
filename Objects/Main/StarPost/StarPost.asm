@@ -239,6 +239,8 @@ Load_StarPost_Stars:
 		move.l	#words_to_long(-$400,0),x_vel(a1)
 		move.w	d2,objoff_34(a1)
 		addi.w	#256/4,d2
+
+		; create next object
 		jsr	(Create_New_Object_4).w						; find next free object slot
 		dbne	d1,.create
 
