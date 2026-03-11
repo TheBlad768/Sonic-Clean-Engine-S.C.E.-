@@ -367,7 +367,7 @@ Obj_Attracted_Ring:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .offscreen2
-		move.w	objoff_30(a0),d0						; get ring address
+		move.w	parent(a0),d0							; get ring address
 		beq.s	.delete								; if it's zero, branch
 		movea.w	d0,a2								; load address into a2
 		clr.w	(a2)								; clear slot

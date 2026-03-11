@@ -28,13 +28,13 @@ Load_Rings_RaiseError:
 
 ; =============== S U B R O U T I N E =======================================
 
-Test_Ring_Collisions_RaiseError:
+RingTouchResponse_RaiseError:
 
 		; check
-		move.w	(a1),d0
+		move.w	(a2),d0
 		cmp.w	(Screen_X_wrap_value).w,d0					; check ring's x_pos
 		bhs.s	.x
-		move.w	2(a1),d0
+		move.w	2(a2),d0
 		cmp.w	(Screen_Y_wrap_value).w,d0					; check ring's y_pos
 		blo.w	.return
 
@@ -48,9 +48,9 @@ Test_Ring_Collisions_RaiseError:
 
 .console
 		Console.WriteLine "It seems you have a corrupted ring!%<endl>"
-		Console.WriteLine "%<pal1>Ring ROM current:    %<pal2>%<.l a1>"
-		Console.WriteLine "%<pal1>Ring x position:     %<pal2>%<.w (a1)>"
-		Console.WriteLine "%<pal1>Ring y position:     %<pal2>%<.w 2(a1)>%<endl>"
+		Console.WriteLine "%<pal1>Ring ROM current:    %<pal2>%<.l a2>"
+		Console.WriteLine "%<pal1>Ring x position:     %<pal2>%<.w (a2)>"
+		Console.WriteLine "%<pal1>Ring y position:     %<pal2>%<.w 2(a2)>%<endl>"
 		Console.WriteLine "%<pal1>Screen x wrap value: %<pal2>%<.w Screen_X_wrap_value>"
 		Console.WriteLine "%<pal1>Screen y wrap value: %<pal2>%<.w Screen_Y_wrap_value>"
 
@@ -59,10 +59,10 @@ Test_Ring_Collisions_RaiseError:
 
 ; =============== S U B R O U T I N E =======================================
 
-Test_Ring_Collisions_Consume_RaiseError:
+RingTouchResponse_Consume_RaiseError:
 
 		; check
-		cmpa.w	#Ring_consumption_list_end,a3
+		cmpa.w	#Ring_consumption_list_end,a1
 		blo.w	.return
 
 		; debug

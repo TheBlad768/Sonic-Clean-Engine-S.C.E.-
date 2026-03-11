@@ -5,8 +5,10 @@
 ; =============== S U B R O U T I N E =======================================
 
 TouchResponse:
-		bsr.w	Test_Ring_Collisions
-		bsr.w	ShieldTouchResponse
+		bsr.w	RingTouchResponse						; check touch rings
+		bsr.w	ShieldTouchResponse						; check touch shields
+
+		; check
 		tst.b	character_id(a0)						; is the player Sonic?
 		bne.s	.Touch_NoInstaShield						; if not, branch
 
@@ -205,12 +207,13 @@ Touch_ChkValue:
 ; =============== S U B R O U T I N E =======================================
 
 Touch_Ring:
-		move.b	(Player_1+invulnerability_timer).w,d0				; get the main character's invulnerability_timer
-		cmpi.b	#(1*60)+30,d0							; is there more than 90 frames on the timer remaining?
-		bhs.s	.locret								; if so, branch
+
+		; check the main character's invulnerability_timer
+		cmpi.b	#(1*60)+30,(Player_1+invulnerability_timer).w			; is there more than 90 frames on the timer remaining?
+		bhs.s	.return								; if so, branch
 		move.l	#Obj_Ring_Collect,address(a1)
 
-.locret
+.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -294,6 +297,8 @@ Touch_Enemy:
 		beq.s	.checkhurtenemy							; if so, branch
 		cmpi.b	#AniIDSonAni_Roll,anim(a0)					; is player in their rolling animation?
 		beq.s	.checkhurtenemy							; if so, branch
+
+		; check Knuckles
 		cmpi.b	#PlayerID_Knuckles,character_id(a0)				; is player Knuckles?
 		bne.s	.notKnuckles							; if not, branch
 		cmpi.b	#1,double_jump_flag(a0)						; is Knuckles gliding?
@@ -309,7 +314,9 @@ Touch_Enemy:
 		tst.b	double_jump_flag(a0)						; is Tails flying? ("gravity-affected")
 		beq.w	Touch_ChkHurt							; if not, branch
 		btst	#status.player.underwater,status(a0)				; is Tails underwater?
-		bne.w	Touch_ChkHurt							; if not, branch
+		bne.w	Touch_ChkHurt							; if so, branch
+
+		; check Tails attack
 		move.w	x_pos(a0),d1
 		move.w	y_pos(a0),d2
 		sub.w	x_pos(a1),d1
@@ -357,16 +364,16 @@ Touch_EnemyNormal:
 
 .notDPLC
 		bset	#status.npc.defeated,status(a1)					; set "boss defeated" flag
-		moveq	#0,d0
-		move.w	(Chain_bonus_counter).w,d0
+		moveq	#0,d0								; clear d0 for HUD_AddToScore
+		move.w	(Chain_bonus_counter).w,d0					; get copy of chain bonus counter
 		addq.w	#2,(Chain_bonus_counter).w					; add 2 to item bonus counter
-		cmpi.w	#6,d0
-		blo.s	.notreachedlimit
-		moveq	#6,d0								; max bonus is lvl6
+		cmpi.w	#(Enemy_Points_end-Enemy_Points)-2,d0				; has the counter already surpassed 5?
+		blo.s	.notreachedlimit						; if not, branch
+		moveq	#(Enemy_Points_end-Enemy_Points)-2,d0				; cap counter at 6
 
 .notreachedlimit
 		move.w	d0,bonus_counter(a1)
-		move.w	Enemy_Points(pc,d0.w),d0
+		move.w	Enemy_Points(pc,d0.w),d0					; get appropriate number of points
 		cmpi.w	#16*2,(Chain_bonus_counter).w					; have 16 enemies been destroyed?
 		blo.s	.notreachedlimit2						; if not, branch
 		move.w	#1000,d0							; fix bonus to 10000
@@ -395,6 +402,7 @@ Touch_EnemyNormal:
 ; ---------------------------------------------------------------------------
 
 Enemy_Points:	dc.w 10, 20, 50, 100							; points awarded div 10
+Enemy_Points_end
 
 ; ---------------------------------------------------------------------------
 ; subroutine for checking if Sonic/Tails/Knuckles should be hurt and hurting them if so
@@ -537,10 +545,9 @@ HurtCharacter:
 		moveq	#signextendB(sfx_SpikeHit),d0					; load spikes damage sound
 		cmpi.l	#Map_Spikes,mappings(a2)					; was damage caused by spikes?
 		beq.s	Kill_Character.main						; if yes, branch
-		moveq	#signextendB(sfx_Death),d0					; load normal damage sound
 
 		; next
-		bra.s	Kill_Character.main
+		bra.s	Kill_Character.sfx
 
 ; ---------------------------------------------------------------------------
 ; Killing Sonic/Tails/Knuckles subroutine
@@ -551,6 +558,8 @@ HurtCharacter:
 Kill_Character:
 		tst.w	(Debug_placement_mode).w					; is debug mode active?
 		bne.s	.dontdie							; if yes, branch
+
+.sfx
 		moveq	#signextendB(sfx_Death),d0					; play normal death sound
 
 .main
@@ -604,6 +613,10 @@ loc_103FA:
 		addq.b	#1,collision_property(a1)					; otherwise, it seems everything else does double
 		rts
 
+; ---------------------------------------------------------------------------
+; Subroutine to react to shield collision
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 ShieldTouchResponse:
@@ -618,12 +631,12 @@ ShieldTouchResponse:
 
 		and.b	status_secondary(a0),d0
 		beq.s	ShieldTouch_Return
-		moveq	#-(48/2),d2								; subtract width of shield
+		moveq	#-(48/2),d2							; subtract width of shield
 		add.w	x_pos(a0),d2							; get player's x_pos
-		moveq	#-(48/2),d3								; subtract height of shield
+		moveq	#-(48/2),d3							; subtract height of shield
 		add.w	y_pos(a0),d3							; get player's y_pos
-		moveq	#96/2,d4								; player's width
-		moveq	#96/2,d5								; player's height
+		moveq	#96/2,d4							; player's width
+		moveq	#96/2,d5							; player's height
 		lea	(Collision_response_list).w,a4
 		move.w	(a4)+,d6							; get number of objects queued
 		beq.s	ShieldTouch_Return						; if there are none, return

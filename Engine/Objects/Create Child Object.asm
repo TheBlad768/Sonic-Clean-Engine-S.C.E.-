@@ -10,6 +10,8 @@ CreateChild1_Normal:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -58,6 +60,8 @@ CreateChild2_Complex:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -110,6 +114,8 @@ CreateChild3_NormalRepeated:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -159,6 +165,8 @@ CreateChild4_LinkListRepeated:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		movea.w	a0,a3								; parent RAM address into a3
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
@@ -200,6 +208,8 @@ CreateChild5_ComplexAdjusted:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -262,6 +272,8 @@ CreateChild6_Simple:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -300,6 +312,8 @@ CreateChild7_Normal2:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object						; find new object slot
 		bne.s	.return
 
@@ -348,6 +362,8 @@ CreateChild8_TreeListRepeated:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		movea.w	a0,a3								; parent RAM address into a3
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
@@ -389,6 +405,8 @@ CreateChild9_TreeList:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		movea.w	a0,a3								; parent RAM address into a3
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
@@ -430,6 +448,8 @@ CreateChild10_NormalAdjusted:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -484,6 +504,8 @@ CreateChild11_Simple:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object_3						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 
@@ -522,6 +544,8 @@ CreateChild12_Simple:
 .skip
 		move.w	(a2)+,d6							; get number of objects list
 		bmi.s	.return								; branch, if no objects in list
+
+.create
 		bsr.w	Create_New_Object						; find new object slot
 		bne.s	.return								; branch, if there are no free object slots here
 

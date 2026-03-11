@@ -154,14 +154,14 @@ Consumption_Rings:
 
 ; =============== S U B R O U T I N E =======================================
 
-Test_Ring_Collisions:
+RingTouchResponse:
 
-		; check timer
-		cmpi.b	#90,invulnerability_timer(a0)
-		bhs.s	Consumption_Rings.return
-		movea.l	(Ring_start_addr_ROM).w,a1
-		movea.l	(Ring_end_addr_ROM).w,a2
-		cmpa.l	a1,a2
+		; check the character's invulnerability_timer
+		cmpi.b	#(1*60)+30,invulnerability_timer(a0)				; is there more than 90 frames on the timer remaining?
+		bhs.s	Consumption_Rings.return					; if so, branch
+		movea.l	(Ring_start_addr_ROM).w,a2
+		movea.l	(Ring_end_addr_ROM).w,a3
+		cmpa.l	a2,a3
 		beq.s	Consumption_Rings.return
 		movea.w	(Ring_start_addr_RAM).w,a4
 
@@ -207,10 +207,10 @@ Test_Ring_Collisions:
 		bne.s	.next								; if it has, branch
 
 		; RaiseError is only available in DEBUG builds
-		ifdebug	jsr	(Test_Ring_Collisions_RaiseError).l			; raise an error if there is ring is corrupted
+		ifdebug	jsr	(RingTouchResponse_RaiseError).l			; raise an error if there is ring is corrupted
 
 		; check
-		move.w	(a1),d0								; get ring's x_pos
+		move.w	(a2),d0								; get ring's x_pos
 		sub.w	d1,d0								; subtract ring's width
 		sub.w	d2,d0								; subtract player's left collision boundary
 		bhs.s	.checkrightside							; if player's left side is to the left of the ring, branch
@@ -224,7 +224,7 @@ Test_Ring_Collisions:
 		bhi.s	.next								; if so, loop and check next ring
 
 .checkheight
-		move.w	2(a1),d0							; get ring's y_pos
+		move.w	2(a2),d0							; get ring's y_pos
 		sub.w	d1,d0								; subtract ring's height
 		sub.w	d3,d0								; subtract player's bottom collision boundary
 		bhs.s	.checktop							; if bottom of player is under the ring, branch
@@ -239,47 +239,40 @@ Test_Ring_Collisions:
 
 .check
 		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
-		bne.s	Test_Ring_Collisions_AttractRing				; if yes, branch
+		bne.s	.attractring							; if yes, branch
 
 .consume
 		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/2),(a4)
 		bsr.s	GiveRing
-		lea	(Ring_consumption_list).w,a3
+		lea	(Ring_consumption_list).w,a1
 
 .find
 
 		; RaiseError is only available in DEBUG builds
-		ifdebug	jsr	(Test_Ring_Collisions_Consume_RaiseError).l		; raise an error if there is ring consumption list overflow
+		ifdebug	jsr	(RingTouchResponse_Consume_RaiseError).l		; raise an error if there is ring consumption list overflow
 
-		tst.w	(a3)+
+		tst.w	(a1)+
 		bne.s	.find
-		move.w	a4,-(a3)
+		move.w	a4,-(a1)
 		addq.w	#1,(Ring_consumption_table).w
 
 .next
-		addq.w	#4,a1
+		addq.w	#4,a2
 		addq.w	#2,a4
-		cmpa.l	a1,a2
+		cmpa.l	a2,a3
 		bne.s	.nextring
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Test_Ring_Collisions_AttractRing:
-		lea	(a1),a3								; save ROM address
-		bsr.w	Create_New_Object
-		bne.s	.notfree
-		move.l	#Obj_Attracted_Ring,address(a1)
-		move.w	(a3),x_pos(a1)							; copy xpos
-		move.w	2(a3),y_pos(a1)							; copy ypos
-		move.w	a4,objoff_30(a1)						; save ring RAM address
-		move.w	#-1,(a4)							; set not draw flag
 		rts
 ; ---------------------------------------------------------------------------
 
-.notfree
-		lea	(a3),a1								; return ROM address
-		bra.s	Test_Ring_Collisions.consume
+.attractring
+		bsr.w	Create_New_Object
+		bne.s	.consume
+		move.l	#Obj_Attracted_Ring,address(a1)
+		move.w	(a2),x_pos(a1)							; copy xpos
+		move.w	2(a2),y_pos(a1)							; copy ypos
+		move.w	a4,parent(a1)							; save ring RAM address
+		move.w	#-1,(a4)							; set not draw flag
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Give ring to player
