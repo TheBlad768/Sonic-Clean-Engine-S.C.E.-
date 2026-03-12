@@ -159,13 +159,16 @@ RingTouchResponse:
 		; check the character's invulnerability_timer
 		cmpi.b	#(1*60)+30,invulnerability_timer(a0)				; is there more than 90 frames on the timer remaining?
 		bhs.s	Consumption_Rings.return					; if so, branch
-		movea.l	(Ring_start_addr_ROM).w,a2
-		movea.l	(Ring_end_addr_ROM).w,a3
+
+		; set
+		movem.l	(Ring_start_addr_ROM).w,a2-a3					; get Ring_start_addr_ROM and Ring_end_addr_ROM
+
+		; check
 		cmpa.l	a2,a3
 		beq.s	Consumption_Rings.return
 		movea.w	(Ring_start_addr_RAM).w,a4
 
-		; check
+		; check Lightning Shield
 		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
 		beq.s	.noattraction							; if not, branch
 
@@ -238,6 +241,8 @@ RingTouchResponse:
 		bhi.s	.next								; if so, loop and check next ring
 
 .check
+
+		; check Lightning Shield
 		btst	#status_secondary.lightning_shield,status_secondary(a0)		; does Sonic have a Lightning Shield?
 		bne.s	.attractring							; if yes, branch
 
