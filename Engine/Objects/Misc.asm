@@ -198,7 +198,7 @@ Displace_PlayerOffObject:
 ; =============== S U B R O U T I N E =======================================
 
 Go_CheckPlayerRelease:
-		movem.l	d7-a0/a2-a3,-(sp)
+		movem.l	d7-a0/a2-a3,-(sp)						; save the registers to the stack
 		lea	(Player_1).w,a1							; a1=character
 		btst	#status.player.on_object,status(a1)
 		beq.s	.notp1
@@ -206,7 +206,7 @@ Go_CheckPlayerRelease:
 		bsr.w	CheckPlayerReleaseFromObj
 
 .notp1
-		movem.l	(sp)+,d7-a0/a2-a3
+		movem.l	(sp)+,d7-a0/a2-a3						; return saved registers from the stack
 		rts
 
 ; =============== S U B R O U T I N E =======================================
