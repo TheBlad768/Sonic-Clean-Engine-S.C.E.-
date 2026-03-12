@@ -369,7 +369,6 @@ subtype =						objoff_2C			; byte/word
 state_flags =						objoff_38			; byte
 count =							objoff_39			; byte
 routine_secondary =					objoff_3C			; byte ; used by monitors for this purpose at least
-bonus_counter =						objoff_3E			; word ; used by chain bonus counter
 child_dx =						objoff_48			; byte ; X offset of child relative to parent
 child_dy =						objoff_49			; byte ; Y offset of child relative to parent
 parent =						objoff_48			; word ; address of the object that owns or spawned this one, if applicable

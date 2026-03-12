@@ -3,11 +3,15 @@
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
-animal_ground_x_vel		= objoff_30	; .w
-animal_ground_y_vel		= objoff_32	; .w
-animal_ground_pointer		= objoff_34	; .l
 
-;				= objoff_3E	; .w
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+animal.bonus_counter			ds.w 1						; (2 bytes)
+animal.xvel				ds.w 1						; (2 bytes)
+animal.yvel				ds.w 1						; (2 bytes)
+animal.code_ptr				ds.l 1						; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -16,7 +20,7 @@ animal_ground_pointer		= objoff_34	; .l
 		; note: you must also load the corresponding art in the PLCs
 
 Obj_Animal_ZoneAnimals:
-		zoneanimals.b Flicky, Chicken	; DEZ
+		zoneanimals.b Flicky, Chicken						; DEZ
 
 		zonewarning Obj_Animal_ZoneAnimals,(1*2)
 
@@ -25,13 +29,13 @@ Obj_Animal_ZoneAnimals:
 		; this table declares the speed and mappings of each animal
 
 Obj_Animal_Properties:
-Rabbit:		objanimaldecl Map_Animals5, Obj_Animal_Walk, -$200, -$400	; 0
-Chicken:	objanimaldecl Map_Animals1, Obj_Animal_Fly, -$200, -$300	; 1
-Penguin:	objanimaldecl Map_Animals5, Obj_Animal_Walk, -$180, -$300	; 2
-Seal:		objanimaldecl Map_Animals4, Obj_Animal_Walk, -$140, -$180	; 3
-Pig:		objanimaldecl Map_Animals3, Obj_Animal_Walk, -$1C0, -$300	; 4
-Flicky:		objanimaldecl Map_Animals1, Obj_Animal_Fly, -$300, -$400	; 5
-Squirrel:	objanimaldecl Map_Animals2, Obj_Animal_Walk, -$280, -$380	; 6
+Rabbit:		objanimaldecl Map_Animals5, Obj_Animal_Walk, -$200, -$400		; 0
+Chicken:	objanimaldecl Map_Animals1, Obj_Animal_Fly, -$200, -$300		; 1
+Penguin:	objanimaldecl Map_Animals5, Obj_Animal_Walk, -$180, -$300		; 2
+Seal:		objanimaldecl Map_Animals4, Obj_Animal_Walk, -$140, -$180		; 3
+Pig:		objanimaldecl Map_Animals3, Obj_Animal_Walk, -$1C0, -$300		; 4
+Flicky:		objanimaldecl Map_Animals1, Obj_Animal_Fly, -$300, -$400		; 5
+Squirrel:	objanimaldecl Map_Animals2, Obj_Animal_Walk, -$280, -$380		; 6
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -55,8 +59,8 @@ Obj_Animal:
 		lea	Obj_Animal_Properties(pc),a1					; $C size data
 		adda.w	d0,a1
 		move.l	(a1)+,mappings(a0)
-		move.l	(a1)+,animal_ground_pointer(a0)
-		move.l	(a1),animal_ground_x_vel(a0)
+		move.l	(a1)+,animal.code_ptr(a0)
+		move.l	(a1),animal.xvel(a0)						; x_vel and y_vel
 
 		move.b	#( \
 			setBit(render_flags.level) | \
@@ -74,7 +78,7 @@ Obj_Animal:
 		lea	Child6_EndSignScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	.draw
-		move.w	objoff_3E(a0),d0						; get saved chain bonus counter
+		move.w	animal.bonus_counter(a0),d0					; get saved chain bonus counter
 		lsr.w	d0								; division by 2
 		move.b	d0,mapping_frame(a1)
 		bra.s	.draw
@@ -90,8 +94,8 @@ Obj_Animal:
 		tst.w	d1
 		bpl.s	.draw
 		add.w	d1,y_pos(a0)
-		move.l	animal_ground_x_vel(a0),x_vel(a0)
-		move.l	animal_ground_pointer(a0),address(a0)
+		move.l	animal.xvel(a0),x_vel(a0)					; x_vel and y_vel
+		move.l	animal.code_ptr(a0),address(a0)
 		move.b	#1,mapping_frame(a0)
 
 .draw
@@ -113,7 +117,7 @@ Obj_Animal_Walk:
 		tst.w	d1
 		bpl.s	.notfloor
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .notfloor
 		tst.b	render_flags(a0)						; object visible on the screen?
@@ -130,7 +134,7 @@ Obj_Animal_Fly:
 		tst.w	d1
 		bpl.s	.anim
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .anim
 		subq.b	#1,anim_frame_timer(a0)						; decrement timer
@@ -160,7 +164,7 @@ Obj_Animal_Ending:
 		move.l	(a1)+,mappings(a0)
 		move.w	(a1)+,art_tile(a0)
 		move.l	(a1),x_vel(a0)							; load horizontal and vertical speed
-		move.l	(a1),animal_ground_x_vel(a0)					; copy horizontal and vertical speed
+		move.l	(a1),animal.xvel(a0)						; copy horizontal and vertical speed
 
 		move.b	#( \
 			setBit(render_flags.level) | \
@@ -196,7 +200,7 @@ Obj_Animal_FlickyWait:
 		jsr	(Find_SonicObject).w
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
-		move.l	animal_ground_x_vel(a0),x_vel(a0)
+		move.l	animal.xvel(a0),x_vel(a0)					; x_vel and y_vel
 		move.l	#.fly,address(a0)
 
 .fly
@@ -207,7 +211,7 @@ Obj_Animal_FlickyWait:
 		tst.w	d1
 		bpl.s	.anim
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 		tst.b	subtype(a0)
 		beq.s	.anim
 		neg.w	x_vel(a0)
@@ -229,7 +233,7 @@ Obj_Animal_FlickyJump:
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
 		clr.w	x_vel(a0)
-		clr.w	animal_ground_x_vel(a0)
+		clr.w	animal.xvel(a0)
 		move.l	#.jump,address(a0)
 
 .jump
@@ -253,7 +257,7 @@ Obj_Animal_RabbitWait:
 		jsr	(Find_SonicObject).w
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
-		move.l	animal_ground_x_vel(a0),x_vel(a0)
+		move.l	animal.xvel(a0),x_vel(a0)					; x_vel and y_vel
 		move.l	#.walk,address(a0)
 
 .walk
@@ -266,7 +270,7 @@ Obj_Animal_RabbitWait:
 		tst.w	d1
 		bpl.s	.chkdel
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .chkdel
 		bra.w	Obj_Animal_ChkDel
@@ -289,7 +293,7 @@ Obj_Animal_DoubleBounce:
 
 .chg
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .chkdel
 		bra.w	Obj_Animal_ChkDel
@@ -301,7 +305,7 @@ Obj_Animal_LandJump:
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
 		clr.w	x_vel(a0)
-		clr.w	animal_ground_x_vel(a0)
+		clr.w	animal.xvel(a0)
 		move.l	#.jump,address(a0)
 
 .jump
@@ -333,7 +337,7 @@ Obj_Animal_SingleBounce:
 		neg.w	x_vel(a0)
 		bchg	#render_flags.x_flip,render_flags(a0)
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .chkdel
 		bra.s	Obj_Animal_ChkDel
@@ -360,7 +364,7 @@ Obj_Animal_FlyBounce:
 
 .chg
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .anim
 		subq.b	#1,anim_frame_timer(a0)						; decrement timer
@@ -403,7 +407,7 @@ Obj_Animal_Jump:
 		tst.w	d1
 		bpl.s	.return
 		add.w	d1,y_pos(a0)
-		move.w	animal_ground_y_vel(a0),y_vel(a0)
+		move.w	animal.yvel(a0),y_vel(a0)
 
 .return
 		rts

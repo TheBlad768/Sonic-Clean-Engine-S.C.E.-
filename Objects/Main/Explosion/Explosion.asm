@@ -4,17 +4,23 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+explosion.bonus_counter			ds.w 1						; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Explosion:
 
 		; create animal
-		jsr	(Create_New_Object).w
-		bne.s	.skipanimal
+		jsr	(Create_New_Object_3).w						; find new object slot
+		bne.s	.skipanimal							; branch, if there are no free object slots here
 		move.l	#Obj_Animal,address(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
-		move.w	bonus_counter(a0),bonus_counter(a1)				; copy chain bonus counter
+		move.w	explosion.bonus_counter(a0),animal.bonus_counter(a1)		; copy chain bonus counter
 
 .skipanimal
 		sfx	sfx_Break
