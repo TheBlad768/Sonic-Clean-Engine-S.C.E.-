@@ -295,8 +295,19 @@ GiveRing:
 ; =============== S U B R O U T I N E =======================================
 
 AddRings:
+
+		; RingTouchResponse uses registers d1-d6
+		; Don't overwrite these registers!
+
+		; check max rings
+		cmpi.w	#999,(Ring_count).w						; does the player 1 have 999 or less rings?
+		bhs.s	.sfx								; if yes, branch
+
+		; set
 		add.w	d0,(Ring_count).w						; add to rings
 		ori.b	#1,(Update_HUD_ring_count).w					; update the rings counter
+
+.sfx
 		sfx	sfx_RingRight,1							; play ring sound
 
 ; ---------------------------------------------------------------------------
