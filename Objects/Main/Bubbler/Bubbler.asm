@@ -71,8 +71,7 @@ loc_2FABA:
 		move.l	#Obj_Bubbler_Bubbles,address(a1)
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
-		move.w	priority(a0),priority(a1)
-		move.w	height_pixels(a0),height_pixels(a1)				; set height and width
+		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
 		move.w	x_pos(a0),x_pos(a1)
 		jsr	(Random_Number).w
 		andi.w	#$F,d0
