@@ -119,8 +119,7 @@ AirCountdown_MakeItem:
 		move.l	#Obj_AirCountdown_Bubbles,address(a1)
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
-		move.w	priority(a0),priority(a1)
-		move.w	height_pixels(a0),height_pixels(a1)				; set height and width
+		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
 		move.w	x_pos(a2),x_pos(a1)						; copy player X position to object
 		moveq	#6,d0
 		btst	#status.player.x_flip,status(a2)
