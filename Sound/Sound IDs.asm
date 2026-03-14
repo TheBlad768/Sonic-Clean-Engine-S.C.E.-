@@ -80,6 +80,7 @@ sfx_Explode				ds.b 1		; $1B
 sfx_Signpost				ds.b 1		; $1C
 sfx_Switch				ds.b 1		; $1D
 sfx_Register				ds.b 1		; $1E
+sfx_GroundSlide				ds.b 1		; $1F
 
 ; Continuous
 sfx__FirstContinuous =			*		; ID of the first continuous sound effect

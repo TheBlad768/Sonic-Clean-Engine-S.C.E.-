@@ -4,6 +4,17 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+; players
+autospin.p1_passed			ds.b 1						; Sonic's passed flag (1 byte)
+					ds.b 1						; Tails's passed flag (1 byte)
+
+; main
+autospin.range				ds.w 1						; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AutoSpin:
@@ -22,12 +33,12 @@ Obj_AutoSpin:
 		move.b	d0,mapping_frame(a0)
 		andi.w	#3,d0
 		add.w	d0,d0
-		move.w	word_1E854(pc,d0.w),objoff_32(a0)
+		move.w	word_1E854(pc,d0.w),autospin.range(a0)
 		move.w	y_pos(a0),d1
 		lea	(Player_1).w,a1							; a1=character
 		cmp.w	y_pos(a1),d1
 		bhs.s	loc_1E84A
-		move.b	#1,objoff_34(a0)
+		st	autospin.p1_passed(a0)
 
 loc_1E84A:
 
@@ -48,12 +59,12 @@ AutoSpin_CheckX:
 		andi.w	#3,d0
 		move.b	d0,mapping_frame(a0)
 		add.w	d0,d0
-		move.w	word_1E854(pc,d0.w),objoff_32(a0)
+		move.w	word_1E854(pc,d0.w),autospin.range(a0)
 		move.w	x_pos(a0),d1
 		lea	(Player_1).w,a1							; a1=character
 		cmp.w	x_pos(a1),d1
 		bhs.s	loc_1E890
-		move.b	#1,objoff_34(a0)
+		st	autospin.p1_passed(a0)
 
 loc_1E890:
 		move.l	#AutoSpin_MainX,address(a0)
@@ -64,7 +75,7 @@ AutoSpin_MainX:
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
 		bne.s	loc_1E8C0							; if yes, branch
 		move.w	x_pos(a0),d1
-		lea	objoff_34(a0),a2
+		lea	autospin.p1_passed(a0),a2
 		lea	(Player_1).w,a1							; a1=character
 		bsr.s	sub_1E8C6
 		jmp	(Delete_Sprite_If_Not_In_Range).w
@@ -83,7 +94,7 @@ sub_1E8C6:
 		st	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
-		move.w	objoff_32(a0),d4
+		move.w	autospin.range(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
@@ -127,7 +138,7 @@ AutoSpin_MainX_Alt:
 		clr.b	-1(a2)
 		move.w	y_pos(a0),d2
 		move.w	d2,d3
-		move.w	objoff_32(a0),d4
+		move.w	autospin.range(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	y_pos(a1),d4
@@ -184,7 +195,7 @@ AutoSpin_MainY:
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
 		bne.s	loc_1EA0E							; if yes, branch
 		move.w	y_pos(a0),d1
-		lea	objoff_34(a0),a2
+		lea	autospin.p1_passed(a0),a2
 		lea	(Player_1).w,a1							; a1=character
 		bsr.s	sub_1EA14
 		jmp	(Delete_Sprite_If_Not_In_Range).w
@@ -203,7 +214,7 @@ sub_1EA14:
 		st	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
-		move.w	objoff_32(a0),d4
+		move.w	autospin.range(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
@@ -254,7 +265,7 @@ AutoSpin_MainY_Alt:
 		clr.b	-1(a2)
 		move.w	x_pos(a0),d2
 		move.w	d2,d3
-		move.w	objoff_32(a0),d4
+		move.w	autospin.range(a0),d4
 		sub.w	d4,d2
 		add.w	d4,d3
 		move.w	x_pos(a1),d4
