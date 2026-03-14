@@ -22,7 +22,7 @@ Obj_HiddenMonitor:
 		move.w	(Signpost_addr).w,d0						; address is empty?
 		beq.s	.notdraw							; if it is, branch
 		movea.w	d0,a1								; get signpost address
-		btst	#0,objoff_38(a1)
+		btst	#0,state_flags(a1)
 		beq.s	.notdraw							; if signpost hasn't landed, branch
 
 		; check xypos
@@ -31,7 +31,7 @@ Obj_HiddenMonitor:
 		bne.s	.bounceup
 
 		; landed
-		sfx	sfx_Signpost							; if signpost has landed
+		sfx	sfx_GroundSlide							; if signpost has landed
 		move.l	#Delete_Sprite_If_Not_In_Range,address(a0)			; not draw hidden monitor
 
 .notdraw
@@ -39,9 +39,9 @@ Obj_HiddenMonitor:
 ; ---------------------------------------------------------------------------
 
 .bounceup
-		bclr	#0,objoff_38(a1)						; if signpost has landed and is in range
+		bclr	#0,state_flags(a1)						; if signpost has landed and is in range
 		move.l	#Obj_Monitor.main,address(a0)					; make this object a monitor
-		move.b	#4,objoff_3C(a0)
+		st	routine_secondary(a0)						; set the monitor's routine_secondary counter
 		move.w	#-$500,y_vel(a0)
 		sfx	sfx_BubbleAttack						; play sfx
 		bclr	#render_flags.x_flip,render_flags(a0)

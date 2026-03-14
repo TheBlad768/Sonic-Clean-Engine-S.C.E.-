@@ -42,7 +42,7 @@ Obj_SpriteMask2:
 .parent
 		st	(Spritemask_flag).w
 		movea.w	parent3(a0),a1							; a1=parent object
-		btst	#5,objoff_38(a1)
+		btst	#5,state_flags(a1)
 		bne.s	.delete
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
