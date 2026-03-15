@@ -73,15 +73,15 @@ LevelSelectScreen:
 
 		; load text
 		bsr.w	LevelSelect_LoadText
-		move.w	#palette_line_1+LevelSelect.VRAM,d3
+		move.w	#make_art_tile(LevelSelect.VRAM,1,FALSE),d3
 		bsr.w	LevelSelect_LoadHeaderText
-		moveq	#palette_line_0+LevelSelect.VRAM,d3
+		mvq	make_art_tile(LevelSelect.VRAM,0,FALSE),d3
 		bsr.w	LevelSelect_MarkFields.drawmusic
-		moveq	#palette_line_0+LevelSelect.VRAM,d3
+		mvq	make_art_tile(LevelSelect.VRAM,0,FALSE),d3
 		bsr.w	LevelSelect_MarkFields.drawsound
-		moveq	#palette_line_0+LevelSelect.VRAM,d3
+		mvq	make_art_tile(LevelSelect.VRAM,0,FALSE),d3
 		bsr.w	LevelSelect_MarkFields.drawsample
-		move.w	#palette_line_1,d3
+		move.w	#make_art_tile(0,1,FALSE),d3
 		bsr.w	LevelSelect_MarkFields
 
 		; load main palette
@@ -110,11 +110,15 @@ LevelSelectScreen:
 		jsr	(Wait_VSync).w
 		lea	LSScroll_Data(pc),a2
 		jsr	(HScroll_Deform).w
-		moveq	#palette_line_0,d3
+
+		; update text
+		moveq	#make_art_tile(0,0,FALSE),d3
 		bsr.w	LevelSelect_MarkFields
 		bsr.s	LevelSelect_Controls
-		move.w	#palette_line_1,d3
+		move.w	#make_art_tile(0,1,FALSE),d3
 		bsr.w	LevelSelect_MarkFields
+
+		; check exit
 		cmpi.w	#LevelSelect.ZoneCount,(LevelSelect.vertical_count).w
 		bhs.s	.loop
 		tst.b	(Ctrl_1_pressed).w
@@ -151,7 +155,7 @@ LevelSelect_Controls:
 		blo.s	.getact
 		subq.w	#LevelSelect.MusicTestCount,d3
 		blo.s	.return
-		add.w	d3,d3
+		add.w	d3,d3								; multiply by 2
 		jmp	.index(pc,d3.w)
 ; ---------------------------------------------------------------------------
 
@@ -187,7 +191,7 @@ LevelSelect_Controls:
 .getact
 		lea	(LevelSelect.horizontal_count).w,a0
 		move.w	(LevelSelect.vertical_count).w,d4
-		add.w	d4,d4
+		add.w	d4,d4								; multiply by 2
 		move.w	(a0,d4.w),d3
 		move.w	.maxacts(pc,d4.w),d2						; set max count
 		lea	(LevelSelect.control_timer).w,a3
@@ -363,7 +367,7 @@ LevelSelect_MarkFields:
 
 		; get text pos
 		move.w	(LevelSelect.vertical_count).w,d0
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 2
 		move.w	LevelSelect_MappingOffsets(pc,d0.w),d0
 
 		; RAM shift
@@ -383,8 +387,8 @@ LevelSelect_MarkFields:
 
 		dbf	d2,.copy
 
-	if LevelSelect.VRAM<>0
-		ori.w	#LevelSelect.VRAM,d3
+	if ((make_art_tile(LevelSelect.VRAM,0,FALSE))<>0)
+		ori.w	#make_art_tile(LevelSelect.VRAM,0,FALSE),d3
 	endif
 
 		; check vertical line
@@ -393,7 +397,7 @@ LevelSelect_MarkFields:
 		blo.s	LevelSelect_LoadAct
 		subq.w	#LevelSelect.MusicTestCount,d0
 		blo.s	.return
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 2
 		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
@@ -466,18 +470,18 @@ LevelSelect_LoadAct:
 		move.w	(sp)+,d0
 		clr.b	d0								; clear garbage data
 		adda.w	d0,a5
-		add.w	d1,d1
+		add.w	d1,d1								; multiply by 2
 		move.w	(a0,d1.w),d0
+		add.w	d1,d1								; multiply by 4
 		add.w	d1,d1
-		add.w	d1,d1
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 2
 		add.w	d1,d0
 		lea	LevelSelect_ActTextIndex(pc),a0
 		adda.w	(a0,d0.w),a0
 
 .loadtext
 		moveq	#0,d6
-		move.b	(a0)+,d6
+		move.b	(a0)+,d6							; get text size
 
 .copy
 		moveq	#0,d0
@@ -508,12 +512,8 @@ LevelSelect_LoadText:
 		lea	(LevelSelect.buffer).l,a1
 		lea	LevelSelect_MainText(pc),a2
 
-	if LevelSelect.VRAM=0
-		moveq	#0,d3
-	else
-		move.w	#LevelSelect.VRAM,d3
-	endif
-
+		; set
+		mvq	make_art_tile(LevelSelect.VRAM,0,FALSE),d3
 		moveq	#LevelSelect.MaxCount-1,d1
 
 .load

@@ -139,6 +139,15 @@ nop macro fill
     endif
     endm
 
+; macro to check moveq
+mvq macro val,reg
+    if ((val)<=$7F) && ((val)>=-$80)
+	moveq	#signextendB(val),reg
+    else
+	move.w	#val,reg
+    endif
+    endm
+
 ; similar function as rsset from asm68k compiler
 dsset macro
 current_offset_rom := *

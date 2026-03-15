@@ -34,7 +34,7 @@ Obj_CreateBossExplosion:
 		; set
 		moveq	#0,d0
 		move.b	subtype(a0),d0
-		add.b	d0,d0								; multiply by 2
+		add.w	d0,d0								; multiply by 2
 		lea	CreateBossExpParameterIndex(pc,d0.w),a1
 		move.w	(a1)+,bossexplosion.xoffset(a0)					; set x offset range and y offset range
 		move.b	(a1)+,count(a0)
