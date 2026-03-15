@@ -147,6 +147,8 @@ LevelScreen:
 		jsr	(Load_ExtraRender).w
 		move.l	#Load_Objects_Init,(Object_load_addr_RAM).w
 		move.l	#Load_Rings_Init,(Rings_manager_addr_RAM).w
+
+		; check water
 		tst.b	(Water_flag).w
 		beq.s	.notwater2
 		move.l	#Obj_WaveSplash,(Wave_Splash+address).w

@@ -319,11 +319,7 @@ clearRAM macro startaddr,endaddr
     if ((startaddr)&1)
 	move.b	d0,(a1)+
     endif
-    if ((bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)))<=$7F)
-	moveq	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
-    else
-	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
-    endif
+	mvq	(bytesToLcnt((endaddr-startaddr) - ((startaddr)&1))),d1
 
 .clear
 	move.l	d0,(a1)+
@@ -381,11 +377,7 @@ clearRAM3 macro startaddr,endaddr
     if ((startaddr)&1)
 	move.b	d0,(a1)+
     endif
-    if ((bytesToXcnt(((endaddr-startaddr) - ((startaddr)&1)),(16*4)))<=$7F)
-	moveq	#bytesToXcnt(((endaddr-startaddr) - ((startaddr)&1)),(16*4)),d1
-    else
-	move.w	#bytesToXcnt(((endaddr-startaddr) - ((startaddr)&1)),(16*4)),d1
-    endif
+	mvq	(bytesToXcnt(((endaddr-startaddr) - ((startaddr)&1)),(16*4))),d1
 
 .clear
     rept 16
@@ -422,11 +414,7 @@ copyRAM macro startaddr,endaddr,startaddr2
     if ((startaddr)&1)
 	move.b	(a1)+,(a2)+
     endif
-    if ((bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)))<=$7F)
-	moveq	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
-    else
-	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
-    endif
+	mvq	(bytesToLcnt((endaddr-startaddr) - ((startaddr)&1))),d1
 
 .clear
 	move.l	(a1)+,(a2)+
@@ -537,11 +525,7 @@ EniDecomp macro data,ram,vram,pal,pri,terminate
     else
 	lea	(ram).w,a1
     endif
-    if ((make_art_tile(vram,pal,pri))<=$7F)
-	moveq	#make_art_tile(vram,pal,pri),d0
-    else
-	move.w	#make_art_tile(vram,pal,pri),d0
-    endif
+	mvq	make_art_tile(vram,pal,pri),d0
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Eni_Decomp).w
     else
@@ -561,11 +545,7 @@ AddToDMAQueue macro art,vram,size,terminate
     else
 	move.w	#tiles_to_bytes(vram),d2
     endif
-    if ((size/2)<=$7F)
-	moveq	#(size/2),d3
-    else
-	move.w	#(size/2),d3
-    endif
+	mvq	(size/2),d3
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Add_To_DMA_Queue).w
     else
@@ -579,7 +559,7 @@ AddToDMAQueue macro art,vram,size,terminate
 ; ---------------------------------------------------------------------------
 
 out_of_xrange macro exit,xpos
-	moveq	#-$80,d0								; round down to nearest $80
+	moveq	#signextendB($80),d0							; round down to nearest $80
     ifnb xpos
 	and.w	xpos,d0									; get object position (if specified as not x_pos)
     else
@@ -600,7 +580,7 @@ out_of_xrange2 macro exit
 ; ---------------------------------------------------------------------------
 
 out_of_yrange macro exit,ypos
-	moveq	#-$80,d0								; round down to nearest $80
+	moveq	#signextendB($80),d0							; round down to nearest $80
     ifnb ypos
 	and.w	ypos,d0									; get object position (if specified as not y_pos)
     else
@@ -779,11 +759,7 @@ DrawPlaneText macro source,loc,vram,pal,pri,terminate
 	lea	source(pc),a1
     endif
 	locVRAM	loc,d1
-    if ((make_art_tile(vram,pal,pri))<=$7F)
-	moveq	#make_art_tile(vram,pal,pri),d3
-    else
-	move.w	#make_art_tile(vram,pal,pri),d3
-    endif
+	mvq	make_art_tile(vram,pal,pri),d3
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Draw_PlaneText).w
     else
@@ -800,11 +776,7 @@ DrawPlaneTextAdvanced macro source,loc,twidth,theight,vram,pal,pri,terminate
 	    bytesToXcnt(((twidth)+(tile_width-1)),tile_width), \
 	    bytesToXcnt(((theight)+(tile_height-1)),tile_height) \
 	),d2
-    if ((make_art_tile(vram,pal,pri))<=$7F)
-	moveq	#make_art_tile(vram,pal,pri),d3
-    else
-	move.w	#make_art_tile(vram,pal,pri),d3
-    endif
+	mvq	make_art_tile(vram,pal,pri),d3
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Draw_PlaneText_Advanced).w
     else
@@ -1386,11 +1358,7 @@ copyTilemap2 macro loc,vram,pal,pri,twidth,theight,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
-    if ((make_art_tile(vram,pal,pri))<=$7F)
-	moveq	#make_art_tile(vram,pal,pri),d3
-    else
-	move.w	#make_art_tile(vram,pal,pri),d3
-    endif
+	mvq	make_art_tile(vram,pal,pri),d3
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_Add_VRAM).w
     else
@@ -1422,11 +1390,7 @@ copyTilemap3 macro loc,twidth,theight,terminate
 copyTilemapToRAM macro twidth,theight,row,terminate
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
-    if ((row)<=$7F)
-	moveq	#(row),d3
-    else
-	move.w	#(row),d3
-    endif
+	mvq	(row),d3
     if ("terminate"="0") || ("terminate"="")
 	jsr	(Plane_Map_To_RAM).w
     else
