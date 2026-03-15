@@ -3,11 +3,16 @@
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
-ecap_speed				= objoff_3A	; .w ; flipped only
 
-; Functions (objoff_38 status)
-ecap_button				= 1		; bit
-ecap_tailspos				= 7		; bit
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+eggcapsule.speed			ds.w 1						; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
+; functions (state_flags)
+eggcapsule.button_bit =			1
+eggcapsule.tails_endpos_bit =		7
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -27,7 +32,7 @@ Obj_EggCapsule:
 
 		; check
 		btst	#render_flags.y_flip,render_flags(a0)				; is egg capsule flipped?
-		bne.s	.flipy								; if yes, branch
+		bne.s	.flying								; if yes, branch
 		move.l	#.normal,jump_ptr(a0)
 
 		; create object
@@ -38,7 +43,7 @@ Obj_EggCapsule:
 		bra.s	.main
 ; ---------------------------------------------------------------------------
 
-.flipy
+.flying
 
 		; set xypos
 		move.w	(Camera_X_pos).w,d0
@@ -48,7 +53,7 @@ Obj_EggCapsule:
 		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
 		move.l	#.flipped,jump_ptr(a0)
-		move.w	#1,objoff_3A(a0)
+		move.w	#1,eggcapsule.speed(a0)						; set speed
 		jsr	(Swing_Setup1).w
 
 		; create button object
@@ -83,7 +88,7 @@ Obj_EggCapsule:
 ; =============== S U B R O U T I N E =======================================
 
 .normal
-		btst	#1,state_flags(a0)						; is button pressed?
+		btst	#eggcapsule.button_bit,state_flags(a0)				; is button pressed?
 		beq.s	.return								; if not, branch
 		move.l	#.Sonicendpose,jump_ptr(a0)
 
@@ -111,6 +116,8 @@ Obj_EggCapsule:
 ; =============== S U B R O U T I N E =======================================
 
 .Sonicendpose
+
+		; wait boss
 		tst.b	(Boss_flag).w							; boss is defeated?
 		bne.s	.return								; if not, branch
 		move.l	#.Tailsendpose,d0
@@ -130,7 +137,7 @@ Obj_EggCapsule:
 
 		; xpos
 		move.w	(Camera_X_pos).w,d0
-		move.w	objoff_3A(a0),d1						; get moving
+		move.w	eggcapsule.speed(a0),d1						; get moving
 		bmi.s	.left
 
 		; check right side
@@ -151,7 +158,7 @@ Obj_EggCapsule:
 		neg.w	d1								; change moving
 
 .setx
-		move.w	d1,objoff_3A(a0)						; save moving
+		move.w	d1,eggcapsule.speed(a0)						; save moving
 		add.w	d1,x_pos(a0)
 
 		; ypos
@@ -166,13 +173,13 @@ Obj_EggCapsule:
 		add.l	d1,y_pos(a0)
 
 		; check button
-		btst	#1,state_flags(a0)						; is button pressed?
+		btst	#eggcapsule.button_bit,state_flags(a0)				; is button pressed?
 		beq.s	.swing								; if not, branch
 
 		; load sub routine
 		moveq	#0,d0
 		move.b	(Current_zone).w,d0
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 4
 		add.w	d0,d0
 		move.l	.subindex(pc,d0.w),jump_ptr(a0)
 		bsr.w	.open
@@ -190,6 +197,8 @@ Obj_EggCapsule:
 ; =============== S U B R O U T I N E =======================================
 
 sub_866BA:										; Routine $A (Normal)
+
+		; wait boss
 		tst.b	(Boss_flag).w							; boss is defeated?
 		bne.s	.waitb								; if not, branch
 		move.l	#sub_866CC,d0
@@ -198,14 +207,18 @@ sub_866BA:										; Routine $A (Normal)
 .waitb
 		jsr	(Swing_UpAndDown).w
 		jmp	(MoveSprite2).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 sub_866CC:										; Routine $C
 		jsr	(Swing_UpAndDown).w
 		jmp	(MoveSprite2).w
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 sub_866DA:										; Routine $E (MGZ)
+
+		; wait boss
 		tst.b	(Boss_flag).w							; boss is defeated?
 		bne.s	.waitb								; if not, branch
 		move.l	#sub_866CC,d0
@@ -219,24 +232,29 @@ sub_866DA:										; Routine $E (MGZ)
 
 sub_86716:										; Routine $12 (LBZ)
 		bra.s	sub_866EC.swing
-; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
 
 sub_866EC:										; Routine $10 (LBZ)
+
+		; wait boss
 		tst.b	(Boss_flag).w							; boss is defeated?
 		bne.s	.swing								; if not, branch
 		move.l	#sub_86716,d0
 		bsr.s	Check_SonicEndPose
+
+; =============== S U B R O U T I N E =======================================
 
 .swing
 		jsr	(Swing_UpAndDown).w
 		moveq	#-96,d0
 		add.w	(Camera_X_pos).w,d0
 		cmp.w	x_pos(a0),d0
-		blo.s	.loc_8670C
+		blo.s	.move
 		rts
 ; ---------------------------------------------------------------------------
 
-.loc_8670C
+.move
 		subq.w	#2,x_pos(a0)
 		jmp	(MoveSprite2).w
 
@@ -272,6 +290,7 @@ Check_SonicEndPose_MGZ:
 		subq.w	#1,wait_timer(a0)
 		bpl.s	.return
 
+		; check
 		lea	(Player_1).w,a1							; a1=character
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	.return								; if yes, branch
@@ -279,6 +298,8 @@ Check_SonicEndPose_MGZ:
 		bpl.s	.return								; if not, branch
 		move.w	#-$100,x_vel(a0)						; left move
 		move.l	d0,jump_ptr(a0)							; set routine
+
+		; create
 		jsr	(Create_New_Object).w
 		bne.s	.return
 		move.l	#Obj_LevelResults,address(a1)
@@ -316,7 +337,7 @@ Obj_EggCapsule_Button:
 		beq.s	.draw								; if not, branch
 		move.l	#.solid,address(a0)
 		movea.w	parent3(a0),a1							; load egg capsule address
-		bset	#1,state_flags(a1)						; set flag as "pressed"
+		bset	#eggcapsule.button_bit,state_flags(a1)				; set flag as "pressed"
 		move.b	#$C,mapping_frame(a0)						; "pressed" frame
 
 .draw
@@ -374,7 +395,7 @@ Obj_EggCapsule_FlippedButton:
 		move.l	#.refresh,address(a0)
 		subq.b	#8,child_dy(a0)							; move object to "pressed"
 		movea.w	parent3(a0),a1							; load egg capsule address
-		bset	#1,state_flags(a1)						; set flag as "pressed"
+		bset	#eggcapsule.button_bit,state_flags(a1)				; set flag as "pressed"
 
 .refresh
 		jsr	(Refresh_ChildPosition).w
@@ -456,7 +477,12 @@ AniRaw_Propeller:	dc.b 0, 6, 7, 8, 9, arfEnd
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
-ecapa_yvel				= objoff_3E	; .w
+
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+eggcapsule_animals.yvel			ds.w 1						; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -493,7 +519,7 @@ Obj_EggCapsule_Animals:
 		tst.w	d1
 		bpl.s	.anim
 		add.w	d1,y_pos(a0)
-		move.w	objoff_3E(a0),y_vel(a0)
+		move.w	eggcapsule_animals.yvel(a0),y_vel(a0)
 
 		; check Sonic
 		jsr	(Find_SonicTails).w
@@ -620,15 +646,15 @@ Obj_EggCapsule_Animals_Flipped:
 ; ---------------------------------------------------------------------------
 
 EggCapsule_Animals_Yvel:
-		dc.w -$380
-		dc.w -$300
-		dc.w -$280
-		dc.w -$200
+		dc.w -$380								; 0
+		dc.w -$300								; 2
+		dc.w -$280								; 4
+		dc.w -$200								; 6
 EggCapsule_Animals_VRAM:
-		dc.w make_art_tile($580,0,TRUE)
-		dc.w make_art_tile($592,0,TRUE)
-		dc.w make_art_tile($42E,0,TRUE)
-		dc.w make_art_tile($440,0,TRUE)
+		dc.w make_art_tile($580,0,TRUE)						; 0
+		dc.w make_art_tile($592,0,TRUE)						; 2
+		dc.w make_art_tile($42E,0,TRUE)						; 4
+		dc.w make_art_tile($440,0,TRUE)						; 6
 
 ; ---------------------------------------------------------------------------
 ; Egg Capsule load animals
@@ -643,7 +669,7 @@ EggCapsule_Animals_Load:
 		andi.w	#6,d0
 		move.w	EggCapsule_Animals_Yvel(pc,d0.w),d2
 		move.w	d2,y_vel(a0)
-		move.w	d2,objoff_3E(a0)
+		move.w	d2,eggcapsule_animals.yvel(a0)
 
 		; check
 		movea.w	parent3(a0),a1							; load egg capsule address
@@ -661,7 +687,7 @@ EggCapsule_Animals_Load:
 		move.w	EggCapsule_Animals_VRAM(pc,d2.w),art_tile(a0)
 		moveq	#0,d2
 		move.b	(Current_zone).w,d2
-		add.w	d2,d2
+		add.w	d2,d2								; multiply by 2
 		lea	Obj_Animal_ZoneAnimals(pc),a1
 		adda.w	d2,a1
 		lsr.w	d0								; division by 2
