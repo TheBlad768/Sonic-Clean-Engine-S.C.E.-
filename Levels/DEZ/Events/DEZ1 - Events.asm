@@ -75,5 +75,5 @@ DEZ1_Deform:
 ; ---------------------------------------------------------------------------
 
 DEZ1_BGDeformArray:
-		dcb.w 15, 16	; stars
-		dc.w $7FFF	; last stars
+		dcb.w 15, 16	; stars size
+		dc.w $7FFF	; last stars size ; end marker
