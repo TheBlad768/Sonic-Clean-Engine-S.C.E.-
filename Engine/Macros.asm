@@ -65,25 +65,25 @@ bytesTo2Lcnt function n,bytesTo2Xcnt(n,4)
 
 ; macros to convert from tile index to art tiles, block mapping or VRAM address
 sprite_priority function x,((x&7)<<7)
-make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
+make_art_tile function addr,pal,pri,((pri<<15)&high_priority)|((pal<<13)&palette_line_3)|(addr&tile_mask)
 make_block_tile function addr,flx,fly,pal,pri,((pri&1)<<15)|((pal&3)<<13)|((fly&1)<<12)|((flx&1)<<11)|(addr&tile_mask)
 make_block_tile_pair function addr,flx,fly,pal,pri,((make_block_tile(addr,flx,fly,pal,pri)<<16)|make_block_tile(addr,flx,fly,pal,pri))
-tiles_to_bytes function addr,((addr&$7FF)<<5)
+tiles_to_bytes function addr,((addr&tile_mask)<<5)
 
 ; function to calculate the location of a tile in plane mappings
 planeLoc function width,col,line,(((width * line) + col) * 2)
 
-; function to calculate the location of a tile in plane mappings with a width of 40 cells
-planeLocH32 function col,line,(($40 * line) + (2 * col))
+; function to calculate the location of a tile in plane mappings with a width of 32 cells
+planeLocH32 function col,line,planeLoc(32,col,line)
 
 ; function to calculate the location of a tile in plane mappings with a width of 40 cells
-planeLocH28 function col,line,(($50 * line) + (2 * col))
+planeLocH40 function col,line,planeLoc(40,col,line)
 
 ; function to calculate the location of a tile in plane mappings with a width of 64 cells
-planeLocH40 function col,line,(($80 * line) + (2 * col))
+planeLocH64 function col,line,planeLoc(64,col,line)
 
 ; function to calculate the location of a tile in plane mappings with a width of 128 cells
-planeLocH80 function col,line,(($100 * line) + (2 * col))
+planeLocH128 function col,line,planeLoc(128,col,line)
 
 ; the VDP's sprite coordinates place the top-left pixel of the screen at $80,$80,
 ; these constants are to help deobfuscate that
