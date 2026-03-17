@@ -1,6 +1,8 @@
 ; ---------------------------------------------------------------------------
 ; Simple horizontal deformation
-; Inputs:
+; ---------------------------------------------------------------------------
+;
+; Input:
 ; a2 = config: buffer, initial pixel, velocity, deformation size
 ; a3 = deformation table
 ; ---------------------------------------------------------------------------
@@ -28,7 +30,9 @@ HScroll_Deform:
 
 ; ---------------------------------------------------------------------------
 ; Simple vertical deformation
-; Inputs:
+; ---------------------------------------------------------------------------
+;
+; Input:
 ; a1 = deformation table
 ; a2 = config: velocity
 ; ---------------------------------------------------------------------------
@@ -40,7 +44,7 @@ VScroll_Deform:
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 		move.l	#vdpComm(0,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		moveq	#bytesToXcnt((320*2),16),d6
+		moveq	#bytesToXcnt((screen_width*2),16),d6
 
 .loop
 		move.w	(a2)+,d2							; get velocity parameter
@@ -730,7 +734,7 @@ Apply_FGVScroll2:
 		lsr.w	#4,d0								; divide by $10
 
 .find_column
-		addq.w	#2,a5								; next
+		addq.w	#2,a5								; next table buffer
 		move.w	(a4)+,d2
 		lsr.w	#4,d2								; divide by $10
 
@@ -798,7 +802,7 @@ Apply_BGVScroll2:
 		lsr.w	#4,d0								; divide by $10
 
 .find_column
-		addq.w	#2,a5								; next
+		addq.w	#2,a5								; next table buffer
 		move.w	(a4)+,d2
 		lsr.w	#4,d2								; divide by $10
 
