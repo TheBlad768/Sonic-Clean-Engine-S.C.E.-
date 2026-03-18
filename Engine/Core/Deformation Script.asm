@@ -836,29 +836,39 @@ Apply_BGVScroll2:
 ; ---------------------------------------------------------------------------
 ; Adjust background during loop
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = camera pos copy table
+; d0 = camera pos copy
+; d2 = wrap half size
+; d3 = wrap size
 
 ; =============== S U B R O U T I N E =======================================
 
 Adjust_BGDuringLoop:
-		move.w	(a1),d1
-		move.w	d0,(a1)+
-		sub.w	d1,d0
-		bpl.s	.loc_4F37C
-		neg.w	d0
-		cmp.w	d2,d0
-		blo.s	.loc_4F378
-		sub.w	d3,d0
+		move.w	(a1),d1								; get previous camera pos copy value to d1
+		move.w	d0,(a1)+							; save new camera pos copy value
+		sub.w	d1,d0								; subtract old value from new value
+		bpl.s	.wrap_positive							; if not minus, branch
+		neg.w	d0								; get absolute
 
-.loc_4F378
-		sub.w	d0,(a1)+
+		; check negative
+		cmp.w	d2,d0								; check half wrap value
+		blo.s	.accum_negative							; if small, branch
+		sub.w	d3,d0								; wrap fix
+
+.accum_negative
+		sub.w	d0,(a1)+							; apply backward move to accumulator
 		rts
 ; ---------------------------------------------------------------------------
 
-.loc_4F37C
-		cmp.w	d2,d0
-		blo.s	.loc_4F382
-		sub.w	d3,d0
+.wrap_positive
 
-.loc_4F382
-		add.w	d0,(a1)+
+		; check positive
+		cmp.w	d2,d0								; check half wrap value
+		blo.s	.accum_positive							; if small, branch
+		sub.w	d3,d0								; wrap fix
+
+.accum_positive
+		add.w	d0,(a1)+							; apply forward move to accumulator
 		rts
