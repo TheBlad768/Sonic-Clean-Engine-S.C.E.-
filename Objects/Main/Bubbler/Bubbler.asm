@@ -266,8 +266,8 @@ Obj_Bubbler_Bubbles:
 		; main
 		tst.b	object_control(a1)
 		bmi.s	.return
-		btst	#shield_reaction.bubble_shield,shield_reaction(a1)
-		bne.s	.return
+		btst	#status_secondary.bubble_shield,status_secondary(a1)		; does Sonic have a Bubble Shield?
+		bne.s	.return								; if yes, branch
 
 		; check xypos
 		lea	.range(pc),a2
