@@ -6,8 +6,8 @@
 
 	dsset aniraw_ptr								; pretend we're in the RAM
 
-bubbler.timer				ds.b 1						; current time remaining (2 bytes)
-bubbler.delay				ds.b 1						; time delay (2 bytes)
+bubbler.timer				ds.b 1						; current time remaining (1 byte)
+bubbler.delay				ds.b 1						; time delay (1 byte)
 bubbler.state_flags			ds.b 1						; (1 byte)
 bubbler.type_index			ds.b 1						; (1 byte)
 bubbler.types_ptr			ds.l 1						; (4 bytes)
