@@ -109,6 +109,7 @@ LevelSelectScreen:
 .loop
 		jsr	(Wait_VSync).w
 		lea	LSScroll_Data(pc),a2
+		lea	(H_scroll_table).w,a3						; load scroll table
 		jsr	(HScroll_Deform).w
 
 		; update text

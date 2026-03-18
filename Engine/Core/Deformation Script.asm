@@ -4,15 +4,12 @@
 ;
 ; Input:
 ; a2 = config: buffer, initial pixel, velocity, deformation size
-; a3 = deformation table
+; a3 = horizontal deformation table
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 HScroll_Deform:
-		lea	(H_scroll_table).w,a3						; load scroll table
-
-.main
 		move.w	(a2)+,d6							; get list of deformation
 
 .next
@@ -22,7 +19,7 @@ HScroll_Deform:
 .loop
 		add.l	d2,(a3)								; add velocity to deformation table
 		move.w	(a3),(a1)							; set velocity from deformation table to deformation buffer
-		addq.w	#4,a1								; next deformation line
+		addq.w	#4,a1								; next foreground or background
 		addq.w	#4,a3								; next deformation table
 		dbf	d5,.loop
 		dbf	d6,.next
@@ -33,7 +30,7 @@ HScroll_Deform:
 ; ---------------------------------------------------------------------------
 ;
 ; Input:
-; a1 = deformation table
+; a1 = vertical deformation table
 ; a2 = config: velocity
 ; ---------------------------------------------------------------------------
 
@@ -52,7 +49,7 @@ VScroll_Deform:
 		asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d2,(a1)								; add velocity to deformation table
 		move.w	(a1),VDP_data_port-VDP_data_port(a6)				; set velocity from deformation table to deformation buffer
-		addq.w	#4,a1
+		addq.w	#4,a1								; next foreground and background
 		dbf	d6,.loop
 
 		; exit
@@ -77,7 +74,7 @@ PlainDeformation:
 .loop
 
 	rept 8
-		move.l	d0,(a1)+
+		move.l	d0,(a1)+							; copy to foreground and background
 	endr
 
 		dbf	d1,.loop
@@ -101,7 +98,7 @@ PlainDeformation_Flipped:
 .loop
 
 	rept 8
-		move.l	d0,(a1)+
+		move.l	d0,(a1)+							; copy to foreground and background
 	endr
 
 		dbf	d1,.loop
@@ -134,7 +131,7 @@ FGScroll_Deformation:
 		move.w	(a1),d2
 		add.w	d0,d2
 		move.w	d2,(a1)
-		addq.w	#4,a1								; skip foreground and background
+		addq.w	#4,a1								; next foreground and background
 	endr
 
 		dbf	d1,.loop
@@ -247,139 +244,6 @@ ApplyDeformation2:
 
 .normal_skip
 		move.l	d3,(a1)+
-		dbf	d0,.normal_loop
-
-.next_check
-		tst.w	d2
-		bmi.s	.return
-
-		; get
-		move.w	(a4)+,d0
-		smi	d4								; if minus, set flag (linear)
-		andi.w	#$7FFF,d0							; clear linear flag bit
-
-		; check
-		move.w	d2,d3
-		sub.w	d0,d2
-		bpl.s	.set_dbf
-		move.w	d3,d0
-		bra.s	.check_mode
-; ---------------------------------------------------------------------------
-
-.return
-		rts
-
-; ---------------------------------------------------------------------------
-; Background horizontal deformation without foreground fix for move camera
-; ---------------------------------------------------------------------------
-;
-; Input:
-; a4 = deform array table
-; a5 = horizontal background scroll table buffer
-
-; =============== S U B R O U T I N E =======================================
-
-ApplyBGDeformation:
-		move.w	#screen_height-1,d1
-
-ApplyBGDeformation3:
-		lea	(H_scroll_buffer).w,a1
-		move.w	(Camera_Y_pos_BG_copy).w,d0
-		move.w	(Camera_X_pos_copy).w,d3
-
-ApplyBGDeformation2:
-
-.process_block
-
-		; get
-		move.w	(a4)+,d2
-		smi	d4								; if minus, set flag (linear)
-		andi.w	#$7FFF,d2							; clear linear flag bit
-
-		; check
-		sub.w	d2,d0
-		bmi.s	.block_visible
-		addq.w	#2,a5								; next table buffer
-
-		; check linear flag
-		tst.b	d4								; is linear flag set?
-		beq.s	.process_block							; if not, branch
-		subq.w	#2,a5								; prev table buffer
-		add.w	d2,d2								; multiply by 2
-		adda.w	d2,a5
-		bra.s	.process_block
-; ---------------------------------------------------------------------------
-
-.block_visible
-
-		; check linear flag
-		tst.b	d4								; is linear flag set?
-		beq.s	.calc_height							; if not, branch
-		add.w	d0,d2
-		add.w	d2,d2								; multiply by 2
-		adda.w	d2,a5
-
-.calc_height
-		neg.w	d0
-		move.w	d1,d2
-		sub.w	d0,d2
-		bhs.s	.set_fg
-		move.w	d1,d0
-		addq.w	#1,d0
-
-.set_fg
-		neg.w	d3								; set foreground values to negative
-		swap	d3								; word to long
-
-.set_dbf
-		subq.w	#1,d0								; fix dbf
-
-.check_mode
-
-		; check linear flag
-		tst.b	d4								; is linear flag set?
-		beq.s	.get_normal							; if not, branch
-
-		; check even
-		lsr.w	d0								; division by 2
-		bhs.s	.linear_skip							; branch, if the value is even
-
-		; odd value
-
-.linear_loop
-		move.w	(a5)+,d3							; get horizontal background scroll table buffer
-		neg.w	d3								; set background values to negative
-		addq.w	#2,a1								; skip foreground
-		move.w	d3,(a1)+
-
-.linear_skip
-		move.w	(a5)+,d3							; get horizontal background scroll table buffer
-		neg.w	d3								; set background values to negative
-		addq.w	#2,a1								; skip foreground
-		move.w	d3,(a1)+
-		dbf	d0,.linear_loop
-
-		; next
-		bra.s	.next_check
-; ---------------------------------------------------------------------------
-
-.get_normal
-		move.w	(a5)+,d3							; get horizontal background scroll table buffer once
-		neg.w	d3								; set background values to negative
-
-		; check even
-		lsr.w	d0								; division by 2
-		bhs.s	.normal_skip							; branch, if the value is even
-
-		; odd value
-
-.normal_loop
-		addq.w	#2,a1								; skip foreground
-		move.w	d3,(a1)+
-
-.normal_skip
-		addq.w	#2,a1								; skip foreground
-		move.w	d3,(a1)+
 		dbf	d0,.normal_loop
 
 .next_check
@@ -530,6 +394,130 @@ ApplyFGDeformation2:
 		sub.w	d0,d2
 		bpl.s	.set_dbf
 		move.w	d1,d0
+		bra.s	.check_mode
+; ---------------------------------------------------------------------------
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
+; Foreground or background horizontal deformation without fix for move camera
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = deform array table
+; a5 = horizontal foreground or background scroll table buffer
+
+; =============== S U B R O U T I N E =======================================
+
+ApplyCustomDeformation:
+		move.w	#screen_height-1,d1
+
+ApplyCustomDeformation2:
+
+.process_block
+
+		; get
+		move.w	(a4)+,d2
+		smi	d4								; if minus, set flag (linear)
+		andi.w	#$7FFF,d2							; clear linear flag bit
+
+		; check
+		sub.w	d2,d0
+		bmi.s	.block_visible
+		addq.w	#2,a5								; next table buffer
+
+		; check linear flag
+		tst.b	d4								; is linear flag set?
+		beq.s	.process_block							; if not, branch
+		subq.w	#2,a5								; prev table buffer
+		add.w	d2,d2								; multiply by 2
+		adda.w	d2,a5
+		bra.s	.process_block
+; ---------------------------------------------------------------------------
+
+.block_visible
+
+		; check linear flag
+		tst.b	d4								; is linear flag set?
+		beq.s	.calc_height							; if not, branch
+		add.w	d0,d2
+		add.w	d2,d2								; multiply by 2
+		adda.w	d2,a5
+
+.calc_height
+		neg.w	d0
+		move.w	d1,d2
+		sub.w	d0,d2
+		bhs.s	.set_dbf
+		move.w	d1,d0
+		addq.w	#1,d0
+
+.set_dbf
+		subq.w	#1,d0								; fix dbf
+
+.check_mode
+
+		; check linear flag
+		tst.b	d4								; is linear flag set?
+		beq.s	.get_normal							; if not, branch
+
+		; check even
+		lsr.w	d0								; division by 2
+		bhs.s	.linear_skip							; branch, if the value is even
+
+		; odd value
+
+.linear_loop
+		move.w	(a5)+,d3							; get horizontal background scroll table buffer
+		neg.w	d3								; set background values to negative
+		move.w	d3,(a1)
+		addq.w	#4,a1								; next foreground or background
+
+.linear_skip
+		move.w	(a5)+,d3							; get horizontal background scroll table buffer
+		neg.w	d3								; set background values to negative
+		move.w	d3,(a1)
+		addq.w	#4,a1								; next foreground or background
+		dbf	d0,.linear_loop
+
+		; next
+		bra.s	.next_check
+; ---------------------------------------------------------------------------
+
+.get_normal
+		move.w	(a5)+,d3							; get horizontal background scroll table buffer once
+		neg.w	d3								; set background values to negative
+
+		; check even
+		lsr.w	d0								; division by 2
+		bhs.s	.normal_skip							; branch, if the value is even
+
+		; odd value
+
+.normal_loop
+		move.w	d3,(a1)
+		addq.w	#4,a1								; next foreground or background
+
+.normal_skip
+		move.w	d3,(a1)
+		addq.w	#4,a1								; next foreground or background
+		dbf	d0,.normal_loop
+
+.next_check
+		tst.w	d2
+		bmi.s	.return
+
+		; get
+		move.w	(a4)+,d0
+		smi	d4								; if minus, set flag (linear)
+		andi.w	#$7FFF,d0							; clear linear flag bit
+
+		; check
+		move.w	d2,d3
+		sub.w	d0,d2
+		bpl.s	.set_dbf
+		move.w	d3,d0
 		bra.s	.check_mode
 ; ---------------------------------------------------------------------------
 
@@ -843,4 +831,34 @@ Apply_BGVScroll2:
 ; ---------------------------------------------------------------------------
 
 .return
+		rts
+
+; ---------------------------------------------------------------------------
+; Adjust background during loop
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Adjust_BGDuringLoop:
+		move.w	(a1),d1
+		move.w	d0,(a1)+
+		sub.w	d1,d0
+		bpl.s	.loc_4F37C
+		neg.w	d0
+		cmp.w	d2,d0
+		blo.s	.loc_4F378
+		sub.w	d3,d0
+
+.loc_4F378
+		sub.w	d0,(a1)+
+		rts
+; ---------------------------------------------------------------------------
+
+.loc_4F37C
+		cmp.w	d2,d0
+		blo.s	.loc_4F382
+		sub.w	d3,d0
+
+.loc_4F382
+		add.w	d0,(a1)+
 		rts
