@@ -44,6 +44,8 @@ Obj_HiddenMonitor:
 		st	routine_secondary(a0)						; set the monitor's routine_secondary counter
 		move.w	#-$500,y_vel(a0)
 		sfx	sfx_BubbleAttack						; play sfx
+
+		; check
 		bclr	#render_flags.x_flip,render_flags(a0)
 		beq.s	.draw
 		bset	#high_priority_bit,art_tile(a0)					; high priority

@@ -4,13 +4,19 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+levelsize.maxX				ds.l 1						; maximum x-axis position (4 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_IncLevEndXGradual:
 		move.w	(Camera_max_X_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
+		move.l	levelsize.maxX(a0),d1
+		addi.l	#$4000,d1							; increase speed
+		move.l	d1,levelsize.maxX(a0)
 		swap	d1
 		add.w	d1,d0
 		cmp.w	(Camera_stored_max_X_pos).w,d0
@@ -29,13 +35,19 @@ Obj_IncLevEndXGradual:
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+levelsize.minX				ds.l 1						; minimum x-axis position (4 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_DecLevStartXGradual:
 		move.w	(Camera_min_X_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
+		move.l	levelsize.minX(a0),d1
+		addi.l	#$4000,d1							; decrease speed
+		move.l	d1,levelsize.minX(a0)
 		swap	d1
 		sub.w	d1,d0
 		cmp.w	(Camera_stored_min_X_pos).w,d0
@@ -54,13 +66,19 @@ Obj_DecLevStartXGradual:
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+levelsize.maxY				ds.l 1						; maximum y-axis position (4 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_IncLevEndYGradual:
 		move.w	(Camera_max_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$8000,d1
-		move.l	d1,objoff_30(a0)
+		move.l	levelsize.maxY(a0),d1
+		addi.l	#$8000,d1							; increase speed
+		move.l	d1,levelsize.maxY(a0)
 		swap	d1
 		add.w	d1,d0
 		cmp.w	(Camera_stored_max_Y_pos).w,d0
@@ -79,13 +97,19 @@ Obj_IncLevEndYGradual:
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+levelsize.minY				ds.l 1						; minimum y-axis position (4 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_DecLevStartYGradual:
 		move.w	(Camera_min_Y_pos).w,d0
-		move.l	objoff_30(a0),d1
-		addi.l	#$4000,d1
-		move.l	d1,objoff_30(a0)
+		move.l	levelsize.minY(a0),d1
+		addi.l	#$4000,d1							; decrease speed
+		move.l	d1,levelsize.minY(a0)
 		swap	d1
 		sub.w	d1,d0
 		cmp.w	(Camera_stored_min_Y_pos).w,d0

@@ -5,6 +5,12 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+startnewlevel.size_ptr			ds.l 1						; (4 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; levels list (subtype)
 ; $00	= $000 (DEZ1)
 ; $01	= $001 (DEZ2)
@@ -34,11 +40,11 @@ Obj_StartNewLevel:
 		addq.w	#(.horizontal-.vertical),a2					; horizontal
 
 .set
-		move.l	a2,objoff_30(a0)						; save data
+		move.l	a2,startnewlevel.size_ptr(a0)					; save data
 
 .main
 		lea	(Player_1).w,a1							; a1=character
-		movea.l	objoff_30(a0),a2						; load xydata
+		movea.l	startnewlevel.size_ptr(a0),a2					; load xydata
 		jsr	(Check_InMyRange).w
 		beq.s	.chkdel
 
