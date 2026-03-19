@@ -4,6 +4,12 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+wavesplash.pause_flag			ds.b 1						; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_WaveSplash:
@@ -35,13 +41,13 @@ Obj_WaveSplash:
 		move.w	d1,(a2)+
 
 		; check
-		tst.b	objoff_32(a0)							; is pause flag set?
+		tst.b	wavesplash.pause_flag(a0)					; is pause flag set?
 		bne.s	.checkpause							; if yes, branch
 		tst.b	(Ctrl_1_pressed_logical).w					; is Start pressed?
 		bpl.s	.anim								; if not, branch
 
 		; set flag
-		st	objoff_32(a0)							; set pause flag
+		st	wavesplash.pause_flag(a0)					; set pause flag
 		addq.b	#3,mapping_frame(a0)
 		bra.s	.setframe
 ; ---------------------------------------------------------------------------
@@ -49,7 +55,7 @@ Obj_WaveSplash:
 .checkpause
 		tst.b	(Game_paused).w							; still pause?
 		bne.s	.setframe							; if yes, branch
-		clr.b	objoff_32(a0)							; clear pause flag
+		clr.b	wavesplash.pause_flag(a0)					; clear pause flag
 		subq.b	#3,mapping_frame(a0)
 
 .anim
