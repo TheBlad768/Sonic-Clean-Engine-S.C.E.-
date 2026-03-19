@@ -4,6 +4,17 @@
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+aircountdown.drown_timer		ds.w 1						; current time remaining (2 bytes)
+aircountdown.warn_timer			ds.w 1						; current time remaining (2 bytes)
+aircountdown.spawn_delay		ds.w 1						; time delay (2 bytes)
+aircountdown.timer			ds.b 1						; current time remaining (1 byte)
+aircountdown.bubble_count		ds.b 1						; (1 byte)
+aircountdown.state_flags		ds.b 1						; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AirCountdown:
@@ -11,73 +22,93 @@ Obj_AirCountdown:
 		; init
 		movem.l	ObjDat_AirCountdown(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.b	#1,objoff_37(a0)
 
 .countdown
 		lea	(Player_1).w,a2							; a2=character
-		tst.w	objoff_30(a0)
-		bne.w	loc_1857C
+
+		; if the player has drowned, and the object is waiting until the
+		; world should pause, then go deal with that
+		tst.w	aircountdown.drown_timer(a0)					; is timer over?
+		bne.w	.drowning							; if not, branch
+
+		; check player
 		cmpi.b	#PlayerID_Death,routine(a2)					; has player just died?
-		bhs.w	locret_1857A							; if yes, branch
-		btst	#status_secondary.bubble_shield,status_secondary(a2)
-		bne.w	locret_1857A
+		bhs.w	.return								; if yes, branch
+		btst	#status_secondary.bubble_shield,status_secondary(a2)		; does Sonic have a Bubble Shield?
+		bne.w	.return								; if yes, branch
 		btst	#status.player.underwater,status(a2)
-		beq.w	locret_1857A
+		beq.w	.return
 
-		; wait
-		subq.w	#1,objoff_3C(a0)
-		bpl.w	loc_18594
-		move.w	#60-1,objoff_3C(a0)
+		; wait a second
+		subq.w	#1,aircountdown.warn_timer(a0)					; subtract 1 from time delay
+		bpl.w	.checkcreate							; if time still remains, branch
+		move.w	#(1*60)-1,aircountdown.warn_timer(a0)				; reset time delay
+		bset	#0,aircountdown.state_flags(a0)
 
-		move.w	#1,objoff_3A(a0)
+		; randomly spawn either one or two bubbles
 		jsr	(Random_Number).w
 		andi.w	#1,d0
-		move.b	d0,objoff_38(a0)
-		moveq	#0,d0
+		move.b	d0,aircountdown.bubble_count(a0)
+
+		; check air left
 		move.b	air_left(a2),d0							; check air remaining
-		cmpi.w	#25,d0
-		beq.s	AirCountdown_WarnSound						; play ding sound if air is 25
-		cmpi.w	#20,d0
-		beq.s	AirCountdown_WarnSound						; play ding sound if air is 20
-		cmpi.w	#15,d0
-		beq.s	AirCountdown_WarnSound						; play ding sound if air is 15
-		cmpi.w	#12,d0
-		bhi.s	AirCountdown_ReduceAir
-		bne.s	loc_184E8
+		cmpi.b	#25,d0
+		beq.s	.warnsound							; play ding sound if air is 25
+		cmpi.b	#20,d0
+		beq.s	.warnsound							; play ding sound if air is 20
+		cmpi.b	#15,d0
+		beq.s	.warnsound							; play ding sound if air is 15
+		cmpi.b	#12,d0
+		bhi.s	.reduceair							; if higher than 12, branch
+		bne.s	.checktimer							; play drowning theme when there are 12 seconds left
+
+		; play countdown music
 		music	mus_Drowning							; play drowning music
 
-loc_184E8:
-		subq.b	#1,objoff_36(a0)
-		bpl.s	AirCountdown_ReduceAir
-		move.b	objoff_37(a0),objoff_36(a0)
-		bset	#7,objoff_3A(a0)
-		bra.s	AirCountdown_ReduceAir
+.checktimer
+
+		; wait
+		subq.b	#1,aircountdown.timer(a0)					; decrement timer
+		bpl.s	.reduceair							; if time remains, branch
+		addq.b	#1+1,aircountdown.timer(a0)					; reset timer to 1 frames
+
+		; next
+		bset	#7,aircountdown.state_flags(a0)					; set the flag to create a number
+		bra.s	.reduceair
 ; ---------------------------------------------------------------------------
 
-AirCountdown_WarnSound:
+.warnsound
+
+		; play the "ding-ding" warning sound
 		sfx	sfx_AirDing							; play air ding sound
 
-AirCountdown_ReduceAir:
-		subq.b	#1,air_left(a2)
-		bhs.w	AirCountdown_MakeItem
-		move.b	#$81,object_control(a2)
-		sfx	sfx_Drown							; play drown sound
-		move.b	#10,objoff_38(a0)
-		move.w	#1,objoff_3A(a0)
-		move.w	#2*60,objoff_30(a0)
-		movea.w	a2,a1
+.reduceair
+
+		; check air left
+		subq.b	#1,air_left(a2)							; subtract 1 from air remaining
+		bhs.w	.create								; if air is above 0, branch
+
+		; drown the player
+		move.b	#$81,object_control(a2)						; lock controls
+		sfx	sfx_Drown							; play drowning sound
+		move.b	#10,aircountdown.bubble_count(a0)				; spawn ten bubbles
+		bset	#0,aircountdown.state_flags(a0)
+		move.w	#2*60,aircountdown.drown_timer(a0)				; two seconds until the world pauses
+		movea.w	a2,a1								; a1=character
 		bsr.w	Player_ResetAirTimer
 		move.w	a0,-(sp)
-		movea.w	a2,a0
+		movea.w	a2,a0								; a0=character
 		jsr	(Sonic_TouchFloor).l
 		movea.w	(sp)+,a0
 
-		; drown character
+		; set
 		bset	#status.player.in_air,status(a2)
 		clr.l	x_vel(a2)
 		clr.w	ground_vel(a2)
-		move.b	#AniIDSonAni_Drown,anim(a2)
+		move.b	#AniIDSonAni_Drown,anim(a2)					; use Sonic's drowning animation
 		move.b	#PlayerID_Drown,routine(a2)
+
+		; check p1
 		cmpa.w	#Player_1,a2
 		bne.s	.notp1
 		move.l	priority(a2),(Debug_saved_priority).w				; save priority and art_tile
@@ -87,39 +118,45 @@ AirCountdown_ReduceAir:
 .notp1
 		bset	#high_priority_bit,art_tile(a2)					; high priority
 
-locret_1857A:
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1857C:
-		move.b	#AniIDSonAni_Drown,anim(a2)
-		subq.w	#1,objoff_30(a0)
-		bne.s	loc_18594
-		move.b	#PlayerID_Death,routine(a2)
+.drowning
+		move.b	#AniIDSonAni_Drown,anim(a2)					; use Sonic's drowning animation
 
-locret_1858E:
+		; check time
+		subq.w	#1,aircountdown.drown_timer(a0)					; subtract 1 from time delay
+		bne.s	.checkcreate							; if time still remains, branch
+		move.b	#PlayerID_Death,routine(a2)					; signal that the player is dead
+
+.return2
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_18594:
-		tst.w	objoff_3A(a0)
-		beq.s	locret_1858E
-		subq.w	#1,objoff_3E(a0)
-		bpl.s	locret_1858E
+.checkcreate
+		tst.b	aircountdown.state_flags(a0)
+		beq.s	.return2
+		subq.w	#1,aircountdown.spawn_delay(a0)					; subtract 1 from time delay
+		bpl.s	.return2							; if time still remains, branch
 
-AirCountdown_MakeItem:
+.create
+
+		; set wait time
 		jsr	(Random_Number).w
 		andi.w	#$F,d0
 		addq.w	#8,d0
-		move.w	d0,objoff_3E(a0)
+		move.w	d0,aircountdown.spawn_delay(a0)
 
 		; create bubbles
 		jsr	(Create_New_Object).w
-		bne.s	locret_1858E
+		bne.s	.return2
 		move.l	#Obj_AirCountdown_Bubbles,address(a1)
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
+
+		; set xypos
 		move.w	x_pos(a2),x_pos(a1)						; copy player X position to object
 		moveq	#6,d0
 		btst	#status.player.x_flip,status(a2)
@@ -131,53 +168,60 @@ AirCountdown_MakeItem:
 		add.w	d0,x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
 		move.b	#6,subtype(a1)
-		tst.w	objoff_30(a0)
-		beq.s	loc_1862A
-		andi.w	#7,objoff_3E(a0)
+
+		; check
+		tst.w	aircountdown.drown_timer(a0)
+		beq.s	.check
+		andi.w	#7,aircountdown.spawn_delay(a0)
 		subi.w	#12,y_pos(a1)
 		jsr	(Random_Number).w
 		move.b	d0,angle(a1)
 		moveq	#3,d0
 		and.w	(Level_frame_counter).w,d0
-		bne.s	loc_18676
+		bne.s	.checkcount
 		move.b	#$E,subtype(a1)
-		bra.s	loc_18676
+		bra.s	.checkcount
 
 ; ---------------------------------------------------------------------------
 ; has something to do with making bubbles come out less regularly
 ; when Sonic is almost drowning
 ; ---------------------------------------------------------------------------
 
-loc_1862A:
-		btst	#7,objoff_3A(a0)
-		beq.s	loc_18676
+.check
+		; the player has not drowned
+
+		; if it's not time to create a number bubble, then skip this
+		btst	#7,aircountdown.state_flags(a0)
+		beq.s	.checkcount
 		moveq	#0,d2
-		move.b	air_left(a2),d2
+		move.b	air_left(a2),d2							; check air remaining
 		cmpi.b	#12,d2
-		bhs.s	loc_18676
-		lsr.w	d2
+		bhs.s	.checkcount							; if higher than 12, branch
+
+		; this player is about to drown
+		lsr.w	d2								; division by 2
 		jsr	(Random_Number).w
 		andi.w	#3,d0
-		bne.s	loc_1865E
-		bset	#6,objoff_3A(a0)
-		bne.s	loc_18676
+		bne.s	.check2
+		bset	#6,aircountdown.state_flags(a0)					; this flag prevents more than one number bubble from spawning at once
+		bne.s	.checkcount
 		move.b	d2,subtype(a1)
-		move.w	#$1C,objoff_3C(a1)
+		move.w	#28,aircountdown_bubbles.number_timer(a1)			; make this bubble turn into a number later
 
-loc_1865E:
-		tst.b	objoff_38(a0)
-		bne.s	loc_18676
-		bset	#6,objoff_3A(a0)
-		bne.s	loc_18676
+.check2
+		tst.b	aircountdown.bubble_count(a0)
+		bne.s	.checkcount
+		bset	#6,aircountdown.state_flags(a0)					; this flag prevents more than one number bubble from spawning at once
+		bne.s	.checkcount
 		move.b	d2,subtype(a1)
-		move.w	#$1C,objoff_3C(a1)
+		move.w	#28,aircountdown_bubbles.number_timer(a1)			; make this bubble turn into a number later
 
-loc_18676:
-		subq.b	#1,objoff_38(a0)
-		bpl.s	.return
-		clr.w	objoff_3A(a0)
+.checkcount
+		subq.b	#1,aircountdown.bubble_count(a0)				; subtract 1 from time delay
+		bpl.s	.return3							; if time still remains, branch
+		clr.b	aircountdown.state_flags(a0)					; don't spawn any more bubbles
 
-.return
+.return3
 		rts
 
 ; ----------------------------------------------------------------------------
@@ -185,6 +229,14 @@ loc_18676:
 ; ----------------------------------------------------------------------------
 
 ; dynamic object variables
+
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+aircountdown_bubbles.origX		ds.w 1						; original x-axis position (2 bytes)
+aircountdown_bubbles.number_timer	ds.w 1						; current time remaining (2 bytes)
+aircountdown_bubbles.prev_frame		ds.b 1						; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -197,7 +249,7 @@ Obj_AirCountdown_Bubbles:
 			setBit(render_flags.on_screen) \
 		),render_flags(a0)
 
-		move.w	x_pos(a0),objoff_34(a0)
+		move.w	x_pos(a0),aircountdown_bubbles.origX(a0)
 		move.w	#-$100,y_vel(a0)
 		move.l	#.animate,address(a0)
 
@@ -210,111 +262,134 @@ Obj_AirCountdown_Bubbles:
 		move.l	#.chkwater,address(a0)
 
 .chkwater
+
+		; check water
 		move.w	(Water_level).w,d0
 		cmp.w	y_pos(a0),d0							; has bubble reached the water surface?
-		blo.s	AirCountdown_Wobble						; if not, branch
+		blo.s	.wobble								; if not, branch
 
-		; pop the bubble
-		move.l	#AirCountdown_Display,address(a0)
-		addq.b	#7,anim(a0)
+		; burst the bubble
+		addq.b	#7,anim(a0)							; burst animation
+		move.l	#.airleft,address(a0)
+
+		; check animation
 		cmpi.b	#$D,anim(a0)
-		beq.s	AirCountdown_Display
-		blo.s	AirCountdown_Display
+		beq.s	.airleft
+		blo.s	.airleft
 		move.b	#$D,anim(a0)
-		bra.s	AirCountdown_Display
+		bra.s	.airleft
 ; ---------------------------------------------------------------------------
 
-AirCountdown_Wobble:
-		tst.b	(WindTunnel_flag).w
-		beq.s	loc_18218
-		addq.w	#4,objoff_34(a0)
+.wobble
 
-loc_18218:
+		; if in a wind-tunnel, then make the bubbles move to the right
+		tst.b	(WindTunnel_flag).w
+		beq.s	.notwindtunnel
+		addq.w	#4,aircountdown_bubbles.origX(a0)
+
+.notwindtunnel
+
+		; wiggle the bubble left and right
 		moveq	#$7F,d0
 		and.b	angle(a0),d0
-		addq.b	#1,angle(a0)
+		addq.b	#1,angle(a0)							; next
 		lea	AirCountdown_WobbleData(pc),a1
 		move.b	(a1,d0.w),d0
 		ext.w	d0
-		add.w	objoff_34(a0),d0
+		add.w	aircountdown_bubbles.origX(a0),d0
 		move.w	d0,x_pos(a0)
+
+		; draw
 		bsr.w	AirCountdown_ShowNumber
 		jsr	(MoveSprite2).w
 		tst.b	render_flags(a0)						; object visible on the screen?
-		bpl.s	AirCountdown_Delete						; if not, branch
+		bpl.s	.delete								; if not, branch
 		jmp	(Draw_Sprite).w
-
-; ---------------------------------------------------------------------------
-; AirCountdown_Display and AirCountdown_DisplayNumber were split in this
-; game, unlike Sonic 2, to fix a bug where the countdown numbers corrupted
-; if they reached the surface of the water.
-; (The start of ARZ Act 1 is a good place to see this).
 ; ---------------------------------------------------------------------------
 
-AirCountdown_Display:
+.airleft
 		lea	(Player_1).w,a2							; a2=character
 		cmpi.b	#12,air_left(a2)						; check air remaining
-		bhi.s	AirCountdown_Delete						; if higher than 12, branch
+		bhi.s	.delete								; if higher than 12, branch
 		bsr.s	AirCountdown_ShowNumber
+
+		; draw
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
-		bne.s	AirCountdown_Delete
+		bne.s	.delete
 		bsr.w	AirCountdown_Load_Art
+		tst.b	render_flags(a0)						; object visible on the screen?
+		bpl.s	.delete								; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-AirCountdown_Delete:
+.delete
 		jmp	(Delete_Current_Object).w
-
-; =============== S U B R O U T I N E =======================================
-
-AirCountdown_AirLeft:
-		lea	(Player_1).w,a2							; a2=character
-		cmpi.b	#12,air_left(a2)						; check air remaining
-		bhi.s	AirCountdown_Delete						; if higher than 12, branch
-		subq.w	#1,objoff_3C(a0)
-		bne.s	AirCountdown_Display2
-		move.l	#AirCountdown_DisplayNumber,address(a0)
-		addq.b	#7,anim(a0)
-		bra.s	AirCountdown_Display
 ; ---------------------------------------------------------------------------
 
-AirCountdown_Display2:
+.airleft2
+		lea	(Player_1).w,a2							; a2=character
+		cmpi.b	#12,air_left(a2)						; check air remaining
+		bhi.s	.delete								; if higher than 12, branch
+
+		; check timer
+		subq.w	#1,aircountdown_bubbles.number_timer(a0)
+		bne.s	.draw
+		move.l	#.airleft3,address(a0)
+		addq.b	#7,anim(a0)							; burst animation
+		bra.s	.airleft
+; ---------------------------------------------------------------------------
+
+.draw
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
-		bne.s	AirCountdown_Delete
+		bne.s	.delete
 		bsr.s	AirCountdown_Load_Art
 		tst.b	render_flags(a0)						; object visible on the screen?
-		bpl.s	AirCountdown_Delete						; if not, branch
+		bpl.s	.delete								; if not, branch
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
-AirCountdown_DisplayNumber:
+.airleft3
 		lea	(Player_1).w,a2							; a2=character
 		cmpi.b	#12,air_left(a2)						; check air remaining
-		bhi.s	AirCountdown_Delete						; if higher than 12, branch
+		bhi.s	.delete								; if higher than 12, branch
+
+		; draw
 		bsr.s	AirCountdown_ShowNumber
 		lea	Ani_AirCountdown(pc),a1
 		jsr	(Animate_Sprite).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
-		bne.s	AirCountdown_Delete
+		bne.s	.delete
+		tst.b	render_flags(a0)						; object visible on the screen?
+		bpl.s	.delete								; if not, branch
 		jmp	(Draw_Sprite).w
+
+; ----------------------------------------------------------------------------
+; Show number
+; ----------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 AirCountdown_ShowNumber:
-		tst.w	objoff_3C(a0)
+
+		; check timer
+		tst.w	aircountdown_bubbles.number_timer(a0)
 		beq.s	.return
-		subq.w	#1,objoff_3C(a0)
+		subq.w	#1,aircountdown_bubbles.number_timer(a0)
 		bne.s	.return
+
+		; check anim
 		cmpi.b	#7,anim(a0)
 		bhs.s	.return
-		move.w	#15,objoff_3C(a0)
+
+		; turn this bubble into a number
+		move.w	#15,aircountdown_bubbles.number_timer(a0)
 		clr.w	y_vel(a0)
 		move.w	#$80,d1
-		move.b	d1,render_flags(a0)
+		move.b	d1,render_flags(a0)						; render_flags.on_screen
 		move.w	x_pos(a0),d0
 		sub.w	(Camera_X_pos).w,d0
 		add.w	d1,d0
@@ -323,10 +398,14 @@ AirCountdown_ShowNumber:
 		sub.w	(Camera_Y_pos).w,d0
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
-		move.l	#AirCountdown_AirLeft,address(a0)
+		move.l	#Obj_AirCountdown_Bubbles.airleft2,address(a0)
 
 .return
 		rts
+
+; ----------------------------------------------------------------------------
+; Load number art
+; ----------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -337,9 +416,11 @@ AirCountdown_Load_Art:
 		blo.s	AirCountdown_ShowNumber.return
 		cmpi.b	#$13,d1
 		bhs.s	AirCountdown_ShowNumber.return
-		cmp.b	objoff_32(a0),d1
+
+		; check prev frame
+		cmp.b	aircountdown_bubbles.prev_frame(a0),d1
 		beq.s	AirCountdown_ShowNumber.return
-		move.b	d1,objoff_32(a0)
+		move.b	d1,aircountdown_bubbles.prev_frame(a0)
 		subi.w	#9,d1
 		move.w	d1,d0								; multiply by $C0/2
 		add.w	d1,d1
@@ -362,11 +443,15 @@ AirCountdown_Load_Art:
 ; =============== S U B R O U T I N E =======================================
 
 Player_ResetAirTimer:
+
+		; check air left
 		cmpi.b	#12,air_left(a1)
-		bhi.s	.end								; branch if countdown hasn't started yet
+		bhi.s	.reset								; branch if countdown hasn't started yet
 		cmpa.w	#Player_1,a1
-		bne.s	.end								; branch if it isn't player 1
+		bne.s	.reset								; branch if it isn't player 1
 		move.w	(Current_music).w,d0						; prepare to play current level's music
+
+		; check boss
 		tst.b	(Boss_flag).w
 		bne.s	.notinvincible							; branch if in a boss fight
 		btst	#status_secondary.invincible,status_secondary(a1)
@@ -376,8 +461,8 @@ Player_ResetAirTimer:
 .notinvincible
 		jsr	(Play_Music).w							; play music
 
-.end
-		move.b	#30,air_left(a1)						; reset air to full
+.reset
+		move.b	#30,air_left(a1)						; reset air to full (30 seconds)
 		rts
 
 ; ----------------------------------------------------------------------------

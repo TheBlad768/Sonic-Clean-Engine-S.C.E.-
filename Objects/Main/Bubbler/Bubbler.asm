@@ -222,7 +222,7 @@ Obj_Bubbler_Bubbles:
 		blo.s	.wobble								; if not, branch
 
 .burst
-		addq.b	#4,anim(a0)							; burst animate
+		addq.b	#4,anim(a0)							; burst animation
 		move.l	#.burst_draw,address(a0)
 
 .burst_draw
@@ -236,6 +236,8 @@ Obj_Bubbler_Bubbles:
 ; ---------------------------------------------------------------------------
 
 .wobble
+
+		; wiggle the bubble left and right
 		moveq	#$7F,d0
 		and.b	angle(a0),d0
 		addq.b	#1,angle(a0)							; next
