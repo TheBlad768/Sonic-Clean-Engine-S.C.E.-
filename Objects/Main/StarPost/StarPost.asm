@@ -67,7 +67,7 @@ Obj_StarPost:
 		move.w	(Player_1+x_pos).w,d0
 		sub.w	x_pos(a0),d0
 		addq.w	#8,d0
-		cmpi.w	#16,d0
+		cmpi.w	#8*2,d0
 		bhs.s	.return
 
 		; check ypos
@@ -81,7 +81,7 @@ Obj_StarPost:
 		sfx	sfx_StarPost
 
 		; move circle
-		move.w	#34,objoff_36(a0)						; rotation time
+		move.w	#34,wait_timer(a0)						; rotation time
 
 		; check bonus
 		cmpi.w	#50,(Ring_count).w						; does Sonic have at least 50 rings?
@@ -109,15 +109,17 @@ Obj_StarPost:
 ; =============== S U B R O U T I N E =======================================
 
 .circular
-		subq.w	#1,objoff_36(a0)
-		bne.s	.cmove
+
+		; wait
+		subq.w	#1,wait_timer(a0)						; subtract 1 from time delay
+		bne.s	.cmove								; if time still remains, branch
 		move.l	#.canim,address(a0)
 
 .canim
 		moveq	#1,d0
-		btst	#2,(Level_frame_counter+1).w
+		btst	#2,(Level_frame_counter+1).w					; 0 or 4
 		beq.s	.cdraw
-		moveq	#2,d0
+		addq.b	#1,d0
 
 .cdraw
 		move.b	d0,sub2_mapframe(a0)
@@ -231,13 +233,13 @@ Load_StarPost_Stars:
 		move.w	a0,parent3(a1)							; save parent (StarPost)
 		move.w	x_pos(a0),d3
 		move.w	d3,x_pos(a1)
-		move.w	d3,objoff_30(a1)
+		move.w	d3,starpost_stars.origX(a1)
 		moveq	#-48,d3
 		add.w	y_pos(a0),d3
 		move.w	d3,y_pos(a1)
-		move.w	d3,objoff_32(a1)
+		move.w	d3,starpost_stars.origY(a1)
 		move.l	#words_to_long(-$400,0),x_vel(a1)
-		move.w	d2,objoff_34(a1)
+		move.w	d2,angle(a1)
 		addi.w	#256/4,d2
 
 		; create next object
@@ -253,13 +255,21 @@ Load_StarPost_Stars:
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+starpost_stars.origX			ds.w 1						; original x-axis position (2 bytes)
+starpost_stars.origY			ds.w 1						; original y-axis position (2 bytes)
+starpost_stars.radius			ds.w 1						; radius of circular (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_StarPost_Stars:
 		move.b	collision_property(a0),d0
-		beq.s	loc_2D50A
+		beq.s	.circular
 		andi.b	#1,d0
-		beq.s	loc_2D506
+		beq.s	.clrtouch
 
 		; load special stage
 		addq.w	#4*2,sp								; exit from object and current screen
@@ -270,89 +280,94 @@ Obj_StarPost_Stars:
 		st	(Respawn_table_keep).w
 		jsr	(Clear_SpriteRingMem).w
 
-loc_2D506:
+.clrtouch
 		clr.b	collision_property(a0)
 
-loc_2D50A:
-		move.w	objoff_34(a0),d0
-		addi.w	#10,objoff_34(a0)
+.circular
+		move.w	angle(a0),d0
+		addi.w	#10,angle(a0)
 		jsr	(GetSineCosine).w
-		asr.w	#5,d0
-		asr.w	#3,d1
+		asr.w	#5,d0								; division by $20
+		asr.w	#3,d1								; division by 8
 		move.w	d1,d3
-		move.w	objoff_34(a0),d2
+		move.w	angle(a0),d2
 		andi.w	#$3E0,d2
-		lsr.w	#5,d2
-		moveq	#3-1,d5
+		lsr.w	#5,d2								; division by $20
+
+		; set
+		moveq	#3-1,d5								; set loop count
 		moveq	#0,d4
 		cmpi.w	#16,d2
-		ble.s	loc_2D53A
+		ble.s	.check
 		neg.w	d1
 
-loc_2D53A:
+.check
 		andi.w	#$F,d2
 		cmpi.w	#8,d2
-		ble.s	loc_2D54A
+		ble.s	.check2
 		neg.w	d2
 		andi.w	#7,d2
 
-loc_2D54A:
-		lsr.w	d2
-		beq.s	loc_2D550
+.check2
+		lsr.w	d2								; division by 2
+		beq.s	.next
 		add.w	d1,d4
 
-loc_2D550:
-		asl.w	d1
-		dbf	d5,loc_2D54A
-		asr.w	#4,d4
-		add.w	d4,d0
-		addq.w	#1,objoff_36(a0)
-		move.w	objoff_36(a0),d1
-		cmpi.w	#$80,d1
-		beq.s	loc_2D574
-		bgt.s	loc_2D57A
+.next
+		asl.w	d1								; multiply by 2
+		dbf	d5,.check2
 
-loc_2D56A:
-		muls.w	d1,d0
-		muls.w	d1,d3
-		asr.w	#7,d0
-		asr.w	#7,d3
-		bra.s	loc_2D58C
+		asr.w	#4,d4								; division by $10
+		add.w	d4,d0
+		addq.w	#1,starpost_stars.radius(a0)
+		move.w	starpost_stars.radius(a0),d1
+
+		; check radius of circular
+		cmpi.w	#$80*1,d1
+		beq.s	.settouch
+		bgt.s	.checkrange
+		bra.s	.calcradius
 ; ---------------------------------------------------------------------------
 
-loc_2D574:
+.settouch
 		move.b	#$18|collision_flags.npc.special,collision_flags(a0)		; set collision size 8x8
 
-loc_2D57A:
-		cmpi.w	#$180,d1
-		ble.s	loc_2D58C
+.checkrange
+		cmpi.w	#$80*3,d1
+		ble.s	.setpos
 		neg.w	d1
-		addi.w	#$200,d1
-		bmi.s	loc_2D5C0
-		bra.s	loc_2D56A
-; ---------------------------------------------------------------------------
+		addi.w	#$80*4,d1
+		bmi.s	.delete
 
-loc_2D58C:
-		move.w	objoff_30(a0),d2
+.calcradius
+		muls.w	d1,d0
+		muls.w	d1,d3
+		asr.w	#7,d0								; division by $80
+		asr.w	#7,d3								; division by $80
+
+.setpos
+		move.w	starpost_stars.origX(a0),d2
 		add.w	d3,d2
 		move.w	d2,x_pos(a0)
-		move.w	objoff_32(a0),d2
+		move.w	starpost_stars.origY(a0),d2
 		add.w	d0,d2
 		move.w	d2,y_pos(a0)
-		addq.b	#1,objoff_23(a0)
+
+		; star anim
+		addq.b	#1,anim_frame(a0)
 		moveq	#6,d0
-		and.b	objoff_23(a0),d0
-		lsr.b	d0
+		and.b	anim_frame(a0),d0
+		lsr.b	d0								; division by 2
 		cmpi.b	#3,d0
-		bne.s	loc_2D5B6
+		bne.s	.setframe
 		moveq	#1,d0
 
-loc_2D5B6:
+.setframe
 		move.b	d0,mapping_frame(a0)
 		jmp	(Child_DrawTouch_Sprite).w
 ; ---------------------------------------------------------------------------
 
-loc_2D5C0:
+.delete
 		jmp	(Delete_Current_Object).w
 
 ; =============== S U B R O U T I N E =======================================
