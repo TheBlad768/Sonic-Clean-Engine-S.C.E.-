@@ -157,7 +157,6 @@ Obj_AirCountdown:
 		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
 
 		; set xypos
-		move.w	x_pos(a2),x_pos(a1)						; copy player X position to object
 		moveq	#6,d0
 		btst	#status.player.x_flip,status(a2)
 		beq.s	.notflipx
@@ -165,7 +164,8 @@ Obj_AirCountdown:
 		move.b	#$40,angle(a1)
 
 .notflipx
-		add.w	d0,x_pos(a1)
+		add.w	x_pos(a2),d0
+		move.w	d0,x_pos(a1)						; copy player X position to object
 		move.w	y_pos(a2),y_pos(a1)
 		move.b	#6,subtype(a1)
 
