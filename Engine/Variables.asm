@@ -9,12 +9,12 @@ Chunk_table						ds.b $100*$80			; chunk (128x128) definitions, $80 bytes per de
 Chunk_table_end =					*
 
 ; object variables (110 objects)
-Object_RAM						= *
+Object_RAM =						*
 Player_1						ds.b object_size		; main character in 1 player mode
 							ds.b object_size		; Tails in a Sonic and Tails game
 Reserved_object_3					ds.b object_size		; during a level, an object whose sole purpose is to clear the collision response list is stored here
 Dynamic_object_RAM					ds.b object_size*90		; 90 objects
-Dynamic_object_RAM_end					= *
+Dynamic_object_RAM_end =				*
 							ds.b object_size		; unused
 Breathing_bubbles					ds.b object_size		; for the main character
 							ds.b object_size		; for Tails in a Sonic and Tails game
@@ -27,7 +27,7 @@ Shield							ds.b object_size
 Invincibility_stars					ds.b object_size*4		; 4 objects
 							ds.b object_size*3		; unused
 Wave_Splash						ds.b object_size		; Obj_WaveSplash is loaded here
-Object_RAM_end						= *
+Object_RAM_end =					*
 
 ; kosinski plus moduled buffer variables
 KosPlus_decomp_buffer					ds.b $1000			; each module in a KosPlusM archive is decompressed here and then DMAed to VRAM
@@ -45,18 +45,18 @@ Pos_table						ds.l 64				; recorded player xy position buffer
 Ring_status_table					ds.b RingsTable_Size		; ring status table (1 byte)
 Ring_status_table_end =					*
 Object_respawn_table					ds.b ObjectsTable_Size		; object respawn table (1 byte)
-Object_respawn_table_end				= *
+Object_respawn_table_end =				*
 Sprite_table_buffer					ds.b 80*8
-Sprite_table_buffer_end					= *
+Sprite_table_buffer_end =				*
 Sprite_table_input					ds.w ($80/2)*8			; sprite table input buffer
-Sprite_table_input_end					= *
+Sprite_table_input_end =				*
 
 ; DMA variables
 DMA_queue						ds.w $12*7			; stores all the VDP commands necessary to initiate a DMA transfer
 DMA_queue_slot						ds.w 1				; points to the next free slot on the queue
 
 ; camera variables
-Camera_RAM						= *				; various camera and scroll-related variables are stored here
+Camera_RAM =						*				; various camera and scroll-related variables are stored here
 H_scroll_amount						ds.w 1				; number of pixels camera scrolled horizontally in the last frame * $100
 V_scroll_amount						ds.w 1				; number of pixels camera scrolled vertically in the last frame * $100
 Camera_target_min_X_pos					ds.w 1
@@ -146,7 +146,7 @@ Game_mode						ds.b 1
 							ds.b 1				; even
 V_int_flag =						*
 V_int_ptr						ds.l 1
-Ctrl_1_logical	 =					*
+Ctrl_1_logical =					*
 Ctrl_1_held_logical					ds.b 1
 Ctrl_1_pressed_logical					ds.b 1
 Ctrl_1 =						*
@@ -213,7 +213,7 @@ Screen_event_flag					ds.b 1
 Background_event_routine				ds.b 1
 Background_event_flag					ds.b 1
 Background_collision_flag				ds.b 1				; if set, background collision is enabled
-Debug_placement_mode					= *				; both routine and type (word)
+Debug_placement_mode =					*				; both routine and type (word)
 Debug_placement_routine					ds.b 1
 Debug_placement_type					ds.b 1				; 0 = normal gameplay, 1 = normal object placement, 2 = frame cycling
 Debug_camera_delay					ds.b 1
@@ -223,7 +223,7 @@ Last_act_end_flag					ds.b 1
 Slotted_object_bits					ds.b 8				; index of slot array to use
 Signpost_addr						ds.w 1
 Render_sprite_first_RAM					ds.l 8
-Render_sprite_first_RAM_end				= *
+Render_sprite_first_RAM_end =				*
 Render_sprite_last_RAM					ds.l 1
 Palette_cycle_counters					ds.b $40
 Pal_fade_delay						ds.w 1
@@ -238,7 +238,7 @@ Chain_bonus_counter					ds.w 1
 Time_bonus_countdown					ds.w 1				; used on the results screen
 Ring_bonus_countdown					ds.w 1				; used on the results screen
 Total_bonus_countup					ds.w 1
-Lag_frame_count_end					= *
+Lag_frame_count_end =					*
 
 ; water variables
 Water_level						ds.w 1				; keeps fluctuating
@@ -349,14 +349,14 @@ Target_palette_line_3					ds.b palette_line_size
 Target_palette_line_4					ds.b palette_line_size
 
 ; oscillating variables
-Oscillating_variables					= *
-Oscillating_table					= *
-Oscillating_Numbers					= *
+Oscillating_variables = 				*
+Oscillating_table = 					*
+Oscillating_Numbers = 					*
 Oscillation_Control					ds.w 1
 Oscillating_Data					ds.b $40
 Anim_Counters						ds.b $10			; each word stores data on animated level art, including duration and current frame
 Level_trigger_array					ds.b $10			; used by buttons, etc
-Level_trigger_array_end					= *
+Level_trigger_array_end =				*
 Rings_frame_timer					ds.b 1
 Rings_frame						ds.b 1
 Ring_spill_anim_counter					ds.b 1
@@ -374,10 +374,10 @@ CrossResetRAM =						*				; RAM in this region will not be cleared after a soft 
 
 ; main variables
 V_int_run_count						ds.l 1				; the number of times V-int has run
-Current_zone_and_act					= *
+Current_zone_and_act =					*
 Current_zone						ds.b 1
 Current_act						ds.b 1
-Apparent_zone_and_act					= *
+Apparent_zone_and_act =					*
 Apparent_zone						ds.b 1
 Apparent_act						ds.b 1
 Debug_saved_mappings					ds.l 1				; player 1 mappings before entering debug mode
