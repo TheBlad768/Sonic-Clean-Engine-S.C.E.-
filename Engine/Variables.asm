@@ -42,8 +42,8 @@ V_scroll_buffer_end =					*
 ; table variables
 Collision_response_list					ds.w $80/2			; only objects in this list are processed by the collision response routines
 Pos_table						ds.l 64				; recorded player xy position buffer
-Ring_status_table					ds.w RingsTable_Size		; ring status table (1 word)
-Ring_status_table_end					= *
+Ring_status_table					ds.b RingsTable_Size		; ring status table (1 byte)
+Ring_status_table_end =					*
 Object_respawn_table					ds.b ObjectsTable_Size		; object respawn table (1 byte)
 Object_respawn_table_end				= *
 Sprite_table_buffer					ds.b 80*8
@@ -132,7 +132,7 @@ Ring_end_addr_ROM					ds.l 1				; address in the ring layout of the first ring w
 Ring_start_addr_RAM					ds.w 1				; address in the ring status table of the first ring whose X position is >= camera X position - 8
 Ring_consumption_table =				*				; stores the addresses of all rings currently being consumed
 Ring_consumption_count					ds.w 1				; the number of rings being consumed currently
-Ring_consumption_list					ds.w RingsList_Size		; the remaining part of the ring consumption table
+Ring_consumption_list					ds.w RingsList_Size		; the remaining part of the ring consumption table (1 word)
 Ring_consumption_list_end =				*
 Ring_consumption_table_end =				*
 Camera_RAM_end =					*

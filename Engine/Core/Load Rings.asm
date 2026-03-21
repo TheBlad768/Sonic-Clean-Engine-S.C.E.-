@@ -29,8 +29,8 @@ Load_Rings_Init:
 ; ---------------------------------------------------------------------------
 
 .next
-		addq.w	#4,a1								; load next ring
-		addq.w	#2,a2								; load next ring status
+		addq.w	#4,a1								; load next ring xy pos
+		addq.w	#1,a2								; load next ring status
 
 .check
 		cmp.w	(a1),d4								; is the X pos of the ring < camera X pos?
@@ -46,7 +46,7 @@ Load_Rings_Init:
 ; ---------------------------------------------------------------------------
 
 .next2
-		addq.w	#4,a1								; load next ring
+		addq.w	#4,a1								; load next ring xy pos
 
 .check2
 		cmp.w	(a1),d4								; is the X pos of the ring < camera X + 336?
@@ -69,8 +69,8 @@ Load_Rings_Main:
 ; ---------------------------------------------------------------------------
 
 .next
-		addq.w	#4,a1								; load next ring
-		addq.w	#2,a2								; load next ring status
+		addq.w	#4,a1								; load next ring xy pos
+		addq.w	#1,a2								; load next ring status
 
 .check
 		cmp.w	(a1),d4
@@ -79,8 +79,8 @@ Load_Rings_Main:
 ; ---------------------------------------------------------------------------
 
 .prev
-		subq.w	#4,a1								; load previous ring
-		subq.w	#2,a2								; load previous ring status
+		subq.w	#4,a1								; load previous ring xy pos
+		subq.w	#1,a2								; load previous ring status
 
 .check2
 		cmp.w	-4(a1),d4
@@ -97,7 +97,7 @@ Load_Rings_Main:
 ; ---------------------------------------------------------------------------
 
 .next2
-		addq.w	#4,a2								; load next ring
+		addq.w	#4,a2								; load next ring xy pos
 
 .check3
 		cmp.w	(a2),d4
@@ -106,13 +106,17 @@ Load_Rings_Main:
 ; ---------------------------------------------------------------------------
 
 .prev2
-		subq.w	#4,a2								; load previous ring
+		subq.w	#4,a2								; load previous ring xy pos
 
 .check4
 		cmp.w	-4(a2),d4
 		bls.s	.prev2
 		move.l	a2,(Ring_end_addr_ROM).w
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to consumption ring
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -128,17 +132,19 @@ Consumption_Rings:
 		movea.w	d0,a1								; load ring address
 
 		; wait
-		subq.b	#1,(a1)								; decrement timer
-		bne.s	.next								; if it's not 0 yet, branch
-		addq.b	#6,(a1)								; reset timer
+		subi.b	#nibbles_to_byte(1,0),(a1)					; decrement timer
+		bhs.s	.next								; if time remains, branch
+		addi.b	#nibbles_to_byte(6,0),(a1)					; reset timer to 6 frames
 
 		; frame
-		addq.b	#1,1(a1)							; increment frame
-		cmpi.b	#(CMap_Ring_end-CMap_Ring)/2,1(a1)				; is it destruction time yet?
+		addq.b	#nibbles_to_byte(0,1),(a1)					; increment frame
+		moveq	#nibbles_to_byte(0,$F),d0					; maximum 15 frames
+		and.b	(a1),d0
+		cmpi.b	#nibbles_to_byte(0,(CMap_Ring_end-CMap_Ring)/2),d0		; is it destruction time yet?
 		bne.s	.next								; if not, branch
-		move.w	#-1,(a1)							; destroy ring
 
 		; clear slot
+		st	(a1)								; destroy ring
 		clr.w	-2(a2)								; clear ring entry
 		subq.w	#1,(Ring_consumption_table).w					; subtract count
 
@@ -164,8 +170,8 @@ RingTouchResponse:
 		movem.l	(Ring_start_addr_ROM).w,a2-a3					; get Ring_start_addr_ROM and Ring_end_addr_ROM
 
 		; check
-		cmpa.l	a2,a3
-		beq.s	Consumption_Rings.return
+		cmpa.l	a2,a3								; is that the end of the list of rings?
+		beq.s	Consumption_Rings.return					; if yes, branch
 		movea.w	(Ring_start_addr_RAM).w,a4
 
 		; check Lightning Shield
@@ -194,6 +200,8 @@ RingTouchResponse:
 		move.b	y_radius(a0),d5							; load player's height
 		subq.b	#6/2,d5
 		sub.w	d5,d3
+
+		; check ducking
 		cmpi.b	#AniIDSonAni_Duck,anim(a0)					; is player ducking?
 		bne.s	.notduck							; if not, branch
 		addi.w	#24/2,d3							; fix player's y_pos
@@ -206,7 +214,7 @@ RingTouchResponse:
 		add.w	d5,d5								; double player's height value
 
 .nextring
-		tst.w	(a4)								; has this ring been consumed?
+		tst.b	(a4)								; has this ring been consumed?
 		bne.s	.next								; if it has, branch
 
 		; RaiseError is only available in DEBUG builds
@@ -247,7 +255,7 @@ RingTouchResponse:
 		bne.s	.attractring							; if yes, branch
 
 .consume
-		move.w	#bytes_to_word(6,(CMap_Ring_Spark-CMap_Ring)/2),(a4)
+		move.b	#nibbles_to_byte(5,(CMap_Ring_Spark-CMap_Ring)/2),(a4)		; set timer to 6 frames and set mapping frame
 		bsr.s	GiveRing
 		lea	(Ring_consumption_list).w,a1
 
@@ -262,10 +270,10 @@ RingTouchResponse:
 		addq.w	#1,(Ring_consumption_table).w
 
 .next
-		addq.w	#4,a2
-		addq.w	#2,a4
-		cmpa.l	a2,a3
-		bne.s	.nextring
+		addq.w	#4,a2								; load next ring xy pos
+		addq.w	#1,a4								; load next ring status
+		cmpa.l	a2,a3								; is that the end of the list of rings?
+		bne.s	.nextring							; if not, branch
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -275,8 +283,8 @@ RingTouchResponse:
 		move.l	#Obj_Attracted_Ring,address(a1)
 		move.w	(a2),x_pos(a1)							; copy xpos
 		move.w	2(a2),y_pos(a1)							; copy ypos
-		move.w	a4,parent(a1)							; save ring RAM address
-		move.w	#-1,(a4)							; set not draw flag
+		move.w	a4,parent(a1)							; save ring status RAM address
+		st	(a4)								; destroy ring
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -326,9 +334,9 @@ Render_Rings:
 		move.w	#gameplay_plane_height-block_height,d5
 		move.w	(Screen_Y_wrap_value).w,d3
 
-.loop
-		tst.w	(a4)+								; has this ring been consumed?
-		bmi.s	.next								; if it has, branch
+.nextring
+		cmpi.b	#-1,(a4)+							; has this ring been consumed?
+		beq.s	.next								; if it has, branch
 		move.w	2(a0),d1							; get ring ypos
 		sub.w	d4,d1								; subtract camera ypos
 		addq.w	#8,d1
@@ -337,7 +345,8 @@ Render_Rings:
 		bhs.s	.next
 		move.w	(a0),d0								; get ring xpos
 		sub.w	(a3),d0								; subtract camera xpos
-		move.b	-1(a4),d6
+		moveq	#nibbles_to_byte(0,$F),d6					; maximum 15 frames
+		and.b	-1(a4),d6
 		add.w	d6,d6								; multiply by 2
 		addi.w	#128-16,d1							; add ypos
 		move.w	d1,(a6)+							; set ypos
@@ -349,9 +358,9 @@ Render_Rings:
 		subq.w	#1,d7								; subtract sprite count
 
 .next
-		addq.w	#4,a0								; next
-		subq.w	#4,d2
-		bne.s	.loop
+		addq.w	#4,a0								; load next ring xy pos
+		subq.w	#4,d2								; is that the end of the list of rings?
+		bne.s	.nextring							; if not, branch
 
 .return
 		rts
@@ -414,12 +423,12 @@ Clear_SpriteRingMem:
 .find
 		move.w	(a2)+,d0							; is there a ring in this slot?
 		beq.s	.find								; if not, branch
-		movea.w	d0,a1								; load ring address
-		move.w	#-1,(a1)							; destroy ring
+		movea.w	d0,a1								; load ring status RAM address
 
 		; clear slot
-		clr.w	-2(a2)
-		subq.w	#1,(Ring_consumption_table).w
+		st	(a1)								; destroy ring
+		clr.w	-2(a2)								; clear ring entry
+		subq.w	#1,(Ring_consumption_table).w					; subtract count
 
 		; next
 		dbf	d1,.find							; repeat for all rings in table
