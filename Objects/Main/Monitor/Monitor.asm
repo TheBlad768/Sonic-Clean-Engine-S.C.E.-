@@ -37,7 +37,7 @@ Obj_Monitor:
 		move.l	#.main,address(a0)
 
 .main
-		bsr.s	Obj_MonitorFall
+		bsr.s	Monitor_Fall
 
 		; solid
 		moveq	#$B,d1
@@ -62,22 +62,22 @@ Obj_Monitor:
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_MonitorFall:
+Monitor_Fall:
 		tst.b	routine_secondary(a0)						; player hit the monitor from below?
-		beq.s	Obj_MonitorFallUpsideUp.return					; if not, return
+		beq.s	.return								; if not, return
 		btst	#render_flags.y_flip,render_flags(a0)				; is monitor upside down?
-		bne.s	Obj_MonitorFallUpsideDown					; if so, branch
+		bne.s	.upsidedown							; if so, branch
 
-Obj_MonitorFallUpsideUp:
+		; upside up
 		jsr	(MoveSprite).w
 		tst.w	y_vel(a0)							; is monitor moving up?
 		bmi.s	.return								; if so, return
 		jsr	(ObjCheckFloorDist).w
 		tst.w	d1								; is monitor in the ground?
-		beq.s	.inground							; if so, branch
+		beq.s	.ingroundup							; if so, branch
 		bpl.s	.return								; if not, return
 
-.inground
+.ingroundup
 		add.w	d1,y_pos(a0)							; move monitor out of the ground
 		clr.w	y_vel(a0)
 		clr.b	routine_secondary(a0)						; stop monitor from falling
@@ -86,21 +86,19 @@ Obj_MonitorFallUpsideUp:
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_MonitorFallUpsideDown:
+.upsidedown
 		jsr	(MoveSprite_ReverseGravity).w
 		tst.w	y_vel(a0)							; is monitor moving down?
 		bmi.s	.return								; if so, return
 		jsr	(ObjCheckCeilingDist).w
 		tst.w	d1								; is monitor in the ground (ceiling)?
-		beq.s	.inground							; if so, branch
+		beq.s	.ingrounddown							; if so, branch
 		bpl.s	.return								; if not, return
 
-.inground
+.ingrounddown
 		sub.w	d1,y_pos(a0)							; move monitor out of the ground
 		clr.w	y_vel(a0)
 		clr.b	routine_secondary(a0)						; stop monitor from falling
-
-.return
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -148,29 +146,33 @@ Monitor_CharStandOn:
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_MonitorBreak:
+Monitor_Break:
 		moveq	#standing_mask|pushing_mask,d0					; is someone touching the monitor?
 		and.b	status(a0),d0
-		beq.s	Obj_MonitorSpawnIcon						; if not, branch
+		beq.s	.spawnicon							; if not, branch
 		move.b	d0,d1
 		andi.b	#p1_standing|p1_pushing,d1					; is it the main character?
 		beq.s	Obj_MonitorSpawnIcon						; if not, branch
 
+		; remove flags
 		andi.b	#~( \
 			setBit(status.player.on_object) | \
 			setBit(status.player.pushing) \
 		),(Player_1+status).w
 
+		; set flag
 		ori.b	#setBit(status.player.in_air),(Player_1+status).w		; prevent main character from walking in the air
 
 Obj_MonitorSpawnIcon:
 
+		; set flags
 		andi.b	#( \
 			setBit(status.npc.x_flip) | \
 			setBit(status.npc.y_flip) \
 		),status(a0)
 
-		clr.b	collision_flags(a0)
+		; clear
+		clr.b	collision_flags(a0)						; remove collision
 
 		; create monitor icon
 		jsr	(Create_New_Object_3).w
@@ -197,12 +199,11 @@ Obj_MonitorSpawnIcon:
 
 .notremembered
 		move.b	#$A,anim(a0)							; display 'broken' animation
-		move.l	#Obj_MonitorAnimate,address(a0)
+		move.l	#Monitor_Animate,address(a0)
 		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
 
-; =============== S U B R O U T I N E =======================================
-
-Obj_MonitorAnimate:
+Monitor_Animate:
 		cmpi.b	#$B,mapping_frame(a0)						; is monitor broken?
 		bne.s	.notbroken							; if not, branch
 		move.l	#Sprite_OnScreen_Test,address(a0)
@@ -251,13 +252,13 @@ Obj_MonitorContents:
 		move.l	a1,mappings(a0)
 
 .main
-		bsr.s	sub_1D820
+		bsr.s	MonitorContents_GivePowerup
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 .waitdel
-		subq.w	#1,anim_frame_timer(a0)
-		bmi.s	.delete
+		subq.w	#1,wait_timer(a0)						; subtract 1
+		bmi.s	.delete								; if timer has run out, delete
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
@@ -266,31 +267,31 @@ Obj_MonitorContents:
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_1D820:
+MonitorContents_GivePowerup:
 		btst	#render_flags.y_flip,render_flags(a0)				; is monitor upside down?
-		bne.s	loc_1D83C							; if so, branch
+		bne.s	.flipy								; if so, branch
 		tst.w	y_vel(a0)
-		bpl.s	loc_1D850
+		bpl.s	.give
 		moveq	#$18,d1
 		jmp	(MoveSprite_CustomGravity).w
 ; ---------------------------------------------------------------------------
 
-loc_1D83C:
+.flipy
 		tst.w	y_vel(a0)
-		bmi.s	loc_1D850
+		bmi.s	.give
 		moveq	#-$18,d1
 		jmp	(MoveSprite_CustomGravity).w
 ; ---------------------------------------------------------------------------
 
-loc_1D850:
-		move.w	#30-1,anim_frame_timer(a0)
+.give
+		move.w	#30-1,wait_timer(a0)						; set wait timer for delete
 		move.l	#Obj_MonitorContents.waitdel,address(a0)
 
 		; give powerup
 		lea	(Player_1).w,a2							; a2=character
 		moveq	#0,d0
 		move.b	anim(a0),d0
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 4
 		add.w	d0,d0
 		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
@@ -301,9 +302,8 @@ loc_1D850:
 		bra.s	Monitor_Give_Eggman						; 2
 		rts									; nop
 		bra.s	Monitor_Give_Eggman						; 4
-		rts									; nop
-		bra.s	Monitor_Give_Rings						; 6
-		rts									; nop
+		rts									; align
+		bra.w	Monitor_Give_Rings						; 6
 		bra.s	Monitor_Give_SpeedShoes						; 8
 		rts									; nop
 		bra.s	Monitor_Give_Fire_Shield					; A
@@ -326,6 +326,8 @@ Monitor_Give_Rings:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_SpeedShoes:
+
+		; set
 		bset	#status_secondary.speed_shoes,status_secondary(a2)
 		move.b	#(20*60)/8,speed_shoes_timer(a2)
 
@@ -339,61 +341,71 @@ Monitor_Give_SpeedShoes:
 
 Monitor_Give_Fire_Shield:
 
-		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		; remove shields flags
 		andi.b	#~( \
 			setBit(status_secondary.shield) | \
-			setBit(status_secondary.fire_shield) | \
 			setBit(status_secondary.lightning_shield) | \
 			setBit(status_secondary.bubble_shield) \
 		),status_secondary(a2)
 
+		; set
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.fire_shield,status_secondary(a2)
+		bne.s	.sfx								; if the player already has a fire shield, branch
 		move.l	#Obj_FireShield,(Shield+address).w
+
+.sfx
 		sfx	sfx_FireShield, 1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Lightning_Shield:
 
-		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		; remove shields flags
 		andi.b	#~( \
 			setBit(status_secondary.shield) | \
 			setBit(status_secondary.fire_shield) | \
-			setBit(status_secondary.lightning_shield) | \
 			setBit(status_secondary.bubble_shield) \
 		),status_secondary(a2)
 
+		; set
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.lightning_shield,status_secondary(a2)
+		bne.s	.sfx								; if the player already has a lightning shield, branch
 		move.l	#Obj_LightningShield,(Shield+address).w
+
+.sfx
 		sfx	sfx_LightningShield, 1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Bubble_Shield:
 
-		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
+		; remove shields flags
 		andi.b	#~( \
 			setBit(status_secondary.shield) | \
 			setBit(status_secondary.fire_shield) | \
-			setBit(status_secondary.lightning_shield) | \
-			setBit(status_secondary.bubble_shield) \
+			setBit(status_secondary.lightning_shield) \
 		),status_secondary(a2)
 
+		; set
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.bubble_shield,status_secondary(a2)
+		bne.s	.sfx								; if the player already has a bubble shield, branch
 		move.l	#Obj_BubbleShield,(Shield+address).w
+
+.sfx
 		sfx	sfx_BubbleShield, 1
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
+		move.b	#(20*60)/8,invincibility_timer(a2)				; set invincibility timer
 		bset	#status_secondary.invincible,status_secondary(a2)
-		move.b	#(20*60)/8,invincibility_timer(a2)
+		bne.s	.return								; if the player is already invincible, branch
 		tst.b	(Music_results_flag).w						; don't change music if level is end
 		bne.s	.skipmusic
 		tst.b	(Boss_flag).w
-		bne.s	.skipmusic
+		bne.s	.skipmusic							; branch if in a boss fight
 		cmpi.b	#12,air_left(a2)
-		bls.s	.skipmusic
+		bls.s	.skipmusic							; branch if countdown has started
 		music	mus_Invincible							; if invincible, play invincibility music
 
 .skipmusic

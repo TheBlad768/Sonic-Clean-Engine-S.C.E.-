@@ -31,7 +31,7 @@ Obj_FireShield:
 		bne.w	.return								; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)					; is player in their 'blank' animation?
 		beq.w	.return								; if so, do not display and do not update variables
-		btst	#status_secondary.shield,status_secondary(a2)			; should the player still have a shield?
+		btst	#status_secondary.fire_shield,status_secondary(a2)		; should the player still have a shield?
 		beq.w	.destroy							; if not, change to Insta-Shield
 		btst	#status.player.underwater,status(a2)				; is player underwater?
 		bne.s	.destroyunderwater						; if so, branch
@@ -124,7 +124,7 @@ Obj_LightningShield:
 		bne.s	Obj_FireShield.return						; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)					; is player in their 'blank' animation?
 		beq.s	Obj_FireShield.return						; if so, do not display and do not update variables
-		btst	#status_secondary.shield,status_secondary(a2)			; should the player still have a shield?
+		btst	#status_secondary.lightning_shield,status_secondary(a2)		; should the player still have a shield?
 		beq.s	.destroy							; if not, change to Insta-Shield
 		btst	#status.player.underwater,status(a2)				; is player underwater?
 		bne.s	.destroyunderwater						; if so, branch
@@ -310,7 +310,7 @@ Obj_BubbleShield:
 		bne.s	.return								; if so, do not display and do not update variables
 		cmpi.b	#AniIDSonAni_Blank,anim(a2)					; is player in their 'blank' animation?
 		beq.s	.return								; if so, do not display and do not update variables
-		btst	#status_secondary.shield,status_secondary(a2)			; should the player still have a shield?
+		btst	#status_secondary.bubble_shield,status_secondary(a2)		; should the player still have a shield?
 		beq.s	.destroy							; if not, change to Insta-Shield
 		move.w	x_pos(a2),x_pos(a0)
 		move.w	y_pos(a2),y_pos(a0)
@@ -424,12 +424,11 @@ Obj_InstaShield:
 
 	dsset aniraw_ptr								; pretend we're in the RAM
 
-invincibility.anim_ptr		ds.l 1							; (4 bytes)
-invincibility.offset		ds.b 1							; (1 byte)
-invincibility.offset2		ds.b 1							; (1 byte)
-invincibility.index		ds.b 1							; (1 byte)
-				ds.b 1							; (1 byte)
-invincibility.frame		ds.w 1							; (2 bytes)
+invincibility.anim_ptr			ds.l 1						; (4 bytes)
+invincibility.offset			ds.b 1						; (1 byte)
+invincibility.offset2			ds.b 1						; (1 byte)
+invincibility.frame			ds.w 1						; (2 bytes)
+invincibility.index			ds.b 1						; (1 byte)
 
 	dsreset										; stop pretending and reset the program counter
 
