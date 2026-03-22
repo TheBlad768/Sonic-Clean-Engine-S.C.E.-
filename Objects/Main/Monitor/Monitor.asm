@@ -107,7 +107,7 @@ SolidObject_Monitor_SonicKnux:
 		btst	d6,status(a0)							; is Sonic/Knux standing on the monitor?
 		bne.s	Monitor_ChkOverEdge						; if so, branch
 		cmpi.b	#AniIDSonAni_Roll,anim(a1)					; is Sonic/Knux in their rolling animation?
-		beq.s	Obj_MonitorFallUpsideDown.return				; if so, return
+		beq.s	Monitor_Fall.return						; if so, return
 
 		; solid
 		jmp	(SolidObject_cont).w
@@ -152,7 +152,7 @@ Monitor_Break:
 		beq.s	.spawnicon							; if not, branch
 		move.b	d0,d1
 		andi.b	#p1_standing|p1_pushing,d1					; is it the main character?
-		beq.s	Obj_MonitorSpawnIcon						; if not, branch
+		beq.s	.spawnicon						; if not, branch
 
 		; remove flags
 		andi.b	#~( \
@@ -163,7 +163,7 @@ Monitor_Break:
 		; set flag
 		ori.b	#setBit(status.player.in_air),(Player_1+status).w		; prevent main character from walking in the air
 
-Obj_MonitorSpawnIcon:
+.spawnicon
 
 		; set flags
 		andi.b	#( \
@@ -298,20 +298,20 @@ MonitorContents_GivePowerup:
 
 .index
 		bra.s	Monitor_Give_Eggman						; 0
-		rts									; nop
+		rts									; align
 		bra.s	Monitor_Give_Eggman						; 2
-		rts									; nop
+		rts									; align
 		bra.s	Monitor_Give_Eggman						; 4
 		rts									; align
 		bra.w	Monitor_Give_Rings						; 6
 		bra.s	Monitor_Give_SpeedShoes						; 8
-		rts									; nop
+		rts									; align
 		bra.s	Monitor_Give_Fire_Shield					; A
-		rts									; nop
+		rts									; align
 		bra.s	Monitor_Give_Lightning_Shield					; C
-		rts									; nop
+		rts									; align
 		bra.s	Monitor_Give_Bubble_Shield					; E
-		rts									; nop
+		rts									; align
 		bra.w	Monitor_Give_Invincibility					; 10
 ; ---------------------------------------------------------------------------
 
@@ -397,6 +397,8 @@ Monitor_Give_Bubble_Shield:
 ; ---------------------------------------------------------------------------
 
 Monitor_Give_Invincibility:
+
+		; set
 		move.b	#(20*60)/8,invincibility_timer(a2)				; set invincibility timer
 		bset	#status_secondary.invincible,status_secondary(a2)
 		bne.s	.return								; if the player is already invincible, branch
@@ -410,6 +412,8 @@ Monitor_Give_Invincibility:
 
 .skipmusic
 		move.l	#Obj_Invincibility,(Invincibility_stars+address).w
+
+.return
 		rts
 ; ---------------------------------------------------------------------------
 
