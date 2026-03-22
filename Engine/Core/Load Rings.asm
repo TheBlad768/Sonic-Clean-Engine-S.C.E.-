@@ -24,7 +24,7 @@ Load_Rings_Init:
 		move.w	(Camera_X_pos).w,d4
 		subq.w	#8,d4
 		bhi.s	.check
-		moveq	#1,d4								; no negative values allowed
+		moveq	#1,d4								; no zero or negative values allowed
 		bra.s	.check
 ; ---------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ Load_Rings_Main:
 		move.w	(Camera_X_pos).w,d4
 		subq.w	#8,d4
 		bhi.s	.check
-		moveq	#1,d4								; no negative values allowed
+		moveq	#1,d4								; no zero or negative values allowed
 		bra.s	.check
 ; ---------------------------------------------------------------------------
 
@@ -327,10 +327,15 @@ AddRings:
 Render_Rings:
 		movea.l	(Ring_start_addr_ROM).w,a0
 		move.l	(Ring_end_addr_ROM).w,d2
+
+		; check rings
 		sub.l	a0,d2								; are there any rings on-screen?
 		beq.s	.return								; if not, branch
-		movea.w	(Ring_start_addr_RAM).w,a4
+
+		; load
+		move.w	(a3),d0								; Camera_X_pos_copy
 		move.w	4(a3),d4							; Camera_Y_pos_copy
+		movea.w	(Ring_start_addr_RAM).w,a4
 		move.w	#gameplay_plane_height-block_height,d5
 		move.w	(Screen_Y_wrap_value).w,d3
 
@@ -343,19 +348,21 @@ Render_Rings:
 		and.w	d3,d1
 		cmp.w	d5,d1
 		bhs.s	.next
-		move.w	(a0),d0								; get ring xpos
-		sub.w	(a3),d0								; subtract camera xpos
+
+		; set mapping
+		addi.w	#128-16,d1							; add ypos
+		move.w	d1,(a6)+							; set ypos
+		move.w	(a0),d1								; get ring xpos
+		sub.w	d0,d1								; subtract camera xpos
+		move.b	#5,(a6)								; set size of the sprite tile
+		addq.w	#2,a6								; skip link parameter
+		subq.w	#1,d7								; subtract sprite count
 		moveq	#nibbles_to_byte(0,$F),d6					; maximum 15 frames
 		and.b	-1(a4),d6
 		add.w	d6,d6								; multiply by 2
-		addi.w	#128-16,d1							; add ypos
-		move.w	d1,(a6)+							; set ypos
-		move.b	#5,(a6)								; set size of the sprite tile
-		addq.w	#2,a6								; skip link parameter
 		move.w	CMap_Ring(pc,d6.w),(a6)+					; VRAM
-		addi.w	#128-8,d0							; add xpos
-		move.w	d0,(a6)+							; set xpos
-		subq.w	#1,d7								; subtract sprite count
+		addi.w	#128-8,d1							; add xpos
+		move.w	d1,(a6)+							; set xpos
 
 .next
 		addq.w	#4,a0								; load next ring xy pos
