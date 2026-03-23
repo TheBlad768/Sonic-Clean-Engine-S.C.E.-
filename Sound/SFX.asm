@@ -63,7 +63,7 @@ Sound06:		include "Sound/SFX/Snd - Skid.asm"
 	even
 Sound07:		include "Sound/SFX/Snd - Death.asm"
 	even
-Sound08:		include "Sound/SFX/Snd - SpinDash.asm"
+Sound08:		include "Sound/SFX/Snd - Spin Dash.asm"
 	even
 Sound09:		include "Sound/SFX/Snd - Splash.asm"
 	even
@@ -87,7 +87,7 @@ Sound12:		include "Sound/SFX/Snd - Spike Move.asm"
 	even
 Sound13:		include "Sound/SFX/Snd - Drown.asm"
 	even
-Sound14:		include "Sound/SFX/Snd - StarPost.asm"
+Sound14:		include "Sound/SFX/Snd - Star Post.asm"
 	even
 Sound15:		include "Sound/SFX/Snd - Spring.asm"
 	even
@@ -109,5 +109,5 @@ Sound1D:		include "Sound/SFX/Snd - Switch.asm"
 	even
 Sound1E:		include "Sound/SFX/Snd - Register.asm"
 	even
-Sound1F:		include "Sound/SFX/Snd - GroundSlide.asm"
+Sound1F:		include "Sound/SFX/Snd - Ground Slide.asm"
 	even
