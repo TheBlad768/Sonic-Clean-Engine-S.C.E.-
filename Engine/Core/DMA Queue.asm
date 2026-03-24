@@ -210,8 +210,10 @@ QueueStaticDMA macro src,length,dest
 	endif ; UseVIntSafeDMA==1
 	movea.w	(DMA_queue_slot).w,a1
 
+    if DEBUG_DMA
 	; RaiseError is only available in DEBUG builds
 	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is DMA queue slot overflow
+    endif
 
 	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer
@@ -245,8 +247,10 @@ Add_To_DMA_Queue:
 	endif ; UseVIntSafeDMA==1
 	movea.w	(DMA_queue_slot).w,a1
 
+    if DEBUG_DMA
 	; RaiseError is only available in DEBUG builds
 	ifdebug	jsr	(Add_To_DMA_Queue_RaiseError).l							; raise an error if there is DMA queue slot overflow
+    endif
 
 	cmpa.w	#DMA_queue_slot,a1
 	beq.s	.done											; Return if there's no more room in the buffer

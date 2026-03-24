@@ -18,8 +18,10 @@ Queue_KosPlus:
 		lea	(KosPlus_decomp_queue).w,a3
 		adda.w	d0,a3
 
+	if DEBUG_KosinskiPlus
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Queue_KosPlus_RaiseError).l				; raise an error if there is kosinski plus buffer overflow
+	endif
 
 		move.l	a1,(a3)+							; store source
 		move.l	a2,(a3)+							; store destination
@@ -155,8 +157,10 @@ Queue_KosPlus_Module:
 		tst.l	(a2)
 		bne.s	.findFreeSlot
 
+	if DEBUG_KosinskiPlusModule
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Queue_KosPlus_Module_RaiseError).l			; raise an error if there is kosinski plus moduled buffer overflow
+	endif
 
 		move.l	a1,(a2)+							; store source address
 		move.w	d2,(a2)+							; store destination VRAM address

@@ -58,8 +58,10 @@ Render_Sprites_LevelLoop:
 Render_Sprites_ObjLoop:
 		movea.w	(a4)+,a0							; a0=object
 
+	if DEBUG_RenderSprites
 		; assert is only available in DEBUG builds
 		ifdebug	jsr	(Render_Sprites_Assert).l				; raise an error if there is no object or mappings address here
+	endif
 
 		; clear on-screen flag
 		andi.b	#signextendB( \
