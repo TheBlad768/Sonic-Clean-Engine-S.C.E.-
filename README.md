@@ -10,6 +10,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/TheBlad768/Sonic-Clean-Engine-S.C.E.-?style=flat-square)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/TheBlad768/Sonic-Clean-Engine-S.C.E.-/total?style=flat-square)
+[![Hypercommit](https://img.shields.io/badge/Hypercommit-DB2475)](https://hypercommit.com/sonic-clean-engine-s-c-e--)
 
 # Download
 
