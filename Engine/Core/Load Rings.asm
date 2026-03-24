@@ -38,8 +38,10 @@ Load_Rings_Init:
 		move.l	a1,(Ring_start_addr_ROM).w					; set start addresses
 		move.w	a2,(Ring_start_addr_RAM).w
 
+	if DEBUG_LoadRings
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Load_Rings_RaiseError).l				; raise an error if there is ring status table overflow
+	endif
 
 		addi.w	#screen_width+block_width,d4					; advance by a screen
 		bra.s	.check2
@@ -88,8 +90,10 @@ Load_Rings_Main:
 		move.l	a1,(Ring_start_addr_ROM).w
 		move.w	a2,(Ring_start_addr_RAM).w
 
+	if DEBUG_LoadRings
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Load_Rings_RaiseError).l				; raise an error if there is ring status table overflow
+	endif
 
 		movea.l	(Ring_end_addr_ROM).w,a2
 		addi.w	#screen_width+block_width,d4					; advance by a screen
@@ -217,8 +221,10 @@ RingTouchResponse:
 		tst.b	(a4)								; has this ring been consumed?
 		bne.s	.next								; if it has, branch
 
+	if DEBUG_RingTouchResponse
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(RingTouchResponse_RaiseError).l			; raise an error if there is ring is corrupted
+	endif
 
 		; check
 		move.w	(a2),d0								; get ring's x_pos
@@ -261,8 +267,10 @@ RingTouchResponse:
 
 .find
 
+	if DEBUG_RingTouchResponse_Consume
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(RingTouchResponse_Consume_RaiseError).l		; raise an error if there is ring consumption list overflow
+	endif
 
 		tst.w	(a1)+
 		bne.s	.find
