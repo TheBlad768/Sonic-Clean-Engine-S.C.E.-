@@ -26,7 +26,7 @@
 		include "Objects/Main/Bubbler/Bubbler.asm"
 		include "Objects/Main/Count Down/Count Down.asm"
 		include "Objects/Main/Wave Splash/Wave Splash.asm"
-		include "Objects/Main/StarPost/StarPost.asm"
+		include "Objects/Main/Star Post/Star Post.asm"
 		include "Objects/Main/Button/Button.asm"
 		include "Objects/Main/Animals/Animals.asm"
 		include "Objects/Main/Egg Capsule/Egg Capsule.asm"

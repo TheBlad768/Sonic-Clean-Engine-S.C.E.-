@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; StarPost (Object)
+; Star Post (Object)
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
@@ -381,6 +381,6 @@ ObjDat_StarPost:	subObjMainData \
 ; ---------------------------------------------------------------------------
 
 		; mappings
-		include "Objects/Main/StarPost/Object Data/Map - StarPost.asm"
-		include "Objects/Main/StarPost/Object Data/Map - StarPost Stars.asm"
-		include "Objects/Main/StarPost/Object Data/Map - Enemy Points.asm"
+		include "Objects/Main/Star Post/Object Data/Map - Star Post.asm"
+		include "Objects/Main/Star Post/Object Data/Map - Star Post Stars.asm"
+		include "Objects/Main/Star Post/Object Data/Map - Enemy Points.asm"
