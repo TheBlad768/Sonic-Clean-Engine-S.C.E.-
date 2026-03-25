@@ -41,7 +41,7 @@ Init_VDP:
 
 		; clear vertical scrolling
 		move.l	#vdpComm(0,VSRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		move.l	d0,VDP_data_port-VDP_data_port(a6)				; FG and BG
+		move.l	d0,VDP_data_port-VDP_data_port(a6)				; foreground and background
 		move.l	d0,(V_scroll_value).w
 		move.l	d0,(H_scroll_value).w
 
@@ -60,6 +60,9 @@ Init_VDP:
 ; ---------------------------------------------------------------------------
 ; VDP load
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a1 = VDP registers list
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -67,10 +70,37 @@ Load_VDP:
 		lea	(VDP_control_port).l,a6
 
 .main
-		move.w	(a1)+,d0							; get first VDP registers
+		move.w	(a1)+,d0							; get first VDP register
+		bpl.s	.exit								; branch, if no VDP registers in list
 
 .loop
 		move.w	d0,VDP_control_port-VDP_control_port(a6)
-		move.w	(a1)+,d0							; next VDP registers
+		move.w	(a1)+,d0							; next VDP register
 		bmi.s	.loop
+
+.exit
+		rts
+
+; ---------------------------------------------------------------------------
+; Disable display
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Disable_Display:
+		moveq	#signextendB(%10111111),d0
+		and.w	(VDP_reg_1_command).w,d0
+		move.w	d0,(VDP_control_port).l
+		rts
+
+; ---------------------------------------------------------------------------
+; Enable display
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Enable_Display:
+		moveq	#%1000000,d0
+		or.w	(VDP_reg_1_command).w,d0
+		move.w	d0,(VDP_control_port).l
 		rts
