@@ -988,20 +988,20 @@ enableIntsSave macro
     endm
 
 ; ---------------------------------------------------------------------------
-; disable screen
+; disable display
 ; ---------------------------------------------------------------------------
 
-disableScreen macro
+disableDisplay macro
 	moveq	#signextendB(%10111111),d0
 	and.w	(VDP_reg_1_command).w,d0
 	move.w	d0,(VDP_control_port).l
     endm
 
 ; ---------------------------------------------------------------------------
-; enable screen
+; enable display
 ; ---------------------------------------------------------------------------
 
-enableScreen macro
+enableDisplay macro
 	moveq	#%1000000,d0
 	or.w	(VDP_reg_1_command).w,d0
 	move.w	d0,(VDP_control_port).l
