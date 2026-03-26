@@ -112,7 +112,7 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
     ;  Title Card zone names
     ; ---------------------------------------------------------------------------
 
-    TitleCardName_ZONE =				"ZONE"
+    TitleCardName_ZONE =					"ZONE"
     TitleCardName_DEZ =					"DEATH EGG"
     ```
 
