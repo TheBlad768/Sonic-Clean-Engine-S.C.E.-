@@ -46,6 +46,7 @@ Please read the [license](LICENSE) before using this project.
 
 - The size of the object slots is now 0x50 bytes:
     - Additional free bytes will facilitate work on complex objects;
+    - You can easily change the object slot size without breaking anything, since there's no slot-size-based multiplication like in Sonic 1 and Sonic 2;
 
 - Various sound drivers:
     - There are Z80 Sound Flamedriver and M68K Sonic 2 Clone Driver v2 (Mega PCM 2.0 version). It all depends on your tasks.
@@ -78,7 +79,9 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 - For counting instruction cycles you can use [68kCounter](https://68kcounter.grahambates.com).
 
-- Recommended emulators for debugging: [BizHawk](https://github.com/TASEmulators/BizHawk/releases), [BlastEm](https://www.retrodev.com/blastem/nightlies/), [ClownMDEmu](https://github.com/Clownacy/clownmdemu-frontend/releases), [Exodus](https://www.exodusemulator.com/downloads/current-release), [Gens KMod](https://segaretro.org/Gens_KMod), [Regen](https://segaretro.org/Regen).
+- Recommended emulators for debugging: [BizHawk](https://github.com/TASEmulators/BizHawk/releases), [BlastEm](https://www.retrodev.com/blastem/nightlies/), [ClownMDEmu](https://github.com/Clownacy/clownmdemu-frontend/releases), [Exodus](https://www.exodusemulator.com/downloads/current-release), [Gens KMod](https://segaretro.org/Gens_KMod), [Gens r57shell Mod](https://www.romhacking.net/utilities/1123/), [Regen](https://segaretro.org/Regen).
+
+- Recommended emulators for Mode 1 (MSU): [BlastEm](https://www.retrodev.com/blastem/nightlies/), [RetroArch](https://www.retroarch.com/).
 
 ## Current issues
 
@@ -101,10 +104,19 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 #### How do I make different text for Title Card?
 
-- If you want to make a different text for Title Card, you need to create a file of letters from [List.unc](Objects/Main/Title%20Card/KosinskiPM%20Art/Levels). This will be loaded before the level starts.
-You don't have to add the letters **'ENOZ' (ZONE)** because those letters are already in VRAM. Then you have to create a mapping of your zone name in [Map - Title Card.asm](Objects/Main/Title%20Card/Object%20Data).
+- If you want to make different text for the Title Card, you need to open the [Constants.asm](Engine) file and look for \
+`Title Card zone names`. There you'll find a list of zones whose names you can modify.
 
-Now you can use a Python script to create Title Card mappings [S3TCG](https://github.com/RobiTheGit/S3TCG).
+    ```m68k
+    ; ---------------------------------------------------------------------------
+    ;  Title Card zone names
+    ; ---------------------------------------------------------------------------
+
+    TitleCardName_ZONE =				"ZONE"
+    TitleCardName_DEZ =					"DEATH EGG"
+    ```
+
+If you still want to use direct mappings instead of a macro to create Title Card mappings [S3TCG](https://github.com/RobiTheGit/S3TCG).
 
 #### Where can I find other SMPS music?
 
@@ -135,7 +147,7 @@ The assembler used here is Flamewing's modified version of The Macro Assembler A
 
 <details>
 <summary>Answer</summary>
- 
+
 ![AS]
 
 [AS]: https://i.imgur.com/dYq4mPl.gif
