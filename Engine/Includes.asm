@@ -406,7 +406,7 @@ EndOfROM:
 		message "[Macro AS] Pass \{MOMPASS}"
 	if DEBUG_PassError
 	    if MOMPASS>DEBUG_PassMax
-		fatal "[Macro AS] Pass ERROR: There should be no more than \{DEBUG_PassMax} passes here, but there are \{MOMPASS}!"
+		warning "[Macro AS] Pass ERROR: There should be no more than \{DEBUG_PassMax} passes here, but there are \{MOMPASS}!"
 	    endif
 	endif
     endif

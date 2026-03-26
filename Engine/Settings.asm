@@ -26,7 +26,7 @@ AddressSRAM =						0				; 0 = odd+even, 2 = even only, 3 = odd only
 
 ; assembly options
 DEBUG_PassCheck =					1				; if 1, check the number of assembly passes
-DEBUG_PassError =					0				; if 1, raise an error if there are more than max assembly passes here
+DEBUG_PassError =					1				; if 1, raise an error if there are more than max assembly passes here
 DEBUG_PassMax =						2				; set the maximum number of assembly passes for a pass error
 
 ; error handler debugging options (only available in DEBUG builds)
