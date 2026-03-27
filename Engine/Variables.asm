@@ -43,8 +43,10 @@ V_scroll_buffer_end =					*
 Collision_response_list					ds.w $80/2			; only objects in this list are processed by the collision response routines
 Pos_table						ds.l 64				; recorded player xy position buffer
 Ring_status_table					ds.b RingsTable_Size		; ring status table (1 byte)
+							evenRAM
 Ring_status_table_end =					*
 Object_respawn_table					ds.b ObjectsTable_Size		; object respawn table (1 byte)
+							evenRAM
 Object_respawn_table_end =				*
 Sprite_table_buffer					ds.b 80*8
 Sprite_table_buffer_end =				*
