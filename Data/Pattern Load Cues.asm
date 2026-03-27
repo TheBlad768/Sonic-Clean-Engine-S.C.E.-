@@ -8,7 +8,7 @@
 ; ===========================================================================
 
 PLC1_Sonic: plrlistheader
-		plreq ArtTile_StarPost, ArtKosPM_EnemyPtsStarPost			; starpost
+		plreq ArtTile_StarPost, ArtKosPM_EnemyScoreStarPost			; starpost
 		plreq ArtTile_Ring_Sparks, ArtKosPM_Ring_Sparks				; rings
 		plreq ArtTile_HUD, ArtKosPM_HUD						; HUD
 		plrlistend

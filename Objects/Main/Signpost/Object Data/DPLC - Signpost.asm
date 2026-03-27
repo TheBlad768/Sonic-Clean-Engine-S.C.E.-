@@ -2,14 +2,14 @@
 ; DPLC mappings - signpost
 ; ---------------------------------------------------------------------------
 
-DPLC_EndSigns:
-		dc.w word_83B7A-DPLC_EndSigns
-		dc.w word_83B80-DPLC_EndSigns
-		dc.w word_83B86-DPLC_EndSigns
-		dc.w word_83B8C-DPLC_EndSigns
-		dc.w word_83B92-DPLC_EndSigns
-		dc.w word_83B96-DPLC_EndSigns
-		dc.w word_83B9A-DPLC_EndSigns
+DPLC_Signpost:
+		dc.w word_83B7A-DPLC_Signpost
+		dc.w word_83B80-DPLC_Signpost
+		dc.w word_83B86-DPLC_Signpost
+		dc.w word_83B8C-DPLC_Signpost
+		dc.w word_83B92-DPLC_Signpost
+		dc.w word_83B96-DPLC_Signpost
+		dc.w word_83B9A-DPLC_Signpost
 word_83B7A:	dc.w 1
 		dc.w $20B
 		dc.w $2CB

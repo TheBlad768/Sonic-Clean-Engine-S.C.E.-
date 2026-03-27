@@ -75,7 +75,7 @@ Obj_Animal:
 		move.l	#.main,address(a0)						; Go to "Obj_Animal_Main"
 
 		; draw score
-		lea	Child6_EndSignScore(pc),a2
+		lea	Child6_EnemyScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	.draw
 		move.w	animal.bonus_counter(a0),d0					; get saved chain bonus counter
