@@ -132,33 +132,11 @@ Obj_TensionBridge_Explosion:
 .delete
 		jmp	(Delete_Current_Object).w
 
-; ---------------------------------------------------------------------------
-; Enemy score (Object)
-; ---------------------------------------------------------------------------
-
-; dynamic object variables
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_EnemyScore:
-
-		; init
-		movem.l	ObjDat_EnemyScore(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
-		move.w	#-$300,y_vel(a0)
-
-.main
-		MoveSprite2YOnly
-		addi.w	#$18,y_vel(a0)
-		bpl.s	Obj_TensionBridge_Explosion.delete
-		jmp	(Draw_Sprite).w
-
 ; =============== S U B R O U T I N E =======================================
 
 ; init
 ObjDat_FireShield_Dissipate:		subObjMainData Obj_FireShield_Dissipate.main, setBit(render_flags.level), 0, 24, 24, 5, ArtTile_Explosion, 0, FALSE, Map_Explosion
 ObjDat_TensionBridge_Explosion:		subObjMainData Obj_TensionBridge_Explosion.wait, setBit(render_flags.level), 0, 24, 24, 2, ArtTile_Explosion, 0, TRUE, Map_Explosion
-ObjDat_EnemyScore:			subObjMainData Obj_EnemyScore.main, setBit(render_flags.level), 0, 8, 32, 1, ArtTile_StarPost, 0, TRUE, Map_EnemyScore
 ; ---------------------------------------------------------------------------
 
 		; mappings

@@ -1,53 +1,57 @@
 ; ---------------------------------------------------------------------------
-; Load Signpost (Object)
+; Create Signpost (Object)
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_EndSignControl:
-		move.l	#Obj_Wait,address(a0)
+Obj_Signpost_Control:
 		st	(Level_results_flag).w						; end of level is in effect
 		move.w	#(2*60)-1,wait_timer(a0)
-		move.l	#Obj_EndSignControlDoSign,jump_ptr(a0)
+		move.l	#.create,jump_ptr(a0)
+		move.l	#Obj_Wait,address(a0)
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
-Obj_EndSignControlDoSign:
-		move.l	#Obj_EndSignControlAwaitStart,address(a0)
-		clr.b	(Boss_flag).w
-		lea	Child6_EndSign(pc),a2
+.create
+		clr.b	(Boss_flag).w							; clear boss flag
+		move.l	#Signpost_Control_AwaitStart,address(a0)
+
+		; create signpost
+		lea	Child6_Signpost(pc),a2
 		jsr	(CreateChild6_Simple).w
 
 AfterBoss_Cleanup:
 
 		; check after boss
 		move.l	(Level_data_addr_RAM.AfterBoss).w,d0
-		beq.s	Obj_EndSignControl.return
+		beq.s	Obj_Signpost_Control.return
 		movea.l	d0,a1
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
-Obj_EndSignControlAwaitStart:
+Signpost_Control_AwaitStart:
 
 		; check level results flag
-		tst.b	(Level_results_flag).w
-		bne.s	Obj_EndSignControl.return
-		move.l	#Obj_EndSignControlDoStart,address(a0)
+		tst.b	(Level_results_flag).w						; is level over?
+		bne.s	Obj_Signpost_Control.return					; if yes, branch
+		move.l	#.check,address(a0)
 
 		; restore control
 		clr.b	(Ctrl_1_locked).w						; unlock control 1
 		jmp	(Restore_PlayerControl).w
 ; ---------------------------------------------------------------------------
 
-Obj_EndSignControlDoStart:
+.check
 
 		; check end level flag
 		tst.b	(End_of_level_flag).w						; wait for title card to finish
-		beq.s	Obj_EndSignControl.return
+		beq.s	Obj_Signpost_Control.return
+
+		; exit
 		jsr	(Change_ActSizes).w						; set level size
 		jmp	(Delete_Current_Object).w
 
@@ -57,9 +61,15 @@ Obj_EndSignControlDoStart:
 
 ; dynamic object variables
 
+	dsset anim									; pretend we're in the RAM
+
+signpost.timer				ds.b 1						; delay while check the next hit (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
-Obj_EndSign:
+Obj_Signpost:
 
 .artsize	:= (ArtUnc_SignpostStub_end-ArtUnc_SignpostStub)&$FFFF
 
@@ -67,7 +77,7 @@ Obj_EndSign:
 		QueueStaticDMA ArtUnc_SignpostStub,.artsize,tiles_to_bytes($492)
 
 		; init
-		lea	ObjSlot_EndSigns(pc),a1
+		lea	ObjSlot_Signpost(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).w
 		move.l	#.signfall,address(a0)
 
@@ -79,29 +89,31 @@ Obj_EndSign:
 .nothighpriority
 		move.w	a0,(Signpost_addr).w						; put RAM address here for use by hidden monitor object
 		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)				; set y_radius and x_radius
-		move.l	#AniRaw_EndSigns1,aniraw_ptr(a0)
+		move.l	#AniRaw_Signpost1,aniraw_ptr(a0)
+
+		; create stub
+		lea	Child1_Signpost_Stub(pc),a2					; make the little stub at the bottom of the signpost
+		jsr	(CreateChild1_Normal).w
+
+		; set
 		moveq	#-32,d0
 		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)							; place vertical position at top of screen
 		sfx	sfx_Signpost
 
-		; create stub
-		lea	Child1_EndSignStub(pc),a2					; make the little stub at the bottom of the signpost
-		jsr	(CreateChild1_Normal).w
-
 .signfall
-		bsr.w	EndSign_CheckPlayerHit
+		bsr.w	Signpost_CheckPlayerHit
 
 .sparkle
 		moveq	#3,d0
 		and.b	(V_int_run_count+3).w,d0
 		bne.s	.skip
-		lea	Child6_EndSignSparkle(pc),a2					; create a signpost sparkle every 4 frames
+		lea	Child6_Signpost_Sparkle(pc),a2					; create a signpost sparkle every 4 frames
 		jsr	(CreateChild6_Simple).w
 
 .skip
 		MoveSprite , $C								; move downward
-		bsr.w	EndSign_CheckWall
+		bsr.w	Signpost_CheckWall
 		jsr	(Animate_Raw).w
 		moveq	#80,d0
 		add.w	(Camera_Y_pos).w,d0
@@ -118,7 +130,7 @@ Obj_EndSign:
 		move.w	#(1*60)+4,wait_timer(a0)
 
 .draw
-		lea	PLCPtr_EndSigns(pc),a2
+		lea	PLCPtr_Signpost(pc),a2
 		jsr	(Perform_DPLC).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -141,7 +153,7 @@ Obj_EndSign:
 
 .hmon
 		move.l	#.signfall,address(a0)						; if a hidden monitor was hit, bounce ths signpost again
-		move.b	#32,objoff_20(a0)						; set delay for when it checks for the next hit
+		move.b	#32,signpost.timer(a0)						; set delay for when it checks for the next hit
 		move.w	#-$200,y_vel(a0)
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
@@ -165,7 +177,7 @@ Obj_EndSign:
 		out_of_yrange.s	.offscreen
 
 .draw2
-		lea	PLCPtr_EndSigns(pc),a2
+		lea	PLCPtr_Signpost(pc),a2
 		jsr	(Perform_DPLC).w
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
@@ -189,12 +201,18 @@ Obj_EndSign:
 
 ; dynamic object variables
 
+	dsset aniraw_ptr								; pretend we're in the RAM
+
+signpost_sparkle.origX			ds.w 1						; original x-axis position (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
-Obj_SignpostSparkle:
+Obj_Signpost_Sparkle:
 
 		; init
-		lea	ObjDat_SignpostSparkle(pc),a1
+		lea	ObjDat_Signpost_Sparkle(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 
 		; check priority
@@ -208,7 +226,7 @@ Obj_SignpostSparkle:
 		andi.w	#$1F,d0
 		subi.w	#$10,d0
 		add.w	d0,y_pos(a0)							; random vertical position
-		move.w	x_pos(a0),objoff_3A(a0)
+		move.w	x_pos(a0),signpost_sparkle.origX(a0)
 		move.w	#$1000,x_vel(a0)
 		move.w	#32,wait_timer(a0)
 		move.l	#Go_Delete_Object,jump_ptr(a0)
@@ -216,7 +234,7 @@ Obj_SignpostSparkle:
 .main
 		move.w	#$400,d0							; right
 		move.w	x_pos(a0),d1
-		cmp.w	objoff_3A(a0),d1
+		cmp.w	signpost_sparkle.origX(a0),d1
 		blo.s	.skip
 		neg.w	d0								; left
 
@@ -229,7 +247,7 @@ Obj_SignpostSparkle:
 .priority
 		move.w	d1,priority(a0)							; set priority
 		jsr	(MoveSprite2).w
-		lea	AniRaw_SignpostSparkle(pc),a1
+		lea	AniRaw_Signpost_Sparkle(pc),a1
 		jsr	(Animate_RawNoSST).w
 		jsr	(Obj_Wait).w
 		jmp	(Draw_Sprite).w
@@ -242,10 +260,10 @@ Obj_SignpostSparkle:
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_SignpostStub:
+Obj_Signpost_Stub:
 
 		; init
-		lea	ObjDat_SignpostStub(pc),a1
+		lea	ObjDat_Signpost_Stub(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		bset	#render_flags.static_mappings,render_flags(a0)			; set flag to "static mappings flag"
 		move.l	#.main,address(a0)
@@ -262,10 +280,14 @@ Obj_SignpostStub:
 
 ; =============== S U B R O U T I N E =======================================
 
-EndSign_CheckPlayerHit:
-		tst.b	objoff_20(a0)
-		bne.s	.subtime
-		lea	EndSign_Range(pc),a1
+Signpost_CheckPlayerHit:
+
+		; wait
+		tst.b	signpost.timer(a0)						; is timer over?
+		bne.s	.subtime							; if not, branch
+
+		; check player hit
+		lea	Signpost_Range(pc),a1
 		jsr	(Check_PlayerInRange).w
 		tst.l	d0								; check Tails and Sonic address
 		beq.s	.return								; if neither player is in range, don't do anything
@@ -286,7 +308,7 @@ EndSign_CheckPlayerHit:
 		bne.s	.return								; only go on if player is currently jumping
 		tst.w	y_vel(a1)
 		bpl.s	.return								; and if he's actually moving upwards
-		move.b	#32,objoff_20(a0)						; set delay for when it checks for the next hit
+		move.b	#32,signpost.timer(a0)						; set delay for when it checks for the next hit
 		move.w	x_pos(a0),d0
 		sub.w	x_pos(a1),d0							; get velocity
 		bne.s	.notzero
@@ -296,27 +318,31 @@ EndSign_CheckPlayerHit:
 		asl.w	#4,d0								; calc velocity
 		move.w	d0,x_vel(a0)							; modify strength of X velocity based on how far to the left/right player is
 		move.w	#-$200,y_vel(a0)						; new vertical velocity is always the same
-		sfx	sfx_Signpost
-		lea	Child6_EndSignScore(pc),a2
+		sfx	sfx_Signpost							; play signpost sound
+
+		; create and add score
+		lea	Child6_EnemyScore(pc),a2
 		jsr	(CreateChild6_Simple).w
 		moveq	#10,d0
 		jmp	(HUD_AddToScore).w						; add 100 points whenever hit
 ; ---------------------------------------------------------------------------
 
 .subtime
-		subq.b	#1,objoff_20(a0)
+		subq.b	#1,signpost.timer(a0)						; subtract 1
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
-EndSign_Range:
+Signpost_Range:
 		dc.w -32, 64	; xpos
 		dc.w -24, 48	; ypos
 
 ; =============== S U B R O U T I N E =======================================
 
-EndSign_CheckWall:
+Signpost_CheckWall:
+
+		; check move
 		move.w	(Camera_X_pos).w,d0
 		tst.w	x_vel(a0)							; check x velocity
 		bmi.s	.leftside							; left move
@@ -356,34 +382,31 @@ EndSign_CheckWall:
 ; =============== S U B R O U T I N E =======================================
 
 ; init
-ObjSlot_EndSigns:		subObjSlotData 1-1, $494, 0, FALSE, $18, 0, Map_EndSigns, 32, 48, 6, 0, 0
-ObjDat_SignpostStub:		subObjData Map_SignpostStub, $492, 0, FALSE, 16, 8, 6, 0, 0
-ObjDat_SignpostSparkle:		subObjData Map_Ring, ArtTile_Ring, 1, FALSE, 16, 16, 5, 4, 0
+ObjSlot_Signpost:		subObjSlotData 1-1, $494, 0, FALSE, $18, 0, Map_Signpost, 32, 48, 6, 0, 0
+ObjDat_Signpost_Stub:		subObjData Map_Signpost_Stub, $492, 0, FALSE, 16, 8, 6, 0, 0
+ObjDat_Signpost_Sparkle:	subObjData Map_Ring, ArtTile_Ring, 1, FALSE, 16, 16, 5, 4, 0
 
 ; dplc
-PLCPtr_EndSigns:		DPLCEntry ArtUnc_EndSigns, DPLC_EndSigns
+PLCPtr_Signpost:		DPLCEntry ArtUnc_Signpost, DPLC_Signpost
 
-Child6_EndSign:
+Child6_Signpost:
 		dc.w 1-1
-		dc.l Obj_EndSign
-Child1_EndSignStub:
+		dc.l Obj_Signpost
+Child1_Signpost_Stub:
 		dc.w 1-1
-		dc.l Obj_SignpostStub
+		dc.l Obj_Signpost_Stub
 		dc.b 0, 24
-Child6_EndSignSparkle:
+Child6_Signpost_Sparkle:
 		dc.w 1-1
-		dc.l Obj_SignpostSparkle
-Child6_EndSignScore:
-		dc.w 1-1
-		dc.l Obj_EnemyScore
+		dc.l Obj_Signpost_Sparkle
 
-AniRaw_EndSigns1:		dc.b 1, 0, 4, 5, 6, 1, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Sonic
-AniRaw_EndSigns2:		dc.b 1, 1, 4, 5, 6, 2, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Knuckles
-AniRaw_SignpostSparkle:		dc.b 1, 1, 2, 3, 4, arfEnd
+AniRaw_Signpost1:		dc.b 1, 0, 4, 5, 6, 1, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Sonic
+AniRaw_Signpost2:		dc.b 1, 1, 4, 5, 6, 2, 4, 5, 6, 3, 4, 5, 6, arfEnd	; Knuckles
+AniRaw_Signpost_Sparkle:	dc.b 1, 1, 2, 3, 4, arfEnd				; ring sparkle
 	even
 ; ---------------------------------------------------------------------------
 
 		; mappings
-		include "Objects/Main/Signpost/Object Data/Map - End Signs.asm"
-		include "Objects/Main/Signpost/Object Data/DPLC - End Signs.asm"
+		include "Objects/Main/Signpost/Object Data/Map - Signpost.asm"
+		include "Objects/Main/Signpost/Object Data/DPLC - Signpost.asm"
 		include "Objects/Main/Signpost/Object Data/Map - Signpost Stub.asm"

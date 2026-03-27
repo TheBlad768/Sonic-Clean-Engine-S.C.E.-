@@ -7,8 +7,8 @@
 		incfile.ba	ArtUnc_Ring, "Objects/Main/Rings/Uncompressed Art/Rings.unc"
 		incfile.ba	ArtUnc_HUDDigits, "Objects/Renders/HUD/Uncompressed Art/HUD Digits.unc"
 		incfile.ba	ArtUnc_DebugDigits, "Objects/Renders/HUD/Uncompressed Art/Debug Digits.unc"
-		incfile.ba	ArtUnc_EndSigns, "Objects/Main/Signpost/Uncompressed Art/End Signs.unc"
-		incfile.bea	ArtUnc_SignpostStub, "Objects/Main/Signpost/Uncompressed Art/Stub.unc"
+		incfile.ba	ArtUnc_Signpost, "Objects/Main/Signpost/Uncompressed Art/Signpost.unc"
+		incfile.bea	ArtUnc_SignpostStub, "Objects/Main/Signpost/Uncompressed Art/Signpost Stub.unc"
 		incfile.ba	ArtUnc_AirCountDown, "Objects/Main/Count Down/Uncompressed Art/Air Countdown.unc"
 
 ; ===========================================================================
