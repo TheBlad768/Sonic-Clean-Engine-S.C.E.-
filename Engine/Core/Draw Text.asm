@@ -59,8 +59,8 @@ Draw_PlaneText:
 .nextline
 		andi.w	#$1F,d0								; get next line size
 		addq.w	#1,d0								; fix zero value
-		mulu.w	#(gameplay_plane_width/tile_width)*2,d0				; multiply by the next line
-		swap	d0								; "
+		lsl.w	#7,d0								; multiply by the next line ; (gameplay_plane_width/tile_width)*2
+		swap	d0								; get long from word
 		clr.w	d0								; "
 		add.l	d0,d1								; add calculated position to d1
 		bra.s	.setpos								; next character
@@ -195,7 +195,7 @@ Draw_PlaneText_Advanced:
 		move.w	d2,d5								; copy vertical character size to d5
 		addq.w	#1,d5								; dbf fix
 		mulu.w	d5,d0								; multiply by the vertical character size
-		mulu.w	#(gameplay_plane_width/tile_width)*2,d0				; multiply by the next line
+		lsl.l	#7,d0								; multiply by the next line ; (gameplay_plane_width/tile_width)*2
 		swap	d0								; get long from word
 		clr.w	d0								; "
 		add.l	d0,(sp)								; add calculated position to stack
