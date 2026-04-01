@@ -53,7 +53,7 @@ Obj_FireShield:
 
 .nothighpriority2
 		lea	Ani_FireShield(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		move.w	#priority_1,d0							; layer shield over player sprite
 		cmpi.b	#$F,mapping_frame(a0)						; are these the frames that display in front of the player?
 		blo.s	.overplayer							; if so, branch
@@ -150,7 +150,7 @@ Obj_LightningShield:
 
 .display
 		lea	Ani_LightningShield(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		move.w	#priority_1,d0							; layer shield over player sprite
 		cmpi.b	#$E,mapping_frame(a0)						; are these the frames that display in front of the player?
 		blo.s	.overplayer							; if so, branch
@@ -258,7 +258,7 @@ Obj_LightningShield_Create_Spark:
 Obj_LightningShield_Spark:
 		MoveSprite , $18
 		lea	Ani_LightningShield(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	.delete
 		jmp	(Draw_Sprite).w
@@ -328,7 +328,7 @@ Obj_BubbleShield:
 
 .nothighpriority2
 		lea	Ani_BubbleShield(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 
 		; draw
 		lea	PLCPtr_BubbleShield(pc),a2
@@ -394,7 +394,7 @@ Obj_InstaShield:
 
 .nothighpriority2
 		lea	Ani_InstaShield(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		cmpi.b	#7,mapping_frame(a0)						; has it reached then end of its animation?
 		bne.s	.notover							; if not, branch
 		tst.b	double_jump_flag(a2)						; is it in its attacking state?

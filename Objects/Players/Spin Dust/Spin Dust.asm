@@ -53,7 +53,7 @@ Obj_DashDust:
 
 .anim
 		lea	Ani_DashSplashDrown(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 
 		; draw
 		lea	PLCPtr_SplashDrown(pc),a2
@@ -107,7 +107,7 @@ Obj_DashDust:
 
 .draw
 		lea	Ani_DashSplashDrown(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 
 		; check reset frame
 		tst.b	anim(a0)							; changed by Animate_Sprite
@@ -209,7 +209,7 @@ Obj_DashDust_SkidDust:
 
 		; draw
 		lea	Ani_DashSplashDrown(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	.delete
 
