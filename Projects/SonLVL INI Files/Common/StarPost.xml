@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ObjDef xmlns="http://www.sonicretro.org" Name="Star Post" Image="img" Depth="5">
+<ObjDef xmlns="http://www.sonicretro.org" Name="Star Post" Image="main" Depth="5">
   <Images>
-    <ImageFromMappings id="img">
-      <ArtFile filename="../../Objects/Main/StarPost/KosinskiPM Art/Enemy points.kospm" compression="KosinskiPlusM" />
-      <MapFile type="ASM" filename="../../Objects/Main/StarPost/Object Data/Map - StarPost.asm" />
+    <ImageFromMappings id="main">
+      <ArtFile filename="../../Objects/Main/Enemy Score/KosinskiPM Art/Enemy Score and Star Post.kospm" compression="KosinskiPlusM" />
+      <MapFile type="ASM" filename="../../Objects/Main/Star Post/Object Data/Map - Star Post.asm" frame="0" />
+    </ImageFromMappings>
+    <ImageFromMappings id="circle">
+      <ArtFile filename="../../Objects/Main/Enemy Score/KosinskiPM Art/Enemy Score and Star Post.kospm" compression="KosinskiPlusM" />
+      <MapFile type="ASM" filename="../../Objects/Main/Star Post/Object Data/Map - Star Post.asm" frame="1" />
     </ImageFromMappings>
   </Images>
+  <Display>
+    <DisplayOption>
+      <ImageRef image="circle">
+        <Offset Y="-32" />
+      </ImageRef>
+      <ImageRef image="main" />
+    </DisplayOption>
+  </Display>
   <Properties>
     <BitsProperty name="Star Post ID" type="int" startbit="0" length="7" description="Any star posts with a lower ID will automatically activate." />
   </Properties>
