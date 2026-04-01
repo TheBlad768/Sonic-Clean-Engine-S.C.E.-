@@ -597,5 +597,5 @@ loc_236E2:
 
 		; mappings
 		include "Objects/Main/Spring/Object Data/Anim - Spring.asm"
-		include "Objects/Main/Spring/Object Data/Map - Spring(Red).asm"
-		include "Objects/Main/Spring/Object Data/Map - Spring(Yellow).asm"
+		include "Objects/Main/Spring/Object Data/Map - Spring (Red).asm"
+		include "Objects/Main/Spring/Object Data/Map - Spring (Yellow).asm"
