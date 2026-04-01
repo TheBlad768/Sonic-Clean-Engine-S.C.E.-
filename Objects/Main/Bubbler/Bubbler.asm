@@ -146,7 +146,7 @@ Obj_Bubbler:
 
 .anim
 		lea	Ani_Bubbler(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 
 .chkdel
 		out_of_xrange.s	.offscreen
@@ -203,7 +203,7 @@ Obj_Bubbler_Bubbles:
 
 .animate
 		lea	Ani_Bubbler(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
 		beq.s	.rskip
 		clr.b	routine(a0)
@@ -227,7 +227,7 @@ Obj_Bubbler_Bubbles:
 
 .burst_draw
 		lea	Ani_Bubbler(pc),a1
-		jsr	(Animate_Sprite).w
+		jsr	(Animate_SpriteNoSST).w
 		tst.b	routine(a0)							; changed by Animate_Sprite
 		bne.s	Obj_Bubbler.delete
 		tst.b	render_flags(a0)						; object visible on the screen?

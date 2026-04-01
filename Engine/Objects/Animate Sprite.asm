@@ -5,6 +5,9 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Sprite:
+		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+
+Animate_SpriteNoSST:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
@@ -99,6 +102,9 @@ Animate_Sprite:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteMultiDelay:
+		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+
+Animate_SpriteMultiDelayNoSST:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
@@ -196,6 +202,9 @@ Animate_SpriteMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteCheckResult:
+		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+
+Animate_SpriteCheckResultNoSST:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
@@ -280,6 +289,9 @@ Animate_SpriteCheckResult:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteAdjustFlipXY:
+		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+
+Animate_SpriteAdjustFlipXYNoSST:
 		moveq	#0,d0
 		move.b	anim(a0),d0							; move animation number to d0
 		cmp.b	prev_anim(a0),d0						; is animation set to change?
