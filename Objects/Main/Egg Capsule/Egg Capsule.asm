@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 eggcapsule.speed			ds.w 1						; (2 bytes)
 
@@ -28,12 +28,12 @@ Obj_EggCapsule:
 		; init
 		lea	ObjDat_EggCapsule(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 		; check
 		btst	#render_flags.y_flip,render_flags(a0)				; is egg capsule flipped?
 		bne.s	.flying								; if yes, branch
-		move.l	#.normal,jump_ptr(a0)
+		move.l	#.normal,wait_addr(a0)
 
 		; create object
 		lea	Child1_EggCapsule_Button(pc),a2
@@ -52,7 +52,7 @@ Obj_EggCapsule:
 		moveq	#128/2,d0
 		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
-		move.l	#.flipped,jump_ptr(a0)
+		move.l	#.flipped,wait_addr(a0)
 		move.w	#1,eggcapsule.speed(a0)						; set speed
 		jsr	(Swing_Setup1).w
 
@@ -67,7 +67,7 @@ Obj_EggCapsule:
 .main
 
 		; jump
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		move.w	x_pos(a0),-(sp)
 		jsr	(a1)
 
@@ -90,7 +90,7 @@ Obj_EggCapsule:
 .normal
 		btst	#eggcapsule.button_bit,state_flags(a0)				; is button pressed?
 		beq.s	.return								; if not, branch
-		move.l	#.Sonicendpose,jump_ptr(a0)
+		move.l	#.Sonicendpose,wait_addr(a0)
 
 .open
 		move.b	#1,mapping_frame(a0)						; set empty egg capsule frame
@@ -181,7 +181,7 @@ Obj_EggCapsule:
 		move.b	(Current_zone).w,d0
 		add.w	d0,d0								; multiply by 4
 		add.w	d0,d0
-		move.l	.subindex(pc,d0.w),jump_ptr(a0)
+		move.l	.subindex(pc,d0.w),wait_addr(a0)
 		bsr.w	.open
 
 .swing
@@ -273,11 +273,11 @@ Check_SonicEndPose:
 		bne.s	.return								; if yes, branch
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	.return								; if yes, branch
-		move.l	d0,jump_ptr(a0)							; set routine
+		move.l	d0,wait_addr(a0)						; set routine
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Object).w
 		bne.s	.return
-		move.l	#Obj_LevelResults,address(a1)
+		move.l	#Obj_LevelResults,code_addr(a1)
 
 .return
 		rts
@@ -297,12 +297,12 @@ Check_SonicEndPose_MGZ:
 		tst.b	render_flags(a1)						; player visible on the screen?
 		bpl.s	.return								; if not, branch
 		move.w	#-$100,x_vel(a0)						; left move
-		move.l	d0,jump_ptr(a0)							; set routine
+		move.l	d0,wait_addr(a0)						; set routine
 
 		; create
 		jsr	(Create_New_Object).w
 		bne.s	.return
-		move.l	#Obj_LevelResults,address(a1)
+		move.l	#Obj_LevelResults,code_addr(a1)
 
 .return
 		rts
@@ -320,7 +320,7 @@ Obj_EggCapsule_Button:
 		; init
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .main
 
@@ -335,7 +335,7 @@ Obj_EggCapsule_Button:
 		moveq	#standing_mask,d0
 		and.b	status(a0),d0							; is Sonic or Tails standing on the object?
 		beq.s	.draw								; if not, branch
-		move.l	#.solid,address(a0)
+		move.l	#.solid,code_addr(a0)
 		movea.w	parent3(a0),a1							; load egg capsule address
 		bset	#eggcapsule.button_bit,state_flags(a1)				; set flag as "pressed"
 		move.b	#$C,mapping_frame(a0)						; "pressed" frame
@@ -368,7 +368,7 @@ Obj_EggCapsule_FlippedButton:
 		lea	ObjDat_EggCapsule_Button(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
 		bset	#render_flags.y_flip,render_flags(a0)				; set flipy flag
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .main
 		lea	.range(pc),a1
@@ -392,7 +392,7 @@ Obj_EggCapsule_FlippedButton:
 		bpl.s	.refresh
 
 .press
-		move.l	#.refresh,address(a0)
+		move.l	#.refresh,code_addr(a0)
 		subq.b	#8,child_dy(a0)							; move object to "pressed"
 		movea.w	parent3(a0),a1							; load egg capsule address
 		bset	#eggcapsule.button_bit,state_flags(a1)				; set flag as "pressed"
@@ -428,7 +428,7 @@ Obj_EggCapsule_Pieces:
 		; init
 		lea	ObjDat_EggCapsule_Pieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#Obj_FlickerMove,address(a0)
+		move.l	#Obj_FlickerMove,code_addr(a0)
 		bsr.s	.getframe
 		moveq	#1<<2,d0							; set index velocity
 		jsr	(Set_IndexedVelocity).w
@@ -460,7 +460,7 @@ Obj_EggCapsule_Propeller:
 		; init
 		lea	ObjDat3_EggCapsule_Propeller(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .main
 		jsr	(Refresh_ChildPosition).w
@@ -478,7 +478,7 @@ AniRaw_Propeller:	dc.b 0, 6, 7, 8, 9, arfEnd
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 eggcapsule_animals.yvel			ds.w 1						; (2 bytes)
 
@@ -491,7 +491,7 @@ Obj_EggCapsule_Animals:
 		; init
 		lea	ObjDat_EggCapsule_Animals(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		move.l	#.normal,address(a0)
+		move.l	#.normal,code_addr(a0)
 		move.b	#16/2,y_radius(a0)						; 24/2?
 		bsr.w	EggCapsule_Animals_Load
 		jmp	(Draw_Sprite).w
@@ -502,7 +502,7 @@ Obj_EggCapsule_Animals:
 		; wait
 		subq.w	#1,wait_timer(a0)
 		bpl.s	.draw
-		move.l	#.jump,address(a0)
+		move.l	#.jump,code_addr(a0)
 		move.w	#priority_1,priority(a0)
 
 .draw
@@ -565,7 +565,7 @@ Obj_EggCapsule_Animals_Flipped:
 		; wait
 		subq.w	#1,wait_timer(a0)
 		bpl.s	.draw
-		move.l	#.move,address(a0)
+		move.l	#.move,code_addr(a0)
 		move.w	#priority_1,priority(a0)
 
 .draw
@@ -626,7 +626,7 @@ Obj_EggCapsule_Animals_Flipped:
 .check
 		tst.b	(Level_results_flag).w
 		bne.s	.anim
-		move.l	#.back,address(a0)
+		move.l	#.back,code_addr(a0)
 		bset	#render_flags.x_flip,render_flags(a0)				; left side
 		bra.s	.anim
 ; ---------------------------------------------------------------------------
@@ -677,7 +677,7 @@ EggCapsule_Animals_Load:
 		beq.s	.skipf								; if not, branch
 
 		; egg capsule flipped
-		move.l	#Obj_EggCapsule_Animals_Flipped,address(a0)
+		move.l	#Obj_EggCapsule_Animals_Flipped,code_addr(a0)
 		addq.b	#8,child_dy(a0)
 		clr.w	y_vel(a0)
 

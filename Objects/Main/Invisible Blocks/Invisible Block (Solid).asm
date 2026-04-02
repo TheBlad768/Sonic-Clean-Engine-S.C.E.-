@@ -31,7 +31,7 @@ Obj_Invisible_SolidBlock:
 		addq.w	#1,d1
 		lsl.w	#3,d1
 		move.b	d1,height_pixels(a0)
-		move.l	#.solid,address(a0)
+		move.l	#.solid,code_addr(a0)
 
 .solid
 		moveq	#$B,d1

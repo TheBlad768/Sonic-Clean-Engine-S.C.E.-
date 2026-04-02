@@ -14,7 +14,7 @@ Create_New_Object:
 
 .find
 		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
+		tst.l	code_addr(a1)							; is object RAM slot empty?
 		dbeq	d0,.find							; if not, branch
 		rts
 
@@ -38,7 +38,7 @@ Create_New_Object_4:
 
 .find
 		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
+		tst.l	code_addr(a1)							; is object RAM slot empty?
 		dbeq	d0,.find							; if not, branch
 
 .done
@@ -85,7 +85,7 @@ Create_New_Object_3:
 
 .find
 		lea	next_object(a1),a1						; goto next object RAM slot
-		tst.l	address(a1)							; is object RAM slot empty?
+		tst.l	code_addr(a1)							; is object RAM slot empty?
 		dbeq	d0,.find							; if not, branch
 
 .done

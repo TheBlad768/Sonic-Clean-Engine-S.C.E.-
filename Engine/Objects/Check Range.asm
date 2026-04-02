@@ -19,7 +19,7 @@ Check_CameraBoundary:
 		bhi.s	Check_CameraInRange.return					; if not, branch
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ Check_CameraInRange:
 		bset	#boss_side_x_bit,boss_state_flags(a0)
 
 .done
-		move.l	(sp),address(a0)
+		move.l	(sp),code_addr(a0)
 
 .return
 		rts
@@ -211,7 +211,7 @@ Check_CameraInBoundary:
 		clr.w	boss_saved_mus(a0)						; clear boss_saved_mus and boss_state_flags
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------

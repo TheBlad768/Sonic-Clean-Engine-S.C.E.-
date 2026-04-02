@@ -26,7 +26,7 @@ Obj_Monitor:
 
 		; draw
 		lea	(Sprite_OnScreen_Test).w,a1
-		move.l	a1,address(a0)
+		move.l	a1,code_addr(a0)
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ Obj_Monitor:
 		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#6|collision_flags.npc.item,collision_flags(a0)
 		move.b	subtype(a0),anim(a0)						; subtype determines what powerup is inside
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .main
 		bsr.s	Monitor_Fall
@@ -177,7 +177,7 @@ Monitor_Break:
 		; create monitor icon
 		jsr	(Create_New_Object_3).w
 		bne.s	.skipexplosioncreation
-		move.l	#Obj_MonitorContents,address(a1)
+		move.l	#Obj_MonitorContents,code_addr(a1)
 		move.b	render_flags(a0),render_flags(a1)
 		move.w	x_pos(a0),x_pos(a1)						; set icon's position
 		move.w	y_pos(a0),y_pos(a1)
@@ -187,7 +187,7 @@ Monitor_Break:
 		; create explosion
 		jsr	(Create_New_Object_4).w
 		bne.s	.skipexplosioncreation
-		move.l	#Obj_Explosion.skipanimal,address(a1)
+		move.l	#Obj_Explosion.skipanimal,code_addr(a1)
 		move.w	x_pos(a0),x_pos(a1)						; set explosion's position
 		move.w	y_pos(a0),y_pos(a1)
 
@@ -199,14 +199,14 @@ Monitor_Break:
 
 .notremembered
 		move.b	#$A,anim(a0)							; display 'broken' animation
-		move.l	#Monitor_Animate,address(a0)
+		move.l	#Monitor_Animate,code_addr(a0)
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
 
 Monitor_Animate:
 		cmpi.b	#$B,mapping_frame(a0)						; is monitor broken?
 		bne.s	.notbroken							; if not, branch
-		move.l	#Sprite_OnScreen_Test,address(a0)
+		move.l	#Sprite_OnScreen_Test,code_addr(a0)
 
 .notbroken
 		lea	Ani_Monitor(pc),a1
@@ -233,7 +233,7 @@ Obj_MonitorContents:
 		),render_flags(a0)
 
 		move.l	#bytes_word_to_long(16/2,16/2,priority_3),height_pixels(a0)	; set height, width and priority
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 		; set move
 		move.w	#-$300,y_vel(a0)
@@ -285,7 +285,7 @@ MonitorContents_GivePowerup:
 
 .give
 		move.w	#30-1,wait_timer(a0)						; set wait timer for delete
-		move.l	#Obj_MonitorContents.waitdel,address(a0)
+		move.l	#Obj_MonitorContents.waitdel,code_addr(a0)
 
 		; give powerup
 		lea	(Player_1).w,a2							; a2=character
@@ -352,7 +352,7 @@ Monitor_Give_Fire_Shield:
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.fire_shield,status_secondary(a2)
 		bne.s	.sfx								; if the player already has a fire shield, branch
-		move.l	#Obj_FireShield,(Shield+address).w
+		move.l	#Obj_FireShield,(Shield+code_addr).w
 
 .sfx
 		sfx	sfx_FireShield, 1
@@ -371,7 +371,7 @@ Monitor_Give_Lightning_Shield:
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.lightning_shield,status_secondary(a2)
 		bne.s	.sfx								; if the player already has a lightning shield, branch
-		move.l	#Obj_LightningShield,(Shield+address).w
+		move.l	#Obj_LightningShield,(Shield+code_addr).w
 
 .sfx
 		sfx	sfx_LightningShield, 1
@@ -390,7 +390,7 @@ Monitor_Give_Bubble_Shield:
 		bset	#status_secondary.shield,status_secondary(a2)
 		bset	#status_secondary.bubble_shield,status_secondary(a2)
 		bne.s	.sfx								; if the player already has a bubble shield, branch
-		move.l	#Obj_BubbleShield,(Shield+address).w
+		move.l	#Obj_BubbleShield,(Shield+code_addr).w
 
 .sfx
 		sfx	sfx_BubbleShield, 1
@@ -411,7 +411,7 @@ Monitor_Give_Invincibility:
 		music	mus_Invincible							; if invincible, play invincibility music
 
 .skipmusic
-		move.l	#Obj_Invincibility,(Invincibility_stars+address).w
+		move.l	#Obj_Invincibility,(Invincibility_stars+code_addr).w
 
 .return
 		rts

@@ -69,7 +69,7 @@ Sprite_CheckDelete:
 
 .delete
 		bset	#status.npc.defeated,status(a0)					; set "defeated" flag
-		move.l	#Delete_Current_Object,address(a0)
+		move.l	#Delete_Current_Object,code_addr(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -101,7 +101,7 @@ Sprite_CheckDelete2:
 
 .delete
 		bset	#4,state_flags(a0)						; set "delete child object" flag
-		move.l	#Delete_Current_Object,address(a0)
+		move.l	#Delete_Current_Object,code_addr(a0)
 
 .return
 		rts
@@ -134,7 +134,7 @@ Sprite_CheckDelete3:
 		bclr	#respawn_addr.state,(a2)					; turn on the slot
 
 .delete
-		move.l	#Delete_Current_Object,address(a0)
+		move.l	#Delete_Current_Object,code_addr(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -232,7 +232,7 @@ Go_Delete_SpriteSlotted2:
 		bset	#status.npc.defeated,status(a0)					; set "defeated" flag
 
 Go_Delete_SpriteSlotted3:
-		move.l	#Delete_Current_Object,address(a0)
+		move.l	#Delete_Current_Object,code_addr(a0)
 
 Remove_From_TrackingSlot:
 		move.b	ros_bit(a0),d0							; slot bit
@@ -269,8 +269,8 @@ Obj_WaitOffscreen:
 		move.l	#Map_Offscreen,mappings(a0)
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
-		move.l	(sp)+,jump_ptr(a0)						; save address after bsr/jsr from stack and exit from current object
-		move.l	#.main,address(a0)
+		move.l	(sp)+,wait_addr(a0)						; save address after bsr/jsr from stack and exit from current object
+		move.l	#.main,code_addr(a0)
 
 .main
 		tst.b	render_flags(a0)						; object visible on the screen?
@@ -279,7 +279,7 @@ Obj_WaitOffscreen:
 ; ---------------------------------------------------------------------------
 
 .restore
-		move.l	jump_ptr(a0),address(a0)					; restore normal object operation when onscreen
+		move.l	wait_addr(a0),code_addr(a0)					; restore normal object operation when onscreen
 		rts
 ; ---------------------------------------------------------------------------
 

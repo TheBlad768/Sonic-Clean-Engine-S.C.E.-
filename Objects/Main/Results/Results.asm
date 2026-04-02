@@ -78,7 +78,7 @@ Obj_LevelResults:
 		clr.w	(Total_bonus_countup).w
 		move.w	#6*60,objoff_2E(a0)						; wait 6 seconds before starting score counting sequence
 		move.w	#12,objoff_30(a0)
-		move.l	#.create,address(a0)
+		move.l	#.create,code_addr(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ Obj_LevelResults:
 		move.w	(a2)+,d1							; make objects
 
 .loop
-		move.l	(a2)+,address(a1)
+		move.l	(a2)+,code_addr(a1)
 		move.w	(a2)+,objoff_46(a1)
 		move.w	(a2)+,x_pos(a1)
 		spl	objoff_05(a1)
@@ -110,7 +110,7 @@ Obj_LevelResults:
 		dbne	d1,.loop
 
 		; next
-		move.l	#.wait,address(a0)
+		move.l	#.wait,code_addr(a0)
 		tst.b	(Last_act_end_flag).w
 		bne.s	.return								; if this is the last act, branch
 		tst.b	(NoBackground_event_flag).w
@@ -174,7 +174,7 @@ Obj_LevelResults:
 .finish
 		sfx	sfx_Register							; play the cash register sound
 		move.w	#3*60,objoff_2E(a0)						; set wait amount
-		move.l	#.wait2,address(a0)
+		move.l	#.wait2,code_addr(a0)
 
 .wait2
 		tst.w	objoff_2E(a0)
@@ -198,7 +198,7 @@ Obj_LevelResults:
 		tst.b	(Last_act_end_flag).w
 		bne.s	.skiptc
 		clr.b	(Last_star_post_hit).w
-		move.l	#Obj_TitleCard,address(a0)					; change current object to title card
+		move.l	#Obj_TitleCard,code_addr(a0)					; change current object to title card
 		clr.b	routine(a0)
 		st	objoff_3E(a0)
 		rts
@@ -213,7 +213,7 @@ Obj_LevelResults:
 Obj_LevResultsCharName:
 
 		; Sonic only
-		move.l	#Obj_LevResultsGeneral,address(a0)
+		move.l	#Obj_LevResultsGeneral,code_addr(a0)
 
 ; =============== S U B R O U T I N E =======================================
 

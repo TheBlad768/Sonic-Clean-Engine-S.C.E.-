@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Sprite:
-		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_SpriteNoSST:
 		moveq	#0,d0
@@ -102,7 +102,7 @@ Animate_SpriteNoSST:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteMultiDelay:
-		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_SpriteMultiDelayNoSST:
 		moveq	#0,d0
@@ -202,7 +202,7 @@ Animate_SpriteMultiDelayNoSST:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteCheckResult:
-		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_SpriteCheckResultNoSST:
 		moveq	#0,d0
@@ -289,7 +289,7 @@ Animate_SpriteCheckResultNoSST:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_SpriteAdjustFlipXY:
-		movea.l	aniraw_ptr(a0),a1						; load animate sprite script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_SpriteAdjustFlipXYNoSST:
 		moveq	#0,d0

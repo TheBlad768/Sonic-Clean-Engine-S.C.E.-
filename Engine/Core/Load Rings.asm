@@ -288,7 +288,7 @@ RingTouchResponse:
 .attractring
 		bsr.w	Create_New_Object
 		bne.s	.consume
-		move.l	#Obj_Attracted_Ring,address(a1)
+		move.l	#Obj_Attracted_Ring,code_addr(a1)
 		move.w	(a2),x_pos(a1)							; copy xpos
 		move.w	2(a2),y_pos(a1)							; copy ypos
 		move.w	a4,parent(a1)							; save ring status RAM address
@@ -419,7 +419,7 @@ Clear_SpriteRingMem:
 
 .findos
 		lea	next_object(a1),a1						; next object slot
-		tst.l	address(a1)							; is object RAM slot empty?
+		tst.l	code_addr(a1)							; is object RAM slot empty?
 		beq.s	.nextos								; if yes, branch
 		move.w	respawn_addr(a1),d0						; get address in respawn table
 		beq.s	.nextos								; if it's zero, it isn't remembered

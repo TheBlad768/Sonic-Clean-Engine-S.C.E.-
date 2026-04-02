@@ -30,7 +30,7 @@ Go_Delete_Object_3:
 		bset	#4,state_flags(a0)						; set "delete child object" flag
 
 Go_Delete_Object:
-		move.l	#Delete_Current_Object,address(a0)
+		move.l	#Delete_Current_Object,code_addr(a0)
 		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		rts
 
@@ -41,6 +41,6 @@ Go_Delete_Object:
 ; =============== S U B R O U T I N E =======================================
 
 Go_Delete_Object_2:
-		move.l	#Delete_Current_Object,address(a0)
+		move.l	#Delete_Current_Object,code_addr(a0)
 		bset	#4,state_flags(a0)						; set "delete child object" flag
 		rts

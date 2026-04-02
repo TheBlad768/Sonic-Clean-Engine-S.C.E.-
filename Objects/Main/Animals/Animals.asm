@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 animal.bonus_counter			ds.w 1						; (2 bytes)
 animal.xvel				ds.w 1						; (2 bytes)
@@ -72,7 +72,7 @@ Obj_Animal:
 		move.b	#2,mapping_frame(a0)
 		move.b	#7,anim_frame_timer(a0)
 		move.w	#-$400,y_vel(a0)
-		move.l	#.main,address(a0)						; Go to "Obj_Animal_Main"
+		move.l	#.main,code_addr(a0)						; Go to "Obj_Animal_Main"
 
 		; draw score
 		lea	Child6_EnemyScore(pc),a2
@@ -95,7 +95,7 @@ Obj_Animal:
 		bpl.s	.draw
 		add.w	d1,y_pos(a0)
 		move.l	animal.xvel(a0),x_vel(a0)					; x_vel and y_vel
-		move.l	animal.code_ptr(a0),address(a0)
+		move.l	animal.code_ptr(a0),code_addr(a0)
 		move.b	#1,mapping_frame(a0)
 
 .draw
@@ -160,7 +160,7 @@ Obj_Animal_Ending:
 		move.b	subtype(a0),d0
 		lsl.w	#4,d0								; multiply by $10
 		lea	Animal_Ending_Index(pc,d0.w),a1					; $E size data
-		move.l	(a1)+,address(a0)						; Go to "NEXT"
+		move.l	(a1)+,code_addr(a0)						; Go to "NEXT"
 		move.l	(a1)+,mappings(a0)
 		move.w	(a1)+,art_tile(a0)
 		move.l	(a1),x_vel(a0)							; load horizontal and vertical speed
@@ -201,7 +201,7 @@ Obj_Animal_FlickyWait:
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
 		move.l	animal.xvel(a0),x_vel(a0)					; x_vel and y_vel
-		move.l	#.fly,address(a0)
+		move.l	#.fly,code_addr(a0)
 
 .fly
 		MoveSprite , $18
@@ -234,7 +234,7 @@ Obj_Animal_FlickyJump:
 		bhs.s	.chkdel								; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal.xvel(a0)
-		move.l	#.jump,address(a0)
+		move.l	#.jump,code_addr(a0)
 
 .jump
 		MoveSprite , $18
@@ -258,7 +258,7 @@ Obj_Animal_RabbitWait:
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
 		move.l	animal.xvel(a0),x_vel(a0)					; x_vel and y_vel
-		move.l	#.walk,address(a0)
+		move.l	#.walk,code_addr(a0)
 
 .walk
 		MoveSprite
@@ -306,7 +306,7 @@ Obj_Animal_LandJump:
 		bhs.s	.chkdel								; if not, branch
 		clr.w	x_vel(a0)
 		clr.w	animal.xvel(a0)
-		move.l	#.jump,address(a0)
+		move.l	#.jump,code_addr(a0)
 
 .jump
 		MoveSprite
@@ -323,7 +323,7 @@ Obj_Animal_SingleBounce:
 		jsr	(Find_SonicObject).w
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	.chkdel								; if not, branch
-		move.l	#.bounce,address(a0)
+		move.l	#.bounce,code_addr(a0)
 
 .bounce
 		MoveSprite
@@ -348,7 +348,7 @@ Obj_Animal_FlyBounce:
 		jsr	(Find_SonicObject).w
 		cmpi.w	#(screen_width/2)+24,d2						; is Sonic within $B8 pixels (x-axis)?
 		bhs.s	Obj_Animal_ChkDel						; if not, branch
-		move.l	#.bounce,address(a0)
+		move.l	#.bounce,code_addr(a0)
 
 .bounce
 		MoveSprite , $18

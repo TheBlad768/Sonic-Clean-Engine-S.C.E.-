@@ -11,7 +11,7 @@ Obj_HiddenMonitor:
 		; init
 		lea	ObjDat_HiddenMonitor(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#6|collision_flags.npc.item,collision_flags(a0)
 		move.b	subtype(a0),anim(a0)						; set monitor content id
@@ -32,7 +32,7 @@ Obj_HiddenMonitor:
 
 		; landed
 		sfx	sfx_GroundSlide							; if signpost has landed
-		move.l	#Delete_Sprite_If_Not_In_Range,address(a0)			; not draw hidden monitor
+		move.l	#Delete_Sprite_If_Not_In_Range,code_addr(a0)			; not draw hidden monitor
 
 .notdraw
 		jmp	(Delete_Sprite_If_Not_In_Range).w
@@ -40,7 +40,7 @@ Obj_HiddenMonitor:
 
 .bounceup
 		bclr	#0,state_flags(a1)						; if signpost has landed and is in range
-		move.l	#Obj_Monitor.main,address(a0)					; make this object a monitor
+		move.l	#Obj_Monitor.main,code_addr(a0)					; make this object a monitor
 		st	routine_secondary(a0)						; set the monitor's routine_secondary counter
 		move.w	#-$500,y_vel(a0)
 		sfx	sfx_BubbleAttack						; play sfx

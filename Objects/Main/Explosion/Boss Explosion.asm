@@ -41,8 +41,8 @@ Obj_CreateBossExplosion:
 		move.b	(a1)+,d0
 		lea	CreateBossExpRoutineSet(pc,d0.w),a1
 		movea.l	(a1)+,a2
-		move.l	a2,address(a0)
-		move.l	(a1)+,jump_ptr(a0)
+		move.l	a2,code_addr(a0)
+		move.l	(a1)+,wait_addr(a0)
 		jmp	(a2)
 ; ---------------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ Obj_WaitForParent:
 		movea.w	parent3(a0),a1							; a1=parent object
 		btst	#5,state_flags(a1)
 		bne.s	CreateBossExplosion.delete
-		tst.l	address(a1)							; is object RAM slot empty?
+		tst.l	code_addr(a1)							; is object RAM slot empty?
 		beq.s	CreateBossExplosion.delete					; if yes, branch
 		move.w	x_pos(a1),x_pos(a0)
 		move.w	y_pos(a1),y_pos(a0)
@@ -217,8 +217,8 @@ Obj_BossExplosion1:
 		jsr	(SetUp_ObjAttributes).w
 
 .set
-		move.l	#Obj_BossExplosionAnim,address(a0)
-		move.l	#Go_Delete_Object,jump_ptr(a0)
+		move.l	#Obj_BossExplosionAnim,code_addr(a0)
+		move.l	#Go_Delete_Object,wait_addr(a0)
 		sfx	sfx_Explode
 
 Obj_BossExplosionAnim:
@@ -237,8 +237,8 @@ Obj_BossExplosionOffset:
 		; init
 		lea	ObjDat_BossExplosion1(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#.main,address(a0)
-		move.l	#Go_Delete_Object,jump_ptr(a0)
+		move.l	#.main,code_addr(a0)
+		move.l	#Go_Delete_Object,wait_addr(a0)
 		sfx	sfx_Explode
 
 .main

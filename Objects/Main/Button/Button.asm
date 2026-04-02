@@ -10,7 +10,7 @@ Obj_Button:
 
 		; init
 		movem.l	ObjDat_Button(pc),d0-d3						; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		addq.w	#4,y_pos(a0)
 
 .main

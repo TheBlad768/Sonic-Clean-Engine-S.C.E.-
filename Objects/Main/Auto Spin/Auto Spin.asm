@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 ; players
 autospin.p1_passed			ds.b 1						; Sonic's passed flag (1 byte)
@@ -44,7 +44,7 @@ loc_1E84A:
 
 		; next
 		lea	AutoSpin_MainY(pc),a1
-		move.l	a1,address(a0)
+		move.l	a1,code_addr(a0)
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ AutoSpin_CheckX:
 		st	autospin.p1_passed(a0)
 
 loc_1E890:
-		move.l	#AutoSpin_MainX,address(a0)
+		move.l	#AutoSpin_MainX,code_addr(a0)
 
 ; =============== S U B R O U T I N E =======================================
 

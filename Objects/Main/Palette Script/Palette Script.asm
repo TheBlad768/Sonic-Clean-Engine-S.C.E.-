@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 smoothpalette.delay			ds.w 1						; (2 bytes)
 smoothpalette.destination		ds.w 1						; (2 bytes)
@@ -16,7 +16,7 @@ smoothpalette.size			ds.w 1						; (2 bytes)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_SmoothPalette:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#7,count(a0)							; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
@@ -51,7 +51,7 @@ Obj_SmoothPalette:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 smoothpalette2.delay			ds.w 1						; (2 bytes)
 smoothpalette2.source			ds.l 1						; script pointer (4 bytes)
@@ -61,7 +61,7 @@ smoothpalette2.source			ds.l 1						; script pointer (4 bytes)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_SmoothPalette2:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#7,count(a0)							; set 7-1 for normal fade
 		st	(Palette_rotation_disable).w
 
@@ -109,7 +109,7 @@ Child6_SmoothPalette2:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 fadeselectedtoblack.delay		ds.w 1						; (2 bytes)
 fadeselectedtoblack.source		ds.w 1						; (2 bytes)
@@ -120,7 +120,7 @@ fadeselectedtoblack.size		ds.w 1						; (2 bytes)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FadeSelectedToBlack:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#7,count(a0)							; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
@@ -155,7 +155,7 @@ Obj_FadeSelectedToBlack:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 fadeselectedfromblack.delay		ds.w 1						; (2 bytes)
 fadeselectedfromblack.source		ds.w 1						; (2 bytes)
@@ -167,7 +167,7 @@ fadeselectedfromblack.size		ds.w 1						; (2 bytes)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FadeSelectedFromBlack:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#7,count(a0)							; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
@@ -203,7 +203,7 @@ Obj_FadeSelectedFromBlack:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 fadetowhite.delay			ds.w 1						; (2 bytes)
 
@@ -212,7 +212,7 @@ fadetowhite.delay			ds.w 1						; (2 bytes)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FadeToWhite:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#7,count(a0)							; set 7 for normal fade
 		st	(Palette_rotation_disable).w
 
@@ -238,7 +238,7 @@ Obj_FadeToWhite:
 		; check exit
 		tst.b	subtype(a0)
 		beq.s	.delete
-		move.l	#Obj_FadeFromWhite,address(a0)
+		move.l	#Obj_FadeFromWhite,code_addr(a0)
 		bset	#5,state_flags(a0)
 
 .return
@@ -258,7 +258,7 @@ Obj_FadeToWhite:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_FadeFromWhite:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#7,count(a0)							; set 7 for normal fade
 		move.w	#3,wait_timer(a0)						; set wait time
 

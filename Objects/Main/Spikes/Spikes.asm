@@ -36,7 +36,7 @@ Obj_Spikes:
 		andi.w	#$F0,d0
 		lsr.w	#3,d0
 		move.w	Spikes_InitData(pc,d0.w),height_pixels(a0)			; set height and width
-		move.l	#sub_24090,address(a0)						; face up or down
+		move.l	#sub_24090,code_addr(a0)					; face up or down
 		move.l	#Map_Spikes,mappings(a0)
 
 		; set priority and art_tile
@@ -49,7 +49,7 @@ Obj_Spikes:
 		move.b	d0,mapping_frame(a0)
 		cmpi.b	#4,d0
 		blo.s	loc_23FE8
-		move.l	#sub_240E2,address(a0)						; sideways
+		move.l	#sub_240E2,code_addr(a0)						; sideways
 
 loc_23FE8:
 		move.b	status(a0),d0
@@ -60,7 +60,7 @@ loc_23FE8:
 .notgrav
 		andi.b	#setBit(status.npc.y_flip),d0
 		beq.s	loc_24002
-		move.l	#sub_2413E,address(a0)
+		move.l	#sub_2413E,code_addr(a0)
 
 loc_24002:
 		move.w	#32,objoff_3C(a0)						; push time

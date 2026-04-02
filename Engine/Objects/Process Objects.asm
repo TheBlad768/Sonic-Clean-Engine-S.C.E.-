@@ -13,7 +13,7 @@ Process_Objects:
 		moveq	#bytesToXcnt(Object_RAM_end-Object_RAM,object_size),d7		; run objects
 
 .loop
-		move.l	address(a0),d0							; get object address to d0
+		move.l	code_addr(a0),d0						; get object address to d0
 		beq.s	.nextslot							; if zero, skip
 		movea.l	d0,a1								; load object address to a0
 		jsr	(a1)
@@ -49,7 +49,7 @@ Process_Objects:
 ; ---------------------------------------------------------------------------
 
 .freezeobject_loop
-		tst.l	address(a0)							; is this object slot occupied?
+		tst.l	code_addr(a0)							; is this object slot occupied?
 		beq.s	.freezeobject_nextslot						; if not, branch
 		tst.b	render_flags(a0)						; object visible on the screen?
 		bpl.s	.freezeobject_nextslot						; if not, branch

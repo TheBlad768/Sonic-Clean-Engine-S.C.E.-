@@ -60,21 +60,21 @@ Obj_Invisible_HurtBlock:
 		; check
 		btst	#status.npc.x_flip,status(a0)					; is it flipx?
 		beq.s	loc_1F448							; if not, branch
-		move.l	#loc_1F4C4,address(a0)						; set side hurt
+		move.l	#loc_1F4C4,code_addr(a0)					; set side hurt
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F448:
 		btst	#status.npc.y_flip,status(a0)					; is it flipy?
 		beq.s	loc_1F458							; if not, branch
-		move.l	#loc_1F528,address(a0)						; set bottom hurt
+		move.l	#loc_1F528,code_addr(a0)					; set bottom hurt
 
 locret_1F456:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F458:
-		move.l	#loc_1F45E,address(a0)						; set top hurt
+		move.l	#loc_1F45E,code_addr(a0)					; set top hurt
 
 loc_1F45E:
 		moveq	#$B,d1

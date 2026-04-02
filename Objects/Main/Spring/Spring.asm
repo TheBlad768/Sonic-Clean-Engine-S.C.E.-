@@ -35,7 +35,7 @@ Obj_Spring:
 		move.b	#$A,mapping_frame(a0)
 		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)			; set diagonal
 		bset	#status.npc.y_flip,status(a0)
-		move.l	#Obj_Spring_DownDiag,address(a0)
+		move.l	#Obj_Spring_DownDiag,code_addr(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ Spring_UpDiag:
 		move.b	#4,anim(a0)
 		move.b	#7,mapping_frame(a0)
 		move.w	#make_art_tile($468,0,FALSE),art_tile(a0)			; set diagonal
-		move.l	#Obj_Spring_UpDiag,address(a0)
+		move.l	#Obj_Spring_UpDiag,code_addr(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ Spring_Horizontal:
 		move.b	#2,anim(a0)
 		move.b	#3,mapping_frame(a0)
 		move.b	#16/2,width_pixels(a0)
-		move.l	#Obj_Spring_Horizontal,address(a0)
+		move.l	#Obj_Spring_Horizontal,code_addr(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ Spring_Down:
 
 loc_22DFC:
 		move.b	#6,mapping_frame(a0)
-		move.l	#Obj_Spring_Down,address(a0)
+		move.l	#Obj_Spring_Down,code_addr(a0)
 		bra.s	Spring_Common
 ; ---------------------------------------------------------------------------
 
@@ -71,10 +71,10 @@ Spring_Up:
 		bne.s	loc_22DFC
 
 loc_22E96:
-		move.l	#Obj_Spring_Up,address(a0)
+		move.l	#Obj_Spring_Up,code_addr(a0)
 		tst.b	subtype(a0)
 		bpl.s	Spring_Common
-		move.l	#Obj_Spring_Up_NoSolid,address(a0)
+		move.l	#Obj_Spring_Up_NoSolid,code_addr(a0)
 
 Spring_Common:
 		moveq	#2,d0

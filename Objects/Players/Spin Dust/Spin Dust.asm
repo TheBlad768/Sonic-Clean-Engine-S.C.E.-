@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 dashdust.timer			ds.b 1							; (1 byte)
 dashdust.tails_flag		ds.b 1							; (1 byte)
@@ -17,7 +17,7 @@ Obj_DashDust:
 
 		; init
 		movem.l	ObjDat_DashDust(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		move.w	#Player_1,parent(a0)
 
 		; check Tails
@@ -143,7 +143,7 @@ DashDust_CheckSkid:
 		beq.s	.create								; if so, branch
 
 .back
-		move.l	#Obj_DashDust.main,address(a0)					; back
+		move.l	#Obj_DashDust.main,code_addr(a0)				; back
 		clr.b	dashdust.timer(a0)						; clear timer
 		rts
 ; ---------------------------------------------------------------------------
@@ -162,7 +162,7 @@ DashDust_CheckSkid:
 		; create dust clouds
 		jsr	(Create_New_Object).w
 		bne.s	.dplc
-		move.l	#Obj_DashDust_SkidDust,address(a1)
+		move.l	#Obj_DashDust_SkidDust,code_addr(a1)
 		move.w	x_pos(a2),x_pos(a1)
 		move.w	y_pos(a2),y_pos(a1)
 		tst.b	dashdust.tails_flag(a0)

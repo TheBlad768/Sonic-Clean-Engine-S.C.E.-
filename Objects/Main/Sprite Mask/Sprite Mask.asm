@@ -15,11 +15,11 @@ Obj_SpriteMask2:
 		clr.w	art_tile(a0)
 		move.l	#Map_SpriteMask,mappings(a0)
 		move.b	#64/2,width_pixels(a0)
-		move.l	#.level,address(a0)						; level
+		move.l	#.level,code_addr(a0)						; level
 		move.b	subtype(a0),d0
 		btst	#3,d0								; 8
 		beq.s	.skip
-		move.l	#.parent,address(a0)						; parent
+		move.l	#.parent,code_addr(a0)						; parent
 
 .skip
 		move.b	d0,d1

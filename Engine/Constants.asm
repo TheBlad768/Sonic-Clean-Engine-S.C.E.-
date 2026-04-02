@@ -326,7 +326,7 @@ next_object =						object_size
 ; Universally followed object conventions
 ; ---------------------------------------------------------------------------
 
-address =						objoff_00			; long
+code_addr =						objoff_00			; long ; address of the current object code
 render_flags =						objoff_04			; bitfield ; refer to SCHG for details
 height_pixels =						objoff_06			; byte ; height / 2
 width_pixels =						objoff_07			; byte ; width / 2
@@ -366,6 +366,7 @@ collision_flags =					objoff_28			; byte ; TT SSSSSS ; TT = collision type, SSSS
 collision_property =					objoff_29			; byte ; usage varies, bosses use it as a hit counter
 shield_reaction =					objoff_2B			; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
 subtype =						objoff_2C			; byte/word
+animations =						objoff_30			; long
 state_flags =						objoff_38			; byte
 count =							objoff_39			; byte
 routine_secondary =					objoff_3C			; byte ; used by monitors for this purpose at least
@@ -375,7 +376,7 @@ parent =						objoff_48			; word ; address of the object that owns or spawned th
 parent4 =						objoff_4A			; word
 parent3 =						objoff_4C			; word ; parent of child objects
 parent2 =						objoff_4E			; word ; several objects use this instead
-respawn_addr =						objoff_4E			; word ; the address of this object's entry in the respawn table
+respawn_addr =						objoff_4E			; word ; address of this object's entry in the respawn table
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by animate raw subroutine
@@ -383,14 +384,13 @@ respawn_addr =						objoff_4E			; word ; the address of this object's entry in t
 
 aniraw_frame_timer =					objoff_2E			; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
 aniraw_wait_timer =					objoff_2F			; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
-aniraw_ptr =						objoff_30			; long
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by object wait subroutine
 ; ---------------------------------------------------------------------------
 
 wait_timer =						objoff_2E			; word
-jump_ptr =						objoff_34			; long
+wait_addr =						objoff_34			; long
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by perform DPLC subroutine
@@ -404,7 +404,7 @@ ros_addr =						objoff_3C			; word ; the RAM address whose bit to clear when an 
 ; Conventions followed by create child object subroutine
 ; ---------------------------------------------------------------------------
 
-setup_ptr =						objoff_3E			; long
+setup_addr =						objoff_3E			; long
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by movesprite circular subroutine
@@ -437,7 +437,7 @@ scaling_frame =						objoff_20			; byte
 scaling_art_tile =					objoff_3A			; word
 scaling_scale_factor =					objoff_40			; byte
 scaling_scale_prev_factor =				objoff_41			; byte
-scaling_art_address =					objoff_42			; long
+scaling_art_addr =					objoff_42			; long
 
 ; ---------------------------------------------------------------------------
 ; Conventions followed by some/most bosses
@@ -490,7 +490,7 @@ lrb_solid_bit =						objoff_47			; byte ; the bit to check for left/right/bottom
 ; ---------------------------------------------------------------------------
 
 ; universal
-obId =							address				; long
+obId =							code_addr			; long
 obRender =						render_flags			; byte ; bitfield for x/y flip, display mode
 obRoutine =						routine				; byte ; routine number
 obHeight =						height_pixels			; byte ; height/2
@@ -527,7 +527,7 @@ obRespawnNo =						respawn_addr			; word ; the address of this object's entry in
 ; ---------------------------------------------------------------------------
 
 ; universal
-id =							address				; long
+id =							code_addr			; long
 anim_frame_duration =					anim_frame_timer		; byte
 respawn_index =						respawn_addr			; word ; the address of this object's entry in the respawn table
 
@@ -895,7 +895,7 @@ afReset =						$FB				; move offscreen for remove(Using the Sprite_OnScreen_Test
 arfIndex =						$FF				; go to animate raw index
 arfEnd =						$FE				; return to beginning of animation
 arfChange =						$FC				; run specified animation (specified offset)
-arfJump =						$FA				; jump from $34(a0) address
+arfJump =						$FA				; jump from wait_addr
 
 ; ---------------------------------------------------------------------------
 ; Subroutine constants
