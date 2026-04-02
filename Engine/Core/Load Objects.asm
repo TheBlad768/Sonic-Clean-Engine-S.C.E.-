@@ -304,7 +304,7 @@ loc_1B9A4:
 		move.b	2(a0),d2							; get object id
 		add.w	d2,d2								; multiply by 4
 		add.w	d2,d2
-		move.l	(a4,d2.w),address(a1)
+		move.l	(a4,d2.w),code_addr(a1)
 		move.b	3(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		Create_New_Object_4.s	loc_1B9FA
@@ -363,7 +363,7 @@ loc_1BA64:
 		move.b	(a0)+,d2							; get object id
 		add.w	d2,d2								; multiply by 4
 		add.w	d2,d2
-		move.l	(a4,d2.w),address(a1)
+		move.l	(a4,d2.w),code_addr(a1)
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		Create_New_Object_4.s	, 1
@@ -413,7 +413,7 @@ loc_1BAB6:
 		move.b	(a0)+,d2							; get object id
 		add.w	d2,d2								; multiply by 4
 		add.w	d2,d2
-		move.l	(a4,d2.w),address(a1)
+		move.l	(a4,d2.w),code_addr(a1)
 		move.b	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		Create_New_Object_4.s	, 1

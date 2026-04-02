@@ -180,8 +180,8 @@ Debug_Mode:
 		add.w	d0,d0
 		add.w	d1,d0
 		move.b	4(a2,d0.w),subtype(a1)
-		move.l	(a2,d0.w),address(a1)
-		clr.b	address(a1)
+		move.l	(a2,d0.w),code_addr(a1)
+		clr.b	code_addr(a1)
 
 .stayindebug
 		rts

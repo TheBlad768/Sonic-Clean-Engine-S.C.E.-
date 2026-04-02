@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 spikebonker.delay			ds.w 1						; (2 bytes)
 
@@ -20,8 +20,8 @@ Obj_Spikebonker:
 		; init
 		lea	ObjDat_Spikebonker(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#.main,address(a0)
-		move.l	#.changeside,jump_ptr(a0)
+		move.l	#.main,code_addr(a0)
+		move.l	#.changeside,wait_addr(a0)
 
 		; set xvel
 		moveq	#signextendB($80),d0
@@ -75,7 +75,7 @@ Obj_Spikebonker:
 ; ---------------------------------------------------------------------------
 
 .attack
-		move.l	#.wait,address(a0)
+		move.l	#.wait,code_addr(a0)
 		bset	#3,state_flags(a0)						; set attack flag
 		sfx	sfx_Dash
 		jmp	(Sprite_CheckDeleteTouch).w
@@ -91,7 +91,7 @@ Obj_Spikebonker:
 .wait
 		btst	#3,state_flags(a0)						; check attack flag
 		bne.s	.draw
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .draw
 		jmp	(Sprite_CheckDeleteTouch).w
@@ -105,7 +105,7 @@ Obj_Spikebonker:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Spikebonker_Control:
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 		; create spikeball
 		lea	ChildObjDat_Spikebonker_SpikeBall(pc),a2
@@ -127,7 +127,7 @@ Obj_Spikebonker_Control:
 ; ---------------------------------------------------------------------------
 
 .loc_91B14
-		move.l	#.loc_91B3E,address(a0)
+		move.l	#.loc_91B3E,code_addr(a0)
 		moveq	#-4,d0
 		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.notflipx
@@ -136,7 +136,7 @@ Obj_Spikebonker_Control:
 .notflipx
 		move.w	d0,x_vel(a0)
 		move.w	#$1F,wait_timer(a0)
-		move.l	#.loc_91B68,jump_ptr(a0)
+		move.l	#.loc_91B68,wait_addr(a0)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
@@ -149,7 +149,7 @@ Obj_Spikebonker_Control:
 ; ---------------------------------------------------------------------------
 
 .loc_91B68
-		move.l	#.loc_91B70,address(a0)
+		move.l	#.loc_91B70,code_addr(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -164,15 +164,15 @@ Obj_Spikebonker_Control:
 ; ---------------------------------------------------------------------------
 
 .loc_91B8A
-		move.l	#.loc_91B3E,address(a0)
+		move.l	#.loc_91B3E,code_addr(a0)
 		neg.w	x_vel(a0)
 		move.w	#$1F,wait_timer(a0)
-		move.l	#.loc_91B56,jump_ptr(a0)
+		move.l	#.loc_91B56,wait_addr(a0)
 		jmp	(Child_CheckParent).w
 ; ---------------------------------------------------------------------------
 
 .loc_91B56
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		movea.w	parent3(a0),a1							; a1=parent object (spikebonker)
 		bclr	#3,state_flags(a1)						; clear attack flag
 		rts
@@ -192,7 +192,7 @@ Obj_Spikebonker_SpikeBall:
 		jsr	(SetUp_ObjAttributes3).w
 		movea.w	parent3(a0),a1							; a1=parent object (spikebonker)
 		move.w	a0,parent4(a1)							; save spikeball address to parent4 (control)
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .main
 		move.b	circular_angle(a0),d0						; angle

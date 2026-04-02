@@ -35,21 +35,21 @@ Obj_Invisible_KillBlock:
 		move.b	d1,height_pixels(a0)
 		btst	#status.npc.x_flip,status(a0)					; is it flipx?
 		beq.s	loc_1F5F0							; if not, branch
-		move.l	#loc_1F66C,address(a0)						; set side kill
+		move.l	#loc_1F66C,code_addr(a0)					; set side kill
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F5F0:
 		btst	#status.npc.y_flip,status(a0)					; is it flipy?
 		beq.s	loc_1F600							; if not, branch
-		move.l	#loc_1F6D0,address(a0)						; set bottom kill
+		move.l	#loc_1F6D0,code_addr(a0)					; set bottom kill
 
 locret_1F5FE:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1F600:
-		move.l	#loc_1F606,address(a0)						; set top kill
+		move.l	#loc_1F606,code_addr(a0)					; set top kill
 
 loc_1F606:
 		moveq	#$B,d1

@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 wavesplash.pause_flag			ds.b 1						; (1 byte)
 
@@ -16,7 +16,7 @@ Obj_WaveSplash:
 
 		; init
 		movem.l	ObjDat_WaveSplash(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		move.w	#1,mainspr_childsprites(a0)
 		lea	sub2_x_pos(a0),a2
 		move.w	x_pos(a0),(a2)

@@ -15,7 +15,7 @@ Obj_Wait:
 .jump
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ ObjCheckFloorDist_DoRoutine:
 		add.w	d1,y_pos(a0)							; move object out of the ground
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ ObjCheckCeilingDist_DoRoutine:
 		sub.w	d1,y_pos(a0)							; move object out of the ground
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ ObjCheckFloorDist2_DoRoutine:
 .jump
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jsr	(a1)
 		moveq	#1,d0								; set flag to 1
 
@@ -132,7 +132,7 @@ ObjCheckRightWallDist_DoRoutine:
 		add.w	d1,x_pos(a0)							; move object out of the wall
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------
@@ -148,5 +148,5 @@ ObjCheckLeftWallDist_DoRoutine:
 		add.w	d1,x_pos(a0)							; move object out of the wall
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)

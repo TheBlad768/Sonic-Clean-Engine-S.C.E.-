@@ -14,7 +14,7 @@ Obj_FireShield:
 
 		; init
 		movem.l	ObjDat_FireShield(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -71,7 +71,7 @@ Obj_FireShield:
 .destroyunderwater
 		jsr	(Create_New_Object).w						; set up for a new object
 		bne.s	.destroy							; if that can't happen, branch
-		move.l	#Obj_FireShield_Dissipate,address(a1)				; create dissipate object
+		move.l	#Obj_FireShield_Dissipate,code_addr(a1)				; create dissipate object
 		move.w	x_pos(a0),x_pos(a1)						; put it at shields' x_pos
 		move.w	y_pos(a0),y_pos(a1)						; put it at shields' y_pos
 
@@ -85,7 +85,7 @@ Obj_FireShield:
 			setBit(status_secondary.bubble_shield) \
 		),status_secondary(a2)
 
-		move.l	#Obj_InstaShield,address(a0)					; replace the Fire Shield with the Insta-Shield
+		move.l	#Obj_InstaShield,code_addr(a0)					; replace the Fire Shield with the Insta-Shield
 
 .return
 		rts
@@ -107,7 +107,7 @@ Obj_LightningShield:
 
 		; init
 		movem.l	ObjDat_LightningShield(pc),d0-d3				; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -179,14 +179,14 @@ Obj_LightningShield:
 			setBit(status_secondary.bubble_shield) \
 		),status_secondary(a2)
 
-		move.l	#Obj_InstaShield,address(a0)					; replace the Lightning Shield with the Insta-Shield
+		move.l	#Obj_InstaShield,code_addr(a0)					; replace the Lightning Shield with the Insta-Shield
 
 .return
 		rts
 ; ---------------------------------------------------------------------------
 
 .flashwater
-		move.l	#Obj_LightningShield_DestroyUnderwater2,address(a0)
+		move.l	#Obj_LightningShield_DestroyUnderwater2,code_addr(a0)
 
 		; sets Status_Shield, Status_FireShield, Status_LtngShield, and Status_BublShield to 0
 		andi.b	#~( \
@@ -230,7 +230,7 @@ Obj_LightningShield_Create_Spark:
 		bne.s	.return								; if one can't be found, return
 
 .loop
-		move.l	#Obj_LightningShield_Spark,address(a1)				; make new object a Spark
+		move.l	#Obj_LightningShield_Spark,code_addr(a1)			; make new object a Spark
 		move.w	x_pos(a0),x_pos(a1)						; (Spark) inherit x_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	y_pos(a0),y_pos(a1)						; (Spark) inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.l	mappings(a0),mappings(a1)					; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
@@ -272,7 +272,7 @@ Obj_LightningShield_Spark:
 Obj_LightningShield_DestroyUnderwater2:
 		subq.b	#1,anim_frame_timer(a0)						; is it time to end the white flash?
 		bpl.s	Obj_LightningShield_Create_Spark.return				; if not, return
-		move.l	#Obj_InstaShield,address(a0)					; replace Lightning Shield with Insta-Shield
+		move.l	#Obj_InstaShield,code_addr(a0)					; replace Lightning Shield with Insta-Shield
 
 		; restore backed-up underwater palette
 		lea	(Target_water_palette).w,a1
@@ -291,7 +291,7 @@ Obj_BubbleShield:
 
 		; init
 		movem.l	ObjDat_BubbleShield(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -346,7 +346,7 @@ Obj_BubbleShield:
 			setBit(status_secondary.bubble_shield) \
 		),status_secondary(a2)
 
-		move.l	#Obj_InstaShield,address(a0)					; replace the Bubble Shield with the Insta-Shield
+		move.l	#Obj_InstaShield,code_addr(a0)					; replace the Bubble Shield with the Insta-Shield
 
 .return
 		rts
@@ -363,7 +363,7 @@ Obj_InstaShield:
 
 		; init
 		movem.l	ObjDat_InstaShield(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -422,7 +422,7 @@ Obj_InstaShield:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 invincibility.anim_ptr			ds.l 1						; (4 bytes)
 invincibility.offset			ds.b 1						; (1 byte)
@@ -449,7 +449,7 @@ Obj_Invincibility:
 
 .loop
 		movem.l	ObjDat_Invincibility(pc),d0/d3-d5				; copy data to d0/d3-d5
-		movem.l	d0/d3-d5,address(a1)						; set data from d0/d3-d5 to current object
+		movem.l	d0/d3-d5,code_addr(a1)						; set data from d0/d3-d5 to current object
 		move.w	#2,mainspr_childsprites(a1)					; set number of child sprites
 		move.b	d2,invincibility.index(a1)
 		move.l	(a2)+,invincibility.anim_ptr(a1)
@@ -457,7 +457,7 @@ Obj_Invincibility:
 		lea	next_object(a1),a1
 		addq.w	#1,d2
 		dbf	d1,.loop
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.b	#4,invincibility.offset(a0)
 
 .main

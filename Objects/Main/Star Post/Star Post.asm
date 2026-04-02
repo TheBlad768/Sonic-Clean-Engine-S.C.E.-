@@ -10,7 +10,7 @@ Obj_StarPost:
 
 		; init
 		movem.l	ObjDat_StarPost(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		move.w	#2,mainspr_childsprites(a0)
 
 		; create circle
@@ -37,7 +37,7 @@ Obj_StarPost:
 		cmp.b	d2,d1
 		blo.s	.main
 		bset	#0,(a2)
-		move.l	#.canim,address(a0)						; set as "taken"
+		move.l	#.canim,code_addr(a0)						; set as "taken"
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ Obj_StarPost:
 
 .notbonus
 		bsr.s	Save_StarPost_Settings
-		move.l	#.circular,address(a0)
+		move.l	#.circular,code_addr(a0)
 
 		; check
 		move.w	respawn_addr(a0),d0						; get address in respawn table
@@ -103,7 +103,7 @@ Obj_StarPost:
 ; ---------------------------------------------------------------------------
 
 .taken
-		move.l	#.canim,address(a0)						; set as "taken"
+		move.l	#.canim,code_addr(a0)						; set as "taken"
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -113,7 +113,7 @@ Obj_StarPost:
 		; wait
 		subq.w	#1,wait_timer(a0)						; subtract 1 from time delay
 		bne.s	.cmove								; if time still remains, branch
-		move.l	#.canim,address(a0)
+		move.l	#.canim,code_addr(a0)
 
 .canim
 		moveq	#1,d0
@@ -223,7 +223,7 @@ Load_StarPost_Stars:
 		bne.s	.return
 
 .create
-		move.l	#Obj_StarPost_Stars,address(a1)
+		move.l	#Obj_StarPost_Stars,code_addr(a1)
 		move.l	#Map_StarPostStars,mappings(a1)
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,FALSE),art_tile(a1)
 		move.b	#setBit(render_flags.level),render_flags(a1)			; use screen coordinates
@@ -255,7 +255,7 @@ Load_StarPost_Stars:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 starpost_stars.origX			ds.w 1						; original x-axis position (2 bytes)
 starpost_stars.origY			ds.w 1						; original y-axis position (2 bytes)

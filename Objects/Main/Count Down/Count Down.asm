@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 aircountdown.drown_timer		ds.w 1						; current time remaining (2 bytes)
 aircountdown.warn_timer			ds.w 1						; current time remaining (2 bytes)
@@ -21,7 +21,7 @@ Obj_AirCountdown:
 
 		; init
 		movem.l	ObjDat_AirCountdown(pc),d0-d3					; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 
 .countdown
 		lea	(Player_1).w,a2							; a2=character
@@ -151,7 +151,7 @@ Obj_AirCountdown:
 		; create bubbles
 		jsr	(Create_New_Object).w
 		bne.s	.return2
-		move.l	#Obj_AirCountdown_Bubbles,address(a1)
+		move.l	#Obj_AirCountdown_Bubbles,code_addr(a1)
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
@@ -230,7 +230,7 @@ Obj_AirCountdown:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 aircountdown_bubbles.origX		ds.w 1						; original x-axis position (2 bytes)
 aircountdown_bubbles.number_timer	ds.w 1						; current time remaining (2 bytes)
@@ -251,7 +251,7 @@ Obj_AirCountdown_Bubbles:
 
 		move.w	x_pos(a0),aircountdown_bubbles.origX(a0)
 		move.w	#-$100,y_vel(a0)
-		move.l	#.animate,address(a0)
+		move.l	#.animate,code_addr(a0)
 
 .animate
 		lea	Ani_AirCountdown(pc),a1
@@ -259,7 +259,7 @@ Obj_AirCountdown_Bubbles:
 		tst.b	routine(a0)							; changed by Animate_Sprite
 		beq.s	.chkwater
 		clr.b	routine(a0)
-		move.l	#.chkwater,address(a0)
+		move.l	#.chkwater,code_addr(a0)
 
 .chkwater
 
@@ -270,7 +270,7 @@ Obj_AirCountdown_Bubbles:
 
 		; burst the bubble
 		addq.b	#7,anim(a0)							; burst animation
-		move.l	#.airleft,address(a0)
+		move.l	#.airleft,code_addr(a0)
 
 		; check animation
 		cmpi.b	#$D,anim(a0)
@@ -336,7 +336,7 @@ Obj_AirCountdown_Bubbles:
 		; check timer
 		subq.w	#1,aircountdown_bubbles.number_timer(a0)
 		bne.s	.draw
-		move.l	#.airleft3,address(a0)
+		move.l	#.airleft3,code_addr(a0)
 		addq.b	#7,anim(a0)							; burst animation
 		bra.s	.airleft
 ; ---------------------------------------------------------------------------
@@ -398,7 +398,7 @@ AirCountdown_ShowNumber:
 		sub.w	(Camera_Y_pos).w,d0
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
-		move.l	#Obj_AirCountdown_Bubbles.airleft2,address(a0)
+		move.l	#Obj_AirCountdown_Bubbles.airleft2,code_addr(a0)
 
 .return
 		rts

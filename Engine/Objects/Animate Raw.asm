@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipX:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTAdjustFlipX:
 
@@ -38,7 +38,7 @@ Animate_RawNoSSTAdjustFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipY:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTAdjustFlipY:
 
@@ -71,7 +71,7 @@ Animate_RawNoSSTAdjustFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSST:
 
@@ -106,7 +106,7 @@ Animate_RawNoSST:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)							; reset anim frame
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 ; ---------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ Animate_RawNoSST:
 		move.b	2(a1,d0.w),d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
+		move.l	a1,animations(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)						; set mapping frame
@@ -129,7 +129,7 @@ Animate_RawNoSST:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawCheckResult:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTCheckResult:
 
@@ -173,7 +173,7 @@ Animate_RawNoSSTCheckResult:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)							; reset anim frame
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jsr	(a1)
 
 		; exit
@@ -185,7 +185,7 @@ Animate_RawNoSSTCheckResult:
 		move.b	(a2)+,d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
+		move.l	a1,animations(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)						; set mapping frame
@@ -203,7 +203,7 @@ Animate_RawNoSSTCheckResult:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipX:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTMultiDelayFlipX:
 
@@ -242,7 +242,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelay:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTMultiDelay:
 
@@ -283,7 +283,7 @@ Animate_RawNoSSTMultiDelay:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)							; reset anim frame
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jsr	(a1)
 
 		; exit
@@ -295,7 +295,7 @@ Animate_RawNoSSTMultiDelay:
 		move.b	1(a1,d0.w),d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
+		move.l	a1,animations(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)						; set mapping frame
@@ -313,7 +313,7 @@ Animate_RawNoSSTMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipY:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTMultiDelayFlipY:
 
@@ -352,7 +352,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw2MultiDelay:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_Raw2NoSSTMultiDelay:
 
@@ -396,7 +396,7 @@ Animate_Raw2NoSSTMultiDelay:
 		; jump to custom code							; FA
 		clr.b	anim_frame(a0)							; reset anim frame
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jsr	(a1)
 
 		; exit
@@ -408,7 +408,7 @@ Animate_Raw2NoSSTMultiDelay:
 		move.b	(a2)+,d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,aniraw_ptr(a0)						; set new animation pointer
+		move.l	a1,animations(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)						; set mapping frame
@@ -426,7 +426,7 @@ Animate_Raw2NoSSTMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetFaster:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTGetFaster:
 
@@ -487,7 +487,7 @@ Animate_RawNoSSTGetFaster:
 		; jump to custom code
 		bclr	#5,state_flags(a0)
 		clr.b	aniraw_wait_timer(a0)						; reset aniraw wait timer
-		movea.l	jump_ptr(a0),a2
+		movea.l	wait_addr(a0),a2
 		jsr	(a2)
 
 .end
@@ -501,7 +501,7 @@ Animate_RawNoSSTGetFaster:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetSlower:
-		movea.l	aniraw_ptr(a0),a1						; load animate raw script to a1
+		movea.l	animations(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTGetSlower:
 
@@ -550,7 +550,7 @@ Animate_RawNoSSTGetSlower:
 		; jump to custom code
 		bclr	#5,state_flags(a0)
 		clr.b	aniraw_wait_timer(a0)						; reset aniraw wait timer
-		movea.l	jump_ptr(a0),a2
+		movea.l	wait_addr(a0),a2
 		jmp	(a2)
 
 ; ---------------------------------------------------------------------------
@@ -588,7 +588,7 @@ Animate_ExternalPlayerSprite:
 		bsr.w	Sonic_Load_PLC
 
 		; jump to custom code
-		movea.l	jump_ptr(a0),a1
+		movea.l	wait_addr(a0),a1
 		jmp	(a1)
 
 ; ---------------------------------------------------------------------------
@@ -598,7 +598,7 @@ Animate_ExternalPlayerSprite:
 ; =============== S U B R O U T I N E =======================================
 
 Set_Raw_Animation:
-		move.l	a1,aniraw_ptr(a0)						; set animate raw script
+		move.l	a1,animations(a0)						; set animation script
 		clr.b	anim_frame(a0)							; reset anim frame
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
 		rts

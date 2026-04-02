@@ -26,7 +26,7 @@ Obj_RobotnikHead3Init:
 		; init
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#AniRaw_RobotnikHead,aniraw_ptr(a0)
+		move.l	#AniRaw_RobotnikHead,animations(a0)
 
 		; check
 		movea.w	parent3(a0),a1							; a1=parent object
@@ -120,7 +120,7 @@ Obj_RobotnikShipFlame:
 		; init
 		lea	ObjDat2_RoboShipFlame(pc),a1
 		jsr	(SetUp_ObjAttributes3).w
-		move.l	#RobotnikShipFlame_Main,address(a0)
+		move.l	#RobotnikShipFlame_Main,code_addr(a0)
 
 RobotnikShipFlame_Main:
 		movea.w	parent3(a0),a1							; a1=parent object
@@ -148,7 +148,7 @@ Obj_RobotnikShipPieces:
 		; init
 		lea	ObjDat_RobotnikShipPieces(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#Obj_FlickerMove,address(a0)
+		move.l	#Obj_FlickerMove,code_addr(a0)
 		move.b	subtype(a0),d0
 		lsr.b	d0								; division by 2
 		move.b	d0,mapping_frame(a0)

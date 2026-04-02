@@ -308,7 +308,7 @@ Sonic_InWater:
 		addq.b	#1,(Water_entered_counter).w
 		movea.w	a0,a1
 		bsr.w	Player_ResetAirTimer
-		move.l	#Obj_AirCountdown,(Breathing_bubbles+address).w			; load Sonic's breathing bubbles
+		move.l	#Obj_AirCountdown,(Breathing_bubbles+code_addr).w		; load Sonic's breathing bubbles
 		move.w	#$300,Max_speed-Max_speed(a4)
 		move.w	#6,Acceleration-Max_speed(a4)
 		move.w	#$40,Deceleration-Max_speed(a4)
@@ -920,7 +920,7 @@ loc_11438:
 		bclr	#status.player.x_flip,status(a0)
 		cmpi.b	#12,air_left(a0)						; check air remaining
 		blo.s	locret_11480							; if less than 12, branch
-		move.l	#DashDust_CheckSkid,address(a6)					; Dust
+		move.l	#DashDust_CheckSkid,code_addr(a6)				; Dust
 		move.b	#$15,mapping_frame(a6)						; Dust
 
 locret_11480:
@@ -971,7 +971,7 @@ loc_114BE:
 		bset	#status.player.x_flip,status(a0)
 		cmpi.b	#12,air_left(a0)						; check air remaining
 		blo.s	locret_11506							; if less than 12, branch
-		move.l	#DashDust_CheckSkid,address(a6)					; Dust
+		move.l	#DashDust_CheckSkid,code_addr(a6)				; Dust
 		move.b	#$15,mapping_frame(a6)						; Dust
 
 locret_11506:

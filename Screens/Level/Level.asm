@@ -88,7 +88,7 @@ LevelScreen:
 
 		; set
 		move.l	#VInt_Fade,(V_int_ptr).w					; set VInt pointer
-		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)+address).w	; load title card object
+		move.l	#Obj_TitleCard,(Dynamic_object_RAM+(object_size*5)+code_addr).w	; load title card object
 
 .wait
 		st	(V_int_flag).w							; set VInt flag
@@ -151,7 +151,7 @@ LevelScreen:
 		; check water
 		tst.b	(Water_flag).w
 		beq.s	.notwater2
-		move.l	#Obj_WaveSplash,(Wave_Splash+address).w
+		move.l	#Obj_WaveSplash,(Wave_Splash+code_addr).w
 
 .notwater2
 		bsr.w	SpawnLevelMainSprites
@@ -205,8 +205,8 @@ LevelExtraRender_Data:
 ; =============== S U B R O U T I N E =======================================
 
 SpawnLevelMainSprites:
-		move.l	#Obj_ResetCollisionResponseList,(Reserved_object_3+address).w
-		move.l	#Obj_Sonic,(Player_1+address).w
-		move.l	#Obj_DashDust,(Dust+address).w
-		move.l	#Obj_InstaShield,(Shield+address).w
+		move.l	#Obj_ResetCollisionResponseList,(Reserved_object_3+code_addr).w
+		move.l	#Obj_Sonic,(Player_1+code_addr).w
+		move.l	#Obj_DashDust,(Dust+code_addr).w
+		move.l	#Obj_InstaShield,(Shield+code_addr).w
 		rts

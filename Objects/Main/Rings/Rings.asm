@@ -10,7 +10,7 @@ Obj_Ring:
 
 		; init
 		movem.l	ObjDat_Ring(pc),d0-d3						; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		move.b	#7|collision_flags.npc.item,collision_flags(a0)			; set ring collision
 
 		; draw
@@ -37,7 +37,7 @@ Obj_Ring_Collect:
 		),priority(a0)
 
 		; next
-		move.l	#.sparkle,address(a0)
+		move.l	#.sparkle,code_addr(a0)
 		jsr	(GiveRing).w
 		move.b	#5,anim_frame_timer(a0)
 		move.b	#1,mapping_frame(a0)
@@ -108,7 +108,7 @@ Obj_Bouncing_Ring:
 		move.w	y_pos(a0),y_pos(a1)
 
 .load
-		move.l	d6,address(a1)							; set object address
+		move.l	d6,code_addr(a1)						; set object code address
 		movem.l	(a3),d2-d4							; load ring data
 		movem.l	d2-d4,render_flags(a1)						; set ring data
 		move.b	#7|collision_flags.npc.item,collision_flags(a1)
@@ -156,7 +156,7 @@ Obj_Bouncing_Ring_Normal:
 		; check shield
 		btst	#status_secondary.lightning_shield,(Player_1+status_secondary).w	; does Sonic have a Lightning Shield?
 		beq.s	.notshield							; if not, branch
-		move.l	#Obj_Attracted_Ring.main,address(a0)
+		move.l	#Obj_Attracted_Ring.main,code_addr(a0)
 
 .notshield
 
@@ -235,7 +235,7 @@ Obj_Bouncing_Ring_TestGravity:
 		; check shield
 		btst	#status_secondary.lightning_shield,(Player_1+status_secondary).w	; does Sonic have a Lightning Shield?
 		beq.s	.notshield							; if not, branch
-		move.l	#Obj_Attracted_Ring.main,address(a0)
+		move.l	#Obj_Attracted_Ring.main,code_addr(a0)
 
 .notshield
 
@@ -289,7 +289,7 @@ Obj_Attracted_Ring:
 
 		; init
 		movem.l	ObjDat_Ring2(pc),d0-d3						; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		move.b	#7|collision_flags.npc.item,collision_flags(a0)			; set ring collision
 		move.w	height_pixels(a0),y_radius(a0)					; set y_radius and x_radius
 
@@ -350,10 +350,10 @@ Obj_Attracted_Ring:
 
 		; set bouncing
 		st	(Ring_spill_anim_counter).w					; set time
-		move.l	#Obj_Bouncing_Ring_Normal,address(a0)
+		move.l	#Obj_Bouncing_Ring_Normal,code_addr(a0)
 		tst.b	(Reverse_gravity_flag).w
 		beq.s	.chkdel
-		move.l	#Obj_Bouncing_Ring_TestGravity,address(a0)
+		move.l	#Obj_Bouncing_Ring_TestGravity,code_addr(a0)
 
 .chkdel
 		out_of_xrange.s	.offscreen

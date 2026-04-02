@@ -211,7 +211,7 @@ Touch_Ring:
 		; check the main character's invulnerability_timer
 		cmpi.b	#(1*60)+30,(Player_1+invulnerability_timer).w			; is there more than 90 frames on the timer remaining?
 		bhs.s	.return								; if so, branch
-		move.l	#Obj_Ring_Collect,address(a1)
+		move.l	#Obj_Ring_Collect,code_addr(a1)
 
 .return
 		rts
@@ -285,7 +285,7 @@ Touch_Monitor:
 
 		; okaytodestroy
 		neg.w	y_vel(a0)
-		move.l	#Monitor_Break,address(a1)
+		move.l	#Monitor_Break,code_addr(a1)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -381,7 +381,7 @@ Touch_EnemyNormal:
 
 .notreachedlimit2
 		bsr.w	HUD_AddToScore
-		move.l	#Obj_Explosion,address(a1)					; change object to explosion
+		move.l	#Obj_Explosion,code_addr(a1)					; change object to explosion
 		tst.w	y_vel(a0)
 		bmi.s	.bouncedown
 		move.w	y_pos(a0),d0
@@ -497,7 +497,7 @@ HurtCharacter:
 		; create
 		bsr.w	Create_New_Object
 		bne.s	.hasshield
-		move.l	#Obj_Bouncing_Ring,address(a1)					; load bouncing multi rings object
+		move.l	#Obj_Bouncing_Ring,code_addr(a1)				; load bouncing multi rings object
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 

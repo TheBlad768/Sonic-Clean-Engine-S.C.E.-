@@ -30,7 +30,7 @@ Child_GetPriorityOnce:
 		btst	#high_priority_bit,art_tile(a1)					; is parent object has high priority?
 		beq.s	.nothighpriority						; if not, branch
 		bset	#high_priority_bit,art_tile(a0)					; high priority
-		move.l	(sp),address(a0)						; set address after bsr/jsr
+		move.l	(sp),code_addr(a0)						; set address after bsr/jsr
 
 .nothighpriority
 		rts
@@ -66,7 +66,7 @@ Child_GetVRAMPriorityOnce:
 		bpl.s	.nothighpriority						; if not, branch
 		move.w	d0,art_tile(a0)							; copy parent VRAM
 		move.w	priority(a1),priority(a0)					; copy parent object priority
-		move.l	(sp),address(a0)						; set address after bsr/jsr
+		move.l	(sp),code_addr(a0)						; set address after bsr/jsr
 
 .nothighpriority
 		rts
@@ -110,7 +110,7 @@ Child_GetCollisionPriorityOnce:
 		btst	#high_priority_bit,art_tile(a1)					; is parent object has high priority?
 		beq.s	.nothighpriority						; if not, branch
 		bset	#high_priority_bit,art_tile(a0)					; high priority
-		move.l	(sp),address(a0)						; set address after bsr/jsr
+		move.l	(sp),code_addr(a0)						; set address after bsr/jsr
 		move.b	d0,collision_flags(a0)						; set collision number
 
 .nothighpriority

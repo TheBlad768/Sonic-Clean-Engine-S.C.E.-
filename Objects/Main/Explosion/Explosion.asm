@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 explosion.bonus_counter			ds.w 1						; (2 bytes)
 
@@ -17,7 +17,7 @@ Obj_Explosion:
 		; create animal
 		jsr	(Create_New_Object_3).w						; find new object slot
 		bne.s	.skipanimal							; branch, if there are no free object slots here
-		move.l	#Obj_Animal,address(a1)
+		move.l	#Obj_Animal,code_addr(a1)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		move.w	explosion.bonus_counter(a0),animal.bonus_counter(a1)		; copy chain bonus counter
@@ -28,7 +28,7 @@ Obj_Explosion:
 .skipsound
 
 		; init
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		move.l	#Map_Explosion,mappings(a0)
 		move.w	art_tile(a0),d0
 		andi.w	#high_priority,d0
@@ -67,7 +67,7 @@ Obj_FireShield_Dissipate:
 
 		; init
 		movem.l	ObjDat_FireShield_Dissipate(pc),d0-d3				; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		move.b	#3,anim_frame_timer(a0)
 		move.b	#1,mapping_frame(a0)
 
@@ -99,7 +99,7 @@ Obj_TensionBridge_Explosion:
 
 		; init
 		movem.l	ObjDat_TensionBridge_Explosion(pc),d0-d3			; copy data to d0-d3
-		movem.l	d0-d3,address(a0)						; set data from d0-d3 to current object
+		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
 		clr.b	mapping_frame(a0)
 
 .wait
@@ -110,7 +110,7 @@ Obj_TensionBridge_Explosion:
 
 .set
 		move.b	#3,anim_frame_timer(a0)
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 .main
 		jsr	(MoveSprite2).w

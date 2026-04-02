@@ -729,20 +729,20 @@ Add_SpriteToCollisionResponseList macro reg,terminate
     endif
     endm
 
-Create_New_Object_4 macro addr,terminate
+Create_New_Object_4 macro codeaddr,terminate
 	subq.w	#1,d0
-    ifnb addr
-	bmi.ATTRIBUTE	addr								; branch, if there are no free object slots here
+    ifnb codeaddr
+	bmi.ATTRIBUTE	codeaddr							; branch, if there are no free object slots here
     else
 	bmi.ATTRIBUTE	.done								; branch, if there are no free object slots here
     endif
 
 .find
 	lea	next_object(a1),a1							; goto next object RAM slot
-	tst.l	address(a1)								; is object RAM slot empty?
+	tst.l	code_addr(a1)								; is object RAM slot empty?
 	dbeq	d0,.find								; if not, branch
 
-    ifb addr
+    ifb codeaddr
 .done
     endif
     ifnb terminate

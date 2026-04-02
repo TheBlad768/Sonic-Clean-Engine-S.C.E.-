@@ -113,7 +113,7 @@ Child_Draw_Sprite_FlickerMove:
 
 .flicker
 		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
-		move.l	#Obj_FlickerMove,address(a0)
+		move.l	#Obj_FlickerMove,code_addr(a0)
 		clr.b	collision_flags(a0)
 		bsr.w	Set_IndexedVelocity
 		bra.w	Draw_Sprite

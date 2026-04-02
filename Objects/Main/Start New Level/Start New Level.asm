@@ -5,7 +5,7 @@
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 startnewlevel.size_ptr			ds.l 1						; (4 bytes)
 
@@ -31,7 +31,7 @@ Obj_StartNewLevel:
 			make_art_tile(ArtTile_Monitors,0,TRUE) \
 		),priority(a0)
 
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 		; get xydata
 		lea	.vertical(pc),a2						; vertical

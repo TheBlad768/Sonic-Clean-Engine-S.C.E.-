@@ -9,8 +9,8 @@
 Obj_Signpost_Control:
 		st	(Level_results_flag).w						; end of level is in effect
 		move.w	#(2*60)-1,wait_timer(a0)
-		move.l	#.create,jump_ptr(a0)
-		move.l	#Obj_Wait,address(a0)
+		move.l	#.create,wait_addr(a0)
+		move.l	#Obj_Wait,code_addr(a0)
 
 .return
 		rts
@@ -18,7 +18,7 @@ Obj_Signpost_Control:
 
 .create
 		clr.b	(Boss_flag).w							; clear boss flag
-		move.l	#Signpost_Control_AwaitStart,address(a0)
+		move.l	#Signpost_Control_AwaitStart,code_addr(a0)
 
 		; create signpost
 		lea	Child6_Signpost(pc),a2
@@ -38,7 +38,7 @@ Signpost_Control_AwaitStart:
 		; check level results flag
 		tst.b	(Level_results_flag).w						; is level over?
 		bne.s	Obj_Signpost_Control.return					; if yes, branch
-		move.l	#.check,address(a0)
+		move.l	#.check,code_addr(a0)
 
 		; restore control
 		clr.b	(Ctrl_1_locked).w						; unlock control 1
@@ -79,7 +79,7 @@ Obj_Signpost:
 		; init
 		lea	ObjSlot_Signpost(pc),a1
 		jsr	(SetUp_ObjAttributesSlotted).w
-		move.l	#.signfall,address(a0)
+		move.l	#.signfall,code_addr(a0)
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
@@ -89,7 +89,7 @@ Obj_Signpost:
 .nothighpriority
 		move.w	a0,(Signpost_addr).w						; put RAM address here for use by hidden monitor object
 		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)				; set y_radius and x_radius
-		move.l	#AniRaw_Signpost1,aniraw_ptr(a0)
+		move.l	#AniRaw_Signpost1,animations(a0)
 
 		; create stub
 		lea	Child1_Signpost_Stub(pc),a2					; make the little stub at the bottom of the signpost
@@ -125,7 +125,7 @@ Obj_Signpost:
 		tst.w	d1
 		bpl.s	.draw
 		add.w	d1,y_pos(a0)
-		move.l	#.signlanded,address(a0)
+		move.l	#.signlanded,code_addr(a0)
 		bset	#0,state_flags(a0)						; signpost landed flag
 		move.w	#(1*60)+4,wait_timer(a0)
 
@@ -145,14 +145,14 @@ Obj_Signpost:
 ; ---------------------------------------------------------------------------
 
 .endtime
-		move.l	#.signresults,address(a0)
+		move.l	#.signresults,code_addr(a0)
 		clr.l	x_vel(a0)							; clear velocity
 		clr.b	mapping_frame(a0)						; set frame
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
 .hmon
-		move.l	#.signfall,address(a0)						; if a hidden monitor was hit, bounce ths signpost again
+		move.l	#.signfall,code_addr(a0)					; if a hidden monitor was hit, bounce ths signpost again
 		move.b	#32,signpost.timer(a0)						; set delay for when it checks for the next hit
 		move.w	#-$200,y_vel(a0)
 		bra.s	.draw
@@ -162,12 +162,12 @@ Obj_Signpost:
 		lea	(Player_1).w,a1							; a1=character
 		btst	#status.player.in_air,status(a1)
 		bne.s	.draw2								; if player is not standing on the ground, wait until he is
-		move.l	#.signafter,address(a0)
+		move.l	#.signafter,code_addr(a0)
 		st	(Ctrl_1_locked).w						; null Sonic's input
 		jsr	(Set_PlayerEndingPose).w
 		jsr	(Create_New_Object).w
 		bne.s	.draw2
-		move.l	#Obj_LevelResults,address(a1)
+		move.l	#Obj_LevelResults,code_addr(a1)
 		bra.s	.draw2
 ; ---------------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ Obj_Signpost:
 
 ; dynamic object variables
 
-	dsset aniraw_ptr								; pretend we're in the RAM
+	dsset animations								; pretend we're in the RAM
 
 signpost_sparkle.origX			ds.w 1						; original x-axis position (2 bytes)
 
@@ -221,7 +221,7 @@ Obj_Signpost_Sparkle:
 		bset	#high_priority_bit,art_tile(a0)					; sparkles have same priority as Sonic (high priority)
 
 .nothighpriority
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 		jsr	(Random_Number).w
 		andi.w	#$1F,d0
 		subi.w	#$10,d0
@@ -229,7 +229,7 @@ Obj_Signpost_Sparkle:
 		move.w	x_pos(a0),signpost_sparkle.origX(a0)
 		move.w	#$1000,x_vel(a0)
 		move.w	#32,wait_timer(a0)
-		move.l	#Go_Delete_Object,jump_ptr(a0)
+		move.l	#Go_Delete_Object,wait_addr(a0)
 
 .main
 		move.w	#$400,d0							; right
@@ -266,7 +266,7 @@ Obj_Signpost_Stub:
 		lea	ObjDat_Signpost_Stub(pc),a1
 		jsr	(SetUp_ObjAttributes).w
 		bset	#render_flags.static_mappings,render_flags(a0)			; set flag to "static mappings flag"
-		move.l	#.main,address(a0)
+		move.l	#.main,code_addr(a0)
 
 		; check priority
 		btst	#high_priority_bit,(Player_1+art_tile).w			; is Sonic has high priority?
