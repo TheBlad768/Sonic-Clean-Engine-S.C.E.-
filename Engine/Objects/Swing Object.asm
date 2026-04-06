@@ -247,12 +247,12 @@ Refresh_ChildPositionAdjusted_Animate:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#render_flags.x_flip,status(a0)
+		bclr	#status.npc.x_flip,status(a0)
 		bclr	#render_flags.x_flip,render_flags(a0)
-		btst	#render_flags.x_flip,status(a1)
+		btst	#status.npc.x_flip,status(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#render_flags.x_flip,status(a0)
+		bset	#status.npc.x_flip,status(a0)
 		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
@@ -261,12 +261,12 @@ Refresh_ChildPositionAdjusted_Animate:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#render_flags.y_flip,status(a0)
+		bclr	#status.npc.y_flip,status(a0)
 		bclr	#render_flags.y_flip,render_flags(a0)
-		btst	#render_flags.y_flip,status(a1)
+		btst	#status.npc.y_flip,status(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#render_flags.y_flip,status(a0)
+		bset	#status.npc.y_flip,status(a0)
 		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
@@ -283,12 +283,12 @@ Refresh_Child_X_PositionAdjusted_Animate:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#render_flags.x_flip,status(a0)
+		bclr	#status.npc.x_flip,status(a0)
 		bclr	#render_flags.x_flip,render_flags(a0)
-		btst	#render_flags.x_flip,status(a1)
+		btst	#status.npc.x_flip,status(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#render_flags.x_flip,status(a0)
+		bset	#status.npc.x_flip,status(a0)
 		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
@@ -305,12 +305,12 @@ Refresh_Child_Y_PositionAdjusted_Animate:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#render_flags.y_flip,status(a0)
+		bclr	#status.npc.y_flip,status(a0)
 		bclr	#render_flags.y_flip,render_flags(a0)
-		btst	#render_flags.y_flip,status(a1)
+		btst	#status.npc.y_flip,status(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#render_flags.y_flip,status(a0)
+		bset	#status.npc.y_flip,status(a0)
 		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
@@ -327,12 +327,12 @@ Refresh_ChildPositionAdjusted_Animate2:
 		move.w	x_pos(a1),d0
 		move.b	child_dx(a0),d1
 		ext.w	d1
-		bclr	#render_flags.x_flip,status(a0)
+		bclr	#status.npc.x_flip,status(a0)
 		bclr	#render_flags.x_flip,render_flags(a0)
 		btst	#render_flags.x_flip,render_flags(a1)
 		beq.s	.notflipx
 		neg.w	d1
-		bset	#render_flags.x_flip,status(a0)
+		bset	#status.npc.x_flip,status(a0)
 		bset	#render_flags.x_flip,render_flags(a0)
 
 .notflipx
@@ -341,12 +341,12 @@ Refresh_ChildPositionAdjusted_Animate2:
 		move.w	y_pos(a1),d0
 		move.b	child_dy(a0),d1
 		ext.w	d1
-		bclr	#render_flags.y_flip,status(a0)
+		bclr	#status.npc.y_flip,status(a0)
 		bclr	#render_flags.y_flip,render_flags(a0)
 		btst	#render_flags.y_flip,render_flags(a1)
 		beq.s	.notflipy
 		neg.w	d1
-		bset	#render_flags.y_flip,status(a0)
+		bset	#status.npc.y_flip,status(a0)
 		bset	#render_flags.y_flip,render_flags(a0)
 
 .notflipy
