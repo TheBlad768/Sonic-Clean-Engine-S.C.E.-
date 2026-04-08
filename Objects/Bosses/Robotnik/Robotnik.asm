@@ -127,7 +127,7 @@ RobotnikShipFlame_Main:
 		btst	#4,state_flags(a1)
 		bne.s	Obj_RobotnikHead4.delete
 		jsr	(Refresh_ChildPositionAdjusted).w
-		btst	#0,(V_int_run_count+3).w
+		btst	#0,(V_int_run_count+3).w					; 0 or 1
 		bne.s	Obj_RobotnikHeadEnd
 		tst.w	x_vel(a1)
 		beq.s	Obj_RobotnikHeadEnd

@@ -77,7 +77,7 @@ Perform_DPLC:
 		move.b	d0,ros_prev_frame(a0)
 
 		; load
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 2
 		movea.l	(a2)+,a3							; source address of art
 		movea.l	(a2)+,a2							; address of DPLC script
 		adda.w	(a2,d0.w),a2							; apply offset to script
@@ -372,7 +372,7 @@ Check_PlayerAttack:
 		; check player
 		moveq	#0,d0
 		move.b	character_id(a1),d0
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 2
 		jmp	.index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
@@ -398,7 +398,7 @@ Check_PlayerCollision:
 		beq.s	.return
 		clr.b	collision_property(a0)
 		andi.w	#3,d0
-		add.w	d0,d0
+		add.w	d0,d0								; multiply by 2
 		movea.w	.players(pc,d0.w),a1
 		move.w	a1,parent4(a0)
 		moveq	#1,d1								; set touch

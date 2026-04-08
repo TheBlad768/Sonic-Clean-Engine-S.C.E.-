@@ -112,3 +112,20 @@ MoveSprite2_Reserve:
 		add.l	d0,objoff_30(a0)						; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
 		add.l	d2,objoff_34(a0)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		rts
+
+; =============== S U B R O U T I N E =======================================
+
+MoveSprite_Absolute_Reserve:
+		movem.l	objoff_30(a0),d0/d2						; load xy speed
+		add.l	d0,x_pos(a0)							; add to x-axis position
+		add.l	d2,y_pos(a0)							; add to y-axis position
+		addi.l	#$380000,objoff_34(a0)						; increase vertical speed (apply gravity)
+		rts
+
+; =============== S U B R O U T I N E =======================================
+
+MoveSprite2_Absolute_Reserve:
+		movem.l	objoff_30(a0),d0/d2						; load xy speed
+		add.l	d0,x_pos(a0)							; add to x-axis position
+		add.l	d2,y_pos(a0)							; add to y-axis position
+		rts

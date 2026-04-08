@@ -20,7 +20,7 @@ Animate_RawNoSSTAdjustFlipX:
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1							; read mapping frame from script
 		bmi.s	Animate_RawNoSST.main						; if animation is complete, branch
-		bclr	#6,d1								; $40?
+		bclr	#6,d1								; $40
 		beq.s	.skip
 		bchg	#render_flags.x_flip,render_flags(a0)				; change xflip
 
@@ -53,7 +53,7 @@ Animate_RawNoSSTAdjustFlipY:
 		moveq	#0,d1
 		move.b	1(a1,d0.w),d1							; read mapping frame from script
 		bmi.s	Animate_RawNoSST.main						; if animation is complete, branch
-		bclr	#6,d1								; $40?
+		bclr	#6,d1								; $40
 		beq.s	.skip
 		bchg	#render_flags.y_flip,render_flags(a0)				; change yflip
 
@@ -218,7 +218,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1							; read mapping frame from script
 		bmi.s	Animate_RawNoSSTMultiDelay.main					; if animation is complete, branch
-		bclr	#6,d1								; $40?
+		bclr	#6,d1								; $40
 		beq.s	.skip
 		bchg	#render_flags.x_flip,render_flags(a0)				; change xflip
 
@@ -328,7 +328,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 		moveq	#0,d1
 		move.b	(a1,d0.w),d1							; read mapping frame from script
 		bmi.s	Animate_RawNoSSTMultiDelay.main					; if animation is complete, branch
-		bclr	#6,d1								; $40?
+		bclr	#6,d1								; $40
 		beq.s	.skip
 		bchg	#render_flags.y_flip,render_flags(a0)				; change yflip
 
@@ -491,6 +491,8 @@ Animate_RawNoSSTGetFaster:
 		jsr	(a2)
 
 .end
+
+		; exit
 		moveq	#-1,d2								; end flag
 		rts
 

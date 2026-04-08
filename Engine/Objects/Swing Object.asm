@@ -31,15 +31,10 @@ Swing_UpAndDown_Count:
 		tst.w	d3								; has the object finished swinging?
 		beq.s	.return								; if not, branch
 		subq.b	#1,count(a0)							; decrement count
-		bmi.s	.end								; if count has ended, branch
-		moveq	#0,d0								; set flag to 0
+		smi	d0								; if count has ended, set flag
+		tst.b	d0								; test if count has ended
 
 .return
-		rts
-; ---------------------------------------------------------------------------
-
-.end
-		moveq	#1,d0								; set flag to 1
 		rts
 
 ; =============== S U B R O U T I N E =======================================
