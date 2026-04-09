@@ -17,7 +17,7 @@ smoothpalette.size			ds.w 1						; (2 bytes)
 
 Obj_SmoothPalette:
 		move.l	#.main,code_addr(a0)
-		move.b	#7,count(a0)							; set 7 for normal fade
+		move.b	#7,count(a0)							; set 7-1 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -121,7 +121,7 @@ fadeselectedtoblack.size		ds.w 1						; (2 bytes)
 
 Obj_FadeSelectedToBlack:
 		move.l	#.main,code_addr(a0)
-		move.b	#7,count(a0)							; set 7 for normal fade
+		move.b	#7,count(a0)							; set 7-1 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -168,7 +168,7 @@ fadeselectedfromblack.size		ds.w 1						; (2 bytes)
 
 Obj_FadeSelectedFromBlack:
 		move.l	#.main,code_addr(a0)
-		move.b	#7,count(a0)							; set 7 for normal fade
+		move.b	#7,count(a0)							; set 7-1 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -213,7 +213,7 @@ fadetowhite.delay			ds.w 1						; (2 bytes)
 
 Obj_FadeToWhite:
 		move.l	#.main,code_addr(a0)
-		move.b	#7,count(a0)							; set 7 for normal fade
+		move.b	#7,count(a0)							; set 7-1 for normal fade
 		st	(Palette_rotation_disable).w
 
 .main
@@ -259,7 +259,7 @@ Obj_FadeToWhite:
 
 Obj_FadeFromWhite:
 		move.l	#.main,code_addr(a0)
-		move.b	#7,count(a0)							; set 7 for normal fade
+		move.b	#7,count(a0)							; set 7-1 for normal fade
 		move.w	#3,wait_timer(a0)						; set wait time
 
 .main
