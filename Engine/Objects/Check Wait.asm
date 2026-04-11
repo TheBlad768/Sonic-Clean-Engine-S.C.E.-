@@ -150,3 +150,50 @@ ObjCheckLeftWallDist_DoRoutine:
 		; jump to custom code
 		movea.l	wait_addr(a0),a1
 		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Wait delay and jump to subroutine
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_WaitNewDelay:
+		subq.w	#1,wait_timer(a0)						; subtract 1
+		bmi.s	.jump								; if timer has run out, branch
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+.jump
+		bclr	#render_flags.on_screen,render_flags(a0)
+		move.w	#(2*60)-1,wait_timer(a0)					; set timer
+
+		; jump to custom code
+		movea.l	wait_addr(a0),a1
+		jmp	(a1)
+
+; ---------------------------------------------------------------------------
+; Wait fade and jump to subroutine
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Obj_WaitFadeToLevelMusic:
+		subq.w	#1,wait_timer(a0)						; subtract 1
+		bmi.s	.jump								; if timer has run out, branch
+		bra.w	Draw_Sprite
+; ---------------------------------------------------------------------------
+
+.jump
+		bclr	#render_flags.on_screen,render_flags(a0)
+		move.w	#(2*60)-1,wait_timer(a0)					; set timer
+
+		; create
+		bsr.w	Create_New_Object
+		bne.s	.notfree
+		move.l	#Obj_Song_Fade_ToLevelMusic,code_addr(a1)
+
+.notfree
+
+		; jump to custom code
+		movea.l	wait_addr(a0),a1
+		jmp	(a1)

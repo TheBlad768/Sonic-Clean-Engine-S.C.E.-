@@ -152,15 +152,15 @@ Game_mode						ds.b 1
 							ds.b 1				; even
 V_int_flag =						*
 V_int_ptr						ds.l 1
-Ctrl_1_logical =					*
+Ctrl_1_logical =					*				; both held and pressed
 Ctrl_1_held_logical					ds.b 1
 Ctrl_1_pressed_logical					ds.b 1
-Ctrl_1 =						*
-Ctrl_1_held						ds.b 1
-Ctrl_1_pressed						ds.b 1
-Ctrl_2 =						*
-Ctrl_2_held						ds.b 1
-Ctrl_2_pressed						ds.b 1
+Ctrl_1 =						*				; both held and pressed
+Ctrl_1_held						ds.b 1				; all held buttons
+Ctrl_1_pressed						ds.b 1				; buttons being pressed newly this frame
+Ctrl_2 =						*				; both held and pressed
+Ctrl_2_held						ds.b 1				; all held buttons
+Ctrl_2_pressed						ds.b 1				; buttons being pressed newly this frame
 Ctrl_2_logical =					*				; both held and pressed
 Ctrl_2_held_logical					ds.b 1
 Ctrl_2_pressed_logical					ds.b 1

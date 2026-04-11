@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Misc subroutine
+; Init object
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -14,9 +14,16 @@ SetUp_ObjAttributes3:
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
 		move.b	(a1)+,collision_flags(a0)					; collision number
+
+		; set
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		addq.b	#2,routine(a0)							; next routine
 		rts
+
+; ---------------------------------------------------------------------------
+; Init object for perform DPLC (slot system)
+; Create the object only in the current slot
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -67,6 +74,10 @@ SetUp_ObjAttributesSlotted:
 		bset	d0,status(a0)							; turn object slotting on
 		rts
 
+; ---------------------------------------------------------------------------
+; Perform DPLC (custom format)
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Perform_DPLC:
@@ -105,6 +116,10 @@ Perform_DPLC:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Set indexed velocity
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Set_IndexedVelocity:
@@ -113,6 +128,8 @@ Set_IndexedVelocity:
 		add.w	d1,d1								; multiply by 2
 		add.w	d1,d0
 		move.l	.index(pc,d0.w),x_vel(a0)
+
+		; check flipx
 		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	.return
 		neg.w	x_vel(a0)
@@ -161,89 +178,9 @@ Set_IndexedVelocity:
 		dc.w -$200, -$300	; 90
 		dc.w $200, -$300	; 94
 
-; =============== S U B R O U T I N E =======================================
-
-Release_PlayerFromObject:
-
-		; clear push
-		moveq	#pushing_mask,d0
-		and.b	status(a0),d0							; is Sonic or Tails pushing the object?
-		beq.s	.return								; if not, branch
-		bclr	#p1_pushing_bit,status(a0)
-		beq.s	.return
-		lea	(Player_1).w,a1							; a1=character
-		bclr	#status.player.pushing,status(a1)
-		move.w	#bytes_to_word(AniIDSonAni_Walk,AniIDSonAni_Run),anim(a1)	; reset player anim
-
-.return
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Displace_PlayerOffObject:
-
-		; clear standing
-		moveq	#standing_mask,d0
-		and.b	status(a0),d0							; is Sonic or Tails standing on the object?
-		beq.s	.return								; if not, branch
-		bclr	#p1_standing_bit,status(a0)
-		beq.s	.return
-		lea	(Player_1).w,a1							; a1=character
-		bclr	#status.player.on_object,status(a1)
-		bset	#status.player.in_air,status(a1)
-
-.return
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Go_CheckPlayerRelease:
-		movem.l	d7-a0/a2-a3,-(sp)						; save the registers to the stack
-		lea	(Player_1).w,a1							; a1=character
-		btst	#status.player.on_object,status(a1)
-		beq.s	.notp1
-		movea.w	interact(a1),a0							; a0=object
-		bsr.w	CheckPlayerReleaseFromObj
-
-.notp1
-		movem.l	(sp)+,d7-a0/a2-a3						; return saved registers from the stack
-		rts
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_Song_Fade_Transition:
-		music	mus_FadeOut							; fade out music
-		move.w	#(2*60)-30,wait_timer(a0)					; fade time
-		move.l	#.wait,code_addr(a0)
-
-.return
-		rts
 ; ---------------------------------------------------------------------------
-
-.wait
-		subq.w	#1,wait_timer(a0)						; subtract 1 from fade delay
-		bpl.s	.return								; if fade still remains, branch
-		move.b	subtype(a0),d0
-		move.b	d0,(Current_music+1).w
-		bsr.w	Play_Music							; play music
-		bra.w	Delete_Current_Object
-
-; =============== S U B R O U T I N E =======================================
-
-Obj_Song_Fade_ToLevelMusic:
-		music	mus_FadeOut							; fade out music
-		move.w	#2*60,wait_timer(a0)						; fade time
-		move.l	#.wait,code_addr(a0)
-
-.return
-		rts
+; Restore level music
 ; ---------------------------------------------------------------------------
-
-.wait
-		subq.w	#1,wait_timer(a0)						; subtract 1 from fade delay
-		bpl.s	.return								; if fade still remains, branch
-		bsr.s	Restore_LevelMusic
-		bra.w	Delete_Current_Object
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -258,6 +195,10 @@ Restore_LevelMusic:
 
 .play
 		bra.w	Play_Music							; play music
+
+; ---------------------------------------------------------------------------
+; Hurt character
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -284,6 +225,10 @@ HurtCharacter_Directly:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Enemy defeated
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 EnemyDefeated:
@@ -294,8 +239,8 @@ EnemyDefeated:
 
 		; check
 		move.w	y_pos(a1),d0
-		cmp.w	y_pos(a0),d0
-		bhs.s	.bounceup
+		cmp.w	y_pos(a0),d0							; is the object above Sonic?
+		bhs.s	.bounceup							; if yes, branch
 		neg.w	y_vel(a1)
 		rts
 ; ---------------------------------------------------------------------------
@@ -309,22 +254,26 @@ EnemyDefeated:
 		subi.w	#$100,y_vel(a1)							; bounce up
 		rts
 
+; ---------------------------------------------------------------------------
+; Enemy defeat add score
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 EnemyDefeat_Score:
 		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
 		clr.b	collision_flags(a0)
-		moveq	#0,d0
-		move.w	(Chain_bonus_counter).w,d0
-		addq.w	#2,(Chain_bonus_counter).w
-		cmpi.w	#6,d0
-		blo.s	.notreachedlimit
-		moveq	#6,d0
+		moveq	#0,d0								; clear d0 for HUD_AddToScore
+		move.w	(Chain_bonus_counter).w,d0					; get copy of chain bonus counter
+		addq.w	#2,(Chain_bonus_counter).w					; add 2 to item bonus counter
+		cmpi.w	#(Enemy_Points_end-Enemy_Points)-2,d0				; has the counter already surpassed 5?
+		blo.s	.notreachedlimit						; if not, branch
+		moveq	#(Enemy_Points_end-Enemy_Points)-2,d0				; cap counter at 6
 
 .notreachedlimit
 		move.w	d0,explosion.bonus_counter(a0)
 		lea	Enemy_Points(pc),a2
-		move.w	(a2,d0.w),d0
+		move.w	(a2,d0.w),d0							; get appropriate number of points
 		cmpi.w	#16*2,(Chain_bonus_counter).w					; have 16 enemies been destroyed?
 		blo.s	.notreachedlimit2						; if not, branch
 		move.w	#1000,d0							; fix bonus to 10000
@@ -334,9 +283,13 @@ EnemyDefeat_Score:
 		move.l	#Obj_Explosion,code_addr(a0)					; change object to explosion
 		bra.w	HUD_AddToScore
 
+; ---------------------------------------------------------------------------
+; Hurt character (without damage)
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
-HurtCharacter_NoDamage:
+HurtCharacter_WithoutDamage:
 		lea	(Player_1).w,a1							; a1=character
 		move.b	#PlayerID_Hurt,routine(a1)					; hit animation
 		bclr	#status.player.on_object,status(a1)
@@ -345,7 +298,11 @@ HurtCharacter_NoDamage:
 		move.l	#words_to_long(-$200,-$300),x_vel(a1)				; set speed of player
 		clr.w	ground_vel(a1)							; zero out inertia
 		move.b	#AniIDSonAni_Hurt,anim(a1)					; set falling animation
-		sfx	sfx_Death,1
+		sfx	sfx_Death,1							; play death sound
+
+; ---------------------------------------------------------------------------
+; Launch character
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -358,6 +315,10 @@ LaunchCharacter:
 		move.b	#AniIDSonAni_Spring,anim(a1)					; change Sonic's animation to "spring" ($10)
 		move.b	#PlayerID_Control,routine(a1)					; set character to airborne state
 		sfx	sfx_Spring,1							; play spring sound
+
+; ---------------------------------------------------------------------------
+; Check player attack
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -393,6 +354,10 @@ Check_PlayerAttack:
 		moveq	#0,d0								; player doesn't attack
 		rts
 
+; ---------------------------------------------------------------------------
+; Check player collision
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Check_PlayerCollision:
@@ -402,7 +367,7 @@ Check_PlayerCollision:
 		andi.w	#3,d0
 		add.w	d0,d0								; multiply by 2
 		movea.w	.players(pc,d0.w),a1
-		move.w	a1,parent4(a0)
+		move.w	a1,parent4(a0)							; save player address
 		moveq	#1,d1								; set touch
 
 .return
@@ -410,6 +375,10 @@ Check_PlayerCollision:
 ; ---------------------------------------------------------------------------
 
 .players	dc.w Player_1&$FFFF, Player_1&$FFFF, Player_1&$FFFF, Player_1&$FFFF
+
+; ---------------------------------------------------------------------------
+; Load level results
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -432,6 +401,10 @@ Load_LevelResults:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Set player ending pose
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Set_PlayerEndingPose:
@@ -451,8 +424,8 @@ Set_PlayerEndingPose:
 		move.w	default_y_radius(a1),y_radius(a1)				; set y_radius and x_radius
 		sub.b	default_y_radius(a1),d0
 		ext.w	d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d0
 
 .notgrav
@@ -461,12 +434,9 @@ Set_PlayerEndingPose:
 .return
 		rts
 
-; =============== S U B R O U T I N E =======================================
-
-Stop_Object:
-		clr.l	x_vel(a1)
-		clr.w	ground_vel(a1)
-		rts
+; ---------------------------------------------------------------------------
+; Restore player control
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -481,6 +451,10 @@ Restore_PlayerControl2:
 		clr.b	anim_frame_timer(a1)
 		rts
 
+; ---------------------------------------------------------------------------
+; Start new level
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 StartNewLevel:
@@ -492,83 +466,166 @@ StartNewLevel:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Play sfx continuous
+; ---------------------------------------------------------------------------
+;
+; Input:
+; d0 = sfx id
+; d1 = wait count
+
 ; =============== S U B R O U T I N E =======================================
 
 Play_SFX_Continuous:
+		moveq	#$F,d1								; play sound every 16th frame
+
+.main
 		and.b	(V_int_run_count+3).w,d1
 		bne.s	StartNewLevel.return
 		bra.w	Play_SFX							; play continuous sfx
 
-; =============== S U B R O U T I N E =======================================
-
-Wait_NewDelay:
-		subq.w	#1,wait_timer(a0)
-		bmi.s	.end
-		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
-
-.end
-		bclr	#render_flags.on_screen,render_flags(a0)
-		move.w	#(2*60)-1,wait_timer(a0)
-
-		; jump
-		movea.l	wait_addr(a0),a1
-		jmp	(a1)
-
-; =============== S U B R O U T I N E =======================================
-
-Wait_FadeToLevelMusic:
-		subq.w	#1,wait_timer(a0)
-		bmi.s	.end
-		bra.w	Draw_Sprite
+; Player intro right move
 ; ---------------------------------------------------------------------------
-
-.end
-		bclr	#render_flags.on_screen,render_flags(a0)
-		move.w	#(2*60)-1,wait_timer(a0)
-
-		; create
-		bsr.w	Create_New_Object
-		bne.s	.notfree
-		move.l	#Obj_Song_Fade_ToLevelMusic,code_addr(a1)
-
-.notfree
-
-		; jump
-		movea.l	wait_addr(a0),a1
-		jmp	(a1)
 
 ; =============== S U B R O U T I N E =======================================
 
 Player_IntroRightMove:
 		move.w	#bytes_to_word(btnR,btnR),d0					; set right move
-		tst.w	wait_timer(a0)
-		beq.s	.notjump
-		subq.w	#1,wait_timer(a0)
+		tst.w	wait_timer(a0)							; is timer over?
+		beq.s	.notjump							; if yes, branch
+		subq.w	#1,wait_timer(a0)						; subtract 1
 		move.w	#bytes_to_word(btnA+btnR,btnR),d0				; keep jumping
 
 .notjump
 		btst	#status.player.pushing,status(a1)				; player hitting a solid?
 		beq.s	.notpush							; if not, branch
-		move.w	#$1F,wait_timer(a0)
+		move.w	#$1F,wait_timer(a0)						; set timer
 		move.w	#bytes_to_word(btnA+btnR,btnA+btnR),d0				; set player jump
 
 .notpush
 		move.w	d0,(Ctrl_1_logical).w
 		rts
 
+; ---------------------------------------------------------------------------
+; Check left/right controller press
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Check_LRControllerShake:
+
+		; wait
+		subq.b	#1,objoff_3D(a0)						; decrement timer
+		bpl.s	.skip								; if time remains, branch
+		move.w	#bytes_to_word((6-1),(1*60)),objoff_3C(a0)			; reset direction changes counter and timer
+
+.skip
+		movea.w	objoff_3E(a0),a2						; load controller address to a2
+
+		; check buttons
+		moveq	#btnLR,d0							; mask for left/right buttons
+		and.w	(a2),d0								; is left/right being pressed?
+		beq.s	.return								; if not, branch
+		move.w	objoff_3A(a0),d1						; load previous controller state
+		move.w	d0,objoff_3A(a0)						; save current controller state
+
+		; check buttons changes
+		andi.w	#btnLR,d1							; mask for left/right buttons
+		eor.w	d1,d0								; has direction changes counter changed?
+		beq.s	.return								; if not, branch
+
+		; wait
+		subq.b	#1,objoff_3C(a0)						; decrement remaining required direction changes
+		bmi.s	.return								; if minus, branch (success)
+
+		; fail
+		moveq	#0,d0								; set flag to 0
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
+; Subtract ring from the player
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+SubtractRings_Process:
+
+		; wait
+		subq.w	#1,wait_timer(a0)						; decrement timer
+		bpl.s	.check								; if time remains, branch
+		move.w	#(1*60)-1,wait_timer(a0)					; reset timer
+
+		; this checks if the ring counter needs to be blanked
+		; for example, this ticks '10' down to ' 9' instead of '19' (yes, this does happen)
+		ori.b	#1,(Update_HUD_ring_count).w					; update ring counter
+		bset	#7,state_flags(a0)
+		move.w	(Ring_count).w,d0
+		subq.w	#1,d0
+		bmi.s	.killplayer
+		beq.s	.resetHUD
+		cmpi.w	#10,(Ring_count).w
+		beq.s	.resetHUD
+		cmpi.w	#100,(Ring_count).w
+		bne.s	.updateHUD
+
+.resetHUD
+		ori.b	#$80,(Update_HUD_ring_count).w					; re-init ring counter
+
+.updateHUD
+		move.w	d0,(Ring_count).w
+		sfx	sfx_RingRight							; play ring sound
+
+		; fail
+		moveq	#0,d0								; set flag to 0
+		rts
+; ---------------------------------------------------------------------------
+
+.check
+		bclr	#7,state_flags(a0)
+		beq.s	.fail
+		andi.b	#~(1)&$FF,(Update_HUD_ring_count).w
+
+.fail
+
+		; fail
+		moveq	#0,d0								; set flag to 0
+		rts
+; ---------------------------------------------------------------------------
+
+.killplayer
+		movea.w	a0,a2								; load current object to a2
+		movea.w	parent4(a0),a1							; a1=character
+		movea.w	a1,a0								; load player to a0
+		jsr	(Kill_Character).l						; "
+		movea.w	a2,a0
+
+		; success
+		moveq	#1,d0								; set flag to 1
+		rts
+
+; ---------------------------------------------------------------------------
+; Boss defeated
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 BossDefeated_StopTimer:
-		clr.b	(Update_HUD_timer).w
+		clr.b	(Update_HUD_timer).w						; stop update time counter
 
 BossDefeated:
-		move.w	#$40-1,wait_timer(a0)
+		move.w	#$40-1,wait_timer(a0)						; set timer
 
 BossDefeated_NoTime:
 		bclr	#render_flags.on_screen,render_flags(a0)
 		moveq	#100,d0
 		bra.w	HUD_AddToScore							; add 1000 to score
+
+; ---------------------------------------------------------------------------
+; Boss flash
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -586,40 +643,48 @@ BossFlash:
 		dc.w 8, $866, cBlack
 		dc.w $888, $CCC, cWhite
 
+; ---------------------------------------------------------------------------
+; Copy colors to the palette line
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 CopyWordData_8:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_7:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_6:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_5:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_4:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_3:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_2:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 
 CopyWordData_1:
-		movea.w	(a1)+,a3
-		move.w	(a2)+,(a3)+
+		movea.w	(a1)+,a3							; load palette address
+		move.w	(a2)+,(a3)+							; set color
 		rts
+
+; ---------------------------------------------------------------------------
+; Reset players and objects position
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
