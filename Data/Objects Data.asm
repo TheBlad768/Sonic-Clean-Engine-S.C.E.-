@@ -35,6 +35,7 @@
 		include "Objects/Main/Start New Level/Start New Level.asm"
 		include "Objects/Main/Level Sizes/Level Sizes.asm"
 		include "Objects/Main/Palette Script/Palette Script.asm"
+		include "Objects/Main/Song Fade/Song Fade.asm"
 
 ; ===========================================================================
 ; Environment objects data

@@ -974,8 +974,8 @@ CalcRoomInFront:
 		move.w	y_vel(a0),d1
 
 		; check gravity
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d1								; reverse it
 
 .notgrav
@@ -1021,8 +1021,8 @@ loc_F68A:
 		subq.w	#5,d2								; if so, move push sensor up a bit
 
 		; check gravity
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.skip
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.skip								; if not, branch
 		subi.w	#-(5+5),d2
 
 .skip

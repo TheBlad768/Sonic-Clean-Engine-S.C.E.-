@@ -199,8 +199,8 @@ MoveCameraY:
 		move.b	y_radius(a0),d1
 		sub.b	default_y_radius(a0),d1
 		ext.w	d1
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d1
 
 .notgrav

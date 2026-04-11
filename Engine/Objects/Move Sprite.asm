@@ -16,8 +16,8 @@ MoveSprite:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_TestGravity:
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	MoveSprite
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	MoveSprite							; if not, branch
 
 MoveSprite_ReverseGravity:
 		movem.w	x_vel(a0),d0/d2							; load xy speed
@@ -42,8 +42,8 @@ MoveSprite2:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite2_TestGravity:
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	MoveSprite2
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	MoveSprite2							; if not, branch
 
 MoveSprite2_ReverseGravity:
 		movem.w	x_vel(a0),d0/d2							; load xy speed
@@ -57,7 +57,7 @@ MoveSprite2_ReverseGravity:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_LightGravity:
-		moveq	#$20,d1
+		moveq	#$20,d1								; set vertical speed
 
 MoveSprite_CustomGravity:
 		movem.w	x_vel(a0),d0/d2							; load xy speed
@@ -71,7 +71,7 @@ MoveSprite_CustomGravity:
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_NormGravity_Parent:
-		moveq	#$38,d1
+		moveq	#$38,d1								; set vertical speed
 
 MoveSprite_CustomGravity_Parent:
 		movem.w	x_vel(a1),d0/d2							; load xy speed
@@ -128,4 +128,15 @@ MoveSprite2_Absolute_Reserve:
 		movem.l	objoff_30(a0),d0/d2						; load xy speed
 		add.l	d0,x_pos(a0)							; add to x-axis position
 		add.l	d2,y_pos(a0)							; add to y-axis position
+		rts
+
+; ---------------------------------------------------------------------------
+; Stop moving object
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Stop_Object:
+		clr.l	x_vel(a1)							; clear velocity
+		clr.w	ground_vel(a1)							; clear ground velocity
 		rts

@@ -35,11 +35,21 @@ sfxcont macro track,wait,terminate,byte
     else
 	move.w	#(track),d0
     endif
+    if (wait)<>$F
 	moveq	#signextendB(wait),d1
+    endif
     if ("terminate"="0") || ("terminate"="")
-	jsr	(Play_SFX_Continuous).w
+	if (wait)<>$F
+	    jsr	(Play_SFX_Continuous.main).w
+	else
+	    jsr	(Play_SFX_Continuous).w
+	endif
     else
-	jmp	(Play_SFX_Continuous).w
+	if (wait)<>$F
+	    jmp	(Play_SFX_Continuous.main).w
+	else
+	    jmp	(Play_SFX_Continuous).w
+	endif
     endif
     endm
 

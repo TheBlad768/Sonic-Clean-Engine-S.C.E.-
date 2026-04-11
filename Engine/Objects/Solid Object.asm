@@ -398,8 +398,8 @@ SolidObject_cont:
 		add.w	d3,d3								; calculate object's width
 		cmp.w	d3,d0
 		bhi.w	SolidObject_TestClearPush					; branch if Sonic is outside the object's right edge
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 
 		; reverse gravity
 		move.b	default_y_radius(a1),d4
@@ -592,8 +592,8 @@ loc_1E10E:
 		bset	#5,status_tertiary(a1)
 
 loc_1E11A:
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d3
 
 .notgrav
@@ -641,8 +641,8 @@ SolidObject_Landed:
 		bmi.s	SolidObject_Miss						; if yes, branch
 		sub.w	d3,y_pos(a1)							; correct Sonic's position
 		subq.w	#1,y_pos(a1)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d3
 		addq.w	#2,y_pos(a1)
 
@@ -666,8 +666,8 @@ SolidObject_Miss:
 ; =============== S U B R O U T I N E =======================================
 
 MvSonicOnPtfm:
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_1E1AA
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_1E1AA							; if yes, branch
 		move.w	y_pos(a0),d0
 		sub.w	d3,d0
 		bra.s	loc_1E1CA
@@ -984,8 +984,8 @@ loc_1E42E:
 		bhs.s	sub_1E3AE.return
 
 loc_1E44C:
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_1E4D6
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_1E4D6							; if yes, branch
 		move.w	y_pos(a0),d0
 		sub.w	d3,d0
 
@@ -1106,6 +1106,10 @@ SolidObjCheckSloped:
 		sub.w	d3,d0
 		bra.w	loc_1E45A
 
+; ---------------------------------------------------------------------------
+; Check player release from object
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 CheckPlayerReleaseFromObj:
@@ -1127,6 +1131,66 @@ CheckPlayerReleaseFromObj:
 
 .end
 		moveq	#0,d4
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
+; Check player release
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Go_CheckPlayerRelease:
+		movem.l	d7-a0/a2-a3,-(sp)						; save the registers to the stack
+		lea	(Player_1).w,a1							; a1=character
+		btst	#status.player.on_object,status(a1)
+		beq.s	.notp1
+		movea.w	interact(a1),a0							; a0=object
+		bsr.w	CheckPlayerReleaseFromObj
+
+.notp1
+		movem.l	(sp)+,d7-a0/a2-a3						; return saved registers from the stack
+		rts
+
+; ---------------------------------------------------------------------------
+; Release player from object
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Release_PlayerFromObject:
+
+		; clear push
+		moveq	#pushing_mask,d0
+		and.b	status(a0),d0							; is Sonic or Tails pushing the object?
+		beq.s	.return								; if not, branch
+		bclr	#p1_pushing_bit,status(a0)
+		beq.s	.return
+		lea	(Player_1).w,a1							; a1=character
+		bclr	#status.player.pushing,status(a1)
+		move.w	#bytes_to_word(AniIDSonAni_Walk,AniIDSonAni_Run),anim(a1)	; reset player anim
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
+; Displace player off object
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Displace_PlayerOffObject:
+
+		; clear standing
+		moveq	#standing_mask,d0
+		and.b	status(a0),d0							; is Sonic or Tails standing on the object?
+		beq.s	.return								; if not, branch
+		bclr	#p1_standing_bit,status(a0)
+		beq.s	.return
+		lea	(Player_1).w,a1							; a1=character
+		bclr	#status.player.on_object,status(a1)
+		bset	#status.player.in_air,status(a1)
 
 .return
 		rts
