@@ -22,7 +22,6 @@ Handle_Onscreen_Water_Height:
 		move.w	d0,(Water_level).w
 
 		; calculate distance between water surface and top of screen
-		move.w	(Water_level).w,d0
 		sub.w	(Camera_Y_pos).w,d0
 		beq.s	.set
 		bhs.s	.check

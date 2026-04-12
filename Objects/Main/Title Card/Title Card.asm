@@ -4,6 +4,19 @@
 
 ; dynamic object variables
 
+	dsset animations								; pretend we're in the RAM
+
+titlecard.elements_count		ds.b 1						; (1 byte)
+titlecard.exit_phase			ds.b 1						; (1 byte)
+titlecard.elements_moving_flag		ds.b 1						; (1 byte)
+titlecard.in_level_flag			ds.b 1						; (1 byte)
+
+titlecard.queue_id =			collision_flags					; (1 byte)
+titlecard.destination =			parent3						; (2 bytes)
+titlecard.process =			parent2						; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 TitleCardAct_Index:
@@ -28,9 +41,9 @@ Obj_TitleCard:
 		jsr	(Queue_KosPlus_Module).w
 
 		; next
-		move.w	#1*60+30,objoff_2E(a0)						; set wait value
-		clr.w	objoff_32(a0)
-		st	objoff_48(a0)
+		move.w	#(1*60)+30,wait_timer(a0)					; set wait value
+		clr.w	titlecard.elements_count(a0)					; clear elements_count and exit_phase
+		st	titlecard.process(a0)						; set Title Card process flag
 		move.l	#.create,code_addr(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -38,21 +51,21 @@ Obj_TitleCard:
 .create
 		tst.w	(KosPlus_modules_left).w
 		bne.s	.return								; don't load the objects until the art has been loaded
-		jsr	(Create_New_Object_3).w
-		bne.s	.return
-		lea	ObjArray_TtlCard(pc),a2
+		jsr	(Create_New_Object_3).w						; find new object slot
+		bne.s	.return								; branch, if there are no free object slots here
+		lea	ObjArray_TitleCard(pc),a2
 		move.w	(a2)+,d1							; make objects
 
 .loop
-		addq.w	#1,objoff_30(a0)
-		move.l	(a2)+,code_addr(a1)
-		move.w	(a2)+,objoff_46(a1)
+		addq.b	#1,titlecard.elements_count(a0)					; number of elements
+		move.l	(a2)+,code_addr(a1)						; object code address
+		move.w	(a2)+,titlecard.destination(a1)					; destination
 		move.w	(a2)+,x_pos(a1)
 		move.w	(a2)+,y_pos(a1)
 		move.b	(a2)+,mapping_frame(a1)
 		move.b	(a2)+,width_pixels(a1)
 		move.w	(a2)+,d2
-		move.b	d2,objoff_28(a1)
+		move.b	d2,titlecard.queue_id(a1)					; place in exit queue
 		move.b	#setBit(render_flags.multi_sprite),render_flags(a1)
 		move.l	#Map_TitleCard,mappings(a1)
 		move.w	#make_art_tile($500,0,FALSE),art_tile(a1)
@@ -70,54 +83,52 @@ Obj_TitleCard:
 ; ---------------------------------------------------------------------------
 
 .wait
-		tst.w	objoff_34(a0)
-		beq.s	.branch
-		clr.w	objoff_34(a0)
+		tst.b	titlecard.elements_moving_flag(a0)				; are the elements still moving in?
+		beq.s	.branch								; if not, branch
+		clr.b	titlecard.elements_moving_flag(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .branch
-		tst.w	objoff_3E(a0)
-		beq.s	.skiplevel
+		tst.b	titlecard.in_level_flag(a0)
+		beq.s	.not_in_level
 
 		; reset level flags
 		clr.l	(Timer).w							; if using in-level title card
 		clr.w	(Ring_count).w							; reset HUD rings and timer
 		st	(Update_HUD_timer).w
 		st	(Update_HUD_ring_count).w					; start updating timer and rings again
-		move.b	#30,(Player_1+air_left).w					; reset air
+		move.b	#30,(Player_1+air_left).w					; reset air p1
 		jsr	(Restore_LevelMusic).w						; play music
 
-.skiplevel
-		clr.w	objoff_48(a0)
+.not_in_level
+		sf	titlecard.process(a0)						; clear Title Card process flag
 		move.l	#.wait2,code_addr(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .wait2
-		tst.w	objoff_2E(a0)
+		tst.w	wait_timer(a0)
 		beq.s	.endtimer
-		subq.w	#1,objoff_2E(a0)
+		subq.w	#1,wait_timer(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .endtimer
-		tst.w	objoff_30(a0)
+		tst.b	titlecard.elements_count(a0)					; wait for title screen objects to disappear
 		beq.s	.branch2
-		addq.w	#1,objoff_32(a0)
+		addq.b	#1,titlecard.exit_phase(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .branch2
-		tst.b	objoff_44(a0)
-		bne.s	.delete
-		tst.w	objoff_3E(a0)
-		beq.s	.skiplevel2
-		st	(End_of_level_flag).w						; if in-level, set end of title card flag
-		bra.s	.skiplevel3
+		tst.b	titlecard.in_level_flag(a0)
+		beq.s	.not_in_level_2
+		st	(End_of_level_flag).w						; if in-level, set end of title card flag. No need to reload PLCs
+		bra.s	.not_in_level_3
 ; ---------------------------------------------------------------------------
 
-.skiplevel2
+.not_in_level_2
 
 		; load second main plc
 		lea	(PLC2_Sonic).l,a5
@@ -125,7 +136,7 @@ Obj_TitleCard:
 		movea.l	(Level_data_addr_RAM.PLC2).w,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w					; load PLC2 art
 
-.skiplevel3
+.not_in_level_3
 		movea.l	(Level_data_addr_RAM.PLCAnimals).w,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w					; load animals art
 		moveq	#1,d0
@@ -133,41 +144,55 @@ Obj_TitleCard:
 		move.b	d0,(Update_HUD_timer).w						; update time counter
 		clr.b	(Ctrl_1_locked).w						; unlock control 1
 
-.delete
+		; delete
 		jmp	(Delete_Current_Object).w
+
+; ---------------------------------------------------------------------------
+; Title Card red banner (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 Obj_TitleCardRedBanner:
 		movea.w	parent2(a0),a1							; a1=parent object
-		move.w	objoff_32(a1),d0
-		beq.s	.loc_2D90A
+
+		; check move
+		move.b	titlecard.exit_phase(a1),d0
+		beq.s	.move_in							; if zero, move in
+
+		; check delete
 		tst.b	render_flags(a0)						; is the object visible on the screen?
-		bmi.s	.loc_2D8FC							; if yes, branch
+		bmi.s	.check_queue							; if yes, branch
 
 		; delete
-		subq.w	#1,objoff_30(a1)
+		subq.b	#1,titlecard.elements_count(a1)					; if offscreen, subtract from number of elements and delete
 		jmp	(Delete_Current_Object).w
 ; ---------------------------------------------------------------------------
 
-.loc_2D8FC
-		cmp.b	objoff_28(a0),d0
-		blo.s	.loc_2D920
-		subi.w	#32,y_pos(a0)
-		bra.s	.loc_2D920
+.check_queue
+		cmp.b	titlecard.queue_id(a0),d0					; level element moving out. Test if value of parent queue matches given queue value
+		blo.s	.draw								; if not, branch
+
+		; move out
+		subi.w	#16*2,y_pos(a0)							; if so, move out
+		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
-.loc_2D90A
+.move_in
 		move.w	y_pos(a0),d0
-		cmp.w	objoff_46(a0),d0
-		beq.s	.loc_2D920
-		addi.w	#16,d0
+		cmp.w	titlecard.destination(a0),d0
+		beq.s	.draw								; if y position has reached destination, don't do anything else
+		addi.w	#16,d0								; level element moving in
 		move.w	d0,y_pos(a0)
-		st	objoff_34(a1)
+		st	titlecard.elements_moving_flag(a1)				; set moving flag
 
-.loc_2D920
+.draw
 		move.b	#screen_height/2,height_pixels(a0)
 		jmp	(Draw_Sprite).w
+
+; ---------------------------------------------------------------------------
+; Title Card name (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -176,37 +201,51 @@ Obj_TitleCardName:
 		add.b	d0,mapping_frame(a0)
 		move.l	#Obj_TitleCardElement,code_addr(a0)
 
+; ---------------------------------------------------------------------------
+; Title Card element (Object)
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_TitleCardElement:
 		movea.w	parent2(a0),a1							; a1=parent object
-		move.w	objoff_32(a1),d0
-		beq.s	.loc_2D984
+
+		; check move
+		move.b	titlecard.exit_phase(a1),d0
+		beq.s	.move_in							; if zero, move in
+
+		; check delete
 		tst.b	render_flags(a0)						; is the object visible on the screen?
-		bmi.s	.loc_2D976							; if yes, branch
+		bmi.s	.check_queue							; if yes, branch
 
 		; delete
-		subq.w	#1,objoff_30(a1)
+		subq.b	#1,titlecard.elements_count(a1)					; if offscreen, subtract from number of elements and delete
 		jmp	(Delete_Current_Object).w
 ; ---------------------------------------------------------------------------
 
-.loc_2D976
-		cmp.b	objoff_28(a0),d0
-		blo.s	.loc_2D99A
-		addi.w	#32,x_pos(a0)
-		bra.s	.loc_2D99A
+.check_queue
+		cmp.b	titlecard.queue_id(a0),d0					; level element moving out. Test if value of parent queue matches given queue value
+		blo.s	.draw								; if not, branch
+
+		; move out
+		addi.w	#32,x_pos(a0)							; if so, move out
+		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
-.loc_2D984
+.move_in
 		move.w	x_pos(a0),d0
-		cmp.w	objoff_46(a0),d0
-		beq.s	.loc_2D99A
-		subi.w	#16,d0
+		cmp.w	titlecard.destination(a0),d0
+		beq.s	.draw
+		subi.w	#16,d0								; level element moving in
 		move.w	d0,x_pos(a0)
-		st	objoff_34(a1)
+		st	titlecard.elements_moving_flag(a1)				; set moving flag
 
-.loc_2D99A
+.draw
 		jmp	(Draw_Sprite).w
+
+; ---------------------------------------------------------------------------
+; Title Card act (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -217,21 +256,21 @@ Obj_TitleCardAct:
 
 		; remove a number of the act, if not needed
 		movea.w	parent2(a0),a1							; a1=parent object
-		subq.w	#1,objoff_30(a1)
+		subq.b	#1,titlecard.elements_count(a1)					; subtract from number of elements and delete
 		jmp	(Delete_Current_Object).w
 ; ---------------------------------------------------------------------------
 
-ObjArray_TtlCard: titlecardresultsheader
-	titlecardresultsobjdata	Obj_TitleCardName, 160, 480, 96, 4, 256, 3		; 1
-	titlecardresultsobjdata	Obj_TitleCardElement, 252, 636, 128, 3, 72, 5		; 2
-	titlecardresultsobjdata	Obj_TitleCardAct, 260, 708, 160, 2, 56, 7		; 3
-	titlecardresultsobjdata	Obj_TitleCardRedBanner, 64, 96, 16-128, 1, 0, 1		; 4
-	titlecardresultsend
+ObjArray_TitleCard: titlecardresultsheader
+		titlecardresultsobjdata	Obj_TitleCardName, 160, 480, 96, 4, 256, 3		; 1
+		titlecardresultsobjdata	Obj_TitleCardElement, 252, 636, 128, 3, 72, 5		; 2
+		titlecardresultsobjdata	Obj_TitleCardAct, 260, 708, 160, 2, 56, 7		; 3
+		titlecardresultsobjdata	Obj_TitleCardRedBanner, 64, 96, 16-128, 1, 0, 1		; 4
+		titlecardresultsend
 
-ObjArray_TtlCardBonus: titlecardresultsheader
-	titlecardresultsobjdata	Obj_TitleCardElement, 72, 264, 104, $13, 256, 1		; 1
-	titlecardresultsobjdata	Obj_TitleCardElement, 168, 360, 104, $14, 256, 1	; 2
-	titlecardresultsend
+ObjArray_TitleCard_Bonus: titlecardresultsheader
+		titlecardresultsobjdata	Obj_TitleCardElement, 72, 264, 104, $13, 256, 1		; 1
+		titlecardresultsobjdata	Obj_TitleCardElement, 168, 360, 104, $14, 256, 1	; 2
+		titlecardresultsend
 
 ; ---------------------------------------------------------------------------
 ; Title Card load letters to VRAM

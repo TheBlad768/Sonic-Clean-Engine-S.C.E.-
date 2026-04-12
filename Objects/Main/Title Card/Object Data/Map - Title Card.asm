@@ -4,7 +4,7 @@
 
 Map_TitleCard:
 		dc.w 0						; null
-		dc.w Map_TitleCard_Banner-Map_TitleCard		; red banner
+		dc.w Map_TitleCard_RedBanner-Map_TitleCard	; red banner
 		dc.w Map_TitleCard_ACT-Map_TitleCard		; ACT
 		dc.w Map_TitleCard_ZONE-Map_TitleCard		; ZONE
 
@@ -13,7 +13,7 @@ Map_TitleCard:
 
 		zonewarning Map_TitleCard.levels,(1*2)
 
-Map_TitleCard_Banner:
+Map_TitleCard_RedBanner:
 		dc.w $10
 		dc.b $58, 9, $80, $10, $FF, $E8
 		dc.b $58, 9, $80, $16, 0, 0

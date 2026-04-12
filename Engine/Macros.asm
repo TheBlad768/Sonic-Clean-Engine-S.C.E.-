@@ -289,9 +289,9 @@ titlecardresultscur := "__LABEL__"
 	dc.w titlecardresultscount___LABEL__						; number of titlecard and results object list (-1)
     endm
 
-titlecardresultsobjdata macro addr,xdest,xpos,ypos,frame,width,exit
-	dc.l addr									; object address
-	dc.w 128+xdest,128+xpos,128+ypos						; x destination, xpos, ypos
+titlecardresultsobjdata macro addr,dest,xpos,ypos,frame,width,exit
+	dc.l addr									; object code address
+	dc.w 128+dest,128+xpos,128+ypos							; destination, xpos, ypos
 	dc.b frame,(width/2)								; mapping frame, width
 	dc.w exit									; place in exit queue
 titlecardresultscount := titlecardresultscount + 1

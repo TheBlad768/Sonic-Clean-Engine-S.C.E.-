@@ -97,7 +97,7 @@ LevelScreen:
 		jsr	(Process_Objects).w
 		jsr	(Render_Sprites).w
 		jsr	(Process_KosPlus_Module_Queue).w
-		tst.w	(Dynamic_object_RAM+(object_size*5)+objoff_48).w		; has title card sequence finished?
+		tst.b	(Dynamic_object_RAM+(object_size*5)+titlecard.process).w	; has title card sequence finished?
 		bne.s	.wait								; if not, branch
 		tst.w	(KosPlus_modules_left).w					; are there any items in the pattern load cue?
 		bne.s	.wait								; if yes, branch
@@ -162,9 +162,13 @@ LevelScreen:
 		jsr	(Animate_Tiles).w
 		move.w	#bytes_to_word(16*2,48-1),(Palette_fade_info).w			; set fade info and fade count
 		jsr	(Pal_FillBlack).w
+
+		; set wait
 		moveq	#22,d0
 		move.w	d0,(Palette_fade_timer).w					; time for Pal_FromBlack
-		move.w	d0,(Dynamic_object_RAM+(object_size*5)+objoff_2E).w		; time for Title Card
+		move.w	d0,(Dynamic_object_RAM+(object_size*5)+wait_timer).w		; time for Title Card
+
+		; set
 		move.w	#$7F00,(Ctrl_1).w
 		move.l	#VInt_Level,(V_int_ptr).w					; set VInt pointer
 		andi.b	#$7F,(Last_star_post_hit).w

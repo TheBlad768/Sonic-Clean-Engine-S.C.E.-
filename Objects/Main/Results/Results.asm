@@ -4,6 +4,17 @@
 
 ; dynamic object variables
 
+	dsset animations								; pretend we're in the RAM
+
+levelresults.elements_count		ds.w 1						; (2 bytes)
+levelresults.exit_phase			ds.w 1						; (2 bytes)
+
+levelresults.side_flag =		routine						; (1 byte)
+levelresults.queue_id =			collision_flags					; (1 byte)
+levelresults.destination =		parent3						; (2 bytes)
+
+	dsreset										; stop pretending and reset the program counter
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_LevelResults:
@@ -76,8 +87,7 @@ Obj_LevelResults:
 		add.w	d1,d0
 		move.w	d0,(Ring_bonus_countdown).w					; get the ring bonus
 		clr.w	(Total_bonus_countup).w
-		move.w	#6*60,objoff_2E(a0)						; wait 6 seconds before starting score counting sequence
-		move.w	#12,objoff_30(a0)
+		move.w	#6*60,wait_timer(a0)						; wait 6 seconds before starting score counting sequence
 		move.l	#.create,code_addr(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -85,21 +95,22 @@ Obj_LevelResults:
 .create
 		tst.w	(KosPlus_modules_left).w
 		bne.s	.return								; don't load the objects until the art has been loaded
-		jsr	(Create_New_Object_3).w
-		bne.s	.return
-		lea	ObjArray_LevResults(pc),a2
+		jsr	(Create_New_Object_3).w						; find new object slot
+		bne.s	.return								; branch, if there are no free object slots here
+		lea	ObjArray_LevelResults(pc),a2
 		move.w	(a2)+,d1							; make objects
 
 .loop
-		move.l	(a2)+,code_addr(a1)
-		move.w	(a2)+,objoff_46(a1)
+		addq.b	#1,levelresults.elements_count(a0)				; number of elements
+		move.l	(a2)+,code_addr(a1)						; object code address
+		move.w	(a2)+,levelresults.destination(a1)				; destination
 		move.w	(a2)+,x_pos(a1)
-		spl	objoff_05(a1)
+		spl	levelresults.side_flag(a1)
 		move.w	(a2)+,y_pos(a1)
 		move.b	(a2)+,mapping_frame(a1)
 		move.b	(a2)+,width_pixels(a1)
 		move.w	(a2)+,d2
-		move.b	d2,objoff_28(a1)
+		move.b	d2,levelresults.queue_id(a1)					; place in exit queue
 		move.b	#setBit(render_flags.multi_sprite),render_flags(a1)
 		move.l	#Map_Results,mappings(a1)
 		move.w	#make_art_tile($500,0,FALSE),art_tile(a1)
@@ -122,12 +133,12 @@ Obj_LevelResults:
 ; ---------------------------------------------------------------------------
 
 .wait
-		tst.w	objoff_2E(a0)
-		beq.s	.countdown
-		subq.w	#1,objoff_2E(a0)
+		tst.w	wait_timer(a0)							; is timer over?
+		beq.s	.countdown							; if yes, branch
+		subq.w	#1,wait_timer(a0)						; subtract 1
 
 		; check timer
-		cmpi.w	#5*60-11,objoff_2E(a0)
+		cmpi.w	#5*60-11,wait_timer(a0)
 		bne.s	.return2							; play after eh, a second or so
 		move.b	#30,(Player_1+air_left).w					; reset air p1
 		st	(Music_results_flag).w
@@ -165,6 +176,8 @@ Obj_LevelResults:
 		tst.w	d0
 		beq.s	.finish								; branch once score has finished counting down
 		jsr	(HUD_AddToScore).w						; add to actual score
+
+		; play sfx
 		moveq	#3,d0
 		and.w	(Level_frame_counter).w,d0
 		bne.s	.return2
@@ -173,40 +186,48 @@ Obj_LevelResults:
 
 .finish
 		sfx	sfx_Register							; play the cash register sound
-		move.w	#3*60,objoff_2E(a0)						; set wait amount
+		move.w	#3*60,wait_timer(a0)						; set wait amount
 		move.l	#.wait2,code_addr(a0)
 
 .wait2
-		tst.w	objoff_2E(a0)
-		beq.s	.endtimer
-		subq.w	#1,objoff_2E(a0)
+		tst.w	wait_timer(a0)							; is timer over?
+		beq.s	.endtimer							; if yes, branch
+		subq.w	#1,wait_timer(a0)						; subtract 1
 
 .return2
 		rts
 ; ---------------------------------------------------------------------------
 
 .endtimer
-		tst.w	objoff_30(a0)							; wait for title screen objects to disappear
+		tst.b	levelresults.elements_count(a0)					; wait for title screen objects to disappear
 		beq.s	.endr
-		addq.w	#1,objoff_32(a0)
+		addq.b	#1,levelresults.exit_phase(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 .endr
 		clr.b	(Music_results_flag).w
 		clr.b	(Level_results_flag).w
+
+		; check
 		tst.b	(Last_act_end_flag).w
-		bne.s	.skiptc
+		bne.s	.delete								; if this is the last act, branch
+
+		; load title card
 		clr.b	(Last_star_post_hit).w
 		move.l	#Obj_TitleCard,code_addr(a0)					; change current object to title card
 		clr.b	routine(a0)
-		st	objoff_3E(a0)
+		st	titlecard.in_level_flag(a0)					; set in-level flag
 		rts
 ; ---------------------------------------------------------------------------
 
-.skiptc
+.delete
 		st	(End_of_level_flag).w						; stop level results flag and set title card finished flag
 		jmp	(Delete_Current_Object).w
+
+; ---------------------------------------------------------------------------
+; Level Results character name (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -217,9 +238,13 @@ Obj_LevResultsCharName:
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_LevResultsGeneral:
+Obj_LevelResultsGeneral:
 		pea	(Draw_Sprite).w
 		bra.s	LevelResults_MoveElement
+
+; ---------------------------------------------------------------------------
+; Level Results time bonus (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -228,12 +253,20 @@ Obj_LevelResultsTimeBonus:
 		move.w	(Time_bonus_countdown).w,d0
 		bra.s	Obj_LevelResultsTotal.draw
 
+; ---------------------------------------------------------------------------
+; Level Results ring bonus (Object)
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Obj_LevelResultsRingBonus:
 		bsr.s	LevelResults_MoveElement
 		move.w	(Ring_bonus_countdown).w,d0
 		bra.s	Obj_LevelResultsTotal.draw
+
+; ---------------------------------------------------------------------------
+; Level Results total (Object)
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -244,17 +277,21 @@ Obj_LevelResultsTotal:
 .draw
 		pea	(Draw_Sprite).w
 
+; ---------------------------------------------------------------------------
+; Level Results display score
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
-LevResults_DisplayScore:
-		move.w	#7,mainspr_childsprites(a0)
-		bsr.s	LevResults_GetDecimalScore
+LevelResults_DisplayScore:
+		move.w	#7,mainspr_childsprites(a0)					; set number of child sprites
+		bsr.s	LevelResults_GetDecimalScore
 		rol.l	#4,d1
 		lea	sub2_x_pos(a0),a1
 		moveq	#-56,d2
 		add.w	x_pos(a0),d2
 		move.w	y_pos(a0),d3
-		moveq	#0,d4
+		moveq	#0,d4								; clear non-draw flag
 		moveq	#7-1,d5
 
 .loop
@@ -265,61 +302,78 @@ LevResults_DisplayScore:
 		move.w	d1,d0
 		andi.w	#$F,d0
 		beq.s	.skip
-		moveq	#1,d4
+		moveq	#1,d4								; set non-draw flag (mapping frame)
 
 .skip
 		add.w	d4,d0
-		move.b	d0,(a1)+							; mapping frame
-		addq.w	#8,d2
+		move.b	d0,(a1)+							; sub2_mapframe
+		addq.w	#8,d2								; move 8 pixels to right
 		dbf	d5,.loop
 		rts
+
+; ---------------------------------------------------------------------------
+; Level Results move element
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
 LevelResults_MoveElement:
 		movea.w	parent2(a0),a1							; a1=parent object
-		move.w	objoff_32(a1),d0
-		beq.s	.loc_2DE38
+
+		; check move
+		move.b	levelresults.exit_phase(a1),d0
+		beq.s	.move_in							; if zero, move in
+
+		; check delete
 		tst.b	render_flags(a0)						; object visible on the screen?
-		bmi.s	.loc_2DE20							; if yes, branch
-		subq.w	#1,objoff_30(a1)						; if offscreen, subtract from number of elements and delete
-		addq.w	#4,sp								; exit from current object
+		bmi.s	.check_queue							; if yes, branch
+
+		; delete
+		subq.b	#1,levelresults.elements_count(a1)				; if offscreen, subtract from number of elements and delete
+		addq.w	#4,sp								; exit from current object (skip Draw_Sprite)
 		jmp	(Delete_Current_Object).w
 ; ---------------------------------------------------------------------------
 
-.loc_2DE20
-		cmp.b	objoff_28(a0),d0						; level element moving out. Test if value of parent queue matches given queue value
-		blo.s	.return
+.check_queue
+		cmp.b	levelresults.queue_id(a0),d0					; level element moving out. Test if value of parent queue matches given queue value
+		blo.s	.return								; if not, branch
+
+		; move out
 		moveq	#-32,d0								; if so, move out
-		tst.b	objoff_05(a0)
-		beq.s	.loc_2DE32
+		tst.b	levelresults.side_flag(a0)
+		beq.s	.move_out_xpos
 		neg.w	d0								; change direction depending on where it came from
 
-.loc_2DE32
+.move_out_xpos
 		add.w	x_pos(a0),d0
-		bra.s	.loc_2DE4A
-; ---------------------------------------------------------------------------
-
-.loc_2DE38
-		moveq	#16,d1								; level element moving in
-		move.w	x_pos(a0),d0
-		cmp.w	objoff_46(a0),d0
-		beq.s	.loc_2DE4A							; if x position has reached destination, don't do anything else
-		blt.s	.loc_2DE48							; see which direction it needs to go
-		neg.w	d1
-
-.loc_2DE48
-		add.w	d1,d0								; add speed to X amount
-
-.loc_2DE4A
 		move.w	d0,x_pos(a0)
 
 .return
 		rts
+; ---------------------------------------------------------------------------
+
+.move_in
+		moveq	#16,d1								; level element moving in
+		move.w	x_pos(a0),d0
+		cmp.w	levelresults.destination(a0),d0
+		beq.s	.move_in_xpos							; if x position has reached destination, don't do anything else
+		blt.s	.x_amount							; see which direction it needs to go
+		neg.w	d1
+
+.x_amount
+		add.w	d1,d0								; add speed to X amount
+
+.move_in_xpos
+		move.w	d0,x_pos(a0)
+		rts
+
+; ---------------------------------------------------------------------------
+; Level Results get decimal score
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-LevResults_GetDecimalScore:
+LevelResults_GetDecimalScore:
 		clr.l	(DecimalScoreRAM).w
 		lea	.decdata(pc),a1
 		moveq	#16-1,d2
@@ -359,20 +413,20 @@ LevResults_GetDecimalScore:
 		tribyte $32768, $16384, $8192, $4096, $2048, $1024, $512, $256, $128, $64, $32, $16, 8, 4, 2, 1
 .decdata
 
-ObjArray_LevResults: titlecardresultsheader
-	titlecardresultsobjdata	Obj_LevResultsCharName, 96, 0-(544+128), 56, $13, 144, 1	; 1
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 176, 0-(464+128), 56, $11, 96, 1		; 2
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 104, 1000, 76, $10, 224, 3		; 3
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 224, 1120, 60, $F, 112, 3		; 4
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 64, 1088, 112, $E, 64, 5			; 5 (bonus (time) HUD)
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 104, 1128, 112, $C, 96, 5		; 6 (time HUD)
-	titlecardresultsobjdata	Obj_LevelResultsTimeBonus, 248, 1272, 112, 1, 128, 5		; 7 (time bonus)
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 64, 1152, 128, $D, 64, 7			; 8 (bonus (ring) HUD)
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 104, 1192, 128, $C, 96, 7		; 9 (ring HUD)
-	titlecardresultsobjdata	Obj_LevelResultsRingBonus, 248, 1336, 128, 1, 128, 7		; 10 (ring bonus)
-	titlecardresultsobjdata	Obj_LevResultsGeneral, 84, 1236, 156, $B, 96, 9			; 11 (total HUD)
-	titlecardresultsobjdata	Obj_LevelResultsTotal, 248, 1400, 156, 1, 128, 9		; 12 (total number)
-	titlecardresultsend
+ObjArray_LevelResults: titlecardresultsheader
+		titlecardresultsobjdata	Obj_LevelResultsCharName, 96, 0-(544+128), 56, $13, 144, 1	; 1
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 176, 0-(464+128), 56, $11, 96, 1	; 2
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 104, 1000, 76, $10, 224, 3		; 3
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 224, 1120, 60, $F, 112, 3		; 4
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 64, 1088, 112, $E, 64, 5		; 5 (bonus (time) HUD)
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 104, 1128, 112, $C, 96, 5		; 6 (time HUD)
+		titlecardresultsobjdata	Obj_LevelResultsTimeBonus, 248, 1272, 112, 1, 128, 5		; 7 (time bonus)
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 64, 1152, 128, $D, 64, 7		; 8 (bonus (ring) HUD)
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 104, 1192, 128, $C, 96, 7		; 9 (ring HUD)
+		titlecardresultsobjdata	Obj_LevelResultsRingBonus, 248, 1336, 128, 1, 128, 7		; 10 (ring bonus)
+		titlecardresultsobjdata	Obj_LevelResultsGeneral, 84, 1236, 156, $B, 96, 9		; 11 (total HUD)
+		titlecardresultsobjdata	Obj_LevelResultsTotal, 248, 1400, 156, 1, 128, 9		; 12 (total number)
+		titlecardresultsend
 ; ---------------------------------------------------------------------------
 
 		; mappings
