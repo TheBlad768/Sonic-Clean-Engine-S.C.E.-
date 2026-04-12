@@ -3,15 +3,22 @@
 ; ---------------------------------------------------------------------------
 
 ; dynamic object variables
-spikes_base_x_pos		= objoff_30	; original x-position
-spikes_base_y_pos		= objoff_32	; original y-position
-spikes_retract_offset		= objoff_34	; actual position relative to base position
-spikes_retract_state		= objoff_36	; 0 = positive offset, 1 = original position
-spikes_retract_timer		= objoff_38	; delay, before spikes move again
-spikes_push_timer		= objoff_3A	; delay, before spikes push again
-spikes_push_max			= objoff_3C	; how many pixels can the spikes be moved
-spikes_push_p1			= objoff_3E	; saved player status
-spikes_push_p2			= objoff_3F	; saved player status
+
+	dsset animations								; pretend we're in the RAM
+
+; main
+spikes.origX				ds.w 1						; original x-axis position (2 bytes)
+spikes.origY				ds.w 1						; original y-axis position (2 bytes)
+spikes.retract_offset			ds.w 1						; actual position relative to base position (2 bytes)
+spikes.retract_state			ds.w 1						; 0 = positive offset, 1 = original position (2 bytes)
+spikes.retract_timer			ds.w 1						; delay, before spikes move again (2 bytes)
+spikes.push_timer			ds.w 1						; how many pixels can the spikes be moved (2 bytes)
+spikes.push_max				ds.w 1						; how many pixels can the spikes be moved (2 bytes)
+
+; players
+spikes.p1_status			ds.b 1						; Sonic's status (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -63,9 +70,9 @@ loc_23FE8:
 		move.l	#sub_2413E,code_addr(a0)
 
 loc_24002:
-		move.w	#32,objoff_3C(a0)						; push time
-		move.w	x_pos(a0),objoff_30(a0)
-		move.w	y_pos(a0),objoff_32(a0)
+		move.w	#32,spikes.push_max(a0)						; push time
+		move.w	x_pos(a0),spikes.origX(a0)
+		move.w	y_pos(a0),spikes.origY(a0)
 		moveq	#$F,d0
 		and.b	subtype(a0),d0
 		add.b	d0,d0
@@ -97,7 +104,7 @@ sub_24090:										; face up or down
 
 .draw
 		moveq	#-$80,d0							; round down to nearest $80
-		and.w	objoff_30(a0),d0						; get object position
+		and.w	spikes.origX(a0),d0						; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -126,7 +133,7 @@ sub_240E2:										; sideways
 
 .draw
 		moveq	#-$80,d0							; round down to nearest $80
-		and.w	objoff_30(a0),d0						; get object position
+		and.w	spikes.origX(a0),d0						; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 
 ; =============== S U B R O U T I N E =======================================
@@ -154,7 +161,7 @@ sub_2413E:
 
 .draw
 		moveq	#-$80,d0							; round down to nearest $80
-		and.w	objoff_30(a0),d0						; get object position
+		and.w	spikes.origX(a0),d0						; get object position
 		jmp	(Sprite_OnScreen_Test2).w
 ; ---------------------------------------------------------------------------
 
@@ -210,12 +217,12 @@ MoveSpikes:
 		beq.s	.notp1
 		move.w	x_pos(a0),d2
 		lea	(Player_1).w,a1							; a1=character
-		move.b	objoff_3E(a0),d0
+		move.b	spikes.p1_status(a0),d0
 		moveq	#p1_pushing_bit,d6
 		bsr.s	.movepush
 
 .notp1
-		move.b	(Player_1+status).w,objoff_3E(a0)
+		move.b	(Player_1+status).w,spikes.p1_status(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -229,14 +236,14 @@ MoveSpikes:
 		beq.s	.return
 
 		; wait
-		subq.w	#1,objoff_3A(a0)
+		subq.w	#1,spikes.push_timer(a0)
 		bpl.s	.return
-		move.w	#16,objoff_3A(a0)
+		move.w	#16,spikes.push_timer(a0)
 
 		; push max
-		tst.w	objoff_3C(a0)
+		tst.w	spikes.push_max(a0)
 		beq.s	.return
-		subq.w	#1,objoff_3C(a0)
+		subq.w	#1,spikes.push_max(a0)
 		addq.w	#1,x_pos(a0)
 		addq.w	#1,x_pos(a1)
 
@@ -248,8 +255,8 @@ MoveSpikes:
 .vertical
 		bsr.s	MoveSpikes_Delay
 		moveq	#0,d0
-		move.b	objoff_34(a0),d0
-		add.w	objoff_32(a0),d0						; apply offset to y-position
+		move.b	spikes.retract_offset(a0),d0
+		add.w	spikes.origY(a0),d0						; apply offset to y-position
 		move.w	d0,y_pos(a0)
 		rts
 
@@ -258,17 +265,17 @@ MoveSpikes:
 .horizontal
 		bsr.s	MoveSpikes_Delay
 		moveq	#0,d0
-		move.b	objoff_34(a0),d0
-		add.w	objoff_30(a0),d0						; apply offset to x-position
+		move.b	spikes.retract_offset(a0),d0
+		add.w	spikes.origX(a0),d0						; apply offset to x-position
 		move.w	d0,x_pos(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 MoveSpikes_Delay:
-		tst.w	objoff_38(a0)							; is it time for spikes to move again?
+		tst.w	spikes.retract_timer(a0)					; is it time for spikes to move again?
 		beq.s	.chkdir								; if yes, branch
-		subq.w	#1,objoff_38(a0)						; else, decrement timer
+		subq.w	#1,spikes.retract_timer(a0)					; else, decrement timer
 		bne.s	.return								; branch, if timer didn't reach 0
 		tst.b	render_flags(a0)						; are spikes on screen?
 		bpl.s	.return								; if not, branch
@@ -276,22 +283,22 @@ MoveSpikes_Delay:
 ; ---------------------------------------------------------------------------
 
 .chkdir
-		tst.w	objoff_36(a0)							; do spikes need to move away from initial position?
+		tst.w	spikes.retract_state(a0)					; do spikes need to move away from initial position?
 		beq.s	.retract							; if yes, branch
-		subi.w	#$800,objoff_34(a0)						; subtract 8 pixels from offset
+		subi.w	#$800,spikes.retract_offset(a0)					; subtract 8 pixels from offset
 		bhs.s	.return								; branch, if offset is not yet 0
-		clr.l	objoff_34(a0)							; switch state
-		move.w	#60,objoff_38(a0)						; reset timer
+		clr.l	spikes.retract_offset(a0)					; switch state
+		move.w	#1*60,spikes.retract_timer(a0)					; reset timer
 		rts
 ; ---------------------------------------------------------------------------
 
 .retract
-		addi.w	#$800,objoff_34(a0)						; add 8 pixels to offset
-		cmpi.w	#$2000,objoff_34(a0)						; is offset the width of one spike block (32 pixels)?
+		addi.w	#$800,spikes.retract_offset(a0)					; add 8 pixels to offset
+		cmpi.w	#$2000,spikes.retract_offset(a0)				; is offset the width of one spike block (32 pixels)?
 		blo.s	.return								; if not, branch
-		move.w	#$2000,objoff_34(a0)
-		move.w	#1,objoff_36(a0)						; switch state
-		move.w	#60,objoff_38(a0)						; reset timer
+		move.w	#$2000,spikes.retract_offset(a0)
+		move.w	#1,spikes.retract_state(a0)					; switch state
+		move.w	#1*60,spikes.retract_timer(a0)					; reset timer
 
 .return
 		rts
