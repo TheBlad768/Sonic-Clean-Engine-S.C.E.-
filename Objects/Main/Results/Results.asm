@@ -6,8 +6,8 @@
 
 	dsset animations								; pretend we're in the RAM
 
-levelresults.elements_count		ds.w 1						; (2 bytes)
-levelresults.exit_phase			ds.w 1						; (2 bytes)
+levelresults.elements_count		ds.b 1						; (1 byte)
+levelresults.exit_phase			ds.b 1						; (1 byte)
 
 levelresults.side_flag =		routine						; (1 byte)
 levelresults.queue_id =			collision_flags					; (1 byte)
