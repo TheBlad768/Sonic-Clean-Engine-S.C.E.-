@@ -231,10 +231,10 @@ Obj_LevelResults:
 
 ; =============== S U B R O U T I N E =======================================
 
-Obj_LevResultsCharName:
+Obj_LevelResultsCharName:
 
 		; Sonic only
-		move.l	#Obj_LevResultsGeneral,code_addr(a0)
+		move.l	#Obj_LevelResultsGeneral,code_addr(a0)
 
 ; =============== S U B R O U T I N E =======================================
 

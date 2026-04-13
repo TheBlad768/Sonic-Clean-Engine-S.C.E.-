@@ -10,9 +10,6 @@
 spring.strength				ds.w 1						; speed applied on player (2 bytes)
 spring.origX				ds.w 1						; original x-axis position (2 bytes)
 spring.origY				ds.w 1						; original y-axis position (2 bytes)
-spring.retract_offset			ds.w 1						; actual position relative to base position (2 bytes)
-spring.retract_state			ds.w 1						; 0 = positive offset, 1 = original position (2 bytes)
-spring.retract_timer			ds.w 1						; delay, before spring move again (2 bytes)
 
 	dsreset										; stop pretending and reset the program counter
 
