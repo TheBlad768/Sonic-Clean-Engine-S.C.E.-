@@ -60,8 +60,8 @@ Obj_Spikes:
 
 loc_23FE8:
 		move.b	status(a0),d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		eori.b	#setBit(status.npc.y_flip),d0
 
 .notgrav

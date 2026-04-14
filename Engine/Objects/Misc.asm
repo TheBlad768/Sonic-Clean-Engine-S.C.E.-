@@ -494,7 +494,7 @@ Player_IntroRightMove:
 		move.w	#bytes_to_word(btnR,btnR),d0					; set right move
 		tst.w	wait_timer(a0)							; is timer over?
 		beq.s	.notjump							; if yes, branch
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 		move.w	#bytes_to_word(btnA+btnR,btnR),d0				; keep jumping
 
 .notjump

@@ -115,8 +115,8 @@ Check_CameraInBoundary:
 		bne.s	.checky								; if yes, skip
 
 		; wait
-		subq.w	#1,wait_timer(a0)						; subtract 1
-		bpl.s	.checky								; if timer has run out, branch
+		subq.w	#1,wait_timer(a0)						; decrement timer
+		bpl.s	.checky								; if time remains, branch
 
 		; play music
 		move.b	boss_saved_mus(a0),d0

@@ -71,8 +71,8 @@ Obj_Ring_Collect:
 
 Obj_Bouncing_Ring:
 		move.l	#Obj_Bouncing_Ring_Normal,d6
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		move.l	#Obj_Bouncing_Ring_TestGravity,d6
 
 .notgrav
@@ -126,8 +126,8 @@ Obj_Bouncing_Ring:
 		move.b	#$80,(Update_HUD_ring_count).w					; update ring counter
 
 		; check gravity
-		tst.b	(Reverse_gravity_flag).w
-		bne.w	Obj_Bouncing_Ring_TestGravity
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.w	Obj_Bouncing_Ring_TestGravity					; if yes, branch
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -203,8 +203,8 @@ Obj_Bouncing_Ring_TestGravity:
 
 		; move sprite
 		movem.w	x_vel(a0),d0/d2							; load xy speed
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.l	d2								; reverse y speed
 
 .notgrav
@@ -351,8 +351,8 @@ Obj_Attracted_Ring:
 		; set bouncing
 		st	(Ring_spill_anim_counter).w					; set time
 		move.l	#Obj_Bouncing_Ring_Normal,code_addr(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.chkdel
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.chkdel								; if not, branch
 		move.l	#Obj_Bouncing_Ring_TestGravity,code_addr(a0)
 
 .chkdel
