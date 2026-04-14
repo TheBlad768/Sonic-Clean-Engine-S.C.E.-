@@ -294,8 +294,8 @@ Obj_Bubbler_Bubbles:
 		move.b	y_radius(a1),d0
 		sub.b	default_y_radius(a1),d0
 		ext.w	d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d0
 
 .notgrav

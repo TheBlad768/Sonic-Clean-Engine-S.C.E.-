@@ -65,8 +65,8 @@ Spring_Horizontal:
 ; ---------------------------------------------------------------------------
 
 Spring_Down:
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_22E96
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_22E96							; if yes, branch
 		bset	#status.npc.y_flip,status(a0)
 
 loc_22DFC:
@@ -76,8 +76,8 @@ loc_22DFC:
 ; ---------------------------------------------------------------------------
 
 Spring_Up:
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_22DFC
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_22DFC							; if yes, branch
 
 loc_22E96:
 		move.l	#Obj_Spring_Up,code_addr(a0)
@@ -145,8 +145,8 @@ Obj_Spring_Up_NoSolid:
 sub_22F98:
 		move.w	#bytes_to_word(1,0),anim(a0)					; set anim and clear next_anim/prev_anim
 		addq.w	#8,y_pos(a1)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		subi.w	#8*2,y_pos(a1)
 
 .notgrav
@@ -364,8 +364,8 @@ loc_2334C:
 
 sub_233CA:
 		subq.w	#8,y_pos(a1)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		addi.w	#8*2,y_pos(a1)
 
 .notgrav

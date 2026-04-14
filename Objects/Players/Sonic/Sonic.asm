@@ -171,8 +171,8 @@ loc_10C26:
 		btst	#1,object_control(a0)
 		bne.s	.touch
 		bsr.w	Animate_Sonic
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.plc
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.plc								; if not, branch
 		eori.b	#setBit(render_flags.y_flip),render_flags(a0)
 
 .plc
@@ -394,8 +394,8 @@ locret_10F82:
 ; =============== S U B R O U T I N E =======================================
 
 Call_Player_AnglePos:
-		tst.b	(Reverse_gravity_flag).w
-		beq.w	Player_AnglePos
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.w	Player_AnglePos							; if not, branch
 		moveq	#$40,d0
 		add.b	angle(a0),d0
 		neg.b	d0
@@ -535,8 +535,8 @@ Sonic_ChgFallAnim:
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a0)					; use "rolling"	animation
 		addq.w	#5,y_pos(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.return
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.return								; if not, branch
 		subi.w	#5+5,y_pos(a0)
 
 .return
@@ -723,8 +723,8 @@ loc_11276:
 		cmpi.b	#2*60,scroll_delay_counter(a0)
 		blo.s	loc_112F0
 		move.b	#2*60,scroll_delay_counter(a0)
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_112A6
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_112A6							; if yes, branch
 		cmpi.w	#tile_height,(a5)
 		beq.s	loc_112FC
 		subq.w	#2,(a5)
@@ -746,8 +746,8 @@ loc_112B0:
 		cmpi.b	#2*60,scroll_delay_counter(a0)
 		blo.s	loc_112F0
 		move.b	#2*60,scroll_delay_counter(a0)
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_112E0
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_112E0							; if yes, branch
 		cmpi.w	#screen_height-(block_height+tile_height),(a5)
 		beq.s	loc_112FC
 		addq.w	#2,(a5)
@@ -1042,8 +1042,8 @@ loc_11570:
 .skip
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_115AE
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_115AE							; if not, branch
 		neg.w	d0
 
 loc_115AE:
@@ -1239,8 +1239,8 @@ Player_LevelBound:
 Player_Boundary_CheckBottom:
 		tst.b	(Disable_death_plane).w
 		bne.s	locret_11720
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_11722
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_11722							; if yes, branch
 		move.w	(Camera_max_Y_pos).w,d0
 		cmp.w	(Camera_target_max_Y_pos).w,d0
 		blt.s	locret_11720
@@ -1321,8 +1321,8 @@ SonicKnux_DoRoll:
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a0)					; enter roll animation
 		addq.w	#5,y_pos(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_117C2
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_117C2							; if not, branch
 		subi.w	#5+5,y_pos(a0)
 
 loc_117C2:
@@ -1352,8 +1352,8 @@ Sonic_Jump:
 		beq.s	locret_117D8
 		moveq	#0,d0
 		move.b	angle(a0),d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_117FC
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_117FC							; if not, branch
 		addi.b	#$40,d0
 		neg.b	d0
 		subi.b	#$40,d0
@@ -1395,8 +1395,8 @@ loc_1182E:
 		move.b	y_radius(a0),d0
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_118AE
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_118AE							; if not, branch
 		neg.w	d0
 
 loc_118AE:
@@ -1554,8 +1554,8 @@ loc_11C5E:
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a0)
 		addq.w	#5,y_pos(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_11C8C
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_11C8C							; if not, branch
 		subi.w	#5+5,y_pos(a0)
 
 loc_11C8C:
@@ -1918,8 +1918,8 @@ loc_11F56:
 
 loc_11F6E:
 		move.b	d3,angle(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_11F7A
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_11F7A							; if not, branch
 		neg.w	d1
 
 loc_11F7A:
@@ -1961,8 +1961,8 @@ locret_11FD4:
 ; =============== S U B R O U T I N E =======================================
 
 sub_11FD6:
-		tst.b	(Reverse_gravity_flag).w
-		beq.w	Sonic_CheckFloor
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.w	Sonic_CheckFloor						; if not, branch
 		bsr.w	Sonic_CheckCeiling
 		addi.b	#$40,d3
 		neg.b	d3
@@ -1972,8 +1972,8 @@ sub_11FD6:
 ; =============== S U B R O U T I N E =======================================
 
 sub_11FEE:
-		tst.b	(Reverse_gravity_flag).w
-		beq.w	Sonic_CheckCeiling2
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.w	Sonic_CheckCeiling2						; if not, branch
 		bsr.w	Sonic_CheckFloor2
 		addi.b	#$40,d3
 		neg.b	d3
@@ -1983,8 +1983,8 @@ sub_11FEE:
 ; =============== S U B R O U T I N E =======================================
 
 ChooseChkFloorEdge:
-		tst.b	(Reverse_gravity_flag).w
-		beq.w	ChkFloorEdge_Part2
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.w	ChkFloorEdge_Part2						; if not, branch
 		bra.w	ChkFloorEdge_ReverseGravity
 ; ---------------------------------------------------------------------------
 
@@ -2003,8 +2003,8 @@ Player_HitCeiling:
 		neg.w	d1
 		cmpi.w	#$14,d1
 		bhs.s	loc_12054
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_12042
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_12042							; if not, branch
 		neg.w	d1
 
 loc_12042:
@@ -2038,8 +2038,8 @@ loc_12074:
 		bsr.w	sub_11FD6
 		tst.w	d1
 		bpl.s	locret_12066
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_12084
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_12084							; if not, branch
 		neg.w	d1
 
 loc_12084:
@@ -2068,8 +2068,8 @@ loc_120C2:
 		bsr.w	sub_11FEE
 		tst.w	d1
 		bpl.s	locret_12100
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_120D2
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_120D2							; if not, branch
 		neg.w	d1
 
 loc_120D2:
@@ -2106,8 +2106,8 @@ loc_1211A:
 		bsr.w	sub_11FEE
 		tst.w	d1
 		bpl.s	loc_1213C
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_1212A
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_1212A							; if not, branch
 		neg.w	d1
 
 loc_1212A:
@@ -2130,8 +2130,8 @@ loc_12148:
 		bsr.w	sub_11FD6
 		tst.w	d1
 		bpl.s	locret_1213A
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_12158
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_12158							; if not, branch
 		neg.w	d1
 
 loc_12158:
@@ -2156,8 +2156,8 @@ Sonic_TouchFloor:
 		clr.b	anim(a0)							; AniIDSonAni_Walk
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_121C4
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_121C4							; if not, branch
 		neg.w	d0
 
 loc_121C4:
@@ -2225,8 +2225,8 @@ BubbleShield_Bounce:
 		move.b	y_radius(a0),d0
 		sub.b	default_y_radius(a0),d0
 		ext.w	d0
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d0
 
 .notgrav
@@ -2275,8 +2275,8 @@ loc_12302:
 sub_12318:
 		tst.b	(Disable_death_plane).w
 		bne.s	loc_12344
-		tst.b	(Reverse_gravity_flag).w
-		bne.s	loc_12336
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		bne.s	loc_12336							; if yes, branch
 		move.w	(Camera_max_Y_pos).w,d0
 		addi.w	#screen_height,d0
 		cmp.w	y_pos(a0),d0
@@ -2343,8 +2343,8 @@ sub_123C2:
 		move.w	(Camera_Y_pos).w,d0
 		st	(Scroll_lock).w
 		clr.b	spin_dash_flag(a0)
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	loc_123FA
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	loc_123FA							; if not, branch
 		subi.w	#$10,d0
 		cmp.w	y_pos(a0),d0
 		bge.s	loc_12410
@@ -2415,8 +2415,8 @@ Sonic_Drown:
 
 sub_125E0:
 		bsr.s	Animate_Sonic
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		eori.b	#setBit(render_flags.y_flip),render_flags(a0)
 
 .notgrav

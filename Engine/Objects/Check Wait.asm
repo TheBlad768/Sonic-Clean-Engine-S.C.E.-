@@ -7,7 +7,7 @@
 Obj_Wait:
 		tst.w wait_timer(a0)							; is timer over?
 		bmi.s	.jump								; if yes, branch
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 		bmi.s	.jump								; if timer has run out, branch
 		rts
 ; ---------------------------------------------------------------------------
@@ -27,7 +27,7 @@ Obj_Wait:
 Obj_WaitRun:
 		tst.w wait_timer(a0)							; is timer over?
 		bmi.s	.return								; if yes, branch
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 		addq.w	#4,sp								; don't run the code after the call to this routine
 
 .return
@@ -158,7 +158,7 @@ ObjCheckLeftWallDist_DoRoutine:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_WaitNewDelay:
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 		bmi.s	.jump								; if timer has run out, branch
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------
@@ -178,7 +178,7 @@ Obj_WaitNewDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_WaitFadeToLevelMusic:
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 		bmi.s	.jump								; if timer has run out, branch
 		bra.w	Draw_Sprite
 ; ---------------------------------------------------------------------------

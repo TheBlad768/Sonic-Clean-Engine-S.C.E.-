@@ -41,8 +41,8 @@ Obj_FireShield:
 		bne.s	.nothighpriority2						; if so, do not update orientation or allow changing of the priority art_tile bit
 		move.b	status(a2),status(a0)						; inherit status
 		andi.b	#setBit(status.npc.x_flip),status(a0)				; limit inheritance to 'orientation' bit
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.normalgravity
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.normalgravity							; if not, branch
 		ori.b	#setBit(status.npc.y_flip),status(a0)				; if in reverse gravity, reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
 .normalgravity
@@ -132,8 +132,8 @@ Obj_LightningShield:
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)						; inherit status
 		andi.b	#setBit(status.npc.x_flip),status(a0)				; limit inheritance to 'orientation' bit
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.normalgravity
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.normalgravity							; if not, branch
 		ori.b	#setBit(status.npc.y_flip),status(a0)				; if in reverse gravity, reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
 .normalgravity
@@ -316,8 +316,8 @@ Obj_BubbleShield:
 		move.w	y_pos(a2),y_pos(a0)
 		move.b	status(a2),status(a0)						; inherit status
 		andi.b	#setBit(status.npc.x_flip),status(a0)				; limit inheritance to 'orientation' bit
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.normalgravity
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.normalgravity							; if not, branch
 		ori.b	#setBit(status.npc.y_flip),status(a0)				; reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
 .normalgravity
@@ -382,8 +382,8 @@ Obj_InstaShield:
 		move.w	y_pos(a2),y_pos(a0)						; inherit player's y_pos
 		move.b	status(a2),status(a0)						; inherit status
 		andi.b	#setBit(status.npc.x_flip),status(a0)				; limit inheritance to 'orientation' bit
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.normalgravity
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.normalgravity							; if not, branch
 		ori.b	#setBit(status.npc.y_flip),status(a0)				; reverse the vertical mirror render_flag bit (On if Off beforehand and vice versa)
 
 .normalgravity

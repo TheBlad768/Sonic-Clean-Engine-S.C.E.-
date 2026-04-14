@@ -135,7 +135,7 @@ Obj_LevelResults:
 .wait
 		tst.w	wait_timer(a0)							; is timer over?
 		beq.s	.countdown							; if yes, branch
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 
 		; check timer
 		cmpi.w	#5*60-11,wait_timer(a0)
@@ -192,7 +192,7 @@ Obj_LevelResults:
 .wait2
 		tst.w	wait_timer(a0)							; is timer over?
 		beq.s	.endtimer							; if yes, branch
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 
 .return2
 		rts

@@ -87,8 +87,8 @@ Obj_DashDust:
 		move.b	status(a2),status(a0)
 		andi.b	#setBit(status.npc.x_flip),status(a0)
 		moveq	#4,d1
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		ori.b	#setBit(status.npc.y_flip),status(a0)
 		neg.w	d1
 
@@ -170,8 +170,8 @@ DashDust_CheckSkid:
 		subq.w	#4,d1
 
 .skip
-		tst.b	(Reverse_gravity_flag).w
-		beq.s	.notgrav
+		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
+		beq.s	.notgrav							; if not, branch
 		neg.w	d1
 
 .notgrav

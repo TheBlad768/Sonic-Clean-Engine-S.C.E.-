@@ -257,7 +257,7 @@ Obj_MonitorContents:
 ; ---------------------------------------------------------------------------
 
 .waitdel
-		subq.w	#1,wait_timer(a0)						; subtract 1
+		subq.w	#1,wait_timer(a0)						; decrement timer
 		bmi.s	.delete								; if timer has run out, delete
 		jmp	(Draw_Sprite).w
 ; ---------------------------------------------------------------------------
