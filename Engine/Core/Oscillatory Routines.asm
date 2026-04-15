@@ -11,14 +11,14 @@ ChangeRingFrame:
 .syncrings
 
 		; used for rings and giant rings
-		subq.b	#1,(Rings_frame_timer).w
-		bpl.s	.syncrings2
-		addq.b	#4+1,(Rings_frame_timer).w
-		addq.b	#1,(Rings_frame).w
-		andi.b	#7,(Rings_frame).w
+		subq.b	#1,(Rings_frame_timer).w					; decrement timer
+		bpl.s	.syncrings2							; if time remains, branch
+		addq.b	#4+1,(Rings_frame_timer).w					; reset timer to 4 frames
+		addq.b	#1,(Rings_frame).w						; change frame
+		andi.b	#7,(Rings_frame).w						; max 8 frames
 
 		; dynamic ring graphics
-		moveq	#0,d1
+		moveq	#0,d1								; clear d1 for Add_To_DMA_Queue
 		move.b	(Rings_frame).w,d1
 		lsl.w	#6,d1								; multiply by $40
 		addi.l	#dmaSource(ArtUnc_Ring),d1					; get next frame
@@ -46,7 +46,7 @@ ChangeRingFrame:
 		subq.b	#1,(Ring_spill_anim_counter).w
 
 		; dynamic ring graphics
-		moveq	#0,d1
+		moveq	#0,d1								; clear d1 for Add_To_DMA_Queue
 		move.b	(Ring_spill_anim_frame).w,d1
 		lsl.w	#6,d1								; multiply by $40
 		addi.l	#dmaSource(ArtUnc_Ring),d1					; get next frame
