@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Object swing subroutine
+; Init object swing subroutine (up/down)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -12,6 +12,10 @@ Swing_Setup1:
 		bclr	#0,state_flags(a0)						; clear up/down swing flag
 		rts
 
+; ---------------------------------------------------------------------------
+; Init object swing subroutine (left/right)
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Swing_Setup2:
@@ -21,6 +25,10 @@ Swing_Setup2:
 		move.w	#$20,swing_xacc(a0)						; acceleration
 		bclr	#3,state_flags(a0)						; clear left/right swing flag
 		rts
+
+; ---------------------------------------------------------------------------
+; Swing up and down count
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -37,11 +45,19 @@ Swing_UpAndDown_Count:
 .return
 		rts
 
+; ---------------------------------------------------------------------------
+; Swing left and right count
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Swing_LeftAndRight_Count:
 		bsr.s	Swing_LeftAndRight
 		bra.s	Swing_UpAndDown_Count.check
+
+; ---------------------------------------------------------------------------
+; Swing up and down
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -75,6 +91,10 @@ Swing_UpAndDown:
 		move.w	d1,y_vel(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Swing left and right
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Swing_LeftAndRight:
@@ -107,6 +127,10 @@ Swing_LeftAndRight:
 		move.w	d1,x_vel(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Simple swing up and down
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Swing_UpAndDown_Simple:
@@ -116,6 +140,10 @@ Swing_UpAndDown_Simple:
 		asr.w	#2,d0
 		move.w	d0,y_vel(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; Refresh child xy position
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -135,6 +163,10 @@ Refresh_ChildPosition:
 		move.w	d0,y_pos(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Refresh child x position
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_X_Position:
@@ -148,6 +180,10 @@ Refresh_Child_X_Position:
 		move.w	d0,x_pos(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Refresh child y position
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_Y_Position:
@@ -160,6 +196,10 @@ Refresh_Child_Y_Position:
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; Refresh child xy position adjusted
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -193,6 +233,10 @@ Refresh_ChildPositionAdjusted:
 		move.w	d0,y_pos(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Refresh child x position adjusted
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_X_PositionAdjusted:
@@ -213,6 +257,10 @@ Refresh_Child_X_PositionAdjusted:
 		move.w	d0,x_pos(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Refresh child y position adjusted
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_Y_PositionAdjusted:
@@ -232,6 +280,10 @@ Refresh_Child_Y_PositionAdjusted:
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; Refresh child xy position adjusted check status
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -269,6 +321,10 @@ Refresh_ChildPositionAdjusted_Animate:
 		move.w	d0,y_pos(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Refresh child x position adjusted check status
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_X_PositionAdjusted_Animate:
@@ -291,6 +347,10 @@ Refresh_Child_X_PositionAdjusted_Animate:
 		move.w	d0,x_pos(a0)
 		rts
 
+; ---------------------------------------------------------------------------
+; Refresh child y position adjusted check status
+; ---------------------------------------------------------------------------
+
 ; =============== S U B R O U T I N E =======================================
 
 Refresh_Child_Y_PositionAdjusted_Animate:
@@ -312,6 +372,10 @@ Refresh_Child_Y_PositionAdjusted_Animate:
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; Refresh child xy position adjusted check status 2
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -348,6 +412,10 @@ Refresh_ChildPositionAdjusted_Animate2:
 		add.w	d1,d0
 		move.w	d0,y_pos(a0)
 		rts
+
+; ---------------------------------------------------------------------------
+; Refresh child xy position
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -617,55 +685,66 @@ Shot_Object_3:
 		lsl.w	d5,d1
 		bra.s	.check
 
-; =============== S U B R O U T I N E =======================================
+; ---------------------------------------------------------------------------
+; Gradual swing offset
+; ---------------------------------------------------------------------------
 
-sub_8619A:
-		move.w	objoff_30(a0),d2
-		move.w	objoff_34(a0),d3
-		moveq	#4,d0
-		add.b	objoff_40(a0),d0
-		move.l	#$100,d4
-		divu.w	d0,d4
-		sub.w	d4,d2
-		sub.w	d4,d3
-		move.w	d2,x_pos(a0)
-		move.w	d3,y_pos(a0)
-		rts
+; dynamic object variables
+
+	dsset wait_timer								; pretend we're in the RAM
+
+gradual_swingoffset.speed		ds.l 1						; (4 bytes)
+gradual_swingoffset.offset		ds.l 1						; (4 bytes)
+gradual_swingoffset.state		ds.b 1						; (1 byte)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; =============== S U B R O U T I N E =======================================
 
 Gradual_SwingOffset:
-		move.l	objoff_2E(a0),d2
-		tst.b	objoff_36(a0)
-		beq.s	loc_465F6
+		move.l	gradual_swingoffset.speed(a0),d2
+		tst.b	gradual_swingoffset.state(a0)
+		beq.s	.down
+
+		; up
 		neg.l	d1
-		add.l	d2,objoff_32(a0)						; moving up and then down. Reset speed/direction when center point is reached going down
-		bmi.s	loc_4660E
-		move.l	d0,objoff_2E(a0)						; reset initial speed (positive) to move downwards
-		clr.l	objoff_32(a0)
-		clr.b	objoff_36(a0)
-		move.w	objoff_32(a0),d0						; get final offset for us by calling object
+		add.l	d2,gradual_swingoffset.offset(a0)				; moving up and then down. Reset speed/direction when center point is reached going down
+		bmi.s	.set_speed
+		move.l	d0,gradual_swingoffset.speed(a0)				; reset initial speed (positive) to move downwards
+		clr.l	gradual_swingoffset.offset(a0)
+		clr.b	gradual_swingoffset.state(a0)
+
+		; exit
+		move.w	gradual_swingoffset.offset(a0),d0				; get final offset for us by calling object
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_465F6:
-		add.l	d2,objoff_32(a0)						; moving down and then up. Reset speed/direction when center point is reached going up
-		bmi.s	loc_465FE
-		bne.s	loc_4660E
+.down
+		add.l	d2,gradual_swingoffset.offset(a0)				; moving down and then up. Reset speed/direction when center point is reached going up
+		bmi.s	.reverse
+		bne.s	.set_speed
 
-loc_465FE:
+.reverse
 		neg.l	d0								; reverse direction to move upwards when speed has reached
-		move.l	d0,objoff_2E(a0)						; reset initial speed (negative)
-		clr.l	objoff_32(a0)
-		st	objoff_36(a0)
-		move.w	objoff_32(a0),d0						; get final offset for us by calling object
+		move.l	d0,gradual_swingoffset.speed(a0)				; reset initial speed (negative)
+		clr.l	gradual_swingoffset.offset(a0)
+		st	gradual_swingoffset.state(a0)
+
+		; exit
+		move.w	gradual_swingoffset.offset(a0),d0				; get final offset for us by calling object
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_4660E:
-		sub.l	d1,objoff_2E(a0)						; apply speed
-		move.w	objoff_32(a0),d0						; get final offset for us by calling object
+.set_speed
+		sub.l	d1,gradual_swingoffset.speed(a0)				; apply speed
+
+		; exit
+		move.w	gradual_swingoffset.offset(a0),d0				; get final offset for us by calling object
 		rts
+
+; ---------------------------------------------------------------------------
+; Refresh child sprites xy position
+; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
