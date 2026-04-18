@@ -101,6 +101,8 @@ LevelScreen:
 		bne.s	.wait								; if not, branch
 		tst.w	(KosPlus_modules_left).w					; are there any items in the pattern load cue?
 		bne.s	.wait								; if yes, branch
+
+		; next
 		disableInts
 		jsr	(HUD_DrawInitial).w						; init HUD
 		enableInts
