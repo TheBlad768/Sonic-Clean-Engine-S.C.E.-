@@ -35,7 +35,7 @@ Obj_Explosion:
 		ori.w	#ArtTile_Explosion,d0						; VRAM
 		move.w	d0,art_tile(a0)
 		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
-		clr.b	collision_flags(a0)
+		clr.b	collision_type(a0)						; remove collision
 		move.l	#bytes_word_to_long(24/2,24/2,priority_1),height_pixels(a0)	; set height, width and priority
 		move.b	#3,anim_frame_timer(a0)
 		clr.b	mapping_frame(a0)

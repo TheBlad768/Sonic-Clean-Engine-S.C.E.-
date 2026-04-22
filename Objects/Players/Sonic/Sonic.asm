@@ -2198,7 +2198,6 @@ locret_12230:
 ; =============== S U B R O U T I N E =======================================
 
 BubbleShield_Bounce:
-		movem.l	d1-d2,-(sp)
 		move.w	#$780,d2
 		btst	#status.player.underwater,status(a0)				; is Sonic underwater?
 		beq.s	.isdry								; if not, branch
@@ -2214,7 +2213,6 @@ BubbleShield_Bounce:
 		muls.w	d2,d0
 		asr.l	#8,d0
 		add.w	d0,y_vel(a0)
-		movem.l	(sp)+,d1-d2
 		bset	#status.player.in_air,status(a0)
 		bclr	#status.player.pushing,status(a0)
 		move.b	#1,jumping(a0)

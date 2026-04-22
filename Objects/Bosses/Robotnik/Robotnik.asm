@@ -158,11 +158,11 @@ Obj_RobotnikShipPieces:
 ; =============== S U B R O U T I N E =======================================
 
 ; init
-ObjDat_RobotnikShip:		subObjData Map_RobotnikShip, $52E, 0, FALSE, 64, 64, 4, $C, $F|collision_flags.npc.touch
-ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, FALSE, 64, 64, 4, 7, $F|collision_flags.npc.touch
-ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, FALSE, 16, 32, 5, 0, 0
-ObjDat2_RoboShipFlame:		subObjData FALSE, FALSE, 0, FALSE, 8, 16, 5, 8, 0
-ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, TRUE, 64, 64, 0, 0, 0
+ObjDat_RobotnikShip:		subObjData Map_RobotnikShip, $52E, 0, FALSE, 64, 64, 4, $C, collision_type.npc.touch, 48, 48
+ObjDat_RobotnikShip_Glass:	subObjData Map_RobotnikShip, $52E, 0, FALSE, 64, 64, 4, 7, collision_type.npc.touch, 48, 48
+ObjDat_RobotnikHead:		subObjData Map_RobotnikShip, $52E, 0, FALSE, 16, 32, 5, 0, collision_type.npc.none, 0, 0
+ObjDat2_RoboShipFlame:		subObjData FALSE, FALSE, 0, FALSE, 8, 16, 5, 8, collision_type.npc.none, 0, 0
+ObjDat_RobotnikShipPieces:	subObjData Map_RobotnikShipPieces, $52E, 0, TRUE, 64, 64, 0, 0, collision_type.npc.none, 0, 0
 
 AniRaw_RobotnikHead:
 		dc.b 5, 0, 1, arfEnd

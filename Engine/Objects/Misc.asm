@@ -13,7 +13,8 @@ SetUp_ObjAttributes2:
 SetUp_ObjAttributes3:
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
-		move.b	(a1)+,collision_flags(a0)					; collision number
+		move.b	(a1)+,collision_type(a0)					; collision type
+		move.w	(a1)+,collision_height(a0)					; collision height and width
 
 		; set
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
@@ -64,7 +65,8 @@ SetUp_ObjAttributesSlotted:
 		move.l	(a1)+,mappings(a0)						; mapping address
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
-		move.b	(a1)+,collision_flags(a0)					; collision number
+		move.b	(a1)+,collision_type(a0)					; collision type
+		move.w	(a1)+,collision_height(a0)					; collision height and width
 		st	ros_prev_frame(a0)						; reset DPLC frame (used by Perform_DPLC)
 
 		; set
@@ -262,7 +264,7 @@ EnemyDefeated:
 
 EnemyDefeat_Score:
 		bset	#status.npc.defeated,status(a0)					; set "boss defeated" flag
-		clr.b	collision_flags(a0)
+		clr.b	collision_type(a0)						; remove collision
 		moveq	#0,d0								; clear d0 for HUD_AddToScore
 		move.w	(Chain_bonus_counter).w,d0					; get copy of chain bonus counter
 		addq.w	#2,(Chain_bonus_counter).w					; add 2 to item bonus counter

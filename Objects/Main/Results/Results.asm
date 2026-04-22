@@ -10,7 +10,7 @@ levelresults.elements_count		ds.b 1						; (1 byte)
 levelresults.exit_phase			ds.b 1						; (1 byte)
 
 levelresults.side_flag =		routine						; (1 byte)
-levelresults.queue_id =			collision_flags					; (1 byte)
+levelresults.queue_id =			collision_type					; (1 byte)
 levelresults.destination =		parent3						; (2 bytes)
 
 	dsreset										; stop pretending and reset the program counter

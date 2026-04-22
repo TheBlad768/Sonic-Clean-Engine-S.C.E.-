@@ -111,7 +111,9 @@ Child_GetCollisionPriorityOnce:
 		beq.s	.nothighpriority						; if not, branch
 		bset	#high_priority_bit,art_tile(a0)					; high priority
 		move.l	(sp),code_addr(a0)						; set address after bsr/jsr
-		move.b	d0,collision_flags(a0)						; set collision number
+		move.b	d0,collision_type(a0)						; set collision type
+		swap	d0
+		move.w	d0,collision_height(a0)						; collision height and width
 
 .nothighpriority
 		rts

@@ -330,7 +330,8 @@ Obj_StarPost_Stars:
 ; ---------------------------------------------------------------------------
 
 .settouch
-		move.b	#$18|collision_flags.npc.special,collision_flags(a0)		; set collision size 8x8
+		move.b	#collision_type.npc.double,collision_type(a0)			; set star post collision type
+		move.w	#bytes_to_word(8/2,8/2),collision_height(a0)			; set height and width collision
 
 .checkrange
 		cmpi.w	#$80*3,d1

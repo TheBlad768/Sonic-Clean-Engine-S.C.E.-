@@ -323,7 +323,7 @@ ccr_c_bit =						0				; carry ($01)
  nextenum	objoff_4D,objoff_4E,objoff_4F
 
 ; ---------------------------------------------------------------------------
-; property of all objects
+; Property of all objects
 ; ---------------------------------------------------------------------------
 
 object_size_bits =					6
@@ -331,99 +331,94 @@ object_size =						$50				; the size of an object's status table entry (affects 
 next_object =						object_size
 
 ; ---------------------------------------------------------------------------
-; Object Status Table offsets
-; Universally followed object conventions
+; Object variables
 ; ---------------------------------------------------------------------------
 
-code_addr =						objoff_00			; long ; address of the current object code
-render_flags =						objoff_04			; bitfield ; refer to SCHG for details
-height_pixels =						objoff_06			; byte ; height / 2
-width_pixels =						objoff_07			; byte ; width / 2
-priority =						objoff_08			; word ; in units of $80
-art_tile =						objoff_0A			; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
-mappings =						objoff_0C			; long
-x_pos =							objoff_10			; word, or long when extra precision is required
+	dsset objoff_00									; pretend we're in the RAM
+
+code_addr						ds.l 1				; long ; address of the current object code
+render_flags						ds.b 1				; bitfield for x/y flip, display mode
+routine							ds.b 1				; byte ; routine number
+height_pixels						ds.b 1				; byte ; display height / 2
+width_pixels						ds.b 1				; byte ; display width / 2
+priority						ds.w 1				; word ; sprite stack priority -- 0 is front
+art_tile						ds.w 1				; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
+mappings						ds.l 1				; long ; mappings address
+x_pos							ds.l 1				; word, or long when extra precision is required
 x_sub =							x_pos+2				; word
-y_pos =							objoff_14			; word, or long when extra precision is required
+y_pos							ds.l 1				; word, or long when extra precision is required
 y_sub =							y_pos+2				; word
-mapping_frame =						objoff_22			; byte
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by most objects
+; Movement and animation object variables
 ; ---------------------------------------------------------------------------
 
-routine =						objoff_05			; byte
-x_vel =							objoff_18			; word
-y_vel =							objoff_1A			; word
-y_radius =						objoff_1E			; byte ; collision height / 2
-x_radius =						objoff_1F			; byte ; collision width / 2
-anim =							objoff_20			; byte
-prev_anim =						objoff_21			; byte ; when this isn't equal to anim the animation restarts
-next_anim =						prev_anim			; byte ; when this isn't equal to anim the animation restarts
-anim_frame =						objoff_23			; byte
-anim_frame_timer =					objoff_24			; byte
-angle =							objoff_26			; byte/word ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
-status =						objoff_2A			; bitfield ; refer to SCHG for details
+x_vel							ds.w 1				; word ; x-axis velocity
+y_vel							ds.w 1				; word ; y-axis velocity
+							ds.w 1				; skip ground_vel, boss_saved_player, boss_invulnerability_timer
+y_radius						ds.b 1				; byte ; collision height / 2
+x_radius						ds.b 1				; byte ; collision width / 2
+anim							ds.b 1				; byte ; current animation
+prev_anim						ds.b 1				; byte ; when this isn't equal to anim the animation restarts
+mapping_frame						ds.b 1				; byte ; current frame displayed
+anim_frame						ds.b 1				; byte
+anim_frame_timer					ds.b 1				; byte
+							ds.b 1				; skip double_jump_property
+angle							ds.w 1				; byte/word ; angle about axis into plane of the screen (00 = vertical, 360 degrees = 256)
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by many objects but not Sonic/Tails/Knuckles
+; Extended object variables
 ; ---------------------------------------------------------------------------
 
-x_pixel =						x_pos				; word ; x-coordinate for objects using screen positioning
-y_pixel =						y_pos				; word ; y-coordinate for objects using screen positioning
-collision_flags =					objoff_28			; byte ; TT SSSSSS ; TT = collision type, SSSSSS = size
-collision_property =					objoff_29			; byte ; usage varies, bosses use it as a hit counter
-shield_reaction =					objoff_2B			; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
-subtype =						objoff_2C			; byte/word
-animations =						objoff_30			; long
-state_flags =						objoff_38			; byte
-count =							objoff_39			; byte
-routine_secondary =					objoff_3C			; byte ; used by monitors for this purpose at least
-child_dx =						objoff_48			; byte ; X offset of child relative to parent
-child_dy =						objoff_49			; byte ; Y offset of child relative to parent
-parent =						objoff_48			; word ; address of the object that owns or spawned this one, if applicable
-parent4 =						objoff_4A			; word
-parent3 =						objoff_4C			; word ; parent of child objects
-parent2 =						objoff_4E			; word ; several objects use this instead
-respawn_addr =						objoff_4E			; word ; address of this object's entry in the respawn table
+collision_type						ds.b 1				; byte ; collision type
+collision_property					ds.b 1				; byte ; usage varies, bosses use it as a hit counter
+collision_height					ds.b 1				; byte ; collision height / 2
+collision_width						ds.b 1				; byte ; collision width / 2
+status							ds.b 1				; byte ; orientation or mode
+shield_reaction						ds.b 1				; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
+subtype							ds.w 1				; byte/word ; object subtype
+wait_timer						ds.w 1				; word ; object timer
+animations						ds.l 1				; long ; animations address
+wait_addr						ds.l 1				; long ; custom object code address
+state_flags						ds.b 1				; byte
+count							ds.b 1				; byte
+ros_prev_frame						ds.b 1				; byte
+ros_bit							ds.b 1				; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
+routine_secondary =					*				; byte ; used by monitors for this purpose at least
+ros_addr						ds.w 1				; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
+							ds.b 8				; unused
+parent =						*				; word ; address of the object that owns or spawned this one, if applicable
+child_dx						ds.b 1				; byte ; X offset of child relative to parent
+child_dy						ds.b 1				; byte ; Y offset of child relative to parent
+parent4							ds.w 1				; word
+parent3							ds.w 1				; word ; parent of child objects
+parent2 =						*				; word ; several objects use this instead
+respawn_addr						ds.w 1				; word ; address of this object's entry in the respawn table
+
+	dsreset										; stop pretending and reset the program counter
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by animate raw subroutine
+; Animate Raw subroutine object variables
 ; ---------------------------------------------------------------------------
 
-aniraw_frame_timer =					objoff_2E			; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
-aniraw_wait_timer =					objoff_2F			; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
+aniraw_frame_timer =					wait_timer			; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
+aniraw_wait_timer =					wait_timer+1			; byte ; used by Animate_RawGetFaster and Animate_RawGetSlower
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by object wait subroutine
+; Create child object subroutine object variables
 ; ---------------------------------------------------------------------------
 
-wait_timer =						objoff_2E			; word
-wait_addr =						objoff_34			; long
+setup_addr =						objoff_40			; long
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by perform DPLC subroutine
+; Move sprite circular subroutine object variables
 ; ---------------------------------------------------------------------------
 
-ros_prev_frame =					objoff_3A			; byte
-ros_bit =						objoff_3B			; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
-ros_addr =						objoff_3C			; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
+circular_radius =					objoff_3C			; word ; used by MoveSprite_Circular
+circular_angle =					objoff_3E			; byte/word
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by create child object subroutine
-; ---------------------------------------------------------------------------
-
-setup_addr =						objoff_3E			; long
-
-; ---------------------------------------------------------------------------
-; Conventions followed by movesprite circular subroutine
-; ---------------------------------------------------------------------------
-
-circular_radius =					objoff_3A			; word ; used by MoveSprite_Circular
-circular_angle =					objoff_3C			; byte/word
-
-; ---------------------------------------------------------------------------
-; Conventions followed by swing subroutine
+; Swing object subroutine object variables
 ; ---------------------------------------------------------------------------
 
 swing_xmax =						objoff_3A			; word
@@ -432,66 +427,64 @@ swing_ymax =						objoff_3E			; word
 swing_yacc =						objoff_40			; word
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by pal rotation script 2 subroutine
+; Palette rotation script 2 subroutine object variables
 ; ---------------------------------------------------------------------------
 
-palrotation_frame_timer =				objoff_3A			; byte
-palrotation_frame =					objoff_3B			; byte
+palrotation_frame_timer =				objoff_3C			; byte
+palrotation_frame =					objoff_3D			; byte
 
 ; ---------------------------------------------------------------------------
-; Conventions followed by art scaling subroutine
+; Bosses object variables
 ; ---------------------------------------------------------------------------
 
-scaling_frame =						objoff_20			; byte
-scaling_art_tile =					objoff_3A			; word
-scaling_scale_factor =					objoff_40			; byte
-scaling_scale_prev_factor =				objoff_41			; byte
-scaling_art_addr =					objoff_42			; long
-
-; ---------------------------------------------------------------------------
-; Conventions followed by some/most bosses
-; ---------------------------------------------------------------------------
-
+boss_saved_player =					objoff_1C			; byte ; save player RAM address
 boss_invulnerability_timer =				objoff_1D			; byte ; flash time
 boss_saved_collision =					objoff_25			; byte ; restore boss collision after hit
-boss_saved_mus =					objoff_26			; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects
-boss_state_flags =					objoff_27			; byte
-boss_hitcount =						objoff_29			; byte ; usage varies, bosses use it as a hit counter
+boss_saved_mus =					angle				; byte ; used primarily by loc_85CA4 which is used by cutscene knuckles, and most of the boss objects
+boss_state_flags =					angle+1				; byte
+boss_hitcount =						collision_property		; byte ; usage varies, bosses use it as a hit counter
 boss_x_boundary =					objoff_3A			; word
 
 ; ---------------------------------------------------------------------------
-; Conventions specific to Sonic/Tails/Knuckles
+; Player object variables
 ; ---------------------------------------------------------------------------
 
+	dsset objoff_25									; pretend we're in the RAM
+
 ground_vel =						objoff_1C			; word ; overall velocity along ground, not updated when in the air
-double_jump_property =					objoff_25			; byte ; remaining frames of flight / 2 for Tails, gliding-related for Knuckles
-flip_angle =						objoff_27			; byte ; angle about horizontal axis (360 degrees = 256)
-status_secondary =					objoff_2B			; byte ; see SCHG for details
-air_left =						objoff_2C			; byte
-flip_type =						objoff_2D			; byte ; bit 7 set means flipping is inverted, lower bits control flipping type
-object_control =					objoff_2E			; byte ; bit 0 set means character can jump out, bit 7 set means he can't
-double_jump_flag =					objoff_2F			; byte ; meaning depends on current character, see SCHG for details
-flips_remaining =					objoff_30			; byte
-flip_speed =						objoff_31			; byte
-move_lock =						objoff_32			; word ; horizontal control lock, counts down to 0
-invulnerability_timer =					objoff_34			; byte ; decremented every frame
-invincibility_timer =					objoff_35			; byte ; decremented every 8 frames
-speed_shoes_timer =					objoff_36			; byte ; decremented every 8 frames
-status_tertiary =					objoff_37			; byte ; see SCHG for details
-character_id =						objoff_38			; byte ; 0 for Sonic, 1 for Tails, 2 for Knuckles
-scroll_delay_counter =					objoff_39			; byte ; incremented each frame the character is looking up/down, camera starts scrolling when this reaches 120
-next_tilt =						objoff_3A			; byte ; angle on ground in front of character
-tilt =							objoff_3B			; byte ; angle on ground
-stick_to_convex =					objoff_3C			; byte ; used to make character stick to convex surfaces such as the rotating discs in CNZ
-spin_dash_flag =					objoff_3D			; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
-spin_dash_counter =					objoff_3E			; word
-restart_timer =						spin_dash_counter		; word
-jumping =						objoff_40			; byte
-interact =						objoff_42			; word ; RAM address of the last object the character stood on
-default_y_radius =					objoff_44			; byte ; default value of y_radius
-default_x_radius =					objoff_45			; byte ; default value of x_radius
-top_solid_bit =						objoff_46			; byte ; the bit to check for top solidity (either $C or $E)
-lrb_solid_bit =						objoff_47			; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
+double_jump_property					ds.b 1				; byte ; remaining frames of flight / 2 for Tails, gliding-related for Knuckles
+							ds.b 1				; skip angle
+flip_angle						ds.b 1				; byte ; angle about horizontal axis (360 degrees = 256)
+							ds.b 5				; skip collision_type, collision_property, collision_height, collision_width, status
+status_secondary					ds.b 1				; byte
+air_left						ds.b 1				; byte
+flip_type						ds.b 1				; byte ; bit 7 set means flipping is inverted, lower bits control flipping type
+object_control						ds.b 1				; byte ; bit 0 set means character can jump out, bit 7 set means he can't
+double_jump_flag					ds.b 1				; byte ; meaning depends on current character
+flips_remaining						ds.b 1				; byte
+flip_speed						ds.b 1				; byte
+move_lock						ds.w 1				; word ; horizontal control lock, counts down to 0
+invulnerability_timer					ds.b 1				; byte ; decremented every frame
+invincibility_timer					ds.b 1				; byte ; decremented every 8 frames
+speed_shoes_timer					ds.b 1				; byte ; decremented every 8 frames
+status_tertiary						ds.b 1				; byte
+character_id						ds.b 1				; byte ; 0 for Sonic, 1 for Tails, 2 for Knuckles
+scroll_delay_counter					ds.b 1				; byte ; incremented each frame the character is looking up/down, camera starts scrolling when this reaches 120
+next_tilt						ds.b 1				; byte ; angle on ground in front of character
+tilt							ds.b 1				; byte ; angle on ground
+stick_to_convex						ds.b 1				; byte ; used to make character stick to convex surfaces such as the rotating discs in CNZ
+spin_dash_flag						ds.b 1				; byte ; bit 1 indicates spin dash, bit 7 indicates forced roll
+restart_timer =						*				; word
+spin_dash_counter					ds.w 1				; word
+jumping							ds.b 1				; byte
+							ds.b 7				; unused
+interact						ds.w 1				; word ; RAM address of the last object the character stood on
+default_y_radius					ds.b 1				; byte ; default value of y_radius
+default_x_radius					ds.b 1				; byte ; default value of x_radius
+top_solid_bit						ds.b 1				; byte ; the bit to check for top solidity (either $C or $E)
+lrb_solid_bit						ds.b 1				; byte ; the bit to check for left/right/bottom solidity (either $D or $F)
+
+	dsreset										; stop pretending and reset the program counter
 
 ; ---------------------------------------------------------------------------
 ; Object variables
@@ -502,33 +495,32 @@ lrb_solid_bit =						objoff_47			; byte ; the bit to check for left/right/bottom
 obId =							code_addr			; long
 obRender =						render_flags			; byte ; bitfield for x/y flip, display mode
 obRoutine =						routine				; byte ; routine number
-obHeight =						height_pixels			; byte ; height/2
-obWidth =						width_pixels			; byte ; width/2
+obHeight =						height_pixels			; byte ; display height / 2
+obWidth =						width_pixels			; byte ; display width / 2
 obPriority =						priority			; word ; sprite stack priority -- 0 is front
-obGfx =							art_tile			; word ; palette line & VRAM setting (2 bytes)
-obMap =							mappings			; long ; mappings address (4 bytes)
-obX =							x_pos				; word ; x-axis position (2-4 bytes)
-obY =							y_pos				; word ; y-axis position (2-4 bytes)
-obVelX =						x_vel				; word ; x-axis velocity (2 bytes)
-obVelY =						y_vel				; word ; y-axis velocity (2 bytes)
-obInertia =						ground_vel			; word ; potential speed (2 bytes)
+obGfx =							art_tile			; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
+obMap =							mappings			; long ; mappings address
+obX =							x_pos				; word/long ; x-axis position
+obY =							y_pos				; word/long ; y-axis position
+obVelX =						x_vel				; word ; x-axis velocity
+obVelY =						y_vel				; word ; y-axis velocity
+obInertia =						ground_vel			; word ; potential speed
 obAnim =						anim				; byte ; current animation
-obPrevAni =						prev_anim			; byte ; previous animation
-obNextAni =						next_anim			; byte ; next animation
+obPrevAni =						prev_anim			; byte ; when this isn't equal to anim the animation restarts
 obFrame =						mapping_frame			; byte ; current frame displayed
 obAniFrame =						anim_frame			; byte
 obTimeFrame =						anim_frame_timer		; byte
-obAngle =						angle				; byte
-obColType =						collision_flags			; byte ; collision response type
-obColProp =						collision_property		; byte ; collision extra property
+obAngle =						angle				; byte/word
+obColType =						collision_type			; byte ; collision type
+obColProp =						collision_property		; byte ; usage varies, bosses use it as a hit counter
 obStatus =						status				; byte ; orientation or mode
-obSubtype =						subtype				; byte ; object subtype
+obSubtype =						subtype				; byte/word ; object subtype
 obTimer =						wait_timer			; word ; object timer
 obParent =						parent				; word ; parent of child objects
 obParent4 =						parent4				; word ; parent of child objects
 obParent3 =						parent3				; word ; parent of child objects
 obParent2 =						parent2				; word ; parent of child objects
-obRespawnNo =						respawn_addr			; word ; the address of this object's entry in the respawn table
+obRespawnNo =						respawn_addr			; word ; address of this object's entry in the respawn table
 
 ; ---------------------------------------------------------------------------
 ; Object variables
@@ -537,6 +529,8 @@ obRespawnNo =						respawn_addr			; word ; the address of this object's entry in
 
 ; universal
 id =							code_addr			; long
+x_pixel =						x_pos				; word ; x-coordinate for objects using screen positioning
+y_pixel =						y_pos				; word ; y-coordinate for objects using screen positioning
 anim_frame_duration =					anim_frame_timer		; byte
 respawn_index =						respawn_addr			; word ; the address of this object's entry in the respawn table
 
@@ -727,13 +721,16 @@ status.npc.defeated =					7				; set if a player defeated the enemy or boss
 ; Object collision variables
 ; ---------------------------------------------------------------------------
 
-collision_flags.npc.touch =				(0<<6)
-collision_flags.npc.item =				(1<<6)
-collision_flags.npc.hurt =				(2<<6)
-collision_flags.npc.special =				(3<<6)
+offset := Touch_Index
+ptrsize := 1
+idstart := 2
 
-collision_flags.npc.size_mask =				$3F
-collision_flags.npc.type_mask =				$C0
+collision_type.npc.none =				0				; 00
+collision_type.npc.touch =				id(ptr_Touch_Enemy)		; 02
+collision_type.npc.hurt =				id(ptr_Touch_Harmful)		; 04
+collision_type.npc.double =				id(ptr_Touch_ChkDouble)		; 06
+collision_type.npc.ring =				id(ptr_Touch_Ring)		; 08
+collision_type.npc.monitor =				id(ptr_Touch_Monitor)		; 0A
 
 ; ---------------------------------------------------------------------------
 ; Object respawn variables

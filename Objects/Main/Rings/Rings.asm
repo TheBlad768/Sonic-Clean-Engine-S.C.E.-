@@ -11,7 +11,8 @@ Obj_Ring:
 		; init
 		movem.l	ObjDat_Ring(pc),d0-d3						; copy data to d0-d3
 		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
-		move.b	#7|collision_flags.npc.item,collision_flags(a0)			; set ring collision
+		move.b	#collision_type.npc.ring,collision_type(a0)			; set ring collision type
+		move.w	#bytes_to_word(12/2,12/2),collision_height(a0)			; set height and width collision
 
 		; draw
 		jmp	(Sprite_OnScreen_Test_Collision).w
@@ -111,7 +112,8 @@ Obj_Bouncing_Ring:
 		move.l	d6,code_addr(a1)						; set object code address
 		movem.l	(a3),d2-d4							; load ring data
 		movem.l	d2-d4,render_flags(a1)						; set ring data
-		move.b	#7|collision_flags.npc.item,collision_flags(a1)
+		move.b	#collision_type.npc.ring,collision_type(a1)			; set ring collision type
+		move.w	#bytes_to_word(12/2,12/2),collision_height(a1)			; set height and width collision
 		move.w	height_pixels(a1),y_radius(a1)					; set y_radius and x_radius
 		move.l	(a2)+,x_vel(a1)
 
@@ -290,7 +292,8 @@ Obj_Attracted_Ring:
 		; init
 		movem.l	ObjDat_Ring2(pc),d0-d3						; copy data to d0-d3
 		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
-		move.b	#7|collision_flags.npc.item,collision_flags(a0)			; set ring collision
+		move.b	#collision_type.npc.ring,collision_type(a0)			; set ring collision type
+		move.w	#bytes_to_word(12/2,12/2),collision_height(a0)			; set height and width collision
 		move.w	height_pixels(a0),y_radius(a0)					; set y_radius and x_radius
 
 .main

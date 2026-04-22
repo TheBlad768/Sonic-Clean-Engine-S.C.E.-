@@ -382,9 +382,9 @@ Signpost_CheckWall:
 ; =============== S U B R O U T I N E =======================================
 
 ; init
-ObjSlot_Signpost:		subObjSlotData 1-1, $494, 0, FALSE, $18, 0, Map_Signpost, 32, 48, 6, 0, 0
-ObjDat_Signpost_Stub:		subObjData Map_Signpost_Stub, $492, 0, FALSE, 16, 8, 6, 0, 0
-ObjDat_Signpost_Sparkle:	subObjData Map_Ring, ArtTile_Ring, 1, FALSE, 16, 16, 5, 4, 0
+ObjSlot_Signpost:		subObjSlotData 1-1, $494, 0, FALSE, $18, 0, Map_Signpost, 32, 48, 6, 0, collision_type.npc.none, 0, 0
+ObjDat_Signpost_Stub:		subObjData Map_Signpost_Stub, $492, 0, FALSE, 16, 8, 6, 0, collision_type.npc.none, 0, 0
+ObjDat_Signpost_Sparkle:	subObjData Map_Ring, ArtTile_Ring, 1, FALSE, 16, 16, 5, 4, collision_type.npc.none, 0, 0
 
 ; dplc
 PLCPtr_Signpost:		DPLCEntry ArtUnc_Signpost, DPLC_Signpost
