@@ -236,8 +236,8 @@ Obj_Spikebonker_SpikeBall:
 ; =============== S U B R O U T I N E =======================================
 
 ; init
-ObjDat_Spikebonker:			subObjData Map_Spikebonker, $500, 0, TRUE, 40, 40, 5, 0, $1A|collision_flags.npc.touch
-ObjDat3_Spikebonker_SpikeBall:		subObjData FALSE, FALSE, 0, FALSE, 32, 32, 4, 1, $1A|collision_flags.npc.hurt
+ObjDat_Spikebonker:			subObjData Map_Spikebonker, $500, 0, TRUE, 40, 40, 5, 0, collision_type.npc.touch, 24, 24
+ObjDat3_Spikebonker_SpikeBall:		subObjData FALSE, FALSE, 0, FALSE, 32, 32, 4, 1, collision_type.npc.hurt, 24, 24
 
 ChildObjDat_Spikebonker_Control:
 		dc.w 1-1

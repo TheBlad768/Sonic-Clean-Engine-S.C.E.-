@@ -713,11 +713,11 @@ EggCapsule_Animals_Load:
 ; =============== S U B R O U T I N E =======================================
 
 ; init
-ObjDat_EggCapsule:			subObjData Map_EggCapsule, $494, 0, TRUE, 64, 64, 4, 0, 0
-ObjDat_EggCapsule_Button:		subObjData FALSE, FALSE, 0, FALSE, 16, 32, 4, 5, 0
-ObjDat3_EggCapsule_Propeller:		subObjData FALSE, FALSE, 0, FALSE, 8, 40, 4, 6, 0
-ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, TRUE, 24, 24, 3, 0, 0
-ObjDat_EggCapsule_Animals:		subObjData FALSE, FALSE, 0, FALSE, 24, 16, 5, 2, 0
+ObjDat_EggCapsule:			subObjData Map_EggCapsule, $494, 0, TRUE, 64, 64, 4, 0, collision_type.npc.none, 0, 0
+ObjDat_EggCapsule_Button:		subObjData FALSE, FALSE, 0, FALSE, 16, 32, 4, 5, collision_type.npc.none, 0, 0
+ObjDat3_EggCapsule_Propeller:		subObjData FALSE, FALSE, 0, FALSE, 8, 40, 4, 6, collision_type.npc.none, 0, 0
+ObjDat_EggCapsule_Pieces:		subObjData Map_EggCapsule, $494, 0, TRUE, 24, 24, 3, 0, collision_type.npc.none, 0, 0
+ObjDat_EggCapsule_Animals:		subObjData FALSE, FALSE, 0, FALSE, 24, 16, 5, 2, collision_type.npc.none, 0, 0
 
 Child6_EggCapsule:
 		dc.w 1-1

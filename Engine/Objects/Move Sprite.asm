@@ -98,8 +98,8 @@ MoveSprite_Reserve:
 		movem.w	x_vel(a0),d0/d2							; load xy speed
 		asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 		asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d0,objoff_30(a0)						; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-		add.l	d2,objoff_34(a0)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+		add.l	d0,objoff_32(a0)						; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+		add.l	d2,objoff_36(a0)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		addi.w	#$38,y_vel(a0)							; increase vertical speed (apply gravity)
 		rts
 
@@ -109,23 +109,23 @@ MoveSprite2_Reserve:
 		movem.w	x_vel(a0),d0/d2							; load xy speed
 		asl.l	#8,d0								; shift velocity to line up with the middle 16 bits of the 32-bit position
 		asl.l	#8,d2								; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d0,objoff_30(a0)						; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-		add.l	d2,objoff_34(a0)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+		add.l	d0,objoff_32(a0)						; add to x-axis position ; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+		add.l	d2,objoff_36(a0)						; add to y-axis position ; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite_Absolute_Reserve:
-		movem.l	objoff_30(a0),d0/d2						; load xy speed
+		movem.l	objoff_32(a0),d0/d2						; load xy speed
 		add.l	d0,x_pos(a0)							; add to x-axis position
 		add.l	d2,y_pos(a0)							; add to y-axis position
-		addi.l	#$380000,objoff_34(a0)						; increase vertical speed (apply gravity)
+		addi.l	#$380000,objoff_36(a0)						; increase vertical speed (apply gravity)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
 
 MoveSprite2_Absolute_Reserve:
-		movem.l	objoff_30(a0),d0/d2						; load xy speed
+		movem.l	objoff_32(a0),d0/d2						; load xy speed
 		add.l	d0,x_pos(a0)							; add to x-axis position
 		add.l	d2,y_pos(a0)							; add to y-axis position
 		rts

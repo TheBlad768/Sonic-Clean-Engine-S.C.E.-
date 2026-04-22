@@ -11,7 +11,7 @@ titlecard.exit_phase			ds.b 1						; (1 byte)
 titlecard.elements_moving_flag		ds.b 1						; (1 byte)
 titlecard.in_level_flag			ds.b 1						; (1 byte)
 
-titlecard.queue_id =			collision_flags					; (1 byte)
+titlecard.queue_id =			collision_type					; (1 byte)
 titlecard.destination =			parent3						; (2 bytes)
 titlecard.process =			parent2						; (1 byte)
 
