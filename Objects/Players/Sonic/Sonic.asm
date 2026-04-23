@@ -170,7 +170,7 @@ loc_10C26:
 .anim
 		btst	#1,object_control(a0)
 		bne.s	.touch
-		bsr.w	Animate_Sonic
+		bsr.w	Sonic_Animate
 		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
 		beq.s	.plc								; if not, branch
 		eori.b	#setBit(render_flags.y_flip),render_flags(a0)
@@ -2412,7 +2412,7 @@ Sonic_Drown:
 ; =============== S U B R O U T I N E =======================================
 
 sub_125E0:
-		bsr.s	Animate_Sonic
+		bsr.s	Sonic_Animate
 		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
 		beq.s	.notgrav							; if not, branch
 		eori.b	#setBit(render_flags.y_flip),render_flags(a0)
@@ -2422,7 +2422,7 @@ sub_125E0:
 
 ; =============== S U B R O U T I N E =======================================
 
-Animate_Sonic:
+Sonic_Animate:
 		lea	(AniSonic).l,a1
 		moveq	#0,d0
 		move.b	anim(a0),d0
