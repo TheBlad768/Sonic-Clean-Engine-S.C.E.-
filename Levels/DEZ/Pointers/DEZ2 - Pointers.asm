@@ -13,8 +13,8 @@
 
 		; Level setup
 		dc.l DEZ1_ForegroundInit						; Foreground init
-		dc.l DEZ1_BackgroundInit						; Background init
 		dc.l DEZ1_ForegroundEvent						; Foreground event
+		dc.l DEZ1_BackgroundInit						; Background init
 		dc.l DEZ1_BackgroundEvent						; Background event
 
 		; Animate tiles

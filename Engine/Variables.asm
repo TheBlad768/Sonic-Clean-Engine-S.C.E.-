@@ -270,8 +270,8 @@ Level_data_addr_RAM =					*
 .AnimatePalette						ds.l 1				; animate palette main code
 .AnPalScript						ds.l 1				; animate palette scripts
 .ScreenInit						ds.l 1
-.BackgroundInit						ds.l 1
 .ScreenEvent						ds.l 1
+.BackgroundInit						ds.l 1
 .BackgroundEvent					ds.l 1
 .AnimateTilesInit					ds.l 1				; animate tiles init
 .AnimateTiles						ds.l 1				; animate tiles main code
