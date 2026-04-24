@@ -246,7 +246,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Explosion/KosinskiPM Art/Boss Explosion.kospm",
+                        "path": "../Objects/Main/Explosion/KosinskiPlusM Art/Boss Explosion.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -271,7 +271,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Bosses/Robotnik/KosinskiPM Art/Robotnik Ship.kospm",
+                        "path": "../Objects/Bosses/Robotnik/KosinskiPlusM Art/Robotnik Ship.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -304,7 +304,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Spring/KosinskiPM Art/Diagonal Spring.kospm",
+                        "path": "../Objects/Main/Spring/KosinskiPlusM Art/Diagonal Spring.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -329,7 +329,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Spring/KosinskiPM Art/Diagonal Spring.kospm",
+                        "path": "../Objects/Main/Spring/KosinskiPlusM Art/Diagonal Spring.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -354,7 +354,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Egg Capsule/KosinskiPM Art/Egg Capsule.kospm",
+                        "path": "../Objects/Main/Egg Capsule/KosinskiPlusM Art/Egg Capsule.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -379,7 +379,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Explosion/KosinskiPM Art/Explosion.kospm",
+                        "path": "../Objects/Main/Explosion/KosinskiPlusM Art/Explosion.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -404,7 +404,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Monitor/KosinskiPM Art/Monitors.kospm",
+                        "path": "../Objects/Main/Monitor/KosinskiPlusM Art/Monitors.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -429,7 +429,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Monitor/KosinskiPM Art/Monitors.kospm",
+                        "path": "../Objects/Main/Monitor/KosinskiPlusM Art/Monitors.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -479,7 +479,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Spikes/KosinskiPM Art/Spikes and Springs.kospm",
+                        "path": "../Objects/Main/Spikes/KosinskiPlusM Art/Spikes and Springs.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -504,7 +504,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Spikes/KosinskiPM Art/Spikes and Springs.kospm",
+                        "path": "../Objects/Main/Spikes/KosinskiPlusM Art/Spikes and Springs.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -529,7 +529,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Spikes/KosinskiPM Art/Spikes and Springs.kospm",
+                        "path": "../Objects/Main/Spikes/KosinskiPlusM Art/Spikes and Springs.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -579,7 +579,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Enemy Score/KosinskiPM Art/Enemy Score and Star Post.kospm",
+                        "path": "../Objects/Main/Enemy Score/KosinskiPlusM Art/Enemy Score and Star Post.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -604,7 +604,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Star Post/KosinskiPM Art/Star Post Stars 1.kospm",
+                        "path": "../Objects/Main/Star Post/KosinskiPlusM Art/Star Post Stars 1.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -629,7 +629,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Star Post/KosinskiPM Art/Star Post Stars 2.kospm",
+                        "path": "../Objects/Main/Star Post/KosinskiPlusM Art/Star Post Stars 2.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -654,7 +654,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Star Post/KosinskiPM Art/Star Post Stars 3.kospm",
+                        "path": "../Objects/Main/Star Post/KosinskiPlusM Art/Star Post Stars 3.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -687,7 +687,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Enemies/Spikebonker/KosinskiPM Art/Spikebonker.kospm",
+                        "path": "../Objects/Enemies/Spikebonker/KosinskiPlusM Art/Spikebonker.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -720,7 +720,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Blue Flicky.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Blue Flicky.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -745,7 +745,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Chicken.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Chicken.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -770,7 +770,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Penguin.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Penguin.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -795,7 +795,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Pig.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Pig.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -820,7 +820,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Rabbit.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Rabbit.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -845,7 +845,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Seal.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Seal.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },
@@ -870,7 +870,7 @@
                         }
                     ],
                     "art": {
-                        "path": "../Objects/Main/Animals/KosinskiPM Art/Squirrel.kospm",
+                        "path": "../Objects/Main/Animals/KosinskiPlusM Art/Squirrel.kospm",
                         "compression": "KosinskiPlus-M",
                         "offset": 0
                     },

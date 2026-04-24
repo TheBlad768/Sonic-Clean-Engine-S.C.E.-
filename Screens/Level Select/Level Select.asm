@@ -69,7 +69,7 @@ LevelSelectScreen:
 		move.b	d0,(Debug_mode_flag).w
 
 		; load main art
-		QueueKosPlusModule	ArtKosPM_LevelSelectText, 1
+		QueueKosPlusModule	ArtKosPlusM_LevelSelectText, 1
 
 		; load text
 		bsr.w	LevelSelect_LoadText
