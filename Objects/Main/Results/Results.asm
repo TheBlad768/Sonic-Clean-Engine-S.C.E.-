@@ -21,7 +21,7 @@ Obj_LevelResults:
 		music	mus_FadeOut							; fade out music
 
 		; load general art
-		QueueKosPlusModule	ArtKosPM_ResultsGeneral, $500
+		QueueKosPlusModule	ArtKosPlusM_ResultsGeneral, $500
 
 		; load act number art
 		moveq	#0,d0
@@ -34,7 +34,7 @@ Obj_LevelResults:
 		jsr	(Queue_KosPlus_Module).w
 
 		; load character name art
-		QueueKosPlusModule	ArtKosPM_ResultsSONIC, $548			; select character name to use based on character of course
+		QueueKosPlusModule	ArtKosPlusM_ResultsSONIC, $548			; select character name to use based on character of course
 
 		; calc time
 		moveq	#0,d0

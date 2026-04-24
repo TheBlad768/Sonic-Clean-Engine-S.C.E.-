@@ -770,8 +770,8 @@ Child1_EggCapsule_Animals:
 		dc.b 4, -4
 
 PLC_EggCapsule: plrlistheader
-		plreq $494, ArtKosPM_EggCapsule
-		plreq ArtTile_Explosion, ArtKosPM_Explosion
+		plreq $494, ArtKosPlusM_EggCapsule
+		plreq ArtTile_Explosion, ArtKosPlusM_Explosion
 		plrlistend
 ; ---------------------------------------------------------------------------
 

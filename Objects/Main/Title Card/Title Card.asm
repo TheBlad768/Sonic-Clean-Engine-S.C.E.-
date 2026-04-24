@@ -20,16 +20,16 @@ titlecard.process =			parent2						; (1 byte)
 ; =============== S U B R O U T I N E =======================================
 
 TitleCardAct_Index:
-		dc.l ArtKosPM_TitleCardNum1	; 0
-		dc.l ArtKosPM_TitleCardNum2	; 1
-		dc.l ArtKosPM_TitleCardNum3	; 2
-		dc.l ArtKosPM_TitleCardNum4	; 3
+		dc.l ArtKosPlusM_TitleCardNum1	; 0
+		dc.l ArtKosPlusM_TitleCardNum2	; 1
+		dc.l ArtKosPlusM_TitleCardNum3	; 2
+		dc.l ArtKosPlusM_TitleCardNum4	; 3
 ; ---------------------------------------------------------------------------
 
 Obj_TitleCard:
 
 		; load general art
-		QueueKosPlusModule	ArtKosPM_TitleCardRedAct, $500
+		QueueKosPlusModule	ArtKosPlusM_TitleCardRedAct, $500
 
 		; load act number art
 		moveq	#0,d0
