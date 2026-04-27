@@ -27,7 +27,7 @@ Obj_WaveSplash:
 		moveq	#-32,d1								; set align (32 pixels)
 		and.w	(Camera_X_pos).w,d1
 		addi.w	#96,d1
-		btst	#0,(Level_frame_counter+1).w
+		btst	#0,(Level_frame_counter.byte).w
 		beq.s	.skip
 		addi.w	#32,d1
 

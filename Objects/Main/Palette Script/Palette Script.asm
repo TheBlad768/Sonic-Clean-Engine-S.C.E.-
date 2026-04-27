@@ -236,7 +236,7 @@ Obj_FadeToWhite:
 		bpl.s	.return
 
 		; check exit
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		beq.s	.delete
 		move.l	#Obj_FadeFromWhite,code_addr(a0)
 		bset	#5,state_flags(a0)

@@ -216,7 +216,7 @@ Sonic_ChkInvin:										; checks if invincibility has expired and disables it i
 		tst.b	invincibility_timer(a0)
 		beq.s	Sonic_ChkShoes							; if there wasn't any time left, that means we're in Super/Hyper mode
 		moveq	#7,d0
-		and.b	(Level_frame_counter+1).w,d0
+		and.b	(Level_frame_counter.byte).w,d0
 		bne.s	Sonic_ChkShoes
 		subq.b	#1,invincibility_timer(a0)					; reduce invincibility_timer only on every 8th frame
 		bne.s	Sonic_ChkShoes							; if time is still left, branch
@@ -238,7 +238,7 @@ Sonic_ChkShoes:										; checks if Speed Shoes have expired and disables them 
 		tst.b	speed_shoes_timer(a0)
 		beq.s	Sonic_ExitChk
 		moveq	#7,d0
-		and.b	(Level_frame_counter+1).w,d0
+		and.b	(Level_frame_counter.byte).w,d0
 		bne.s	Sonic_ExitChk
 		subq.b	#1,speed_shoes_timer(a0)					; reduce speed_shoes_timer only on every 8th frame
 		bne.s	Sonic_ExitChk

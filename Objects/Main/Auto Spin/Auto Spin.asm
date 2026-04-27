@@ -26,7 +26,7 @@ Obj_AutoSpin:
 		move.l	#bytes_word_to_long(256/2,256/2,priority_5),height_pixels(a0)	; set height, width and priority
 
 		; check
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#2,d0
 		beq.s	AutoSpin_CheckX
 		andi.w	#7,d0
@@ -102,7 +102,7 @@ sub_1E8C6:
 		blo.s	locret_1E942
 		cmp.w	d3,d4
 		bhs.s	locret_1E942
-		btst	#5,subtype(a0)
+		btst	#5,subtype.byte(a0)
 		beq.s	loc_1E908
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1E942							; if yes, branch
@@ -110,11 +110,11 @@ sub_1E8C6:
 loc_1E908:
 		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1E934
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	loc_1E930
 		move.w	#$580,ground_vel(a1)
 		move.b	#1,spin_dash_flag(a1)
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		bpl.s	loc_1E930
 		move.b	#$81,spin_dash_flag(a1)
 
@@ -123,7 +123,7 @@ loc_1E930:
 ; ---------------------------------------------------------------------------
 
 loc_1E934:
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	locret_1E942
 		clr.b	spin_dash_flag(a1)
 
@@ -146,7 +146,7 @@ AutoSpin_MainX_Alt:
 		blo.s	locret_1E9B4
 		cmp.w	d3,d4
 		bhs.s	locret_1E9B4
-		btst	#5,subtype(a0)
+		btst	#5,subtype.byte(a0)
 		beq.s	loc_1E97C
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1E9B4							; if yes, branch
@@ -154,11 +154,11 @@ AutoSpin_MainX_Alt:
 loc_1E97C:
 		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	loc_1E9A6
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	loc_1E9A4
 		move.w	#-$580,ground_vel(a1)
 		move.b	#1,spin_dash_flag(a1)
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		bpl.s	loc_1E9A4
 		move.b	#$81,spin_dash_flag(a1)
 
@@ -167,7 +167,7 @@ loc_1E9A4:
 ; ---------------------------------------------------------------------------
 
 loc_1E9A6:
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	locret_1E9B4
 		clr.b	spin_dash_flag(a1)
 
@@ -222,7 +222,7 @@ sub_1EA14:
 		blo.s	locret_1EAAE
 		cmp.w	d3,d4
 		bhs.s	locret_1EAAE
-		btst	#5,subtype(a0)
+		btst	#5,subtype.byte(a0)
 		beq.s	loc_1EA58
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1EAAE							; if yes, branch
@@ -230,15 +230,15 @@ sub_1EA14:
 loc_1EA58:
 		btst	#render_flags.x_flip,render_flags(a0)
 		bne.s	loc_1EA9E
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	loc_1EA9A
 		move.b	#1,spin_dash_flag(a1)
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		bpl.s	loc_1EA7A
 		move.b	#$81,spin_dash_flag(a1)
 
 loc_1EA7A:
-		btst	#6,subtype(a0)
+		btst	#6,subtype.byte(a0)
 		beq.s	loc_1EA9A
 		bclr	#status.player.in_air,status(a1)
 		move.b	#$40,angle(a1)
@@ -250,7 +250,7 @@ loc_1EA9A:
 ; ---------------------------------------------------------------------------
 
 loc_1EA9E:
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	locret_1EAAE
 		clr.b	spin_dash_flag(a1)
 
@@ -273,7 +273,7 @@ AutoSpin_MainY_Alt:
 		blo.s	locret_1EB30
 		cmp.w	d3,d4
 		bhs.s	locret_1EB30
-		btst	#5,subtype(a0)
+		btst	#5,subtype.byte(a0)
 		beq.s	loc_1EAE8
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1EB30							; if yes, branch
@@ -281,15 +281,15 @@ AutoSpin_MainY_Alt:
 loc_1EAE8:
 		btst	#render_flags.x_flip,render_flags(a0)
 		beq.s	loc_1EB22
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	loc_1EB1E
 		move.b	#1,spin_dash_flag(a1)
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		bpl.s	loc_1EB0A
 		move.b	#$81,spin_dash_flag(a1)
 
 loc_1EB0A:
-		btst	#6,subtype(a0)
+		btst	#6,subtype.byte(a0)
 		beq.s	loc_1EB1E
 		bclr	#status.player.in_air,status(a1)
 		move.b	#$40,angle(a1)
@@ -299,7 +299,7 @@ loc_1EB1E:
 ; ---------------------------------------------------------------------------
 
 loc_1EB22:
-		btst	#4,subtype(a0)
+		btst	#4,subtype.byte(a0)
 		bne.s	locret_1EB30
 		clr.b	spin_dash_flag(a1)
 

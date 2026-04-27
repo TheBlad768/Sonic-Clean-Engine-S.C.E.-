@@ -36,7 +36,7 @@ loc_1B79A:
 loc_1B7A2:
 		cmp.w	(a0),d6
 		bls.s	loc_1B7AC
-		addq.w	#6,a0
+		addq.w	#8,a0
 		addq.w	#1,a3
 		bra.s	loc_1B7A2
 ; ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ loc_1B7AC:
 loc_1B7CE:
 		cmp.w	(a0),d6
 		bls.s	loc_1B7D8
-		addq.w	#6,a0
+		addq.w	#8,a0
 		addq.w	#1,a3
 		bra.s	loc_1B7CE
 ; ---------------------------------------------------------------------------
@@ -132,18 +132,18 @@ loc_1B864:
 		bne.s	loc_1B8A8
 
 loc_1B892:
-		cmp.w	-6(a0),d6
+		cmp.w	-8(a0),d6
 		bge.s	loc_1B8A8
-		subq.w	#6,a0
+		subq.w	#8,a0
 		subq.w	#1,a3
 		jsr	(a6)
 		bne.s	loc_1B8A4
-		subq.w	#6,a0
+		subq.w	#8,a0
 		bra.s	loc_1B892
 ; ---------------------------------------------------------------------------
 
 loc_1B8A4:
-		addq.w	#6,a0
+		addq.w	#8,a0
 		addq.w	#1,a3
 
 loc_1B8A8:
@@ -154,9 +154,9 @@ loc_1B8A8:
 		addi.w	#$300,d6
 
 loc_1B8BC:
-		cmp.w	-6(a0),d6
+		cmp.w	-8(a0),d6
 		bgt.s	loc_1B8C8
-		subq.w	#6,a0
+		subq.w	#8,a0
 		subq.w	#1,a3
 		bra.s	loc_1B8BC
 ; ---------------------------------------------------------------------------
@@ -205,7 +205,7 @@ loc_1B8F2:
 loc_1B908:
 		cmp.w	(a0),d6
 		bls.s	loc_1B912
-		addq.w	#6,a0
+		addq.w	#8,a0
 		addq.w	#1,a3
 		bra.s	loc_1B908
 ; ---------------------------------------------------------------------------
@@ -273,12 +273,12 @@ loc_1B982:
 		move.l	(Object_load_addr_front).w,d7
 		sub.l	a0,d7
 		beq.s	loc_1B9FA
-		addq.w	#2,a0
+		addq.w	#2,a0								; skip xpos
 
 loc_1B9A4:
 		tst.b	(a3)
 		bmi.s	loc_1B9F2
-		move.w	(a0),d1
+		move.w	(a0),d1								; get ypos
 		and.w	d5,d1
 		cmp.w	d3,d1
 		blo.s	loc_1B9F2
@@ -288,7 +288,7 @@ loc_1B9A4:
 		; set
 		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	-2(a0),x_pos(a1)
-		move.w	(a0),d1
+		move.w	(a0),d1								; get ypos
 		move.w	d1,d2
 		and.w	d5,d1
 		move.w	d1,y_pos(a1)
@@ -301,19 +301,19 @@ loc_1B9A4:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		move.b	2(a0),d2							; get object id
-		add.w	d2,d2								; multiply by 4
-		add.w	d2,d2
-		move.l	(a4,d2.w),code_addr(a1)
-		move.b	3(a0),subtype(a1)
+		moveq	#0,d2
+		move.w	2(a0),d2							; get object id
+		lsl.l	#2,d2								; multiply by 4
+		move.l	(a4,d2.l),code_addr(a1)
+		move.w	4(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		Create_New_Object_4.s	loc_1B9FA
 		bne.s	loc_1B9FA
 
 loc_1B9F2:
-		addq.w	#6,a0
+		addq.w	#8,a0
 		addq.w	#1,a3
-		subq.w	#6,d7
+		subq.w	#8,d7
 		bne.s	loc_1B9A4
 
 loc_1B9FA:
@@ -324,14 +324,14 @@ loc_1B9FA:
 loc_1BA40:
 		tst.b	(a3)
 		bpl.s	loc_1BA4A
-		addq.w	#6,a0
+		addq.w	#8,a0
 		moveq	#0,d1
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1BA4A:
-		move.w	(a0)+,d7
-		move.w	(a0)+,d1
+		move.w	(a0)+,d7							; get xpos
+		move.w	(a0)+,d1							; get ypos
 		move.w	d1,d2
 		bmi.s	loc_1BA62
 		and.w	d5,d1
@@ -339,7 +339,7 @@ loc_1BA4A:
 		bhs.s	loc_1BA64
 		cmp.w	d4,d1
 		bls.s	loc_1BA64
-		addq.w	#2,a0
+		addq.w	#4,a0								; skip object id and subtype
 		moveq	#0,d1
 		rts
 ; ---------------------------------------------------------------------------
@@ -360,11 +360,11 @@ loc_1BA64:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		move.b	(a0)+,d2							; get object id
-		add.w	d2,d2								; multiply by 4
-		add.w	d2,d2
-		move.l	(a4,d2.w),code_addr(a1)
-		move.b	(a0)+,subtype(a1)
+		moveq	#0,d2
+		move.w	(a0)+,d2							; get object id
+		lsl.l	#2,d2								; multiply by 4
+		move.l	(a4,d2.l),code_addr(a1)
+		move.w	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		Create_New_Object_4.s	, 1
 ; ---------------------------------------------------------------------------
@@ -372,14 +372,14 @@ loc_1BA64:
 loc_1BA92:
 		tst.b	(a3)
 		bpl.s	loc_1BA9C
-		addq.w	#6,a0
+		addq.w	#8,a0
 		moveq	#0,d1
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1BA9C:
-		move.w	(a0)+,d7
-		move.w	(a0)+,d1
+		move.w	(a0)+,d7							; get xpos
+		move.w	(a0)+,d1							; get ypos
 		move.w	d1,d2
 		bmi.s	loc_1BAB4
 		and.w	d5,d1
@@ -389,7 +389,7 @@ loc_1BA9C:
 		bls.s	loc_1BAB6
 
 loc_1BAAE:
-		addq.w	#2,a0
+		addq.w	#4,a0								; skip object id and subtype
 		moveq	#0,d1
 		rts
 ; ---------------------------------------------------------------------------
@@ -410,11 +410,11 @@ loc_1BAB6:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		move.b	(a0)+,d2							; get object id
-		add.w	d2,d2								; multiply by 4
-		add.w	d2,d2
-		move.l	(a4,d2.w),code_addr(a1)
-		move.b	(a0)+,subtype(a1)
+		moveq	#0,d2
+		move.w	(a0)+,d2							; get object id
+		lsl.l	#2,d2								; multiply by 4
+		move.l	(a4,d2.l),code_addr(a1)
+		move.w	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 		Create_New_Object_4.s	, 1
 
@@ -440,9 +440,9 @@ Seek_Object_Manager:
 		blo.s	loc_1BBF2
 
 loc_1BBE6:
-		cmp.w	-6(a1),d6
+		cmp.w	-8(a1),d6
 		bge.s	loc_1BBF2
-		subq.w	#6,a1
+		subq.w	#8,a1
 		subq.w	#1,a3
 		bra.s	loc_1BBE6
 ; ---------------------------------------------------------------------------
@@ -455,9 +455,9 @@ loc_1BBF2:
 		addi.w	#$300,d6
 
 loc_1BC06:
-		cmp.w	-6(a1),d6
+		cmp.w	-8(a1),d6
 		bgt.s	loc_1BC12
-		subq.w	#6,a1
+		subq.w	#8,a1
 		subq.w	#1,a3
 		bra.s	loc_1BC06
 ; ---------------------------------------------------------------------------
@@ -477,7 +477,7 @@ loc_1BC1C:
 loc_1BC2C:
 		cmp.w	(a1),d6
 		bls.s	loc_1BC36
-		addq.w	#6,a1
+		addq.w	#8,a1
 		addq.w	#1,a3
 		bra.s	loc_1BC2C
 ; ---------------------------------------------------------------------------
@@ -493,7 +493,7 @@ loc_1BC36:
 loc_1BC4C:
 		cmp.w	(a1),d6
 		bls.s	loc_1BC56
-		addq.w	#6,a1
+		addq.w	#8,a1
 		addq.w	#1,a3
 		bra.s	loc_1BC4C
 ; ---------------------------------------------------------------------------

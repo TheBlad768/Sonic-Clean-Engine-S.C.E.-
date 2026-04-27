@@ -187,7 +187,7 @@ Obj_FlickerMove:
 		bsr.w	MoveSprite
 		out_of_xrange.w	Go_Delete_Object_3
 		out_of_yrange.w	Go_Delete_Object_3
-		move.b	(V_int_run_count+3).w,d0
+		move.b	(V_int_run_count.byte).w,d0
 		add.b	d7,d0								; d7 - object count (Process_Objects)
 		andi.b	#1,d0
 		bne.s	Sprite_ChildCheckDeleteY_NoDraw.return

@@ -10,6 +10,7 @@ animal.bonus_counter			ds.w 1						; (2 bytes)
 animal.xvel				ds.w 1						; (2 bytes)
 animal.yvel				ds.w 1						; (2 bytes)
 animal.code_ptr				ds.l 1						; (2 bytes)
+animal.chg_frame			ds.b 1						; (1 byte)
 
 	dsreset										; stop pretending and reset the program counter
 
@@ -156,8 +157,7 @@ Obj_Animal_Fly:
 Obj_Animal_Ending:
 
 		; these are the S1 ending actions
-		moveq	#0,d0
-		move.b	subtype(a0),d0
+		move.w	subtype(a0),d0
 		lsl.w	#4,d0								; multiply by $10
 		lea	Animal_Ending_Index(pc,d0.w),a1					; $E size data
 		move.l	(a1)+,code_addr(a0)						; Go to "NEXT"
@@ -212,7 +212,7 @@ Obj_Animal_FlickyWait:
 		bpl.s	.anim
 		add.w	d1,y_pos(a0)
 		move.w	animal.yvel(a0),y_vel(a0)
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		beq.s	.anim
 		neg.w	x_vel(a0)
 		bchg	#render_flags.x_flip,render_flags(a0)
@@ -286,7 +286,7 @@ Obj_Animal_DoubleBounce:
 		jsr	(ObjCheckFloorDist).w
 		tst.w	d1
 		bpl.s	.chkdel
-		not.b	subtype+1(a0)
+		not.b	animal.chg_frame(a0)
 		bne.s	.chg
 		neg.w	x_vel(a0)
 		bchg	#render_flags.x_flip,render_flags(a0)
@@ -357,7 +357,7 @@ Obj_Animal_FlyBounce:
 		jsr	(ObjCheckFloorDist).w
 		tst.w	d1
 		bpl.s	.anim
-		not.b	subtype+1(a0)
+		not.b	animal.chg_frame(a0)
 		bne.s	.chg
 		neg.w	x_vel(a0)
 		bchg	#render_flags.x_flip,render_flags(a0)

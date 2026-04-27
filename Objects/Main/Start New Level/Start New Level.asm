@@ -49,7 +49,9 @@ Obj_StartNewLevel:
 		beq.s	.chkdel
 
 		; load zone and act
-		move.w	subtype(a0),d0
+		move.b	subtype.byte(a0),-(sp)						; multiply by $100
+		move.w	(sp)+,d0
+		clr.b	d0								; clear garbage data
 		lsr.w	#2,d0
 		rol.b	#2,d0
 		jmp	(StartNewLevel).w

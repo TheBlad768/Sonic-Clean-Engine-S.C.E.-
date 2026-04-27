@@ -188,6 +188,7 @@ WindTunnel_flag						ds.b 1
 Disable_death_plane					ds.b 1				; if set, going below the screen wont kill the player
 Ctrl_1_locked						ds.b 1
 Level_frame_counter					ds.l 1				; the number of frames which have elapsed since the level started
+.byte =							Level_frame_counter+1
 Level_started_flag					ds.b 1
 Game_paused						ds.b 1
 Restart_level_flag					ds.b 1
@@ -380,6 +381,8 @@ CrossResetRAM =						*				; RAM in this region will not be cleared after a soft 
 
 ; main variables
 V_int_run_count						ds.l 1				; the number of times V-int has run
+.word =							V_int_run_count+2
+.byte =							V_int_run_count+3
 Current_zone_and_act =					*
 Current_zone						ds.b 1
 Current_act						ds.b 1

@@ -789,7 +789,7 @@ DrawPlaneTextAdvanced macro source,loc,twidth,theight,vram,pal,pri,terminate
 ; ---------------------------------------------------------------------------
 
 ObjectLayoutBoundary macro
-	dc.w -1, 0, 0
+	dc.w -1, 0, 0, 0
     endm
 
 ; ---------------------------------------------------------------------------

@@ -21,7 +21,7 @@ Obj_Invisible_SolidBlock:
 		bset	#status.npc.no_balancing,status(a0)				; disable player's balance animation
 
 		; set
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		move.b	d0,d1
 		andi.w	#$F0,d0
 		addi.w	#$10,d0
