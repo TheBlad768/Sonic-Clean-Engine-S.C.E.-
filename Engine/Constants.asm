@@ -376,7 +376,8 @@ collision_height					ds.b 1				; byte ; collision height / 2
 collision_width						ds.b 1				; byte ; collision width / 2
 status							ds.b 1				; byte ; orientation or mode
 shield_reaction						ds.b 1				; byte ; bit 3 = bounces off shield, bit 4 = negated by fire shield, bit 5 = negated by lightning shield, bit 6 = negated by bubble shield
-subtype							ds.w 1				; byte/word ; object subtype
+subtype							ds.w 1				; word ; object subtype
+.byte =							subtype+1			; byte ; object subtype
 wait_timer						ds.w 1				; word ; object timer
 animations						ds.l 1				; long ; animations address
 wait_addr						ds.l 1				; long ; custom object code address
@@ -514,7 +515,7 @@ obAngle =						angle				; byte/word
 obColType =						collision_type			; byte ; collision type
 obColProp =						collision_property		; byte ; usage varies, bosses use it as a hit counter
 obStatus =						status				; byte ; orientation or mode
-obSubtype =						subtype				; byte/word ; object subtype
+obSubtype =						subtype				; word ; object subtype
 obTimer =						wait_timer			; word ; object timer
 obParent =						parent				; word ; parent of child objects
 obParent4 =						parent4				; word ; parent of child objects

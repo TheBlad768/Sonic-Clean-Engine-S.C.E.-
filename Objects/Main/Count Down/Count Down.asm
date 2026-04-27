@@ -167,7 +167,7 @@ Obj_AirCountdown:
 		add.w	x_pos(a2),d0
 		move.w	d0,x_pos(a1)						; copy player X position to object
 		move.w	y_pos(a2),y_pos(a1)
-		move.b	#6,subtype(a1)
+		move.b	#6,subtype.byte(a1)
 
 		; check
 		tst.w	aircountdown.drown_timer(a0)
@@ -179,7 +179,7 @@ Obj_AirCountdown:
 		moveq	#3,d0
 		and.w	(Level_frame_counter).w,d0
 		bne.s	.checkcount
-		move.b	#$E,subtype(a1)
+		move.b	#$E,subtype.byte(a1)
 		bra.s	.checkcount
 
 ; ---------------------------------------------------------------------------
@@ -205,7 +205,7 @@ Obj_AirCountdown:
 		bne.s	.check2
 		bset	#6,aircountdown.state_flags(a0)					; this flag prevents more than one number bubble from spawning at once
 		bne.s	.checkcount
-		move.b	d2,subtype(a1)
+		move.b	d2,subtype.byte(a1)
 		move.w	#28,aircountdown_bubbles.number_timer(a1)			; make this bubble turn into a number later
 
 .check2
@@ -213,7 +213,7 @@ Obj_AirCountdown:
 		bne.s	.checkcount
 		bset	#6,aircountdown.state_flags(a0)					; this flag prevents more than one number bubble from spawning at once
 		bne.s	.checkcount
-		move.b	d2,subtype(a1)
+		move.b	d2,subtype.byte(a1)
 		move.w	#28,aircountdown_bubbles.number_timer(a1)			; make this bubble turn into a number later
 
 .checkcount
@@ -241,7 +241,7 @@ aircountdown_bubbles.prev_frame		ds.b 1						; (1 byte)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_AirCountdown_Bubbles:
-		move.b	subtype(a0),anim(a0)
+		move.b	subtype.byte(a0),anim(a0)
 
 		; use screen coordinates
 		move.b	#( \

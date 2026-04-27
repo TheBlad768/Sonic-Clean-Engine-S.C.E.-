@@ -113,7 +113,7 @@ Child_GetCollisionPriorityOnce:
 		move.l	(sp),code_addr(a0)						; set address after bsr/jsr
 		move.b	d0,collision_type(a0)						; set collision type
 		swap	d0
-		move.w	d0,collision_height(a0)						; collision height and width
+		move.w	d0,collision_height(a0)						; set collision height and width
 
 .nothighpriority
 		rts

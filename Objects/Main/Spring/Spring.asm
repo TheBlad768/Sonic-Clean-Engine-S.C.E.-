@@ -26,7 +26,7 @@ Obj_Spring:
 		move.w	y_pos(a0),spring.origY(a0)
 
 		; next
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		lsr.w	#3,d0
 		andi.w	#$E,d0
 		jmp	.index(pc,d0.w)
@@ -81,13 +81,13 @@ Spring_Up:
 
 loc_22E96:
 		move.l	#Obj_Spring_Up,code_addr(a0)
-		tst.b	subtype(a0)
+		tst.b	subtype.byte(a0)
 		bpl.s	Spring_Common
 		move.l	#Obj_Spring_Up_NoSolid,code_addr(a0)
 
 Spring_Common:
 		moveq	#2,d0
-		and.b	subtype(a0),d0
+		and.b	subtype.byte(a0),d0
 		move.w	word_22EF0(pc,d0.w),spring.strength(a0)
 		btst	#1,d0
 		beq.s	locret_22EEE
@@ -159,7 +159,7 @@ sub_22F98:
 		move.b	#PlayerID_Control,routine(a1)
 
 		; check
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#0,d0
 		beq.s	loc_23020
 		move.w	#1,ground_vel(a1)
@@ -250,7 +250,7 @@ loc_231BE:
 		clr.b	anim(a1)							; AniIDSonAni_Walk
 
 loc_231D8:
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#0,d0
 		beq.s	loc_23224
 		move.w	#1,ground_vel(a1)
@@ -377,7 +377,7 @@ sub_233CA:
 		move.w	#$D00,y_vel(a1)
 
 loc_233F8:
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#0,d0
 		beq.s	loc_23444
 		move.w	#1,ground_vel(a1)
@@ -481,7 +481,7 @@ loc_23542:
 		clr.b	jumping(a1)
 		move.b	#AniIDSonAni_Spring,anim(a1)
 		move.b	#PlayerID_Control,routine(a1)
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#0,d0
 		beq.s	loc_235A2
 		move.w	#1,ground_vel(a1)
@@ -564,7 +564,7 @@ loc_23660:
 		move.b	#PlayerID_Control,routine(a1)
 
 		; check
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#0,d0
 		beq.s	loc_236BA
 		move.w	#1,ground_vel(a1)

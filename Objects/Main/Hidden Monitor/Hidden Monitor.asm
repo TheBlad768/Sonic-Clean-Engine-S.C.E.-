@@ -15,7 +15,7 @@ Obj_HiddenMonitor:
 		move.w	#bytes_to_word(30/2,30/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#collision_type.npc.monitor,collision_type(a0)			; set monitor collision type
 		move.w	#bytes_to_word(32/2,32/2),collision_height(a0)			; set height and width collision
-		move.b	subtype(a0),anim(a0)						; set monitor content id
+		move.b	subtype.byte(a0),anim(a0)					; set monitor content id
 		rts
 ; ---------------------------------------------------------------------------
 

@@ -38,7 +38,7 @@ Render_HUD:
 
 .process
 		moveq	#0,d4								; frame #0
-		btst	#3,(Level_frame_counter+1).w
+		btst	#3,(Level_frame_counter.byte).w
 		bne.s	.draw
 		tst.w	(Ring_count).w							; do you have any rings?
 		bne.s	.time								; if yes, branch

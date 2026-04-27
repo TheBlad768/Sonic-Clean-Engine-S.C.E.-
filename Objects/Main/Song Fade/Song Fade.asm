@@ -18,7 +18,7 @@ Obj_Song_Fade_Transition:
 .wait
 		subq.w	#1,wait_timer(a0)						; subtract 1 from fade delay
 		bpl.s	.return								; if fade still remains, branch
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		move.b	d0,(Current_music+1).w
 		jsr	(Play_Music).w							; play music
 

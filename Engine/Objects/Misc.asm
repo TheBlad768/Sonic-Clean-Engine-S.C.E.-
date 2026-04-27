@@ -52,7 +52,7 @@ SetUp_ObjAttributesSlotted:
 		move.l	d0,y_pos(a0)
 		move.b	d0,render_flags(a0)
 		move.w	d0,status(a0)							; if no open slots, then destroy this object period
-		move.b	d0,subtype(a0)
+		move.w	d0,subtype(a0)
 		addq.w	#4*2,sp								; exit from current object
 		rts
 ; ---------------------------------------------------------------------------
@@ -125,8 +125,7 @@ Perform_DPLC:
 ; =============== S U B R O U T I N E =======================================
 
 Set_IndexedVelocity:
-		moveq	#0,d1
-		move.b	subtype(a0),d1
+		move.w	subtype(a0),d1
 		add.w	d1,d1								; multiply by 2
 		add.w	d1,d0
 		move.l	.index(pc,d0.w),x_vel(a0)
@@ -482,7 +481,7 @@ Play_SFX_Continuous:
 		moveq	#$F,d1								; play sound every 16th frame
 
 .main
-		and.b	(V_int_run_count+3).w,d1
+		and.b	(V_int_run_count.byte).w,d1
 		bne.s	StartNewLevel.return
 		bra.w	Play_SFX							; play continuous sfx
 

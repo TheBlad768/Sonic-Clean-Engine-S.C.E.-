@@ -33,8 +33,7 @@ Obj_Spikebonker:
 		move.w	d0,x_vel(a0)
 
 		; set wait
-		moveq	#0,d0
-		move.b	subtype(a0),d0
+		move.w	subtype(a0),d0
 		move.w	d0,d1
 		subq.w	#1,d0
 		move.w	d0,wait_timer(a0)

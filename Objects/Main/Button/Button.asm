@@ -26,13 +26,13 @@ Obj_Button:
 
 		; check
 		moveq	#$F,d0
-		and.b	subtype(a0),d0
+		and.b	subtype.byte(a0),d0
 		lea	(Level_trigger_array).w,a3
 		adda.w	d0,a3
 
 		; set
 		moveq	#0,d3								; bit 0
-		btst	#6,subtype(a0)							; $40?
+		btst	#6,subtype.byte(a0)						; $40?
 		beq.s	.skip
 		moveq	#7,d3								; bit 7
 
@@ -42,7 +42,7 @@ Obj_Button:
 		bne.s	.press								; if yes, branch
 
 		; check
-		btst	#4,subtype(a0)							; $10?
+		btst	#4,subtype.byte(a0)						; $10?
 		bne.s	.draw
 		bclr	d3,(a3)								; set as unpressed
 		bra.s	.draw

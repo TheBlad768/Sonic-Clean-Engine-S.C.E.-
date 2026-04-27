@@ -108,7 +108,7 @@ Obj_EggCapsule:
 		lea	Child6_CreateBossExplosion(pc),a2
 		jsr	(CreateChild6_Simple).w
 		bne.s	.return
-		move.b	#8,subtype(a1)
+		move.w	#8,subtype(a1)
 
 .return
 		rts
@@ -437,8 +437,7 @@ Obj_EggCapsule_Pieces:
 ; =============== S U B R O U T I N E =======================================
 
 .getframe
-		moveq	#0,d0
-		move.b	subtype(a0),d0
+		move.w	subtype(a0),d0
 		lsr.w	d0								; division by 2
 		move.b	.frame(pc,d0.w),mapping_frame(a0)
 		rts
@@ -541,7 +540,7 @@ Obj_EggCapsule_Animals:
 
 .anim
 		moveq	#0,d0
-		btst	#3,(V_int_run_count+3).w					; 0 or 8
+		btst	#3,(V_int_run_count.byte).w					; 0 or 8
 		bne.s	.setframe
 		addq.b	#1,d0
 
@@ -578,7 +577,7 @@ Obj_EggCapsule_Animals_Flipped:
 		move.w	#$100,d1							; max yvel
 		moveq	#$10,d2								; add xyvel
 		moveq	#-48,d4								; add ypos
-		sub.b	subtype(a0),d4
+		sub.w	subtype(a0),d4
 
 		; xvel
 		move.w	d2,d5
@@ -636,7 +635,7 @@ Obj_EggCapsule_Animals_Flipped:
 
 .anim
 		moveq	#0,d0
-		btst	#3,(V_int_run_count+3).w					; 0 or 8
+		btst	#3,(V_int_run_count.byte).w					; 0 or 8
 		bne.s	.setframe
 		addq.b	#1,d0
 
@@ -663,8 +662,7 @@ EggCapsule_Animals_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 EggCapsule_Animals_Load:
-		moveq	#0,d0
-		move.b	subtype(a0),d0
+		move.w	subtype(a0),d0
 		move.w	d0,d1
 		andi.w	#6,d0
 		move.w	EggCapsule_Animals_Yvel(pc,d0.w),d2

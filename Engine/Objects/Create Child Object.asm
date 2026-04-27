@@ -20,7 +20,7 @@ CreateChild1_Normal:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
 		move.b	(a2)+,d1							; x positional offset
 		move.b	d1,child_dx(a1)							; child_dx has the X offset
@@ -73,7 +73,7 @@ CreateChild2_Complex:
 		move.l	(a2)+,setup_addr(a1)						; object data (to be read by SetUp_ObjAttributes)
 		move.l	(a2)+,animations(a1)						; raw animation pointer (used by Animate_Raw)
 		move.l	(a2)+,wait_addr(a1)						; jump to custom code (used by Obj_Wait)
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
 		move.b	(a2)+,d1							; x positional offset
 		move.b	d1,child_dx(a1)							; child_dx has the x offset
@@ -125,7 +125,7 @@ CreateChild3_NormalRepeated:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a3)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
 		move.b	(a3)+,d1							; x positional offset
 		move.b	d1,child_dx(a1)							; child_dx has the X offset
@@ -178,7 +178,7 @@ CreateChild4_LinkListRepeated:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2),code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addq.w	#2,d2								; add 2 to index
@@ -221,7 +221,7 @@ CreateChild5_ComplexAdjusted:
 		move.l	(a2)+,setup_addr(a1)						; object data (to be read by SetUp_ObjAttributes)
 		move.l	(a2)+,animations(a1)						; raw animation pointer (used by Animate_Raw)
 		move.l	(a2)+,wait_addr(a1)						; jump to custom code (used by Obj_Wait)
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
 		move.b	(a2)+,d1							; x positional offset
 		move.b	d1,child_dx(a1)							; child_dx has the x offset
@@ -282,7 +282,7 @@ CreateChild6_Simple:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2),code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addq.w	#2,d2								; add 2 to index
@@ -322,7 +322,7 @@ CreateChild7_Normal2:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
 		move.b	(a2)+,d1							; x positional offset
 		move.b	d1,child_dx(a1)							; child_dx has the X offset
@@ -375,7 +375,7 @@ CreateChild8_TreeListRepeated:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2),code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addq.w	#2,d2								; add 2 to index
@@ -418,7 +418,7 @@ CreateChild9_TreeList:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addq.w	#2,d2								; add 2 to index
@@ -458,7 +458,7 @@ CreateChild10_NormalAdjusted:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
 		move.b	(a2)+,d1							; x positional offset
 		btst	#render_flags.x_flip,render_flags(a0)				; check flipx
@@ -514,7 +514,7 @@ CreateChild11_Simple:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addq.w	#2,d2								; add 2 to index
@@ -554,7 +554,7 @@ CreateChild12_Simple:
 		move.l	mappings(a0),mappings(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
-		move.b	d2,subtype(a1)							; index of child object (done sequentially for each object)
+		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),x_pos(a1)
 		move.w	y_pos(a0),y_pos(a1)
 		addq.w	#2,d2								; add 2 to index

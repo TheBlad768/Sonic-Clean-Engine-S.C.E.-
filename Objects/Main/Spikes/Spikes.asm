@@ -39,7 +39,7 @@ Obj_Spikes:
 
 		; init
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		andi.w	#$F0,d0
 		lsr.w	#3,d0
 		move.w	Spikes_InitData(pc,d0.w),height_pixels(a0)			; set height and width
@@ -74,9 +74,9 @@ loc_24002:
 		move.w	x_pos(a0),spikes.origX(a0)
 		move.w	y_pos(a0),spikes.origY(a0)
 		moveq	#$F,d0
-		and.b	subtype(a0),d0
+		and.b	subtype.byte(a0),d0
 		add.b	d0,d0
-		move.b	d0,subtype(a0)
+		move.b	d0,subtype.byte(a0)
 		rts
 
 ; =============== S U B R O U T I N E =======================================
@@ -200,7 +200,7 @@ Touch_ChkHurt3:
 
 MoveSpikes:
 		moveq	#0,d0
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		beq.s	.return								; 0 (static)
 		jmp	.index-2(pc,d0.w)
 ; ---------------------------------------------------------------------------

@@ -106,7 +106,7 @@ Obj_Signpost:
 
 .sparkle
 		moveq	#3,d0
-		and.b	(V_int_run_count+3).w,d0
+		and.b	(V_int_run_count.byte).w,d0
 		bne.s	.skip
 		lea	Child6_Signpost_Sparkle(pc),a2					; create a signpost sparkle every 4 frames
 		jsr	(CreateChild6_Simple).w

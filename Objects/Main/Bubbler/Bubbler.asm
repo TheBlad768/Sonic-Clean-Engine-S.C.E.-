@@ -20,7 +20,7 @@ Obj_Bubbler:
 
 		; set
 		moveq	#$7F,d0
-		and.b	subtype(a0),d0
+		and.b	subtype.byte(a0),d0
 		move.b	d0,bubbler.timer(a0)
 		move.b	d0,bubbler.delay(a0)
 
@@ -114,7 +114,7 @@ Obj_Bubbler:
 		moveq	#0,d0
 		movea.l	bubbler.types_ptr(a0),a2					; load current bubbles types address
 		move.b	bubbler.type_index(a0),d0
-		move.b	(a2,d0.w),subtype(a1)
+		move.b	(a2,d0.w),subtype.byte(a1)
 
 		; check
 		btst	#7,bubbler.state_flags(a0)
@@ -124,14 +124,14 @@ Obj_Bubbler:
 		bne.s	.check2
 		bset	#6,bubbler.state_flags(a0)
 		bne.s	.set_wait
-		move.b	#2,subtype(a1)
+		move.b	#2,subtype.byte(a1)
 
 .check2
 		tst.b	bubbler.type_index(a0)
 		bne.s	.set_wait
 		bset	#6,bubbler.state_flags(a0)
 		bne.s	.set_wait
-		move.b	#2,subtype(a1)
+		move.b	#2,subtype.byte(a1)
 
 .set_wait
 		subq.b	#1,bubbler.type_index(a0)
@@ -187,7 +187,7 @@ bubbler_bubbles.flag			ds.b 1						; if set, player can collect air (1 byte)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Bubbler_Bubbles:
-		move.b	subtype(a0),anim(a0)
+		move.b	subtype.byte(a0),anim(a0)
 
 		; use screen coordinates
 		move.b	#( \

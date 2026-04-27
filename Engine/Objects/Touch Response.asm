@@ -68,7 +68,7 @@ Touch_Loop:
 		movea.w	(a4)+,a1							; get address of first object's RAM
 		tst.b	render_flags(a1)						; is the object visible on the screen?
 		bpl.s	Touch_NextObj							; if not, branch
-		tst.b	collision_type(a1)						; get its collision type
+		tst.b	collision_type(a1)						; check collision type
 		bne.s	Touch_Width							; if it actually has collision, branch
 
 Touch_NextObj:

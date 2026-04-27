@@ -148,7 +148,7 @@ Obj_Bouncing_Ring_Normal:
 .check
 		add.w	d1,y_vel(a0)
 		bmi.s	.main
-		move.b	(V_int_run_count+3).w,d0
+		move.b	(V_int_run_count.byte).w,d0
 		add.b	d7,d0								; d7 - object count (Process_Objects)
 		andi.b	#7,d0
 		bne.s	.main
@@ -227,7 +227,7 @@ Obj_Bouncing_Ring_TestGravity:
 .check
 		add.w	d1,y_vel(a0)
 		bmi.s	.main
-		move.b	(V_int_run_count+3).w,d0
+		move.b	(V_int_run_count.byte).w,d0
 		add.b	d7,d0								; d7 - object count (Process_Objects)
 		andi.b	#7,d0
 		bne.s	.main

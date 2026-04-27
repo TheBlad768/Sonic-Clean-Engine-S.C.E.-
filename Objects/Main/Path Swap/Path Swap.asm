@@ -26,7 +26,7 @@ Obj_PathSwap:
 		move.l	#bytes_word_to_long(128/2,128/2,priority_5),height_pixels(a0)	; set height, width and priority
 
 		; check
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		btst	#2,d0
 		beq.s	loc_1CD3C
 		andi.w	#7,d0
@@ -102,7 +102,7 @@ sub_1CDDA:
 		blt.s	locret_1CE6A
 		cmp.w	d3,d4
 		bge.s	locret_1CE6A
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		bpl.s	loc_1CE1C
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1CE6A							; if yes, branch
@@ -148,7 +148,7 @@ loc_1CE6C:
 		blt.s	locret_1CEF0
 		cmp.w	d3,d4
 		bge.s	locret_1CEF0
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		bpl.s	loc_1CEA8
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1CEF0							; if yes, branch
@@ -211,7 +211,7 @@ sub_1CF42:
 		blt.s	locret_1CFD2
 		cmp.w	d3,d4
 		bge.s	locret_1CFD2
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		bpl.s	loc_1CF84
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1CFD2							; if yes, branch
@@ -257,7 +257,7 @@ loc_1CFD4:
 		blt.s	locret_1D058
 		cmp.w	d3,d4
 		bge.s	locret_1D058
-		move.b	subtype(a0),d0
+		move.b	subtype.byte(a0),d0
 		bpl.s	loc_1D010
 		btst	#status.player.in_air,status(a1)				; is the player in the air?
 		bne.s	locret_1D058							; if yes, branch

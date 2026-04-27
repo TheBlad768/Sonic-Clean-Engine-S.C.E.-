@@ -21,7 +21,7 @@ Obj_BossExplosionSpecial:
 		moveq	#screen_height/2,d0
 		add.w	(Camera_Y_pos).w,d0
 		move.w	d0,y_pos(a0)
-		move.b	#2,subtype(a0)
+		move.w	#2,subtype(a0)
 
 ; ----------------------------------------------------------------------------
 ; Create boss explosions
@@ -32,8 +32,7 @@ Obj_BossExplosionSpecial:
 Obj_CreateBossExplosion:
 
 		; set
-		moveq	#0,d0
-		move.b	subtype(a0),d0
+		move.w	subtype(a0),d0
 		add.w	d0,d0								; multiply by 2
 		lea	CreateBossExpParameterIndex(pc,d0.w),a1
 		move.w	(a1)+,bossexplosion.xoffset(a0)					; set x offset range and y offset range

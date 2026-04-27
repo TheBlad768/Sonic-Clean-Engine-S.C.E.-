@@ -219,7 +219,7 @@ VInt_LevelSelect:
 
 VInt_Sega:
 		moveq	#$F,d0
-		and.b	(V_int_run_count+3).w,d0
+		and.b	(V_int_run_count.byte).w,d0
 		bne.s	.skip								; run the following code once every 16 frames
 		stopZ80
 		stopZ802

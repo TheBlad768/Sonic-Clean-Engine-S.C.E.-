@@ -33,7 +33,7 @@ Obj_StarPost:
 		moveq	#$7F,d1
 		and.b	(Last_star_post_hit).w,d1
 		moveq	#$7F,d2
-		and.b	subtype(a0),d2
+		and.b	subtype.byte(a0),d2
 		cmp.b	d2,d1
 		blo.s	.main
 		bset	#0,(a2)
@@ -55,7 +55,7 @@ Obj_StarPost:
 		moveq	#$7F,d1
 		and.b	(Last_star_post_hit).w,d1
 		moveq	#$7F,d2
-		and.b	subtype(a0),d2
+		and.b	subtype.byte(a0),d2
 		cmp.b	d2,d1
 		bhs.s	.taken
 
@@ -117,7 +117,7 @@ Obj_StarPost:
 
 .canim
 		moveq	#1,d0
-		btst	#2,(Level_frame_counter+1).w					; 0 or 4
+		btst	#2,(Level_frame_counter.byte).w					; 0 or 4
 		beq.s	.cdraw
 		addq.b	#1,d0
 
@@ -152,7 +152,7 @@ Obj_StarPost:
 ; =============== S U B R O U T I N E =======================================
 
 Save_StarPost_Settings:
-		move.b	subtype(a0),(Last_star_post_hit).w
+		move.b	subtype.byte(a0),(Last_star_post_hit).w
 		move.w	x_pos(a0),(Saved_X_pos).w
 		move.w	y_pos(a0),(Saved_Y_pos).w
 
