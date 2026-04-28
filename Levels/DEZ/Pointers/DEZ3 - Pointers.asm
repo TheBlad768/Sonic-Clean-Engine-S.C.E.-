@@ -11,16 +11,16 @@
 		dc.l AnimatePalette_DoAniPal						; Animate palette main code
 		dc.l AniPalette_DEZ							; Animate palette scripts
 
+		; Animate tiles
+		dc.l 0									; Animate art init
+		dc.l AnimateTiles_DoAniPLC						; Animate tiles main code
+		dc.l AniPLC_DEZ								; Animate tiles PLC scripts
+
 		; Level setup
 		dc.l DEZ1_ForegroundInit						; Foreground init
 		dc.l DEZ1_ForegroundEvent						; Foreground event
 		dc.l DEZ1_BackgroundInit						; Background init
 		dc.l DEZ1_BackgroundEvent						; Background event
-
-		; Animate tiles
-		dc.l 0									; Animate art init
-		dc.l AnimateTiles_DoAniPLC						; Animate tiles main code
-		dc.l AniPLC_DEZ								; Animate tiles PLC scripts
 
 		; Art 1st 8x8 data, 2nd 8x8 data
 		; Blocks pointer, 1st 16x16 data, 2nd 16x16 data

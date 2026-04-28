@@ -266,13 +266,13 @@ Level_data_addr_RAM =					*
 .AfterBoss						ds.l 1
 .AnimatePalette						ds.l 1				; animate palette main code
 .AnPalScript						ds.l 1				; animate palette scripts
-.ScreenInit						ds.l 1
-.ScreenEvent						ds.l 1
-.BackgroundInit						ds.l 1
-.BackgroundEvent					ds.l 1
 .AnimateTilesInit					ds.l 1				; animate tiles init
 .AnimateTiles						ds.l 1				; animate tiles main code
 .AnPLCScript						ds.l 1				; animate tiles PLC scripts
+.ScreenInit						ds.l 1				; foreground init
+.ScreenEvent						ds.l 1				; foreground event
+.BackgroundInit						ds.l 1				; background init
+.BackgroundEvent					ds.l 1				; background event
 .Palette =						*
 .8x8Data1						ds.l 1
 .8x8Data2						ds.l 1
