@@ -1594,7 +1594,7 @@ titlecardVRAMLetters macro opt,opt2,str
 titlecardMapLetters macro opt,pos=-32,str
 	save
 	codepage TITLECARD
-.vram_start := $804D
+.vram_start := make_art_tile($4D,0,TRUE)
 .narrow := "IJL.1!"
 .wide := "MOQW069"
 .llookup := " ABCDEFGHIJKLMNOPQRSTUVWXYZ.()0123456789!"
@@ -1659,13 +1659,13 @@ titlecardMapLetters macro opt,pos=-32,str
 .current_x := .current_x + 8
 	else
 	    if "char" = "Z"
-.vram_final := $8037
+.vram_final := make_art_tile($37,0,TRUE)
 	    elseif ("char" = "O") || ("char" = "0")
-.vram_final := $802E
+.vram_final := make_art_tile($2E,0,TRUE)
 	    elseif "char" = "N"
-.vram_final := $8028
+.vram_final := make_art_tile($28,0,TRUE)
 	    elseif "char" = "E"
-.vram_final := $8022
+.vram_final := make_art_tile($22,0,TRUE)
 	    else
 .vram_final := .vram_start
 .found := 0
@@ -1778,6 +1778,7 @@ levselstr macro str
 	charset ' ',$FF
 	charset '0',"\0\2\4\6\8\xA\xC\xE\x10\x12"
 	charset '*',$14
-	charset ':',$16
-	charset 'E',$18
+	charset ';',$16
+	charset ':',$18
+	charset 'E',$1A
 	restore

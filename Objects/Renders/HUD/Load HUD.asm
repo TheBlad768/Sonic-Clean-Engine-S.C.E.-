@@ -8,6 +8,14 @@ Render_HUD:
 		lea	(HUD_RAM).w,a1
 		move.b	HUD_RAM.status-HUD_RAM(a1),d0
 		beq.s	.return								; if 0, branch
+
+	if ~~HUDScroll
+		subq.b	#1,d0
+		bne.s	.process							; if 2, branch
+		move.w	#spriteScreenPositionX(16),HUD_RAM.xpos-HUD_RAM(a1)
+		move.w	#spriteScreenPositionY(screen_height/2+(block_height+tile_height)),HUD_RAM.ypos-HUD_RAM(a1)
+		addq.b	#1,HUD_RAM.status-HUD_RAM(a1)					; set 2
+	else
 		bmi.s	.left								; if -1, branch
 		cmpi.b	#3,d0
 		beq.s	.check								; if 3, branch
@@ -35,6 +43,7 @@ Render_HUD:
 		cmpi.w	#block_width,HUD_RAM.xpos-HUD_RAM(a1)
 		bhs.s	.process
 		clr.b	HUD_RAM.status-HUD_RAM(a1)
+	endif
 
 .process
 		moveq	#0,d4								; frame #0
@@ -65,4 +74,9 @@ Render_HUD:
 ; ---------------------------------------------------------------------------
 
 		; mappings
+
+	if HUDCentiseconds
 		include "Objects/Renders/HUD/Object Data/Map - HUD.asm"
+	else
+		include "Objects/Renders/HUD/Object Data/Map - HUD (NoCentiseconds).asm"
+	endif
