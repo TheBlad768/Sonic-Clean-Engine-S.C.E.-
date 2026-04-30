@@ -10,13 +10,19 @@ OptimiseStopZ80 =					2				; if 1, remove stopZ80 and startZ80, if 2, use only f
 GameDebug =						1				; if 1, enable debug mode for player
 GameDebugAlt =						0				; if 1, enable alt debug mode for player
 RollInAir =						1				; if 1, enable roll in air for players
-PlayerMoveLock =					0				; if 1, lock control during the fall animation (Android, Mania, Origins style...)
+PlayerMoveLock =					0				; if 1, lock control during the fall animation (Android, Mania, Origins style)
 ExtendedCamera =					0				; if 1, enable extended camera
 
-; level options
+; level main options
 ZoneCount =						1				; set discrete zones are: DEZ
-BossDebug =						0				; if 1, set one hit on all bosses
+HUDScroll =						1				; if 1, enable HUD scrolling movement on level start/finish
+HUDCentiseconds =					1				; if 1, enable centiseconds in the HUD
+
+; level misc options
 MonitorFall =						0				; if 1, monitor will fall after being hit from below
+
+; level boss options
+BossDebug =						0				; if 1, set one hit on all bosses
 
 ; SRAM options
 EnableSRAM =						0				; if 1, enable SRAM

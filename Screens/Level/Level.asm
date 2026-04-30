@@ -144,6 +144,11 @@ LevelScreen:
 		move.b	d0,(Ctrl_1_locked).w
 		move.b	d0,(Update_HUD_score).w						; update score counter
 		move.b	d0,(Update_HUD_ring_count).w					; update rings counter
+
+	if ~~HUDScroll
+		move.b	d0,(HUD_RAM.status).w						; load HUD
+	endif
+
 		move.b	d0,(Level_started_flag).w
 		lea	LevelExtraRender_Data(pc),a1
 		jsr	(Load_ExtraRender).w

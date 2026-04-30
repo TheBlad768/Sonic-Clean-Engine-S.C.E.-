@@ -139,9 +139,15 @@ Obj_TitleCard:
 .not_in_level_3
 		movea.l	(Level_data_addr_RAM.PLCAnimals).w,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w					; load animals art
+
+	if HUDScroll
 		moveq	#1,d0
 		move.b	d0,(HUD_RAM.status).w						; load HUD
 		move.b	d0,(Update_HUD_timer).w						; update time counter
+	else
+		move.b	#1,(Update_HUD_timer).w						; update time counter
+	endif
+
 		clr.b	(Ctrl_1_locked).w						; unlock control 1
 
 		; delete
