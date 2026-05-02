@@ -1139,6 +1139,12 @@ Sonic_ChgJumpDir:
 		move.w	Max_speed-Max_speed(a4),d6
 		move.w	Acceleration-Max_speed(a4),d5
 		asl.w	d5
+
+	if PlayerRollJumpLock
+		btst	#status.player.rolljumping,status(a0)				; did Sonic jump from rolling?
+		bne.s	Sonic_Jump_ResetScr						; if yes, branch to skip midair control
+	endif
+
 		move.w	x_vel(a0),d0
 		btst	#button_left,(Ctrl_1_logical).w
 		beq.s	loc_11682							; if not holding left, branch
@@ -1388,7 +1394,13 @@ loc_1182E:
 		sfx	sfx_Jump
 		move.w	default_y_radius(a0),y_radius(a0)
 		btst	#status.player.rolling,status(a0)
+
+	if PlayerRollJumpLock
+		bne.s	Sonic_RollJump
+	else
 		bne.s	locret_118B2
+	endif
+
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a0)					; use "jumping" animation
 		bset	#status.player.rolling,status(a0)
@@ -1404,6 +1416,13 @@ loc_118AE:
 
 locret_118B2:
 		rts
+; ---------------------------------------------------------------------------
+
+	if PlayerRollJumpLock
+Sonic_RollJump:
+		bset	#status.player.rolljumping,status(a0)				; set the rolling+jumping flag
+		rts
+	endif
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1419,7 +1438,7 @@ Sonic_JumpHeight:
 
 loc_118D2:
 		cmp.w	y_vel(a0),d1							; is y speed greater than 4? (2 if underwater)
-		ble.s	Sonic_InstaAndShieldMoves					; if not, branch
+		ble.s	Sonic_ShieldMoves						; if not, branch
 		moveq	#btnABC,d0							; are buttons A, B or C being pressed?
 		and.b	(Ctrl_1_logical).w,d0
 		bne.s	locret_118E8							; if yes, branch
@@ -1440,12 +1459,16 @@ locret_118FE:
 		rts
 ; ---------------------------------------------------------------------------
 
-Sonic_InstaAndShieldMoves:
+Sonic_ShieldMoves:
 		tst.b	double_jump_flag(a0)						; is Sonic currently performing a double jump?
 		bne.s	locret_118FE							; if yes, branch
 		moveq	#btnABC,d0							; are buttons A, B, or C being pressed?
 		and.b	(Ctrl_1_pressed_logical).w,d0
 		beq.s	locret_118FE							; if not, branch
+
+	if PlayerRollJumpLock
+		bclr	#status.player.rolljumping,status(a0)
+	endif
 
 Sonic_FireShield:
 		btst	#status_secondary.invincible,status_secondary(a0)		; first, does Sonic have invincibility?
@@ -2174,6 +2197,11 @@ loc_121D2:
 loc_121D8:
 		bclr	#status.player.in_air,status(a0)
 		bclr	#status.player.pushing,status(a0)
+
+	if PlayerRollJumpLock
+		bclr	#status.player.rolljumping,status(a0)
+	endif
+
 		moveq	#0,d0
 		move.b	d0,jumping(a0)
 		move.w	d0,(Chain_bonus_counter).w

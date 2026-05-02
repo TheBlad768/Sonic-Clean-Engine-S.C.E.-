@@ -10,6 +10,7 @@ OptimiseStopZ80 =					2				; if 1, remove stopZ80 and startZ80, if 2, use only f
 GameDebug =						1				; if 1, enable debug mode for player
 GameDebugAlt =						0				; if 1, enable alt debug mode for player
 RollInAir =						1				; if 1, enable roll in air for players
+PlayerRollJumpLock =					0				; if 1, lock player control when jump roll
 PlayerMoveLock =					0				; if 1, lock control during the fall animation (Android, Mania, Origins style)
 ExtendedCamera =					0				; if 1, enable extended camera
 

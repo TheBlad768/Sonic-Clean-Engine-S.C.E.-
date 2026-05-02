@@ -257,6 +257,10 @@ Obj_Bubbler_Bubbles:
 		tst.b	render_flags(a0)						; object visible on the screen?
 		bpl.w	Obj_Bubbler.delete						; if not, branch
 		jmp	(Draw_Sprite).w
+; ---------------------------------------------------------------------------
+
+.return
+		rts
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -286,7 +290,13 @@ Obj_Bubbler_Bubbles:
 		clr.b	jumping(a1)
 		clr.b	double_jump_flag(a1)
 		clr.b	spin_dash_flag(a1)
+		bset	#status.player.in_air,status(a1)
 		bclr	#status.player.pushing,status(a1)
+
+	if PlayerRollJumpLock
+		bclr	#status.player.rolljumping,status(a1)
+	endif
+
 		bclr	#status.player.rolling,status(a1)
 		beq.s	.back
 
@@ -304,10 +314,6 @@ Obj_Bubbler_Bubbles:
 .back
 		move.w	default_y_radius(a1),y_radius(a1)				; set y_radius and x_radius
 		bra.w	Obj_Bubbler_Bubbles.burst
-; ---------------------------------------------------------------------------
-
-.return
-		rts
 ; ---------------------------------------------------------------------------
 
 .range

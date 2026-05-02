@@ -17,6 +17,12 @@ Debug_Mode:
 		move.w	(Screen_Y_wrap_value).w,d0
 		and.w	d0,y_pos(a0)
 		and.w	d0,(Camera_Y_pos).w
+		bclr	#status.player.rolling,status(a0)
+
+	if PlayerRollJumpLock
+		bclr	#status.player.rolljumping,status(a0)
+	endif
+
 		bclr	#status.player.in_air,status(a0)
 		bclr	#status.player.pushing,status(a0)
 		bclr	#status.player.underwater,status(a0)
