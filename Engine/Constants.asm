@@ -893,7 +893,7 @@ afEnd =							$FF				; return to beginning of animation
 afBack =						$FE				; go back (specified number) bytes
 afChange =						$FD				; run specified animation
 afRoutine =						$FC				; increment routine counter and continue load next anim bytes
-afReset =						$FB				; move offscreen for remove(Using the Sprite_OnScreen_Test, etc...)
+afReset =						$FB				; move offscreen for remove(Using the Sprite_OnScreen_Test, etc.)
 
 ; ---------------------------------------------------------------------------
 ; Animation Raw flags

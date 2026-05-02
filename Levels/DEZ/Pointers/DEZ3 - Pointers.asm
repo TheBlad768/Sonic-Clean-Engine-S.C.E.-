@@ -55,6 +55,11 @@
 		PalID_WaterDEZ, \
 		mus_DEZ1
 
+		; Floor
+		dc.l AngleArray								; Angle map
+		dc.l HeightMaps								; Height maps
+		dc.l HeightMapsRot							; Height maps rotated
+
 		; PLC
 		dc.l PLC1_DEZ3_Before							; PLC1
 		dc.l PLC2_DEZ3_After							; PLC2

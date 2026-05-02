@@ -139,7 +139,7 @@ Load_Level2:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Load level pointer (resize, events, etc...)
+; Load level pointer (resize, events, etc.)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -157,17 +157,19 @@ LoadLevelPointer:
 		mulu.w	#(Level_data_addr_RAM_end-Level_data_addr_RAM),d0
 	else
 
-		if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$A2
-			fatal "Warning! The buffer size is different! Your buffer is $\{Level_data_addr_RAM_end-Level_data_addr_RAM}, but it's not $A2"
+		if (Level_data_addr_RAM_end-Level_data_addr_RAM)<>$AE
+			fatal "Warning! The buffer size is different! Your buffer is $\{Level_data_addr_RAM_end-Level_data_addr_RAM}, but it's not $AE"
 		endif
 
 		; if you make a different buffer size, you need to change this code
-		move.w	d0,d1								; multiply by $A2
+		move.w	d0,d1								; multiply by $AE
 		lsr.w	d1
 		add.w	d0,d0
 		add.w	d1,d0
-		lsr.w	#4,d1
+		lsr.w	d1
 		add.w	d1,d0
+		lsr.w	#3,d1
+		sub.w	d1,d0
 	endif
 
 .skip
@@ -179,7 +181,7 @@ LoadLevelPointer:
 
 		set	.a,0
 
-	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20				; copy $A2 bytes
+	rept (Level_data_addr_RAM_end-Level_data_addr_RAM)/$20				; copy $AE bytes
 		movem.l	(a2)+,d0-d7
 		movem.l	d0-d7,.a(a3)							; copy $20 bytes
 		set	.a,.a + $20
