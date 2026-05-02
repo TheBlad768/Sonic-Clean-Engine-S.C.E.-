@@ -295,6 +295,11 @@ HurtCharacter_WithoutDamage:
 		move.b	#PlayerID_Hurt,routine(a1)					; hit animation
 		bclr	#status.player.on_object,status(a1)
 		bclr	#status.player.pushing,status(a1)				; player is not standing on/pushing an object
+
+	if PlayerRollJumpLock
+		bclr	#status.player.rolljumping,status(a1)
+	endif
+
 		bset	#status.player.in_air,status(a1)
 		move.l	#words_to_long(-$200,-$300),x_vel(a1)				; set speed of player
 		clr.w	ground_vel(a1)							; zero out inertia
@@ -417,6 +422,11 @@ Set_PlayerEndingPose:
 		bclr	#p1_pushing_bit,status(a0)
 		bclr	#p2_pushing_bit,status(a0)
 		bclr	#status.player.pushing,status(a1)
+
+	if PlayerRollJumpLock
+		bclr	#status.player.rolljumping,status(a1)
+	endif
+
 		bclr	#status.player.rolling,status(a1)
 		beq.s	.return								; if the player doesn't roll, branch
 

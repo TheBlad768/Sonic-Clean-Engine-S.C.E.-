@@ -671,7 +671,7 @@ status.player.x_flip =					render_flags.x_flip		; facing left
 status.player.in_air =					1				; airborne
 status.player.rolling =					2				; spinning, i.e. jumping or rolling
 status.player.on_object =				3				; stood on an object rather than the level
-
+status.player.rolljumping =				4				; jumping whilst rolling; locks the player's controls
 status.player.pushing =					5				; pressing against an object
 status.player.underwater =				6				; submersed
 status.player.prevent_tails_respawn =			7				; prevents AI Tails from respawning

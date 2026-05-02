@@ -11,6 +11,7 @@ MSUMode =						0				; if 1, enable MSU
 GameDebug =						1				; if 1, enable debug mode for player
 GameDebugAlt =						0				; if 1, enable alt debug mode for player
 RollInAir =						1				; if 1, enable roll in air for players
+PlayerRollJumpLock =					0				; if 1, lock player control when jump roll
 PlayerMoveLock =					0				; if 1, lock control during the fall animation (Android, Mania, Origins style)
 ExtendedCamera =					0				; if 1, enable extended camera
 
