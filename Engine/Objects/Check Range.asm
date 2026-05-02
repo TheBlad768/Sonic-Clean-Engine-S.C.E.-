@@ -522,7 +522,7 @@ Check_CameraXBoundary2:
 ; +2: camera x position or -1 for end marker
 ; +4: max y boundary
 ; +6: camera x position or -1 for end marker
-; etc...
+; etc.
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -555,7 +555,7 @@ Resize_MaxYFromX:
 ; +2: camera x position or -1 for end marker
 ; +4: max y boundary
 ; +6: camera x position or -1 for end marker
-; etc...
+; etc.
 
 ; =============== S U B R O U T I N E =======================================
 

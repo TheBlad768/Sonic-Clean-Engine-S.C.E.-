@@ -297,6 +297,9 @@ Level_data_addr_RAM =					*
 .RingsRAM						ds.l 1
 .RingsData1						ds.l 1
 .RingsData2						ds.l 1
+.AngleArray						ds.l 1
+.HeightMaps						ds.l 1
+.HeightMapsRot						ds.l 1
 .PLC1							ds.l 1
 .PLC2							ds.l 1
 .PLCAnimals						ds.l 1
