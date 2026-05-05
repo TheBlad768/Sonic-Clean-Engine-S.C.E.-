@@ -10,7 +10,7 @@ Map_Spring2:
 		dc.w word_23802-Map_Spring2
 		dc.w word_2380A-Map_Spring2
 		dc.w word_23826-Map_Spring2
-		dc.w word_2389C-Map_Spring2
+		dc.w word_2389C-Map_Spring2	; Diagonal Spring
 		dc.w word_238B6-Map_Spring2	; Diagonal Spring
 		dc.w word_238CA-Map_Spring2	; Diagonal Spring
 		dc.w word_238EA-Map_Spring2	; Diagonal Spring
@@ -42,9 +42,9 @@ word_23826:
 		dc.b $F8, 4, $10, $14, $FF, $F8
 word_2389C:
 		dc.w 4
-		dc.b $F1, 8, $20, $A, $FF, $EB
-		dc.b $F9, 8, $20, $D, $FF, $F3
-		dc.b 1, 5, $20, $10, $FF, $FB
+		dc.b $F1, 8, $20, 0, $FF, $EB
+		dc.b $F9, 8, $20, 3, $FF, $F3
+		dc.b 1, 5, $20, 6, $FF, $FB
 		dc.b $FB, 5, 0, $B, $FF, $F1
 word_238B6:
 		dc.w 3
