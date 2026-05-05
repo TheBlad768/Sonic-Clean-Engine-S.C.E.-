@@ -10,7 +10,7 @@ Map_Spring:
 		dc.w word_237DE-Map_Spring
 		dc.w word_237E6-Map_Spring
 		dc.w word_23818-Map_Spring
-		dc.w word_23834-Map_Spring
+		dc.w word_23834-Map_Spring	; Diagonal Spring
 		dc.w word_2384E-Map_Spring	; Diagonal Spring
 		dc.w word_23862-Map_Spring	; Diagonal Spring
 		dc.w word_23882-Map_Spring	; Diagonal Spring
