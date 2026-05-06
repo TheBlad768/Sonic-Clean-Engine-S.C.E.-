@@ -91,8 +91,15 @@ Animate_SpriteNoSST:
 
 .chk_end_FB
 		addq.b	#1,d0								; code FB - move offscreen
-		bne.s	.return
+		bne.s	.chk_end_FA
 		move.w	#$7F00,x_pos(a0)						; delete object
+		rts
+; ---------------------------------------------------------------------------
+
+.chk_end_FA
+		addq.b	#1,d0								; code FA - increment routine counter
+		bne.s	.return
+		addq.b	#2,routine_secondary(a0)					; jump to next routine
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -191,8 +198,15 @@ Animate_SpriteMultiDelayNoSST:
 
 .chk_end_FB
 		addq.b	#1,d0								; code FB - move offscreen
-		bne.s	.return
+		bne.s	.chk_end_FA
 		move.w	#$7F00,x_pos(a0)						; delete object
+		rts
+; ---------------------------------------------------------------------------
+
+.chk_end_FA
+		addq.b	#1,d0								; code FA - increment routine counter
+		bne.s	.return
+		addq.b	#2,routine_secondary(a0)					; jump to next routine
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -379,8 +393,15 @@ Animate_SpriteAdjustFlipXYNoSST:
 
 .chk_end_FB
 		addq.b	#1,d0								; code FB - move offscreen
-		bne.s	.return
+		bne.s	.chk_end_FA
 		move.w	#$7F00,x_pos(a0)						; delete object
+		rts
+; ---------------------------------------------------------------------------
+
+.chk_end_FA
+		addq.b	#1,d0								; code FA - increment routine counter
+		bne.s	.return
+		addq.b	#2,routine_secondary(a0)					; jump to next routine
 		rts
 
 ; ---------------------------------------------------------------------------
