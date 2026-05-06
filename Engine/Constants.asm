@@ -385,7 +385,7 @@ state_flags						ds.b 1				; byte
 count							ds.b 1				; byte
 ros_prev_frame						ds.b 1				; byte
 ros_bit							ds.b 1				; byte ; the bit to be cleared when an object is destroyed if the ROS flag is set
-routine_secondary =					*				; byte ; used by monitors for this purpose at least
+routine_secondary =					*				; byte ; secondary routine number
 ros_addr						ds.w 1				; word ; the RAM address whose bit to clear when an object is destroyed if the ROS flag is set
 							ds.b 8				; unused
 parent =						*				; word ; address of the object that owns or spawned this one, if applicable
@@ -515,6 +515,7 @@ obAngle =						angle				; byte/word
 obColType =						collision_type			; byte ; collision type
 obColProp =						collision_property		; byte ; usage varies, bosses use it as a hit counter
 obStatus =						status				; byte ; orientation or mode
+ob2ndRout =						routine_secondary		; byte ; secondary routine number
 obSubtype =						subtype				; word ; object subtype
 obTimer =						wait_timer			; word ; object timer
 obParent =						parent				; word ; parent of child objects
@@ -894,6 +895,10 @@ afBack =						$FE				; go back (specified number) bytes
 afChange =						$FD				; run specified animation
 afRoutine =						$FC				; increment routine counter and continue load next anim bytes
 afReset =						$FB				; move offscreen for remove(Using the Sprite_OnScreen_Test, etc.)
+af2ndRoutine =						$FA				; increment 2nd routine counter
+
+aniXFlip =						$20				; horizontally mirrors the current frame
+aniYFlip =						$40				; vertically mirrors the current frame
 
 ; ---------------------------------------------------------------------------
 ; Animation Raw flags
