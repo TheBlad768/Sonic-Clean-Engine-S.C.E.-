@@ -163,13 +163,13 @@ LoadLevelPointer:
 
 		; if you make a different buffer size, you need to change this code
 		move.w	d0,d1								; multiply by $AE
-		lsr.w	d1
-		add.w	d0,d0
-		add.w	d1,d0
-		lsr.w	d1
-		add.w	d1,d0
-		lsr.w	#3,d1
-		sub.w	d1,d0
+		add.w	d0,d1
+		add.w	d0,d1
+		lsr.w	#2,d0
+		sub.w	d0,d1
+		lsr.w	#3,d0
+		sub.w	d0,d1
+		move.w	d1,d0
 	endif
 
 .skip
