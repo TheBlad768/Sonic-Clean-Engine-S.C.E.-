@@ -107,13 +107,13 @@ dacD4:	dcSample	TYPE_PCM, HipHopHitKick, 12852			; $D4	- Lowest Power Kick Hit
 	if SMPS_S3DDACSamples
 			; Sonic 3D
 dacD5:	dcSample	TYPE_PCM, MetalCrashS3D, 24104			; $D5	- Final Fight Metal Crash
-dacD6:	dcSample	TYPE_PCM, MetalCrashS3D, 9687			; $D6	- Intro Kick
+dacD6:	dcSample	TYPE_PCM, IntroKickS3D, 9687			; $D6	- Intro Kick
 	endif
 
 	if SMPS_S3DACSamples
 			; Sonic 3
 dacD7:	dcSample	TYPE_PCM, EchoedClapHitS3, 8492			; $D7	- Echoed Clap Hit (S3)
-dacD8:	dcSample	TYPE_PCM, EchoedClapHitS3, 6490			; $D8	- Lower Echoed Clap Hit(S3)	; Clownacy | Good golly, we're close to reaching Mega PCM's limit...
+dacD8:	dcSample	TYPE_PCM, EchoedClapHitS3, 6490			; $D8	- Lower Echoed Clap Hit(S3)
 	endif
 
 	if SMPS_SCDACSamples
@@ -124,7 +124,7 @@ dacDB:	dcSample	TYPE_PCM, TimTom, 13610				; $DB	- Hi Timpani/Tom (SC)
 dacDC:	dcSample	TYPE_PCM, TimTom, 11363				; $DC	- Mid Timpani/Tom (SC)
 dacDD:	dcSample	TYPE_PCM, TimTom, 10497				; $DD	- Low Timpani/Tom (SC)
 dacDE:	dcSample	TYPE_PCM, LetsGo, 13610				; $DE	- "Let's Go!"
-dacDF:	dcSample	TYPE_PCM, Hey, 13610				; $DF	- "Hey!"	; Clownacy | X_X Extending the DAC range is going to take some creativity...
+dacDF:	dcSample	TYPE_PCM, Hey, 13610				; $DF	- "Hey!"
 	endif
 
 dacE0:	dcSample	TYPE_PCM, SegaPCM, 16000, FLAGS_SFX		; $E0	- Sega!
