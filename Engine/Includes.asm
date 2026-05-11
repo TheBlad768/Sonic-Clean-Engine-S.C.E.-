@@ -364,10 +364,12 @@
 		include "Data/Uncompressed Data.asm"
 
 ; ---------------------------------------------------------------------------
-; Vladikcomper's Mega PCM 2.0 - DAC Sound Driver
+; Vladikcomper's Mega PCM 2.1 - DAC Sound Driver
 ; ---------------------------------------------------------------------------
 
 		include "Sound/Engine/MegaPCM.asm"
+		include "Sound/MegaPCM - DAC Table.asm"
+		include "Sound/DAC Samples.asm"
 
 ; ---------------------------------------------------------------------------
 ; Clone sound driver modules

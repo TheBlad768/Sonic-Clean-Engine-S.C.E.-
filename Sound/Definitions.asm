@@ -1,4 +1,5 @@
 	include "Sound/Engine/Macros.asm"
+	include "Sound/Engine/MegaPCM.Macros.asm"
 	include "Sound/Sound IDs.asm"
 	include "Sound/Settings.asm"
 	include "Sound/Engine/RAM.asm"

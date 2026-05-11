@@ -1,33 +1,30 @@
 ; DAC Equates
-offset :=	MegaPCM_DAC_Table
-ptrsize :=	$C
-idstart :=	$81
 
-dac__First = idstart
+dac__First = __ST_SampleID+1
 
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 ; Sonic 1 & 2
-dKick =					SMPS_id(ptr_dac81)
-dSnare =				SMPS_id(ptr_dac82)
-dTimpani =				SMPS_id(ptr_dac85)
-dHiTimpani =				SMPS_id(ptr_dac88)
-dMidTimpani =				SMPS_id(ptr_dac89)
-dLowTimpani =				SMPS_id(ptr_dac8A)
-dVLowTimpani =				SMPS_id(ptr_dac8B)
+dKick =		dac81.id
+dSnare =	dac82.id
+dTimpani =	dac85.id
+dHiTimpani =	dac88.id
+dMidTimpani =	dac89.id
+dLowTimpani =	dac8A.id
+dVLowTimpani =	dac8B.id
 	endif
 
 	if SMPS_S2DACSamples
 ; Sonic 2
-dClap =					SMPS_id(ptr_dac83)
-dScratch =				SMPS_id(ptr_dac84)
-dHiTom =				SMPS_id(ptr_dac86)
-dVLowBongo =				SMPS_id(ptr_dac87)
-dMidTom =				SMPS_id(ptr_dac8C)
-dLowTom =				SMPS_id(ptr_dac8D)
-dFloorTom =				SMPS_id(ptr_dac8E)
-dHighBongo =				SMPS_id(ptr_dac8F)
-dMidBongo =				SMPS_id(ptr_dac90)
-dLowBongo =				SMPS_id(ptr_dac91)
+dClap =		dac83.id
+dScratch =	dac84.id
+dHiTom =	dac86.id
+dVLowBongo =	dac87.id
+dMidTom =	dac8C.id
+dLowTom =	dac8D.id
+dFloorTom =	dac8E.id
+dHighBongo =	dac8F.id
+dMidBongo =	dac90.id
+dLowBongo =	dac91.id
 
 dHiClap = dHighBongo
 dMidClap = dMidBongo
@@ -36,104 +33,104 @@ dLowClap = dLowBongo
 
 	if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
 ; Sonic 3 & K & 3D
-dSnareS3 =				SMPS_id(ptr_dac92)
-dHighTom =				SMPS_id(ptr_dac93)
-dMidTomS3 =				SMPS_id(ptr_dac94)
-dLowTomS3 =				SMPS_id(ptr_dac95)
-dFloorTomS3 =				SMPS_id(ptr_dac96)
-dKickS3 =				SMPS_id(ptr_dac97)
-dMuffledSnare =				SMPS_id(ptr_dac98)
-dCrashCymbal =				SMPS_id(ptr_dac99)
-dRideCymbal =				SMPS_id(ptr_dac9A)
-dLowMetalHit =				SMPS_id(ptr_dac9B)
-dMetalHit =				SMPS_id(ptr_dac9C)
-dHighMetalHit =				SMPS_id(ptr_dac9D)
-dHigherMetalHit =			SMPS_id(ptr_dac9E)
-dMidMetalHit =				SMPS_id(ptr_dac9F)
-dClapS3 =				SMPS_id(ptr_dacA0)
-dElectricHighTom =			SMPS_id(ptr_dacA1)
-dElectricMidTom =			SMPS_id(ptr_dacA2)
-dElectricLowTom =			SMPS_id(ptr_dacA3)
-dElectricFloorTom =			SMPS_id(ptr_dacA4)
-dTightSnare =				SMPS_id(ptr_dacA5)
-dMidpitchSnare =			SMPS_id(ptr_dacA6)
-dLooseSnare =				SMPS_id(ptr_dacA7)
-dLooserSnare =				SMPS_id(ptr_dacA8)
-dHiTimpaniS3 =				SMPS_id(ptr_dacA9)
-dLowTimpaniS3 =				SMPS_id(ptr_dacAA)
-dMidTimpaniS3 =				SMPS_id(ptr_dacAB)
-dQuickLooseSnare =			SMPS_id(ptr_dacAC)
-dClick =				SMPS_id(ptr_dacAD)
-dPowerKick =				SMPS_id(ptr_dacAE)
-dQuickGlassCrash =			SMPS_id(ptr_dacAF)
+dSnareS3 =		dac92.id
+dHighTom =		dac93.id
+dMidTomS3 =		dac94.id
+dLowTomS3 =		dac95.id
+dFloorTomS3 =		dac96.id
+dKickS3 =		dac97.id
+dMuffledSnare =		dac98.id
+dCrashCymbal =		dac99.id
+dRideCymbal =		dac9A.id
+dLowMetalHit =		dac9B.id
+dMetalHit =		dac9C.id
+dHighMetalHit =		dac9D.id
+dHigherMetalHit =	dac9E.id
+dMidMetalHit =		dac9F.id
+dClapS3 =		dacA0.id
+dElectricHighTom =	dacA1.id
+dElectricMidTom =	dacA2.id
+dElectricLowTom =	dacA3.id
+dElectricFloorTom =	dacA4.id
+dTightSnare =		dacA5.id
+dMidpitchSnare =	dacA6.id
+dLooseSnare =		dacA7.id
+dLooserSnare =		dacA8.id
+dHiTimpaniS3 =		dacA9.id
+dLowTimpaniS3 =		dacAA.id
+dMidTimpaniS3 =		dacAB.id
+dQuickLooseSnare =	dacAC.id
+dClick =		dacAD.id
+dPowerKick =		dacAE.id
+dQuickGlassCrash =	dacAF.id
 	endif
 
 	if SMPS_S3DACSamples||SMPS_SKDACSamples
 ; Sonic 3 & K
-dGlassCrashSnare =			SMPS_id(ptr_dacB0)
-dGlassCrash =				SMPS_id(ptr_dacB1)
-dGlassCrashKick =			SMPS_id(ptr_dacB2)
-dQuietGlassCrash =			SMPS_id(ptr_dacB3)
-dOddSnareKick =				SMPS_id(ptr_dacB4)
-dKickExtraBass =			SMPS_id(ptr_dacB5)
-dComeOn =				SMPS_id(ptr_dacB6)
-dDanceSnare =				SMPS_id(ptr_dacB7)
-dLooseKick =				SMPS_id(ptr_dacB8)
-dModLooseKick =				SMPS_id(ptr_dacB9)
-dWoo =					SMPS_id(ptr_dacBA)
-dGo =					SMPS_id(ptr_dacBB)
-dSnareGo =				SMPS_id(ptr_dacBC)
-dPowerTom =				SMPS_id(ptr_dacBD)
-dHiWoodBlock =				SMPS_id(ptr_dacBE)
-dLowWoodBlock =				SMPS_id(ptr_dacBF)
-dHiHitDrum =				SMPS_id(ptr_dacC0)
-dLowHitDrum =				SMPS_id(ptr_dacC1)
-dMetalCrashHit =			SMPS_id(ptr_dacC2)
-dEchoedClapHit =			SMPS_id(ptr_dacC3)
-dLowerEchoedClapHit =			SMPS_id(ptr_dacC4)
-dHipHopHitKick =			SMPS_id(ptr_dacC5)
-dHipHopHitPowerKick =			SMPS_id(ptr_dacC6)
-dBassHey =				SMPS_id(ptr_dacC7)
-dDanceStyleKick =			SMPS_id(ptr_dacC8)
-dHipHopHitKick2 =			SMPS_id(ptr_dacC9)
-dReverseFadingWind =			SMPS_id(ptr_dacCA)
-dScratchS3 =				SMPS_id(ptr_dacCB)
-dLooseSnareNoise =			SMPS_id(ptr_dacCC)
-dPowerKick2 =				SMPS_id(ptr_dacCD)
-dCrashingNoiseWoo =			SMPS_id(ptr_dacCE)
-dQuickHit =				SMPS_id(ptr_dacCF)
-dKickHey =				SMPS_id(ptr_dacD0)
-dPowerKickHit =				SMPS_id(ptr_dacD1)
-dLowPowerKickHit =			SMPS_id(ptr_dacD2)
-dLowerPowerKickHit =			SMPS_id(ptr_dacD3)
-dLowestPowerKickHit =			SMPS_id(ptr_dacD4)
+dGlassCrashSnare =	dacB0.id
+dGlassCrash =		dacB1.id
+dGlassCrashKick =	dacB2.id
+dQuietGlassCrash =	dacB3.id
+dOddSnareKick =		dacB4.id
+dKickExtraBass =	dacB5.id
+dComeOn =		dacB6.id
+dDanceSnare =		dacB7.id
+dLooseKick =		dacB8.id
+dModLooseKick =		dacB9.id
+dWoo =			dacBA.id
+dGo =			dacBB.id
+dSnareGo =		dacBC.id
+dPowerTom =		dacBD.id
+dHiWoodBlock =		dacBE.id
+dLowWoodBlock =		dacBF.id
+dHiHitDrum =		dacC0.id
+dLowHitDrum =		dacC1.id
+dMetalCrashHit =	dacC2.id
+dEchoedClapHit =	dacC3.id
+dLowerEchoedClapHit =	dacC4.id
+dHipHopHitKick =	dacC5.id
+dHipHopHitPowerKick =	dacC6.id
+dBassHey =		dacC7.id
+dDanceStyleKick =	dacC8.id
+dHipHopHitKick2 =	dacC9.id
+dReverseFadingWind =	dacCA.id
+dScratchS3 =		dacCB.id
+dLooseSnareNoise =	dacCC.id
+dPowerKick2 =		dacCD.id
+dCrashingNoiseWoo =	dacCE.id
+dQuickHit =		dacCF.id
+dKickHey =		dacD0.id
+dPowerKickHit =		dacD1.id
+dLowPowerKickHit =	dacD2.id
+dLowerPowerKickHit =	dacD3.id
+dLowestPowerKickHit =	dacD4.id
 
 dHipHopHitKick3 = dHipHopHitKick2
 	endif
 
 	if SMPS_S3DDACSamples
 ; Sonic 3D
-dFinalFightMetalCrash =			SMPS_id(ptr_dacD5)
-dIntroKick =				SMPS_id(ptr_dacD6)
+dFinalFightMetalCrash =	dacD5.id
+dIntroKick =		dacD6.id
 	endif
 
 	if SMPS_S3DACSamples
 ; Sonic 3
-dEchoedClapHit_S3 =			SMPS_id(ptr_dacD7)
-dLowerEchoedClapHit_S3 =		SMPS_id(ptr_dacD8)
+dEchoedClapHit_S3 =		dacD7.id
+dLowerEchoedClapHit_S3 =	dacD8.id
 	endif
 
 	if SMPS_SCDACSamples
 ; Sonic Crackers
-dBeat =					SMPS_id(ptr_dacD9)
-dSnareSC =				SMPS_id(ptr_dacDA)
-dHiTimTom =				SMPS_id(ptr_dacDB)
-dMidTimTom =				SMPS_id(ptr_dacDC)
-dLowTimTom =				SMPS_id(ptr_dacDD)
-dLetsGo =				SMPS_id(ptr_dacDE)
-dHey =					SMPS_id(ptr_dacDF)
+dBeat =				dacD9.id
+dSnareSC =			dacDA.id
+dHiTimTom =			dacDB.id
+dMidTimTom =			dacDC.id
+dLowTimTom =			dacDD.id
+dLetsGo =			dacDE.id
+dHey =				dacDF.id
 	endif
 
-dSega =					SMPS_id(ptr_dacE0)
+dSega =				dacE0.id
 
 dac__Last = dSega
