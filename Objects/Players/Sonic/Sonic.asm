@@ -65,7 +65,7 @@ Sonic_Init:										; Routine 0
 		addq.b	#2,routine(a0)							; => Sonic_Control
 		move.w	#bytes_to_word(38/2,18/2),y_radius(a0)				; set y_radius and x_radius ; this sets Sonic's collision height (2*pixels)
 		move.w	y_radius(a0),default_y_radius(a0)				; set default_y_radius and default_x_radius
-		move.l	#Map_Sonic,mappings(a0)
+		move.l	#Map_Sonic,mappings_addr(a0)
 		move.l	#bytes_word_to_long(48/2,48/2,priority_2),height_pixels(a0)	; set height, width and priority
 		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		clr.b	character_id(a0)						; PlayerID_Sonic

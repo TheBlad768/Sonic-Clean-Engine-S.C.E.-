@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 animal.bonus_counter			ds.w 1						; (2 bytes)
 animal.xvel				ds.w 1						; (2 bytes)
@@ -59,7 +59,7 @@ Obj_Animal:
 		move.b	(a1,d1.w),d0
 		lea	Obj_Animal_Properties(pc),a1					; $C size data
 		adda.w	d0,a1
-		move.l	(a1)+,mappings(a0)
+		move.l	(a1)+,mappings_addr(a0)
 		move.l	(a1)+,animal.code_ptr(a0)
 		move.l	(a1),animal.xvel(a0)						; x_vel and y_vel
 
@@ -161,7 +161,7 @@ Obj_Animal_Ending:
 		lsl.w	#4,d0								; multiply by $10
 		lea	Animal_Ending_Index(pc,d0.w),a1					; $E size data
 		move.l	(a1)+,code_addr(a0)						; Go to "NEXT"
-		move.l	(a1)+,mappings(a0)
+		move.l	(a1)+,mappings_addr(a0)
 		move.w	(a1)+,art_tile(a0)
 		move.l	(a1),x_vel(a0)							; load horizontal and vertical speed
 		move.l	(a1),animal.xvel(a0)						; copy horizontal and vertical speed

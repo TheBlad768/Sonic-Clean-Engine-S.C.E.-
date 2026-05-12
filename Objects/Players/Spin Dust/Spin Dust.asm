@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 dashdust.timer			ds.b 1							; (1 byte)
 dashdust.tails_flag		ds.b 1							; (1 byte)
@@ -178,7 +178,7 @@ DashDust_CheckSkid:
 		add.w	d1,y_pos(a1)
 		clr.b	status(a1)
 		move.b	#4,anim(a1)							; skid dust anim
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.b	render_flags(a0),render_flags(a1)
 		move.l	#bytes_word_to_long(8/2,8/2,priority_1),height_pixels(a1)	; set height, width and priority
 		move.w	art_tile(a0),art_tile(a1)

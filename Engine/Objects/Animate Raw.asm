@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipX:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTAdjustFlipX:
 
@@ -38,7 +38,7 @@ Animate_RawNoSSTAdjustFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawAdjustFlipY:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTAdjustFlipY:
 
@@ -71,7 +71,7 @@ Animate_RawNoSSTAdjustFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSST:
 
@@ -114,7 +114,7 @@ Animate_RawNoSST:
 		move.b	2(a1,d0.w),d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,animations(a0)						; set new animation pointer
+		move.l	a1,animations_addr(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)						; set mapping frame
@@ -129,7 +129,7 @@ Animate_RawNoSST:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawCheckResult:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTCheckResult:
 
@@ -185,7 +185,7 @@ Animate_RawNoSSTCheckResult:
 		move.b	(a2)+,d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,animations(a0)						; set new animation pointer
+		move.l	a1,animations_addr(a0)						; set new animation pointer
 
 .restart
 		move.b	1(a1),mapping_frame(a0)						; set mapping frame
@@ -203,7 +203,7 @@ Animate_RawNoSSTCheckResult:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipX:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTMultiDelayFlipX:
 
@@ -242,7 +242,7 @@ Animate_RawNoSSTMultiDelayFlipX:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelay:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTMultiDelay:
 
@@ -295,7 +295,7 @@ Animate_RawNoSSTMultiDelay:
 		move.b	1(a1,d0.w),d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,animations(a0)						; set new animation pointer
+		move.l	a1,animations_addr(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)						; set mapping frame
@@ -313,7 +313,7 @@ Animate_RawNoSSTMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawMultiDelayFlipY:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTMultiDelayFlipY:
 
@@ -352,7 +352,7 @@ Animate_RawNoSSTMultiDelayFlipY:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_Raw2MultiDelay:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_Raw2NoSSTMultiDelay:
 
@@ -408,7 +408,7 @@ Animate_Raw2NoSSTMultiDelay:
 		move.b	(a2)+,d1							; get jump byte
 		ext.w	d1								; sign extension
 		adda.w	d1,a1								; add result to a1
-		move.l	a1,animations(a0)						; set new animation pointer
+		move.l	a1,animations_addr(a0)						; set new animation pointer
 
 .restart
 		move.b	(a1),mapping_frame(a0)						; set mapping frame
@@ -426,7 +426,7 @@ Animate_Raw2NoSSTMultiDelay:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetFaster:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTGetFaster:
 
@@ -503,7 +503,7 @@ Animate_RawNoSSTGetFaster:
 ; =============== S U B R O U T I N E =======================================
 
 Animate_RawGetSlower:
-		movea.l	animations(a0),a1						; load animation script to a1
+		movea.l	animations_addr(a0),a1						; load animation script to a1
 
 Animate_RawNoSSTGetSlower:
 
@@ -600,7 +600,7 @@ Animate_ExternalPlayerSprite:
 ; =============== S U B R O U T I N E =======================================
 
 Set_Raw_Animation:
-		move.l	a1,animations(a0)						; set animation script
+		move.l	a1,animations_addr(a0)						; set animation script
 		clr.b	anim_frame(a0)							; reset anim frame
 		clr.b	anim_frame_timer(a0)						; reset anim frame timer
 		rts

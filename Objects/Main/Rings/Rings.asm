@@ -28,7 +28,7 @@ Obj_Ring:
 Obj_Ring_Collect:
 
 		; init
-		move.l	#Map_Ring,mappings(a0)
+		move.l	#Map_Ring,mappings_addr(a0)
 		move.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 
 		; set priority and art_tile

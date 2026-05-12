@@ -9,7 +9,7 @@
 Obj_Monitor:
 
 		; init
-		move.l	#Map_Monitor,mappings(a0)
+		move.l	#Map_Monitor,mappings_addr(a0)
 		move.w	#make_art_tile(ArtTile_Monitors,0,FALSE),art_tile(a0)
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,28/2,priority_3),height_pixels(a0)	; set height, width and priority
@@ -250,7 +250,7 @@ Obj_MonitorContents:
 		lea	Map_Monitor(pc),a1
 		adda.w	(a1,d0.w),a1
 		addq.w	#2,a1								; skip the number of sprite tiles
-		move.l	a1,mappings(a0)
+		move.l	a1,mappings_addr(a0)
 
 .main
 		bsr.s	MonitorContents_GivePowerup

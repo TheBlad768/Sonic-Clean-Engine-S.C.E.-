@@ -8,7 +8,7 @@ Debug_Mode:
 		tst.b	(Debug_placement_routine).w
 		bne.w	.action
 		addq.b	#2,(Debug_placement_routine).w
-		move.l	mappings(a0),(Debug_saved_mappings).w				; save mappings
+		move.l	mappings_addr(a0),(Debug_saved_mappings).w			; save mappings
 		cmpi.b	#PlayerID_Death,routine(a0)					; is player dead?
 		bhs.s	.death								; if yes, branch
 		move.l	priority(a0),(Debug_saved_priority).w				; save priority and art_tile
@@ -157,7 +157,7 @@ Debug_Mode:
 		add.w	d0,d0
 		add.w	d0,d0
 		add.w	d1,d0
-		move.l	4(a2,d0.w),mappings(a0)						; load mappings for item
+		move.l	4(a2,d0.w),mappings_addr(a0)					; load mappings for item
 		move.w	8(a2,d0.w),art_tile(a0)						; load VRAM setting for item
 		move.b	(a2,d0.w),mapping_frame(a0)					; load frame number for item
 		rts
@@ -202,7 +202,7 @@ Debug_Mode:
 		move.b	#1,(Update_HUD_score).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		enableInts
-		move.l	(Debug_saved_mappings).w,mappings(a0)				; restore mappings
+		move.l	(Debug_saved_mappings).w,mappings_addr(a0)			; restore mappings
 		move.l	(Debug_saved_priority).w,priority(a0)				; restore priority and art_tile
 
 		; reset

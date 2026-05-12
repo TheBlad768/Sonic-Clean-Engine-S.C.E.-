@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 levelsize.maxX				ds.l 1						; maximum x-axis position (4 bytes)
 
@@ -35,7 +35,7 @@ Obj_IncLevEndXGradual:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 levelsize.minX				ds.l 1						; minimum x-axis position (4 bytes)
 
@@ -66,7 +66,7 @@ Obj_DecLevStartXGradual:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 levelsize.maxY				ds.l 1						; maximum y-axis position (4 bytes)
 
@@ -97,7 +97,7 @@ Obj_IncLevEndYGradual:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 levelsize.minY				ds.l 1						; minimum y-axis position (4 bytes)
 

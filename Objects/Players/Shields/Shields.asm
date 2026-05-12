@@ -233,7 +233,7 @@ Obj_LightningShield_Create_Spark:
 		move.l	#Obj_LightningShield_Spark,code_addr(a1)			; make new object a Spark
 		move.w	x_pos(a0),x_pos(a1)						; (Spark) inherit x_pos from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	y_pos(a0),y_pos(a1)						; (Spark) inherit y_pos from source object (Lightning Shield, Hyper Sonic Stars)
-		move.l	mappings(a0),mappings(a1)					; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
+		move.l	mappings_addr(a0),mappings_addr(a1)				; (Spark) inherit mappings from source object (Lightning Shield, Hyper Sonic Stars)
 		move.w	art_tile(a0),art_tile(a1)					; (Spark) inherit art_tile from source object (Lightning Shield, Hyper Sonic Stars)
 		move.b	#setBit(render_flags.level),render_flags(a1)			; use screen coordinates
 		move.l	#bytes_word_to_long(16/2,16/2,priority_1),height_pixels(a1)	; set height, width and priority
@@ -422,7 +422,7 @@ Obj_InstaShield:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 invincibility.anim_ptr			ds.l 1						; (4 bytes)
 invincibility.offset			ds.b 1						; (1 byte)

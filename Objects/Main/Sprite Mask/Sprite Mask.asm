@@ -13,7 +13,7 @@ Obj_SpriteMask2:
 
 		; init
 		clr.w	art_tile(a0)
-		move.l	#Map_SpriteMask,mappings(a0)
+		move.l	#Map_SpriteMask,mappings_addr(a0)
 		move.b	#64/2,width_pixels(a0)
 		move.l	#.level,code_addr(a0)						; level
 		move.b	subtype.byte(a0),d0

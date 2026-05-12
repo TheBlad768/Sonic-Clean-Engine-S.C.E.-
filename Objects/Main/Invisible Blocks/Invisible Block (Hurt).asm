@@ -34,7 +34,7 @@ Obj_Invisible_LavaBlock:
 Obj_Invisible_HurtBlock:
 
 		; init
-		move.l	#Map_InvisibleBlock,mappings(a0)
+		move.l	#Map_InvisibleBlock,mappings_addr(a0)
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 
 		; set priority and art_tile

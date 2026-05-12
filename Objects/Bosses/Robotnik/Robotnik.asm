@@ -26,7 +26,7 @@ Obj_RobotnikHead3Init:
 		; init
 		lea	ObjDat_RobotnikHead(pc),a1
 		jsr	(SetUp_ObjAttributes).w
-		move.l	#AniRaw_RobotnikHead,animations(a0)
+		move.l	#AniRaw_RobotnikHead,animations_addr(a0)
 
 		; check
 		movea.w	parent3(a0),a1							; a1=parent object
