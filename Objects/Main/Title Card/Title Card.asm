@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 titlecard.elements_count		ds.b 1						; (1 byte)
 titlecard.exit_phase			ds.b 1						; (1 byte)
@@ -67,7 +67,7 @@ Obj_TitleCard:
 		move.w	(a2)+,d2
 		move.b	d2,titlecard.queue_id(a1)					; place in exit queue
 		move.b	#setBit(render_flags.multi_sprite),render_flags(a1)
-		move.l	#Map_TitleCard,mappings(a1)
+		move.l	#Map_TitleCard,mappings_addr(a1)
 		move.w	#make_art_tile($500,0,FALSE),art_tile(a1)
 		move.w	a0,parent2(a1)
 

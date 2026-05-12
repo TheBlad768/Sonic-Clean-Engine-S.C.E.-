@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 ; players
 autospin.p1_passed			ds.b 1						; Sonic's passed flag (1 byte)
@@ -20,7 +20,7 @@ autospin.range				ds.w 1						; (2 bytes)
 Obj_AutoSpin:
 
 		; init
-		move.l	#Map_PathSwap,mappings(a0)
+		move.l	#Map_PathSwap,mappings_addr(a0)
 		move.w	#make_art_tile(ArtTile_Ring,0,FALSE),art_tile(a0)
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(256/2,256/2,priority_5),height_pixels(a0)	; set height, width and priority

@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 ; main
 spring.strength				ds.w 1						; speed applied on player (2 bytes)
@@ -18,7 +18,7 @@ spring.origY				ds.w 1						; original y-axis position (2 bytes)
 Obj_Spring:
 
 		; init
-		move.l	#Map_Spring,mappings(a0)
+		move.l	#Map_Spring,mappings_addr(a0)
 		move.w	#make_art_tile(ArtTile_SpikesSprings,0,FALSE),art_tile(a0)	; set red
 		ori.b	#setBit(render_flags.level),render_flags(a0)			; use screen coordinates
 		move.l	#bytes_word_to_long(32/2,32/2,priority_4),height_pixels(a0)	; set height, width and priority
@@ -91,7 +91,7 @@ Spring_Common:
 		move.w	word_22EF0(pc,d0.w),spring.strength(a0)
 		btst	#1,d0
 		beq.s	locret_22EEE
-		move.l	#Map_Spring2,mappings(a0)					; set yellow
+		move.l	#Map_Spring2,mappings_addr(a0)					; set yellow
 
 locret_22EEE:
 		rts

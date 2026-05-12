@@ -266,7 +266,7 @@ Add_SpriteToCollisionResponseList:
 Obj_WaitOffscreen:
 
 		; init
-		move.l	#Map_Offscreen,mappings(a0)
+		move.l	#Map_Offscreen,mappings_addr(a0)
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
 		move.w	#bytes_to_word(64/2,64/2),height_pixels(a0)			; set height and width
 		move.l	(sp)+,wait_addr(a0)						; save address after bsr/jsr from stack and exit from current object

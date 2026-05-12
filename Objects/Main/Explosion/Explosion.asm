@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 explosion.bonus_counter			ds.w 1						; (2 bytes)
 
@@ -29,7 +29,7 @@ Obj_Explosion:
 
 		; init
 		move.l	#.main,code_addr(a0)
-		move.l	#Map_Explosion,mappings(a0)
+		move.l	#Map_Explosion,mappings_addr(a0)
 		move.w	art_tile(a0),d0
 		andi.w	#high_priority,d0
 		ori.w	#ArtTile_Explosion,d0						; VRAM

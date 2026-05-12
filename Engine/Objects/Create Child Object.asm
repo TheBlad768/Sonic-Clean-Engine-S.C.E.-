@@ -17,7 +17,7 @@ CreateChild1_Normal:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -67,11 +67,11 @@ CreateChild2_Complex:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.l	(a2)+,setup_addr(a1)						; object data (to be read by SetUp_ObjAttributes)
-		move.l	(a2)+,animations(a1)						; raw animation pointer (used by Animate_Raw)
+		move.l	(a2)+,animations_addr(a1)					; raw animation pointer (used by Animate_Raw)
 		move.l	(a2)+,wait_addr(a1)						; jump to custom code (used by Obj_Wait)
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
@@ -122,7 +122,7 @@ CreateChild3_NormalRepeated:
 .loop
 		lea	(a2),a3								; save child data address to a3
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a3)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -175,7 +175,7 @@ CreateChild4_LinkListRepeated:
 		move.w	a3,parent3(a1)							; parent RAM address into parent3
 		move.w	a1,parent4(a3)							; child RAM address into parent4
 		movea.w	a1,a3								; next parent RAM address
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2),code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -215,11 +215,11 @@ CreateChild5_ComplexAdjusted:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.l	(a2)+,setup_addr(a1)						; object data (to be read by SetUp_ObjAttributes)
-		move.l	(a2)+,animations(a1)						; raw animation pointer (used by Animate_Raw)
+		move.l	(a2)+,animations_addr(a1)					; raw animation pointer (used by Animate_Raw)
 		move.l	(a2)+,wait_addr(a1)						; jump to custom code (used by Obj_Wait)
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
 		move.w	x_pos(a0),d3
@@ -279,7 +279,7 @@ CreateChild6_Simple:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2),code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -319,7 +319,7 @@ CreateChild7_Normal2:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -372,7 +372,7 @@ CreateChild8_TreeListRepeated:
 		move.w	a3,parent3(a1)							; parent RAM address into parent3
 		move.w	a0,parent4(a1)							; parent RAM address into parent4
 		movea.w	a1,a3								; next parent RAM address
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2),code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -415,7 +415,7 @@ CreateChild9_TreeList:
 		move.w	a3,parent3(a1)							; parent RAM address into parent3
 		move.w	a0,parent4(a1)							; parent RAM address into parent4
 		movea.w	a1,a3								; next parent RAM address
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -455,7 +455,7 @@ CreateChild10_NormalAdjusted:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -511,7 +511,7 @@ CreateChild11_Simple:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)
@@ -551,7 +551,7 @@ CreateChild12_Simple:
 
 .loop
 		move.w	a0,parent3(a1)							; parent RAM address into parent3
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)					; mappings and VRAM offset copied from parent object
 		move.l	(a2)+,code_addr(a1)						; object address
 		move.w	d2,subtype(a1)							; index of child object (done sequentially for each object)

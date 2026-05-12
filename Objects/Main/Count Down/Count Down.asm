@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 aircountdown.drown_timer		ds.w 1						; current time remaining (2 bytes)
 aircountdown.warn_timer			ds.w 1						; current time remaining (2 bytes)
@@ -152,7 +152,7 @@ Obj_AirCountdown:
 		jsr	(Create_New_Object).w
 		bne.s	.return2
 		move.l	#Obj_AirCountdown_Bubbles,code_addr(a1)
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
 
@@ -230,7 +230,7 @@ Obj_AirCountdown:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 aircountdown_bubbles.origX		ds.w 1						; original x-axis position (2 bytes)
 aircountdown_bubbles.number_timer	ds.w 1						; current time remaining (2 bytes)

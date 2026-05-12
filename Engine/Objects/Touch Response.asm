@@ -475,7 +475,7 @@ HurtCharacter:
 
 		; check
 		moveq	#signextendB(sfx_SpikeHit),d0					; load spikes damage sound
-		move.l	mappings(a2),d1
+		move.l	mappings_addr(a2),d1
 		cmpi.l	#Map_Spikes,d1							; was damage caused by spikes?
 		beq.s	.sound								; if yes, branch
 		moveq	#signextendB(sfx_Death),d0					; load normal damage sound
@@ -490,7 +490,7 @@ HurtCharacter:
 
 		; check
 		moveq	#signextendB(sfx_SpikeHit),d0					; load spikes damage sound
-		move.l	mappings(a2),d1
+		move.l	mappings_addr(a2),d1
 		cmpi.l	#Map_Spikes,d1							; was damage caused by spikes?
 		beq.s	Kill_Character.main						; if yes, branch
 

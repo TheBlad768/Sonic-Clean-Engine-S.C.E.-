@@ -10,7 +10,7 @@ Debug_Mode:
 		tst.b	(Debug_placement_routine).w
 		bne.s	.control
 		addq.b	#2,(Debug_placement_routine).w
-		move.l	mappings(a0),(Debug_saved_mappings).w				; save mappings
+		move.l	mappings_addr(a0),(Debug_saved_mappings).w			; save mappings
 		cmpi.b	#PlayerID_Death,routine(a0)					; is player dead?
 		bhs.s	.death								; if yes, branch
 		move.l	priority(a0),(Debug_saved_priority).w				; save priority and art_tile
@@ -49,7 +49,7 @@ Debug_Mode:
 		move.b	#1,(Update_HUD_score).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		enableInts
-		move.l	(Debug_saved_mappings).w,mappings(a0)				; restore mappings
+		move.l	(Debug_saved_mappings).w,mappings_addr(a0)			; restore mappings
 		move.l	(Debug_saved_priority).w,priority(a0)				; restore priority and art_tile
 
 		; reset

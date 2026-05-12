@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 eggcapsule.speed			ds.w 1						; (2 bytes)
 
@@ -477,7 +477,7 @@ AniRaw_Propeller:	dc.b 0, 6, 7, 8, 9, arfEnd
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 eggcapsule_animals.yvel			ds.w 1						; (2 bytes)
 
@@ -691,7 +691,7 @@ EggCapsule_Animals_Load:
 		lsr.w	d0								; division by 2
 		move.b	(a1,d0.w),d0
 		lea	Obj_Animal_Properties(pc),a2
-		move.l	(a2,d0.w),mappings(a0)
+		move.l	(a2,d0.w),mappings_addr(a0)
 		add.w	d1,d1								; multiply by 4
 		add.w	d1,d1
 		move.w	d1,wait_timer(a0)						; set wait

@@ -5,7 +5,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 startnewlevel.size_ptr			ds.l 1						; (4 bytes)
 
@@ -23,7 +23,7 @@ Obj_StartNewLevel:
 
 		; init
 		bset	#render_flags.level,render_flags(a0)				; use screen coordinates
-		move.l	#Map_InvisibleBlock,mappings(a0)
+		move.l	#Map_InvisibleBlock,mappings_addr(a0)
 
 		; set priority and art_tile
 		move.l	#words_to_long( \

@@ -343,7 +343,7 @@ height_pixels						ds.b 1				; byte ; display height / 2
 width_pixels						ds.b 1				; byte ; display width / 2
 priority						ds.w 1				; word ; sprite stack priority -- 0 is front
 art_tile						ds.w 1				; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
-mappings						ds.l 1				; long ; mappings address
+mappings_addr						ds.l 1				; long ; mappings address
 x_pos							ds.l 1				; word, or long when extra precision is required
 x_sub =							x_pos+2				; word
 y_pos							ds.l 1				; word, or long when extra precision is required
@@ -379,7 +379,7 @@ shield_reaction						ds.b 1				; byte ; bit 3 = bounces off shield, bit 4 = nega
 subtype							ds.w 1				; word ; object subtype
 .byte =							subtype+1			; byte ; object subtype
 wait_timer						ds.w 1				; word ; object timer
-animations						ds.l 1				; long ; animations address
+animations_addr						ds.l 1				; long ; animations address
 wait_addr						ds.l 1				; long ; custom object code address
 state_flags						ds.b 1				; byte
 count							ds.b 1				; byte
@@ -500,7 +500,7 @@ obHeight =						height_pixels			; byte ; display height / 2
 obWidth =						width_pixels			; byte ; display width / 2
 obPriority =						priority			; word ; sprite stack priority -- 0 is front
 obGfx =							art_tile			; word ; PCCVH AAAAAAAAAAA ; P = priority, CC = palette line, V = y-flip; H = x-flip, A = starting cell index of art
-obMap =							mappings			; long ; mappings address
+obMap =							mappings_addr			; long ; mappings address
 obX =							x_pos				; word/long ; x-axis position
 obY =							y_pos				; word/long ; y-axis position
 obVelX =						x_vel				; word ; x-axis velocity

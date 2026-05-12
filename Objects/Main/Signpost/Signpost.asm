@@ -89,7 +89,7 @@ Obj_Signpost:
 .nothighpriority
 		move.w	a0,(Signpost_addr).w						; put RAM address here for use by hidden monitor object
 		move.w	#bytes_to_word(60/2,48/2),y_radius(a0)				; set y_radius and x_radius
-		move.l	#AniRaw_Signpost1,animations(a0)
+		move.l	#AniRaw_Signpost1,animations_addr(a0)
 
 		; create stub
 		lea	Child1_Signpost_Stub(pc),a2					; make the little stub at the bottom of the signpost
@@ -201,7 +201,7 @@ Obj_Signpost:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 signpost_sparkle.origX			ds.w 1						; original x-axis position (2 bytes)
 

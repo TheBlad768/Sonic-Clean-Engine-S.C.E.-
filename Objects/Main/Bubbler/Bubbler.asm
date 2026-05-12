@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 bubbler.timer				ds.b 1						; current time remaining (1 byte)
 bubbler.delay				ds.b 1						; time delay (1 byte)
@@ -98,7 +98,7 @@ Obj_Bubbler:
 		jsr	(Create_New_Object_3).w
 		bne.s	.set_wait
 		move.l	#Obj_Bubbler_Bubbles,code_addr(a1)
-		move.l	mappings(a0),mappings(a1)
+		move.l	mappings_addr(a0),mappings_addr(a1)
 		move.w	art_tile(a0),art_tile(a1)
 		move.l	height_pixels(a0),height_pixels(a1)				; set height, width and priority
 
@@ -177,7 +177,7 @@ Obj_Bubbler:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 bubbler_bubbles.origX			ds.w 1						; original x-axis position (2 bytes)
 bubbler_bubbles.flag			ds.b 1						; if set, player can collect air (1 byte)

@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 ; main
 spikes.origX				ds.w 1						; original x-axis position (2 bytes)
@@ -44,7 +44,7 @@ Obj_Spikes:
 		lsr.w	#3,d0
 		move.w	Spikes_InitData(pc,d0.w),height_pixels(a0)			; set height and width
 		move.l	#sub_24090,code_addr(a0)					; face up or down
-		move.l	#Map_Spikes,mappings(a0)
+		move.l	#Map_Spikes,mappings_addr(a0)
 
 		; set priority and art_tile
 		move.l	#words_to_long( \

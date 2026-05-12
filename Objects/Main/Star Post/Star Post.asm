@@ -224,7 +224,7 @@ Load_StarPost_Stars:
 
 .create
 		move.l	#Obj_StarPost_Stars,code_addr(a1)
-		move.l	#Map_StarPostStars,mappings(a1)
+		move.l	#Map_StarPostStars,mappings_addr(a1)
 		move.w	#make_art_tile(ArtTile_StarPost+8,0,FALSE),art_tile(a1)
 		move.b	#setBit(render_flags.level),render_flags(a1)			; use screen coordinates
 		move.w	priority(a0),priority(a1)
@@ -255,7 +255,7 @@ Load_StarPost_Stars:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 starpost_stars.origX			ds.w 1						; original x-axis position (2 bytes)
 starpost_stars.origY			ds.w 1						; original y-axis position (2 bytes)

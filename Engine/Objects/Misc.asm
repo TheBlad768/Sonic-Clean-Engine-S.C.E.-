@@ -5,7 +5,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 SetUp_ObjAttributes:
-		move.l	(a1)+,mappings(a0)						; mapping offset
+		move.l	(a1)+,mappings_addr(a0)						; mapping address
 
 SetUp_ObjAttributes2:
 		move.w	(a1)+,art_tile(a0)						; VRAM offset
@@ -62,7 +62,7 @@ SetUp_ObjAttributesSlotted:
 		move.b	d0,ros_bit(a0)
 		move.w	a2,ros_addr(a0)							; keep track of slot address and bit number
 		move.w	d3,art_tile(a0)							; use correct VRAM offset
-		move.l	(a1)+,mappings(a0)						; mapping address
+		move.l	(a1)+,mappings_addr(a0)						; mapping address
 		move.l	(a1)+,height_pixels(a0)						; height, width and priority
 		move.b	(a1)+,mapping_frame(a0)						; frame number
 		move.b	(a1)+,collision_type(a0)					; collision type

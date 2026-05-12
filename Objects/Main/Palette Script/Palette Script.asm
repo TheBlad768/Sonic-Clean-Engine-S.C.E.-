@@ -4,7 +4,7 @@
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 smoothpalette.delay			ds.w 1						; (2 bytes)
 smoothpalette.destination		ds.w 1						; (2 bytes)
@@ -51,7 +51,7 @@ Obj_SmoothPalette:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 smoothpalette2.delay			ds.w 1						; (2 bytes)
 smoothpalette2.source			ds.l 1						; script pointer (4 bytes)
@@ -109,7 +109,7 @@ Child6_SmoothPalette2:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 fadeselectedtoblack.delay		ds.w 1						; (2 bytes)
 fadeselectedtoblack.source		ds.w 1						; (2 bytes)
@@ -155,7 +155,7 @@ Obj_FadeSelectedToBlack:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 fadeselectedfromblack.delay		ds.w 1						; (2 bytes)
 fadeselectedfromblack.source		ds.w 1						; (2 bytes)
@@ -203,7 +203,7 @@ Obj_FadeSelectedFromBlack:
 
 ; dynamic object variables
 
-	dsset animations								; pretend we're in the RAM
+	dsset animations_addr								; pretend we're in the RAM
 
 fadetowhite.delay			ds.w 1						; (2 bytes)
 
