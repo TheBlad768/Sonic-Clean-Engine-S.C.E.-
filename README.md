@@ -49,7 +49,7 @@ Please read the [license](LICENSE) before using this project.
     - You can easily change the object slot size without breaking anything, since there's no slot-size-based multiplication like in Sonic 1 and Sonic 2;
 
 - Various sound drivers:
-    - There are Z80 Sound Flamedriver and M68K Sonic 2 Clone Driver v2 (Mega PCM 2.0 version). It all depends on your tasks.
+    - There are Z80 Sound Flamedriver and M68K Sonic 2 Clone Driver v2 (Mega PCM 2.1 version). It all depends on your tasks.
 
 ## Additional links
 
