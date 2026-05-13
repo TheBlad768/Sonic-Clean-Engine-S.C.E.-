@@ -16,6 +16,12 @@ Create_New_Object:
 		lea	next_object(a1),a1						; goto next object RAM slot
 		tst.l	code_addr(a1)							; is object RAM slot empty?
 		dbeq	d0,.find							; if not, branch
+
+	if DEBUG_CreateNewObject
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Create_New_Object_RaiseError).l			; raise an error if there is object buffer overflow
+	endif
+
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -42,6 +48,12 @@ Create_New_Object_4:
 		dbeq	d0,.find							; if not, branch
 
 .done
+
+	if DEBUG_CreateNewObject
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Create_New_Object_RaiseError).l			; raise an error if there is object buffer overflow
+	endif
+
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -89,6 +101,12 @@ Create_New_Object_3:
 		dbeq	d0,.find							; if not, branch
 
 .done
+
+	if DEBUG_CreateNewObject
+		; RaiseError is only available in DEBUG builds
+		ifdebug	jsr	(Create_New_Object_RaiseError).l			; raise an error if there is object buffer overflow
+	endif
+
 		rts
 ; ---------------------------------------------------------------------------
 

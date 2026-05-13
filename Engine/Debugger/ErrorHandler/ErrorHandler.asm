@@ -13,6 +13,7 @@
 ; ---------------------------------------------------------------
 
 	ifdef __DEBUG__
+		include "Engine/Debugger/ErrorHandler/Modules/Create Object(Debug).asm"
 		include "Engine/Debugger/ErrorHandler/Modules/DMA Queue(Debug).asm"
 		include "Engine/Debugger/ErrorHandler/Modules/Draw Level(Debug).asm"
 		include "Engine/Debugger/ErrorHandler/Modules/Kosinski Plus Module Decompression(Debug).asm"
