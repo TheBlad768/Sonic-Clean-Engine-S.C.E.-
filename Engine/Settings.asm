@@ -37,6 +37,7 @@ DEBUG_PassMax =						2				; set the maximum number of assembly passes for a pass
 
 ; error handler debugging options (only available in DEBUG builds)
 DEBUG_ALL =						1				; if 1, enable all debugging checks
+DEBUG_CreateNewObject =					0|DEBUG_ALL			; if 1, check object buffer overflow
 DEBUG_DMA =						0|DEBUG_ALL			; if 1, check DMA buffer overflow
 DEBUG_DrawLevel =					0|DEBUG_ALL			; if 1, check plane buffer overflow
 DEBUG_KosinskiPlus =					0|DEBUG_ALL			; if 1, check kosinki plus buffer overflow
