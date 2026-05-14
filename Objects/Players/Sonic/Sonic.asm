@@ -558,12 +558,12 @@ Sonic_Move:
 		bmi.w	loc_11332							; if so, branch
 		tst.w	move_lock(a0)
 		bne.w	loc_112EA
-		btst	#button_left,(Ctrl_1_logical).w					; is left being pressed?
+		btst	#button_left,(Ctrl_1_held_logical).w				; is left being pressed?
 		beq.s	Sonic_NotLeft							; if not, branch
 		bsr.w	sub_113F6
 
 Sonic_NotLeft:
-		btst	#button_right,(Ctrl_1_logical).w				; is right being pressed?
+		btst	#button_right,(Ctrl_1_held_logical).w				; is right being pressed?
 		beq.s	Sonic_NotRight							; if not, branch
 		bsr.w	sub_11482
 
@@ -716,7 +716,7 @@ loc_11228:
 loc_11276:
 		tst.w	(Camera_H_scroll_shift).w
 		bne.s	loc_112B0
-		btst	#button_down,(Ctrl_1_logical).w
+		btst	#button_down,(Ctrl_1_held_logical).w
 		beq.s	loc_112B0
 		move.b	#AniIDSonAni_Duck,anim(a0)
 		addq.b	#1,scroll_delay_counter(a0)
@@ -739,7 +739,7 @@ loc_112A6:
 ; ---------------------------------------------------------------------------
 
 loc_112B0:
-		btst	#button_up,(Ctrl_1_logical).w
+		btst	#button_up,(Ctrl_1_held_logical).w
 		beq.s	loc_112EA
 		move.b	#AniIDSonAni_LookUp,anim(a0)
 		addq.b	#1,scroll_delay_counter(a0)
@@ -775,7 +775,7 @@ loc_112FA:
 
 loc_112FC:
 		moveq	#btnLR,d0
-		and.b	(Ctrl_1_logical).w,d0
+		and.b	(Ctrl_1_held_logical).w,d0
 		bne.s	loc_11332
 		move.w	ground_vel(a0),d0
 		beq.s	loc_11332
@@ -993,12 +993,12 @@ Sonic_RollSpeed:
 		bne.s	loc_1154E
 		tst.w	(Camera_H_scroll_shift).w
 		bne.s	loc_1154E
-		btst	#button_left,(Ctrl_1_logical).w
+		btst	#button_left,(Ctrl_1_held_logical).w
 		beq.s	loc_11542
 		bsr.w	sub_11608
 
 loc_11542:
-		btst	#button_right,(Ctrl_1_logical).w
+		btst	#button_right,(Ctrl_1_held_logical).w
 		beq.s	loc_1154E
 		bsr.w	sub_1162C
 
@@ -1146,7 +1146,7 @@ Sonic_ChgJumpDir:
 	endif
 
 		move.w	x_vel(a0),d0
-		btst	#button_left,(Ctrl_1_logical).w
+		btst	#button_left,(Ctrl_1_held_logical).w
 		beq.s	loc_11682							; if not holding left, branch
 		bset	#status.player.x_flip,status(a0)
 
@@ -1167,7 +1167,7 @@ Sonic_ChgJumpDir:
 		move.w	d1,d0
 
 loc_11682:
-		btst	#button_right,(Ctrl_1_logical).w
+		btst	#button_right,(Ctrl_1_held_logical).w
 		beq.s	loc_1169E							; if not holding right, branch
 		bclr	#status.player.x_flip,status(a0)
 		add.w	d5,d0								; accelerate right in the air
@@ -1292,9 +1292,9 @@ SonicKnux_Roll:
 		tst.w	(Camera_H_scroll_shift).w
 		bne.s	locret_1177E
 		moveq	#btnLR,d0							; is left/right being pressed?
-		and.b	(Ctrl_1_logical).w,d0
+		and.b	(Ctrl_1_held_logical).w,d0
 		bne.s	locret_1177E
-		btst	#button_down,(Ctrl_1_logical).w					; is down being pressed?
+		btst	#button_down,(Ctrl_1_held_logical).w				; is down being pressed?
 		beq.s	SonicKnux_ChkWalk						; if not, branch
 		mvabs.w	ground_vel(a0),d0
 		cmpi.w	#$100,d0							; is Sonic moving at $100 speed or faster?
@@ -1440,7 +1440,7 @@ loc_118D2:
 		cmp.w	y_vel(a0),d1							; is y speed greater than 4? (2 if underwater)
 		ble.s	Sonic_ShieldMoves						; if not, branch
 		moveq	#btnABC,d0							; are buttons A, B or C being pressed?
-		and.b	(Ctrl_1_logical).w,d0
+		and.b	(Ctrl_1_held_logical).w,d0
 		bne.s	locret_118E8							; if yes, branch
 		move.w	d1,y_vel(a0)							; cap jump height
 
@@ -1572,7 +1572,7 @@ locret_11C5C:
 ; ---------------------------------------------------------------------------
 
 loc_11C5E:
-		btst	#button_down,(Ctrl_1_logical).w
+		btst	#button_down,(Ctrl_1_held_logical).w
 		bne.w	loc_11D16
 		move.w	#bytes_to_word(28/2,14/2),y_radius(a0)				; set y_radius and x_radius
 		move.b	#AniIDSonAni_Roll,anim(a0)
