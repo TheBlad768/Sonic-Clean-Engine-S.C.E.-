@@ -34,6 +34,7 @@ namespace SCECustomLayout
 			ushort bgw = (ushort)layout.BGLayout.GetLength(0);
 			ushort fgh = (ushort)layout.FGLayout.GetLength(1);
 			ushort bgh = (ushort)layout.BGLayout.GetLength(1);
+			ushort dto = (ushort)(8 + (MaxSize.Height * 4));
 			tmp.AddRange(ByteConverter.GetBytes(fgw));
 			tmp.AddRange(ByteConverter.GetBytes(bgw));
 			tmp.AddRange(ByteConverter.GetBytes(fgh));
@@ -41,11 +42,11 @@ namespace SCECustomLayout
 			for (int la = 0; la < MaxSize.Height; la++)
 			{
 				if (la < fgh)
-					tmp.AddRange(ByteConverter.GetBytes((ushort)(0x88 + (la * fgw * 2))));
+					tmp.AddRange(ByteConverter.GetBytes((ushort)(dto + (la * fgw * 2))));
 				else
 					tmp.AddRange(new byte[2]);
 				if (la < bgh)
-					tmp.AddRange(ByteConverter.GetBytes((ushort)(0x88 + (fgh * fgw * 2) + (la * bgw * 2))));
+					tmp.AddRange(ByteConverter.GetBytes((ushort)(dto + (fgh * fgw * 2) + (la * bgw * 2))));
 				else
 					tmp.AddRange(new byte[2]);
 			}
@@ -63,5 +64,5 @@ namespace SCECustomLayout
 		public override System.Drawing.Size MaxSize { get { return new System.Drawing.Size(200, 32); } }
 
 		public override System.Drawing.Size DefaultSize { get { return new System.Drawing.Size(128, 16); } }
-    }
+	}
 }
