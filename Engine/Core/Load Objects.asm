@@ -288,10 +288,13 @@ loc_1B9A4:
 		; set
 		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	-2(a0),x_pos(a1)
-		move.w	(a0),d1								; get ypos
+		move.w	(a0),y_pos(a1)							; get ypos
+		move.w	2(a0),d1							; get object id
 		move.w	d1,d2
 		and.w	d5,d1
-		move.w	d1,y_pos(a1)
+		add.w	d1,d1								; multiply by 4
+		add.w	d1,d1
+		move.l	(a4,d1.w),code_addr(a1)
 		rol.w	#3,d2
 
 		andi.w	#( \
@@ -301,12 +304,10 @@ loc_1B9A4:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		moveq	#0,d2
-		move.w	2(a0),d2							; get object id
-		lsl.l	#2,d2								; multiply by 4
-		move.l	(a4,d2.l),code_addr(a1)
 		move.w	4(a0),subtype(a1)
 		move.w	a3,respawn_addr(a1)
+
+		; create
 		Create_New_Object_4.s	loc_1B9FA
 		bne.s	loc_1B9FA
 
@@ -332,25 +333,26 @@ loc_1BA40:
 loc_1BA4A:
 		move.w	(a0)+,d7							; get xpos
 		move.w	(a0)+,d1							; get ypos
-		move.w	d1,d2
-		bmi.s	loc_1BA62
-		and.w	d5,d1
+		move.w	(a0)+,d2							; get object id
+		bmi.s	loc_1BA64
 		cmp.w	d3,d1
 		bhs.s	loc_1BA64
 		cmp.w	d4,d1
 		bls.s	loc_1BA64
-		addq.w	#4,a0								; skip object id and subtype
+		addq.w	#2,a0								; skip subtype
 		moveq	#0,d1
 		rts
 ; ---------------------------------------------------------------------------
-
-loc_1BA62:
-		and.w	d5,d1
 
 loc_1BA64:
 		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	d7,x_pos(a1)
 		move.w	d1,y_pos(a1)
+		move.w	d2,d1
+		and.w	d5,d1
+		add.w	d1,d1								; multiply by 4
+		add.w	d1,d1
+		move.l	(a4,d1.w),code_addr(a1)
 		rol.w	#3,d2
 
 		andi.w	#( \
@@ -360,12 +362,10 @@ loc_1BA64:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		moveq	#0,d2
-		move.w	(a0)+,d2							; get object id
-		lsl.l	#2,d2								; multiply by 4
-		move.l	(a4,d2.l),code_addr(a1)
 		move.w	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
+
+		; create
 		Create_New_Object_4.s	, 1
 ; ---------------------------------------------------------------------------
 
@@ -380,27 +380,28 @@ loc_1BA92:
 loc_1BA9C:
 		move.w	(a0)+,d7							; get xpos
 		move.w	(a0)+,d1							; get ypos
-		move.w	d1,d2
-		bmi.s	loc_1BAB4
-		and.w	d5,d1
+		move.w	(a0)+,d2							; get object id
+		bmi.s	loc_1BAB6
 		cmp.w	d3,d1
 		blo.s	loc_1BAAE
 		cmp.w	d4,d1
 		bls.s	loc_1BAB6
 
 loc_1BAAE:
-		addq.w	#4,a0								; skip object id and subtype
+		addq.w	#2,a0								; skip subtype
 		moveq	#0,d1
 		rts
 ; ---------------------------------------------------------------------------
-
-loc_1BAB4:
-		and.w	d5,d1
 
 loc_1BAB6:
 		bset	#respawn_addr.state,(a3)					; turn off the slot
 		move.w	d7,x_pos(a1)
 		move.w	d1,y_pos(a1)
+		move.w	d2,d1
+		and.w	d5,d1
+		add.w	d1,d1								; multiply by 4
+		add.w	d1,d1
+		move.l	(a4,d1.w),code_addr(a1)
 		rol.w	#3,d2
 
 		andi.w	#( \
@@ -410,12 +411,10 @@ loc_1BAB6:
 
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
-		moveq	#0,d2
-		move.w	(a0)+,d2							; get object id
-		lsl.l	#2,d2								; multiply by 4
-		move.l	(a4,d2.l),code_addr(a1)
 		move.w	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
+
+		; create
 		Create_New_Object_4.s	, 1
 
 ; ---------------------------------------------------------------------------
