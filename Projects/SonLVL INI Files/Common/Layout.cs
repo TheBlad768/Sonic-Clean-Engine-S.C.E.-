@@ -61,7 +61,7 @@ namespace SCECustomLayout
 
 		public override bool IsResizable { get { return true; } }
 
-		public override System.Drawing.Size MaxSize { get { return new System.Drawing.Size(200, 32); } }
+		public override System.Drawing.Size MaxSize { get { return new System.Drawing.Size(200, 200); } }
 
 		public override System.Drawing.Size DefaultSize { get { return new System.Drawing.Size(128, 16); } }
 	}

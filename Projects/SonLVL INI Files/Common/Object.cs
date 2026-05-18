@@ -99,14 +99,14 @@ namespace SonicRetro.SonLVL.API.SCE
 		{
 			List<byte> ret = new List<byte>();
 			ret.AddRange(ByteConverter.GetBytes(X));
+			ret.AddRange(ByteConverter.GetBytes(Y));
 
-			ushort val = (ushort)(Y & 0xFFF);
-			if (XFlip) val |= 0x2000;
-			if (YFlip) val |= 0x4000;
-			if (LoadAtAnyYPos) val |= 0x8000;
-			ret.AddRange(ByteConverter.GetBytes(val));
+			ushort idVal = (ushort)(fullID & 0x0FFF);
+			if (XFlip) idVal |= 0x2000;
+			if (YFlip) idVal |= 0x4000;
+			if (LoadAtAnyYPos) idVal |= 0x8000;
+			ret.AddRange(ByteConverter.GetBytes(idVal));
 
-			ret.AddRange(ByteConverter.GetBytes(fullID));
 			ret.AddRange(ByteConverter.GetBytes(fullSubType));
 
 			return ret.ToArray();
@@ -115,13 +115,14 @@ namespace SonicRetro.SonLVL.API.SCE
 		public override void FromBytes(byte[] bytes)
 		{
 			X = ByteConverter.ToUInt16(bytes, 0);
-			ushort val = ByteConverter.ToUInt16(bytes, 2);
-			LoadAtAnyYPos = (val & 0x8000) == 0x8000;
-			YFlip = (val & 0x4000) == 0x4000;
-			XFlip = (val & 0x2000) == 0x2000;
-			Y = (ushort)(val & 0xFFF);
+			Y = ByteConverter.ToUInt16(bytes, 2);
 
-			fullID = ByteConverter.ToUInt16(bytes, 4);
+			ushort idVal = ByteConverter.ToUInt16(bytes, 4);
+			LoadAtAnyYPos = (idVal & 0x8000) == 0x8000;
+			YFlip = (idVal & 0x4000) == 0x4000;
+			XFlip = (idVal & 0x2000) == 0x2000;
+			fullID = (ushort)(idVal & 0x0FFF);
+
 			fullSubType = ByteConverter.ToUInt16(bytes, 6);
 		}
 	}
