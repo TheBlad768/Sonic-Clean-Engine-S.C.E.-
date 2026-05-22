@@ -18,28 +18,28 @@
 
 AniPalette_DEZ: zoneanimstart
 
-	; 1
-	zoneanimpaldecl 4, AnPal_PalDEZ12_1, Normal_palette_line_3+$1A, 12, 2
-	dc.b 0
-	dc.b 2
-	dc.b 4
-	dc.b 6
-	dc.b 8
-	dc.b 10
-	dc.b 12
-	dc.b 14
-	dc.b 16
-	dc.b 18
-	dc.b 20
-	dc.b 22
-	even
+		; 1
+		zoneanimpaldecl 4, AnPal_PalDEZ12_1, Normal_palette_line_3+$1A, 12, 2
+		dc.b 0
+		dc.b 2
+		dc.b 4
+		dc.b 6
+		dc.b 8
+		dc.b 10
+		dc.b 12
+		dc.b 14
+		dc.b 16
+		dc.b 18
+		dc.b 20
+		dc.b 22
+		even
 
-	; 2
-	zoneanimpaldecl $13, AnPal_PalDEZ12_2, Normal_palette_line_3+$10, 4, 4
-	dc.b 0
-	dc.b 4
-	dc.b 8
-	dc.b 12
-	even
+		; 2
+		zoneanimpaldecl $13, AnPal_PalDEZ12_2, Normal_palette_line_3+$10, 4, 4
+		dc.b 0
+		dc.b 4
+		dc.b 8
+		dc.b 12
+		even
 
-	zoneanimend
+		zoneanimend								; end marker

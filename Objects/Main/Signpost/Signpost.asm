@@ -184,8 +184,8 @@ Obj_Signpost:
 
 .offscreen
 
-		; load second main plc
-		lea	(PLC2_Sonic).l,a5
+		; load main secondary art
+		lea	(PLC_Main_Secondary).l,a5
 		jsr	(LoadPLC_Raw_KosPlusM).w
 
 		; exit from dplc slot

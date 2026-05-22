@@ -426,7 +426,7 @@ ObjArray_LevelResults: titlecardresultsheader
 		titlecardresultsobjdata	Obj_LevelResultsRingBonus, 248, 1336, 128, 1, 128, 7		; 10 (ring bonus)
 		titlecardresultsobjdata	Obj_LevelResultsGeneral, 84, 1236, 156, $B, 96, 9		; 11 (total HUD)
 		titlecardresultsobjdata	Obj_LevelResultsTotal, 248, 1400, 156, 1, 128, 9		; 12 (total number)
-		titlecardresultsend
+		titlecardresultsend									; end marker
 ; ---------------------------------------------------------------------------
 
 		; mappings
