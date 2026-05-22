@@ -1586,7 +1586,7 @@ titlecardVRAMLetters macro opt,opt2,str
 	    endif
 	endm
     endif
-	dc.b -1	; end marker
+	dc.b -1										; end marker
 	restore
     endm
 

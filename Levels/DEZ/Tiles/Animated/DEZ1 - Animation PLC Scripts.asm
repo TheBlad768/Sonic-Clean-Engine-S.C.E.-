@@ -21,32 +21,36 @@
 
 AniPLC_DEZ: zoneanimstart
 
-	zoneanimplcdecl -1, ArtUnc_AniDEZ__3, $50, 4, 6
-	dc.b 0, 9
-	dc.b 6, 4
-	dc.b $C, 9
-	dc.b 6, 4
-	even
+		; 1
+		zoneanimplcdecl -1, ArtUnc_AniDEZ__3, $50, 4, 6
+		dc.b 0, 9
+		dc.b 6, 4
+		dc.b $C, 9
+		dc.b 6, 4
+		even
 
-	zoneanimplcdecl 4, ArtUnc_AniDEZ__4, $3F, 4, 2
-	dc.b 0
-	dc.b 2
-	dc.b 4
-	dc.b 2
-	even
+		; 2
+		zoneanimplcdecl 4, ArtUnc_AniDEZ__4, $3F, 4, 2
+		dc.b 0
+		dc.b 2
+		dc.b 4
+		dc.b 2
+		even
 
-	zoneanimplcdecl 4, ArtUnc_AniDEZ__5, $5C, 6, 3
-	dc.b 0
-	dc.b 3
-	dc.b 6
-	dc.b 0
-	dc.b 3
-	dc.b 6
-	even
+		; 3
+		zoneanimplcdecl 4, ArtUnc_AniDEZ__5, $5C, 6, 3
+		dc.b 0
+		dc.b 3
+		dc.b 6
+		dc.b 0
+		dc.b 3
+		dc.b 6
+		even
 
-	zoneanimplcdecl 1, ArtUnc_AniDEZ__6, $1C, 2, 8
-	dc.b 0
-	dc.b 8
-	even
+		; 4
+		zoneanimplcdecl 1, ArtUnc_AniDEZ__6, $1C, 2, 8
+		dc.b 0
+		dc.b 8
+		even
 
-	zoneanimend
+		zoneanimend								; end marker

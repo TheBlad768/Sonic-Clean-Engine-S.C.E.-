@@ -2580,7 +2580,10 @@ loc_1270A:
 		cmpi.w	#$600,d2
 		bhs.s	loc_12724
 
-.sani		:= SonAni_Walk-SonAni_Run						; Macro AS hack: if you use subtraction directly in lea it will slow down the assembly several times. So we will use :=/set
+		; Macro AS hack: if you use subtraction directly in lea it will slow down the assembly several times
+		; so we will use :=/set
+
+.sani		:= SonAni_Walk-SonAni_Run
 
 		lea	(.sani)(a1),a1							; use walking animation
 		add.b	d0,d0
@@ -2946,7 +2949,10 @@ loc_12A2A:
 		cmpi.w	#$600,d2
 		bhs.s	loc_12A5E
 
-.sani		:= SonAni_Roll-SonAni_Roll2						; Macro AS hack: if you use subtraction directly in lea it will slow down the assembly several times. So we will use :=/set
+		; Macro AS hack: if you use subtraction directly in lea it will slow down the assembly several times
+		; so we will use :=/set
+
+.sani		:= SonAni_Roll-SonAni_Roll2
 
 		lea	(.sani)(a1),a1							; use roll animation
 

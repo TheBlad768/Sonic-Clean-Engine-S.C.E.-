@@ -68,9 +68,11 @@ LevelScreen:
 		move.w	d1,d0
 		jsr	(LoadPalette_Immediate).w
 
-		; load HUD art
-		lea	(PLC1_Sonic).l,a5
-		jsr	(LoadPLC_Raw_KosPlusM).w					; load hud and ring art
+		; load main primary art
+		lea	(PLC_Main_Primary).l,a5
+		jsr	(LoadPLC_Raw_KosPlusM).w
+
+		; next
 		jsrb	CheckLevelForWater
 		clearRAM Water_palette_line_2, Normal_palette
 		tst.b	(Water_flag).w
@@ -210,8 +212,8 @@ LevelScreen:
 
 LevelExtraRender_Data:
 		dc.w 2-1
-		dc.l Render_HUD		; 0
-		dc.l Render_Rings	; 1
+		dc.l Render_HUD				; 0
+		dc.l Render_Rings			; 1
 
 ; ---------------------------------------------------------------------------
 ; Spawn level main objects
