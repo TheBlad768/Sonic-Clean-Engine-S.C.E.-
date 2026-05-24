@@ -175,6 +175,16 @@ rs macro
 	ds.ATTRIBUTE ALLARGS
     endm
 
+; alias obj from asm68k compiler
+obj macro
+	dsset ALLARGS
+    endm
+
+; alias objend from asm68k compiler
+objend macro
+	dsreset
+    endm
+
 ; alias binclude as incbin from asm68k compiler
 incbin macro
 	binclude ALLARGS
