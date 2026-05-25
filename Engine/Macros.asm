@@ -216,6 +216,12 @@ levartptrs macro \
 ; ---------------------------------------------------------------------------
 
 palptr macro ptr,lineno
+palstring := strstr("ptr","_")
+    if palstring < 0
+	fatal "Invalid palette name 'ptr'!"
+    endif
+palname := substr("ptr",palstring,strlen("ptr"))
+PalPtr{"\{palname}"}:	label *
 	dc.l ptr
 	dc.w ((Normal_palette+lineno*palette_line_size)&$FFFF),bytesToLcnt(ptr_end-ptr)
     endm
@@ -270,7 +276,7 @@ zoneanimals macro first,second
     endm
 
 objanimaldecl macro map,addr,xvel,yvel,{INTLABEL}
-Obj_Animal_Properties___LABEL__: label *
+Obj_Animal_Properties___LABEL__:	label *
 	dc.l map,addr
 	dc.w xvel,yvel
     endm
