@@ -580,7 +580,7 @@ Refresh_PlaneDirectVScroll:
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
-		addi.w	#block_height,d0
+		addi.w	#block_width,d0
 		dbf	d3,.find
 		rts
 
