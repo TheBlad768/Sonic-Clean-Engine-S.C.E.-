@@ -135,6 +135,7 @@ Swing_LeftAndRight:
 
 Swing_UpAndDown_Simple:
 		move.b	angle(a0),d0
+		addq.b	#2,angle(a0)
 		bsr.w	GetSineCosine
 		asr.w	#6,d0
 		add.w	objoff_32(a0),d0						; add original y-axis position to d0
