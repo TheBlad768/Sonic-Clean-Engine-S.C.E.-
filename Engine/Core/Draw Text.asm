@@ -2,9 +2,9 @@
 ; Display 8x8 text on the plane
 ;
 ; Inputs:
+; a1 = source address
 ; d1 = plane address
 ; d3 = VRAM shift
-; a1 = source address
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -88,10 +88,10 @@ Draw_PlaneText:
 ; Display text on the plane
 ;
 ; Inputs:
+; a1 = source address
 ; d1 = plane address
 ; d2 = horizontal and vertical character size (size/8-1)
 ; d3 = VRAM shift
-; a1 = source address
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================

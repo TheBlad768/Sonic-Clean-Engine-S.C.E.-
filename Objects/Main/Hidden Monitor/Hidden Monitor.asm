@@ -26,7 +26,7 @@ Obj_HiddenMonitor:
 		btst	#0,state_flags(a1)
 		beq.s	.notdraw							; if signpost hasn't landed, branch
 
-		; check xypos
+		; check xy positions
 		lea	HiddenMonitor_Range(pc),a2
 		jsr	(Check_InTheirRange).w
 		bne.s	.bounceup

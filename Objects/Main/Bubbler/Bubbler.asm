@@ -275,7 +275,7 @@ Obj_Bubbler_Bubbles:
 		btst	#status_secondary.bubble_shield,status_secondary(a1)		; does Sonic have a Bubble Shield?
 		bne.s	.return								; if yes, branch
 
-		; check xypos
+		; check xy positions
 		lea	.range(pc),a2
 		jsr	(Check_InMyRange).w
 		beq.s	.return

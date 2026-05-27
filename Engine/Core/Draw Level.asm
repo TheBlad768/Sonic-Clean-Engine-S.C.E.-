@@ -12,9 +12,9 @@ VInt_DrawLevel:
 		bsr.s	.find
 
 		; extra
-		move.l	(Plane_buffer_2_addr).w,d0
-		beq.s	.return
-		movea.l	d0,a0
+		move.l	(Plane_buffer_2_addr).w,d0					; get plane buffer 2 pointer to d0
+		beq.s	.return								; if zero, branch
+		movea.l	d0,a0								; load plane buffer 2 pointer to a0
 
 .find
 		move.w	(a0),d0
@@ -99,9 +99,9 @@ Draw_TileColumn:
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
-		movem.w	d1/d6,-(sp)
+		movem.w	d1/d6,-(sp)							; save the registers to the stack
 		bsr.s	Setup_TileColumnDraw
-		movem.w	(sp)+,d1/d6
+		movem.w	(sp)+,d1/d6							; return saved registers from the stack
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
@@ -138,9 +138,9 @@ Draw_TileColumn2:
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
-		movem.w	d1/d6,-(sp)
+		movem.w	d1/d6,-(sp)							; save the registers to the stack
 		bsr.s	Setup_TileColumnDraw
-		movem.w	(sp)+,d1/d6
+		movem.w	(sp)+,d1/d6							; return saved registers from the stack
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
@@ -153,7 +153,7 @@ Setup_TileColumnDraw:
 		move.w	d1,d2
 		andi.w	#$70,d2
 		move.w	d1,d3
-		lsl.w	#4,d3
+		lsl.w	#4,d3								; multiply by $10
 		andi.w	#$F00,d3
 		asr.w	#4,d1
 		move.w	d1,d4
@@ -224,7 +224,7 @@ Setup_TileColumnDraw:
 		move.w	(a5,d2.w),d3
 		move.w	d3,d4
 		andi.w	#$3FF,d3
-		lsl.w	#3,d3
+		lsl.w	#3,d3								; multiply by 8
 		move.w	(a2,d3.w),d5
 		swap	d5
 		move.w	4(a2,d3.w),d5
@@ -232,6 +232,8 @@ Setup_TileColumnDraw:
 		move.w	2(a2,d3.w),d3
 		swap	d3
 		move.w	d7,d3
+
+		; check xy flip flags
 		btst	#$B,d4
 		beq.s	.notflipy
 		eori.l	#words_to_long(flip_y,flip_y),d5
@@ -289,12 +291,12 @@ Get_LevelChunkColumn:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Draw BG 2
+; Draw HScroll background 2
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Draw_BG2:
+Draw_BGHDeform2:
 
 		; update camera y scroll
 		lea	(Camera_Y_pos_BG_copy).w,a6
@@ -329,9 +331,9 @@ Draw_TileRow:
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
-		movem.w	d1/d6,-(sp)
+		movem.w	d1/d6,-(sp)							; save the registers to the stack
 		bsr.s	Setup_TileRowDraw
-		movem.w	(sp)+,d1/d6
+		movem.w	(sp)+,d1/d6							; return saved registers from the stack
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
@@ -370,9 +372,9 @@ Draw_TileRow2:
 		sne	(Plane_double_update_flag).w					; if so, set flag
 
 		; update 1
-		movem.w	d1/d6,-(sp)
+		movem.w	d1/d6,-(sp)							; save the registers to the stack
 		bsr.s	Setup_TileRowDraw
-		movem.w	(sp)+,d1/d6
+		movem.w	(sp)+,d1/d6							; return saved registers from the stack
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
@@ -401,7 +403,7 @@ Setup_TileRowDraw:
 		bmi.s	.next
 		move.w	d0,d5
 		andi.w	#$F0,d5								; if the length of the write can fit without wrapping the nametable
-		lsl.w	#4,d5
+		lsl.w	#4,d5								; multiply by $10
 		add.w	d7,d5
 		add.w	d3,d5
 		move.w	d5,(a0)+
@@ -421,7 +423,7 @@ Setup_TileRowDraw:
 		move.w	d5,-(sp)
 		move.w	d0,d5
 		andi.w	#$F0,d5
-		lsl.w	#4,d5
+		lsl.w	#4,d5								; multiply by $10
 		add.w	d7,d5
 		add.w	d3,d5
 		move.w	d5,(a0)+
@@ -437,7 +439,7 @@ Setup_TileRowDraw:
 		move.w	(sp)+,d6							; must place one more write command to account for rollover
 		move.w	d0,d5
 		andi.w	#$F0,d5
-		lsl.w	#4,d5
+		lsl.w	#4,d5								; multiply by $10
 		add.w	d7,d5
 		move.w	d5,(a0)+
 		move.w	d6,d5
@@ -452,9 +454,11 @@ Setup_TileRowDraw:
 		move.w	(a5,d2.w),d3
 		move.w	d3,d4
 		andi.w	#$3FF,d3
-		lsl.w	#3,d3
+		lsl.w	#3,d3								; multiply by 8
 		move.l	(a2,d3.w),d5
 		move.l	4(a2,d3.w),d3
+
+		; check xy flip flags
 		btst	#$B,d4
 		beq.s	.notflipy
 		eori.l	#words_to_long(flip_y,flip_y),d5
@@ -508,13 +512,19 @@ Get_ChunkRow:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Refresh plane
+; Refresh plane full (horizontal deformation)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d0 = Camera Y pos (or BG) rounded ; align (16 pixels)
+; d1 = Camera X pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
-Refresh_PlaneFull:
+Refresh_PlaneFullHScroll:
 		moveq	#bytesToXcnt(gameplay_plane_height,block_height),d2
+
+		; redraws the entire plane in one go during 68k execution
 
 .refresh
 		movem.l	d0-d2/a0,-(sp)
@@ -527,14 +537,46 @@ Refresh_PlaneFull:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Refresh plane deform
+; Refresh plane full (vertical deformation)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d0 = Camera X pos (or BG) rounded ; align (16 pixels)
+; d1 = Camera Y pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
-Refresh_PlaneTileDeform:
+Refresh_PlaneFullVScroll:
+		moveq	#bytesToXcnt(gameplay_plane_width,block_width),d2
+
+		; redraws the entire plane in one go during 68k execution
+
+.refresh
+		movem.l	d0-d2/a0,-(sp)
+		moveq	#gameplay_plane_height/block_height,d6
+		bsr.w	Setup_TileColumnDraw
+		bsr.w	VInt_DrawLevel
+		movem.l	(sp)+,d0-d2/a0
+		addi.w	#block_width,d0
+		dbf	d2,.refresh
+		rts
+
+; ---------------------------------------------------------------------------
+; Refresh plane tile deform (horizontal deformation)
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = horizontal scroll table
+; d0 = Camera X pos (or BG) rounded ; align (16 pixels)
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_PlaneTileDeformHScroll:
 		move.w	(a4)+,d2
 		moveq	#bytesToXcnt(gameplay_plane_height,block_height),d3
+
+		; redraws the entire plane in one go during 68k execution
 
 .find
 		cmp.w	d2,d0
@@ -556,14 +598,21 @@ Refresh_PlaneTileDeform:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Refresh plane VScroll
+; Refresh plane tile deform (vertical deformation)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = horizontal scroll table
+; d0 = Camera Y pos (or BG) rounded ; align (16 pixels)
 
 ; =============== S U B R O U T I N E =======================================
 
-Refresh_PlaneDirectVScroll:
+Refresh_PlaneTileDeformVScroll:
 		move.w	(a4)+,d2
 		moveq	#bytesToXcnt(gameplay_plane_width,block_width),d3
+
+		; redraws the entire plane in one go during 68k execution
 
 .find
 		cmp.w	d2,d0
@@ -585,29 +634,31 @@ Refresh_PlaneDirectVScroll:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Refresh background
+; Refresh background plane (horizontal deformation)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Refresh_PlaneFullDirect_BG:
+Refresh_BGPlaneFullDirectHScroll:
 		moveq	#gameplay_plane_width/block_width,d6
-		bra.s	Refresh_PlaneDirect2_BG
+		bra.s	Refresh_BGPlaneDirectHScroll2
 ; ---------------------------------------------------------------------------
 
-Refresh_PlaneScreenDirect_BG:
+Refresh_BGPlaneScreenDirectHScroll:
 		moveq	#(screen_width+block_width)/block_width,d6
 
-Refresh_PlaneDirect2_BG:
+Refresh_BGPlaneDirectHScroll2:
 		move.w	(Camera_Y_pos_BG_copy).w,d0
 		move.w	(Camera_X_pos_BG_copy).w,d1
 
-Refresh_PlaneDirect_BG:
+Refresh_BGPlaneDirectHScroll:
 		disableInts
 		moveq	#bytesToXcnt(gameplay_plane_height,block_height),d2
 
+		; redraws the entire plane in one go during 68k execution
+
 .refresh
-		movem.l	d0-d2/d6/a0,-(sp)						; redraws the entire plane in one go during 68k execution
+		movem.l	d0-d2/d6/a0,-(sp)
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
@@ -617,33 +668,103 @@ Refresh_PlaneDirect_BG:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Refresh foreground
+; Refresh foreground plane (horizontal deformation)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Refresh_PlaneFullDirect:
+Refresh_FGPlaneFullDirectHScroll:
 		moveq	#gameplay_plane_width/block_width,d6
-		bra.s	Refresh_PlaneDirect2
+		bra.s	Refresh_FGPlaneDirectHScroll2
 ; ---------------------------------------------------------------------------
 
-Refresh_PlaneScreenDirect:
+Refresh_FGPlaneScreenDirectHScroll:
 		moveq	#(screen_width+block_width)/block_width,d6
 
-Refresh_PlaneDirect2:
+Refresh_FGPlaneDirectHScroll2:
 		move.w	(Camera_Y_pos_copy).w,d0
 		move.w	(Camera_X_pos_copy).w,d1
 
-Refresh_PlaneDirect:
+Refresh_FGPlaneDirectHScroll:
 		disableInts
 		moveq	#bytesToXcnt((screen_height+block_height),block_height),d2
 
+		; redraws the entire plane in one go during 68k execution
+
 .refresh
-		movem.l	d0-d2/d6/a0,-(sp)						; redraws the entire plane in one go during 68k execution
+		movem.l	d0-d2/d6/a0,-(sp)
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
 		movem.l	(sp)+,d0-d2/d6/a0
 		addi.w	#block_height,d0
+		dbf	d2,.refresh
+		enableInts
+		rts
+
+; ---------------------------------------------------------------------------
+; Refresh background plane (vertical deformation)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_BGPlaneFullDirectVScroll:
+		moveq	#gameplay_plane_height/block_height,d6
+		bra.s	Refresh_BGPlaneDirectVScroll2
+; ---------------------------------------------------------------------------
+
+Refresh_BGPlaneScreenDirectVScroll:
+		moveq	#(screen_height+block_height)/block_height,d6
+
+Refresh_BGPlaneDirectVScroll2:
+		move.w	(Camera_Y_pos_BG_copy).w,d0
+		move.w	(Camera_X_pos_BG_copy).w,d1
+
+Refresh_BGPlaneDirectVScroll:
+		disableInts
+		moveq	#bytesToXcnt(gameplay_plane_width,block_width),d2
+
+		; redraws the entire plane in one go during 68k execution
+
+.refresh
+		movem.l	d0-d2/d6/a0,-(sp)
+		bsr.w	Setup_TileColumnDraw
+		bsr.w	VInt_DrawLevel
+		movem.l	(sp)+,d0-d2/d6/a0
+		addi.w	#block_width,d0
+		dbf	d2,.refresh
+		enableInts
+		rts
+
+; ---------------------------------------------------------------------------
+; Refresh foreground plane (vertical deformation)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Refresh_FGPlaneFullDirectVScroll:
+		moveq	#gameplay_plane_height/block_height,d6
+		bra.s	Refresh_BGPlaneDirectVScroll2
+; ---------------------------------------------------------------------------
+
+Refresh_FGPlaneScreenDirectVScroll:
+		moveq	#(screen_height+block_height)/block_height,d6
+
+Refresh_FGPlaneDirectVScroll2:
+		move.w	(Camera_Y_pos_copy).w,d0
+		move.w	(Camera_X_pos_copy).w,d1
+
+Refresh_FGPlaneDirectVScroll:
+		disableInts
+		moveq	#bytesToXcnt(gameplay_plane_width,block_width),d2
+
+		; redraws the entire plane in one go during 68k execution
+
+.refresh
+		movem.l	d0-d2/d6/a0,-(sp)
+		bsr.w	Setup_TileColumnDraw
+		bsr.w	VInt_DrawLevel
+		movem.l	(sp)+,d0-d2/d6/a0
+		addi.w	#block_width,d0
 		dbf	d2,.refresh
 		enableInts
 		rts
@@ -693,103 +814,33 @@ Draw_BGAsYouMove:
 		bra.w	Draw_TileRow
 
 ; ---------------------------------------------------------------------------
-; Draw foreground
+; Draw HScroll foreground
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = horizontal scroll table
+; d5 = draw array size
+; d6 = width size
 
 ; =============== S U B R O U T I N E =======================================
 
-Draw_FG:
+Draw_FGHDeform:
 
 		; update camera y scroll
 		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_Y_pos_copy).w,a6
-		bsr.w	Get_DeformDrawPosVert
+		bsr.s	Get_DeformDrawPosVert
 		lea	(Camera_Y_pos_rounded).w,a5
 		bsr.w	Draw_TileRow2
 		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
 
 		; update camera x scroll
 		move.w	(Camera_Y_pos_rounded).w,d6
-		bra.s	Draw_BGNoVert
+		bra.s	Draw_BGHDeformNoVert
 
 ; ---------------------------------------------------------------------------
-; Draw background
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Draw_BG:
-
-		; update camera y scroll
-		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
-		lea	(Camera_Y_pos_BG_copy).w,a6
-		bsr.s	Get_DeformDrawPosVert
-		lea	(Camera_Y_pos_BG_rounded).w,a5
-		bsr.w	Draw_TileRow2
-		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
-
-		; update camera x scroll
-		move.w	(Camera_Y_pos_BG_rounded).w,d6
-		tst.w	(Camera_Y_pos_BG_copy).w
-		bpl.s	Draw_BGNoVert
-		moveq	#-block_height,d6						; set align (16 pixels)
-		and.w	(Camera_Y_pos_BG_copy).w,d6
-
-Draw_BGNoVert:
-		move.w	d6,d1
-
-.find
-		sub.w	(a4)+,d6
-		bmi.s	.found
-		moveq	#-block_width,d0						; set align (16 pixels)
-		and.w	(a6)+,d0
-		move.w	d0,(a6)+
-		subq.w	#1,d5								; next
-		bra.s	.find
-; ---------------------------------------------------------------------------
-
-.found
-		neg.w	d6
-		lsr.w	#4,d6
-		moveq	#(screen_height+block_height)/block_height,d4
-		sub.w	d6,d4
-		bhs.s	.loop
-		moveq	#0,d4
-		moveq	#(screen_height+block_height)/block_height,d6
-
-.loop
-		movem.w	d1/d4-d6,-(sp)							; save the registers to the stack
-		movem.l	a4/a6,-(sp)
-		lea	2(a6),a5
-		bsr.w	Draw_TileColumn
-		movem.l	(sp)+,a4/a6
-		movem.w	(sp)+,d1/d4-d6							; return saved registers from the stack
-		addq.w	#4,a6
-		tst.w	d4
-		beq.s	.loop2
-		lsl.w	#4,d6
-		add.w	d6,d1
-		subq.w	#1,d5								; next
-		move.w	(a4)+,d6
-		lsr.w	#4,d6
-		move.w	d4,d0
-		sub.w	d6,d4
-		bpl.s	.loop
-		move.w	d0,d6
-		moveq	#0,d4
-		bra.s	.loop
-; ---------------------------------------------------------------------------
-
-.loop2
-		subq.w	#1,d5								; next
-		beq.s	Get_DeformDrawPosVert.return
-		moveq	#-block_width,d0						; set align (16 pixels)
-		and.w	(a6)+,d0
-		move.w	d0,(a6)+
-		bra.s	.loop2
-
-; ---------------------------------------------------------------------------
-; Get deform position
+; Get HScroll deform position
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -816,8 +867,96 @@ Get_DeformDrawPosVert:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Draw HScroll background
+; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = horizontal scroll table
+; d5 = draw array size
+; d6 = width size
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_BGHDeform:
+
+		; update camera y scroll
+		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
+		lea	(Camera_Y_pos_BG_copy).w,a6
+		bsr.s	Get_DeformDrawPosVert
+		lea	(Camera_Y_pos_BG_rounded).w,a5
+		bsr.w	Draw_TileRow2
+		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
+
+		; update camera x scroll
+		move.w	(Camera_Y_pos_BG_rounded).w,d6
+		tst.w	(Camera_Y_pos_BG_copy).w
+		bpl.s	Draw_BGHDeformNoVert
+		moveq	#-block_height,d6						; set align (16 pixels)
+		and.w	(Camera_Y_pos_BG_copy).w,d6
+
+Draw_BGHDeformNoVert:
+		move.w	d6,d1
+
+.find
+		sub.w	(a4)+,d6
+		bmi.s	.found
+		moveq	#-block_width,d0						; set align (16 pixels)
+		and.w	(a6)+,d0
+		move.w	d0,(a6)+
+		subq.w	#1,d5								; next
+		bra.s	.find
+; ---------------------------------------------------------------------------
+
+.found
+		neg.w	d6
+		lsr.w	#4,d6								; divide by $10
+		moveq	#(screen_height+block_height)/block_height,d4
+		sub.w	d6,d4
+		bhs.s	.loop
+		moveq	#0,d4
+		moveq	#(screen_height+block_height)/block_height,d6
+
+.loop
+		movem.w	d1/d4-d6,-(sp)							; save the registers to the stack
+		movem.l	a4/a6,-(sp)
+		lea	2(a6),a5
+		bsr.w	Draw_TileColumn
+		movem.l	(sp)+,a4/a6
+		movem.w	(sp)+,d1/d4-d6							; return saved registers from the stack
+		addq.w	#4,a6
+		tst.w	d4
+		beq.s	.loop2
+		lsl.w	#4,d6								; multiply by $10
+		add.w	d6,d1
+		subq.w	#1,d5								; next
+		move.w	(a4)+,d6
+		lsr.w	#4,d6								; divide by $10
+		move.w	d4,d0
+		sub.w	d6,d4
+		bpl.s	.loop
+		move.w	d0,d6
+		moveq	#0,d4
+		bra.s	.loop
+; ---------------------------------------------------------------------------
+
+.loop2
+		subq.w	#1,d5								; next
+		beq.s	Get_DeformDrawPosHorz.return
+		moveq	#-block_width,d0						; set align (16 pixels)
+		and.w	(a6)+,d0
+		move.w	d0,(a6)+
+		bra.s	.loop2
+
+; ---------------------------------------------------------------------------
 ; Draw VScroll foreground
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = vertical scroll table
+; d5 = draw array size
+; d6 = height size
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -826,7 +965,7 @@ Draw_FGVDeform:
 		; update camera x scroll
 		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_X_pos_copy).w,a6
-		bsr.w	Get_XDeformRange
+		bsr.s	Get_DeformDrawPosHorz
 		lea	(Camera_X_pos_rounded).w,a5
 		bsr.w	Draw_TileColumn2
 		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
@@ -836,8 +975,41 @@ Draw_FGVDeform:
 		bra.s	Draw_BGVDeformNoHorz
 
 ; ---------------------------------------------------------------------------
+; Get VScroll deform position
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+Get_DeformDrawPosHorz:
+		move.w	(a4)+,d2
+		move.w	(a6),d0
+		bsr.s	.find
+		addi.w	#screen_width,d0
+
+.find
+		cmp.w	d2,d0
+		blo.s	.set
+		add.w	(a4)+,d2
+		addq.w	#4,a5								; next
+		bra.s	.find
+; ---------------------------------------------------------------------------
+
+.set
+		move.w	(a5),d1
+		swap	d1
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
 ; Draw VScroll background
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = vertical scroll table
+; d5 = draw array size
+; d6 = height size
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -846,7 +1018,7 @@ Draw_BGVDeform:
 		; update camera x scroll
 		movem.l	d5/a4-a5,-(sp)							; save the registers to the stack
 		lea	(Camera_X_pos_BG_copy).w,a6
-		bsr.s	Get_XDeformRange
+		bsr.s	Get_DeformDrawPosHorz
 		lea	(Camera_X_pos_BG_rounded).w,a5
 		bsr.w	Draw_TileColumn2
 		movem.l	(sp)+,d5/a4/a6							; return saved registers from the stack
@@ -869,7 +1041,7 @@ Draw_BGVDeformNoHorz:
 
 .found
 		neg.w	d6
-		lsr.w	#4,d6
+		lsr.w	#4,d6								; divide by $10
 		moveq	#(screen_width+block_width)/block_width,d4
 		sub.w	d6,d4
 		bhs.s	.loop
@@ -886,11 +1058,11 @@ Draw_BGVDeformNoHorz:
 		addq.w	#4,a6
 		tst.w	d4
 		beq.s	.loop2
-		lsl.w	#4,d6
+		lsl.w	#4,d6								; multiply by $10
 		add.w	d6,d1
 		subq.w	#1,d5								; next
 		move.w	(a4)+,d6
-		lsr.w	#4,d6
+		lsr.w	#4,d6								; divide by $10
 		move.w	d4,d0
 		sub.w	d6,d4
 		bhs.s	.loop
@@ -901,57 +1073,42 @@ Draw_BGVDeformNoHorz:
 
 .loop2
 		subq.w	#1,d5								; next
-		beq.s	Get_XDeformRange.return
+		beq.s	Draw_PlaneVertBottomUp.return
 		move.w	(a6)+,d0
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(a6)+
 		bra.s	.loop2
 
 ; ---------------------------------------------------------------------------
-; Get VScroll deform position
+; Draw plane vertical bottom to up (double update)
 ; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-Get_XDeformRange:
-		move.w	(a4)+,d2
-		move.w	(a6),d0
-		bsr.s	.find
-		addi.w	#screen_width,d0
-
-.find
-		cmp.w	d2,d0
-		blo.s	.set
-		add.w	(a4)+,d2
-		addq.w	#4,a5								; next
-		bra.s	.find
-; ---------------------------------------------------------------------------
-
-.set
-		move.w	(a5),d1
-		swap	d1
-
-.return
-		rts
-
-; ---------------------------------------------------------------------------
-; Draw plane vertical bottom to up (save data)
-; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera X pos (or BG) copy
+; d2 = Camera Y pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneVertBottomUp:
+
+		; update 1
 		movem.w	d1-d2,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneVertSingleBottomUp
 		movem.w	(sp)+,d1-d2							; return saved registers from the stack
 
 		; check draw delayed rowcount
-		bpl.s	Draw_PlaneVertSingleBottomUp
+		bpl.s	Draw_PlaneVertSingleBottomUp					; if draw delayed rowcount remains, update again
+
+.return
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Draw plane vertical bottom to up
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera X pos (or BG) copy
+; d2 = Camera Y pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -970,16 +1127,41 @@ Draw_PlaneVertSingleBottomUp:
 
 .next
 		subi.w	#block_height,(Draw_delayed_position).w
-		subq.w	#1,(Draw_delayed_rowcount).w
+		subq.w	#1,(Draw_delayed_rowcount).w					; decrement draw delayed rowcount
+		rts
+
+; ---------------------------------------------------------------------------
+; Draw plane vertical top to down (double update)
+; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera X pos (or BG) copy
+; d2 = Camera Y pos (or BG) copy
+
+; =============== S U B R O U T I N E =======================================
+
+Draw_PlaneVertTopDown:
+
+		; update 1
+		movem.w	d1-d2,-(sp)							; save the registers to the stack
+		bsr.s	Draw_PlaneVertSingleTopDown
+		movem.w	(sp)+,d1-d2							; return saved registers from the stack
+
+		; check draw delayed rowcount
+		bpl.s	Draw_PlaneVertSingleTopDown					; if draw delayed rowcount remains, update again
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Draw plane vertical top to down
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera X pos (or BG) copy
+; d2 = Camera Y pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
-Draw_PlaneVertTopDown:
+Draw_PlaneVertSingleTopDown:
 		and.w	(Camera_Y_pos_mask).w,d2
 		move.w	d2,d3
 		addi.w	#screen_height+block_height,d3
@@ -994,27 +1176,37 @@ Draw_PlaneVertTopDown:
 
 .next
 		addi.w	#block_height,(Draw_delayed_position).w
-		subq.w	#1,(Draw_delayed_rowcount).w
+		subq.w	#1,(Draw_delayed_rowcount).w					; decrement draw delayed rowcount
 		rts
 
 ; ---------------------------------------------------------------------------
-; Draw plane horizontal right to left (save data)
+; Draw plane horizontal right to left (double update)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera Y pos (or BG) copy
+; d2 = Camera X pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneHorzRightToLeft:
+
+		; update 1
 		movem.w	d1-d2,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneHorzSingleRightToLeft
 		movem.w	(sp)+,d1-d2							; return saved registers from the stack
 
 		; check draw delayed rowcount
-		bpl.s	Draw_PlaneHorzSingleRightToLeft
+		bpl.s	Draw_PlaneHorzSingleRightToLeft					; if draw delayed rowcount remains, update again
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Draw plane horizontal right to left
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera Y pos (or BG) copy
+; d2 = Camera X pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1033,27 +1225,37 @@ Draw_PlaneHorzSingleRightToLeft:
 
 .next
 		subi.w	#block_width,(Draw_delayed_position).w
-		subq.w	#1,(Draw_delayed_rowcount).w
+		subq.w	#1,(Draw_delayed_rowcount).w					; decrement draw delayed rowcount
 		rts
 
 ; ---------------------------------------------------------------------------
-; Draw plane horizontal left to right (save data)
+; Draw plane horizontal left to right (double update)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera Y pos (or BG) copy
+; d2 = Camera X pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneHorzLeftToRight:
+
+		; update 1
 		movem.w	d1-d2,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneHorzSingleLeftToRight
 		movem.w	(sp)+,d1-d2							; return saved registers from the stack
 
 		; check draw delayed rowcount
-		bpl.s	Draw_PlaneHorzSingleLeftToRight
+		bpl.s	Draw_PlaneHorzSingleLeftToRight					; if draw delayed rowcount remains, update again
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Draw plane horizontal left to right
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; d1 = Camera Y pos (or BG) copy
+; d2 = Camera X pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1072,27 +1274,39 @@ Draw_PlaneHorzSingleLeftToRight:
 
 .next
 		addi.w	#block_width,(Draw_delayed_position).w
-		subq.w	#1,(Draw_delayed_rowcount).w
+		subq.w	#1,(Draw_delayed_rowcount).w					; decrement draw delayed rowcount
 		rts
 
 ; ---------------------------------------------------------------------------
-; Draw plane vertical bottom to up complex (save data)
+; Draw plane vertical bottom to up complex (double update)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = horizontal scroll table
+; d1 = Camera Y pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneVertBottomUpComplex:
+
+		; update 1
 		movem.l	d1/a4-a5,-(sp)							; save the registers to the stack
 		bsr.s	Draw_PlaneVertSingleBottomUpComplex
 		movem.l	(sp)+,d1/a4-a5							; return saved registers from the stack
 
 		; check draw delayed rowcount
-		bpl.s	Draw_PlaneVertSingleBottomUpComplex
+		bpl.s	Draw_PlaneVertSingleBottomUpComplex				; if draw delayed rowcount remains, update again
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Draw plane vertical bottom to up complex
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; a4 = draw array
+; a5 = horizontal scroll table
+; d1 = Camera Y pos (or BG) copy
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -1119,18 +1333,25 @@ Draw_PlaneVertSingleBottomUpComplex:
 
 .next
 		subi.w	#block_height,(Draw_delayed_position).w
-		subq.w	#1,(Draw_delayed_rowcount).w
+		subq.w	#1,(Draw_delayed_rowcount).w					; decrement draw delayed rowcount
 		rts
 
 ; ---------------------------------------------------------------------------
-; Reset tile offset position (Actual)
+; Reset foreground tile offset position (horizontal deformation)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; none
+;
+; Outputs:
+; d0 = Camera Y pos rounded ; align (16 pixels)
+; d1 = Camera X pos copy
 
 ; =============== S U B R O U T I N E =======================================
 
-Reset_TileOffsetPositionActual:
+Reset_FGTileOffsetPositionHScroll:
 		move.w	(Camera_X_pos_copy).w,d0
-		move.w	d0,d1
+		move.w	d0,d1								; copy camera x pos to d1
 		andi.w	#-16,d0								; align (16 pixels)
 		move.w	d0,(Camera_X_pos_rounded).w
 		move.w	(Camera_Y_pos_copy).w,d0
@@ -1139,16 +1360,24 @@ Reset_TileOffsetPositionActual:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Reset tile offset position (Eff)
+; Reset background tile offset position (horizontal deformation)
 ; ---------------------------------------------------------------------------
+;
+; Input:
+; none
+;
+; Outputs:
+; d0 = Camera Y pos BG rounded ; align (16 pixels)
+; d1 = Camera X pos BG copy
+; d2 = Camera X pos BG rounded ; align (16 pixels)
 
 ; =============== S U B R O U T I N E =======================================
 
-Reset_TileOffsetPositionEff:
+Reset_BGTileOffsetPositionHScroll:
 		move.w	(Camera_X_pos_BG_copy).w,d0
-		move.w	d0,d1
+		move.w	d0,d1								; copy camera x pos bg to d1
 		andi.w	#-16,d0								; align (16 pixels)
-		move.w	d0,d2
+		move.w	d0,d2								; copy camera x pos bg rounded to d2
 		move.w	d0,(Camera_X_pos_BG_rounded).w
 		move.w	(Camera_Y_pos_BG_copy).w,d0
 		and.w	(Camera_Y_pos_mask).w,d0
@@ -1156,7 +1385,55 @@ Reset_TileOffsetPositionEff:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Get BG actual effective (Diff)
+; Reset foreground tile offset position (vertical deformation)
+; ---------------------------------------------------------------------------
+;
+; Input:
+; none
+;
+; Outputs:
+; d0 = Camera X pos rounded ; align (16 pixels)
+; d1 = Camera Y pos copy
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_FGTileOffsetPositionVScroll:
+		move.w	(Camera_Y_pos_copy).w,d0
+		move.w	d0,d1								; copy camera y pos to d1
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	d0,(Camera_Y_pos_rounded).w
+		move.w	(Camera_X_pos_copy).w,d0
+		andi.w	#-16,d0								; align (16 pixels)
+		move.w	d0,(Camera_X_pos_rounded).w
+		rts
+
+; ---------------------------------------------------------------------------
+; Reset background tile offset position (vertical deformation)
+; ---------------------------------------------------------------------------
+;
+; Input:
+; none
+;
+; Outputs:
+; d0 = Camera X pos BG rounded ; align (16 pixels)
+; d1 = Camera Y pos BG copy
+; d2 = Camera Y pos BG rounded ; align (16 pixels)
+
+; =============== S U B R O U T I N E =======================================
+
+Reset_BGTileOffsetPositionVScroll:
+		move.w	(Camera_Y_pos_BG_copy).w,d0
+		move.w	d0,d1								; copy camera y pos bg to d1
+		and.w	(Camera_Y_pos_mask).w,d0
+		move.w	d0,d2								; copy camera y pos bg rounded to d2
+		move.w	d0,(Camera_Y_pos_BG_rounded).w
+		move.w	(Camera_X_pos_BG_copy).w,d0
+		andi.w	#-16,d0								; align (16 pixels)
+		move.w	d0,(Camera_X_pos_BG_rounded).w
+		rts
+
+; ---------------------------------------------------------------------------
+; Get background tile collision offset position
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
