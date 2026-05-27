@@ -124,7 +124,7 @@ LevelScreen:
 
 .askip
 		jsr	(Load_Solids).w
-		jsr	(Handle_Onscreen_Water_Height).w
+		jsrb	Handle_Onscreen_Water_Height
 		moveq	#0,d0
 		move.w	d0,(Ctrl_1_logical).w
 		move.w	d0,(Ctrl_1).w
@@ -199,7 +199,7 @@ LevelScreen:
 		bne.w	LevelScreen
 		jsr	(DeformBgLayer).w
 		jsr	(Level_Events).w
-		jsr	(Handle_Onscreen_Water_Height).w
+		jsrb	Handle_Onscreen_Water_Height
 		jsr	(Load_Rings).w
 		jsr	(Animate_Palette).w
 		jsr	(Animate_Tiles).w

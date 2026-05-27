@@ -7,8 +7,8 @@
 DEZ1_ForegroundInit:
 
 		; update FG
-		jsr	(Reset_TileOffsetPositionActual).w
-		jmp	(Refresh_PlaneFull).w
+		jsr	(Reset_FGTileOffsetPositionHScroll).w
+		jmp	(Refresh_PlaneFullHScroll).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -23,8 +23,8 @@ DEZ1_BackgroundInit:
 		bsr.s	DEZ1_Deform
 
 		; update BG
-		jsr	(Reset_TileOffsetPositionEff).w
-		jsr	(Refresh_PlaneFull).w
+		jsr	(Reset_BGTileOffsetPositionHScroll).w
+		jsr	(Refresh_PlaneFullHScroll).w
 
 		; deform
 		lea	DEZ1_BGDeformArray(pc),a4
