@@ -72,18 +72,24 @@ AnimatePalette_DoAniPal_Part2:
 		movea.w	4(a2),a1							; load palette RAM
 
 		; copy palette
-		moveq	#-16,d0								; max palette size (16 colors)
-		add.b	7(a2),d0							; get size of palette
-		neg.w	d0								; get total size of palette
+		moveq	#0,d0								; clear d0
+		move.b	7(a2),d0							; get size of palette
+		move.w	d0,d1								; copy data from d0 to d1
+		lsr.w	#4,d1								; divide by $10 (16) ; get loop count
+		andi.w	#16-1,d0							; max palette size (16 colors) per loop
 		add.w	d0,d0								; multiply by 2
-		jmp	.copy(pc,d0.w)
+		neg.w	d0								; get total size of palette
+		jmp	.copy_index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-.copy
+.copy_loop
 
 	rept 16
-		move.w	(a0)+,(a1)+
+		move.w	(a0)+,(a1)+							; copy data from a0 to a1
 	endr
+
+.copy_index
+		dbf	d1,.copy_loop
 
 .nextscript
 		move.b	6(a2),d0							; get total size of frame data
