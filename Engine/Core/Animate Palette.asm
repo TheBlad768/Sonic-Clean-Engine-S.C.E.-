@@ -71,12 +71,14 @@ AnimatePalette_DoAniPal_Part2:
 		; get current position
 		movea.w	4(a2),a1							; load palette RAM
 
+._loopunroll =	4
+
 		; copy palette
 		moveq	#0,d0								; clear d0
 		move.b	7(a2),d0							; get size of palette
 		move.w	d0,d1								; copy data from d0 to d1
-		lsr.w	#4,d1								; divide by $10 (16) ; get loop count
-		andi.w	#16-1,d0							; max palette size (16 colors) per loop
+		lsr.w	#._loopunroll,d1						; get loop count
+		andi.w	#setBit(._loopunroll)-1,d0					; max palette size (16 colors) per loop
 		add.w	d0,d0								; multiply by 2
 		neg.w	d0								; get total size of palette
 		jmp	.copy_index(pc,d0.w)
@@ -84,7 +86,7 @@ AnimatePalette_DoAniPal_Part2:
 
 .copy_loop
 
-	rept 16
+	rept setBit(._loopunroll)
 		move.w	(a0)+,(a1)+							; copy data from a0 to a1
 	endr
 
