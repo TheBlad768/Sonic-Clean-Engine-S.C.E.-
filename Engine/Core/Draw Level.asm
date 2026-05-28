@@ -6,46 +6,57 @@
 
 VInt_DrawLevel:
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
+		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .main
 		lea	(Plane_buffer).w,a0
 		bsr.s	.find
 
-		; extra
-		move.l	(Plane_buffer_2_addr).w,d0					; get plane buffer 2 pointer to d0
+		; check secondary plane buffer
+		move.l	(Plane_buffer_2_addr).w,d0					; get secondary plane buffer pointer to d0
 		beq.s	.return								; if zero, branch
-		movea.l	d0,a0								; load plane buffer 2 pointer to a0
+		movea.l	d0,a0								; load secondary plane buffer pointer to a0
 
 .find
-		move.w	(a0),d0
-		beq.s	.done
-		clr.w	(a0)+
-		move.w	(a0)+,d1
-		bmi.s	.col
+		move.w	(a0),d0								; get destination VRAM address to d0
+		beq.s	.done								; if zero, exit
+		clr.w	(a0)+								; clear current slot
+		move.w	(a0)+,d1							; get number of tiles to d1
+		bmi.s	.column								; branch, if is column flag was set
+
+		; draw row tiles
 		move.w	#$8F02,d2							; VRAM increment at 2 bytes (horizontal level write)
-		move.w	#$80,d3
+		move.w	#$80,d3								; set next line
 		bra.s	.draw
 ; ---------------------------------------------------------------------------
 
-.col
+.column
+
+		; draw column tiles
 		move.w	#$8F80,d2							; VRAM increment at $80 bytes (vertical level write)
-		moveq	#2,d3
-		andi.w	#$7FFF,d1
+		moveq	#2,d3								; set next line
+		andi.w	#$7FFF,d1							; clear column flag bit
 
 .draw
-		move.w	d2,VDP_control_port-VDP_data_port(a6)
-		move.w	d0,d2
-		move.w	d1,d4
+		move.w	d2,VDP_control_port-VDP_control_port(a5)			; set VRAM increment (horizontal or vertical level write)
+
+		; update 1
+		move.w	d0,d2								; save VRAM address
+		move.w	d1,d4								; save loop count
 		bsr.s	VInt_VRAMWrite
-		move.w	d2,d0
-		add.w	d3,d0
-		move.w	d4,d1
+
+		; update 2
+		move.w	d2,d0								; load saved VRAM address
+		add.w	d3,d0								; next line for column/row
+		move.w	d4,d1								; load saved loop count
 		bsr.s	VInt_VRAMWrite
+
+		; next
 		bra.s	.find
 ; ---------------------------------------------------------------------------
 
 .done
-		move.w	#$8F02,VDP_control_port-VDP_data_port(a6)			; VRAM increment at 2 bytes
+		move.w	#$8F02,VDP_control_port-VDP_control_port(a5)			; VRAM increment at 2 bytes
 
 .return
 		rts
@@ -63,11 +74,33 @@ VInt_VRAMWrite:
 		lsl.l	#2,d0
 		lsr.w	#2,d0
 		ori.w	#vdpComm(0,VRAM,WRITE)>>16,d0
-		swap	d0
-		move.l	d0,VDP_control_port-VDP_data_port(a6)
+		swap	d0								; d0 = VDP command to write to destination
+		move.l	d0,VDP_control_port-VDP_control_port(a5)
 
 .copy
 		move.l	(a0)+,VDP_data_port-VDP_data_port(a6)
+		dbf	d1,.copy
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
+; VRAM read
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_VRAMRead:
+		swap	d0
+		clr.w	d0
+		swap	d0
+		lsl.l	#2,d0
+		lsr.w	#2,d0
+		swap	d0								; d0 = VDP command to write to destination
+		move.l	d0,VDP_control_port-VDP_control_port(a5)
+
+.copy
+		move.l	VDP_data_port-VDP_data_port(a6),(a0)+
 		dbf	d1,.copy
 
 .return
@@ -86,7 +119,7 @@ Draw_TileColumn:
 		move.w	d0,(a5)
 		move.w	d2,d3
 		sub.w	d0,d2
-		beq.s	VInt_VRAMWrite.return
+		beq.s	VInt_VRAMRead.return
 		tst.b	d2
 		bpl.s	.check
 		neg.w	d2
@@ -105,7 +138,7 @@ Draw_TileColumn:
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
-		beq.s	VInt_VRAMWrite.return						; if not, branch
+		beq.s	VInt_VRAMRead.return						; if not, branch
 
 		; update 2
 		addi.w	#block_width,d0
@@ -124,7 +157,7 @@ Draw_TileColumn2:
 		move.w	d0,(a5)
 		move.w	d2,d3
 		sub.w	d0,d2
-		beq.s	VInt_VRAMWrite.return
+		beq.s	VInt_VRAMRead.return
 		tst.b	d2
 		bpl.s	.check
 		neg.w	d2
@@ -144,7 +177,7 @@ Draw_TileColumn2:
 
 		; check flag
 		tst.b	(Plane_double_update_flag).w					; is update flag was set?
-		beq.s	VInt_VRAMWrite.return						; if not, branch
+		beq.s	VInt_VRAMRead.return						; if not, branch
 
 		; update 2
 		addi.w	#block_width,d0
@@ -168,13 +201,13 @@ Setup_TileColumnDraw:
 		move.w	d0,d5
 		asr.w	#2,d5
 		andi.w	#$7C,d5
-		add.w	d7,d5
+		add.w	d7,d5								; add plane base address to d5
 		add.w	d3,d5
 		move.w	d5,(a0)+
 		move.w	d6,d5
-		subq.w	#1,d6
+		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
-		bset	#7,-2(a0)
+		bset	#7,-2(a0)							; set column flag
 		lea	(a0),a1
 		add.w	d5,d5
 		add.w	d5,d5
@@ -189,13 +222,13 @@ Setup_TileColumnDraw:
 		move.w	d0,d5
 		asr.w	#2,d5
 		andi.w	#$7C,d5
-		add.w	d7,d5
+		add.w	d7,d5								; add plane base address to d5
 		add.w	d3,d5
 		move.w	d5,(a0)+
 		move.w	d4,d6
-		subq.w	#1,d6
+		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
-		bset	#7,-2(a0)
+		bset	#7,-2(a0)							; set column flag
 		lea	(a0),a1
 		add.w	d4,d4
 		add.w	d4,d4
@@ -206,19 +239,19 @@ Setup_TileColumnDraw:
 		move.w	d0,d5
 		asr.w	#2,d5
 		andi.w	#$7C,d5
-		add.w	d7,d5
+		add.w	d7,d5								; add plane base address to d5
 		move.w	d5,(a0)+
 		move.w	d6,d5
-		subq.w	#1,d6
+		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
-		bset	#7,-2(a0)
+		bset	#7,-2(a0)							; set column flag
 		lea	(a0),a1
 		add.w	d5,d5
 		add.w	d5,d5
 		adda.w	d5,a0
 
 .swap
-		swap	d7
+		swap	d7								; swap data to avoid losing plane base address
 
 .getblock
 		move.w	(a5,d2.w),d3
@@ -260,8 +293,8 @@ Setup_TileColumnDraw:
 
 .skip
 		dbf	d6,.getblock
-		swap	d7
-		clr.w	(a0)
+		swap	d7								; swap data back to return plane base address
+		clr.w	(a0)								; end marker
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -404,11 +437,11 @@ Setup_TileRowDraw:
 		move.w	d0,d5
 		andi.w	#$F0,d5								; if the length of the write can fit without wrapping the nametable
 		lsl.w	#4,d5								; multiply by $10
-		add.w	d7,d5
+		add.w	d7,d5								; add plane base address to d5
 		add.w	d3,d5
 		move.w	d5,(a0)+
 		move.w	d6,d5
-		subq.w	#1,d6
+		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
 		lea	(a0),a1
 		add.w	d5,d5
@@ -424,11 +457,11 @@ Setup_TileRowDraw:
 		move.w	d0,d5
 		andi.w	#$F0,d5
 		lsl.w	#4,d5								; multiply by $10
-		add.w	d7,d5
+		add.w	d7,d5								; add plane base address to d5
 		add.w	d3,d5
 		move.w	d5,(a0)+
 		move.w	d4,d6
-		subq.w	#1,d6
+		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
 		lea	(a0),a1
 		add.w	d4,d4
@@ -440,10 +473,10 @@ Setup_TileRowDraw:
 		move.w	d0,d5
 		andi.w	#$F0,d5
 		lsl.w	#4,d5								; multiply by $10
-		add.w	d7,d5
+		add.w	d7,d5								; add plane base address to d5
 		move.w	d5,(a0)+
 		move.w	d6,d5
-		subq.w	#1,d6
+		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
 		lea	(a0),a1
 		add.w	d5,d5
@@ -484,7 +517,7 @@ Setup_TileRowDraw:
 
 .skip
 		dbf	d6,.getblock
-		clr.w	(a0)
+		clr.w	(a0)								; end marker
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -527,11 +560,11 @@ Refresh_PlaneFullHScroll:
 		; redraws the entire plane in one go during 68k execution
 
 .refresh
-		movem.l	d0-d2/a0,-(sp)
+		movem.l	d0-d2/a0,-(sp)							; save the registers to the stack
 		moveq	#gameplay_plane_width/block_width,d6
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0-d2/a0
+		movem.l	(sp)+,d0-d2/a0							; return saved registers from the stack
 		addi.w	#block_height,d0
 		dbf	d2,.refresh
 		rts
@@ -552,11 +585,11 @@ Refresh_PlaneFullVScroll:
 		; redraws the entire plane in one go during 68k execution
 
 .refresh
-		movem.l	d0-d2/a0,-(sp)
+		movem.l	d0-d2/a0,-(sp)							; save the registers to the stack
 		moveq	#gameplay_plane_height/block_height,d6
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0-d2/a0
+		movem.l	(sp)+,d0-d2/a0							; return saved registers from the stack
 		addi.w	#block_width,d0
 		dbf	d2,.refresh
 		rts
@@ -589,10 +622,10 @@ Refresh_PlaneTileDeformHScroll:
 .refresh
 		move.w	(a5),d1
 		moveq	#gameplay_plane_width/block_width,d6
-		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
+		movem.l	d0/d2-d3/a0/a4-a5,-(sp)						; save the registers to the stack
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
+		movem.l	(sp)+,d0/d2-d3/a0/a4-a5						; return saved registers from the stack
 		addi.w	#block_height,d0
 		dbf	d3,.find
 		rts
@@ -625,10 +658,10 @@ Refresh_PlaneTileDeformVScroll:
 .refresh
 		move.w	(a5),d1
 		moveq	#gameplay_plane_height/block_height,d6
-		movem.l	d0/d2-d3/a0/a4-a5,-(sp)
+		movem.l	d0/d2-d3/a0/a4-a5,-(sp)						; save the registers to the stack
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0/d2-d3/a0/a4-a5
+		movem.l	(sp)+,d0/d2-d3/a0/a4-a5						; return saved registers from the stack
 		addi.w	#block_width,d0
 		dbf	d3,.find
 		rts
@@ -658,10 +691,10 @@ Refresh_BGPlaneDirectHScroll:
 		; redraws the entire plane in one go during 68k execution
 
 .refresh
-		movem.l	d0-d2/d6/a0,-(sp)
+		movem.l	d0-d2/d6/a0,-(sp)						; save the registers to the stack
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0-d2/d6/a0
+		movem.l	(sp)+,d0-d2/d6/a0						; return saved registers from the stack
 		addi.w	#block_height,d0
 		dbf	d2,.refresh
 		enableInts
@@ -692,10 +725,10 @@ Refresh_FGPlaneDirectHScroll:
 		; redraws the entire plane in one go during 68k execution
 
 .refresh
-		movem.l	d0-d2/d6/a0,-(sp)
+		movem.l	d0-d2/d6/a0,-(sp)						; save the registers to the stack
 		bsr.w	Setup_TileRowDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0-d2/d6/a0
+		movem.l	(sp)+,d0-d2/d6/a0						; return saved registers from the stack
 		addi.w	#block_height,d0
 		dbf	d2,.refresh
 		enableInts
@@ -726,10 +759,10 @@ Refresh_BGPlaneDirectVScroll:
 		; redraws the entire plane in one go during 68k execution
 
 .refresh
-		movem.l	d0-d2/d6/a0,-(sp)
+		movem.l	d0-d2/d6/a0,-(sp)						; save the registers to the stack
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0-d2/d6/a0
+		movem.l	(sp)+,d0-d2/d6/a0						; return saved registers from the stack
 		addi.w	#block_width,d0
 		dbf	d2,.refresh
 		enableInts
@@ -760,10 +793,10 @@ Refresh_FGPlaneDirectVScroll:
 		; redraws the entire plane in one go during 68k execution
 
 .refresh
-		movem.l	d0-d2/d6/a0,-(sp)
+		movem.l	d0-d2/d6/a0,-(sp)						; save the registers to the stack
 		bsr.w	Setup_TileColumnDraw
 		bsr.w	VInt_DrawLevel
-		movem.l	(sp)+,d0-d2/d6/a0
+		movem.l	(sp)+,d0-d2/d6/a0						; return saved registers from the stack
 		addi.w	#block_width,d0
 		dbf	d2,.refresh
 		enableInts
@@ -919,10 +952,10 @@ Draw_BGHDeformNoVert:
 
 .loop
 		movem.w	d1/d4-d6,-(sp)							; save the registers to the stack
-		movem.l	a4/a6,-(sp)
+		movem.l	a4/a6,-(sp)							; "
 		lea	2(a6),a5
 		bsr.w	Draw_TileColumn
-		movem.l	(sp)+,a4/a6
+		movem.l	(sp)+,a4/a6							; "
 		movem.w	(sp)+,d1/d4-d6							; return saved registers from the stack
 		addq.w	#4,a6
 		tst.w	d4
@@ -1050,10 +1083,10 @@ Draw_BGVDeformNoHorz:
 
 .loop
 		movem.w	d1/d4-d6,-(sp)							; save the registers to the stack
-		movem.l	a4/a6,-(sp)
+		movem.l	a4/a6,-(sp)							; "
 		lea	2(a6),a5
 		bsr.w	Draw_TileRow
-		movem.l	(sp)+,a4/a6
+		movem.l	(sp)+,a4/a6							; "
 		movem.w	(sp)+,d1/d4-d6							; return saved registers from the stack
 		addq.w	#4,a6
 		tst.w	d4
