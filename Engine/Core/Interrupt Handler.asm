@@ -23,13 +23,13 @@ VInt:
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
-		beq.s	.notpal								; branch if it's not a PAL system
+		beq.s	.not_pal							; branch if it's not a PAL system
 
 		; wait to hide CRAM dots
 		move.w	#$700,d0
 		dbf	d0,*								; otherwise, waste a bit of time here
 
-.notpal
+.not_pal
 
 		; VInt flag shared VInt pointer RAM
 		; VInt flag must be cleared before checking the pointer
@@ -38,9 +38,9 @@ VInt:
 		st	(H_int_flag).w							; allow H Interrupt code to run
 
 		; check
-		move.l	(V_int_ptr).w,d0						; load VInt pointer to d0
+		move.l	(V_int_ptr).w,d0						; get VInt pointer to d0
 		beq.s	VInt_Music							; if zero, branch
-		movea.l	d0,a0
+		movea.l	d0,a0								; load VInt pointer to a0
 		jsr	(a0)								; jump to current VInt pointer
 
 VInt_Music:
@@ -69,49 +69,51 @@ VInt_Lag_Main:
 		cmpi.b	#GameModeID_LevelScreen,d0					; is game on a level?
 		bne.s	VInt_Music							; if not, return from V-int
 
-VInt_Lag_Level:
+		; level only
+
+.main_level
 
 		; check water
 		tst.b	(Water_flag).w
-		beq.s	VInt_Lag_NoWater
+		beq.s	.skip_water
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
-		beq.s	.notpal								; branch if it isn't a PAL system
+		beq.s	.not_pal							; branch if it isn't a PAL system
 
 		; wait to hide CRAM dots
 		move.w	#$700,d0
 		dbf	d0,*								; otherwise waste a bit of time here
 
-.notpal
+.not_pal
 		st	(H_int_flag).w							; set HInt flag
 		stopZ80
 		tst.b	(Water_full_screen_flag).w					; is water above top of screen?
-		bne.s	VInt_Lag_FullyUnderwater					; if yes, branch
+		bne.s	.water_above							; if yes, branch
 		dma68kToVDP Normal_palette,0,$80,CRAM
-		bra.s	VInt_Lag_Water_Cont
+		bra.s	.water_below
 ; ---------------------------------------------------------------------------
 
-VInt_Lag_FullyUnderwater:
+.water_above
 		dma68kToVDP Water_palette,0,$80,CRAM
 
-VInt_Lag_Water_Cont:
+.water_below
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
 		startZ80
 		bra.w	VInt_Music
 ; ---------------------------------------------------------------------------
 
-VInt_Lag_NoWater:
+.skip_water
 
 		; detect PAL region consoles
 		btst	#0,(VDP_control_port-VDP_control_port)+1(a5)
-		beq.s	.notpal								; branch if it isn't a PAL system
+		beq.s	.not_pal2							; branch if it isn't a PAL system
 
 		; wait to hide CRAM dots
 		move.w	#$700,d0
 		dbf	d0,*								; otherwise, waste a bit of time here
 
-.notpal
+.not_pal2
 		st	(H_int_flag).w
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
 		bra.w	VInt_Music
@@ -125,7 +127,7 @@ VInt_Lag_NoWater:
 VInt_Main:
 		bsr.s	Do_ControllerPal
 
-		; demo
+		; check demo
 		tst.w	(Demo_timer).w							; is there time left on the demo?
 		beq.s	.return								; if not, branch
 		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
@@ -142,7 +144,7 @@ VInt_Main:
 VInt_Menu:
 		bsr.s	Do_ControllerPal
 
-		; demo
+		; check demo
 		tst.w	(Demo_timer).w							; is there time left on the demo?
 		beq.s	.kospm								; if not, branch
 		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
@@ -172,16 +174,16 @@ Do_ControllerPal:
 		stopZ802
 		bsr.w	Poll_Controllers
 		startZ802
-		tst.b	(Water_full_screen_flag).w
-		bne.s	.water
+		tst.b	(Water_full_screen_flag).w					; is water above top of screen?
+		bne.s	.water_above							; if yes, branch
 		dma68kToVDP Normal_palette,0,$80,CRAM
-		bra.s	.skipwater
+		bra.s	.water_below
 ; ---------------------------------------------------------------------------
 
-.water
+.water_above
 		dma68kToVDP Water_palette,0,$80,CRAM
 
-.skipwater
+.water_below
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
@@ -206,7 +208,7 @@ VInt_LevelSelect:
 		jsr	(Process_DMA_Queue).w
 		startZ80
 
-		; demo
+		; check demo
 		tst.w	(Demo_timer).w							; is there time left on the demo?
 		beq.s	.return								; if not, branch
 		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
@@ -223,16 +225,16 @@ VInt_LevelSelect:
 VInt_Sega:
 		moveq	#$F,d0
 		and.b	(V_int_run_count.byte).w,d0
-		bne.s	.skip								; run the following code once every 16 frames
+		bne.s	.check_demo							; run the following code once every 16 frames
 		stopZ80
 		stopZ802
 		bsr.w	Poll_Controllers
 		startZ802
 		startZ80
 
-.skip
+.check_demo
 
-		; demo
+		; check demo
 		tst.w	(Demo_timer).w							; is there time left on the demo?
 		beq.s	.return								; if not, branch
 		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
@@ -251,59 +253,70 @@ VInt_Level:
 		stopZ802
 		bsr.w	Poll_Controllers
 		startZ802
+
+		; check flash screen white
+		tst.b	(Hyper_Sonic_flash_timer).w					; is white flash timer over?
+		beq.s	.no_white_flash							; if yes, branch
 		tst.b	(Game_paused).w							; is the game paused?
-		bne.s	VInt_Level_NoNegativeFlash					; if yes, branch
-		tst.b	(Hyper_Sonic_flash_timer).w
-		beq.s	VInt_Level_NoFlash
+		bne.s	.draw_white_flash						; if yes, branch
 
 		; flash screen white
 		subq.b	#1,(Hyper_Sonic_flash_timer).w
+
+.draw_white_flash
 		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		moveq	#bytesToXcnt(64,2),d1
 		move.l	#words_to_long(cWhite,cWhite),d0
 
-.copy
+	rept (palette_line_size*4)/4
 		move.l	d0,VDP_data_port-VDP_data_port(a6)
-		dbf	d1,.copy							; fill entire palette with white
-		bra.s	VInt_Level_Cont
+	endr
+
+		bra.w	.main_level
 ; ---------------------------------------------------------------------------
 
-VInt_Level_NoFlash:
-		tst.b	(Negative_flash_timer).w
-		beq.s	VInt_Level_NoNegativeFlash
+.no_white_flash
+
+		; check flash screen negative
+		tst.b	(Negative_flash_timer).w					; is negative flash timer over?
+		beq.w	.no_negative_flash						; if yes, branch
+		tst.b	(Game_paused).w							; is the game paused?
+		bne.s	.check_negative_flash						; if yes, branch
 
 		; flash screen negative
 		subq.b	#1,(Negative_flash_timer).w
-		btst	#2,(Negative_flash_timer).w
-		beq.s	VInt_Level_NoNegativeFlash
+
+.check_negative_flash
+		btst	#2,(Negative_flash_timer).w					; 0 or 4
+		beq.w	.no_negative_flash
+
+		; draw negative flash
 		move.l	#vdpComm(0,CRAM,WRITE),VDP_control_port-VDP_control_port(a5)
-		moveq	#bytesToXcnt(64,2),d1
 		move.l	#words_to_long($EEE,$EEE),d2
 		lea	(Normal_palette).w,a1
 
-.copy
+	rept (palette_line_size*4)/4
 		move.l	(a1)+,d0
-		not.l	d0
-		and.l	d2,d0
+		eor.l	d2,d0
 		move.l	d0,VDP_data_port-VDP_data_port(a6)
-		dbf	d1,.copy
-		bra.s	VInt_Level_Cont
+	endr
+
+		bra.s	.main_level
 ; ---------------------------------------------------------------------------
 
-VInt_Level_NoNegativeFlash:
-		tst.b	(Water_full_screen_flag).w
-		bne.s	.water
+.no_negative_flash
+		tst.b	(Water_full_screen_flag).w					; is water above top of screen?
+		bne.s	.water_above							; if yes, branch
 		dma68kToVDP Normal_palette,0,$80,CRAM
-		bra.s	.skipwater
+		bra.s	.water_below
 ; ---------------------------------------------------------------------------
 
-.water
+.water_above
 		dma68kToVDP Water_palette,0,$80,CRAM
 
-.skipwater
+.water_below
 		move.w	(H_int_counter_command).w,VDP_control_port-VDP_control_port(a5)
 
-VInt_Level_Cont:
+.main_level
 		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
@@ -311,16 +324,18 @@ VInt_Level_Cont:
 		jsr	(VInt_DrawLevel.main).w
 		startZ80
 		enableInts
+
+		; check water flag
 		tst.b	(Water_flag).w
-		beq.s	.notwater
+		beq.s	.not_water
 		cmpi.b	#92,(H_int_counter).w						; is H-int occuring on or below line 92?
-		bhs.s	.notwater							; if it is, branch
+		bhs.s	.not_water							; if it is, branch
 		st	(Do_Updates_in_H_int).w
 		move.l	#VInt_Done,(sp)							; skip update SMPS
 		jmp	(Set_KosPlus_Bookmark).w
 ; ---------------------------------------------------------------------------
 
-.notwater
+.not_water
 		pea	(Set_KosPlus_Bookmark).w
 
 ; ---------------------------------------------------------------------------
@@ -333,7 +348,7 @@ Do_Updates:
 		jsr	(HUD_Update).w
 		clr.w	(Lag_frame_count).w
 
-		; demo
+		; check demo
 		tst.w	(Demo_timer).w							; is there time left on the demo?
 		beq.s	.return								; if not, branch
 		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
@@ -350,13 +365,13 @@ Do_Updates:
 VInt_SpecialFunction:
 		moveq	#0,d0
 		move.b	(Special_V_int_routine).w,d0
-		beq.s	.return								; if zero, branch
+		beq.s	.return								; if zero, return
 		jmp	.index-2(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
 .index
-		bra.s	.vscrollon							; 2 (vertical scrolling on)
-		bra.s	.vscrollcopy							; 4 (vertical scrolling copy)
+		bra.s	.vscroll_on							; 2 (vertical scrolling on)
+		bra.s	.vscroll_copy							; 4 (vertical scrolling copy)
 ; ---------------------------------------------------------------------------
 
 		; vscrolloff								; 6 (vertical scrolling off)
@@ -367,11 +382,11 @@ VInt_SpecialFunction:
 		rts
 ; ---------------------------------------------------------------------------
 
-.vscrollon
+.vscroll_on
 		move.w	#$8B07,VDP_control_port-VDP_control_port(a5)			; command $8B07 - VScroll cell-based, HScroll line-based
 		addq.b	#2,(Special_V_int_routine).w
 
-.vscrollcopy
+.vscroll_copy
 		stopZ80
 		dma68kToVDP V_scroll_buffer,0,(320/4),VSRAM
 		startZ80
