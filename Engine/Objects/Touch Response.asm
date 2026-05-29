@@ -115,10 +115,10 @@ Touch_Height:
 Touch_ChkValue:
 
 		; load
-		moveq	#0,d0
-		move.b	collision_type(a1),d0
-		move.w	Touch_Index-2(pc,d0.w),d0
-		jmp	Touch_Index(pc,d0.w)
+		moveq	#0,d1
+		move.b	collision_type(a1),d1
+		move.w	Touch_Index-2(pc,d1.w),d1
+		jmp	Touch_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
 Touch_Index: offsetTable
