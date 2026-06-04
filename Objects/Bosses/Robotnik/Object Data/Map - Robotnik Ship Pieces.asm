@@ -2,24 +2,29 @@
 ; Sprite mappings - Robotnik ship pieces (boss levels)
 ; ---------------------------------------------------------------------------
 
-Map_RobotnikShipPieces:
-		dc.w word_7D6E0-Map_RobotnikShipPieces
-		dc.w word_7D6EE-Map_RobotnikShipPieces
-		dc.w word_7D6F6-Map_RobotnikShipPieces
-		dc.w word_7D704-Map_RobotnikShipPieces
-word_7D6E0:
-		dc.w 2
-		dc.b $EC, $C, 0, $36, $FF, $E4
-		dc.b $E4, 4, 0, $5D, $FF, $EC
-word_7D6EE:
-		dc.w 1
-		dc.b $EC, 8, 0, $3A, 0, 4
-word_7D6F6:
-		dc.w 2
-		dc.b $F4, $E, 0, $3D, $FF, $E4
-		dc.b $C, 8, 0, $52, $FF, $EC
-word_7D704:
-		dc.w 2
-		dc.b $F4, $A, 0, $49, 0, 4
-		dc.b $C, 4, 0, $55, 0, 4
+Map_RobotnikShipPieces:	mappingsTable
+	mappingsTableEntry.w word_7D6E0
+	mappingsTableEntry.w word_7D6EE
+	mappingsTableEntry.w word_7D6F6
+	mappingsTableEntry.w word_7D704
+
+word_7D6E0:	spriteHeader
+	spritePiece	-$1C, -$14, 4, 1, $36, 0, 0, 0, 0
+	spritePiece	-$14, -$1C, 2, 1, $5D, 0, 0, 0, 0
+word_7D6E0_End
+
+word_7D6EE:	spriteHeader
+	spritePiece	4, -$14, 3, 1, $3A, 0, 0, 0, 0
+word_7D6EE_End
+
+word_7D6F6:	spriteHeader
+	spritePiece	-$1C, -$C, 4, 3, $3D, 0, 0, 0, 0
+	spritePiece	-$14, $C, 3, 1, $52, 0, 0, 0, 0
+word_7D6F6_End
+
+word_7D704:	spriteHeader
+	spritePiece	4, -$C, 3, 3, $49, 0, 0, 0, 0
+	spritePiece	4, $C, 2, 1, $55, 0, 0, 0, 0
+word_7D704_End
+
 	even

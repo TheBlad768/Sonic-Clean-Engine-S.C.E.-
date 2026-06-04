@@ -2,118 +2,169 @@
 ; DPLC mappings - Fire Shield
 ; ---------------------------------------------------------------------------
 
-DPLC_FireShield:
-DPLC_FireShield_0: 	dc.w DPLC_FireShield_32-DPLC_FireShield
-DPLC_FireShield_2: 	dc.w DPLC_FireShield_3A-DPLC_FireShield
-DPLC_FireShield_4: 	dc.w DPLC_FireShield_42-DPLC_FireShield
-DPLC_FireShield_6: 	dc.w DPLC_FireShield_4A-DPLC_FireShield
-DPLC_FireShield_8: 	dc.w DPLC_FireShield_52-DPLC_FireShield
-DPLC_FireShield_A: 	dc.w DPLC_FireShield_58-DPLC_FireShield
-DPLC_FireShield_C: 	dc.w DPLC_FireShield_60-DPLC_FireShield
-DPLC_FireShield_E: 	dc.w DPLC_FireShield_68-DPLC_FireShield
-DPLC_FireShield_10: 	dc.w DPLC_FireShield_70-DPLC_FireShield
-DPLC_FireShield_12: 	dc.w DPLC_FireShield_78-DPLC_FireShield
-DPLC_FireShield_14: 	dc.w DPLC_FireShield_80-DPLC_FireShield
-DPLC_FireShield_16: 	dc.w DPLC_FireShield_86-DPLC_FireShield
-DPLC_FireShield_18: 	dc.w DPLC_FireShield_8E-DPLC_FireShield
-DPLC_FireShield_1A: 	dc.w DPLC_FireShield_96-DPLC_FireShield
-DPLC_FireShield_1C: 	dc.w DPLC_FireShield_9C-DPLC_FireShield
-DPLC_FireShield_1E: 	dc.w DPLC_FireShield_A2-DPLC_FireShield
-DPLC_FireShield_20: 	dc.w DPLC_FireShield_A8-DPLC_FireShield
-DPLC_FireShield_22: 	dc.w DPLC_FireShield_AE-DPLC_FireShield
-DPLC_FireShield_24: 	dc.w DPLC_FireShield_B6-DPLC_FireShield
-DPLC_FireShield_26: 	dc.w DPLC_FireShield_BE-DPLC_FireShield
-DPLC_FireShield_28: 	dc.w DPLC_FireShield_C4-DPLC_FireShield
-DPLC_FireShield_2A: 	dc.w DPLC_FireShield_CC-DPLC_FireShield
-DPLC_FireShield_2C: 	dc.w DPLC_FireShield_D4-DPLC_FireShield
-DPLC_FireShield_2E: 	dc.w DPLC_FireShield_DA-DPLC_FireShield
-DPLC_FireShield_30: 	dc.w DPLC_FireShield_E0-DPLC_FireShield
-DPLC_FireShield_32: 	dc.b $0, $2
-	dc.b $0, $0
-	dc.b $0, $12
-	dc.b $0, $45
-DPLC_FireShield_3A: 	dc.b $0, $2
-	dc.b $0, $A1
-	dc.b $0, $C5
-	dc.b $1, $25
-DPLC_FireShield_42: 	dc.b $0, $2
-	dc.b $1, $80
-	dc.b $1, $98
-	dc.b $2, $28
-DPLC_FireShield_4A: 	dc.b $0, $2
-	dc.b $2, $B2
-	dc.b $2, $E8
-	dc.b $3, $78
-DPLC_FireShield_52: 	dc.b $0, $1
-	dc.b $4, $5
-	dc.b $4, $65
-DPLC_FireShield_58: 	dc.b $0, $2
-	dc.b $2, $B2
-	dc.b $2, $E8
-	dc.b $3, $78
-DPLC_FireShield_60: 	dc.b $0, $2
-	dc.b $1, $80
-	dc.b $1, $98
-	dc.b $2, $28
-DPLC_FireShield_68: 	dc.b $0, $2
-	dc.b $0, $A1
-	dc.b $0, $C5
-	dc.b $1, $25
-DPLC_FireShield_70: 	dc.b $0, $2
-	dc.b $0, $0
-	dc.b $0, $12
-	dc.b $0, $45
-DPLC_FireShield_78: 	dc.b $0, $2
-	dc.b $4, $C7
-	dc.b $5, $42
-	dc.b $5, $71
-DPLC_FireShield_80: 	dc.b $0, $1
-	dc.b $5, $98
-	dc.b $6, $28
-DPLC_FireShield_86: 	dc.b $0, $2
-	dc.b $6, $BB
-	dc.b $7, $78
-	dc.b $6, $BB
-DPLC_FireShield_8E: 	dc.b $0, $2
-	dc.b $4, $C7
-	dc.b $5, $42
-	dc.b $5, $71
-DPLC_FireShield_96: 	dc.b $0, $1
-	dc.b $8, $B
-	dc.b $8, $C8
-DPLC_FireShield_9C: 	dc.b $0, $1
-	dc.b $9, $5B
-	dc.b $A, $1B
-DPLC_FireShield_A2: 	dc.b $0, $1
-	dc.b $A, $D5
-	dc.b $B, $35
-DPLC_FireShield_A8: 	dc.b $0, $1
-	dc.b $B, $98
-	dc.b $C, $28
-DPLC_FireShield_AE: 	dc.b $0, $2
-	dc.b $C, $BB
-	dc.b $D, $78
-	dc.b $E, $0
-DPLC_FireShield_B6: 	dc.b $0, $2
-	dc.b $E, $1B
-	dc.b $E, $DB
-	dc.b $F, $91
-DPLC_FireShield_BE: 	dc.b $0, $1
-	dc.b $F, $B8
-	dc.b $10, $48
-DPLC_FireShield_C4: 	dc.b $0, $2
-	dc.b $E, $1B
-	dc.b $E, $DB
-	dc.b $F, $91
-DPLC_FireShield_CC: 	dc.b $0, $2
-	dc.b $C, $BB
-	dc.b $D, $78
-	dc.b $E, $0
-DPLC_FireShield_D4: 	dc.b $0, $1
-	dc.b $C, $28
-	dc.b $B, $98
-DPLC_FireShield_DA: 	dc.b $0, $1
-	dc.b $A, $D5
-	dc.b $B, $35
-DPLC_FireShield_E0: 	dc.b $FF, $FF
+DPLC_FireShield:	mappingsTable
+	mappingsTableEntry.w DPLC_FireShield_32
+	mappingsTableEntry.w DPLC_FireShield_3A
+	mappingsTableEntry.w DPLC_FireShield_42
+	mappingsTableEntry.w DPLC_FireShield_4A
+	mappingsTableEntry.w DPLC_FireShield_52
+	mappingsTableEntry.w DPLC_FireShield_58
+	mappingsTableEntry.w DPLC_FireShield_60
+	mappingsTableEntry.w DPLC_FireShield_68
+	mappingsTableEntry.w DPLC_FireShield_70
+	mappingsTableEntry.w DPLC_FireShield_78
+	mappingsTableEntry.w DPLC_FireShield_80
+	mappingsTableEntry.w DPLC_FireShield_86
+	mappingsTableEntry.w DPLC_FireShield_8E
+	mappingsTableEntry.w DPLC_FireShield_96
+	mappingsTableEntry.w DPLC_FireShield_9C
+	mappingsTableEntry.w DPLC_FireShield_A2
+	mappingsTableEntry.w DPLC_FireShield_A8
+	mappingsTableEntry.w DPLC_FireShield_AE
+	mappingsTableEntry.w DPLC_FireShield_B6
+	mappingsTableEntry.w DPLC_FireShield_BE
+	mappingsTableEntry.w DPLC_FireShield_C4
+	mappingsTableEntry.w DPLC_FireShield_CC
+	mappingsTableEntry.w DPLC_FireShield_D4
+	mappingsTableEntry.w DPLC_FireShield_DA
+	mappingsTableEntry.w DPLC_FireShield_E0
+
+DPLC_FireShield_32:	dplcHeader
+	dplcEntry	1, 0
+	dplcEntry	3, 1
+	dplcEntry	6, 4
+DPLC_FireShield_32_End
+
+DPLC_FireShield_3A:	dplcHeader
+	dplcEntry	2, $A
+	dplcEntry	6, $C
+	dplcEntry	6, $12
+DPLC_FireShield_3A_End
+
+DPLC_FireShield_42:	dplcHeader
+	dplcEntry	1, $18
+	dplcEntry	9, $19
+	dplcEntry	9, $22
+DPLC_FireShield_42_End
+
+DPLC_FireShield_4A:	dplcHeader
+	dplcEntry	3, $2B
+	dplcEntry	9, $2E
+	dplcEntry	9, $37
+DPLC_FireShield_4A_End
+
+DPLC_FireShield_52:	dplcHeader
+	dplcEntry	6, $40
+	dplcEntry	6, $46
+DPLC_FireShield_52_End
+
+DPLC_FireShield_58:	dplcHeader
+	dplcEntry	3, $2B
+	dplcEntry	9, $2E
+	dplcEntry	9, $37
+DPLC_FireShield_58_End
+
+DPLC_FireShield_60:	dplcHeader
+	dplcEntry	1, $18
+	dplcEntry	9, $19
+	dplcEntry	9, $22
+DPLC_FireShield_60_End
+
+DPLC_FireShield_68:	dplcHeader
+	dplcEntry	2, $A
+	dplcEntry	6, $C
+	dplcEntry	6, $12
+DPLC_FireShield_68_End
+
+DPLC_FireShield_70:	dplcHeader
+	dplcEntry	1, 0
+	dplcEntry	3, 1
+	dplcEntry	6, 4
+DPLC_FireShield_70_End
+
+DPLC_FireShield_78:	dplcHeader
+	dplcEntry	8, $4C
+	dplcEntry	3, $54
+	dplcEntry	2, $57
+DPLC_FireShield_78_End
+
+DPLC_FireShield_80:	dplcHeader
+	dplcEntry	9, $59
+	dplcEntry	9, $62
+DPLC_FireShield_80_End
+
+DPLC_FireShield_86:	dplcHeader
+	dplcEntry	$C, $6B
+	dplcEntry	9, $77
+	dplcEntry	$C, $6B
+DPLC_FireShield_86_End
+
+DPLC_FireShield_8E:	dplcHeader
+	dplcEntry	8, $4C
+	dplcEntry	3, $54
+	dplcEntry	2, $57
+DPLC_FireShield_8E_End
+
+DPLC_FireShield_96:	dplcHeader
+	dplcEntry	$C, $80
+	dplcEntry	9, $8C
+DPLC_FireShield_96_End
+
+DPLC_FireShield_9C:	dplcHeader
+	dplcEntry	$C, $95
+	dplcEntry	$C, $A1
+DPLC_FireShield_9C_End
+
+DPLC_FireShield_A2:	dplcHeader
+	dplcEntry	6, $AD
+	dplcEntry	6, $B3
+DPLC_FireShield_A2_End
+
+DPLC_FireShield_A8:	dplcHeader
+	dplcEntry	9, $B9
+	dplcEntry	9, $C2
+DPLC_FireShield_A8_End
+
+DPLC_FireShield_AE:	dplcHeader
+	dplcEntry	$C, $CB
+	dplcEntry	9, $D7
+	dplcEntry	1, $E0
+DPLC_FireShield_AE_End
+
+DPLC_FireShield_B6:	dplcHeader
+	dplcEntry	$C, $E1
+	dplcEntry	$C, $ED
+	dplcEntry	2, $F9
+DPLC_FireShield_B6_End
+
+DPLC_FireShield_BE:	dplcHeader
+	dplcEntry	9, $FB
+	dplcEntry	9, $104
+DPLC_FireShield_BE_End
+
+DPLC_FireShield_C4:	dplcHeader
+	dplcEntry	$C, $E1
+	dplcEntry	$C, $ED
+	dplcEntry	2, $F9
+DPLC_FireShield_C4_End
+
+DPLC_FireShield_CC:	dplcHeader
+	dplcEntry	$C, $CB
+	dplcEntry	9, $D7
+	dplcEntry	1, $E0
+DPLC_FireShield_CC_End
+
+DPLC_FireShield_D4:	dplcHeader
+	dplcEntry	9, $C2
+	dplcEntry	9, $B9
+DPLC_FireShield_D4_End
+
+DPLC_FireShield_DA:	dplcHeader
+	dplcEntry	6, $AD
+	dplcEntry	6, $B3
+DPLC_FireShield_DA_End
+
+DPLC_FireShield_E0:	dplcHeader
+DPLC_FireShield_E0_End
 	even
+

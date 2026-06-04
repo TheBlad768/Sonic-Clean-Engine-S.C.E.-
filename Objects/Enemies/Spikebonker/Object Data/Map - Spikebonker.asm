@@ -2,22 +2,27 @@
 ; Sprite mappings - spikebonker
 ; ---------------------------------------------------------------------------
 
-Map_Spikebonker:
-		dc.w word_184E64-Map_Spikebonker
-		dc.w word_184E72-Map_Spikebonker
-		dc.w word_184E7A-Map_Spikebonker
-		dc.w word_184E82-Map_Spikebonker
-word_184E64:
-		dc.w 2
-		dc.b $F0, $E, 0, 0, $FF, $F5
-		dc.b 8, 9, 0, $C, $FF, $F5
-word_184E72:
-		dc.w 1
-		dc.b $F0, $F, 0, $12, $FF, $F0
-word_184E7A:
-		dc.w 1
-		dc.b $F0, $F, 0, $22, $FF, $F0
-word_184E82:
-		dc.w 1
-		dc.b $F0, $F, 0, $32, $FF, $F0
+Map_Spikebonker:	mappingsTable
+	mappingsTableEntry.w word_184E64
+	mappingsTableEntry.w word_184E72
+	mappingsTableEntry.w word_184E7A
+	mappingsTableEntry.w word_184E82
+
+word_184E64:	spriteHeader
+	spritePiece	-$B, -$10, 4, 3, 0, 0, 0, 0, 0
+	spritePiece	-$B, 8, 3, 2, $C, 0, 0, 0, 0
+word_184E64_End
+
+word_184E72:	spriteHeader
+	spritePiece	-$10, -$10, 4, 4, $12, 0, 0, 0, 0
+word_184E72_End
+
+word_184E7A:	spriteHeader
+	spritePiece	-$10, -$10, 4, 4, $22, 0, 0, 0, 0
+word_184E7A_End
+
+word_184E82:	spriteHeader
+	spritePiece	-$10, -$10, 4, 4, $32, 0, 0, 0, 0
+word_184E82_End
+
 	even

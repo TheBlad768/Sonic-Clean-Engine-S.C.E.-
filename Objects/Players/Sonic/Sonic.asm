@@ -29,7 +29,7 @@ Obj_Sonic:
 
 .next
 		addq.b	#1,mapping_frame(a0)						; next frame
-		cmpi.b	#((Map_Sonic_end-Map_Sonic)/2)-1,mapping_frame(a0)		; have we reached the end of Sonic's frames?
+		cmpi.b	#((Map_Sonic_End-Map_Sonic)/2)-1,mapping_frame(a0)		; have we reached the end of Sonic's frames?
 		blo.s	.draw
 		clr.b	mapping_frame(a0)						; if so, reset to Sonic's first frame
 

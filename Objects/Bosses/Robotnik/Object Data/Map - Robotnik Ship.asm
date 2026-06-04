@@ -2,85 +2,123 @@
 ; Sprite mappings - Robotnik ship (boss levels)
 ; ---------------------------------------------------------------------------
 
-Map_RobotnikShip:
-		dc.w SME_mlzjJ_1E-Map_RobotnikShip, SME_mlzjJ_26-Map_RobotnikShip
-		dc.w SME_mlzjJ_2E-Map_RobotnikShip, SME_mlzjJ_3C-Map_RobotnikShip
-		dc.w SME_mlzjJ_4A-Map_RobotnikShip, SME_mlzjJ_58-Map_RobotnikShip
-		dc.w SME_mlzjJ_60-Map_RobotnikShip, SME_mlzjJ_68-Map_RobotnikShip
-		dc.w SME_mlzjJ_B2-Map_RobotnikShip, SME_mlzjJ_BA-Map_RobotnikShip
-		dc.w SME_mlzjJ_D4-Map_RobotnikShip, SME_mlzjJ_106-Map_RobotnikShip
-		dc.w SME_mlzjJ_11A-Map_RobotnikShip, SME_mlzjJ_146-Map_RobotnikShip
-		dc.w SME_mlzjJ_16C-Map_RobotnikShip
-SME_mlzjJ_1E:	dc.b 0, 1
-		dc.b $F8, $D, 0, 0, $FF, $F0
-SME_mlzjJ_26:	dc.b 0, 1
-		dc.b $F8, $D, 0, 8, $FF, $F0
-SME_mlzjJ_2E:	dc.b 0, 2
-		dc.b $F8, $D, 0, $10, $FF, $EC
-		dc.b $F8, 1, 0, $18, 0, $C
-SME_mlzjJ_3C:	dc.b 0, 2
-		dc.b $F8, $D, 0, $1A, $FF, $EB
-		dc.b $F8, 1, 0, $22, 0, $B
-SME_mlzjJ_4A:	dc.b 0, 2
-		dc.b $F8, $D, 0, $24, $FF, $EB
-		dc.b $F8, 1, 0, $2C, 0, $B
-SME_mlzjJ_58:	dc.b 0, 1
-		dc.b $F8, $D, 0, $2E, $FF, $F0
-SME_mlzjJ_60:	dc.b 0, 1
-		dc.b $F8, 5, 0, $62, 0, 0
-SME_mlzjJ_68:	dc.b 0, $C
-		dc.b $EC, $C, 0, $36, $FF, $E4
-		dc.b $EC, 8, 0, $3A, 0, 4
-		dc.b $F4, $E, 0, $3D, $FF, $E4
-		dc.b $F4, $A, 0, $49, 0, 4
-		dc.b $C, 8, 0, $52, $FF, $EC
-		dc.b $C, 4, 0, $55, 0, 4
-		dc.b $D4, 5, 0, $57, $FF, $F0
-		dc.b $DC, 1, 0, $5B, $FF, $E8
-		dc.b $D4, 5, 8, $57, 0, 0
-		dc.b $DC, 1, 8, $5B, 0, $10
-		dc.b $DA, 0, 0, $5F, $FF, $FE
-		dc.b $E4, 4, 0, $5D, $FF, $EC
-SME_mlzjJ_B2:	dc.b 0, 1
-		dc.b $FC, 4, 0, $60, $FF, $F8
-SME_mlzjJ_BA:	dc.b 0, 4
-		dc.b $F4, 5, 0, $57, $FF, $F0
-		dc.b $FC, 1, 0, $5B, $FF, $E8
-		dc.b $F4, 5, 8, $57, 0, 0
-		dc.b $FC, 1, 8, $5B, 0, $10
-SME_mlzjJ_D4:	dc.b 0, 8
-		dc.b $EC, $C, 0, $36, $FF, $E4
-		dc.b $EC, 8, 0, $3A, 0, 4
-		dc.b $D4, 5, 0, $57, $FF, $F0
-		dc.b $DC, 1, 0, $5B, $FF, $E8
-		dc.b $D4, 5, 8, $57, 0, 0
-		dc.b $DC, 1, 8, $5B, 0, $10
-		dc.b $DA, 0, 0, $5F, $FF, $FE
-		dc.b $E4, 4, 0, $5D, $FF, $EC
-SME_mlzjJ_106:	dc.b 0, 3
-		dc.b $EC, $C, 0, $36, $FF, $E4
-		dc.b $EC, 8, 0, $3A, 0, 4
-		dc.b $E4, 4, 0, $5D, $FF, $EC
-SME_mlzjJ_11A:	dc.b 0, 7
-		dc.b $EC, $C, 0, $36, $FF, $E4
-		dc.b $EC, 8, 0, $3A, 0, 4
-		dc.b $F4, $E, 0, $3D, $FF, $E4
-		dc.b $F4, $A, 0, $49, 0, 4
-		dc.b $C, 8, 0, $52, $FF, $EC
-		dc.b $C, 4, 0, $55, 0, 4
-		dc.b $E4, 4, 0, $5D, $FF, $EC
-SME_mlzjJ_146:	dc.b 0, 6
-		dc.b $EC, $C, 0, $36, $FF, $E4
-		dc.b $EC, 8, 0, $3A, 0, 4
-		dc.b $D4, 5, 0, $57, $FF, $F0
-		dc.b $DC, 1, 0, $5B, $FF, $E8
-		dc.b $D4, 5, 8, $57, 0, 0
-		dc.b $DC, 1, 8, $5B, 0, $10
-SME_mlzjJ_16C:	dc.b 0, 6
-		dc.b $D4, 5, 0, $57, $FF, $F0
-		dc.b $DC, 1, 0, $5B, $FF, $E8
-		dc.b $D4, 5, 8, $57, 0, 0
-		dc.b $DC, 1, 8, $5B, 0, $10
-		dc.b $DA, 0, 0, $5F, $FF, $FE
-		dc.b $E4, 4, 0, $5D, $FF, $EC
+Map_RobotnikShip:	mappingsTable
+	mappingsTableEntry.w SME_mlzjJ_1E
+	mappingsTableEntry.w SME_mlzjJ_26
+	mappingsTableEntry.w SME_mlzjJ_2E
+	mappingsTableEntry.w SME_mlzjJ_3C
+	mappingsTableEntry.w SME_mlzjJ_4A
+	mappingsTableEntry.w SME_mlzjJ_58
+	mappingsTableEntry.w SME_mlzjJ_60
+	mappingsTableEntry.w SME_mlzjJ_68
+	mappingsTableEntry.w SME_mlzjJ_B2
+	mappingsTableEntry.w SME_mlzjJ_BA
+	mappingsTableEntry.w SME_mlzjJ_D4
+	mappingsTableEntry.w SME_mlzjJ_106
+	mappingsTableEntry.w SME_mlzjJ_11A
+	mappingsTableEntry.w SME_mlzjJ_146
+	mappingsTableEntry.w SME_mlzjJ_16C
+
+SME_mlzjJ_1E:	spriteHeader
+	spritePiece	-$10, -8, 4, 2, 0, 0, 0, 0, 0
+SME_mlzjJ_1E_End
+
+SME_mlzjJ_26:	spriteHeader
+	spritePiece	-$10, -8, 4, 2, 8, 0, 0, 0, 0
+SME_mlzjJ_26_End
+
+SME_mlzjJ_2E:	spriteHeader
+	spritePiece	-$14, -8, 4, 2, $10, 0, 0, 0, 0
+	spritePiece	$C, -8, 1, 2, $18, 0, 0, 0, 0
+SME_mlzjJ_2E_End
+
+SME_mlzjJ_3C:	spriteHeader
+	spritePiece	-$15, -8, 4, 2, $1A, 0, 0, 0, 0
+	spritePiece	$B, -8, 1, 2, $22, 0, 0, 0, 0
+SME_mlzjJ_3C_End
+
+SME_mlzjJ_4A:	spriteHeader
+	spritePiece	-$15, -8, 4, 2, $24, 0, 0, 0, 0
+	spritePiece	$B, -8, 1, 2, $2C, 0, 0, 0, 0
+SME_mlzjJ_4A_End
+
+SME_mlzjJ_58:	spriteHeader
+	spritePiece	-$10, -8, 4, 2, $2E, 0, 0, 0, 0
+SME_mlzjJ_58_End
+
+SME_mlzjJ_60:	spriteHeader
+	spritePiece	0, -8, 2, 2, $62, 0, 0, 0, 0
+SME_mlzjJ_60_End
+
+SME_mlzjJ_68:	spriteHeader
+	spritePiece	-$1C, -$14, 4, 1, $36, 0, 0, 0, 0
+	spritePiece	4, -$14, 3, 1, $3A, 0, 0, 0, 0
+	spritePiece	-$1C, -$C, 4, 3, $3D, 0, 0, 0, 0
+	spritePiece	4, -$C, 3, 3, $49, 0, 0, 0, 0
+	spritePiece	-$14, $C, 3, 1, $52, 0, 0, 0, 0
+	spritePiece	4, $C, 2, 1, $55, 0, 0, 0, 0
+	spritePiece	-$10, -$2C, 2, 2, $57, 0, 0, 0, 0
+	spritePiece	-$18, -$24, 1, 2, $5B, 0, 0, 0, 0
+	spritePiece	0, -$2C, 2, 2, $57, 1, 0, 0, 0
+	spritePiece	$10, -$24, 1, 2, $5B, 1, 0, 0, 0
+	spritePiece	-2, -$26, 1, 1, $5F, 0, 0, 0, 0
+	spritePiece	-$14, -$1C, 2, 1, $5D, 0, 0, 0, 0
+SME_mlzjJ_68_End
+
+SME_mlzjJ_B2:	spriteHeader
+	spritePiece	-8, -4, 2, 1, $60, 0, 0, 0, 0
+SME_mlzjJ_B2_End
+
+SME_mlzjJ_BA:	spriteHeader
+	spritePiece	-$10, -$C, 2, 2, $57, 0, 0, 0, 0
+	spritePiece	-$18, -4, 1, 2, $5B, 0, 0, 0, 0
+	spritePiece	0, -$C, 2, 2, $57, 1, 0, 0, 0
+	spritePiece	$10, -4, 1, 2, $5B, 1, 0, 0, 0
+SME_mlzjJ_BA_End
+
+SME_mlzjJ_D4:	spriteHeader
+	spritePiece	-$1C, -$14, 4, 1, $36, 0, 0, 0, 0
+	spritePiece	4, -$14, 3, 1, $3A, 0, 0, 0, 0
+	spritePiece	-$10, -$2C, 2, 2, $57, 0, 0, 0, 0
+	spritePiece	-$18, -$24, 1, 2, $5B, 0, 0, 0, 0
+	spritePiece	0, -$2C, 2, 2, $57, 1, 0, 0, 0
+	spritePiece	$10, -$24, 1, 2, $5B, 1, 0, 0, 0
+	spritePiece	-2, -$26, 1, 1, $5F, 0, 0, 0, 0
+	spritePiece	-$14, -$1C, 2, 1, $5D, 0, 0, 0, 0
+SME_mlzjJ_D4_End
+
+SME_mlzjJ_106:	spriteHeader
+	spritePiece	-$1C, -$14, 4, 1, $36, 0, 0, 0, 0
+	spritePiece	4, -$14, 3, 1, $3A, 0, 0, 0, 0
+	spritePiece	-$14, -$1C, 2, 1, $5D, 0, 0, 0, 0
+SME_mlzjJ_106_End
+
+SME_mlzjJ_11A:	spriteHeader
+	spritePiece	-$1C, -$14, 4, 1, $36, 0, 0, 0, 0
+	spritePiece	4, -$14, 3, 1, $3A, 0, 0, 0, 0
+	spritePiece	-$1C, -$C, 4, 3, $3D, 0, 0, 0, 0
+	spritePiece	4, -$C, 3, 3, $49, 0, 0, 0, 0
+	spritePiece	-$14, $C, 3, 1, $52, 0, 0, 0, 0
+	spritePiece	4, $C, 2, 1, $55, 0, 0, 0, 0
+	spritePiece	-$14, -$1C, 2, 1, $5D, 0, 0, 0, 0
+SME_mlzjJ_11A_End
+
+SME_mlzjJ_146:	spriteHeader
+	spritePiece	-$1C, -$14, 4, 1, $36, 0, 0, 0, 0
+	spritePiece	4, -$14, 3, 1, $3A, 0, 0, 0, 0
+	spritePiece	-$10, -$2C, 2, 2, $57, 0, 0, 0, 0
+	spritePiece	-$18, -$24, 1, 2, $5B, 0, 0, 0, 0
+	spritePiece	0, -$2C, 2, 2, $57, 1, 0, 0, 0
+	spritePiece	$10, -$24, 1, 2, $5B, 1, 0, 0, 0
+SME_mlzjJ_146_End
+
+SME_mlzjJ_16C:	spriteHeader
+	spritePiece	-$10, -$2C, 2, 2, $57, 0, 0, 0, 0
+	spritePiece	-$18, -$24, 1, 2, $5B, 0, 0, 0, 0
+	spritePiece	0, -$2C, 2, 2, $57, 1, 0, 0, 0
+	spritePiece	$10, -$24, 1, 2, $5B, 1, 0, 0, 0
+	spritePiece	-2, -$26, 1, 1, $5F, 0, 0, 0, 0
+	spritePiece	-$14, -$1C, 2, 1, $5D, 0, 0, 0, 0
+SME_mlzjJ_16C_End
+
 		even

@@ -2,30 +2,47 @@
 ; Sprite mappings - Invincibility
 ; ---------------------------------------------------------------------------
 
-Map_Invincibility:
-Map_Invincibility_0: 	dc.w 0
-Map_Invincibility_2: 	dc.w Map_Invincibility_12-Map_Invincibility
-Map_Invincibility_4: 	dc.w Map_Invincibility_1A-Map_Invincibility
-Map_Invincibility_6: 	dc.w Map_Invincibility_22-Map_Invincibility
-Map_Invincibility_8: 	dc.w Map_Invincibility_2A-Map_Invincibility
-Map_Invincibility_A: 	dc.w Map_Invincibility_32-Map_Invincibility
-Map_Invincibility_C: 	dc.w Map_Invincibility_3A-Map_Invincibility
-Map_Invincibility_E: 	dc.w Map_Invincibility_42-Map_Invincibility
-Map_Invincibility_10: 	dc.w Map_Invincibility_4A-Map_Invincibility
-Map_Invincibility_12: 	dc.b $0, $1
-	dc.b $F8, $0, $0, $0, $FF, $FC
-Map_Invincibility_1A: 	dc.b $0, $1
-	dc.b $F8, $0, $0, $1, $FF, $FC
-Map_Invincibility_22: 	dc.b $0, $1
-	dc.b $F8, $1, $0, $2, $FF, $FC
-Map_Invincibility_2A: 	dc.b $0, $1
-	dc.b $F8, $1, $0, $4, $FF, $FC
-Map_Invincibility_32: 	dc.b $0, $1
-	dc.b $F8, $1, $0, $6, $FF, $FC
-Map_Invincibility_3A: 	dc.b $0, $1
-	dc.b $F8, $5, $0, $8, $FF, $F8
-Map_Invincibility_42: 	dc.b $0, $1
-	dc.b $F8, $5, $0, $C, $FF, $F8
-Map_Invincibility_4A: 	dc.b $0, $1
-	dc.b $F0, $F, $0, $10, $FF, $F0
+Map_Invincibility:	mappingsTable
+	dc.w 0
+	mappingsTableEntry.w Map_Invincibility_12
+	mappingsTableEntry.w Map_Invincibility_1A
+	mappingsTableEntry.w Map_Invincibility_22
+	mappingsTableEntry.w Map_Invincibility_2A
+	mappingsTableEntry.w Map_Invincibility_32
+	mappingsTableEntry.w Map_Invincibility_3A
+	mappingsTableEntry.w Map_Invincibility_42
+	mappingsTableEntry.w Map_Invincibility_4A
+
+Map_Invincibility_12:	spriteHeader
+	spritePiece	-4, -8, 1, 1, 0, 0, 0, 0, 0
+Map_Invincibility_12_End
+
+Map_Invincibility_1A:	spriteHeader
+	spritePiece	-4, -8, 1, 1, 1, 0, 0, 0, 0
+Map_Invincibility_1A_End
+
+Map_Invincibility_22:	spriteHeader
+	spritePiece	-4, -8, 1, 2, 2, 0, 0, 0, 0
+Map_Invincibility_22_End
+
+Map_Invincibility_2A:	spriteHeader
+	spritePiece	-4, -8, 1, 2, 4, 0, 0, 0, 0
+Map_Invincibility_2A_End
+
+Map_Invincibility_32:	spriteHeader
+	spritePiece	-4, -8, 1, 2, 6, 0, 0, 0, 0
+Map_Invincibility_32_End
+
+Map_Invincibility_3A:	spriteHeader
+	spritePiece	-8, -8, 2, 2, 8, 0, 0, 0, 0
+Map_Invincibility_3A_End
+
+Map_Invincibility_42:	spriteHeader
+	spritePiece	-8, -8, 2, 2, $C, 0, 0, 0, 0
+Map_Invincibility_42_End
+
+Map_Invincibility_4A:	spriteHeader
+	spritePiece	-$10, -$10, 4, 4, $10, 0, 0, 0, 0
+Map_Invincibility_4A_End
+
 	even

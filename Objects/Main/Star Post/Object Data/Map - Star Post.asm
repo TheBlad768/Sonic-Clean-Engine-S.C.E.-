@@ -2,19 +2,23 @@
 ; Sprite mappings - starpost
 ; ---------------------------------------------------------------------------
 
-Map_StarPost:
-		dc.w word_2D36C-Map_StarPost
-		dc.w word_2D380-Map_StarPost
-		dc.w word_2D388-Map_StarPost
-word_2D36C:
-		dc.w 3
-		dc.b $E8, 1, 0, $16, $FF, $FC
-		dc.b $F8, 3, 0, $18, $FF, $F8
-		dc.b $F8, 3, 8, $18, 0, 0
-word_2D380:
-		dc.w 1
-		dc.b $F8, 5, 0, $E, $FF, $F8
-word_2D388:
-		dc.w 1
-		dc.b $F8, 5, 0, $12, $FF, $F8
+Map_StarPost:	mappingsTable
+	mappingsTableEntry.w word_2D36C
+	mappingsTableEntry.w word_2D380
+	mappingsTableEntry.w word_2D388
+
+word_2D36C:	spriteHeader
+	spritePiece	-4, -$18, 1, 2, $16, 0, 0, 0, 0
+	spritePiece	-8, -8, 1, 4, $18, 0, 0, 0, 0
+	spritePiece	0, -8, 1, 4, $18, 1, 0, 0, 0
+word_2D36C_End
+
+word_2D380:	spriteHeader
+	spritePiece	-8, -8, 2, 2, $E, 0, 0, 0, 0
+word_2D380_End
+
+word_2D388:	spriteHeader
+	spritePiece	-8, -8, 2, 2, $12, 0, 0, 0, 0
+word_2D388_End
+
 	even
