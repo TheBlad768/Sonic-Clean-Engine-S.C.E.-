@@ -2,134 +2,151 @@
 ; Sprite mappings - sprite mask
 ; ---------------------------------------------------------------------------
 
-Map_SpriteMask:
-		dc.w 0					; 0 (null)
-		dc.w word_185982-Map_SpriteMask		; 1
-		dc.w word_185990-Map_SpriteMask		; 2
-		dc.w word_18599E-Map_SpriteMask		; 3
-		dc.w word_1859AC-Map_SpriteMask		; 4
-		dc.w word_1859BA-Map_SpriteMask		; 5
-		dc.w word_1859D4-Map_SpriteMask		; 6
-		dc.w word_1859EE-Map_SpriteMask		; 7
-		dc.w word_185A08-Map_SpriteMask		; 8
-		dc.w word_185A22-Map_SpriteMask		; 9
-		dc.w word_185A48-Map_SpriteMask		; A
-		dc.w word_185A6E-Map_SpriteMask		; B
-		dc.w word_185A94-Map_SpriteMask		; C
-		dc.w word_185ABA-Map_SpriteMask		; D
-		dc.w word_185AEC-Map_SpriteMask		; E
-		dc.w word_185B1E-Map_SpriteMask		; F
-		dc.w word_185B50-Map_SpriteMask		; 10
-word_185982:
-		dc.w 2
-		dc.b $FC, 0, 7, $C0, 0, 8
-		dc.b $FC, 0, 0, 0, 0, 0
-word_185990:
-		dc.w 2
-		dc.b $F8, 1, 7, $C0, 0, 8
-		dc.b $F8, 1, 0, 0, 0, 0
-word_18599E:
-		dc.w 2
-		dc.b $F4, 2, 7, $C0, 0, 8
-		dc.b $F4, 2, 0, 0, 0, 0
-word_1859AC:
-		dc.w 2
-		dc.b $F0, 3, 7, $C0, 0, 8
-		dc.b $F0, 3, 0, 0, 0, 0
-word_1859BA:
-		dc.w 4
-		dc.b $EC, 3, 7, $C0, 0, 8
-		dc.b $EC, 3, 0, 0, 0, 0
-		dc.b $C, 0, 7, $C0, 0, 8
-		dc.b $C, 0, 0, 0, 0, 0
-word_1859D4:
-		dc.w 4
-		dc.b $E8, 3, 7, $C0, 0, 8
-		dc.b $E8, 3, 0, 0, 0, 0
-		dc.b 8, 1, 7, $C0, 0, 8
-		dc.b 8, 1, 0, 0, 0, 0
-word_1859EE:
-		dc.w 4
-		dc.b $E4, 3, 7, $C0, 0, 8
-		dc.b $E4, 3, 0, 0, 0, 0
-		dc.b 4, 2, 7, $C0, 0, 8
-		dc.b 4, 2, 0, 0, 0, 0
-word_185A08:
-		dc.w 4
-		dc.b $E0, 3, 7, $C0, 0, 8
-		dc.b $E0, 3, 0, 0, 0, 0
-		dc.b 0, 3, 7, $C0, 0, 8
-		dc.b 0, 3, 0, 0, 0, 0
-word_185A22:
-		dc.w 6
-		dc.b $DC, 3, 7, $C0, 0, 8
-		dc.b $DC, 3, 0, 0, 0, 0
-		dc.b $FC, 3, 7, $C0, 0, 8
-		dc.b $FC, 3, 0, 0, 0, 0
-		dc.b $1C, 0, 7, $C0, 0, 8
-		dc.b $1C, 0, 0, 0, 0, 0
-word_185A48:
-		dc.w 6
-		dc.b $D8, 3, 7, $C0, 0, 8
-		dc.b $D8, 3, 0, 0, 0, 0
-		dc.b $F8, 3, 7, $C0, 0, 8
-		dc.b $F8, 3, 0, 0, 0, 0
-		dc.b $18, 1, 7, $C0, 0, 8
-		dc.b $18, 1, 0, 0, 0, 0
-word_185A6E:
-		dc.w 6
-		dc.b $D4, 3, 7, $C0, 0, 8
-		dc.b $D4, 3, 0, 0, 0, 0
-		dc.b $F4, 3, 7, $C0, 0, 8
-		dc.b $F4, 3, 0, 0, 0, 0
-		dc.b $14, 2, 7, $C0, 0, 8
-		dc.b $14, 2, 0, 0, 0, 0
-word_185A94:
-		dc.w 6
-		dc.b $D0, 3, 7, $C0, 0, 8
-		dc.b $D0, 3, 0, 0, 0, 0
-		dc.b $F0, 3, 7, $C0, 0, 8
-		dc.b $F0, 3, 0, 0, 0, 0
-		dc.b $10, 3, 7, $C0, 0, 8
-		dc.b $10, 3, 0, 0, 0, 0
-word_185ABA:
-		dc.w 8
-		dc.b $CC, 3, 7, $C0, 0, 8
-		dc.b $CC, 3, 0, 0, 0, 0
-		dc.b $EC, 3, 7, $C0, 0, 8
-		dc.b $EC, 3, 0, 0, 0, 0
-		dc.b $C, 3, 7, $C0, 0, 8
-		dc.b $C, 3, 0, 0, 0, 0
-		dc.b $2C, 0, 7, $C0, 0, 8
-		dc.b $2C, 0, 0, 0, 0, 0
-word_185AEC:
-		dc.w 8
-		dc.b $C8, 3, 7, $C0, 0, 8
-		dc.b $C8, 3, 0, 0, 0, 0
-		dc.b $E8, 3, 7, $C0, 0, 8
-		dc.b $E8, 3, 0, 0, 0, 0
-		dc.b 8, 3, 7, $C0, 0, 8
-		dc.b 8, 3, 0, 0, 0, 0
-		dc.b $28, 1, 7, $C0, 0, 8
-		dc.b $28, 1, 0, 0, 0, 0
-word_185B1E:
-		dc.w 8
-		dc.b $C4, 3, 7, $C0, 0, 8
-		dc.b $C4, 3, 0, 0, 0, 0
-		dc.b $E4, 3, 7, $C0, 0, 8
-		dc.b $E4, 3, 0, 0, 0, 0
-		dc.b 4, 3, 7, $C0, 0, 8
-		dc.b 4, 3, 0, 0, 0, 0
-		dc.b $24, 2, 7, $C0, 0, 8
-		dc.b $24, 2, 0, 0, 0, 0
-word_185B50:
-		dc.w 8
-		dc.b $C0, 3, 7, $C0, 0, 8
-		dc.b $C0, 3, 0, 0, 0, 0
-		dc.b $E0, 3, 7, $C0, 0, 8
-		dc.b $E0, 3, 0, 0, 0, 0
-		dc.b 0, 3, 7, $C0, 0, 8
-		dc.b 0, 3, 0, 0, 0, 0
-		dc.b $20, 3, 7, $C0, 0, 8
-		dc.b $20, 3, 0, 0, 0, 0
+Map_SpriteMask:	mappingsTable
+	dc.w 0						; 0 (null)
+	mappingsTableEntry.w word_185982		; 1
+	mappingsTableEntry.w word_185990		; 2
+	mappingsTableEntry.w word_18599E		; 3
+	mappingsTableEntry.w word_1859AC		; 4
+	mappingsTableEntry.w word_1859BA		; 5
+	mappingsTableEntry.w word_1859D4		; 6
+	mappingsTableEntry.w word_1859EE		; 7
+	mappingsTableEntry.w word_185A08		; 8
+	mappingsTableEntry.w word_185A22		; 9
+	mappingsTableEntry.w word_185A48		; A
+	mappingsTableEntry.w word_185A6E		; B
+	mappingsTableEntry.w word_185A94		; C
+	mappingsTableEntry.w word_185ABA		; D
+	mappingsTableEntry.w word_185AEC		; E
+	mappingsTableEntry.w word_185B1E		; F
+	mappingsTableEntry.w word_185B50		; 10
+
+word_185982:	spriteHeader
+	spritePiece	8, -4, 1, 1, $7C0, 0, 0, 0, 0
+	spritePiece	0, -4, 1, 1, 0, 0, 0, 0, 0
+word_185982_End
+
+word_185990:	spriteHeader
+	spritePiece	8, -8, 1, 2, $7C0, 0, 0, 0, 0
+	spritePiece	0, -8, 1, 2, 0, 0, 0, 0, 0
+word_185990_End
+
+word_18599E:	spriteHeader
+	spritePiece	8, -$C, 1, 3, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$C, 1, 3, 0, 0, 0, 0, 0
+word_18599E_End
+
+word_1859AC:	spriteHeader
+	spritePiece	8, -$10, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$10, 1, 4, 0, 0, 0, 0, 0
+word_1859AC_End
+
+word_1859BA:	spriteHeader
+	spritePiece	8, -$14, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$14, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $C, 1, 1, $7C0, 0, 0, 0, 0
+	spritePiece	0, $C, 1, 1, 0, 0, 0, 0, 0
+word_1859BA_End
+
+word_1859D4:	spriteHeader
+	spritePiece	8, -$18, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$18, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, 8, 1, 2, $7C0, 0, 0, 0, 0
+	spritePiece	0, 8, 1, 2, 0, 0, 0, 0, 0
+word_1859D4_End
+
+word_1859EE:	spriteHeader
+	spritePiece	8, -$1C, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$1C, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, 4, 1, 3, $7C0, 0, 0, 0, 0
+	spritePiece	0, 4, 1, 3, 0, 0, 0, 0, 0
+word_1859EE_End
+
+word_185A08:	spriteHeader
+	spritePiece	8, -$20, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$20, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, 0, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, 0, 1, 4, 0, 0, 0, 0, 0
+word_185A08_End
+
+word_185A22:	spriteHeader
+	spritePiece	8, -$24, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$24, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -4, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -4, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $1C, 1, 1, $7C0, 0, 0, 0, 0
+	spritePiece	0, $1C, 1, 1, 0, 0, 0, 0, 0
+word_185A22_End
+
+word_185A48:	spriteHeader
+	spritePiece	8, -$28, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$28, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -8, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -8, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $18, 1, 2, $7C0, 0, 0, 0, 0
+	spritePiece	0, $18, 1, 2, 0, 0, 0, 0, 0
+word_185A48_End
+
+word_185A6E:	spriteHeader
+	spritePiece	8, -$2C, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$2C, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -$C, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$C, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $14, 1, 3, $7C0, 0, 0, 0, 0
+	spritePiece	0, $14, 1, 3, 0, 0, 0, 0, 0
+word_185A6E_End
+
+word_185A94:	spriteHeader
+	spritePiece	8, -$30, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$30, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -$10, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$10, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $10, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, $10, 1, 4, 0, 0, 0, 0, 0
+word_185A94_End
+
+word_185ABA:	spriteHeader
+	spritePiece	8, -$34, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$34, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -$14, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$14, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $C, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, $C, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $2C, 1, 1, $7C0, 0, 0, 0, 0
+	spritePiece	0, $2C, 1, 1, 0, 0, 0, 0, 0
+word_185ABA_End
+
+word_185AEC:	spriteHeader
+	spritePiece	8, -$38, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$38, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -$18, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$18, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, 8, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, 8, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $28, 1, 2, $7C0, 0, 0, 0, 0
+	spritePiece	0, $28, 1, 2, 0, 0, 0, 0, 0
+word_185AEC_End
+
+word_185B1E:	spriteHeader
+	spritePiece	8, -$3C, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$3C, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -$1C, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$1C, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, 4, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, 4, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $24, 1, 3, $7C0, 0, 0, 0, 0
+	spritePiece	0, $24, 1, 3, 0, 0, 0, 0, 0
+word_185B1E_End
+
+word_185B50:	spriteHeader
+	spritePiece	8, -$40, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$40, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, -$20, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, -$20, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, 0, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, 0, 1, 4, 0, 0, 0, 0, 0
+	spritePiece	8, $20, 1, 4, $7C0, 0, 0, 0, 0
+	spritePiece	0, $20, 1, 4, 0, 0, 0, 0, 0
+word_185B50_End
+
 	even

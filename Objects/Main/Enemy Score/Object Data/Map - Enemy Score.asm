@@ -2,29 +2,44 @@
 ; Sprite mappings - enemy score
 ; ---------------------------------------------------------------------------
 
-Map_EnemyScore:
-		dc.w word_2CF5E-Map_EnemyScore
-		dc.w word_2CF66-Map_EnemyScore
-		dc.w word_2CF6E-Map_EnemyScore
-		dc.w word_2CF76-Map_EnemyScore
-		dc.w word_2CF84-Map_EnemyScore
-		dc.w word_2CF8C-Map_EnemyScore
-		dc.w word_2CF9A-Map_EnemyScore
-word_2CF5E:	dc.w 1
-		dc.b $FC, 4, 0, 0, $FF, $FA
-word_2CF66:	dc.w 1
-		dc.b $FC, 4, 0, 2, $FF, $F8
-word_2CF6E:	dc.w 1
-		dc.b $FC, 4, 0, 4, $FF, $F8
-word_2CF76:	dc.w 2
-		dc.b $FC, 0, 0, 0, $FF, $F8
-		dc.b $FC, 4, 0, 6, 0, 0
-word_2CF84:	dc.w 1
-		dc.b $FC, 0, 0, 0, $FF, $FC
-word_2CF8C:	dc.w 2
-		dc.b $FC, 4, 0, 0, $FF, $F8
-		dc.b $FC, 4, 0, 6, 0, 5
-word_2CF9A:	dc.w 2
-		dc.b $FC, 4, 0, 4, $FF, $F8
-		dc.b $FC, 4, 0, 6, 0, 7
+Map_EnemyScore:	mappingsTable
+	mappingsTableEntry.w word_2CF5E
+	mappingsTableEntry.w word_2CF66
+	mappingsTableEntry.w word_2CF6E
+	mappingsTableEntry.w word_2CF76
+	mappingsTableEntry.w word_2CF84
+	mappingsTableEntry.w word_2CF8C
+	mappingsTableEntry.w word_2CF9A
+
+word_2CF5E:	spriteHeader
+	spritePiece	-6, -4, 2, 1, 0, 0, 0, 0, 0
+word_2CF5E_End
+
+word_2CF66:	spriteHeader
+	spritePiece	-8, -4, 2, 1, 2, 0, 0, 0, 0
+word_2CF66_End
+
+word_2CF6E:	spriteHeader
+	spritePiece	-8, -4, 2, 1, 4, 0, 0, 0, 0
+word_2CF6E_End
+
+word_2CF76:	spriteHeader
+	spritePiece	-8, -4, 1, 1, 0, 0, 0, 0, 0
+	spritePiece	0, -4, 2, 1, 6, 0, 0, 0, 0
+word_2CF76_End
+
+word_2CF84:	spriteHeader
+	spritePiece	-4, -4, 1, 1, 0, 0, 0, 0, 0
+word_2CF84_End
+
+word_2CF8C:	spriteHeader
+	spritePiece	-8, -4, 2, 1, 0, 0, 0, 0, 0
+	spritePiece	5, -4, 2, 1, 6, 0, 0, 0, 0
+word_2CF8C_End
+
+word_2CF9A:	spriteHeader
+	spritePiece	-8, -4, 2, 1, 4, 0, 0, 0, 0
+	spritePiece	7, -4, 2, 1, 6, 0, 0, 0, 0
+word_2CF9A_End
+
 	even

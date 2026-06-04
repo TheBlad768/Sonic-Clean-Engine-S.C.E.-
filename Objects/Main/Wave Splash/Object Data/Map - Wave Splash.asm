@@ -2,45 +2,58 @@
 ; Sprite mappings - water surface
 ; ---------------------------------------------------------------------------
 
-Map_WaveSplash:
-		dc.w word_1F2DC-Map_WaveSplash		; 0 (duplicate)
-		dc.w word_1F2DC-Map_WaveSplash		; 1 (duplicate)
-		dc.w word_1F2F0-Map_WaveSplash		; 2
-		dc.w word_1F304-Map_WaveSplash		; 3
-		dc.w word_1F318-Map_WaveSplash		; 4
-		dc.w word_1F33E-Map_WaveSplash		; 5
-		dc.w word_1F364-Map_WaveSplash		; 6
-word_1F2DC:	dc.w 3
-		dc.b $FD, $D, 0, 0, $FF, $A0
-		dc.b $FD, $D, 0, 0, $FF, $E0
-		dc.b $FD, $D, 0, 0, 0, $20
-word_1F2F0:	dc.w 3
-		dc.b $FD, $D, 0, 8, $FF, $A0
-		dc.b $FD, $D, 0, 8, $FF, $E0
-		dc.b $FD, $D, 0, 8, 0, $20
-word_1F304:	dc.w 3
-		dc.b $FD, $D, 8, 0, $FF, $A0
-		dc.b $FD, $D, 8, 0, $FF, $E0
-		dc.b $FD, $D, 8, 0, 0, $20
-word_1F318:	dc.w 6
-		dc.b $FD, $D, 0, 0, $FF, $A0
-		dc.b $FD, $D, 0, 0, $FF, $C0
-		dc.b $FD, $D, 0, 0, $FF, $E0
-		dc.b $FD, $D, 0, 0, 0, 0
-		dc.b $FD, $D, 0, 0, 0, $20
-		dc.b $FD, $D, 0, 0, 0, $40
-word_1F33E:	dc.w 6
-		dc.b $FD, $D, 0, 8, $FF, $A0
-		dc.b $FD, $D, 0, 8, $FF, $C0
-		dc.b $FD, $D, 0, 8, $FF, $E0
-		dc.b $FD, $D, 0, 8, 0, 0
-		dc.b $FD, $D, 0, 8, 0, $20
-		dc.b $FD, $D, 0, 8, 0, $40
-word_1F364:	dc.w 6
-		dc.b $FD, $D, 8, 0, $FF, $A0
-		dc.b $FD, $D, 8, 0, $FF, $C0
-		dc.b $FD, $D, 8, 0, $FF, $E0
-		dc.b $FD, $D, 8, 0, 0, 0
-		dc.b $FD, $D, 8, 0, 0, $20
-		dc.b $FD, $D, 8, 0, 0, $40
+Map_WaveSplash:	mappingsTable
+	mappingsTableEntry.w word_1F2DC		; 0 (duplicate)
+	mappingsTableEntry.w word_1F2DC		; 1 (duplicate)
+	mappingsTableEntry.w word_1F2F0		; 2
+	mappingsTableEntry.w word_1F304		; 3
+	mappingsTableEntry.w word_1F318		; 4
+	mappingsTableEntry.w word_1F33E		; 5
+	mappingsTableEntry.w word_1F364		; 6
+
+word_1F2DC:	spriteHeader
+	spritePiece	-$60, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	-$20, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	$20, -3, 4, 2, 0, 0, 0, 0, 0
+word_1F2DC_End
+
+word_1F2F0:	spriteHeader
+	spritePiece	-$60, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	-$20, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	$20, -3, 4, 2, 8, 0, 0, 0, 0
+word_1F2F0_End
+
+word_1F304:	spriteHeader
+	spritePiece	-$60, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$20, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	$20, -3, 4, 2, 0, 1, 0, 0, 0
+word_1F304_End
+
+word_1F318:	spriteHeader
+	spritePiece	-$60, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	-$40, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	-$20, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	0, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	$20, -3, 4, 2, 0, 0, 0, 0, 0
+	spritePiece	$40, -3, 4, 2, 0, 0, 0, 0, 0
+word_1F318_End
+
+word_1F33E:	spriteHeader
+	spritePiece	-$60, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	-$40, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	-$20, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	0, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	$20, -3, 4, 2, 8, 0, 0, 0, 0
+	spritePiece	$40, -3, 4, 2, 8, 0, 0, 0, 0
+word_1F33E_End
+
+word_1F364:	spriteHeader
+	spritePiece	-$60, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$40, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$20, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	0, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	$20, -3, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	$40, -3, 4, 2, 0, 1, 0, 0, 0
+word_1F364_End
+
 	even

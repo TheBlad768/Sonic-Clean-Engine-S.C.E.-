@@ -2,61 +2,78 @@
 ; Sprite mappings - spikes
 ; ---------------------------------------------------------------------------
 
-Map_Spikes:
-		dc.w word_24466-Map_Spikes
-		dc.w word_24474-Map_Spikes
-		dc.w word_2448E-Map_Spikes
-		dc.w word_244B4-Map_Spikes
-		dc.w word_244E6-Map_Spikes
-		dc.w word_244F4-Map_Spikes
-		dc.w word_2450E-Map_Spikes
-		dc.w word_24534-Map_Spikes
-word_24466:	dc.w 2
-		dc.b $F0, 7, 0, 8, $FF, $F0
-		dc.b $F0, 7, 0, 8, 0, 0
-word_24474:	dc.w 4
-		dc.b $F0, 7, 0, 8, $FF, $E0
-		dc.b $F0, 7, 0, 8, $FF, $F0
-		dc.b $F0, 7, 0, 8, 0, 0
-		dc.b $F0, 7, 0, 8, 0, $10
-word_2448E:	dc.w 6
-		dc.b $F0, 7, 0, 8, $FF, $D0
-		dc.b $F0, 7, 0, 8, $FF, $E0
-		dc.b $F0, 7, 0, 8, $FF, $F0
-		dc.b $F0, 7, 0, 8, 0, 0
-		dc.b $F0, 7, 0, 8, 0, $10
-		dc.b $F0, 7, 0, 8, 0, $20
-word_244B4:	dc.w 8
-		dc.b $F0, 7, 0, 8, $FF, $C0
-		dc.b $F0, 7, 0, 8, $FF, $D0
-		dc.b $F0, 7, 0, 8, $FF, $E0
-		dc.b $F0, 7, 0, 8, $FF, $F0
-		dc.b $F0, 7, 0, 8, 0, 0
-		dc.b $F0, 7, 0, 8, 0, $10
-		dc.b $F0, 7, 0, 8, 0, $20
-		dc.b $F0, 7, 0, 8, 0, $30
-word_244E6:	dc.w 2
-		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b 0, $D, 8, 0, $FF, $F0
-word_244F4:	dc.w 4
-		dc.b $E0, $D, 8, 0, $FF, $F0
-		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b 0, $D, 8, 0, $FF, $F0
-		dc.b $10, $D, 8, 0, $FF, $F0
-word_2450E:	dc.w 6
-		dc.b $D0, $D, 8, 0, $FF, $F0
-		dc.b $E0, $D, 8, 0, $FF, $F0
-		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b 0, $D, 8, 0, $FF, $F0
-		dc.b $10, $D, 8, 0, $FF, $F0
-		dc.b $20, $D, 8, 0, $FF, $F0
-word_24534:	dc.w 8
-		dc.b $C0, $D, 8, 0, $FF, $F0
-		dc.b $D0, $D, 8, 0, $FF, $F0
-		dc.b $E0, $D, 8, 0, $FF, $F0
-		dc.b $F0, $D, 8, 0, $FF, $F0
-		dc.b 0, $D, 8, 0, $FF, $F0
-		dc.b $10, $D, 8, 0, $FF, $F0
-		dc.b $20, $D, 8, 0, $FF, $F0
-		dc.b $30, $D, 8, 0, $FF, $F0
+Map_Spikes:	mappingsTable
+	mappingsTableEntry.w word_24466
+	mappingsTableEntry.w word_24474
+	mappingsTableEntry.w word_2448E
+	mappingsTableEntry.w word_244B4
+	mappingsTableEntry.w word_244E6
+	mappingsTableEntry.w word_244F4
+	mappingsTableEntry.w word_2450E
+	mappingsTableEntry.w word_24534
+
+word_24466:	spriteHeader
+	spritePiece	-$10, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 4, 8, 0, 0, 0, 0
+word_24466_End
+
+word_24474:	spriteHeader
+	spritePiece	-$20, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	$10, -$10, 2, 4, 8, 0, 0, 0, 0
+word_24474_End
+
+word_2448E:	spriteHeader
+	spritePiece	-$30, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	-$20, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	$10, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	$20, -$10, 2, 4, 8, 0, 0, 0, 0
+word_2448E_End
+
+word_244B4:	spriteHeader
+	spritePiece	-$40, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	-$30, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	-$20, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	$10, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	$20, -$10, 2, 4, 8, 0, 0, 0, 0
+	spritePiece	$30, -$10, 2, 4, 8, 0, 0, 0, 0
+word_244B4_End
+
+word_244E6:	spriteHeader
+	spritePiece	-$10, -$10, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, 0, 4, 2, 0, 1, 0, 0, 0
+word_244E6_End
+
+word_244F4:	spriteHeader
+	spritePiece	-$10, -$20, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, 0, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, $10, 4, 2, 0, 1, 0, 0, 0
+word_244F4_End
+
+word_2450E:	spriteHeader
+	spritePiece	-$10, -$30, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, -$20, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, 0, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, $10, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, $20, 4, 2, 0, 1, 0, 0, 0
+word_2450E_End
+
+word_24534:	spriteHeader
+	spritePiece	-$10, -$40, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, -$30, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, -$20, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, 0, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, $10, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, $20, 4, 2, 0, 1, 0, 0, 0
+	spritePiece	-$10, $30, 4, 2, 0, 1, 0, 0, 0
+word_24534_End
+
 	even

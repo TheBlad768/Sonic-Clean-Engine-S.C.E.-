@@ -2,73 +2,102 @@
 ; DPLC mappings - Lightning Shield
 ; ---------------------------------------------------------------------------
 
-DPLC_LightningShield:
-DPLC_LightningShield_0: 	dc.w DPLC_LightningShield_2E-DPLC_LightningShield
-DPLC_LightningShield_2: 	dc.w DPLC_LightningShield_36-DPLC_LightningShield
-DPLC_LightningShield_4: 	dc.w DPLC_LightningShield_3C-DPLC_LightningShield
-DPLC_LightningShield_6: 	dc.w DPLC_LightningShield_44-DPLC_LightningShield
-DPLC_LightningShield_8: 	dc.w DPLC_LightningShield_4C-DPLC_LightningShield
-DPLC_LightningShield_A: 	dc.w DPLC_LightningShield_52-DPLC_LightningShield
-DPLC_LightningShield_C: 	dc.w DPLC_LightningShield_5A-DPLC_LightningShield
-DPLC_LightningShield_E: 	dc.w DPLC_LightningShield_62-DPLC_LightningShield
-DPLC_LightningShield_10: 	dc.w DPLC_LightningShield_2E-DPLC_LightningShield
-DPLC_LightningShield_12: 	dc.w DPLC_LightningShield_70-DPLC_LightningShield
-DPLC_LightningShield_14: 	dc.w DPLC_LightningShield_76-DPLC_LightningShield
-DPLC_LightningShield_16: 	dc.w DPLC_LightningShield_7C-DPLC_LightningShield
-DPLC_LightningShield_18: 	dc.w DPLC_LightningShield_80-DPLC_LightningShield
-DPLC_LightningShield_1A: 	dc.w DPLC_LightningShield_84-DPLC_LightningShield
-DPLC_LightningShield_1C: 	dc.w DPLC_LightningShield_2E-DPLC_LightningShield
-DPLC_LightningShield_1E: 	dc.w DPLC_LightningShield_36-DPLC_LightningShield
-DPLC_LightningShield_20: 	dc.w DPLC_LightningShield_3C-DPLC_LightningShield
-DPLC_LightningShield_22: 	dc.w DPLC_LightningShield_44-DPLC_LightningShield
-DPLC_LightningShield_24: 	dc.w DPLC_LightningShield_4C-DPLC_LightningShield
-DPLC_LightningShield_26: 	dc.w DPLC_LightningShield_52-DPLC_LightningShield
-DPLC_LightningShield_28: 	dc.w DPLC_LightningShield_5A-DPLC_LightningShield
-DPLC_LightningShield_2A: 	dc.w DPLC_LightningShield_62-DPLC_LightningShield
-DPLC_LightningShield_2C: 	dc.w DPLC_LightningShield_2E-DPLC_LightningShield
-DPLC_LightningShield_2E: 	dc.b $0, $2
-	dc.b $0, $3
-	dc.b $0, $47
-	dc.b $0, $C3
-DPLC_LightningShield_36: 	dc.b $0, $1
-	dc.b $1, $8
-	dc.b $1, $98
-DPLC_LightningShield_3C: 	dc.b $0, $2
-	dc.b $2, $22
-	dc.b $2, $5B
-	dc.b $3, $12
-DPLC_LightningShield_44: 	dc.b $0, $2
-	dc.b $3, $42
-	dc.b $3, $7B
-	dc.b $4, $35
-DPLC_LightningShield_4C: 	dc.b $0, $1
-	dc.b $4, $95
-	dc.b $4, $F5
-DPLC_LightningShield_52: 	dc.b $0, $2
-	dc.b $3, $42
-	dc.b $3, $7B
-	dc.b $4, $35
-DPLC_LightningShield_5A: 	dc.b $0, $2
-	dc.b $2, $22
-	dc.b $2, $5B
-	dc.b $3, $12
-DPLC_LightningShield_62: 	dc.b $0, $1
-	dc.b $1, $8
-	dc.b $1, $98
-DPLC_LightningShield_68: 	dc.b $0, $2
-	dc.b $0, $3
-	dc.b $0, $47
-	dc.b $0, $C3
-DPLC_LightningShield_70: 	dc.b $0, $1
-	dc.b $5, $58
-	dc.b $5, $E8
-DPLC_LightningShield_76: 	dc.b $0, $1
-	dc.b $6, $78
-	dc.b $7, $8
-DPLC_LightningShield_7C: 	dc.b $0, $0
-	dc.b $7, $98
-DPLC_LightningShield_80: 	dc.b $0, $0
-	dc.b $8, $20
-DPLC_LightningShield_84: 	dc.b $0, $0
-	dc.b $8, $33
+DPLC_LightningShield:	mappingsTable
+	mappingsTableEntry.w DPLC_LightningShield_2E
+	mappingsTableEntry.w DPLC_LightningShield_36
+	mappingsTableEntry.w DPLC_LightningShield_3C
+	mappingsTableEntry.w DPLC_LightningShield_44
+	mappingsTableEntry.w DPLC_LightningShield_4C
+	mappingsTableEntry.w DPLC_LightningShield_52
+	mappingsTableEntry.w DPLC_LightningShield_5A
+	mappingsTableEntry.w DPLC_LightningShield_62
+	mappingsTableEntry.w DPLC_LightningShield_2E
+	mappingsTableEntry.w DPLC_LightningShield_70
+	mappingsTableEntry.w DPLC_LightningShield_76
+	mappingsTableEntry.w DPLC_LightningShield_7C
+	mappingsTableEntry.w DPLC_LightningShield_80
+	mappingsTableEntry.w DPLC_LightningShield_84
+	mappingsTableEntry.w DPLC_LightningShield_2E
+	mappingsTableEntry.w DPLC_LightningShield_36
+	mappingsTableEntry.w DPLC_LightningShield_3C
+	mappingsTableEntry.w DPLC_LightningShield_44
+	mappingsTableEntry.w DPLC_LightningShield_4C
+	mappingsTableEntry.w DPLC_LightningShield_52
+	mappingsTableEntry.w DPLC_LightningShield_5A
+	mappingsTableEntry.w DPLC_LightningShield_62
+	mappingsTableEntry.w DPLC_LightningShield_2E
+
+DPLC_LightningShield_2E:	dplcHeader
+	dplcEntry	4, 0
+	dplcEntry	8, 4
+	dplcEntry	4, $C
+DPLC_LightningShield_2E_End
+
+DPLC_LightningShield_36:	dplcHeader
+	dplcEntry	9, $10
+	dplcEntry	9, $19
+DPLC_LightningShield_36_End
+
+DPLC_LightningShield_3C:	dplcHeader
+	dplcEntry	3, $22
+	dplcEntry	$C, $25
+	dplcEntry	3, $31
+DPLC_LightningShield_3C_End
+
+DPLC_LightningShield_44:	dplcHeader
+	dplcEntry	3, $34
+	dplcEntry	$C, $37
+	dplcEntry	6, $43
+DPLC_LightningShield_44_End
+
+DPLC_LightningShield_4C:	dplcHeader
+	dplcEntry	6, $49
+	dplcEntry	6, $4F
+DPLC_LightningShield_4C_End
+
+DPLC_LightningShield_52:	dplcHeader
+	dplcEntry	3, $34
+	dplcEntry	$C, $37
+	dplcEntry	6, $43
+DPLC_LightningShield_52_End
+
+DPLC_LightningShield_5A:	dplcHeader
+	dplcEntry	3, $22
+	dplcEntry	$C, $25
+	dplcEntry	3, $31
+DPLC_LightningShield_5A_End
+
+DPLC_LightningShield_62:	dplcHeader
+	dplcEntry	9, $10
+	dplcEntry	9, $19
+DPLC_LightningShield_62_End
+
+DPLC_LightningShield_68:	dplcHeader
+	dplcEntry	4, 0
+	dplcEntry	8, 4
+	dplcEntry	4, $C
+DPLC_LightningShield_68_End
+
+DPLC_LightningShield_70:	dplcHeader
+	dplcEntry	9, $55
+	dplcEntry	9, $5E
+DPLC_LightningShield_70_End
+
+DPLC_LightningShield_76:	dplcHeader
+	dplcEntry	9, $67
+	dplcEntry	9, $70
+DPLC_LightningShield_76_End
+
+DPLC_LightningShield_7C:	dplcHeader
+	dplcEntry	9, $79
+DPLC_LightningShield_7C_End
+
+DPLC_LightningShield_80:	dplcHeader
+	dplcEntry	1, $82
+DPLC_LightningShield_80_End
+
+DPLC_LightningShield_84:	dplcHeader
+	dplcEntry	4, $83
+DPLC_LightningShield_84_End
+
 	even

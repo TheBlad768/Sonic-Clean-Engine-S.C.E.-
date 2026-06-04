@@ -2,5 +2,5 @@
 ; Sprite mappings - signpost stub
 ; ---------------------------------------------------------------------------
 
-Map_Signpost_Stub:	dc.b $F8, 1, 0, 0, $FF, $FC
+Map_Signpost_Stub:	spritePiece	-4, -8, 1, 2, 0, 0, 0, 0, 0
 	even

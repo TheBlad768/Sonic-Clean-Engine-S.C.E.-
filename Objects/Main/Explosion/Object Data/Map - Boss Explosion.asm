@@ -2,23 +2,36 @@
 ; Sprite mappings - explosion from a boss
 ; ---------------------------------------------------------------------------
 
-Map_BossExplosion:
-		dc.w word_84008-Map_BossExplosion
-		dc.w word_84010-Map_BossExplosion
-		dc.w word_84018-Map_BossExplosion
-		dc.w word_84020-Map_BossExplosion
-		dc.w word_84028-Map_BossExplosion
-		dc.w word_84030-Map_BossExplosion
-word_84008:	dc.w 1
-		dc.b $F8, 5, 0, 0, $FF, $F8
-word_84010:	dc.w 1
-		dc.b $F4, $A, 0, 4, $FF, $F4
-word_84018:	dc.w 1
-		dc.b $F4, $A, 0, $D, $FF, $F4
-word_84020:	dc.w 1
-		dc.b $F4, $A, 0, $16, $FF, $F4
-word_84028:	dc.w 1
-		dc.b $F3, $A, 0, $1F, $FF, $F4
-word_84030:	dc.w 1
-		dc.b $F6, 9, 0, $28, $FF, $F4
+Map_BossExplosion:	mappingsTable
+	mappingsTableEntry.w word_84008
+	mappingsTableEntry.w word_84010
+	mappingsTableEntry.w word_84018
+	mappingsTableEntry.w word_84020
+	mappingsTableEntry.w word_84028
+	mappingsTableEntry.w word_84030
+
+word_84008:	spriteHeader
+	spritePiece	-8, -8, 2, 2, 0, 0, 0, 0, 0
+word_84008_End
+
+word_84010:	spriteHeader
+	spritePiece	-$C, -$C, 3, 3, 4, 0, 0, 0, 0
+word_84010_End
+
+word_84018:	spriteHeader
+	spritePiece	-$C, -$C, 3, 3, $D, 0, 0, 0, 0
+word_84018_End
+
+word_84020:	spriteHeader
+	spritePiece	-$C, -$C, 3, 3, $16, 0, 0, 0, 0
+word_84020_End
+
+word_84028:	spriteHeader
+	spritePiece	-$C, -$D, 3, 3, $1F, 0, 0, 0, 0
+word_84028_End
+
+word_84030:	spriteHeader
+	spritePiece	-$C, -$A, 3, 2, $28, 0, 0, 0, 0
+word_84030_End
+
 	even

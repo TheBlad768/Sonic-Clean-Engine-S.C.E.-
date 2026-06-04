@@ -2,50 +2,77 @@
 ; DPLC mappings - Bubble Shield
 ; ---------------------------------------------------------------------------
 
-DPLC_BubbleShield:
-DPLC_BubbleShield_0: 	dc.w DPLC_BubbleShield_1A-DPLC_BubbleShield
-DPLC_BubbleShield_2: 	dc.w DPLC_BubbleShield_1E-DPLC_BubbleShield
-DPLC_BubbleShield_4: 	dc.w DPLC_BubbleShield_22-DPLC_BubbleShield
-DPLC_BubbleShield_6: 	dc.w DPLC_BubbleShield_26-DPLC_BubbleShield
-DPLC_BubbleShield_8: 	dc.w DPLC_BubbleShield_2A-DPLC_BubbleShield
-DPLC_BubbleShield_A: 	dc.w DPLC_BubbleShield_2E-DPLC_BubbleShield
-DPLC_BubbleShield_C: 	dc.w DPLC_BubbleShield_32-DPLC_BubbleShield
-DPLC_BubbleShield_E: 	dc.w DPLC_BubbleShield_36-DPLC_BubbleShield
-DPLC_BubbleShield_10: 	dc.w DPLC_BubbleShield_3A-DPLC_BubbleShield
-DPLC_BubbleShield_12: 	dc.w DPLC_BubbleShield_3E-DPLC_BubbleShield
-DPLC_BubbleShield_14: 	dc.w DPLC_BubbleShield_44-DPLC_BubbleShield
-DPLC_BubbleShield_16: 	dc.w DPLC_BubbleShield_4A-DPLC_BubbleShield
-DPLC_BubbleShield_18: 	dc.w DPLC_BubbleShield_52-DPLC_BubbleShield
-DPLC_BubbleShield_1A: 	dc.b $0, $0
-	dc.b $0, $3
-DPLC_BubbleShield_1E: 	dc.b $0, $0
-	dc.b $0, $45
-DPLC_BubbleShield_22: 	dc.b $0, $0
-	dc.b $0, $A8
-DPLC_BubbleShield_26: 	dc.b $0, $0
-	dc.b $1, $38
-DPLC_BubbleShield_2A: 	dc.b $0, $0
-	dc.b $1, $CB
-DPLC_BubbleShield_2E: 	dc.b $0, $0
-	dc.b $1, $38
-DPLC_BubbleShield_32: 	dc.b $0, $0
-	dc.b $0, $A8
-DPLC_BubbleShield_36: 	dc.b $0, $0
-	dc.b $0, $45
-DPLC_BubbleShield_3A: 	dc.b $0, $0
-	dc.b $0, $1
-DPLC_BubbleShield_3E: 	dc.b $0, $1
-	dc.b $2, $88
-	dc.b $3, $18
-DPLC_BubbleShield_44: 	dc.b $0, $1
-	dc.b $3, $A8
-	dc.b $4, $38
-DPLC_BubbleShield_4A: 	dc.b $0, $2
-	dc.b $4, $C7
-	dc.b $5, $45
-	dc.b $5, $AB
-DPLC_BubbleShield_52: 	dc.b $0, $2
-	dc.b $6, $6F
-	dc.b $7, $63
-	dc.b $7, $AF
+DPLC_BubbleShield:	mappingsTable
+	mappingsTableEntry.w DPLC_BubbleShield_1A
+	mappingsTableEntry.w DPLC_BubbleShield_1E
+	mappingsTableEntry.w DPLC_BubbleShield_22
+	mappingsTableEntry.w DPLC_BubbleShield_26
+	mappingsTableEntry.w DPLC_BubbleShield_2A
+	mappingsTableEntry.w DPLC_BubbleShield_2E
+	mappingsTableEntry.w DPLC_BubbleShield_32
+	mappingsTableEntry.w DPLC_BubbleShield_36
+	mappingsTableEntry.w DPLC_BubbleShield_3A
+	mappingsTableEntry.w DPLC_BubbleShield_3E
+	mappingsTableEntry.w DPLC_BubbleShield_44
+	mappingsTableEntry.w DPLC_BubbleShield_4A
+	mappingsTableEntry.w DPLC_BubbleShield_52
+
+DPLC_BubbleShield_1A:	dplcHeader
+	dplcEntry	4, 0
+DPLC_BubbleShield_1A_End
+
+DPLC_BubbleShield_1E:	dplcHeader
+	dplcEntry	6, 4
+DPLC_BubbleShield_1E_End
+
+DPLC_BubbleShield_22:	dplcHeader
+	dplcEntry	9, $A
+DPLC_BubbleShield_22_End
+
+DPLC_BubbleShield_26:	dplcHeader
+	dplcEntry	9, $13
+DPLC_BubbleShield_26_End
+
+DPLC_BubbleShield_2A:	dplcHeader
+	dplcEntry	$C, $1C
+DPLC_BubbleShield_2A_End
+
+DPLC_BubbleShield_2E:	dplcHeader
+	dplcEntry	9, $13
+DPLC_BubbleShield_2E_End
+
+DPLC_BubbleShield_32:	dplcHeader
+	dplcEntry	9, $A
+DPLC_BubbleShield_32_End
+
+DPLC_BubbleShield_36:	dplcHeader
+	dplcEntry	6, 4
+DPLC_BubbleShield_36_End
+
+DPLC_BubbleShield_3A:	dplcHeader
+	dplcEntry	2, 0
+DPLC_BubbleShield_3A_End
+
+DPLC_BubbleShield_3E:	dplcHeader
+	dplcEntry	9, $28
+	dplcEntry	9, $31
+DPLC_BubbleShield_3E_End
+
+DPLC_BubbleShield_44:	dplcHeader
+	dplcEntry	9, $3A
+	dplcEntry	9, $43
+DPLC_BubbleShield_44_End
+
+DPLC_BubbleShield_4A:	dplcHeader
+	dplcEntry	8, $4C
+	dplcEntry	6, $54
+	dplcEntry	$C, $5A
+DPLC_BubbleShield_4A_End
+
+DPLC_BubbleShield_52:	dplcHeader
+	dplcEntry	$10, $66
+	dplcEntry	4, $76
+	dplcEntry	$10, $7A
+DPLC_BubbleShield_52_End
+
 	even

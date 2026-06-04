@@ -2,78 +2,94 @@
 ; Sprite mappings - bubbler
 ; ---------------------------------------------------------------------------
 
-Map_Bubbler:
-		dc.w word_2FD0E-Map_Bubbler
-		dc.w word_2FD16-Map_Bubbler
-		dc.w word_2FD1E-Map_Bubbler
-		dc.w word_2FD26-Map_Bubbler
-		dc.w word_2FD2E-Map_Bubbler
-		dc.w word_2FD36-Map_Bubbler
-		dc.w word_2FD3E-Map_Bubbler
-		dc.w word_2FD46-Map_Bubbler
-		dc.w word_2FD60-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD7A-Map_Bubbler
-		dc.w word_2FD82-Map_Bubbler
-		dc.w word_2FD8A-Map_Bubbler
-		dc.w word_2FD92-Map_Bubbler
-		dc.w word_2FD9A-Map_Bubbler
-word_2FD0E:
-		dc.w 1
-		dc.b $FC, 0, 0, 0, $FF, $FC
-word_2FD16:
-		dc.w 1
-		dc.b $FC, 0, 0, 1, $FF, $FC
-word_2FD1E:
-		dc.w 1
-		dc.b $FC, 0, 0, 2, $FF, $FC
-word_2FD26:
-		dc.w 1
-		dc.b $F8, 5, 0, 3, $FF, $F8
-word_2FD2E:
-		dc.w 1
-		dc.b $F8, 5, 0, 7, $FF, $F8
-word_2FD36:
-		dc.w 1
-		dc.b $F4, $A, 0, $B, $FF, $F4
-word_2FD3E:
-		dc.w 1
-		dc.b $F0, $F, 0, $14, $FF, $F0
-word_2FD46:
-		dc.w 4
-		dc.b $F0, 5, 0, $24, $FF, $F0
-		dc.b $F0, 5, 8, $24, 0, 0
-		dc.b 0, 5, $10, $24, $FF, $F0
-		dc.b 0, 5, $18, $24, 0, 0
-word_2FD60:
-		dc.w 4
-		dc.b $F0, 5, 0, $28, $FF, $F0
-		dc.b $F0, 5, 8, $28, 0, 0
-		dc.b 0, 5, $10, $28, $FF, $F0
-		dc.b 0, 5, $18, $28, 0, 0
-word_2FD7A:
-		dc.w 1
-		dc.b $F4, 6, 2, $80, $FF, $F8		; air countdown (1P)
-word_2FD82:
-		dc.w 1
-		dc.b $F8, 5, 0, $2C, $FF, $F8
-word_2FD8A:
-		dc.w 1
-		dc.b $F8, 5, 0, $30, $FF, $F8
-word_2FD92:
-		dc.w 1
-		dc.b $F8, 5, 0, $34, $FF, $F8
-word_2FD9A:
-		dc.w 0
-word_2FD9C:
-		dc.w 1
-		dc.b $F4, 6, 3, $94, $FF, $F8		; air countdown (2P)
+Map_Bubbler:	mappingsTable
+	mappingsTableEntry.w word_2FD0E
+	mappingsTableEntry.w word_2FD16
+	mappingsTableEntry.w word_2FD1E
+	mappingsTableEntry.w word_2FD26
+	mappingsTableEntry.w word_2FD2E
+	mappingsTableEntry.w word_2FD36
+	mappingsTableEntry.w word_2FD3E
+	mappingsTableEntry.w word_2FD46
+	mappingsTableEntry.w word_2FD60
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD7A
+	mappingsTableEntry.w word_2FD82
+	mappingsTableEntry.w word_2FD8A
+	mappingsTableEntry.w word_2FD92
+	mappingsTableEntry.w word_2FD9A
+
+word_2FD0E:	spriteHeader
+	spritePiece	-4, -4, 1, 1, 0, 0, 0, 0, 0
+word_2FD0E_End
+
+word_2FD16:	spriteHeader
+	spritePiece	-4, -4, 1, 1, 1, 0, 0, 0, 0
+word_2FD16_End
+
+word_2FD1E:	spriteHeader
+	spritePiece	-4, -4, 1, 1, 2, 0, 0, 0, 0
+word_2FD1E_End
+
+word_2FD26:	spriteHeader
+	spritePiece	-8, -8, 2, 2, 3, 0, 0, 0, 0
+word_2FD26_End
+
+word_2FD2E:	spriteHeader
+	spritePiece	-8, -8, 2, 2, 7, 0, 0, 0, 0
+word_2FD2E_End
+
+word_2FD36:	spriteHeader
+	spritePiece	-$C, -$C, 3, 3, $B, 0, 0, 0, 0
+word_2FD36_End
+
+word_2FD3E:	spriteHeader
+	spritePiece	-$10, -$10, 4, 4, $14, 0, 0, 0, 0
+word_2FD3E_End
+
+word_2FD46:	spriteHeader
+	spritePiece	-$10, -$10, 2, 2, $24, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 2, $24, 1, 0, 0, 0
+	spritePiece	-$10, 0, 2, 2, $24, 0, 1, 0, 0
+	spritePiece	0, 0, 2, 2, $24, 1, 1, 0, 0
+word_2FD46_End
+
+word_2FD60:	spriteHeader
+	spritePiece	-$10, -$10, 2, 2, $28, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 2, $28, 1, 0, 0, 0
+	spritePiece	-$10, 0, 2, 2, $28, 0, 1, 0, 0
+	spritePiece	0, 0, 2, 2, $28, 1, 1, 0, 0
+word_2FD60_End
+
+word_2FD7A:	spriteHeader
+	spritePiece	-8, -$C, 2, 3, $280, 0, 0, 0, 0
+word_2FD7A_End
+
+word_2FD82:	spriteHeader
+	spritePiece	-8, -8, 2, 2, $2C, 0, 0, 0, 0
+word_2FD82_End
+
+word_2FD8A:	spriteHeader
+	spritePiece	-8, -8, 2, 2, $30, 0, 0, 0, 0
+word_2FD8A_End
+
+word_2FD92:	spriteHeader
+	spritePiece	-8, -8, 2, 2, $34, 0, 0, 0, 0
+word_2FD92_End
+
+word_2FD9A:	spriteHeader
+word_2FD9A_End
+
+word_2FD9C:	spriteHeader
+	spritePiece	-8, -$C, 2, 3, $394, 0, 0, 0, 0
+word_2FD9C_End
+
 	even

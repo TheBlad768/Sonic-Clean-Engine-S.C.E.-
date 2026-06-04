@@ -2,37 +2,39 @@
 ; Sprite mappings - title card
 ; ---------------------------------------------------------------------------
 
-Map_TitleCard:
+Map_TitleCard:	mappingsTable
 		dc.w 0						; null
-		dc.w Map_TitleCard_RedBanner-Map_TitleCard	; red banner
-		dc.w Map_TitleCard_ACT-Map_TitleCard		; ACT
-		dc.w Map_TitleCard_ZONE-Map_TitleCard		; ZONE
+		mappingsTableEntry.w Map_TitleCard_RedBanner	; red banner
+		mappingsTableEntry.w Map_TitleCard_ACT		; ACT
+		mappingsTableEntry.w Map_TitleCard_ZONE		; ZONE
 
 .levels
-		dc.w Map_TitleCard_DEZ-Map_TitleCard		; DEATH EGG
+		mappingsTableEntry.w Map_TitleCard_DEZ		; DEATH EGG
 
 		zonewarning Map_TitleCard.levels,(1*2)
 
-Map_TitleCard_RedBanner:
-		dc.w $10
-		dc.b $58, 9, $80, $10, $FF, $E8
-		dc.b $58, 9, $80, $16, 0, 0
-		dc.b $90, $F, $80, 0, $FF, $E0
-		dc.b $90, $F, $80, 0, 0, 0
-		dc.b $B0, $F, $80, 0, $FF, $E0
-		dc.b $B0, $F, $80, 0, 0, 0
-		dc.b $D0, $F, $80, 0, $FF, $E0
-		dc.b $D0, $F, $80, 0, 0, 0
-		dc.b $F0, $F, $80, 0, $FF, $E0
-		dc.b $F0, $F, $80, 0, 0, 0
-		dc.b $10, $F, $80, 0, $FF, $E0
-		dc.b $10, $F, $80, 0, 0, 0
-		dc.b $30, $F, $80, 0, $FF, $E0
-		dc.b $30, $F, $80, 0, 0, 0
-		dc.b $50, $F, $80, 0, $FF, $E0
-		dc.b $50, $F, $80, 0, 0, 0
-Map_TitleCard_ACT:
-		dc.w 2
-		dc.b $10, 9, $80, $1C, $FF, $E4
-		dc.b 0, $F, $80, $3D, $FF, $F5
+Map_TitleCard_RedBanner:	spriteHeader
+	spritePiece	-$18, $58, 3, 2, $10, 0, 0, 0, 1
+	spritePiece	0, $58, 3, 2, $16, 0, 0, 0, 1
+	spritePiece	-$20, -$70, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, -$70, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	-$20, -$50, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, -$50, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	-$20, -$30, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, -$30, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	-$20, -$10, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, -$10, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	-$20, $10, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, $10, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	-$20, $30, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, $30, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	-$20, $50, 4, 4, 0, 0, 0, 0, 1
+	spritePiece	0, $50, 4, 4, 0, 0, 0, 0, 1
+Map_TitleCard_RedBanner_End
+
+Map_TitleCard_ACT:	spriteHeader
+	spritePiece	-$1C, $10, 3, 2, $1C, 0, 0, 0, 1
+	spritePiece	-$B, 0, 4, 4, $3D, 0, 0, 0, 1
+Map_TitleCard_ACT_End
+
 	even

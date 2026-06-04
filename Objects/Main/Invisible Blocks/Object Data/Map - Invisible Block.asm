@@ -2,23 +2,30 @@
 ; Sprite mappings - invisible solid blocks
 ; ---------------------------------------------------------------------------
 
-Map_InvisibleBlock:
-		dc.w word_1ECCC-Map_InvisibleBlock
-		dc.w word_1ECE6-Map_InvisibleBlock
-		dc.w word_1ED00-Map_InvisibleBlock
-word_1ECCC:	dc.w 4
-		dc.b $F0, 5, 0, $1C, $FF, $F0
-		dc.b $F0, 5, 0, $1C, 0, 0
-		dc.b 0, 5, 0, $1C, $FF, $F0
-		dc.b 0, 5, 0, $1C, 0, 0
-word_1ECE6:	dc.w 4
-		dc.b $E0, 5, 0, $1C, $FF, $C0
-		dc.b $E0, 5, 0, $1C, 0, $30
-		dc.b $10, 5, 0, $1C, $FF, $C0
-		dc.b $10, 5, 0, $1C, 0, $30
-word_1ED00:	dc.w 4
-		dc.b $E0, 5, 0, $1C, $FF, $80
-		dc.b $E0, 5, 0, $1C, 0, $70
-		dc.b $10, 5, 0, $1C, $FF, $80
-		dc.b $10, 5, 0, $1C, 0, $70
+Map_InvisibleBlock:	mappingsTable
+	mappingsTableEntry.w word_1ECCC
+	mappingsTableEntry.w word_1ECE6
+	mappingsTableEntry.w word_1ED00
+
+word_1ECCC:	spriteHeader
+	spritePiece	-$10, -$10, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	0, -$10, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	-$10, 0, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	0, 0, 2, 2, $1C, 0, 0, 0, 0
+word_1ECCC_End
+
+word_1ECE6:	spriteHeader
+	spritePiece	-$40, -$20, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	$30, -$20, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	-$40, $10, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	$30, $10, 2, 2, $1C, 0, 0, 0, 0
+word_1ECE6_End
+
+word_1ED00:	spriteHeader
+	spritePiece	-$80, -$20, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	$70, -$20, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	-$80, $10, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	$70, $10, 2, 2, $1C, 0, 0, 0, 0
+word_1ED00_End
+
 	even

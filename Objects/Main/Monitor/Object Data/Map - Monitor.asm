@@ -2,63 +2,76 @@
 ; Sprite mappings - monitors
 ; ---------------------------------------------------------------------------
 
-Map_Monitor:
-		dc.w word_1DBBA-Map_Monitor
-		dc.w word_1DBC2-Map_Monitor
-		dc.w word_1DBD0-Map_Monitor
-		dc.w word_1DBDE-Map_Monitor
-		dc.w word_1DBEC-Map_Monitor
-		dc.w word_1DBFA-Map_Monitor
-		dc.w word_1DC08-Map_Monitor
-		dc.w word_1DC16-Map_Monitor
-		dc.w word_1DC24-Map_Monitor
-		dc.w word_1DC32-Map_Monitor
-		dc.w word_1DC40-Map_Monitor
-		dc.w word_1DC4E-Map_Monitor
-word_1DBBA:
-		dc.w 1
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DBC2:
-		dc.w 2
-		dc.b $F3, 5, 0, $18, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DBD0:
-		dc.w 2
-		dc.b $F3, 5, 3, $28, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DBDE:
-		dc.w 2
-		dc.b $F3, 5, 0, $1C, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DBEC:
-		dc.w 2
-		dc.b $F3, 5, $20, $20, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DBFA:
-		dc.w 2
-		dc.b $F3, 5, 0, $24, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DC08:
-		dc.w 2
-		dc.b $F3, 5, 0, $30, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DC16:
-		dc.w 2
-		dc.b $F3, 5, 0, $2C, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DC24:
-		dc.w 2
-		dc.b $F3, 5, 0, $34, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DC32:
-		dc.w 2
-		dc.b $F3, 5, 0, $28, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DC40:
-		dc.w 2
-		dc.b $F3, 5, 0, $38, $FF, $F8
-		dc.b $F0, $F, 0, 0, $FF, $F0
-word_1DC4E:
-		dc.w 1
-		dc.b 0, $D, 0, $10, $FF, $F0
+Map_Monitor:	mappingsTable
+	mappingsTableEntry.w word_1DBBA
+	mappingsTableEntry.w word_1DBC2
+	mappingsTableEntry.w word_1DBD0
+	mappingsTableEntry.w word_1DBDE
+	mappingsTableEntry.w word_1DBEC
+	mappingsTableEntry.w word_1DBFA
+	mappingsTableEntry.w word_1DC08
+	mappingsTableEntry.w word_1DC16
+	mappingsTableEntry.w word_1DC24
+	mappingsTableEntry.w word_1DC32
+	mappingsTableEntry.w word_1DC40
+	mappingsTableEntry.w word_1DC4E
+
+word_1DBBA:	spriteHeader
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DBBA_End
+
+word_1DBC2:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $18, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DBC2_End
+
+word_1DBD0:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $328, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DBD0_End
+
+word_1DBDE:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $1C, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DBDE_End
+
+word_1DBEC:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $20, 0, 0, 1, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DBEC_End
+
+word_1DBFA:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $24, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DBFA_End
+
+word_1DC08:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $30, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DC08_End
+
+word_1DC16:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $2C, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DC16_End
+
+word_1DC24:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $34, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DC24_End
+
+word_1DC32:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $28, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DC32_End
+
+word_1DC40:	spriteHeader
+	spritePiece	-8, -$D, 2, 2, $38, 0, 0, 0, 0
+	spritePiece	-$10, -$10, 4, 4, 0, 0, 0, 0, 0
+word_1DC40_End
+
+word_1DC4E:	spriteHeader
+	spritePiece	-$10, 0, 4, 2, $10, 0, 0, 0, 0
+word_1DC4E_End
+
 	even
