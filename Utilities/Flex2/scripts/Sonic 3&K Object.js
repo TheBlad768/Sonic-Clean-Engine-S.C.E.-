@@ -1,4 +1,4 @@
-// Flex2 Mapping Definition - Sonic 3&K Objects Single Frame
+// Flex2 Mapping Definition - Sonic 3&K Objects
 
 const {
     mappings,
@@ -15,6 +15,7 @@ const {
 } = Flex2;
 
 mappings([
+    offsetTable(dc.w),
     [
         () => {
             const quantity = read(dc.w);
@@ -91,8 +92,14 @@ SonicDplcVer := 3
     writeMappings(({ label, sprites, renderHex }) => {
         const list = [];
 
-        sprites.forEach((sprite) => {
-            list.push(`${label}:\tspriteHeader`);
+        list.push(`${label}: mappingsTable`);
+        sprites.forEach((_, i) => {
+	        list.push(`\tmappingsTableEntry.w\t${label}_${i}`);
+        });
+        list.push('');
+
+        sprites.forEach((sprite, i) => {
+            list.push(`${label}_${i}:\tspriteHeader`);
 
             sprite.mappings.forEach(mapping => {
                 const pieceInfo = [
@@ -110,7 +117,8 @@ SonicDplcVer := 3
                 list.push(` spritePiece ${pieceInfo}`);
             });
 
-            list.push(`${label}_End`);
+            list.push(`${label}_${i}_End`);
+            list.push('');
         });
 
         list.push('\teven');
