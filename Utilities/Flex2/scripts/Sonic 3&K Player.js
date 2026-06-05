@@ -1,4 +1,4 @@
-// Flex2 Mapping Definition - Sonic 3&K Objects Single Frame
+// Flex2 Mapping Definition - Sonic 3&K Player
 
 const {
     mappings,
@@ -15,6 +15,7 @@ const {
 } = Flex2;
 
 mappings([
+    offsetTable(dc.w),
     [
         () => {
             const quantity = read(dc.w);
@@ -59,18 +60,17 @@ dplcs([
     [
         () => {
             const quantity = read(dc.w);
-            if (quantity === 0xFFFF) return;
-            return (({ mapping }, frameIndex) => {
-                mapping.art = read(nybble * 3);
+            return quantity > 0 && (({ mapping }, frameIndex) => {
                 mapping.size = read(nybble) + 1;
-                if (frameIndex === quantity) return endFrame;
+                mapping.art = read(nybble * 3);
+                if (frameIndex + 1 === quantity) return endFrame;
             });
         },
         ({ sprite }) => {
-            write(dc.w, sprite.length - 1);
+            write(dc.w, sprite.length);
             return ({ mapping }) => {
-                write(nybble * 3, mapping.art);
                 write(nybble, mapping.size - 1);
+                write(nybble * 3, mapping.art);
             };
         },
     ],
@@ -91,8 +91,14 @@ SonicDplcVer := 3
     writeMappings(({ label, sprites, renderHex }) => {
         const list = [];
 
-        sprites.forEach((sprite) => {
-            list.push(`${label}:\tspriteHeader`);
+        list.push(`${label}: mappingsTable`);
+        sprites.forEach((_, i) => {
+	        list.push(`\tmappingsTableEntry.w\t${label}_${i}`);
+        });
+        list.push('');
+
+        sprites.forEach((sprite, i) => {
+            list.push(`${label}_${i}:\tspriteHeader`);
 
             sprite.mappings.forEach(mapping => {
                 const pieceInfo = [
@@ -110,7 +116,8 @@ SonicDplcVer := 3
                 list.push(` spritePiece ${pieceInfo}`);
             });
 
-            list.push(`${label}_End`);
+            list.push(`${label}_${i}_End`);
+            list.push('');
         });
 
         list.push('\teven');
@@ -133,7 +140,7 @@ SonicDplcVer := 3
         list.push('');
 
         sprites.forEach((sprite, i) => {
-            list.push(`${label}_${i}:\tdplcHeader`);
+            list.push(`${label}_${i}:\ts3kPlayerDplcEntry`);
 
             sprite.dplcs.forEach(dplc => {
                 const pieceInfo = [
@@ -141,7 +148,7 @@ SonicDplcVer := 3
                     dplc.art,
                 ].map(renderHex).join(', ');
 
-                list.push(` dplcEntry ${pieceInfo}`);
+                list.push(` s3kPlayerDplcEntry ${pieceInfo}`);
             });
 
             list.push(`${label}_${i}_End`);
