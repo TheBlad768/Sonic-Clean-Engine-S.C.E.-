@@ -38,7 +38,7 @@ IF NOT EXIST S3CE.debug.p (
 )
 
 REM // Convert the assembled file to binary
-"%AS_MSGPATH%\p2bin.exe" -p=FF -z=0,kosinskiplus,Size_of_DAC_driver_guess,after S3CE.debug.p S3CE.debug.gen S3CE.debug.h
+"%AS_MSGPATH%\p2bin.exe" -p=FF S3CE.debug.p S3CE.debug.gen S3CE.debug.h
 IF ERRORLEVEL 1 (
     echo Failed to convert S3CE.debug.p to S3CE.debug.gen
     pause & exit /b 1

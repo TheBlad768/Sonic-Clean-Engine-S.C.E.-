@@ -20,7 +20,7 @@ if [ ! -f S3CE.debug.p ]; then
 fi
 
 # Convert the assembled file to binary
-${AS_MSGPATH}/p2bin -p=FF -z=0,kosinskiplus,Size_of_DAC_driver_guess,after S3CE.debug.p S3CE.debug.gen S3CE.debug.h
+${AS_MSGPATH}/p2bin -p=FF S3CE.debug.p S3CE.debug.gen S3CE.debug.h
 
 # Delete temporary files
 rm -f S3CE.debug.p
