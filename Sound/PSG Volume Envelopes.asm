@@ -1,6 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; PSG pointers
 ; ---------------------------------------------------------------------------
+
 PSG_Index:
 	if SMPS_S1PSGEnvelopes||SMPS_S2PSGEnvelopes
 		; S1 + S2
@@ -98,6 +99,7 @@ ptr_kcpsg0E:	dc.l KC_PSG0E
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
 ; ---------------------------------------------------------------------------
+
 	if SMPS_S1PSGEnvelopes||SMPS_S2PSGEnvelopes
 ; Envelopes found in S1 and S2
 S1_PSG01:	binclude "Sound/PSG/Sonic 1 & 2/PSG 1.bin"

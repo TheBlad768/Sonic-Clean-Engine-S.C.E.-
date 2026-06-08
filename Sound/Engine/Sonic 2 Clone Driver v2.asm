@@ -554,7 +554,7 @@ FMPrepareNote:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
- DoModulationEnvelope:
+DoModulationEnvelope:
 	moveq	#0,d6					; This is the frequency accumulator
     if SMPS_EnableModulationEnvelopes
 	move.b	SMPS_Track.ModulationCtrl(a5),d0

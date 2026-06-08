@@ -89,29 +89,33 @@ sample macro id,terminate,byte
 ; ---------------------------------------------------------------------------
 ; Music macros and constants
 ; ---------------------------------------------------------------------------
+
 SMPS_MUSIC_METADATA macro address,fasttempo,flags
-	dc.l	((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)
+	dc.l ((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)
     endm
 
-SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001				; forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
+SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001						; forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
 
 ; ---------------------------------------------------------------------------
 ; SFX macros and constants
 ; ---------------------------------------------------------------------------
+
 SMPS_SFX_METADATA macro address,priority,flags
-	dc.l	((priority)<<24)|((address)&$FFFFFF)
+	dc.l ((priority)<<24)|((address)&$FFFFFF)
     endm
 
 ; ---------------------------------------------------------------------------
 ; Special SFX macros and constants
 ; ---------------------------------------------------------------------------
+
 SMPS_SPECIAL_SFX_METADATA macro address,flags
-	dc.l	address
+	dc.l address
     endm
 
 ; ---------------------------------------------------------------------------
 ; stop the Z80
 ; ---------------------------------------------------------------------------
+
 SMPS_stopZ80 macro
 	move.w	#$100,(SMPS_z80_bus_request).l
 	SMPS_delayYM
@@ -120,6 +124,7 @@ SMPS_stopZ80 macro
 ; ---------------------------------------------------------------------------
 ; wait for Z80 to stop
 ; ---------------------------------------------------------------------------
+
 SMPS_waitZ80 macro
 .wait:	btst	#0,(SMPS_z80_bus_request).l
 	bne.s	.wait
@@ -128,6 +133,7 @@ SMPS_waitZ80 macro
 ; ---------------------------------------------------------------------------
 ; reset the Z80
 ; ---------------------------------------------------------------------------
+
 SMPS_resetZ80 macro
 	move.w	#$100,(SMPS_z80_reset).l
     endm
@@ -135,6 +141,7 @@ SMPS_resetZ80 macro
 ; ---------------------------------------------------------------------------
 ; start the Z80
 ; ---------------------------------------------------------------------------
+
 SMPS_startZ80 macro
 	move.w	#0,(SMPS_z80_bus_request).l
     endm
@@ -142,6 +149,7 @@ SMPS_startZ80 macro
 ; ---------------------------------------------------------------------------
 ; stop the Z80
 ; ---------------------------------------------------------------------------
+
 SMPS_stopZ80_safe macro
 	disableIntsSave	; mask off interrupts
 	SMPS_stopZ80
@@ -151,6 +159,7 @@ SMPS_stopZ80_safe macro
 ; ---------------------------------------------------------------------------
 ; start the Z80
 ; ---------------------------------------------------------------------------
+
 SMPS_startZ80_safe macro
 	SMPS_startZ80
 	enableIntsSave
@@ -170,13 +179,14 @@ SMPS_startZ80_safe macro
 ; would let me be a bit more precise (I don't know exactly *when* in
 ; the 12-cycle instruction the YM2612 is actually written to).
 ; ---------------------------------------------------------------------------
-SMPS_delayYM macro target
+
+SMPS_delayYM macro
 	nop		; 4(1/0)
 	nop		; 4(1/0)
 	nop		; 4(1/0)
     endm
 
-SMPS_waitYM macro target
+SMPS_waitYM macro
 .loop:	tst.b	(a0)	; 8(2/0)
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
     endm
@@ -184,6 +194,7 @@ SMPS_waitYM macro target
 ; ---------------------------------------------------------------------------
 ; Pauses the driver: music, SFX, everything
 ; ---------------------------------------------------------------------------
+
 SMPS_PauseMusic macro
 	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
     endm
@@ -191,6 +202,7 @@ SMPS_PauseMusic macro
 ; ---------------------------------------------------------------------------
 ; Unpauses the driver
 ; ---------------------------------------------------------------------------
+
 SMPS_UnpauseMusic macro
 	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
     endm
@@ -198,18 +210,20 @@ SMPS_UnpauseMusic macro
 ; ---------------------------------------------------------------------------
 ; update sound driver
 ; ---------------------------------------------------------------------------
+
 SMPS_UpdateSoundDriver macro
-	move	#$2300,sr						; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; set "SMPS running flag"
-	bne.s	.skip							; if it was set already, don't call another instance of SMPS
-	jsr	(SMPS_UpdateDriver).l					; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w		; reset "SMPS running flag"
+	move	#$2300,sr								; enable interrupts (we can accept horizontal interrupts from now on)
+	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w			; set "SMPS running flag"
+	bne.s	.skip									; if it was set already, don't call another instance of SMPS
+	jsr	(SMPS_UpdateDriver).l							; update Sonic 2 Clone Driver v2
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w				; reset "SMPS running flag"
 .skip:
     endm
 
 ; ---------------------------------------------------------------------------
 ; pad RAM to even address
 ; ---------------------------------------------------------------------------
+
 SMPS_RAM_even macro
     if (*)&1	; pretty much an 'even'
 	ds.b 1
@@ -219,8 +233,10 @@ SMPS_RAM_even macro
 ; ---------------------------------------------------------------------------
 ; helper for sound IDs
 ; ---------------------------------------------------------------------------
+
 SMPS_id function ptr,((ptr-offset)/ptrsize+idstart)
 
+	if MSUMode
 ; ---------------------------------------------------------------------------
 ; Macro to communicate with Sega CD
 ; Arguments:
@@ -229,7 +245,7 @@ SMPS_id function ptr,((ptr-offset)/ptrsize+idstart)
 ; 2 - command arg2
 ; -------------------------------------------------------------
 
-MCDSend macro	id, arg, arg2
+MCDSend macro	id,arg,arg2
 .wait
 	tst.b	(MCD_Status).l
 	bne.s	.wait
@@ -243,6 +259,7 @@ MCDSend macro	id, arg, arg2
 	addq.b  #1,(MCD_Command_Clock).l
 
 .wait2
-	tst.b	(MCD_Status).l						; waiting for the first command to be executed
+	tst.b	(MCD_Status).l								; waiting for the first command to be executed
 	beq.s	.wait2
     endm
+	endif

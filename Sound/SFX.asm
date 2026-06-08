@@ -11,6 +11,7 @@
 ; special SFX or music.
 ; TODO Maybe I should make it apply to Special SFX, too.
 ; ---------------------------------------------------------------------------
+
 SoundIndex:
 ptr_snd01:		SMPS_SFX_METADATA	Sound01, $70, 0
 ptr_snd02:		SMPS_SFX_METADATA	Sound02, $70, 0
@@ -45,6 +46,7 @@ ptr_snd1E:		SMPS_SFX_METADATA	Sound1E, $70, 0
 ptr_snd1F:		SMPS_SFX_METADATA	Sound1F, $70, 0
 
 ptr_sndend
+
 ; ---------------------------------------------------------------------------
 ; SFX data ($40-$EF)
 ; ---------------------------------------------------------------------------

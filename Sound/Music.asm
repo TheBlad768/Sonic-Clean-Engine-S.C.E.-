@@ -1,6 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Music metadata (pointers, speed shoes tempos, flags)
 ; ---------------------------------------------------------------------------
+
 MusicIndex:
 ; Levels
 ptr_mus01:		SMPS_MUSIC_METADATA	Music01, s3TempotoS1($FF), 0
