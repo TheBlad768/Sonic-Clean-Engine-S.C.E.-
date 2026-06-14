@@ -131,6 +131,60 @@ MoveSprite2_Absolute_Reserve:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Cap Object Speed
+; Prevents an object from going over a specified speed value.
+;
+; input variables:
+;  d0 = max x velocity
+;  d1 = max y velocity
+;
+;  a0 = object
+;
+; writes:
+;  d0, d1, d2, d3
+; ---------------------------------------------------------------------------
+
+Obj_CapSpeed:
+		move.w	x_vel(a0),d2
+		bpl.s	.moving_right
+
+		; going left
+		neg.w	d0								; set opposite direction
+		cmp.w	d0,d2								; is object's current x velocity lower than max?
+		bhs.s	.cap_y								; if yes, branch (skip capping X)
+		move.w	d0,d2								; else, cap speed
+		bra.s	.cap_y
+; ---------------------------------------------------------------------------
+
+.moving_right
+		cmp.w	d0,d2								; is object's current x velocity lower than max?
+		bls.s	.cap_y								; if yes, branch
+		move.w	d0,d2								; else, cap speed
+
+.cap_y
+		move.w	y_vel(a0),d3
+		bpl.s	.moving_down
+
+		; going up
+		neg.w	d1								; set opposite direction
+		cmp.w	d1,d3								; is object's current y velocity lower than max?
+		bhs.s	.update								; if yes, branch (skip capping Y)
+		move.w	d1,d3								; else, cap speed
+		bra.s	.update
+; ---------------------------------------------------------------------------
+
+.moving_down
+		cmp.w	d1,d3								; is object's current y velocity lower than max?
+		bls.s	.update								; if yes, branch
+		move.w	d1,d3								; else, cap speed
+
+.update
+
+		; update speed
+		movem.w	d2-d3,x_vel(a0)
+		rts
+
+; ---------------------------------------------------------------------------
 ; Stop moving object
 ; ---------------------------------------------------------------------------
 
