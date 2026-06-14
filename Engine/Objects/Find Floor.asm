@@ -98,11 +98,7 @@ locret_ED12:
 loc_ED14:
 		tst.b	stick_to_convex(a0)
 		bne.s	loc_ED32
-		move.b	x_vel(a0),d0
-		bpl.s	loc_ED22
-		neg.b	d0
-
-loc_ED22:
+		mvabs.b	x_vel(a0),d0
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
 		blo.s	loc_ED2E
@@ -207,11 +203,7 @@ locret_EE00:
 loc_EE22:
 		tst.b	stick_to_convex(a0)
 		bne.s	loc_EE40
-		move.b	y_vel(a0),d0
-		bpl.s	loc_EE30
-		neg.b	d0
-
-loc_EE30:
+		mvabs.b	y_vel(a0),d0
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
 		blo.s	loc_EE3C
@@ -280,11 +272,7 @@ locret_EECE:
 loc_EED0:
 		tst.b	stick_to_convex(a0)
 		bne.s	loc_EEEE
-		move.b	x_vel(a0),d0
-		bpl.s	loc_EEDE
-		neg.b	d0
-
-loc_EEDE:
+		mvabs.b	x_vel(a0),d0
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
 		blo.s	loc_EEEA
@@ -353,11 +341,7 @@ locret_EF7C:
 loc_EF7E:
 		tst.b	stick_to_convex(a0)
 		bne.s	loc_EF9C
-		move.b	y_vel(a0),d0
-		bpl.s	loc_EF8C
-		neg.b	d0
-
-loc_EF8C:
+		mvabs.b	y_vel(a0),d0
 		addq.b	#4,d0
 		cmpi.b	#$E,d0
 		blo.s	loc_EF98
