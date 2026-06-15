@@ -1234,7 +1234,7 @@ palscriptrun macro header
 SonicMappingsVer := 3
 SonicDplcVer := 3
 
-	include "MapMacros.asm"
+	include "Engine/MapMacros.asm"
 
 ; ---------------------------------------------------------------------------
 ; bankswitch between SRAM and ROM
