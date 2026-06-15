@@ -1,5 +1,5 @@
 ; ===========================================================================
-; Sonic 2 Clone Driver v2 (Mega PCM 2.0 version)
+; Sonic 2 Clone Driver v2 (Mega PCM 2.1 version)
 ; See https://github.com/Clownacy/Sonic-2-Clone-Driver-v2
 ; ===========================================================================
 ; Copyright (c) 2013-2025 Clownacy
