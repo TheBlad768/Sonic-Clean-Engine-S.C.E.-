@@ -306,7 +306,8 @@ Try to keep 2 passes at all times. If you see 3, 4 or more passes, you should fi
 <details>
 <summary><b>Sunky MD</b> by RobiWanKenobi</summary>
 <p align="center">
-  <a href="https://shc.zone/entries/contest2025/1336" target="_blank">SHC Page</a>
+  <a href="https://shc.zone/entries/contest2025/1336" target="_blank">SHC Page</a> &nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/RobiTheGit/Sunky-MD" target="_blank">Source</a>
   <br><br>
   <img src="https://i.imgur.com/M9CwAkX.png" style="max-width:100%;">
 </p>
