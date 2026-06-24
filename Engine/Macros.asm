@@ -33,7 +33,7 @@ bytes_to_word function byte1,byte2,(((byte1)<<8)&$FF00)|((byte2)&$FF)
 ; function to convert two separate word into a long
 words_to_long function word1,word2,(((word1)<<16)&$FFFF0000)|((word2)&$FFFF)
 
-; function to convert two separate bytes and word into a word
+; function to convert two separate bytes and word into a long
 bytes_word_to_long function byte1,byte2,word,((((byte1)<<24)&$FF000000)|(((byte2)<<16)&$FF0000)|((word)&$FFFF))
 
 ; function to convert four separate bytes into a long
