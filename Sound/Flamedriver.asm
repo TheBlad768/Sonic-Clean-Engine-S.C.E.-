@@ -131,7 +131,7 @@ bitTrackAtRest    = 4
 bitPitchSlide     = 5
 bitSustainFreq    = 6
 bitTrackPlaying   = 7
-maskSkipFMNoteOn  = (1<<bitNoAttack)|(1<<bitSFXOverride)|(1<<bitNoAttack)
+maskSkipFMNoteOn  = (1<<bitTrackAtRest)|(1<<bitSFXOverride)|(1<<bitNoAttack)
 maskSkipFMNoteOff = (1<<bitSFXOverride)|(1<<bitNoAttack)
 maskPlayRest      = (1<<bitTrackPlaying)|(1<<bitTrackAtRest)
 maskFM6Unused     = (1<<bitSFXOverride)|(1<<bitTrackAtRest)
@@ -289,7 +289,6 @@ zSoundQueue0:		ds.b 1
 zSoundQueue1:		ds.b 1
 zSoundQueue2:		ds.b 1
 zTempoSpeedup:		ds.b 1
-zTempoSpeedupReq:	ds.b 1
 zNextSound:			ds.b 1
 ; The following 3 variables are used for M68K input
 zMusicNumber:		ds.b 1	; Play_Sound
@@ -818,7 +817,7 @@ zInitAudioDriver:
 		dec	c								; c--
 		jr	z, .loop						; Loop if c = 0
 
-		call	zMusicFade					; Stop all music
+		call	zMusicFadeFull				; Stop all music
 
 	if (use_s3_samples<>0)||(use_sk_samples<>0)||(use_s3d_samples<>0)
 		ld	a, zmake68kBank(DacBank2)		; Set song bank to second DAC bank (default value)
@@ -1856,9 +1855,9 @@ zPlaySoundByIndex:
 		cp	MusID__End						; Is this a music?
 		jp	c, zPlayMusic					; Branch if yes
 		cp	FadeID__First					; Is it before the first fade effect?
-		jp	c, zMusicFade					; Branch if yes
+		jp	c, zMusicFadeFull				; Branch if yes
 		cp	FadeID__End						; Is this after the last fade effect?
-		jp	nc, zMusicFade					; Branch if yes
+		jp	nc, zMusicFadeFull				; Branch if yes
 		sub	FadeID__First					; If none of the checks passed, do fade effects.
 		ld	hl, zFadeEffects				; hl = switch table pointer
 		rst	PointerTableOffset				; Get address of function that handles the fade effect
@@ -1868,7 +1867,7 @@ zPlaySoundByIndex:
 ;loc_524
 zFadeEffects:
 		dw	zFadeOutMusic					; E1h
-		dw	zMusicFade						; E2h
+		dw	zMusicFadeFull					; E2h
 		dw	zPSGSilenceAll					; E3h
 		dw	zStopSFX						; E4h
 		dw	zFadeOutMusic					; E5h
@@ -2247,6 +2246,17 @@ zSFXTrackInitLoop:
 		inc	hl								; hl = pointer to channel identifier
 		ld	c, (hl)							; c = channel identifier
 		call	zGetSFXChannelPointers		; Get track pointers for track RAM (ix) and overridden song track (hl)
+		ld	a, (zContinuousSFXFlag)			; Is a continuous SFX currently active?
+		or	a								; Is it set?
+		jr	z, .init_track					; Branch if not
+		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is this SFX channel already in use?
+		jr	z, .init_track					; Suppress conflicting channel if so
+		pop	hl								; Restore hl
+		ld	bc, 6							; Each SFX channel is 6 bytes in the header
+		add hl, bc							; Skip to next channel
+		jr	.restore_and_continue
+
+.init_track:
 		set	bitSFXOverride, (hl)			; Set 'SFX is overriding this track' bit
 		push	ix							; Save pointer to SFX track data in RAM
 
@@ -2276,6 +2286,8 @@ zSFXTrackInitLoop:
 		call	z, zFMClearSSGEGOps			; Clear SSG-EG operators for track's channels if not
 		call	zSilencePSGChannel			; Silence PSG channel
 		pop		hl							; Restore hl
+
+.restore_and_continue:
 		pop		bc							; Restore bc
 		djnz	zSFXTrackInitLoop			; Loop for all SFX tracks
 		jp	zClearNextSound
@@ -2420,9 +2432,6 @@ zPauseUnpause:
 .unpause:
 		xor	a								; a = 0
 		ld	(hl), a							; Clear pause flag
-		ld	(zContinuousSFX), a				; Clear continuous SFX ID
-		ld	(zContinuousSFXFlag), a			; Clear continuous SFX flag
-		ld	(zContSFXLoopCnt), a				; Clear continuous SFX counter
 		ld	a, (zFadeOutTimeout)			; Get fade timeout
 		or	a								; Is it zero?
 		jp	nz, zMusicFade					; Stop all music if not
@@ -2434,18 +2443,7 @@ zPauseUnpause:
 		ld	ix, zSongDAC					; Start with DAC instead
 
 .song_loop:
-		ld	a, (zHaltFlag)					; Get halt flag
-		or	a								; Is song halted?
-		jr	nz, .set_pan					; Branch if yes
-		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is track playing?
-		jr	z, .skip_song_track				; Branch if not
-
-.set_pan:
-		ld	c, (ix+zTrack.AMSFMSPan)		; Get track AMS/FMS/panning
-		ld	a, ymPanningAMSensFMSens		; Command to select AMS/FMS/panning register
-		call	zWriteFMIorII				; Write data to YM2612
-
-.skip_song_track:
+		call	zResumeChannelFromPause
 		ld	de, zTrack.len					; Spacing between tracks
 		add	ix, de							; Advance to next track
 		djnz	.song_loop					; Loop for all tracks
@@ -2454,21 +2452,29 @@ zPauseUnpause:
 		ld	b, zNumSFXTracks				; Number of tracks
 
 .sfx_loop:
-		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is track playing?
-		jr	z, .skip_sfx_track				; Branch if not
-		bit	bitIsPSG, (ix+zTrack.VoiceControl)	; Is this a PSG track?
-		jr	nz, .skip_sfx_track				; Branch if yes
-		ld	c, (ix+zTrack.AMSFMSPan)		; Get track AMS/FMS/panning
-		ld	a, ymPanningAMSensFMSens		; Command to select AMS/FMS/panning register
-		call	zWriteFMIorII				; Write data to YM2612
-
-.skip_sfx_track:
+		call	zResumeChannelFromPause
 		ld	de, zTrack.len					; Spacing between tracks
 		add	ix, de							; Go to next track
 		djnz	.sfx_loop					; Loop for all tracks
 
 		ret
 ; End of function zPauseUnpause
+
+; =============== S U B	R O U T	I N E =======================================
+; Forces FM note-on after unpause.
+zResumeChannelFromPause:
+		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is this track playing?
+		ret	z								; Return if not
+		ld	a, (zHaltFlag)					; Get halt flag
+		or	a								; Is song halted?
+		ret	nz								; Return if yes
+		bit	bitIsPSG, (ix+zTrack.VoiceControl)	; Is this a PSG track?
+		ret	nz								; Return if PSG track
+		ld	c, (ix+zTrack.AMSFMSPan)		; Get track AMS/FMS/panning
+		ld	a, ymPanningAMSensFMSens		; Command to select AMS/FMS/panning register
+		call	zWriteFMIorII				; Write data to YM2612
+		res	bitNoAttack, (ix+zTrack.PlaybackControl)	; Clear 'no attack' bit
+		jp	zFMNoteOn
 
 ; =============== S U B	R O U T	I N E =======================================
 ; Fades out music.
@@ -2600,7 +2606,15 @@ zMusicFadeKeepSFX:
 		jp	zMusicFade.common
 
 ; =============== S U B	R O U T	I N E =======================================
-; Wipes music data and fades all FM, PSG and DAC channels.
+; Wipes music data and fades all FM, PSG and DAC channels. Resets tempo.
+;sub_944
+zMusicFadeFull:
+		xor	a								; a = 0
+		ld	(zTempoSpeedup), a				; Fade in normal speed
+		; FALLTHROUGH
+
+; =============== S U B	R O U T	I N E =======================================
+; Wipes music data and fades all FM, PSG and DAC channels. Preserves tempo.
 ;sub_944
 zMusicFade:
 		; The following block sets to zero the z80 RAM that keeps music and SFX state
@@ -2612,14 +2626,6 @@ zMusicFade:
 		xor	a								; a = 0
 		ld	(hl), a							; Initial value of zero
 		ldir								; while (--length) *de++ = *hl++
-		ld	a, (zTempoSpeedupReq)			; Get flag indicating if tempo is to be kept
-		or	a								; Is it set?
-		jr	nz, .keep_tempo					; Branch if yes
-		ld	(zTempoSpeedup), a				; Fade in normal speed
-
-.keep_tempo:
-		xor	a								; a = 0
-		ld	(zTempoSpeedupReq), a			; Clear for next time around
 
 zMusicFadeSimple:
 		ld	ix, zFMDACInitBytes				; Initialization data for channels
@@ -2846,7 +2852,7 @@ zFMOperatorWriteLoop:
 ; ---------------------------------------------------------------------------
 ;loc_A16
 zPlaySegaSound:
-		call	zMusicFade					; Fade music before playing the sound
+		call	zMusicFadeFull				; Fade music before playing the sound
 		xor	a								; a = 0
 		ld	(zMusicNumber), a				; Clear M68K input queue...
 		ld	(zSFXNumber0), a				; ... including SFX slot 0...
