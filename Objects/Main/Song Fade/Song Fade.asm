@@ -7,7 +7,7 @@
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_Transition:
-		music	mus_FadeOut							; fade out music
+		music	cmd_FadeOut							; fade out music
 		move.w	#(2*60)-30,wait_timer(a0)					; fade time
 		move.l	#.wait,code_addr(a0)
 
@@ -34,7 +34,7 @@ Obj_Song_Fade_Transition:
 ; =============== S U B R O U T I N E =======================================
 
 Obj_Song_Fade_ToLevelMusic:
-		music	mus_FadeOut							; fade out music
+		music	cmd_FadeOut							; fade out music
 		move.w	#2*60,wait_timer(a0)						; fade time
 		move.l	#.wait,code_addr(a0)
 

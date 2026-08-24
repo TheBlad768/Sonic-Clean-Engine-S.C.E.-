@@ -18,7 +18,7 @@ levelresults.destination =		parent3						; (2 bytes)
 ; =============== S U B R O U T I N E =======================================
 
 Obj_LevelResults:
-		music	mus_FadeOut							; fade out music
+		music	cmd_FadeOut							; fade out music
 
 		; load general art
 		QueueKosPlusModule	ArtKosPlusM_ResultsGeneral, $500

@@ -40,7 +40,7 @@ LevelSelect.horizontal_count				ds.w $10
 ; =============== S U B R O U T I N E =======================================
 
 LevelSelectScreen:
-		music	mus_Stop							; stop music
+		music	cmd_Stop							; stop music
 		jsr	(Clear_KosPlus_Module_Queue).w					; clear KosPlusM PLCs
 		ResetDMAQueue								; clear DMA queue
 		jsr	(Pal_FadeToBlack).w
@@ -236,7 +236,7 @@ LevelSelect_Controls:
 ; --------------------------------------------------------------------------
 
 .stop
-		music	mus_Stop,1
+		music	cmd_Stop,1
 
 ; ---------------------------------------------------------------------------
 ; Play sound

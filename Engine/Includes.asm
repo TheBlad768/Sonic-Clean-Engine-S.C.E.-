@@ -44,7 +44,7 @@
 ; Flamedriver - Functions modules
 ; ---------------------------------------------------------------------------
 
-		include "Sound/Functions.asm"
+		include "Sound/Helper.asm"
 
 ; ---------------------------------------------------------------------------
 ; Fading palettes modules

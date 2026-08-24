@@ -88,7 +88,7 @@ Init_CameraBoundary:
 		st	(Boss_flag).w							; set boss flag
 
 Init_CameraBoundary_2:
-		music	mus_FadeOut							; fade out music
+		music	cmd_FadeOut							; fade out music
 		move.w	#2*60,wait_timer(a0)						; set timer
 
 Init_CameraBoundary_3:

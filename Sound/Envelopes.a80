@@ -1,0 +1,157 @@
+; ===========================================================================
+; ║                                                                         ║
+; ║                             SONIC&K SOUND DRIVER                        ║
+; ║                         Modified SMPS Z80 Type 2 DAC                    ║
+; ║                                                                         ║
+; ===========================================================================
+; Disassembled by MarkeyJester
+; Routines, pointers and stuff by Linncaki
+; Thoroughly commented and improved (including optional bugfixes) by Flamewing
+; ===========================================================================
+; Permission to use, copy, modify, and/or distribute this software for any
+; purpose with or without fee is hereby granted.
+;
+; THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+; WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+; MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+; ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+; WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+; ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+; OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+; ===========================================================================
+; Envelopes
+; ===========================================================================
+; ===========================================================================
+; Modulation Envelopes
+; ===========================================================================
+;z80_FreqFlutterPointers
+z80_ModEnvPointers:
+		dw	ModEnv_00
+		dw	ModEnv_01
+		dw	ModEnv_02
+		dw	ModEnv_03
+		dw	ModEnv_04
+		dw	ModEnv_05
+		dw	ModEnv_06
+		dw	ModEnv_07
+ModEnv_01:	db    0
+ModEnv_00:	db    1,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1, ModEnvSustain
+ModEnv_02:	db    0,   0,   0,   0,  19,  38,  57,  76,  95, 114, 127, 114, ModEnvSustain
+ModEnv_03:	db    1,   2,   3,   2,   1,   0,  -1,  -2,  -3,  -2,  -1,   0, ModEnvJumpTo,   0
+ModEnv_04:	db    0,   0,   1,   3,   1,   0,  -1,  -3,  -1,   0, ModEnvJumpTo,   2
+ModEnv_05:	db    0,   0,   0,   0,   0,  10,  20,  30,  20,  10,   0, -10, -20, -30, -20, -10
+          	db  ModEnvJumpTo,   4
+ModEnv_06:	db    0,   0,   0,   0,  22,  44,  66,  44,  22,   0, -22, -44, -66, -44, -22
+          	db    ModEnvJumpTo, 3
+ModEnv_07:	db    1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1,   0
+          	db  ModEnvJumpTo,   1
+; ---------------------------------------------------------------------------
+; ===========================================================================
+; Volume Envelopes
+; ===========================================================================
+;z80_PSGTonePointers
+z80_VolEnvPointers:
+		dw		VolEnv_00,VolEnv_01,VolEnv_02,VolEnv_03,VolEnv_04,VolEnv_05
+		dw		VolEnv_06,VolEnv_07,VolEnv_08,VolEnv_09,VolEnv_0A,VolEnv_0B
+		dw		VolEnv_0C,VolEnv_0D,VolEnv_0E,VolEnv_0F,VolEnv_10,VolEnv_11
+		dw		VolEnv_12,VolEnv_13,VolEnv_14,VolEnv_15,VolEnv_16,VolEnv_17
+		dw		VolEnv_18,VolEnv_19,VolEnv_1A,VolEnv_1B,VolEnv_1C,VolEnv_1D
+		dw		VolEnv_1E,VolEnv_1F,VolEnv_20,VolEnv_21,VolEnv_22,VolEnv_23
+		dw		VolEnv_24,VolEnv_25,VolEnv_26,VolEnv_27,VolEnv_28,VolEnv_29
+		dw		VolEnv_2A,VolEnv_2B,VolEnv_2C,VolEnv_2D,VolEnv_2E,VolEnv_2F
+		dw		VolEnv_30,VolEnv_31,VolEnv_32,VolEnv_33
+VolEnv_00:	db    2, VolEnvStopTrack
+VolEnv_01:
+VolEnv_0E:	db    0,   2,   4,   6,   8,  16, VolEnvStopTrack
+VolEnv_02:	db    2,   1,   0,   0,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2
+          	db    2,   3,   3,   3,   4,   4,   4,   5, VolEnvRestTrack
+VolEnv_03:	db    0,   0,   2,   3,   4,   4,   5,   5,   5,   6,   6, VolEnvRestTrack
+VolEnv_04:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, VolEnvRestTrack
+VolEnv_05:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, VolEnvRestTrack
+VolEnv_06:	db    1,  12,   3,  15,   2,   7,   3,  15, VolEnvReset
+VolEnv_07:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9,  10,  11,  14,  15
+          	db  VolEnvStopTrack
+VolEnv_08:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, VolEnvRestTrack
+VolEnv_09:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
+          	db    4,   4,   5,   5, VolEnvRestTrack
+; The -16 in this FM volume envelope appears to be erroneous:
+; negative volume attenuations aren't supported, and instead
+; trigger the code intended for byte 82h.
+; This envelope appears in many SMPS Z80 Type 2 DAC drivers,
+; suggesting it was some kind of poorly-thought-out example.
+; Oddly, this same envelope appears in Ristar (whose driver
+; *does* support negative attenuations), despite SMPS 68k not
+; supporting FM volume envelopes.
+VolEnv_0A:	db   16,  32,  48,  64,  48,  32,  16,   0, -16, VolEnvReset
+VolEnv_0B:	db    0,   0,   1,   1,   3,   3,   4,   5, VolEnvStopTrack
+VolEnv_0C:	db    0, VolEnvRestTrack
+VolEnv_0D:	db    2, VolEnvStopTrack
+VolEnv_0F:	db    9,   9,   9,   8,   8,   8,   7,   7,   7,   6,   6,   6,   5,   5,   5,   4
+          	db    4,   4,   3,   3,   3,   2,   2,   2,   1,   1,   1,   0,   0,   0, VolEnvRestTrack
+VolEnv_10:	db    1,   1,   1,   0,   0,   0, VolEnvRestTrack
+VolEnv_11:	db    3,   0,   1,   1,   1,   2,   3,   4,   4,   5, VolEnvRestTrack
+VolEnv_12:	db    0,   0,   1,   1,   2,   3,   4,   5,   5,   6,   8,   7,   7,   6, VolEnvRestTrack
+VolEnv_13:	db   10,   5,   0,   4,   8, VolEnvStopTrack
+VolEnv_14:	db    0,   0,   0,   2,   3,   3,   4,   5,   6,   7,   8,   9,  10,  11,  14,  15
+          	db  VolEnvStopTrack
+VolEnv_15:	db    3,   2,   1,   1,   0,   0,   1,   2,   3,   4, VolEnvRestTrack
+VolEnv_16:	db    1,   0,   0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   3,   4
+          	db    4,   4,   5,   5, VolEnvRestTrack
+VolEnv_17:	db   16,  32,  48,  64,  48,  32,  16,   0, VolEnvReset
+VolEnv_18:	db    0,   0,   1,   1,   3,   3,   4,   5, VolEnvStopTrack
+VolEnv_19:	db    0,   2,   4,   6,   8, 16h, VolEnvStopTrack
+VolEnv_1A:	db    0,   0,   1,   1,   3,   3,   4,   5, VolEnvStopTrack
+VolEnv_1B:	db    4,   4,   4,   4,   3,   3,   3,   3,   2,   2,   2,   2,   1,   1,   1,   1
+          	db  VolEnvStopTrack
+VolEnv_1C:	db    0,   0,   0,   0,   1,   1,   1,   1,   2,   2,   2,   2,   3,   3,   3,   3
+          	db    4,   4,   4,   4,   5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7
+          	db    8,   8,   8,   8,   9,   9,   9,   9,  10,  10,  10,  10, VolEnvRestTrack
+VolEnv_1D:	db    0,  10, VolEnvStopTrack
+VolEnv_1E:	db    0,   2,   4, VolEnvRestTrack
+VolEnv_1F:	db   48,  32,  16,   0,   0,   0,   0,   0,   8,  16,  32,  48, VolEnvRestTrack
+VolEnv_20:	db    0,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   6,   6,   6,   8,   8
+          	db   10, VolEnvStopTrack
+VolEnv_21:	db    0,   2,   3,   4,   6,   7, VolEnvRestTrack
+VolEnv_22:	db    2,   1,   0,   0,   0,   2,   4,   7, VolEnvRestTrack
+VolEnv_23:	db   15,   1,   5, VolEnvStopTrack
+VolEnv_24:	db    8,   6,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15
+          	db   16, VolEnvStopTrack
+VolEnv_25:	db    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1
+          	db    1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
+          	db    3,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   4,   4,   4
+          	db    4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6
+          	db    6,   6,   6,   6,   6,   6,   7,   7,   7,   7,   7,   7,   7,   7,   7,   7
+          	db    8,   8,   8,   8,   8,   8,   8,   8,   8,   8,   9,   9,   9,   9,   9,   9
+          	db    9,   9, VolEnvStopTrack
+VolEnv_26:	db    0,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5, VolEnvStopTrack
+VolEnv_27:	db	  0,   0,   0,   1,   1,   1,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5
+          	db	  5,   5,   6,   6,   6,   7, VolEnvRestTrack
+VolEnv_28:	db    0,   2,   4,   6,   8,  16, VolEnvRestTrack
+VolEnv_29:	db	  0,   0,   1,   1,   2,   2,   3,   3,   4,   4,   5,   5,   6,   6,   7,   7, VolEnvRestTrack
+VolEnv_2A:	db	  0,   0,   2,   3,   4,   4,   5,   5,   5,   6, VolEnvRestTrack
+VolEnv_2C:	db	  3,   3,   3,   2,   2,   2,   2,   1,   1,   1,   0,   0,   0,   0, VolEnvRestTrack
+VolEnv_2B:	db	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1
+          	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2
+          	db	  2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
+VolEnv_2D:	db	  0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2
+          	db	  3,   3,   3,   4,   4,   4,   5,   5,   5,   6,   7, VolEnvRestTrack
+VolEnv_2E:	db	  0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2
+          	db	  3,   3,   3,   3,   3,   4,   4,   4,   4,   4,   5,   5,   5,   5,   5,   6
+          	db	  6,   6,   6,   6,   7,   7,   7, VolEnvRestTrack
+VolEnv_2F:	db	  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15, VolEnvRestTrack
+VolEnv_30:	db	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,   1,   1,   1,   1
+          	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1
+          	db	  1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2,   2,   2
+          	db	  2,   2,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
+VolEnv_31:	db	  4,   4,   4,   3,   3,   3,   2,   2,   2,   1,   1,   1,   1,   1,   1,   1
+          	db	  2,   2,   2,   2,   2,   3,   3,   3,   3,   3,   4, VolEnvRestTrack
+VolEnv_32:	db	  4,   4,   3,   3,   2,   2,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1
+          	db	  1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   2
+          	db	  2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   2,   3,   3
+          	db	  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3
+          	db	  3,   3,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4,   4
+          	db	  4,   4,   4,   4,   4,   4,   5,   5,   5,   5,   5,   5,   5,   5,   5,   5
+          	db	  5,   5,   5,   5,   5,   5,   5,   5,   5,   5,   6,   6,   6,   6,   6,   6
+          	db	  6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   6,   7, VolEnvRestTrack
+VolEnv_33:	db	 14,  13,  12,  11,  10,   9,   8,   7,   6,   5,   4,   3,   2,   1,   0, VolEnvRestTrack
+; ---------------------------------------------------------------------------

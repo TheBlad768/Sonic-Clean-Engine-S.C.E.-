@@ -19,7 +19,7 @@ Level_VDP:
 
 LevelScreen:
 		bset	#GameModeFlag_TitleCard,(Game_mode).w				; set bit 7 is indicate that we're loading the level
-		music	mus_FadeOut							; fade out music
+		music	cmd_FadeOut							; fade out music
 		jsr	(Clear_KosPlus_Module_Queue).w					; clear KosPlusM PLCs
 		ResetDMAQueue								; clear DMA queue
 		jsr	(Pal_FadeToBlack).w
