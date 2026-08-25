@@ -208,7 +208,7 @@ zNextSound:				ds.b 1
 zMusicNumber:			ds.b 1	; Play_Sound
 zSFXNumber0:			ds.b 1	; Play_Sound_2
 zSFXNumber1:			ds.b 1	; Play_Sound_2
-	shared zQueueVariables,zMusicNumber,zSFXNumber0,zSFXNumber1
+;	shared zQueueVariables,zMusicNumber,zSFXNumber0,zSFXNumber1
 	if (zQueueVariables&1)<>0
 		fatal "zQueueVariables must be at an even address."
 	endif

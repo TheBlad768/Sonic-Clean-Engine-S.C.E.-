@@ -25,11 +25,11 @@
 ; ---------------------------------------------------------------------------
 Mus_Bank1_Start:	startBank
 	Music_Master_Table
-z80_UniVoiceBank:	include "Sound/UniBank.asm"
+z80_UniVoiceBank:	    include "Sound/UniBank.asm"
 MusData_DEZ1:			include "Sound/Music/Mus - DEZ1.asm"
-MusData_MidBoss:			include "Sound/Music/Mus - Miniboss.asm"
-MusData_ZoneBoss:			include "Sound/Music/Mus - Zone Boss.asm"
-MusData_Invincible:			include "Sound/Music/Mus - Invincibility.asm"
+MusData_MidBoss:		include "Sound/Music/Mus - Miniboss.asm"
+MusData_ZoneBoss:		include "Sound/Music/Mus - Zone Boss.asm"
+MusData_Invincible:		include "Sound/Music/Mus - Invincibility.asm"
 MusData_GotThrough:		include "Sound/Music/Mus - Sonic Got Through.asm"
 MusData_Drowning:		include "Sound/Music/Mus - Drowning.asm"
 
