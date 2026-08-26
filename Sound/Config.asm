@@ -44,6 +44,7 @@ use_sk_samples			= 1
 skip_sample_equates		= 1
 ; ---------------------------------------------------------------------------
 ; The prefixes for music, SFX, and driver command IDs.
+; For S1 use "bgm", "sfx", "cmd", and "cmd".
 ; For S2 use "MusID", "SndID", "FadeID", and "MusID".
 ; For S3 use "mus", "sfx", "cmd", and "cmd".
 mus_prefix = "mus"
