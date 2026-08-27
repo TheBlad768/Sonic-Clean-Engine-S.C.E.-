@@ -1,7 +1,6 @@
 {
     "Flex": 2,
     "name": "S3CE",
-    "node": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c",
     "objects": [
         {
             "name": "Player",
@@ -14,11 +13,12 @@
                             "length": 1
                         }
                     ],
-                    "format": "Sonic 3&K Player.js",
+                    "format": "Sonic 3&K.js",
                     "art": {
                         "path": "../Objects/Players/Sonic/Uncompressed Art/Sonic.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Sonic/Object Data/Map - Sonic.asm",
@@ -29,19 +29,22 @@
                         "path": "../Objects/Players/Sonic/Object Data/DPLC - Sonic.asm",
                         "label": ""
                     },
-                    "uuid": "da472ab9-f363-45e6-8ee3-a83fd70d6d9c",
-                    "expanded": true
+                    "expanded": true,
+                    "config": {
+                        "format": "player",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "d544184b-0ca8-4f7a-a1ce-9de6fe53662e"
+            "config": {}
         },
         {
             "name": "Shields",
             "children": [
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Fire Shield",
                     "palettes": [
                         {
@@ -52,7 +55,8 @@
                     "art": {
                         "path": "../Objects/Players/Shields/Uncompressed Art/Fire Shield.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Shields/Object Data/Map - Fire Shield.asm",
@@ -63,11 +67,14 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Fire Shield.asm",
                         "label": ""
                     },
-                    "uuid": "4b0ca86f-7aa1-4e9d-a6fe-53662e690e3c",
-                    "expanded": true
+                    "expanded": true,
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Lightning Shield",
                     "palettes": [
                         {
@@ -78,7 +85,8 @@
                     "art": {
                         "path": "../Objects/Players/Shields/Uncompressed Art/Lightning Shield.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Shields/Object Data/Map - Lightning Shield.asm",
@@ -89,11 +97,14 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Lightning Shield.asm",
                         "label": ""
                     },
-                    "uuid": "0ca86f7a-a1ce-4de6-be53-662e690e3c9e",
-                    "expanded": true
+                    "expanded": true,
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Bubble Shield",
                     "palettes": [
                         {
@@ -104,7 +115,8 @@
                     "art": {
                         "path": "../Objects/Players/Shields/Uncompressed Art/Bubble Shield.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Shields/Object Data/Map - Bubble Shield.asm",
@@ -115,11 +127,14 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Bubble Shield.asm",
                         "label": ""
                     },
-                    "uuid": "a86f7aa1-ce9d-46fe-9366-2e690e3c9e23",
-                    "expanded": true
+                    "expanded": true,
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Insta-Shield",
                     "palettes": [
                         {
@@ -130,7 +145,8 @@
                     "art": {
                         "path": "../Objects/Players/Shields/Uncompressed Art/Insta-Shield.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Shields/Object Data/Map - Insta-Shield.asm",
@@ -141,11 +157,14 @@
                         "path": "../Objects/Players/Shields/Object Data/DPLC - Insta-Shield.asm",
                         "label": ""
                     },
-                    "uuid": "7aa1ce9d-e6fe-4366-ae69-0e3c9e238fec",
-                    "expanded": true
+                    "expanded": true,
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Invincibility",
                     "palettes": [
                         {
@@ -156,7 +175,8 @@
                     "art": {
                         "path": "../Objects/Players/Shields/Uncompressed Art/Invincibility.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Shields/Object Data/Map - Invincibility.asm",
@@ -167,19 +187,22 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "a1ce9de6-fe53-462e-a90e-3c9e238fec23",
-                    "expanded": true
+                    "expanded": true,
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "499f9354-79d5-45e0-8c81-a3deadd21e06"
+            "config": {}
         },
         {
             "name": "Spin Dust",
             "children": [
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Dash Dust",
                     "palettes": [
                         {
@@ -190,7 +213,8 @@
                     "art": {
                         "path": "../Objects/Players/Spin Dust/Uncompressed Art/Dash Dust.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Spin Dust/Object Data/Map - Dash Dust.asm",
@@ -201,10 +225,13 @@
                         "path": "../Objects/Players/Spin Dust/Object Data/DPLC - Dash Splash Drown.asm",
                         "label": ""
                     },
-                    "uuid": "6739e8b4-5086-4019-9350-2f4e7223aa4b"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Splash Drown",
                     "palettes": [
                         {
@@ -215,7 +242,8 @@
                     "art": {
                         "path": "../Objects/Players/Spin Dust/Uncompressed Art/Splash Drown.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Players/Spin Dust/Object Data/Map - Dash Dust.asm",
@@ -226,18 +254,21 @@
                         "path": "../Objects/Players/Spin Dust/Object Data/DPLC - Dash Splash Drown.asm",
                         "label": ""
                     },
-                    "uuid": "39e8b450-8600-49d3-902f-4e7223aa4ba4"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "8c2b1375-1a74-4cc1-bc7e-ea31582e5164"
+            "config": {}
         },
         {
             "name": "Robotnik",
             "children": [
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Boss Explosion",
                     "palettes": [
                         {
@@ -248,7 +279,8 @@
                     "art": {
                         "path": "../Objects/Main/Explosion/KosinskiPlusM Art/Boss Explosion.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Explosion/Object Data/Map - Boss Explosion.asm",
@@ -259,10 +291,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "5479d5f5-e00c-41a3-9ead-d21e065b8581"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Robotnik Ship",
                     "palettes": [
                         {
@@ -273,7 +308,8 @@
                     "art": {
                         "path": "../Objects/Bosses/Robotnik/KosinskiPlusM Art/Robotnik Ship.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Bosses/Robotnik/Object Data/Map - Robotnik Ship.asm",
@@ -284,18 +320,21 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "17771aaf-90a8-448e-9680-08f0588a12fe"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "44184b0c-a86f-4aa1-8e9d-e6fe53662e69"
+            "config": {}
         },
         {
             "name": "Common",
             "children": [
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Diagonal Spring (Red)",
                     "palettes": [
                         {
@@ -306,7 +345,8 @@
                     "art": {
                         "path": "../Objects/Main/Spring/KosinskiPlusM Art/Diagonal Spring.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Spring/Object Data/Map - Spring (Red).asm",
@@ -317,10 +357,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "2b13751a-749c-41fc-beea-31582e5164e9"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Diagonal Spring (Yellow)",
                     "palettes": [
                         {
@@ -331,7 +374,8 @@
                     "art": {
                         "path": "../Objects/Main/Spring/KosinskiPlusM Art/Diagonal Spring.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Spring/Object Data/Map - Spring (Yellow).asm",
@@ -342,11 +386,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "fcc3afad-a357-49d5-a626-7f7e9df79a56"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Egg Capsule",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -356,7 +403,8 @@
                     "art": {
                         "path": "../Objects/Main/Egg Capsule/KosinskiPlusM Art/Egg Capsule.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Egg Capsule/Object Data/Map - Egg Capsule.asm",
@@ -367,10 +415,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "6355e6ce-e3a8-4fd7-8d6d-9cd8865fb147"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Explosion",
                     "palettes": [
                         {
@@ -381,7 +432,8 @@
                     "art": {
                         "path": "../Objects/Main/Explosion/KosinskiPlusM Art/Explosion.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Explosion/Object Data/Map - Explosion.asm",
@@ -392,11 +444,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "935479d5-f5e0-4c81-a3de-add21e065b85"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Invisible solid block",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -406,7 +461,8 @@
                     "art": {
                         "path": "../Objects/Main/Monitor/KosinskiPlusM Art/Monitors.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Invisible Blocks/Object Data/Map - Invisible Block.asm",
@@ -417,11 +473,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "e3a83fd7-0d6d-4cd8-865f-b147929999ea"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Monitor",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -431,7 +490,8 @@
                     "art": {
                         "path": "../Objects/Main/Monitor/KosinskiPlusM Art/Monitors.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Monitor/Object Data/Map - Monitor.asm",
@@ -442,11 +502,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "b9f36355-e6ce-43a8-bfd7-0d6d9cd8865f"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Ring",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Levels/DEZ/Palettes/Death Egg Zone.pal",
@@ -456,7 +519,8 @@
                     "art": {
                         "path": "../Objects/Main/Rings/Uncompressed Art/Rings.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Rings/Object Data/Map - Rings.asm",
@@ -467,11 +531,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "2ab9f363-55e6-4ee3-a83f-d70d6d9cd886"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Spikes",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -481,7 +548,8 @@
                     "art": {
                         "path": "../Objects/Main/Spikes/KosinskiPlusM Art/Spikes and Springs.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Spikes/Object Data/Map - Spikes.asm",
@@ -492,11 +560,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "f36355e6-cee3-483f-970d-6d9cd8865fb1"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Spring (Red)",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -506,7 +577,8 @@
                     "art": {
                         "path": "../Objects/Main/Spikes/KosinskiPlusM Art/Spikes and Springs.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Spring/Object Data/Map - Spring (Red).asm",
@@ -517,11 +589,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "13751a74-9cc1-4c7e-aa31-582e5164e93e"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Spring (Yellow)",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -531,7 +606,8 @@
                     "art": {
                         "path": "../Objects/Main/Spikes/KosinskiPlusM Art/Spikes and Springs.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Spring/Object Data/Map - Spring (Yellow).asm",
@@ -542,7 +618,10 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "55e6cee3-a83f-470d-ad9c-d8865fb14792"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Signpost",
@@ -552,11 +631,12 @@
                             "length": 1
                         }
                     ],
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "art": {
                         "path": "../Objects/Main/Signpost/Uncompressed Art/Signpost.unc",
                         "compression": "Uncompressed",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Signpost/Object Data/Map - Signpost.asm",
@@ -567,11 +647,14 @@
                         "path": "../Objects/Main/Signpost/Object Data/DPLC - Signpost.asm",
                         "label": ""
                     },
-                    "uuid": "472ab9f3-6355-46ce-a3a8-3fd70d6d9cd8"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Star Post",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -581,7 +664,8 @@
                     "art": {
                         "path": "../Objects/Main/Enemy Score/KosinskiPlusM Art/Enemy Score and Star Post.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Star Post/Object Data/Map - Star Post.asm",
@@ -592,11 +676,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "751a749c-c1fc-4eea-b158-2e5164e93ecb"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Star Post Stars 1",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -606,7 +693,8 @@
                     "art": {
                         "path": "../Objects/Main/Star Post/KosinskiPlusM Art/Star Post Stars 1.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Star Post/Object Data/Map - Star Post Stars.asm",
@@ -617,11 +705,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "1a749cc1-fc7e-4a31-982e-5164e93ecba7"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Star Post Stars 2",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -631,7 +722,8 @@
                     "art": {
                         "path": "../Objects/Main/Star Post/KosinskiPlusM Art/Star Post Stars 2.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Star Post/Object Data/Map - Star Post Stars.asm",
@@ -642,11 +734,14 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "749cc1fc-7eea-4158-ae51-64e93ecba7ae"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
                     "name": "Star Post Stars 3",
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "palettes": [
                         {
                             "path": "../Objects/Players/Sonic/Palettes/Sonic.pal",
@@ -656,7 +751,8 @@
                     "art": {
                         "path": "../Objects/Main/Star Post/KosinskiPlusM Art/Star Post Stars 3.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Star Post/Object Data/Map - Star Post Stars.asm",
@@ -667,18 +763,21 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "a83fd70d-6d9c-4886-9fb1-47929999eaa2"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "14da472a-b9f3-4355-a6ce-e3a83fd70d6d"
+            "config": {}
         },
         {
             "name": "DEZ",
             "children": [
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Spikebonker",
                     "palettes": [
                         {
@@ -689,7 +788,8 @@
                     "art": {
                         "path": "../Objects/Enemies/Spikebonker/KosinskiPlusM Art/Spikebonker.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Enemies/Spikebonker/Object Data/Map - Spikebonker.asm",
@@ -700,18 +800,21 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "9f935479-d5f5-400c-81a3-deadd21e065b"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "8b5a865f-db28-4b3a-b833-198b2fd55f4b"
+            "config": {}
         },
         {
             "name": "Ending",
             "children": [
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Blue Flicky",
                     "palettes": [
                         {
@@ -722,7 +825,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Blue Flicky.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 1.asm",
@@ -733,10 +837,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "940c1f12-a06e-4e8b-9c4f-107893d9dadc"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Chicken",
                     "palettes": [
                         {
@@ -747,7 +854,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Chicken.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 1.asm",
@@ -758,10 +866,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "0c1f12a0-6e4e-4bdc-8f10-7893d9dadcc4"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Penguin",
                     "palettes": [
                         {
@@ -772,7 +883,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Penguin.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 5.asm",
@@ -783,10 +895,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "1f12a06e-4e8b-4c4f-9078-93d9dadcc4a2"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Pig",
                     "palettes": [
                         {
@@ -797,7 +912,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Pig.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 3.asm",
@@ -808,10 +924,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "12a06e4e-8bdc-4f10-b893-d9dadcc4a27c"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Rabbit",
                     "palettes": [
                         {
@@ -822,7 +941,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Rabbit.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 5.asm",
@@ -833,10 +953,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "a06e4e8b-dc4f-4078-93d9-dadcc4a27c53"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Seal",
                     "palettes": [
                         {
@@ -847,7 +970,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Seal.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 4.asm",
@@ -858,10 +982,13 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "6e4e8bdc-4f10-4893-99da-dcc4a27c53d3"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 },
                 {
-                    "format": "Sonic 3&K Object.js",
+                    "format": "Sonic 3&K.js",
                     "name": "Squirrel",
                     "palettes": [
                         {
@@ -872,7 +999,8 @@
                     "art": {
                         "path": "../Objects/Main/Animals/KosinskiPlusM Art/Squirrel.kospm",
                         "compression": "KosinskiPlus-M",
-                        "offset": 0
+                        "offset": 0,
+                        "extra": []
                     },
                     "mappings": {
                         "path": "../Objects/Main/Animals/Object Data/Map - Animals 2.asm",
@@ -883,12 +1011,15 @@
                         "path": "",
                         "label": ""
                     },
-                    "uuid": "4e8bdc4f-1078-43d9-9adc-c4a27c53d3d1"
+                    "config": {
+                        "format": "object",
+                        "mapMacros": true
+                    }
                 }
             ],
             "isDirectory": true,
             "expanded": false,
-            "uuid": "b08d55b9-745b-4ae7-9573-6ae00fff4cff"
+            "config": {}
         }
     ]
 }
