@@ -147,15 +147,15 @@ FGScroll_Deformation:
 
 ; =============== S U B R O U T I N E =======================================
 
-ApplyDeformation:
+ApplyBGDeformation:
 		move.w	#screen_height-1,d1
 
-ApplyDeformation3:
+ApplyBGDeformation3:
 		lea	(H_scroll_buffer).w,a1
 		move.w	(Camera_Y_pos_BG_copy).w,d0
 		move.w	(Camera_X_pos_copy).w,d3
 
-ApplyDeformation2:
+ApplyBGDeformation2:
 
 .process_block
 

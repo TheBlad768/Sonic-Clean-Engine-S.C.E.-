@@ -29,7 +29,7 @@ DEZ1_BackgroundInit:
 		; deform
 		lea	DEZ1_BGDeformArray(pc),a4
 		lea	(H_scroll_table).w,a5
-		jmp	(ApplyDeformation).w
+		jmp	(ApplyBGDeformation).w
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -41,7 +41,7 @@ DEZ1_BackgroundEvent:
 .deform
 		lea	DEZ1_BGDeformArray(pc),a4
 		lea	(H_scroll_table).w,a5
-		jsr	(ApplyDeformation).w
+		jsr	(ApplyBGDeformation).w
 		jmp	(ShakeScreen_Setup).w
 ; ---------------------------------------------------------------------------
 
