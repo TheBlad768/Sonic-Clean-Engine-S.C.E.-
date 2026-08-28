@@ -24,7 +24,7 @@
 
 ; ---------------------------------------------------------------------------
 ; Approximate size of compressed sound driver.
-Size_of_Snd_driver_guess    = $1200
+Size_of_Snd_driver_guess = $1200
 ; Used by SMPS2ASM include file.
 SonicDriverVer			= 5
 ; Set the following to non-zero to use all S2 DAC samples, or to zero otherwise.
