@@ -262,7 +262,7 @@ zUpdateMusic:
 		call	zDoMusicFadeOut				; Check if music should be faded out and fade if needed
 		call	zDoMusicFadeIn				; Check if music should be faded in and fade if needed
 		ld	a, (zFadeToPrevFlag)			; Get fade-to-prev flag
-		cp	zMus_ExtraLife-zMus__First		; Is it still 1-Up?
+		cp	fadeOverrideActive				; Is it still 1-Up?
 		jr	nz, .check_fade_in				; Branch if not
 		ld	a, (zMusicNumber)				; Get next music to play
 		cp	zMus_ExtraLife					; Is it another 1-Up?
@@ -283,7 +283,7 @@ zUpdateMusic:
 ;loc_149
 .check_fade_in:
 		ld	a, (zFadeToPrevFlag)			; Get fade-to-previous flag
-		cp	0FFh							; Is it 0FFh?
+		cp	fadeRestorePending				; Is it the flag to restore-to-previous?
 		jr	z, .update_music				; Branch if yes
 		ld	hl, zMusicNumber				; Point hl to M68K input
 		ld	e, (hl)							; e = next song to play
@@ -304,7 +304,7 @@ zUpdateMusic:
 		xor	a								; a = flagMusicUpdate
 		ld	(zUpdatingSFX), a				; Updating music
 		ld	a, (zFadeToPrevFlag)			; Get fade-to-previous flag
-		cp	0FFh							; Is it 0FFh?
+		cp	fadeRestorePending				; Is it the flag to restore-to-previous?
 		call	z, zFadeInToPrevious		; Fade to previous if yes
 		ld	ix, zSongDAC					; ix = DAC track RAM
 		bit	bitTrackPlaying, (ix+zTrack.PlaybackControl)	; Is DAC track playing?
@@ -1307,7 +1307,7 @@ zPlayMusic:
 ; ---------------------------------------------------------------------------
 .no_fade:
 		ld	a, (zFadeToPrevFlag)			; Get fade-to-prev flag
-		cp	zMus_ExtraLife-zMus__First		; Was it triggered by the 1-up song?
+		cp	fadeOverrideActive				; Was it triggered by the 1-up song?
 		jp	z, zBGMLoad						; Branch if yes
 		xor	a								; a = 0
 		ld	(zMusicNumber), a				; Clear M68K input queue...
@@ -1345,7 +1345,7 @@ zPlayMusic:
 		add	hl, de							; Advance to next track
 		djnz	.loop						; Loop for all tracks
 
-		ld	a, zMus_ExtraLife-zMus__First	; a = 1-up id-zMus__First
+		ld	a, fadeOverrideActive			; a = 1-up id-zMus__First
 		ld	(zFadeToPrevFlag), a			; Set fade-to-prev flag to it
 		ld	hl, (zVoiceTblPtr)				; Get voice table pointer
 		ld	(zVoiceTblPtrSave), hl			; Save it
@@ -2317,7 +2317,7 @@ zPlaySegaSound:
 ;
 ;sub_A20
 zFadeInToPrevious:
-		xor	a								; a = 0
+		xor	a								; a = fadeNormalMode
 		ld	(zFadeToPrevFlag), a			; Clear fade-to-prev flag
 		ld	a, (zCurrentTempoSave)			; Get saved current tempo
 		ld	(zCurrentTempo), a				; Restore it
@@ -2545,6 +2545,7 @@ zExtraCoordFlagSwitchTable:
 		dw cfPitchSlide						; 0FFh 0Bh
 		dw cfSetLFO							; 0FFh 0Ch
 		dw cfPlayMusicByIndex				; 0FFh 0Dh
+		dw cfSetCommByte					; 0FFh 0Eh
 ; =============== S U B	R O U T	I N E =======================================
 ; Sets a new DAC sample for play.
 ;
@@ -2643,17 +2644,25 @@ cfDetune:
 ; =============== S U B	R O U T	I N E =======================================
 ; Fade in to previous song.
 ;
-; Has one parameter byte. If the parameter byte if FFh, the engine will fade
-; to the previous song. If the parameter byte is equal to 29h (1-Up ID - 1),
-; the driver will prevent new music or SFX from playing as long as the 1-Up
-; music is playing (but will not clear the M68K queue). For all other values,
-; the queue will work as normal, but no fade-in will be done.
+; Has a parameter byte which is ignored (compatibility reasons).
+; It always requests a fade to the previous song.
 ;
 ;sub_C7B
 cfFadeInToPrevious:
+		ld	a, fadeRestorePending		; Trigger a restore/fade to previous
 		ld	(zFadeToPrevFlag), a
 		ret
 ; End of function cfFadeInToPrevious
+
+; =============== S U B	R O U T	I N E =======================================
+; Sets the game/music communication byte. Its meaning is entirely up to the
+; game and song data; the driver only stores and preserves it.
+;
+; Has one parameter byte, the new value for the communication byte.
+cfSetCommByte:
+		ld	(zCommByte), a
+		ret
+; End of function cfSetCommByte
 
 ; =============== S U B	R O U T	I N E =======================================
 ; Silences FM channel and stops track. Expanded form of coord. flag 0F2h.
@@ -3958,7 +3967,7 @@ zPlaySEGAPCM:
 		nop
 		nop
 
-		ld	b, 0Ah							; Loop counter
+		ld	b, 0Ch							; Loop counter
 		djnz	$							; Loop in this instruction, decrementing b each iteration, until b = 0
 
 		inc	hl								; Advance to next byte of SEGA PCM

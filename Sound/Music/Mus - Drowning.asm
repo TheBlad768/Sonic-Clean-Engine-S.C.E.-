@@ -17,7 +17,6 @@ Snd_Drown_Header:
 ; FM1 Data
 Snd_Drown_FM1:
 	smpsSetvoice        $00
-	smpsFade            $01
 	smpsNoteFill        $03
 	smpsCall            Snd_Drown_Call01
 	smpsSetTempoMod     $40
@@ -29,7 +28,6 @@ Snd_Drown_FM1:
 	smpsSetTempoMod     $08
 	smpsCall            Snd_Drown_Call01
 	dc.b	nC5, $0C
-	smpsFade            $01
 	smpsStop
 
 ; FM2 Data

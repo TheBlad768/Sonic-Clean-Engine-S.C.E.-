@@ -101,3 +101,21 @@ Unpause_Music:
 	rts
 ; End of function Unpause_Music
 ; ===========================================================================
+
+; =============== S U B R O U T I N E =======================================
+; Reads the music/game communication byte (see smpsSetCommByte). Its meaning
+; is defined by the song data and the game code using it, not the driver.
+; Resets the byte to 0 after reading it, so that the game code can detect when
+; a new value has been set.
+; This should be called at most once per frame, preferably after the Z80 sound
+; driver has finished its V-Int handler.
+;
+; Output: d0.b = communication byte
+Read_Music_Comm_Byte:
+	zStopZ80
+	move.b	(fZ80_RAM+zCommByte).l,d0
+	move.b	#0,(fZ80_RAM+zCommByte).l
+	zStartZ80
+	rts
+; End of function Read_Music_Comm_Byte
+; ===========================================================================

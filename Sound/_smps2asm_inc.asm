@@ -405,12 +405,27 @@ smpsDetune macro val
 	dc.b	$E1,val
 	endm
 
-; E2xx - Used for setting a variable which can be read by the game, for synchronisation. Ristar does this.
-smpsNop macro val
-	if (SonicDriverVer>=3) && ((val==$FF) || (val==$29))
-		warning "Values $FF and $29 are reserved in S3K's driver; use a different value or remove this command."
+; E2xx - Sets a one-byte game/music communication latch (SMPS "SetComm"). Meaning
+; is title-specific: e.g. Ristar/Moonwalker use it for gameplay sync, while
+; S3K's original driver repurposes the same byte to track 1-Up save/restore
+; state, which makes it risky to also use for communication there. Flamedriver
+; fixes this by storing it in a byte dedicated to communication.
+smpsSetCommByte macro val
+	if SonicDriverVer>=5
+		; Meta-CF independent of 1-Up state.
+		dc.b	$FF,$0E,val
+	else
+		if SonicDriverVer>=3
+			warning "S3/S&K's driver reuses $E2 as the 1-Up fade flag; values $FF and $29 are reserved, and other values may be unsafe to use for communication."
+		endif
+		dc.b	$E2,val
 	endif
-	dc.b	$E2,val
+	endm
+
+; Deprecated name for smpsSetCommByte, kept for compatibility.
+smpsNop macro val
+	warning "smpsNop is deprecated; use smpsSetCommByte instead."
+	smpsSetCommByte val
 	endm
 
 ; Return (used after smpsCall)
@@ -425,18 +440,18 @@ smpsReturn macro val
 ; Fade in previous song (ie. 1-Up)
 smpsFade macro val
 	if SonicDriverVer>=3
-		dc.b	$E2
-		if ("val"<>"")
-			dc.b	val
+		if ("val"=="") || ("val"=="$FF")
+			dc.b	$E2,$FF
+		elseif SonicDriverVer>=5
+			warning "smpsFade parameter is ignored by Flamedriver; use smpsSetCommByte to set a communication byte."
+			dc.b	$E2,val
 		else
-			dc.b	$FF
+			; This is actually a communication byte, not a fade.
+			smpsSetCommByte	val
 		endif
-		if SourceDriver<3
+		if (("val"=="") || ("val"=="$FF")) && (SourceDriver<3)
 			smpsStop
 		endif
-	elseif (SourceDriver>=3) && ("val"<>"") && ("val"<>"$FF")
-		; This is actually a communication byte, not a fade.
-		smpsNop	val
 	else
 		dc.b	$E4
 	endif

@@ -184,13 +184,20 @@ flagContinuousSfxUpdate = $80
 flagSFXInit = 0
 flagContinuousSfxInit = $80
 ; ---------------------------------------------------------------------------
+; Values used by zFadeToPrevFlag
+fadeNormalMode = 0
+; Music/SFX queue suppressed, previous song data saved
+fadeOverrideActive = $29
+; Triggers fade to previous song data
+fadeRestorePending = $FF
+; ---------------------------------------------------------------------------
 ; z80 RAM:
 zDataStart				=	$1C10
 		phase zDataStart
 z80_stack_top:			ds.b $60
 z80_stack:
 zSFXSaveIndex:			ds.b 1
-						ds.b 1
+zCommByte:				ds.b 1	; Game/music communication latch, set by cfSetCommByte
 zDACEnable:				ds.b 1
 zDACEnableSave:			ds.b 1
 zSpecFM3Freqs:			ds.b 8
