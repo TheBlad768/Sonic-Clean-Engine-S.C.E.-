@@ -5,7 +5,7 @@ Snd_DEZ1_Header:
 	smpsHeaderTempo     $01, $08
 
 	smpsHeaderDAC       Snd_DEZ1_DAC
-	smpsHeaderFM        Snd_DEZ1_FM1,		$00, $0F
+	smpsHeaderFM        Snd_DEZ1_FM1,	$00, $0F
 	smpsHeaderFM        Snd_DEZ1_FM2,	$00, $0B
 	smpsHeaderFM        Snd_DEZ1_FM3,	$00, $0C
 	smpsHeaderFM        Snd_DEZ1_FM4,	$00, $0F
