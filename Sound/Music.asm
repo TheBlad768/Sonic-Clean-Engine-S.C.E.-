@@ -27,7 +27,7 @@ Music02:		include "Sound/Music/Mus - Miniboss.asm"
 	even
 Music03:		include "Sound/Music/Mus - Zone Boss.asm"
 	even
-Music04:		include "Sound/Music/Mus - Invincibility.asm"
+Music04:		include "Sound/Music/Mus - Invincible.asm"
 	even
 Music05: 		include "Sound/Music/Mus - Sonic Got Through.asm"
 	even
