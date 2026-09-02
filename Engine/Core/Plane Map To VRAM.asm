@@ -27,7 +27,12 @@ Clear_DisplayData:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM_3:
-		move.l	#vdpCommDelta(planeLoc(32,0,1)),d4				; row increment value
+
+		; row increment value
+		move.l	#vdpCommDelta( \
+		planeLoc(32,0,1) \
+		),d4
+
 		bra.s	Plane_Map_To_VRAM.main
 
 ; ---------------------------------------------------------------------------
@@ -42,7 +47,12 @@ Plane_Map_To_VRAM_3:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM_2:
-		move.l	#vdpCommDelta(planeLoc(128,0,1)),d4				; row increment value
+
+		; row increment value
+		move.l	#vdpCommDelta( \
+		planeLoc(128,0,1) \
+		),d4
+
 		bra.s	Plane_Map_To_VRAM.main
 
 ; ---------------------------------------------------------------------------
@@ -57,17 +67,30 @@ Plane_Map_To_VRAM_2:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_VRAM:
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4				; row increment value
+
+		; row increment value
+		move.l	#vdpCommDelta( \
+		planeLoc(64,0,1) \
+		),d4
 
 .main
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .loop2
-		move.w	d1,d3
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
+		move.w	d1,d3
+
+		; check even
+		lsr.w	d3								; division by 2
+		bhs.s	.loop_skip							; branch, if the value is even
 
 .loop
+
+		; odd value
+		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
+
+.loop_skip
 		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,.loop							; copy one row
 		add.l	d4,d0								; move onto next row
@@ -105,7 +128,11 @@ Copy_Listed_Data_To_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 Plane_Map_To_Add_VRAM:
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4
+
+		; row increment value
+		move.l	#vdpCommDelta( \
+		planeLoc(64,0,1) \
+		),d4
 
 .main
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
@@ -115,7 +142,18 @@ Plane_Map_To_Add_VRAM:
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		move.w	d1,d5
 
+		; check even
+		lsr.w	d5								; division by 2
+		bhs.s	.loop_skip							; branch, if the value is even
+
 .loop
+
+		; odd value
+		move.w	(a1)+,d6
+		add.w	d3,d6								; add VRAM shift
+		move.w	d6,VDP_data_port-VDP_data_port(a6)
+
+.loop_skip
 		move.w	(a1)+,d6
 		add.w	d3,d6								; add VRAM shift
 		move.w	d6,VDP_data_port-VDP_data_port(a6)
@@ -135,17 +173,30 @@ Plane_Map_To_Add_VRAM:
 ; =============== S U B R O U T I N E =======================================
 
 Clear_Plane_Map:
-		move.l	#vdpCommDelta(planeLoc(64,0,1)),d4				; row increment value
+
+		; row increment value
+		move.l	#vdpCommDelta( \
+		planeLoc(64,0,1) \
+		),d4
 
 .main
 		lea	(VDP_data_port).l,a6						; load VDP data address to a6
 		lea	VDP_control_port-VDP_data_port(a6),a5				; load VDP control address to a5
 
 .loop
-		move.w	d1,d3
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
+		move.w	d1,d3
+
+		; check even
+		lsr.w	d3								; division by 2
+		bhs.s	.clear_skip							; branch, if the value is even
 
 .clear
+
+		; odd value
+		move.w	#0,VDP_data_port-VDP_data_port(a6)
+
+.clear_skip
 		move.w	#0,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,.clear							; copy one row
 		add.l	d4,d0								; move onto next row
@@ -167,10 +218,19 @@ Clear_Plane_Map:
 Plane_Map_To_RAM:
 
 .loop2
-		move.w	d1,d5
 		lea	(a2),a3
+		move.w	d1,d5
+
+		; check even
+		lsr.w	d5								; division by 2
+		bhs.s	.loop_skip							; branch, if the value is even
 
 .loop
+
+		; odd value
+		move.w	(a1)+,(a3)+
+
+.loop_skip
 		move.w	(a1)+,(a3)+
 		dbf	d5,.loop							; copy one row
 		adda.w	d3,a2								; move onto next row
@@ -232,7 +292,12 @@ RAM_Map_Data_To_VDP:
 		move.w	d1,d3
 		bsr.s	RAM_Map_Data_Copy
 		lea	(a2),a1
-		addi.l	#vdpCommDelta(planeLoc(64,0,1)),d0
+
+		; row increment value
+		addi.l	#vdpCommDelta( \
+		planeLoc(64,0,1) \
+		),d0
+
 		dbf	d2,.loop
 		rts
 
