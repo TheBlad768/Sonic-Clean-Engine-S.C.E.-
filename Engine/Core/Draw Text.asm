@@ -132,7 +132,12 @@ Draw_PlaneText_Advanced:
 		move.w	d0,VDP_data_port-VDP_data_port(a6)				; draw tile to plane
 		addq.w	#1,d0								; next character tile
 		dbf	d5,.column							; check vertical character size end
-		addi.l	#vdpCommDelta(planeLoc(64,1,0)),d1				; next row
+
+		; next row
+		addi.l	#vdpCommDelta( \
+		planeLoc(64,1,0) \
+		),d1
+
 		dbf	d4,.row								; check horizontal character size end
 		swap	d2								; get horizontal character size
 		bra.s	.loop								; next character
