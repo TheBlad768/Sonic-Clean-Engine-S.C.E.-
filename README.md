@@ -71,7 +71,7 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 ## Quick start
 
-- For editing sprites you can use [SonMapEd](https://info.sonicretro.org/SonMapEd), [ClownMapEd](https://info.sonicretro.org/ClownMapEd) or [Flex2](https://info.sonicretro.org/Flex_2) (Read the issues).
+- For editing sprites you can use [Flex2](https://info.sonicretro.org/Flex_2), [ClownMapEd](https://info.sonicretro.org/ClownMapEd) or [SonMapEd](https://info.sonicretro.org/SonMapEd).
 
 - For editing levels you can use official [SonLVL](https://info.sonicretro.org/SonLVL) or [SonLVL-64x64-Compatible](https://github.com/Project1114/SonLVL-64x64-Compatible). Unfortunately, [SonED2](https://info.sonicretro.org/SonED2) is no longer supported.
 
@@ -83,18 +83,13 @@ To build this, use build.bat if you're a Windows user, or build.sh if you're a L
 
 - Recommended emulators for Mode 1 (MSU): [BlastEm](https://www.retrodev.com/blastem/nightlies/), [RetroArch](https://www.retroarch.com/).
 
+#### Useful programs:
+- [mdcomp](https://github.com/flamewing/mdcomp/releases)
+- [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt/releases)
+
 ## Current issues
 
-1. S.C.E. uses [Kosinski Plus algorithm](https://github.com/flamewing/mdcomp/blob/master/src/asm/KosinskiPlus.asm), but **Flex2** program does not support **Kosinski Plus Module**. Therefore, **Flex2.json** project file is partially useless. **SonMapEd** program does not support **Kosinski Plus** at all. You can only open uncompressed graphics.
-
-### Solution: Use the fork from Nichloya:
-
-- [Flex2](https://github.com/Nichloya/Flex2/releases)
-
-#### Alternative programs:
-- [mdcomp](https://github.com/flamewing/mdcomp/releases)
-- [ClownMapEd](https://github.com/Clownacy/ClownMapEd/releases)
-- [FW-KENSC-ShellExt](https://github.com/MainMemory/FW-KENSC-ShellExt/releases)
+I am not currently aware of any issues.
 
 ## FAQ
 
