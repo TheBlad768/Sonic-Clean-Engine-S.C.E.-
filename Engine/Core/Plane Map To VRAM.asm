@@ -81,17 +81,22 @@ Plane_Map_To_VRAM:
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		move.w	d1,d3
 
-		; check even
+		; check odd
 		lsr.w	d3								; division by 2
-		bhs.s	.loop_skip							; branch, if the value is even
+		blo.s	.loop								; branch, if the value is odd
+
+		; even value
+		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
+		dbf	d3,.loop							; copy one row
+		add.l	d4,d0								; move onto next row
+		dbf	d2,.loop2							; and copy it
+		rts
+; ---------------------------------------------------------------------------
 
 .loop
 
 		; odd value
-		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
-
-.loop_skip
-		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
+		move.l	(a1)+,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,.loop							; copy one row
 		add.l	d4,d0								; move onto next row
 		dbf	d2,.loop2							; and copy it
@@ -187,17 +192,22 @@ Clear_Plane_Map:
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 		move.w	d1,d3
 
-		; check even
+		; check odd
 		lsr.w	d3								; division by 2
-		bhs.s	.clear_skip							; branch, if the value is even
+		blo.s	.clear								; branch, if the value is odd
+
+		; even value
+		move.w	#0,VDP_data_port-VDP_data_port(a6)
+		dbf	d3,.clear							; copy one row
+		add.l	d4,d0								; move onto next row
+		dbf	d2,.loop							; and copy it
+		rts
+; ---------------------------------------------------------------------------
 
 .clear
 
 		; odd value
-		move.w	#0,VDP_data_port-VDP_data_port(a6)
-
-.clear_skip
-		move.w	#0,VDP_data_port-VDP_data_port(a6)
+		move.l	#0,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,.clear							; copy one row
 		add.l	d4,d0								; move onto next row
 		dbf	d2,.loop							; and copy it
@@ -221,17 +231,22 @@ Plane_Map_To_RAM:
 		lea	(a2),a3
 		move.w	d1,d5
 
-		; check even
+		; check odd
 		lsr.w	d5								; division by 2
-		bhs.s	.loop_skip							; branch, if the value is even
+		blo.s	.loop								; branch, if the value is odd
+
+		; even value
+		move.w	(a1)+,(a3)+
+		dbf	d5,.loop							; copy one row
+		adda.w	d3,a2								; move onto next row
+		dbf	d2,.loop2							; and copy it
+		rts
+; ---------------------------------------------------------------------------
 
 .loop
 
 		; odd value
-		move.w	(a1)+,(a3)+
-
-.loop_skip
-		move.w	(a1)+,(a3)+
+		move.l	(a1)+,(a3)+
 		dbf	d5,.loop							; copy one row
 		adda.w	d3,a2								; move onto next row
 		dbf	d2,.loop2							; and copy it
@@ -272,8 +287,20 @@ Copy_Map_Line_To_VRAM:
 RAM_Map_Data_Copy:
 		move.l	d0,VDP_control_port-VDP_control_port(a5)
 
-.loop
+		; check odd
+		lsr.w	d3								; division by 2
+		blo.s	.loop								; branch, if the value is odd
+
+		; even value
 		move.w	(a1)+,VDP_data_port-VDP_data_port(a6)
+		dbf	d3,.loop							; copy one row
+		rts
+; ---------------------------------------------------------------------------
+
+.loop
+
+		; odd value
+		move.l	(a1)+,VDP_data_port-VDP_data_port(a6)
 		dbf	d3,.loop							; copy one row
 		rts
 
