@@ -131,7 +131,7 @@ sub_1F734:
 		movem.w	d6/a0,-(sp)
 		movea.w	a0,a2								; load current object to a2
 		movea.w	a1,a0								; load player to a0
-		jsr	Kill_Character(pc)						; "
+		jsr	(Kill_Character).w						; "
 		movem.w	(sp)+,d6/a0
 
 locret_1F742:
