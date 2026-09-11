@@ -31,7 +31,7 @@ Game_Program:
 .skip
 
 	if ChecksumCheck
-		bsr.s	Test_Checksum
+		bsr.w	Test_Checksum
 	endif
 
 		; clear some RAM only on a coldboot
