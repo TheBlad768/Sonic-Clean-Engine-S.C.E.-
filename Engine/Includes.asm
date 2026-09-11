@@ -83,10 +83,10 @@
 		include "Engine/Core/Oscillatory Routines.asm"
 
 ; ---------------------------------------------------------------------------
-; HUD update modules
+; BCD modules
 ; ---------------------------------------------------------------------------
 
-		include "Engine/Core/HUD Update.asm"
+		include "Engine/Core/Get BCD.asm"
 
 ; ---------------------------------------------------------------------------
 ; Draw text on the plane module
@@ -114,12 +114,6 @@
 		include "Engine/Core/Load Rings.asm"
 
 ; ---------------------------------------------------------------------------
-; Draw level tiles modules
-; ---------------------------------------------------------------------------
-
-		include "Engine/Core/Draw Level.asm"
-
-; ---------------------------------------------------------------------------
 ; Load level modules
 ; ---------------------------------------------------------------------------
 
@@ -132,21 +126,10 @@
 		include "Engine/Core/Move Camera.asm"
 
 ; ---------------------------------------------------------------------------
-; Parallax engine modules
-; ---------------------------------------------------------------------------
-
-		include "Engine/Core/Deformation Script.asm"
-
-; ---------------------------------------------------------------------------
-; Shake screen modules
-; ---------------------------------------------------------------------------
-
-		include "Engine/Core/Shake Screen.asm"
-
-; ---------------------------------------------------------------------------
 ; Objects modules
 ; ---------------------------------------------------------------------------
 
+		include "Engine/Objects/Add Score.asm"
 		include "Engine/Objects/Animate Raw.asm"
 		include "Engine/Objects/Animate Sprite.asm"
 		include "Engine/Objects/Calc Angle.asm"
@@ -192,6 +175,12 @@
 ; ---------------------------------------------------------------------------
 
 		include "Engine/Core/Level Setup.asm"
+
+; ---------------------------------------------------------------------------
+; Shake screen modules
+; ---------------------------------------------------------------------------
+
+		include "Engine/Core/Shake Screen.asm"
 
 ; ---------------------------------------------------------------------------
 ; Special events modules
@@ -271,18 +260,6 @@
 		include "Engine/Core/Security Startup 1.asm"
 		include "Engine/Core/Security Startup 2.asm"
 
-; ---------------------------------------------------------------------------
-; Controllers modules
-; ---------------------------------------------------------------------------
-
-		include "Engine/Core/Controllers.asm"
-
-; ---------------------------------------------------------------------------
-; Interrupt Handler modules
-; ---------------------------------------------------------------------------
-
-		include "Engine/Core/Interrupt Handler.asm"
-
 	if ChecksumCheck
 
 ; ---------------------------------------------------------------------------
@@ -301,6 +278,36 @@
 		include "Objects/Players/Sonic/Object Data/Anim - Sonic.asm"
 		include "Objects/Players/Sonic/Object Data/Map - Sonic.asm"
 		include "Objects/Players/Sonic/Object Data/DPLC - Sonic.asm"
+
+; ---------------------------------------------------------------------------
+; HUD update modules
+; ---------------------------------------------------------------------------
+
+		include "Engine/Core/HUD Update.asm"
+
+; ---------------------------------------------------------------------------
+; Controllers modules
+; ---------------------------------------------------------------------------
+
+		include "Engine/Core/Controllers.asm"
+
+; ---------------------------------------------------------------------------
+; Interrupt Handler modules
+; ---------------------------------------------------------------------------
+
+		include "Engine/Core/Interrupt Handler.asm"
+
+; ---------------------------------------------------------------------------
+; Deformation script modules
+; ---------------------------------------------------------------------------
+
+		include "Engine/Core/Deformation Script.asm"
+
+; ---------------------------------------------------------------------------
+; Draw level modules
+; ---------------------------------------------------------------------------
+
+		include "Engine/Core/Draw Level.asm"
 
 ; ---------------------------------------------------------------------------
 ; Levels events modules

@@ -106,7 +106,7 @@ LevelScreen:
 
 		; next
 		disableInts
-		jsr	(HUD_DrawInitial).w						; init HUD
+		jsr	(HUD_DrawInitial).l						; init HUD
 		enableInts
 		jsrb	Get_LevelSizeStart
 		jsr	(DeformBgLayer).w

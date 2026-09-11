@@ -110,7 +110,7 @@ LevelSelectScreen:
 		jsr	(Wait_VSync).w
 		lea	LSScroll_Data(pc),a2
 		lea	(H_scroll_table).w,a3						; load scroll table
-		jsr	(HScroll_Deform).w
+		jsr	(HScroll_Deform).l
 
 		; update text
 		moveq	#make_art_tile(0,0,FALSE),d3

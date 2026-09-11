@@ -190,7 +190,7 @@ Touch_ChkHurt3:
 		move.l	d3,y_pos(a1)
 		movea.w	a0,a2								; save current object
 		movea.w	a1,a0								; a0=character
-		jsr	HurtCharacter(pc)
+		jsr	(HurtCharacter).w						; "
 		movea.w	a2,a0								; restore current object
 
 .return

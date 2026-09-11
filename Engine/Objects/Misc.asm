@@ -610,7 +610,7 @@ SubtractRings_Process:
 		movea.w	a0,a2								; load current object to a2
 		movea.w	parent4(a0),a1							; a1=character
 		movea.w	a1,a0								; load player to a0
-		jsr	(Kill_Character).l						; "
+		jsr	(Kill_Character).w						; "
 		movea.w	a2,a0
 
 		; success

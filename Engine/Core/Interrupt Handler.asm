@@ -318,7 +318,7 @@ VInt_Level:
 		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
 		bsr.s	VInt_SpecialFunction
-		jsr	(VInt_DrawLevel.main).w
+		bsr.w	VInt_DrawLevel.main
 		startZ80
 		enableInts
 
@@ -341,7 +341,7 @@ VInt_Level:
 ; =============== S U B R O U T I N E =======================================
 
 Do_Updates:
-		jsr	(HUD_Update).w
+		bsr.w	HUD_Update
 		clr.w	(Lag_frame_count).w
 
 		; check demo

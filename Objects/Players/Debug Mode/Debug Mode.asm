@@ -198,7 +198,7 @@ Debug_Mode:
 		beq.s	.stayindebug							; if not, branch
 		clr.w	(Debug_placement_mode).w					; deactivate debug mode
 		disableInts
-		jsr	(HUD_DrawInitial).w
+		jsr	(HUD_DrawInitial).l
 		move.b	#1,(Update_HUD_score).w
 		move.b	#$80,(Update_HUD_ring_count).w
 		enableInts
