@@ -41,9 +41,9 @@ HUD_Update:
 ; ---------------------------------------------------------------------------
 
 .skiptimer
-		beq.s	HUD_AddToScore.return
+		beq.s	.return
 		tst.b	(Game_paused).w							; is the game paused?
-		bne.s	HUD_AddToScore.return						; if yes, branch
+		bne.s	.return								; if yes, branch
 		lea	(Timer).w,a1
 		cmpi.l	#bytes_to_long(0,9,59,59),(a1)+					; is the time 9:59:59?
 		beq.s	UpdateHUD_TimeOver						; if yes, branch
@@ -87,7 +87,10 @@ HUD_Update:
 	else
 		bra.w	DrawTwoDigitNumber
 	endif
+; ---------------------------------------------------------------------------
 
+.return
+		rts
 ; ---------------------------------------------------------------------------
 
 UpdateHUD_TimeOver:
