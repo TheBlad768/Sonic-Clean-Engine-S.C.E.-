@@ -7,15 +7,15 @@
 DEZ1_ForegroundInit:
 
 		; update FG
-		jsr	(Reset_FGTileOffsetPositionHScroll).w
-		jmp	(Refresh_PlaneFullHScroll).w
+		bsr.w	Reset_FGTileOffsetPositionHScroll
+		bra.w	Refresh_PlaneFullHScroll
 
 ; =============== S U B R O U T I N E =======================================
 
 DEZ1_ForegroundEvent:
 		move.w	(Screen_shaking_offset).w,d0					; shake foreground
 		add.w	d0,(Camera_Y_pos_copy).w
-		jmp	(Draw_FGAsYouMove).w
+		bra.w	Draw_FGAsYouMove
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -23,13 +23,13 @@ DEZ1_BackgroundInit:
 		bsr.s	DEZ1_Deform
 
 		; update BG
-		jsr	(Reset_BGTileOffsetPositionHScroll).w
-		jsr	(Refresh_PlaneFullHScroll).w
+		bsr.w	Reset_BGTileOffsetPositionHScroll
+		bsr.w	Refresh_PlaneFullHScroll
 
 		; deform
 		lea	DEZ1_BGDeformArray(pc),a4
 		lea	(H_scroll_table).w,a5
-		jmp	(ApplyBGDeformation).w
+		bra.w	ApplyBGDeformation
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -41,7 +41,7 @@ DEZ1_BackgroundEvent:
 .deform
 		lea	DEZ1_BGDeformArray(pc),a4
 		lea	(H_scroll_table).w,a5
-		jsr	(ApplyBGDeformation).w
+		bsr.w	ApplyBGDeformation
 		jmp	(ShakeScreen_Setup).w
 ; ---------------------------------------------------------------------------
 
