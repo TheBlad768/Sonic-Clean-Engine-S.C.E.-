@@ -83,10 +83,9 @@ HUD_Update:
 		moveq	#99,d1
 
 .skipt
-		bra.w	DrawTwoDigitNumber
-	else
-		bra.w	DrawTwoDigitNumber
 	endif
+
+		bra.w	DrawTwoDigitNumber
 ; ---------------------------------------------------------------------------
 
 .return
