@@ -17,7 +17,7 @@ Obj_WaveSplash:
 		; init
 		movem.l	ObjDat_WaveSplash(pc),d0-d3					; copy data to d0-d3
 		movem.l	d0-d3,code_addr(a0)						; set data from d0-d3 to current object
-		move.w	#1,mainspr_childsprites(a0)
+		move.w	#1,mainspr_childsprites(a0)					; set number of child sprites
 		lea	sub2_x_pos(a0),a2
 		move.w	x_pos(a0),(a2)
 		addi.w	#$C0,(a2)+
