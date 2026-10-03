@@ -393,15 +393,22 @@ Check_PlayerInRange2:
 ; ---------------------------------------------------------------------------
 ; Check object off screen subroutine
 ; ---------------------------------------------------------------------------
+;
+; Output:
+; d0 = 0 if on screen, 1 if off screen
 
 ; =============== S U B R O U T I N E =======================================
 
-Chk_OffScreen:
+Check_OffScreen:
+
+		; check xpos
 		move.w	x_pos(a0),d0							; get object x-position
 		sub.w	(Camera_X_pos).w,d0						; subtract screen x-position
 		bmi.s	.offscreen
 		cmpi.w	#screen_width,d0						; is object on the screen?
 		bge.s	.offscreen							; if not, branch
+
+		; check ypos
 		move.w	y_pos(a0),d0							; get object y-position
 		sub.w	(Camera_Y_pos).w,d0						; subtract screen y-position
 		bmi.s	.offscreen
@@ -419,11 +426,16 @@ Chk_OffScreen:
 
 ; ---------------------------------------------------------------------------
 ; Check object off screen with width subroutine
+;
+; Output:
+; d0 = 0 if on screen, 1 if off screen
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-Chk_WidthOffScreen:
+Check_PartiallyOffScreen:
+
+		; check width
 		moveq	#0,d1
 		move.b	width_pixels(a0),d1
 		move.w	x_pos(a0),d0							; get object x-position
@@ -434,9 +446,16 @@ Chk_WidthOffScreen:
 		sub.w	d1,d0
 		cmpi.w	#screen_width,d0						; is object on the screen?
 		bge.s	.offscreen							; if not, branch
+
+		; check height
+		moveq	#0,d1
+		move.b	height_pixels(a0),d1
 		move.w	y_pos(a0),d0							; get object y-position
 		sub.w	(Camera_Y_pos).w,d0						; subtract screen y-position
+		add.w	d1,d0								; add object height
 		bmi.s	.offscreen
+		add.w	d1,d1
+		sub.w	d1,d0
 		cmpi.w	#screen_height,d0						; is object on the screen?
 		bge.s	.offscreen							; if not, branch
 
