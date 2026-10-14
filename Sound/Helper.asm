@@ -87,7 +87,7 @@ Play_Sample:
 ; =============== S U B R O U T I N E =======================================
 Pause_Music:
 	zStopZ80
-	move.b	#1,(fZ80_RAM+zPauseFlag).l
+	move.b	#flagTriggerPause,(fZ80_RAM+zPauseFlag).l	; pause the music
 	zStartZ80
 	rts
 ; End of function Pause_Music
@@ -96,7 +96,7 @@ Pause_Music:
 ; =============== S U B R O U T I N E =======================================
 Unpause_Music:
 	zStopZ80
-	move.b	#0,(fZ80_RAM+zPauseFlag).l
+	move.b	#flagUnpause,(fZ80_RAM+zPauseFlag).l	; unpause music
 	zStartZ80
 	rts
 ; End of function Unpause_Music

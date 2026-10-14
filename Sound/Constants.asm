@@ -184,6 +184,12 @@ flagContinuousSfxUpdate = $80
 flagSFXInit = 0
 flagContinuousSfxInit = $80
 ; ---------------------------------------------------------------------------
+; Pause/unpause flags
+flagNotPaused = 0
+flagTriggerPause = 1
+flagPaused = 2
+flagUnpause = $80
+; ---------------------------------------------------------------------------
 ; Values used by zFadeToPrevFlag
 fadeNormalMode = 0
 ; Music/SFX queue suppressed, previous song data saved

@@ -1866,15 +1866,15 @@ zPauseUnpause:
 		ld	a, (hl)							; a = pause flag
 		or	a								; Is sound driver paused?
 		ret	z								; Return if not
-		jp	m, .unpause						; Branch if pause flag is negative (unpause)
+		jp	m, .unpause						; Branch if pause flag is flagUnpause
 		pop	de								; Pop return value from the stack, so that a 'ret' will go back to zVInt
 		dec	a								; Decrease a
-		ret	nz								; Return if nonzero
-		ld	(hl), 2							; Set pause flag to 2 (i.e., stay paused but don't pause again)
+		ret	nz								; Return if it was not flagTriggerPause
+		ld	(hl), flagPaused				; Set pause flag to flagPaused (i.e., stay paused but don't pause again)
 		jp	zPauseAudio						; Pause all but DAC
 ; ---------------------------------------------------------------------------
 .unpause:
-		xor	a								; a = 0
+		xor	a								; a = flagNotPaused
 		ld	(hl), a							; Clear pause flag
 		ld	a, (zFadeOutTimeout)			; Get fade timeout
 		or	a								; Is it zero?
