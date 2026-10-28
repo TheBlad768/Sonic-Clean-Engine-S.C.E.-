@@ -1,10 +1,10 @@
 ; ---------------------------------------------------------------------------
-; Load level data
+; Load level data (Primary)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-LoadLevelLoadBlock:
+Load_LevelData_Primary:
 
 		; load primary level art
 		movea.l	(Level_data_addr_RAM.8x8Data1).w,a1				; get primary level art to a1
@@ -14,10 +14,12 @@ LoadLevelLoadBlock:
 
 		; load secondary level art
 		move.l	(Level_data_addr_RAM.8x8Data2).w,d0				; get secondary level art to d0
-		beq.s	.waitplc							; if zero, branch
+		beq.s	.set								; if zero, branch
 		movea.l	d0,a1								; load secondary level art to a1
 		move.w	d4,d2								; load art size for the starting position
 		bsr.w	Queue_KosPlus_Module						; decompress and send data to VRAM
+
+.set
 
 		; set
 		move.l	#VInt_Fade,(V_int_ptr).w					; set VInt pointer
@@ -59,7 +61,7 @@ Reset_LevelData:
 		move.b	d0,(Respawn_table_keep).w
 
 		; load
-		bsr.s	LoadLevelPointer
+		bsr.s	Load_LevelPointer
 		bsr.s	Load_Level
 		bsr.w	CheckLevelForWater
 
@@ -81,12 +83,12 @@ Load_Solids2:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Load level data 2
+; Load level data (Secondary)
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
 
-LoadLevelLoadBlock2:
+Load_LevelData_Secondary:
 
 		; load art
 		movea.l	(Level_data_addr_RAM.PLC1).w,a5					; get plc1 pointer to a5
@@ -144,7 +146,7 @@ Load_Level2:
 
 ; =============== S U B R O U T I N E =======================================
 
-LoadLevelPointer:
+Load_LevelPointer:
 
 		; calc level
 		move.w	(Current_zone_and_act).w,d0

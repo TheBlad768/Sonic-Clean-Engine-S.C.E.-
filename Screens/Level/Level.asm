@@ -41,7 +41,7 @@ LevelScreen:
 		clearRAM Oscillating_variables, Oscillating_variables_end		; clear variables
 		lea	Level_VDP(pc),a1
 		jsr	(Load_VDP).w							; a6 now has a VDP control address do not overwrite this register
-		jsr	(LoadLevelPointer).w						; load level data
+		jsr	(Load_LevelPointer).w						; load level data
 
 	if GameDebug
 		btst	#button_C,(Ctrl_1_held).w					; is C button held?
@@ -110,8 +110,8 @@ LevelScreen:
 		enableInts
 		jsrb	Get_LevelSizeStart
 		jsr	(DeformBgLayer).w
-		jsr	(LoadLevelLoadBlock).w
-		jsr	(LoadLevelLoadBlock2).w
+		jsr	(Load_LevelData_Primary).w
+		jsr	(Load_LevelData_Secondary).w
 		disableInts
 		jsr	(Level_Setup).w							; draw level
 		enableInts
