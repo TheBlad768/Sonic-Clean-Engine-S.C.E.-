@@ -1435,8 +1435,8 @@ Reset_FGTileOffsetPositionVScroll:
 		move.w	d0,d1								; copy camera y pos to d1
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(Camera_Y_pos_rounded).w
-		move.w	(Camera_X_pos_copy).w,d0
-		andi.w	#-16,d0								; align (16 pixels)
+		moveq	#-16,d0								; align (16 pixels)
+		and.w	(Camera_X_pos_copy).w,d0
 		move.w	d0,(Camera_X_pos_rounded).w
 		rts
 
@@ -1460,8 +1460,8 @@ Reset_BGTileOffsetPositionVScroll:
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,d2								; copy camera y pos bg rounded to d2
 		move.w	d0,(Camera_Y_pos_BG_rounded).w
-		move.w	(Camera_X_pos_BG_copy).w,d0
-		andi.w	#-16,d0								; align (16 pixels)
+		moveq	#-16,d0								; align (16 pixels)
+		and.w	(Camera_X_pos_BG_copy).w,d0
 		move.w	d0,(Camera_X_pos_BG_rounded).w
 		rts
 
