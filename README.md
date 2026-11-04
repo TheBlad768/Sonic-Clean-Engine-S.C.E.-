@@ -115,7 +115,7 @@ If you still want to use direct mappings instead of a macro to create Title Card
 
 #### Where can I find other SMPS music?
 
-- If you want to use other SMPS music you can use [Valley Bell's SMPS Research](https://forums.sonicretro.org/index.php?threads/valley-bells-smps-research.32473) or [vgm2smps](https://github.com/Ivan-YO/vgm2smps/releases).
+- If you want to use other SMPS music you can use [Valley Bell's SMPS Research](https://forums.sonicretro.org/index.php?threads/valley-bells-smps-research.32473) or [vgm2smps](https://github.com/N-BAH/vgm2smps/releases).
 
 #### Why don't mappings use MapMacros?
 
