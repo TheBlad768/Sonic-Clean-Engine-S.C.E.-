@@ -101,7 +101,8 @@ LevelSelectScreen:
 		bne.s	.waitplc							; wait for KosPlusM queue to clear
 
 		; next
-		move.l	#VInt_LevelSelect,(V_int_ptr).w					; set VInt pointer
+		move.l	#LevelSelect_UpdateScreen,(V_int_extra_ptr).w			; set VInt extra pointer
+		move.l	#VInt_MainCustom,(V_int_ptr).w					; set VInt pointer
 		jsr	(Wait_VSync).w
 		enableDisplay
 		jsr	(Pal_FadeFromBlack).w
@@ -599,3 +600,13 @@ LevelSelect_MainText:
 LSScroll_Data: HScroll_Header
 		HScroll_Data 8, 8, -$100, FG						; start pos, size, velocity, plane
 		HScroll_End								; end marker
+
+; ---------------------------------------------------------------------------
+; Update screen (VInt)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+LevelSelect_UpdateScreen:
+		dma68kToVDP (LevelSelect.buffer2),VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size,VRAM	; foreground buffer to VRAM
+		rts

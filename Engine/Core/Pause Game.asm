@@ -21,7 +21,7 @@ Pause_Game:
 		move.l	#VInt_Level,(V_int_ptr).w					; set new VInt pointer
 
 .loop
-		bsr.s	Wait_VSync
+		jsr	(Wait_VSync).w
 
 	if GameDebug
 		btst	#button_A,(Ctrl_1_pressed).w					; is button A pressed?

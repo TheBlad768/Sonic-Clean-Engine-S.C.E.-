@@ -133,6 +133,31 @@ VInt_Main:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Main (Custom)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_MainCustom:
+		bsr.s	Do_ControllerPal
+
+		; check
+		move.l	(V_int_extra_ptr).w,d0						; get VInt extra pointer to d0
+		beq.s	.check_demo							; if zero, branch
+		movea.l	d0,a0								; load VInt extra pointer to a0
+		jsr	(a0)								; jump to current VInt extra pointer
+
+.check_demo
+
+		; check demo
+		tst.w	(Demo_timer).w							; is there time left on the demo?
+		beq.s	.return								; if not, branch
+		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
+
+.return
+		rts
+
+; ---------------------------------------------------------------------------
 ; Menu
 ; ---------------------------------------------------------------------------
 
@@ -140,6 +165,31 @@ VInt_Main:
 
 VInt_Menu:
 		bsr.s	Do_ControllerPal
+
+		; check demo
+		tst.w	(Demo_timer).w							; is there time left on the demo?
+		beq.s	.kospm								; if not, branch
+		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
+
+.kospm
+		jmp	(Set_KosPlus_Bookmark).w
+
+; ---------------------------------------------------------------------------
+; Menu (Custom)
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+VInt_MenuCustom:
+		bsr.s	Do_ControllerPal
+
+		; check
+		move.l	(V_int_extra_ptr).w,d0						; get VInt extra pointer to d0
+		beq.s	.check_demo							; if zero, branch
+		movea.l	d0,a0								; load VInt extra pointer to a0
+		jsr	(a0)								; jump to current VInt extra pointer
+
+.check_demo
 
 		; check demo
 		tst.w	(Demo_timer).w							; is there time left on the demo?
@@ -185,32 +235,6 @@ Do_ControllerPal:
 		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 		jsr	(Process_DMA_Queue).w
 		startZ80
-		rts
-
-; ---------------------------------------------------------------------------
-; Level Select
-; ---------------------------------------------------------------------------
-
-; =============== S U B R O U T I N E =======================================
-
-VInt_LevelSelect:
-		stopZ80
-		stopZ802
-		bsr.w	Poll_Controllers
-		startZ802
-		dma68kToVDP Normal_palette,0,$80,CRAM
-		dma68kToVDP Sprite_table_buffer,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-		dma68kToVDP H_scroll_buffer,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
-		dma68kToVDP (LevelSelect.buffer2),VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size,VRAM	; foreground buffer to VRAM
-		jsr	(Process_DMA_Queue).w
-		startZ80
-
-		; check demo
-		tst.w	(Demo_timer).w							; is there time left on the demo?
-		beq.s	.return								; if not, branch
-		subq.w	#1,(Demo_timer).w						; subtract 1 from time left
-
-.return
 		rts
 
 ; ---------------------------------------------------------------------------
