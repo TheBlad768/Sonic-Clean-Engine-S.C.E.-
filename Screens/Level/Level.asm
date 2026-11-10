@@ -184,7 +184,7 @@ LevelScreen:
 		bclr	#GameModeFlag_TitleCard,(Game_mode).w				; subtract $80 from mode to end pre-level stuff
 
 .loop
-		jsr	(Pause_Game).w
+		bsr.w	Pause_Game
 		st	(V_int_flag).w							; set VInt flag
 		jsr	(Process_KosPlus_Queue).w
 		jsr	(Wait_VSync.skip).w

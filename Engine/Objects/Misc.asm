@@ -30,7 +30,7 @@ SetUp_ObjAttributes3:
 
 SetUp_ObjAttributesSlotted:
 		moveq	#0,d0
-		movem.w	(a1)+,d1/d3-d5							; copy data to d1,d3-d5
+		movem.w	(a1)+,d1/d3-d5							; copy data to d1,d3,d4,d5
 
 		; check
 		lea	(Slotted_object_bits).w,a2

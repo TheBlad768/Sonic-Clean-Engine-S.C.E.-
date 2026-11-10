@@ -123,6 +123,7 @@ Screen_shaking_last_offset				ds.w 1				; value of Screen_shaking_offset for the
 Level_repeat_offset					ds.w 1				; the number of pixels the screen was moved this frame, used to offset level objects horizontally. Used only for level repeat sections, such as AIZ airship.
 Spritemask_flag						ds.b 1				; when set, indicates that special sprites are used for sprite masking
 							ds.b 1				; even
+V_int_extra_ptr						ds.l 1				; extra jump pointer in V-int
 Events_fg						ds.b $18			; various flags used by foreground events
 Draw_delayed_position					ds.w 1				; position to redraw screen from. Screen is reloaded 1 row at a time to avoid game lag
 Draw_delayed_rowcount					ds.w 1				; number of rows for screen redrawing. Screen is reloaded 1 row at a time to avoid game lag
@@ -227,7 +228,7 @@ Debug_camera_delay					ds.b 1
 Debug_camera_speed					ds.b 1
 Debug_object						ds.b 1				; the current position in the debug mode object list
 Last_act_end_flag					ds.b 1
-Slotted_object_bits					ds.b 8				; index of slot array to use
+Slotted_object_bits					ds.b SlottedObject_Size		; bits to determine which slots are used for slotted objects
 Signpost_addr						ds.w 1
 Render_sprite_first_RAM					ds.l 8
 Render_sprite_first_RAM_end =				*

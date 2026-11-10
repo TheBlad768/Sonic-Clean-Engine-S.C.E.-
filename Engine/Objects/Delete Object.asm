@@ -18,6 +18,10 @@ Delete_Referenced_Object:
 		move.w	d0,(a1)+							; clear last 2 bytes
 	endif
 
+	if object_size&1
+		move.b	d0,(a1)+							; clear last byte
+	endif
+
 		rts
 
 ; ---------------------------------------------------------------------------
