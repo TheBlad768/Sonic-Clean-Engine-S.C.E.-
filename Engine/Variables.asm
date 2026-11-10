@@ -102,7 +102,8 @@ Camera_Y_pos_coarse					ds.w 1				; rounded down to the nearest chunk boundary (
 Camera_X_pos_coarse_back				ds.w 1				; Camera_X_pos_coarse - $80
 Camera_Y_pos_coarse_back				ds.w 1				; Camera_Y_pos_coarse - $80
 Plane_double_update_flag				ds.b 1				; set when two block are to be updated instead of one (i.e. the camera's scrolled by more than 16 pixels)
-Special_V_int_routine					ds.b 1
+							ds.b 1				; even
+Special_V_int_ptr					ds.l 1
 Camera_H_scroll_shift					ds.w 3
 
 	if ExtendedCamera

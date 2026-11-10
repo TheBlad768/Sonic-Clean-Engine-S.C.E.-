@@ -1254,7 +1254,7 @@ gotoROM macro
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap macro loc,twidth,theight,terminate
+copyTilemap macro loc,twidth=screen_width,theight=screen_height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
@@ -1270,7 +1270,7 @@ copyTilemap macro loc,twidth,theight,terminate
 ; input: destination, VRAM shift, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap2 macro loc,vram,pal,pri,twidth,theight,terminate
+copyTilemap2 macro loc,vram,pal,pri,twidth=screen_width,theight=screen_height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
@@ -1287,7 +1287,7 @@ copyTilemap2 macro loc,vram,pal,pri,twidth,theight,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemap3 macro loc,twidth,theight,terminate
+copyTilemap3 macro loc,twidth=screen_width,theight=screen_height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
@@ -1303,7 +1303,7 @@ copyTilemap3 macro loc,twidth,theight,terminate
 ; input: destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-copyTilemapToRAM macro twidth,theight,row,terminate
+copyTilemapToRAM macro twidth=screen_width,theight=screen_height,row,terminate
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2
 	mvq	(row),d3
@@ -1319,7 +1319,7 @@ copyTilemapToRAM macro twidth,theight,row,terminate
 ; input: source, destination, width [cells], height [cells], terminate
 ; ---------------------------------------------------------------------------
 
-clearTilemap macro loc,twidth,theight,terminate
+clearTilemap macro loc,twidth=screen_width,theight=screen_height,terminate
 	locVRAM	loc,d0
 	moveq	#bytesToXcnt(((twidth)+(tile_width-1)),tile_width),d1
 	moveq	#bytesToXcnt(((theight)+(tile_height-1)),tile_height),d2

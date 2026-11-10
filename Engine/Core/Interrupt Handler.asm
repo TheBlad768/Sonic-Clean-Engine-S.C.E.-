@@ -383,20 +383,17 @@ Do_Updates:
 ; =============== S U B R O U T I N E =======================================
 
 VInt_SpecialFunction:
-		moveq	#0,d0
-		move.b	(Special_V_int_routine).w,d0
-		beq.s	.return								; if zero, return
-		jmp	.index-2(pc,d0.w)
+
+		; check
+		move.l	(Special_V_int_ptr).w,d0					; get special function pointer to d0
+		beq.s	.return								; if zero, branch
+		movea.l	d0,a0								; load special function pointer to a0
+		jmp	(a0)								; jump to current special function pointer
 ; ---------------------------------------------------------------------------
 
-.index
-		bra.s	.vscroll_on							; 2 (vertical scrolling on)
-		bra.s	.vscroll_copy							; 4 (vertical scrolling copy)
-; ---------------------------------------------------------------------------
-
-		; vscrolloff								; 6 (vertical scrolling off)
+.vscroll_off
 		move.w	#$8B03,VDP_control_port-VDP_control_port(a5)			; command $8B03 - VScroll full, HScroll line-based
-		clr.b	(Special_V_int_routine).w
+		clr.l	(Special_V_int_ptr).w
 
 .return
 		rts
@@ -404,11 +401,11 @@ VInt_SpecialFunction:
 
 .vscroll_on
 		move.w	#$8B07,VDP_control_port-VDP_control_port(a5)			; command $8B07 - VScroll cell-based, HScroll line-based
-		addq.b	#2,(Special_V_int_routine).w
+		move.l	#.vscroll_copy,(Special_V_int_ptr).w
 
 .vscroll_copy
 		stopZ80
-		dma68kToVDP V_scroll_buffer,0,(320/4),VSRAM
+		dma68kToVDP V_scroll_buffer,0,(screen_width/4),VSRAM
 		startZ80
 		rts
 
