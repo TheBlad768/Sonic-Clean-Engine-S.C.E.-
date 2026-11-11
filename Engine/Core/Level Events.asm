@@ -18,12 +18,14 @@ Do_ResizeEvents:
 		sub.w	(Camera_max_Y_pos).w,d0
 		beq.s	.return								; if it's same position, branch
 		bhs.s	.check
+
+		; move up
 		neg.w	d1								; change to camera raising speed
 		move.w	(Camera_Y_pos).w,d0
 		cmp.w	(Camera_target_max_Y_pos).w,d0
 		bls.s	.set
 		move.w	d0,(Camera_max_Y_pos).w
-		andi.w	#$FFFE,(Camera_max_Y_pos).w					; align (2 pixels)
+		and.w	d1,(Camera_max_Y_pos).w						; align (2 pixels)
 
 .set
 		add.w	d1,(Camera_max_Y_pos).w
@@ -34,6 +36,8 @@ Do_ResizeEvents:
 ; ---------------------------------------------------------------------------
 
 .check
+
+		; move down
 		move.w	(Camera_Y_pos).w,d0
 		addq.w	#8,d0
 		cmp.w	(Camera_max_Y_pos).w,d0

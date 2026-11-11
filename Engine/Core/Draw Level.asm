@@ -113,7 +113,7 @@ VInt_VRAMRead:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn:
-		moveq	#-16,d0
+		moveq	#-block_width,d0
 		and.w	(a6),d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
@@ -151,7 +151,7 @@ Draw_TileColumn:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_TileColumn2:
-		moveq	#-16,d0
+		moveq	#-block_width,d0
 		and.w	(a6),d0
 		move.w	(a5),d2
 		move.w	d0,(a5)
@@ -1244,10 +1244,10 @@ Draw_PlaneHorzRightToLeft:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneHorzSingleRightToLeft:
-		andi.w	#-16,d2								; align (16 pixels)
+		andi.w	#-block_width,d2						; align (16 pixels)
 		move.w	d2,d3
 		addi.w	#gameplay_plane_width-block_width,d3
-		andi.w	#-16,d3								; align (16 pixels)
+		andi.w	#-block_width,d3						; align (16 pixels)
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d2,d0
 		blo.s	.next
@@ -1293,10 +1293,10 @@ Draw_PlaneHorzLeftToRight:
 ; =============== S U B R O U T I N E =======================================
 
 Draw_PlaneHorzSingleLeftToRight:
-		andi.w	#-16,d2								; align (16 pixels)
+		andi.w	#-block_width,d2						; align (16 pixels)
 		move.w	d2,d3
 		addi.w	#gameplay_plane_width-block_width,d3
-		andi.w	#-16,d3								; align (16 pixels)
+		andi.w	#-block_width,d3						; align (16 pixels)
 		move.w	(Draw_delayed_position).w,d0
 		cmp.w	d2,d0
 		blo.s	.next
@@ -1385,7 +1385,7 @@ Draw_PlaneVertSingleBottomUpComplex:
 Reset_FGTileOffsetPositionHScroll:
 		move.w	(Camera_X_pos_copy).w,d0
 		move.w	d0,d1								; copy camera x pos to d1
-		andi.w	#-16,d0								; align (16 pixels)
+		andi.w	#-block_width,d0						; align (16 pixels)
 		move.w	d0,(Camera_X_pos_rounded).w
 		move.w	(Camera_Y_pos_copy).w,d0
 		and.w	(Camera_Y_pos_mask).w,d0
@@ -1409,7 +1409,7 @@ Reset_FGTileOffsetPositionHScroll:
 Reset_BGTileOffsetPositionHScroll:
 		move.w	(Camera_X_pos_BG_copy).w,d0
 		move.w	d0,d1								; copy camera x pos bg to d1
-		andi.w	#-16,d0								; align (16 pixels)
+		andi.w	#-block_width,d0						; align (16 pixels)
 		move.w	d0,d2								; copy camera x pos bg rounded to d2
 		move.w	d0,(Camera_X_pos_BG_rounded).w
 		move.w	(Camera_Y_pos_BG_copy).w,d0
@@ -1435,7 +1435,7 @@ Reset_FGTileOffsetPositionVScroll:
 		move.w	d0,d1								; copy camera y pos to d1
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,(Camera_Y_pos_rounded).w
-		moveq	#-16,d0								; align (16 pixels)
+		moveq	#-block_width,d0						; align (16 pixels)
 		and.w	(Camera_X_pos_copy).w,d0
 		move.w	d0,(Camera_X_pos_rounded).w
 		rts
@@ -1460,7 +1460,7 @@ Reset_BGTileOffsetPositionVScroll:
 		and.w	(Camera_Y_pos_mask).w,d0
 		move.w	d0,d2								; copy camera y pos bg rounded to d2
 		move.w	d0,(Camera_Y_pos_BG_rounded).w
-		moveq	#-16,d0								; align (16 pixels)
+		moveq	#-block_width,d0						; align (16 pixels)
 		and.w	(Camera_X_pos_BG_copy).w,d0
 		move.w	d0,(Camera_X_pos_BG_rounded).w
 		rts
