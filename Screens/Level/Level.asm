@@ -178,9 +178,9 @@ LevelScreen:
 		move.w	d0,(Dynamic_object_RAM+(object_size*5)+wait_timer).w		; time for Title Card
 
 		; set
-		move.w	#$7F00,(Ctrl_1).w
+		move.w	#bytes_to_word(~button_start_mask,0),(Ctrl_1).w
 		move.l	#VInt_Level,(V_int_ptr).w					; set VInt pointer
-		andi.b	#$7F,(Last_star_post_hit).w
+		andi.b	#~($80)&$FF,(Last_star_post_hit).w				; clear restore starpost data flag
 		bclr	#GameModeFlag_TitleCard,(Game_mode).w				; subtract $80 from mode to end pre-level stuff
 
 .loop
