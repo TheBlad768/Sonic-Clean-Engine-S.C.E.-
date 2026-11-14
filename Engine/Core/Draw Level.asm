@@ -209,7 +209,7 @@ Setup_TileColumnDraw:
 		move.w	d6,(a0)+
 		bset	#7,-2(a0)							; set column flag
 		lea	(a0),a1
-		add.w	d5,d5
+		add.w	d5,d5								; multiply by 4
 		add.w	d5,d5
 		adda.w	d5,a0
 		bsr.w	Get_LevelChunkColumn
@@ -230,7 +230,7 @@ Setup_TileColumnDraw:
 		move.w	d6,(a0)+
 		bset	#7,-2(a0)							; set column flag
 		lea	(a0),a1
-		add.w	d4,d4
+		add.w	d4,d4								; multiply by 4
 		add.w	d4,d4
 		adda.w	d4,a0
 		bsr.w	Get_LevelChunkColumn
@@ -246,7 +246,7 @@ Setup_TileColumnDraw:
 		move.w	d6,(a0)+
 		bset	#7,-2(a0)							; set column flag
 		lea	(a0),a1
-		add.w	d5,d5
+		add.w	d5,d5								; multiply by 4
 		add.w	d5,d5
 		adda.w	d5,a0
 
@@ -444,7 +444,7 @@ Setup_TileRowDraw:
 		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
 		lea	(a0),a1
-		add.w	d5,d5
+		add.w	d5,d5								; multiply by 4
 		add.w	d5,d5
 		adda.w	d5,a0
 		bsr.w	Get_LevelAddrChunkRow
@@ -464,7 +464,7 @@ Setup_TileRowDraw:
 		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
 		lea	(a0),a1
-		add.w	d4,d4
+		add.w	d4,d4								; multiply by 4
 		add.w	d4,d4
 		adda.w	d4,a0
 		bsr.s	Get_LevelAddrChunkRow
@@ -479,7 +479,7 @@ Setup_TileRowDraw:
 		subq.w	#1,d6								; dbf fix
 		move.w	d6,(a0)+
 		lea	(a0),a1
-		add.w	d5,d5
+		add.w	d5,d5								; multiply by 4
 		add.w	d5,d5
 		adda.w	d5,a0
 
@@ -636,7 +636,7 @@ Refresh_PlaneTileDeformHScroll:
 ;
 ; Input:
 ; a4 = draw array
-; a5 = horizontal scroll table
+; a5 = vertical scroll table
 ; d0 = Camera Y pos (or BG) rounded ; align (16 pixels)
 
 ; =============== S U B R O U T I N E =======================================
