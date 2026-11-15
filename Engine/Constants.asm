@@ -359,6 +359,7 @@ x_pos							ds.l 1				; word, or long when extra precision is required
 x_sub =							x_pos+2				; word
 y_pos							ds.l 1				; word, or long when extra precision is required
 y_sub =							y_pos+2				; word
+mainspr_childsprites =					y_sub				; word ; amount of child sprites
 
 ; ---------------------------------------------------------------------------
 ; Movement and animation object variables
@@ -566,10 +567,6 @@ boss_hitcount2 =					boss_hitcount			; byte ; usage varies, bosses use it as a h
 ; When childsprites are activated (i.e. bit #6 of render_flags set)
 ; ---------------------------------------------------------------------------
 
-mainspr_childsprites =					objoff_16			; word ; amount of child sprites
-next_subspr =						6				; size
-
-
 	dsset x_vel									; pretend we're in the RAM
 
 subspr_data =						*
@@ -577,6 +574,8 @@ sub2_x_pos						ds.w 1				; (2 bytes) ; x_vel
 sub2_y_pos						ds.w 1				; (2 bytes) ; y_vel
 							ds.b 1				; even ; boss_saved_player
 sub2_mapframe						ds.b 1				; (1 byte)
+subspr_data_end =					*
+
 sub3_x_pos						ds.w 1				; (2 bytes) ; y_radius and x_radius
 sub3_y_pos						ds.w 1				; (2 bytes) ; anim and prev_anim
 							ds.b 1				; even ; mapping_frame
@@ -609,8 +608,17 @@ subA_x_pos						ds.w 1				; (2 bytes)
 subA_y_pos						ds.w 1				; (2 bytes)
 							ds.b 1				; even
 subA_mapframe						ds.b 1				; (1 byte)
+subspr_data_last =					*
 
 	dsreset										; stop pretending and reset the program counter
+
+; ---------------------------------------------------------------------------
+; Property of all child sprites
+; ---------------------------------------------------------------------------
+
+subspr_size =						subspr_data_end-subspr_data	; size
+next_subspr =						subspr_size
+subspr_total =						(subspr_data_last-subspr_data)/subspr_size
 
 ; ---------------------------------------------------------------------------
 ; Bits 3-6 of an object's status after a SolidObject call is a
