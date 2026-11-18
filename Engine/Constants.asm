@@ -1017,6 +1017,7 @@ RememberState =						Sprite_OnScreen_Test		; alias from Sonic 1 (GitHub)
 MarkObjGone_Collision =					Sprite_CheckDeleteTouch3	; alias for SCE
 RememberState_Collision =				Sprite_CheckDeleteTouch3	; alias for SCE
 Sprite_OnScreen_Test_Collision =			Sprite_CheckDeleteTouch3	; alias for SCE
+Sprite_OnScreen_Test2_Collision =			Sprite_CheckDeleteTouch3.skipxpos	; alias for SCE
 ObjHitFloor =						ObjCheckFloorDist		; alias from Sonic 1 (Hivebrain)
 ObjFloorDist =						ObjCheckFloorDist		; alias from Sonic 1 (GitHub)
 ObjHitFloor2 =						ObjCheckFloorDist2		; alias from Sonic 1 (Hivebrain)
