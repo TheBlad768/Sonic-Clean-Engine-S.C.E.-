@@ -205,7 +205,7 @@ Restore_LevelMusic:
 
 HurtCharacter_Directly2:
 		tst.b	object_control(a1)
-		bmi.s	HurtCharacter_Directly.return
+		bmi.s	HurtCharacter_Directly.return					; branch if object collisions are disabled for Sonic
 		btst	#status_secondary.invincible,status_secondary(a1)		; is character invincible?
 		bne.s	HurtCharacter_Directly.return					; if yes, branch
 		tst.b	invulnerability_timer(a1)					; is character invulnerable?
@@ -414,7 +414,12 @@ Load_LevelResults:
 ; =============== S U B R O U T I N E =======================================
 
 Set_PlayerEndingPose:
-		move.b	#$81,object_control(a1)
+
+		move.b	#( \
+			setBit(object_control.lock_control) | \
+			setBit(object_control.no_interaction) \
+		),object_control(a1)
+
 		move.b	#AniIDSonAni_Landing,anim(a1)					; set landing animation
 		clr.l	x_vel(a1)
 		clr.w	ground_vel(a1)
@@ -455,7 +460,7 @@ Restore_PlayerControl:
 		lea	(Player_1).w,a1							; a1=character
 
 Restore_PlayerControl2:
-		clr.b	object_control(a1)
+		clr.b	object_control(a1)						; restore Player's movement
 		bclr	#status.player.in_air,status(a1)
 		move.w	#bytes_to_word(AniIDSonAni_Wait,AniIDSonAni_Wait),anim(a1)
 		clr.b	anim_frame(a1)

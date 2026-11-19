@@ -173,7 +173,7 @@ Touch_ChkHurt3:
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
 		bne.s	.return								; if yes, branch
 		tst.b	object_control(a1)
-		bmi.s	.return
+		bmi.s	.return								; branch if object collisions are disabled for Sonic
 		btst	#status_secondary.invincible,status_secondary(a1)		; is character invincible?
 		bne.s	.return								; if yes, branch
 		tst.b	invulnerability_timer(a1)					; is character invulnerable?

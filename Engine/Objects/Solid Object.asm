@@ -681,7 +681,7 @@ loc_1E1AA:
 
 loc_1E1CA:
 		tst.b	object_control(a1)
-		bmi.s	locret_1E1F2
+		bmi.s	locret_1E1F2							; branch if object collisions are disabled for Sonic
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	locret_1E1F2							; if yes, branch
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
@@ -699,7 +699,7 @@ locret_1E1F2:
 
 loc_1E1F4:
 		tst.b	object_control(a1)
-		bmi.s	locret_1E21C
+		bmi.s	locret_1E21C							; branch if object collisions are disabled for Sonic
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	locret_1E21C							; if yes, branch
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
@@ -1000,7 +1000,7 @@ loc_1E45A:
 		cmpi.w	#-16,d0
 		blo.s	locret_1E4D4
 		tst.b	object_control(a1)
-		bmi.s	locret_1E4D4
+		bmi.s	locret_1E4D4							; branch if object collisions are disabled for Sonic
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	locret_1E4D4							; if yes, branch
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
@@ -1049,7 +1049,7 @@ loc_1E4D6:
 		cmpi.w	#-16,d1
 		blo.s	locret_1E4D4
 		tst.b	object_control(a1)
-		bmi.s	locret_1E4D4
+		bmi.s	locret_1E4D4							; branch if object collisions are disabled for Sonic
 		cmpi.b	#PlayerID_Death,routine(a1)					; has player just died?
 		bhs.s	locret_1E4D4							; if yes, branch
 		tst.w	(Debug_placement_mode).w					; is debug mode on?
