@@ -684,7 +684,7 @@ render_flags.multi_sprite =				6				; object SST holds metadata for multiple spr
 render_flags.on_screen =				7				; object is on-screen and was rendered on the previous frame
 
 ; ---------------------------------------------------------------------------
-; Player status variables
+; Player status bits
 ; ---------------------------------------------------------------------------
 
 status.player.x_flip =					render_flags.x_flip		; facing left
@@ -697,7 +697,7 @@ status.player.underwater =				6				; submersed
 status.player.prevent_tails_respawn =			7				; prevents AI Tails from respawning
 
 ; ---------------------------------------------------------------------------
-; Player status secondary variables
+; Player status secondary bits
 ; ---------------------------------------------------------------------------
 
 status_secondary.shield =				0
@@ -710,7 +710,7 @@ status_secondary.bubble_shield =			6
 status_secondary.sliding =				7
 
 ; ---------------------------------------------------------------------------
-; Player shield reaction variables
+; Player shield reaction bits
 ; ---------------------------------------------------------------------------
 
 shield_reaction.shield =				0
@@ -722,7 +722,19 @@ shield_reaction.lightning_shield =			5
 shield_reaction.bubble_shield =				6
 
 ; ---------------------------------------------------------------------------
-; Object status variables
+; Player control bits
+; ---------------------------------------------------------------------------
+
+object_control.lock_control =				0				; player control is disabled
+object_control.no_animation =				1				; animation is disabled
+
+object_control.bit4 =					4				; ???
+object_control.ignore_touch =				5				; player collision is disabled
+object_control.ignore_walls =				6				; wall collision is disabled
+object_control.no_interaction =				7				; interaction is disabled
+
+; ---------------------------------------------------------------------------
+; Object status bits
 ; ---------------------------------------------------------------------------
 
 status.npc.x_flip =					render_flags.x_flip		; facing right ; used by Animate_Sprite
@@ -754,7 +766,7 @@ collision_type.npc.ring =				id(ptr_Touch_Ring)		; 08
 collision_type.npc.monitor =				id(ptr_Touch_Monitor)		; 0A
 
 ; ---------------------------------------------------------------------------
-; Object respawn variables
+; Object respawn bits
 ; ---------------------------------------------------------------------------
 
 respawn_addr.state =					7				; remember object state
@@ -772,7 +784,7 @@ boss_side_x_bit =					6
 boss_side_y_bit =					7
 
 ; ---------------------------------------------------------------------------
-; Water wind tunnels variables
+; Water wind tunnels bits
 ; ---------------------------------------------------------------------------
 
 WindTunnel_holding_flag.player_1 =			0

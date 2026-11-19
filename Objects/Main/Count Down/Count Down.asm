@@ -88,8 +88,13 @@ Obj_AirCountdown:
 		subq.b	#1,air_left(a2)							; subtract 1 from air remaining
 		bhs.w	.create								; if air is above 0, branch
 
+		; lock controls
+		move.b	#( \
+			setBit(object_control.lock_control) | \
+			setBit(object_control.no_interaction) \
+		),object_control(a2)
+
 		; drown the player
-		move.b	#$81,object_control(a2)						; lock controls
 		sfx	sfx_Drown							; play drowning sound
 		move.b	#10,aircountdown.bubble_count(a0)				; spawn ten bubbles
 		bset	#0,aircountdown.state_flags(a0)

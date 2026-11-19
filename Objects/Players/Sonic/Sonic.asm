@@ -130,7 +130,7 @@ loc_10BF0:
 		move.w	(Ctrl_1).w,(Ctrl_1_logical).w					; copy new held buttons, to enable joypad control
 
 loc_10BFC:
-		btst	#0,object_control(a0)						; is Sonic interacting with another object that holds him in place or controls his movement somehow?
+		btst	#object_control.lock_control,object_control(a0)			; is Sonic interacting with another object that holds him in place or controls his movement somehow?
 		beq.s	loc_10C0C							; if yes, branch to skip Sonic's control
 		clr.b	double_jump_flag(a0)						; enable double jump
 		bra.s	loc_10C26
@@ -168,7 +168,7 @@ loc_10C26:
 		move.b	prev_anim(a0),anim(a0)
 
 .anim
-		btst	#1,object_control(a0)
+		btst	#object_control.no_animation,object_control(a0)
 		bne.s	.touch
 		bsr.w	Sonic_Animate
 		tst.b	(Reverse_gravity_flag).w					; are we in reverse gravity mode?
@@ -179,7 +179,12 @@ loc_10C26:
 		bsr.w	Sonic_Load_PLC
 
 .touch
-		moveq	#signextendB($A0),d0
+
+		moveq	#signextendB( \
+			setBit(object_control.ignore_touch) | \
+			setBit(object_control.no_interaction) \
+		),d0
+
 		and.b	object_control(a0),d0
 		bne.s	.return
 		jmp	TouchResponse(pc)
@@ -808,7 +813,7 @@ loc_11332:
 		move.w	d0,y_vel(a0)
 
 loc_11350:
-		btst	#6,object_control(a0)
+		btst	#object_control.ignore_walls,object_control(a0)
 		bne.s	locret_113CE
 		moveq	#$3F,d0
 		and.b	angle(a0),d0
