@@ -1,5 +1,25 @@
 ; ---------------------------------------------------------------------------
 ; Load level objects
+;
+; input variables:
+;  -none-
+;
+; writes:
+;  d0 = object slot
+;  d3 = upper boundary to load object
+;  d4 = lower boundary to load object
+;  d5 = #$FFF, used to filter out object's y position
+;  d6 = camera position
+;  d1, d2, d7 = misc
+;
+;  a0 = address in object placement list
+;  a1 = address of object slot
+;  a3 = address in object respawn table
+;  a4 = address of object index
+;  a5 = address of free objects list
+;  a6 = object loading routine
+;
+; Optimized version by Flamewing
 ; ---------------------------------------------------------------------------
 
 ; =============== S U B R O U T I N E =======================================
@@ -11,6 +31,8 @@ Load_Objects:
 ; =============== S U B R O U T I N E =======================================
 
 Load_Objects_Init:
+
+		; initialize each object load address with the first object in the layout
 		movea.l	(Level_data_addr_RAM.ObjectsRAM).w,a0
 		move.l	a0,(Object_load_addr_front).w
 		move.l	a0,(Object_load_addr_back).w
@@ -18,397 +40,515 @@ Load_Objects_Init:
 Load_Objects_Init2:
 		move.l	#Load_Objects_Main,(Object_load_addr_RAM).w
 		move.l	#Obj_Index,(Object_index_addr).w
-		tst.b	(Respawn_table_keep).w
-		bne.s	.skip
-		clearRAM Object_respawn_table, Object_respawn_table_end
+
+		; check
+		tst.b	(Respawn_table_keep).w						; are you restarting from a lamppost?
+		bne.s	.skip								; if yes, branch
+		clearRAM Object_respawn_table, Object_respawn_table_end			; clear data
 
 .skip
 		lea	(Object_respawn_table).w,a3
+
+		moveq	#-$80,d1
 		move.w	(Camera_X_pos).w,d6
-		subi.w	#$80,d6
-		bhs.s	loc_1B79A
-		moveq	#0,d6
+		add.w	d1,d6								; look one chunk to the left (d1 = -$80)
+		blo.s	.nocap								; if the result was negative,
+		moveq	#0,d6								; cap at zero
 
-loc_1B79A:
-		andi.w	#$FF80,d6
-		movea.l	(Object_load_addr_front).w,a0
+.nocap
+		and.w	d1,d6								; limit to increments of $80 (width of a chunk)
+		movea.l	(Object_load_addr_front).w,a0					; get first object in layout
 
-loc_1B7A2:
-		cmp.w	(a0),d6
-		bls.s	loc_1B7AC
-		addq.w	#8,a0
-		addq.w	#1,a3
-		bra.s	loc_1B7A2
+		; at the beginning of a level this gives respawn table entries to any object that is one chunk
+		; behind the left edge of the screen that needs to remember its state (Monitors, Badniks, etc.)
+
+.scan_right1
+		cmp.w	(a0),d6								; is object's x position >= d6?
+		bls.s	.found_rightmost						; if yes, branch
+		addq.w	#8,a0								; next object
+		addq.w	#1,a3								; respawn index of next object going right
+		bra.s	.scan_right1							; continue with next object
 ; ---------------------------------------------------------------------------
 
-loc_1B7AC:
-		move.l	a0,(Object_load_addr_front).w
-		move.w	a3,(Object_respawn_index_front).w
+.found_rightmost
+		move.l	a0,(Object_load_addr_front).w					; remember rightmost object that has been processed, so far (we still need to look forward)
+		move.w	a3,(Object_respawn_index_front).w				; and its respawn table index
 
 	if DEBUG_LoadObjects
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is object respawn table overflow
 	endif
 
-		lea	(Object_respawn_table).w,a3
-		movea.l	(Object_load_addr_back).w,a0
-		subi.w	#$80,d6
-		blo.s	loc_1B7D8
+		lea	(Object_respawn_table).w,a3					; reset a3
+		movea.l	(Object_load_addr_back).w,a0					; reset a0
+		add.w	d1,d6								; look even farther left (any object behind this is out of range)
+		bhs.s	.found_leftmost							; branch, if camera position would be behind level's left boundary
 
-loc_1B7CE:
-		cmp.w	(a0),d6
-		bls.s	loc_1B7D8
+.scan_right2:
+		cmp.w	(a0),d6								; is object's x position >= d6?
+		bls.s	.found_leftmost							; if yes, branch
 		addq.w	#8,a0
-		addq.w	#1,a3
-		bra.s	loc_1B7CE
+		addq.w	#1,a3								; respawn index of next object going left
+		bra.s	.scan_right2							; continue with next object
 ; ---------------------------------------------------------------------------
 
-loc_1B7D8:
-		move.l	a0,(Object_load_addr_back).w
-		move.w	a3,(Object_respawn_index_back).w
-		move.w	#-1,(Camera_X_pos_coarse).w
-		moveq	#-$80,d0
-		and.w	(Camera_Y_pos).w,d0
-		move.w	d0,(Camera_Y_pos_coarse).w
+.found_leftmost:
+		move.l	a0,(Object_load_addr_back).w					; remember current object from the left
+		move.w	a3,(Object_respawn_index_back).w				; and its respawn table index
+
+		move.w	#-1,(Camera_X_pos_coarse).w					; make sure Load_Objects_GoingForward is run
+
+		and.w	(Camera_Y_pos).w,d1
+		move.w	d1,(Camera_Y_pos_coarse).w					; make sure the Y check isn't run unnecessarily during initialization
+
+		; fall throuh
 
 Load_Objects_Main:
-		moveq	#-$80,d0
-		move.w	(Camera_Y_pos).w,d1
-		add.w	d0,d1								; subtract $80
-		and.w	d0,d1
-		move.w	d1,(Camera_Y_pos_coarse_back).w
-		move.w	(Camera_X_pos).w,d1
-		add.w	d0,d1								; subtract $80
-		and.w	d0,d1
-		move.w	d1,(Camera_X_pos_coarse_back).w
+
+		; get coarse camera position
+		moveq	#-$80,d1
+		move.w	(Camera_Y_pos).w,d0
+		add.w	d1,d0								; one chunk up (d1 = -$80)
+		and.w	d1,d0
+		move.w	d0,(Camera_Y_pos_coarse_back).w
+
+		move.w	(Camera_X_pos).w,d0
+		add.w	d1,d0								; one chunk up (d1 = -$80)
+		and.w	d1,d0
+		move.w	d0,(Camera_X_pos_coarse_back).w
 		movea.l	(Object_index_addr).w,a4
-		tst.w	(Camera_min_Y_pos).w
-		bpl.s	loc_1B84A
-		lea	loc_1BA40(pc),a6
-		moveq	#-$80,d3
-		and.w	(Camera_Y_pos).w,d3
+
+		; check
+		tst.w	(Camera_min_Y_pos).w						; does this level y-wrap?
+		bpl.s	.NoYWrap							; if not, branch
+		lea	ChkLoadObj_YWrap(pc),a6						; set object loading routine
+		move.w	(Camera_Y_pos).w,d3
+		and.w	d1,d3								; get coarse value
 		move.w	d3,d4
-		addi.w	#$200,d4
-		subi.w	#$80,d3
-		bpl.s	loc_1B83A
-		and.w	(Screen_Y_wrap_value).w,d3
-		bra.s	loc_1B864
+		addi.w	#$200,d4							; set lower boundary
+		add.w	d1,d3								; set upper boundaryy (d1 = -$80)
+		bpl.s	.nowrap_top							; branch, if upper boundary > 0
+		and.w	(Screen_Y_wrap_value).w,d3					; wrap value
+		bra.s	Load_Objects_Main_Cont
 ; ---------------------------------------------------------------------------
 
-loc_1B83A:
+.nowrap_top
 		move.w	(Screen_Y_wrap_value).w,d0
 		addq.w	#1,d0
 		cmp.w	d0,d4
-		bls.s	loc_1B860
-		and.w	(Screen_Y_wrap_value).w,d4
-		bra.s	loc_1B864
+		bls.s	.valid_top							; branch, if lower boundary < wrap value
+		and.w	(Screen_Y_wrap_value).w,d4					; wrap value
+		bra.s	Load_Objects_Main_Cont
 ; ---------------------------------------------------------------------------
 
-loc_1B84A:
-		moveq	#-$80,d3
-		and.w	(Camera_Y_pos).w,d3
+.NoYWrap
+		move.w	(Camera_Y_pos).w,d3
+		and.w	d1,d3								; get coarse value
 		move.w	d3,d4
-		addi.w	#$200,d4
-		subi.w	#$80,d3
-		bpl.s	loc_1B860
-		moveq	#0,d3
+		addi.w	#$200,d4							; set lower boundary
+		add.w	d1,d3								; set upper boundary (d1 = -$80)
+		bpl.s	.valid_top
+		moveq	#0,d3								; no negative values allowed
 
-loc_1B860:
-		lea	loc_1BA92(pc),a6
+.valid_top
+		lea	ChkLoadObj(pc),a6						; set object loading routine
 
-loc_1B864:
-		move.w	#$FFF,d5
-		moveq	#-$80,d6
-		and.w	(Camera_X_pos).w,d6
-		cmp.w	(Camera_X_pos_coarse).w,d6
-		beq.w	loc_1B91A
-		bge.s	loc_1B8D2
-		move.w	d6,(Camera_X_pos_coarse).w
-		movea.l	(Object_load_addr_back).w,a0
-		movea.w	(Object_respawn_index_back).w,a3
-		subi.w	#$80,d6
-		blo.s	loc_1B8A8
+Load_Objects_Main_Cont:
+		move.w	#$FFF,d5							; this will be used later when we load objects
+		move.w	(Camera_X_pos).w,d6
+		and.w	d1,d6
+		cmp.w	(Camera_X_pos_coarse).w,d6					; is the X range the same as last time?
+		beq.w	Load_Objects_SameXRange						; if yes, branch
+		bge.s	Load_Objects_GoingForward					; if new pos is greater than old pos, branch
+
+		; if the player is moving back
+		move.w	d6,(Camera_X_pos_coarse).w					; remember current position for next time
+
+		movea.l	(Object_load_addr_back).w,a0					; get current object going left
+		movea.w	(Object_respawn_index_back).w,a3				; and its respawn table index
+
+		add.w	d1,d6								; look one chunk to the lefty (d1 = -$80)
+		bhs.s	Load_Objects_GoingBack_Part2					; branch, if camera position would be behind level's left boundary
+
+		; find an empty object slot
 		bsr.w	Create_New_Object
-		bne.s	loc_1B8A8
+		bne.s	Load_Objects_GoingBack_Part2
 
-loc_1B892:
-		cmp.w	-8(a0),d6
-		bge.s	loc_1B8A8
+		; load all objects left of the screen that are now in range
+
+.scan_left
+		cmp.w	-8(a0),d6							; is the previous object's X pos less than d6?
+		bge.s	Load_Objects_GoingBack_Part2					; if it is, branch
+		subq.w	#8,a0								; get object's address
+		subq.w	#1,a3								; and respawn table index
+		jsr	(a6)								; load object
+		bne.s	.loadfail							; branch, if SST is full
 		subq.w	#8,a0
-		subq.w	#1,a3
-		jsr	(a6)
-		bne.s	loc_1B8A4
-		subq.w	#8,a0
-		bra.s	loc_1B892
+		bra.s	.scan_left							; continue with previous object
 ; ---------------------------------------------------------------------------
 
-loc_1B8A4:
-		addq.w	#8,a0
-		addq.w	#1,a3
+.loadfail
 
-loc_1B8A8:
-		move.l	a0,(Object_load_addr_back).w
-		move.w	a3,(Object_respawn_index_back).w
-		movea.l	(Object_load_addr_front).w,a0
-		movea.w	(Object_respawn_index_front).w,a3
-		addi.w	#$300,d6
+		; undo a few things, if the object couldn't load
+		addq.w	#8,a0								; go back to last object
+		addq.w	#1,a3								; since we didn't load the object, undo last change
 
-loc_1B8BC:
-		cmp.w	-8(a0),d6
-		bgt.s	loc_1B8C8
-		subq.w	#8,a0
-		subq.w	#1,a3
-		bra.s	loc_1B8BC
+Load_Objects_GoingBack_Part2:
+		move.l	a0,(Object_load_addr_back).w					; remember current object going left
+		move.w	a3,(Object_respawn_index_back).w				; and its respawn table index
+
+		movea.l	(Object_load_addr_front).w,a0					; get next object going right
+		movea.w	(Object_respawn_index_front).w,a3				; and its respawn table index
+		addi.w	#$300,d6							; look two chunks beyond the right edge of the screen
+
+		; subtract number of objects that have been moved out of range (from the right side)
+
+.scan_left
+		cmp.w	-8(a0),d6							; is the previous object's X pos less than d6?
+		bgt.s	.found_prev							; if it is, branch
+		subq.w	#8,a0								; get object's address
+		subq.w	#1,a3								; and respawn table index
+		bra.s	.scan_left							; continue with previous object
 ; ---------------------------------------------------------------------------
 
-loc_1B8C8:
-		move.l	a0,(Object_load_addr_front).w
-		move.w	a3,(Object_respawn_index_front).w
+.found_prev
+		move.l	a0,(Object_load_addr_front).w					; remember next object going right
+		move.w	a3,(Object_respawn_index_front).w				; and its respawn table index
 
 	if DEBUG_LoadObjects
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is object respawn table overflow
 	endif
 
-		bra.s	loc_1B91A
+		bra.s	Load_Objects_SameXRange
 ; ---------------------------------------------------------------------------
 
-loc_1B8D2:
+Load_Objects_GoingForward:
 		move.w	d6,(Camera_X_pos_coarse).w
-		movea.l	(Object_load_addr_front).w,a0
-		movea.w	(Object_respawn_index_front).w,a3
-		addi.w	#$280,d6
+
+		movea.l	(Object_load_addr_front).w,a0					; get next object from the right
+		movea.w	(Object_respawn_index_front).w,a3				; and its respawn table index
+		addi.w	#$280,d6							; look two chunks forward
+
+		; find an empty object slot
 		bsr.w	Create_New_Object
-		bne.s	loc_1B8F2
+		bne.s	Load_Objects_GoingForward_Part2
 
-loc_1B8E8:
-		cmp.w	(a0),d6
-		bls.s	loc_1B8F2
-		jsr	(a6)
-		addq.w	#1,a3
-		beq.s	loc_1B8E8
+		; load all objects right of the screen that are now in range
 
-loc_1B8F2:
-		move.l	a0,(Object_load_addr_front).w
-		move.w	a3,(Object_respawn_index_front).w
+.scan_right
+		cmp.w	(a0),d6								; is object's x position >= d6?
+		bls.s	Load_Objects_GoingForward_Part2					; if yes, branch
+		jsr	(a6)								; load object (and get address of next object)
+		addq.w	#1,a3								; respawn index of next object to the right
+		beq.s	.scan_right							; continue loading objects, if the SST isn't full
+
+Load_Objects_GoingForward_Part2:
+		move.l	a0,(Object_load_addr_front).w					; remember next object from the right
+		move.w	a3,(Object_respawn_index_front).w				; and its respawn table index
 
 	if DEBUG_LoadObjects
 		; RaiseError is only available in DEBUG builds
 		ifdebug	jsr	(Load_Objects_RaiseError).l				; raise an error if there is object respawn table overflow
 	endif
 
-		movea.l	(Object_load_addr_back).w,a0
-		movea.w	(Object_respawn_index_back).w,a3
-		subi.w	#$300,d6
-		blo.s	loc_1B912
+		movea.l	(Object_load_addr_back).w,a0					; get current object from the left
+		movea.w	(Object_respawn_index_back).w,a3				; and its respawn table index
+		subi.w	#$300,d6							; look one chunk behind the left edge of the screen
+		blo.s	Load_Objects_GoingForward_End					; branch, if camera position would be behind level's left boundary
 
-loc_1B908:
-		cmp.w	(a0),d6
-		bls.s	loc_1B912
-		addq.w	#8,a0
-		addq.w	#1,a3
-		bra.s	loc_1B908
+		; subtract number of objects that have been moved out of range (from the left)
+
+.scan_right
+		cmp.w	(a0),d6								; is object's x position >= d6?
+		bls.s	Load_Objects_GoingForward_End					; if yes, branch
+		addq.w	#8,a0								; next object
+		addq.w	#1,a3								; respawn index of next object to the left
+		bra.s	.scan_right							; continue with next object
 ; ---------------------------------------------------------------------------
 
-loc_1B912:
-		move.l	a0,(Object_load_addr_back).w
-		move.w	a3,(Object_respawn_index_back).w
+Load_Objects_GoingForward_End:
+		move.l	a0,(Object_load_addr_back).w					; remember current object from the left
+		move.w	a3,(Object_respawn_index_back).w				; and its respawn table index
 
-loc_1B91A:
-		moveq	#-$80,d6
-		and.w	(Camera_Y_pos).w,d6
+Load_Objects_SameXRange:
+		move.w	(Camera_Y_pos).w,d6
+		and.w	d1,d6
 		move.w	d6,d3
-		cmp.w	(Camera_Y_pos_coarse).w,d6
-		beq.w	loc_1B9FA
-		bge.s	loc_1B956
-		tst.w	(Camera_min_Y_pos).w
-		bpl.s	loc_1B94C
+		cmp.w	(Camera_Y_pos_coarse).w,d6					; is the y range the same as last time?
+		beq.s	Load_Objects_Done						; if yes, branch
+		bge.s	Load_Objects_GoingDown						; if the player is moving down
+
+		; if the player is moving up
+		move.w	d6,(Camera_Y_pos_coarse).w
+		tst.w	(Camera_min_Y_pos).w						; does the level y-wrap?
+		bpl.s	Load_Objects_GoingUp_NoYWrap					; if not, branch
 		tst.w	d6
-		bne.s	loc_1B940
+		bne.s	Load_Objects_GoingUp_YWrap
 		cmpi.w	#$80,(Camera_Y_pos_coarse).w
-		bne.s	loc_1B968
+		bne.s	Load_Objects_GoingDown_YWrap
 
-loc_1B940:
-		subi.w	#$80,d3
-		bpl.s	loc_1B982
-		and.w	(Screen_Y_wrap_value).w,d3
-		bra.s	loc_1B982
+Load_Objects_GoingUp_YWrap:
+		add.w	d1,d3								; look one chunk up (d1 = -$80)
+		and.w	(Screen_Y_wrap_value).w,d3					; else, wrap value
+		bra.s	Load_Objects_YCheck
 ; ---------------------------------------------------------------------------
 
-loc_1B94C:
-		subi.w	#$80,d3
-		bmi.w	loc_1B9FA
-		bra.s	loc_1B982
+Load_Objects_GoingUp_NoYWrap:
+		add.w	d1,d3								; look one chunk up (d1 = -$80)
+		bmi.s	Load_Objects_Done						; don't do anything if camera y position is < $80
+		bra.s	Load_Objects_YCheck
 ; ---------------------------------------------------------------------------
 
-loc_1B956:
-		tst.w	(Camera_min_Y_pos).w
-		bpl.s	loc_1B978
+Load_Objects_GoingDown:
+		move.w	d6,(Camera_Y_pos_coarse).w
+		tst.w	(Camera_min_Y_pos).w						; does the level y-wrap?
+		bpl.s	Load_Objects_GoingDown_NoYWrap					; if not, branch
 		tst.w	(Camera_Y_pos_coarse).w
-		bne.s	loc_1B968
+		bne.s	Load_Objects_GoingDown_YWrap
 		cmpi.w	#$80,d6
-		bne.s	loc_1B940
+		bne.s	Load_Objects_GoingUp_YWrap
 
-loc_1B968:
-		addi.w	#$180,d3
-		cmp.w	(Screen_Y_wrap_value).w,d3
-		blo.s	loc_1B982
-		and.w	(Screen_Y_wrap_value).w,d3
-		bra.s	loc_1B982
+Load_Objects_GoingDown_YWrap:
+		addi.w	#$180,d3							; look one chunk down
+		and.w	(Screen_Y_wrap_value).w,d3					; wrap value
+		bra.s	Load_Objects_YCheck
 ; ---------------------------------------------------------------------------
 
-loc_1B978:
-		addi.w	#$180,d3
+Load_Objects_Done:
+		rts
+; ---------------------------------------------------------------------------
+
+Load_Objects_GoingDown_NoYWrap:
+		addi.w	#$180,d3							; look one chunk down
 		cmp.w	(Screen_Y_wrap_value).w,d3
-		bhi.w	loc_1B9FA
+		bhi.s	Load_Objects_Done						; don't do anything, if camera is too close to bottom
 
-loc_1B982:
+Load_Objects_YCheck:
+
+		; check
+		movem.l	(Object_load_addr_front).w,d7/a0				; get next object going right (d7) and left (a0)
+		sub.l	a0,d7								; d7 = number of objects between the left and right boundaries * 8
+		beq.s	.done								; branch if there are no objects inbetween
+
+		; get an empty object slot
 		bsr.w	Create_New_Object
-		bne.s	loc_1B9FA
-		move.w	d3,d4
-		addi.w	#$80,d4
-		move.w	#$FFF,d5
-		movea.l	(Object_load_addr_back).w,a0
-		movea.w	(Object_respawn_index_back).w,a3
-		move.l	(Object_load_addr_front).w,d7
-		sub.l	a0,d7
-		beq.s	loc_1B9FA
-		addq.w	#2,a0								; skip xpos
+		bne.s	.done
 
-loc_1B9A4:
-		tst.b	(a3)
-		bmi.s	loc_1B9F2
-		move.w	(a0),d1								; get ypos
-		and.w	d5,d1
-		cmp.w	d3,d1
-		blo.s	loc_1B9F2
-		cmp.w	d4,d1
-		bhi.s	loc_1B9F2
+		; get
+		movea.w	(Object_respawn_index_back).w,a3				; and its respawn table index
+		move.w	d3,d4
+		sub.w	d1,d4								; d4 += $80 (d1 = -$80)
+		move.w	#$FFF,d5							; this will be used later when we load objects
+
+.loop
+
+		; check, if current object needs to be loaded
+		tst.b	(a3)								; is object already loaded?
+		bmi.s	.next								; if yes, branch
+		move.w	(a0)+,d6							; get xpos
+		move.w	(a0)+,d2							; get ypos
+		cmp.w	d3,d2
+		blo.s	.next2								; branch, if object is out of range from the top
+		cmp.w	d4,d2
+		bhi.s	.next2								; branch, if object is out of range from the bottom
+
+		; load object
+		or.b	d1,(a3)								; mark object as loaded (d1 = -$80)
+		move.w	d2,y_pos(a1)							; set ypos
+		move.w	d6,x_pos(a1)							; set xpos
+		move.w	(a0)+,d2							; get object id
+		move.w	d2,d6
+		and.w	d5,d6								; object id mask
+		add.w	d6,d6								; multiply by 4
+		add.w	d6,d6
+		move.l	(a4,d6.w),code_addr(a1)
+		rol.w	#3,d2
+
+		; get object's render flags and status
+		andi.w	#( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),d2
 
 		; set
-		bset	#respawn_addr.state,(a3)					; turn off the slot
-		move.w	-2(a0),x_pos(a1)
-		move.w	(a0),y_pos(a1)							; get ypos
-		move.w	2(a0),d1							; get object id
-		move.w	d1,d2
-		and.w	d5,d1
-		add.w	d1,d1								; multiply by 4
-		add.w	d1,d1
-		move.l	(a4,d1.w),code_addr(a1)
-		rol.w	#3,d2
-
-		andi.w	#( \
-			setBit(render_flags.x_flip) | \
-			setBit(render_flags.y_flip) \
-		),d2
-
-		move.b	d2,render_flags(a1)
-		move.b	d2,status(a1)
-		move.w	4(a0),subtype(a1)
-		move.w	a3,respawn_addr(a1)
-
-		; create
-		Create_New_Object_4.s	loc_1B9FA
-		bne.s	loc_1B9FA
-
-loc_1B9F2:
-		addq.w	#8,a0
-		addq.w	#1,a3
-		subq.w	#8,d7
-		bne.s	loc_1B9A4
-
-loc_1B9FA:
-		move.w	d6,(Camera_Y_pos_coarse).w
-		rts
-; ---------------------------------------------------------------------------
-
-loc_1BA40:
-		tst.b	(a3)
-		bpl.s	loc_1BA4A
-		addq.w	#8,a0
-		moveq	#0,d1
-		rts
-; ---------------------------------------------------------------------------
-
-loc_1BA4A:
-		move.w	(a0)+,d7							; get xpos
-		move.w	(a0)+,d1							; get ypos
-		move.w	(a0)+,d2							; get object id
-		bmi.s	loc_1BA64
-		cmp.w	d3,d1
-		bhs.s	loc_1BA64
-		cmp.w	d4,d1
-		bls.s	loc_1BA64
-		addq.w	#2,a0								; skip subtype
-		moveq	#0,d1
-		rts
-; ---------------------------------------------------------------------------
-
-loc_1BA64:
-		bset	#respawn_addr.state,(a3)					; turn off the slot
-		move.w	d7,x_pos(a1)
-		move.w	d1,y_pos(a1)
-		move.w	d2,d1
-		and.w	d5,d1
-		add.w	d1,d1								; multiply by 4
-		add.w	d1,d1
-		move.l	(a4,d1.w),code_addr(a1)
-		rol.w	#3,d2
-
-		andi.w	#( \
-			setBit(render_flags.x_flip) | \
-			setBit(render_flags.y_flip) \
-		),d2
-
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.w	(a0)+,subtype(a1)
 		move.w	a3,respawn_addr(a1)
 
-		; create
-		Create_New_Object_4.s	, 1
-; ---------------------------------------------------------------------------
+		; find new object slot
+		Create_New_Object_4.s	.done
+		bne.s	.done
 
-loc_1BA92:
-		tst.b	(a3)
-		bpl.s	loc_1BA9C
-		addq.w	#8,a0
-		moveq	#0,d1
+		; next
+		addq.w	#1,a3								; and its respawn index
+		subq.w	#8,d7								; subtract from size of remaining objects
+		bne.s	.loop								; branch, if there are more
+
+.done
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1BA9C:
+.next
+		addq.w	#8,a0								; address of next object
+		addq.w	#1,a3								; and its respawn index
+		subq.w	#8,d7								; subtract from size of remaining objects
+		bne.s	.loop								; branch, if there are more
+		rts
+; ---------------------------------------------------------------------------
+
+.next2
+		addq.w	#8-4,a0								; address of next object
+		addq.w	#1,a3								; and its respawn index
+		subq.w	#8,d7								; subtract from size of remaining objects
+		bne.s	.loop								; branch, if there are more
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutines to check if an object needs to be loaded with y-wrapping.
+;
+; input variables:
+;  d0 = object slot
+;  d1 = -$80
+;  d3 = upper boundary to load object
+;  d4 = lower boundary to load object
+;  d5 = #$FFF, used to filter out object's y position
+;  d6 = camera x position
+;
+;  a0 = address in object placement list
+;  a1 = object
+;  a3 = address in object respawn table
+;
+; writes:
+;  d2, d7
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+ChkLoadObj_YWrap:
+		tst.b	(a3)								; is object already loaded?
+		bpl.s	.chk_yrange							; if not, branch
+
+		; next
+		addq.w	#8,a0								; address of next object
+		moveq	#0,d7								; let the objects manager know that it can keep going
+		rts
+; ---------------------------------------------------------------------------
+
+.chk_yrange
 		move.w	(a0)+,d7							; get xpos
-		move.w	(a0)+,d1							; get ypos
+		swap	d7
+		move.w	(a0)+,d7							; get ypos
 		move.w	(a0)+,d2							; get object id
-		bmi.s	loc_1BAB6
-		cmp.w	d3,d1
-		blo.s	loc_1BAAE
-		cmp.w	d4,d1
-		bls.s	loc_1BAB6
+		bmi.s	.spawn_obj
+		cmp.w	d3,d7
+		bhs.s	.spawn_obj
+		cmp.w	d4,d7
+		bls.s	.spawn_obj
 
-loc_1BAAE:
-		addq.w	#2,a0								; skip subtype
-		moveq	#0,d1
+		; next
+		addq.w	#2,a0								; address of next object
+		moveq	#0,d7								; let the objects manager know that it can keep going
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1BAB6:
-		bset	#respawn_addr.state,(a3)					; turn off the slot
+.spawn_obj
+		or.b	d1,(a3)								; mark object as loaded (d1 = -$80)
+		move.w	d7,y_pos(a1)
+		swap	d7
 		move.w	d7,x_pos(a1)
-		move.w	d1,y_pos(a1)
-		move.w	d2,d1
-		and.w	d5,d1
-		add.w	d1,d1								; multiply by 4
-		add.w	d1,d1
-		move.l	(a4,d1.w),code_addr(a1)
+		move.w	d2,d7
+		and.w	d5,d7								; object id mask
+		add.w	d7,d7								; multiply by 4
+		add.w	d7,d7
+		move.l	(a4,d7.w),code_addr(a1)
 		rol.w	#3,d2
 
+		; get object's render flags and status
 		andi.w	#( \
 			setBit(render_flags.x_flip) | \
 			setBit(render_flags.y_flip) \
 		),d2
 
+		; set
+		move.b	d2,render_flags(a1)
+		move.b	d2,status(a1)
+		move.w	(a0)+,subtype(a1)
+		move.w	a3,respawn_addr(a1)
+
+		; find new object slot
+		Create_New_Object_4.s	, 1
+
+; ---------------------------------------------------------------------------
+; Subroutines to check if an object needs to be loaded without y-wrapping.
+;
+; input variables:
+;  d0 = object slot
+;  d1 = -$80
+;  d3 = upper boundary to load object
+;  d4 = lower boundary to load object
+;  d5 = #$FFF, used to filter out object's y position
+;  d6 = camera x position
+;
+;  a0 = address in object placement list
+;  a1 = object
+;  a3 = address in object respawn table
+;
+; writes:
+;  d2, d7
+; ---------------------------------------------------------------------------
+
+; =============== S U B R O U T I N E =======================================
+
+ChkLoadObj:
+		tst.b	(a3)								; is object already loaded?
+		bpl.s	.chk_yrange							; if not, branch
+
+		; next
+		addq.w	#8,a0								; address of next object
+		moveq	#0,d7								; let the objects manager know that it can keep going
+		rts
+; ---------------------------------------------------------------------------
+
+.chk_yrange
+		move.w	(a0)+,d7							; get xpos
+		swap	d7
+		move.w	(a0)+,d7							; get ypos
+		move.w	(a0)+,d2							; get object id
+		bmi.s	.spawn_obj
+		cmp.w	d3,d7
+		blo.s	.out_of_range							; branch, if object is out of range from the top
+		cmp.w	d4,d7
+		bls.s	.spawn_obj							; branch, if object is in range from the bottom
+
+.out_of_range
+
+		; next
+		addq.w	#2,a0								; address of next object
+		moveq	#0,d7								; let the objects manager know that it can keep going
+		rts
+; ---------------------------------------------------------------------------
+
+.spawn_obj
+		or.b	d1,(a3)								; mark object as loaded (d1 = -$80)
+		move.w	d7,y_pos(a1)
+		swap	d7
+		move.w	d7,x_pos(a1)
+		move.w	d2,d7
+		and.w	d5,d7								; object id mask
+		add.w	d7,d7								; multiply by 4
+		add.w	d7,d7
+		move.l	(a4,d7.w),code_addr(a1)
+		rol.w	#3,d2
+
+		; get object's render flags and status
+		andi.w	#( \
+			setBit(render_flags.x_flip) | \
+			setBit(render_flags.y_flip) \
+		),d2
+
+		; set
 		move.b	d2,render_flags(a1)
 		move.b	d2,status(a1)
 		move.w	(a0)+,subtype(a1)
@@ -426,80 +566,95 @@ loc_1BAB6:
 ; =============== S U B R O U T I N E =======================================
 
 Seek_Object_Manager:
+		moveq	#-$80,d1
 		move.w	(Camera_X_pos).w,d6
 		addi.w	#$400,d6
-		andi.w	#$FF80,d6
-		cmp.w	(Camera_X_pos_coarse).w,d6
-		beq.w	locret_1BC5E
-		bge.s	loc_1BC1C
-		move.w	d6,(Camera_X_pos_coarse).w
-		movea.l	(Object_load_addr_back).w,a1
-		movea.w	(Object_respawn_index_back).w,a3
-		subi.w	#$80,d6
-		blo.s	loc_1BBF2
+		and.w	d1,d6
+		cmp.w	(Camera_X_pos_coarse).w,d6					; is the X range the same as last time?
+		beq.s	Seek_Object_Manager_Done					; if yes, branch
+		bge.s	Seek_Object_Manager_GoingForward				; if new pos is greater than old pos, branch
 
-loc_1BBE6:
-		cmp.w	-8(a1),d6
-		bge.s	loc_1BBF2
-		subq.w	#8,a1
-		subq.w	#1,a3
-		bra.s	loc_1BBE6
+		; if the player is moving back
+		move.w	d6,(Camera_X_pos_coarse).w					; remember current position for next time
+
+		movea.l	(Object_load_addr_back).w,a1					; get current object going left
+		movea.w	(Object_respawn_index_back).w,a3				; and its respawn table index
+
+		add.w	d1,d6								; look one chunk to the lefty (d1 = -$80)
+		bhs.s	Seek_Object_Manager_GoingBack_Part2				; branch, if camera position would be behind level's left boundary
+
+		; load all objects left of the screen that are now in range
+
+.scan_left
+		cmp.w	-8(a1),d6							; is the previous object's X pos less than d6?
+		bge.s	Seek_Object_Manager_GoingBack_Part2				; if it is, branch
+		subq.w	#8,a1								; get object's address
+		subq.w	#1,a3								; and respawn table index
+		bra.s	.scan_left							; continue with previous object
 ; ---------------------------------------------------------------------------
 
-loc_1BBF2:
-		move.l	a1,(Object_load_addr_back).w
-		move.w	a3,(Object_respawn_index_back).w
-		movea.l	(Object_load_addr_front).w,a1
-		movea.w	(Object_respawn_index_front).w,a3
-		addi.w	#$300,d6
+Seek_Object_Manager_GoingBack_Part2:
+		move.l	a1,(Object_load_addr_back).w					; remember current object going left
+		move.w	a3,(Object_respawn_index_back).w				; and its respawn table index
+		movea.l	(Object_load_addr_front).w,a1					; get next object going right
+		movea.w	(Object_respawn_index_front).w,a3				; and its respawn table index
+		addi.w	#$300,d6							; look two chunks beyond the right edge of the screen
 
-loc_1BC06:
-		cmp.w	-8(a1),d6
-		bgt.s	loc_1BC12
-		subq.w	#8,a1
-		subq.w	#1,a3
-		bra.s	loc_1BC06
+		; subtract number of objects that have been moved out of range (from the right side)
+
+.scan_left
+		cmp.w	-8(a1),d6							; is the previous object's X pos less than d6?
+		bgt.s	.found_prev							; if it is, branch
+		subq.w	#8,a1								; get object's address
+		subq.w	#1,a3								; and respawn table index
+		bra.s	.scan_left							; continue with previous object
 ; ---------------------------------------------------------------------------
 
-loc_1BC12:
-		move.l	a1,(Object_load_addr_front).w
-		move.w	a3,(Object_respawn_index_front).w
+.found_prev:
+		move.l	a1,(Object_load_addr_front).w					; remember next object going right
+		move.w	a3,(Object_respawn_index_front).w				; and its respawn table index
+
+Seek_Object_Manager_Done:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_1BC1C:
+Seek_Object_Manager_GoingForward:
 		move.w	d6,(Camera_X_pos_coarse).w
-		movea.l	(Object_load_addr_front).w,a1
-		movea.w	(Object_respawn_index_front).w,a3
-		addi.w	#$280,d6
 
-loc_1BC2C:
-		cmp.w	(a1),d6
-		bls.s	loc_1BC36
-		addq.w	#8,a1
-		addq.w	#1,a3
-		bra.s	loc_1BC2C
+		movea.l	(Object_load_addr_front).w,a1					; get next object from the right
+		movea.w	(Object_respawn_index_front).w,a3				; and its respawn table index
+		addi.w	#$280,d6							; look two chunks forward
+
+		; load all objects right of the screen that are now in range
+
+.scan_right
+		cmp.w	(a1),d6								; is object's x position >= d6?
+		bls.s	Seek_Object_Manager_GoingForward_Part2				; if yes, branch
+		addq.w	#8,a1								; get object's address
+		addq.w	#1,a3								; respawn index of next object to the right
+		bra.s	.scan_right							; continue loading objects, if the SST isn't full
 ; ---------------------------------------------------------------------------
 
-loc_1BC36:
-		move.l	a1,(Object_load_addr_front).w
-		move.w	a3,(Object_respawn_index_front).w
-		movea.l	(Object_load_addr_back).w,a1
-		movea.w	(Object_respawn_index_back).w,a3
-		subi.w	#$300,d6
-		blo.s	loc_1BC56
+Seek_Object_Manager_GoingForward_Part2:
+		move.l	a1,(Object_load_addr_front).w					; remember next object from the right
+		move.w	a3,(Object_respawn_index_front).w				; and its respawn table index
 
-loc_1BC4C:
-		cmp.w	(a1),d6
-		bls.s	loc_1BC56
-		addq.w	#8,a1
-		addq.w	#1,a3
-		bra.s	loc_1BC4C
+		movea.l	(Object_load_addr_back).w,a1					; get current object from the left
+		movea.w	(Object_respawn_index_back).w,a3				; and its respawn table index
+		subi.w	#$300,d6							; look one chunk behind the left edge of the screen
+		blo.s	Seek_Object_Manager_GoingForward_End				; branch, if camera position would be behind level's left boundary
+
+		; subtract number of objects that have been moved out of range (from the left)
+
+.scan_right
+		cmp.w	(a1),d6								; is object's x position >= d6?
+		bls.s	Seek_Object_Manager_GoingForward_End				; if yes, branch
+		addq.w	#8,a1								; next object
+		addq.w	#1,a3								; respawn index of next object to the left
+		bra.s	.scan_right							; continue with next object
 ; ---------------------------------------------------------------------------
 
-loc_1BC56:
-		move.l	a1,(Object_load_addr_back).w
-		move.w	a3,(Object_respawn_index_back).w
-
-locret_1BC5E:
+Seek_Object_Manager_GoingForward_End:
+		move.l	a1,(Object_load_addr_back).w					; remember current object from the left
+		move.w	a3,(Object_respawn_index_back).w				; and its respawn table index
 		rts
